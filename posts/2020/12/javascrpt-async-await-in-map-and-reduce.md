@@ -46,7 +46,7 @@ console.table(messages)
 5: Promise {<pending>}
 ```
 
-아쉽게도 모든 결과가 pending으로 뜬다. `await`은 `Promise` 객체만 기다려 주기 떄문에 그런 것으로 보인다. 반변에 우리가 넘긴 것은 `list`다.
+아쉽게도 모든 결과가 pending으로 뜬다. `await`은 `Promise` 객체만 기다려 주기 때문에 그런 것으로 보인다. 반변에 우리가 넘긴 것은 `list`다.
 
 따라서 이를 정상적으로 실행하기 위해서는 `Promise.all`을 사용해야 한다.
 

@@ -15,8 +15,7 @@
     "lint": "concurrently \"yarn run lint:js\" \"yarn run lint:scss\" \"yarn flow\"",
     "test": "jest --config ./jest/jest-config.js",
     "test:coverage": "jest --coverage --config ./jest/jest-config.js",
-    "test:watch": "jest --watch --config ./jest/jest-config.js",
-    "heroku-postbuild": "gatsby build"
+    "test:watch": "jest --watch --config ./jest/jest-config.js"    
   },
   "repository": "https://github.com/yceffort/yceffort-blog",
   "author": "yceffort <yceffort@gmail.com>",

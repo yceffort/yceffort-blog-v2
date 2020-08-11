@@ -15,7 +15,7 @@
     "lint": "concurrently \"npm run lint:js\" \"npm run lint:scss\" \"npm flow\"",
     "test": "jest --config ./jest/jest-config.js",
     "test:coverage": "jest --coverage --config ./jest/jest-config.js",
-    "test:watch": "jest --watch --config ./jest/jest-config.js"    
+    "test:watch": "jest --watch --config ./jest/jest-config.js"
   },
   "repository": "https://github.com/yceffort/yceffort-blog",
   "author": "yceffort <yceffort@gmail.com>",
@@ -63,7 +63,6 @@
     "gatsby-remark-embed-gist": "^1.2.0",
     "gatsby-remark-external-links": "0.0.4",
     "gatsby-remark-images": "^3.3.25",
-    "gatsby-remark-katex": "^3.3.10",
     "gatsby-remark-mathjax-ssr": "^1.2.1",
     "gatsby-remark-prismjs": "^3.5.10",
     "gatsby-remark-relative-images": "^0.3.0",

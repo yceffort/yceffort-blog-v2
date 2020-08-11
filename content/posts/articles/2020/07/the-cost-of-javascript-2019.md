@@ -1,0 +1,146 @@
+---
+title: 자바스크립트의 비용
+tags:
+  - javascript
+  - web
+  - browser
+published: true
+date: 2020-07-06 12:32:23
+description: '[The cost of JavaScript in
+  2019](https://v8.dev/blog/cost-of-javascript-2019)을 번역 요약한 글입니다. ```toc tight:
+  true, from-heading: 2 to-heading: 3 ```  <iframe
+  src="https://www.youtube.com/embed/X9eRLElSW...'
+category: javascript
+slug: /2020/07/the-cost-of-javascript-2019/
+template: post
+---
+[The cost of JavaScript in 2019](https://v8.dev/blog/cost-of-javascript-2019)을 번역 요약한 글입니다.
+
+```toc
+tight: true,
+from-heading: 2
+to-heading: 3
+```
+
+<iframe width="640px" height="360px" src="https://www.youtube.com/embed/X9eRLElSW1c" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+2019년 들어서 자바스크립트를 처리하는데 드는 주요 비용은 다운로드와 CPU 실행 시간이다. 유저 인터랙션은 브라우저의 메인쓰레드가 자바스크립트를 실행하는라 바쁘다면 약간 지연 될 수 있다. 따라서 스크립스 실행 시간 및 네트워크 병목현상을 최적화 하는 것이 효과적이다.
+
+## 실행가능한 고오급 지침
+
+이것이 웹 개발자들에게 의미하는 것이 무엇이냐? 파싱과 컴파일에 드는 시간이 더이상 생각만큼 느리지 않다는 것이다. 자바스크립트 번들에 필요한 세가지 사항은 아래와 같다.
+
+### 다운로드 소요시간을 향상 시켜라
+
+- 자바스크립트 번들사이즈를, 특히 모바일 기기를 위해 작게 만들어라. 작을 수록 다운로드 속도는 향생되고, 메모리 사용량도 줄어들며, CPU 도 부담이 적다.
+- 하나의 큰 번들을 만드는 것을 피하라. 먼들이 50~100kb를 넘는다면, 이를 작은 번들로 쪼갤 필요가 있다. ([HTTP/2의 multiplexing](https://stackoverflow.com/questions/36517829/what-does-multiplexing-mean-in-http-2)을 활용한다면 여러 응답과 요청을 동시에 전송할 수 있어 추가적인 요청의 오버헤드를 줄일 수 있다. )
+- 모바일에서는 네트워크 속도로 인해 훨씬 더 적은 리소스를 유지하고, 메모리 사용량도 낮게 유지해야 한다.
+
+### 실행 시간 최적화
+
+-  메인쓰레드에 부담을 주는 [Long Tasks](https://w3c.github.io/longtasks/)를 피하고, 페이지를 최대한 빠르게 작동가능하게 (interactive) 만들어라. 다운로드 이후 스크립트 시간은 속도에 있어 이제 중요한 척도(비용)가 되었다.
+
+### 1kb 이상의 큰 인라인 스크립트를 피하라
+
+- 만약 스크립트가 1kb가 넘는다면, 인라인으로 사용하는 것을 피하라. 큰 인라인 스크립트는 메인 쓰레드에서 파싱되고 컴파일 된다. 
+
+> Chrome has a minimum size for code caches, currently set to 1 KiB of source code. This means that smaller scripts are not cached at all, since we consider the overheads to be greater than the benefits.
+
+[참고](https://v8.dev/blog/code-caching-for-devs)
+
+## 왜 다운로드와 실행 속도가 문제인가?
+
+왜 다운로드와 실행 시간을 최적화 해야하는가? 다운로드 시간은 성능이 구린 네트워크 환경에서 치명적이다. 4G와 5G 환경이 전세계적으로 구축되고 있지만, [NetworkInformation.effectiveType](https://developer.mozilla.org/en-US/docs/Web/API/NetworkInformation/effectiveType) 는 많은 요소들로 인해 3G 혹은 더 느린 네트워크 처럼 작동할 수 있다.
+
+> 다른 여러가지 요소로 인해 매번 빠른 속도를 유지해 줄 수 없다는 뜻 같습니다.
+
+자바스크립트의 실행속도는 느린 CPU를 사용하는 스마트폰에서 중요하다. CPU, GPU, 서멀 스로틀링 등의 차이로 인해 고오급 스마트폰과 보급형 스마트폰의 성능 차이가 크다. 이는 실행 시간이 CPU와 연관되어 있기 때문에, 자바스크립트 성능에 있어 중요하다.
+
+사실 크롬과 같은 브라우저에서 전체 페이지 로딩에 걸리는 시간 중 최대 30% 정도는 자바스크립트 실행에 사용될 수 있다. 아래는 일반적인 웹사이트 Reddit.com을 하이엔드 데스크톱에서 접근했을 때 걸리는 시간이다.
+
+![자바스크립트 처리에 전체 페이지 로딩 시간 중 10~30%를 소비하고 있다.](https://v8.dev/_img/cost-of-javascript-2019/reddit-js-processing.svg)
+
+그러나 모바일에서는 이와 상황이 많이 다르다.
+
+![최신형 스마트폰(픽셀)에서는 3~4배의 시간이 소요되었지만, 보급형 스마트폰에서는 6배 이상의 시간이 소요된다.](https://v8.dev/_img/cost-of-javascript-2019/reddit-js-processing-devices.svg)
+
+자바스크립트 실행 시간을 최적화 할때는, UI스레드를 장기간 독점하고 있는 Long Tasks에 주의 하자. 이는 시각적으로 페이지가 준비된 것처럼 보여도, 중요한 태스크 실행을 차단하고 있을 수 있다. 이러한 것들은 가능한 작게 나누어야 한다. 코드를 분할하고, 로드 되는 순서에 우선순위를 지정하여 페이지 상호작용을 더 빠르게 할 수 있고, 입력 지연 시간을 줄일 수도 있다.
+
+![메인 쓰레드를 독점하는 작업을 잘게 나누자](https://v8.dev/_img/cost-of-javascript-2019/long-tasks.png)
+
+## 파싱과 컴파일을 향상시키기 위해 V8은 무엇을 했나?
+
+V8의 원시 자바스크립트 구문 분석속도는 크롬 60 이후 2배가량 증가했다. 동시에, 파싱과 컴파일 비용은 이를 병렬화 하는 크롬의 다른 최적화 작업으로 인해 덜 눈에 띄게 되었고, 중요성도 떨어졌다.
+
+V8은 메인 스레드의 파싱 및 컴파일 작업을 평균 40% 감소시켰다(Facebook 46%, 핀터레스트 62%, youtube 80%) 
+
+![버전 별 V8파싱 속도](https://v8.dev/_img/cost-of-javascript-2019/chrome-js-parse-times.svg)
+
+또한 V8의 서로 다른 버전에서 이러한 변경점이 CPU 시간에 미치는 영향을 시각화 할수 있다. 
+
+![V8 버전별 파싱 속도](https://v8.dev/_img/cost-of-javascript-2019/js-parse-times-websites.svg)
+
+이러한 변화들이 어떻게 이루어졌는지 살펴보자. 요약하자면, 스크립트 리소스는 worker스레드에서 스트리밍 파싱되고, 컴파일 될 수 있는데 이는 다음과 같은 것을 의미한다.
+
+- V8은 메인 스레드를 막지 않고 자바스크립트를 파싱+컴파일 할수 있다.
+- 전체 HTML 파서가 `<script/>`태그를 만나면 스트리밍이 시작된다. 파서 블락 스크립트의 경우, HTML파서가 만들어내지만, 다른 `async` 스크립트는 계속해서 진행된다.
+- 대부분의 경우, V8 v파서의 속도가 실제 연결 속도 보다는 빠르므로, V8은 마지막 스트립트 바이트가 다운로드 된후 몇 밀리 초 이후에 파싱 + 컴파일된다.
+
+오래된 크롬 버전의 경우, 파싱을 시작하기전에 스크립트를 모두 다운로드 해야 했으므로, 이는 간단한 접근 법인 한편으로 CPU를 충분히 사용하지는 못햇다. 41~68사이의 크롬은 다운로드가 시작되자마자 별도의 스레드에서 `async` `deferred` 스크립트 구문을 파싱하기 시작했다.
+
+![스크립트는 여러 chunck로 도착한다.](https://v8.dev/_img/cost-of-javascript-2019/script-streaming-1.svg)
+
+![크롬 71에서는, 스케쥴러가 한번에 여러 `async` `deferred` 스크립트의 신택스를 분석할 수 있는작업기반 설정으로 이동했다. 이러한 변화는 메인 스래드의 파싱 시간이 20% 까지 감소하여 실제 웹사이트에서 측정한 전체적인 TTI/FID가 전체적으로 2%까지 개선되었다.](https://v8.dev/_img/cost-of-javascript-2019/script-streaming-2.svg)
+
+크롬 72에서는, 스트리밍을 파싱을 하는 주요 방법으로 채택했다. 이제는 일반 동기식 스크립트도 동일하게 파싱된다. (인라인은 제외) 또한 메인 스레드에서 필요로 할 경우 이미 수행된 모든 작업을 불필요하게 복제하기 때문에, 작업 기반 구문분석을 취소하는 것을 중단했다. 
+
+이전 버전의 크롬은 스트리밍 파싱과 컴파일을 지원했는데, 여기에서 네트워크로 부터 들어오는 스크립트 소스 데이터가 스트리머로 전달되기 전에 크롬의 메인 스레드로 이동해야 했다.
+
+이로 인해 스트리밍 파서는 이미 네트워크에서 도착한 데이터를 기다리는 경우가 많았지만, 메인 스레드의 다른 작업 (HTML파싱, 레이아웃, 또는 자바스크립트 실행 등) 에 의해 차단되서 아직 스트리밍 작업으로 전달되지 않았다.
+
+## 실제 웹사이트에서는 어떤 변화가 일어 났는가?
+
+![](https://v8.dev/_img/cost-of-javascript-2019/reddit-main-thread.svg)
+
+레딧의 경우 100+kb의 번들이 몇개 있는데, 이번들은 외부 다른 함수에 의해 랩핑되어 있어서 메인스레드에 레이지 컴파일을 야기한다. 
+
+![](https://v8.dev/_img/cost-of-javascript-2019/facebook-main-thread.svg)
+
+페이스북은 압축된 6mb 정도의 데이터를 최대 292개의 요청으로 부터 가져오는데, 몇개는 비동기로, preloaded로, 혹은 낮은 우선순위로 fetch 된다. 대부분의 스크립트는 작고 세분화되어 있다. 이러한 작은 스크립트는 스트리밍-파싱 / 컴파일을 할 수 있기 때문에 백가라운드 - worker 스레드에서 전체 병렬화에 많은 도움을 준다.
+
+## JSON을 파싱하는데 드는 비용
+
+JSON 문법은 자바스크립트 문법에 비해 간결하므로,JSON을 파싱하는 것이 자바스크립트를 파싱하는 것보다 더욱 효과적이다. 이 사실은 JSON 객체 리터럴을 필요로 하는 웹 앱의 시작 성능 향상에 적용할 수 있다.
+
+```javascript
+const data = { foo: 42, bar: 1337 }; // 🐌 객체 리터럴이라 느리다.
+```
+
+위 형식은 JSON 형식으로 바꿔 쓸 수 있고, 이는 런타임에서 더 빠르게 실행된다.
+
+```javascript
+const data = JSON.parse('{"foo":42,"bar":1337}'); // 🚀
+```
+
+JSON 문자열은 딱 한번 수행되기 때문에, `JSON.parse` 접근은 자바스크립트 객체 리터럴에 비해 훨씬 빠르며, 특히 콜드 로드 시 더 두각을 나타낸다. 경험적으로 보았을때, 10kb 이상의 객체에 이기법을 적용하는 것이 효과적인데, 이를 적용하기 전에 실제로 테스트 해보기를 권한다.
+
+![`JSON.parse`가 훨씬 더 파싱하고, 컴파일하고, 실행하기 빠르다.](https://v8.dev/_img/cost-of-javascript-2019/json.svg)
+
+<iframe width="640px" height="360px" src="https://www.youtube.com/embed/ff4fgQxPaO0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+## 재 방문시 파싱과 컴파일은 어떻게 이루어 지는가?
+
+V8의 코드 캐싱 최적화가 도움을 줄 수 있다. 스크립트가 처음 요청되면 크롬이 다운로드 하여 V8에 전달하고, 이를 컴파일 한다. 이후 브라우저의 온디스크 캐시에 파일을 저장한다. 만약 JS 파일이 두번째로 요청되면, 크롬은 브라우저에서 캐시된 파일을 가져다가 다시 V8에 전달하여 컴파일 한다. 그러나 이번에는 컴파일된 코드가 직렬화 되어, 캐시된 스크립트 파일에 메타데이터로 첨부된다.
+
+![](https://v8.dev/_img/cost-of-javascript-2019/code-caching.png)
+
+세번째에는, 크롬은 캐시에서 파일과 파일의 메타데이터를 모두가져가서 V8에 넘겨준다.V8은 메타데이터를 역질렬화하여 컴파일을 건너 뛸 수 있다. 처음 두번의 방문이 72시간내에 이루어지면 코드 캐싱이 시작된다. 크롬은 또는 서비스 워커가 스크립트를 캐싱하는데 사용되는 경우 빠른 코드 캐싱을 할 수도 있다. 
+
+## 결론
+
+- 다운로드 및 실행 시간은 2019년 스크립트 로딩의 주요 병목 현상이다. 
+- 화면의 처음 보이는 영역 (above-the-fold-content)와 나머지 페이지를 표현하기 위한 `defered` 스크립트 등을 작은 번들로 만드는 것을 목표로 하라.
+- 사용자가 필요할 때 필요한 코드를 넘길 수 있도록 큰 번들을 분해하라.
+  - 이는 V8에서 병렬화를 극대화 한다.
+- 모바일에서는 느린 CPU, 네트워크, 메모리 소비, 실행시간으로  인해 훨씬 더 적은 스크립트를 제공해야 한다.
+- latency와 cahceablility 사이에 가능한 균형을 유지하여, 메인스레드에서 발생할 수 있는 파싱 및 컴파일 작업의 양을 극대화 하라.

@@ -1,8 +1,4 @@
-# yceffort's blog v5
-
-## made by
-
-gatsby (react with javascript) + heroku + cloudflare
+# yceffort-blog v2
 
 ## front-matter
 

@@ -15,8 +15,7 @@
     "lint": "concurrently \"npm run lint:js\" \"npm run lint:scss\" \"npm flow\"",
     "test": "jest --config ./jest/jest-config.js",
     "test:coverage": "jest --coverage --config ./jest/jest-config.js",
-    "test:watch": "jest --watch --config ./jest/jest-config.js",
-    "heroku-postbuild": "npm run build"
+    "test:watch": "jest --watch --config ./jest/jest-config.js"
   },
   "repository": "https://github.com/yceffort/yceffort-blog",
   "author": "yceffort <yceffort@gmail.com>",

@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x]
+        node-version: [10.x]
 
     steps:
     - uses: actions/checkout@v2
@@ -26,7 +26,4 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm install -g yarn
     - run: yarn install --frozen-lockfile
-    - run: yarn run lint
-    - run: yarn run test --runInBand --no-cache
-      env:
-        CI: true
+    - run: yarn run lint    

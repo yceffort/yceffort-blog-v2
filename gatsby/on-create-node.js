@@ -7,14 +7,14 @@ const onCreateNode = ({ node, actions, getNode }) => {
   const { createNodeField } = actions;
 
   if (node.internal.type === 'MarkdownRemark') {
-    if (typeof node.frontmatter.slug !== 'undefined') {      
+    if (typeof node.frontmatter.slug !== 'undefined') {
       createNodeField({
         node,
         name: 'slug',
         value: node.frontmatter.slug
       });
     } else {
-      const value = createFilePath({ node, getNode, basePath: `pages` });
+      const value = createFilePath({ node, getNode, basePath: 'pages' });
       createNodeField({
         node,
         name: 'slug',

@@ -7,7 +7,7 @@ module.exports = {
   subtitle: 'yceffort',
   copyright: '© All rights reserved.',
   disqusShortname: '',
-  postsPerPage: 4,
+  postsPerPage: 5,
   googleAnalyticsId: 'UA-139493546-1',
   useKatex: false,
   menu: [

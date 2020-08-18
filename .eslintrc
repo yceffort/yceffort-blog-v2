@@ -1,5 +1,5 @@
 {
-  "extends": "@yceffort/eslint-config-yceffort",
+  "extends": "eslint-config-yceffort",
   "rules": {
     // your custom rules..
   }

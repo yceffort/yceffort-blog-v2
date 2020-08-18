@@ -1,56 +1,56 @@
 // @flow strict
 const getContactHref = (name: string, contact: string) => {
-  let href;
+  let href
 
   switch (name) {
     case 'twitter':
-      href = `https://www.twitter.com/${contact}`;
-      break;
+      href = `https://www.twitter.com/${contact}`
+      break
     case 'github':
-      href = `https://github.com/${contact}`;
-      break;
+      href = `https://github.com/${contact}`
+      break
     case 'vkontakte':
-      href = `https://vk.com/${contact}`;
-      break;
+      href = `https://vk.com/${contact}`
+      break
     case 'telegram':
-      href = `https://t.me/${contact}`;
-      break;
+      href = `https://t.me/${contact}`
+      break
     case 'email':
-      href = `mailto:${contact}`;
-      break;
+      href = `mailto:${contact}`
+      break
     case 'linkedin':
-      href = `https://www.linkedin.com/in/${contact}`;
-      break;
+      href = `https://www.linkedin.com/in/${contact}`
+      break
     case 'instagram':
-      href = `https://www.instagram.com/${contact}`;
-      break;
+      href = `https://www.instagram.com/${contact}`
+      break
     case 'line':
-      href = `line://ti/p/${contact}`;
-      break;
+      href = `line://ti/p/${contact}`
+      break
     case 'facebook':
-      href = `https://www.facebook.com/${contact}`;
-      break;
+      href = `https://www.facebook.com/${contact}`
+      break
     case 'gitlab':
-      href = `https://www.gitlab.com/${contact}`;
-      break;
+      href = `https://www.gitlab.com/${contact}`
+      break
     case 'weibo':
-      href = `https://www.weibo.com/${contact}`;
-      break;
+      href = `https://www.weibo.com/${contact}`
+      break
     case 'codepen':
-      href = `https://www.codepen.io/${contact}`;
-      break;
+      href = `https://www.codepen.io/${contact}`
+      break
     case 'youtube':
-      href = `https://www.youtube.com/channel/${contact}`;
-      break;
+      href = `https://www.youtube.com/channel/${contact}`
+      break
     case 'soundcloud':
-      href = `https://soundcloud.com/${contact}`;
-      break;
+      href = `https://soundcloud.com/${contact}`
+      break
     default:
-      href = contact;
-      break;
+      href = contact
+      break
   }
 
-  return href;
-};
+  return href
+}
 
-export default getContactHref;
+export default getContactHref

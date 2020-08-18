@@ -1,61 +1,61 @@
 // @flow strict
-import { ICONS } from '../constants';
+import { ICONS } from '../constants'
 
 const getIcon = (name: string) => {
-  let icon;
+  let icon
 
   switch (name) {
     case 'twitter':
-      icon = ICONS.TWITTER;
-      break;
+      icon = ICONS.TWITTER
+      break
     case 'github':
-      icon = ICONS.GITHUB;
-      break;
+      icon = ICONS.GITHUB
+      break
     case 'vkontakte':
-      icon = ICONS.VKONTAKTE;
-      break;
+      icon = ICONS.VKONTAKTE
+      break
     case 'telegram':
-      icon = ICONS.TELEGRAM;
-      break;
+      icon = ICONS.TELEGRAM
+      break
     case 'email':
-      icon = ICONS.EMAIL;
-      break;
+      icon = ICONS.EMAIL
+      break
     case 'rss':
-      icon = ICONS.RSS;
-      break;
+      icon = ICONS.RSS
+      break
     case 'linkedin':
-      icon = ICONS.LINKEDIN;
-      break;
+      icon = ICONS.LINKEDIN
+      break
     case 'instagram':
-      icon = ICONS.INSTAGRAM;
-      break;
+      icon = ICONS.INSTAGRAM
+      break
     case 'line':
-      icon = ICONS.LINE;
-      break;
+      icon = ICONS.LINE
+      break
     case 'facebook':
-      icon = ICONS.FACEBOOK;
-      break;
+      icon = ICONS.FACEBOOK
+      break
     case 'gitlab':
-      icon = ICONS.GITLAB;
-      break;
+      icon = ICONS.GITLAB
+      break
     case 'weibo':
-      icon = ICONS.WEIBO;
-      break;
+      icon = ICONS.WEIBO
+      break
     case 'codepen':
-      icon = ICONS.CODEPEN;
-      break;
+      icon = ICONS.CODEPEN
+      break
     case 'youtube':
-      icon = ICONS.YOUTUBE;
-      break;
+      icon = ICONS.YOUTUBE
+      break
     case 'soundcloud':
-      icon = ICONS.SOUNDCLOUD;
-      break;
+      icon = ICONS.SOUNDCLOUD
+      break
     default:
-      icon = {};
-      break;
+      icon = {}
+      break
   }
 
-  return icon;
-};
+  return icon
+}
 
-export default getIcon;
+export default getIcon

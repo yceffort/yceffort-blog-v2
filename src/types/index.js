@@ -1,16 +1,16 @@
 // @flow strict
-import type { Node as ReactNode } from 'react';
+import type { Node as ReactNode } from 'react'
 
 export type RenderCallback = {
   // $FlowFixMe
-  render: (data: any) => ReactNode;
+  render: (data: any) => ReactNode,
 }
 
 export type Entry = {
-  getIn: (string[]) => string;
+  getIn: (string[]) => string,
 }
 
-export type WidgetFor = (string) => string;
+export type WidgetFor = (string) => string
 
 export type PageContext = {
   tag: string,
@@ -19,14 +19,14 @@ export type PageContext = {
   prevPagePath: string,
   nextPagePath: string,
   hasPrevPage: boolean,
-  hasNextPage: boolean
-};
+  hasNextPage: boolean,
+}
 
 export type Node = {
   fields: {
     slug: string,
     categorySlug?: string,
-    tagSlugs?: string[]
+    tagSlugs?: string[],
   },
   frontmatter: {
     date: string,
@@ -34,17 +34,17 @@ export type Node = {
     category?: string,
     tags?: string[],
     title: string,
-    socialImage?: string
+    socialImage?: string,
   },
   html: string,
-  id: string
-};
+  id: string,
+}
 
 export type Edge = {
-  node: Node
-};
+  node: Node,
+}
 
-export type Edges = Array<Edge>;
+export type Edges = Array<Edge>
 
 export type AllMarkdownRemark = {
   allMarkdownRemark: {
@@ -52,8 +52,8 @@ export type AllMarkdownRemark = {
   },
   group: {
     fieldValue: string,
-    totalCount: number
-  }[]
-};
+    totalCount: number,
+  }[],
+}
 
-export type MarkdownRemark = Node;
+export type MarkdownRemark = Node

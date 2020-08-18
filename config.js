@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 module.exports = {
   url: 'https://yceffort.kr',
@@ -13,16 +13,16 @@ module.exports = {
   menu: [
     {
       label: 'Articles',
-      path: '/'
+      path: '/',
     },
     {
       label: 'About me',
-      path: '/about'
+      path: '/about',
     },
     {
       label: 'Contact me',
-      path: '/contacts'
-    }
+      path: '/contacts',
+    },
   ],
   author: {
     name: 'yceffort',
@@ -44,6 +44,6 @@ module.exports = {
       codepen: '',
       youtube: '',
       soundcloud: '',
-    }
-  }
-};
+    },
+  },
+}

@@ -1,2 +1,2 @@
 // @flow strict
-export { default } from './Copyright';
+export { default } from './Copyright'

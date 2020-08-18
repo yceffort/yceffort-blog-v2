@@ -1,2 +1,2 @@
 // @flow strict
-export { default } from './Contacts';
+export { default } from './Contacts'

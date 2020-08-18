@@ -1,17 +1,21 @@
-'use strict';
+'use strict'
 
-const _ = require('lodash');
-const path = require('path');
-const siteConfig = require('../../config.js');
+const path = require('path')
+
+const _ = require('lodash')
+
+const siteConfig = require('../../config.js')
 
 module.exports = async (graphql, actions) => {
-  const { createPage } = actions;
-  const { postsPerPage } = siteConfig;
+  const { createPage } = actions
+  const { postsPerPage } = siteConfig
 
   const result = await graphql(`
     {
       allMarkdownRemark(
-        filter: { frontmatter: { template: { eq: "post" }, published: { ne: false } } }
+        filter: {
+          frontmatter: { template: { eq: "post" }, published: { ne: false } }
+        }
       ) {
         group(field: frontmatter___category) {
           fieldValue
@@ -19,11 +23,11 @@ module.exports = async (graphql, actions) => {
         }
       }
     }
-  `);
+  `)
 
   _.each(result.data.allMarkdownRemark.group, (category) => {
-    const numPages = Math.ceil(category.totalCount / postsPerPage);
-    const categorySlug = `/category/${_.kebabCase(category.fieldValue)}`;
+    const numPages = Math.ceil(category.totalCount / postsPerPage)
+    const categorySlug = `/category/${_.kebabCase(category.fieldValue)}`
 
     for (let i = 0; i < numPages; i += 1) {
       createPage({
@@ -37,9 +41,9 @@ module.exports = async (graphql, actions) => {
           prevPagePath: i <= 1 ? categorySlug : `${categorySlug}/page/${i - 1}`,
           nextPagePath: `${categorySlug}/page/${i + 1}`,
           hasPrevPage: i !== 0,
-          hasNextPage: i !== numPages - 1
-        }
-      });
+          hasNextPage: i !== numPages - 1,
+        },
+      })
     }
-  });
-};
+  })
+}

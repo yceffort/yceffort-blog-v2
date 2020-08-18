@@ -1,14 +1,15 @@
 // @flow strict
-import React from 'react';
-import { Link } from 'gatsby';
-import styles from './Menu.module.scss';
+import React from 'react'
+import { Link } from 'gatsby'
+
+import styles from './Menu.module.scss'
 
 type Props = {
   menu: {
     label: string,
-    path: string
-  }[]
-};
+    path: string,
+  }[],
+}
 
 const Menu = ({ menu }: Props) => (
   <nav className={styles['menu']}>
@@ -26,6 +27,6 @@ const Menu = ({ menu }: Props) => (
       ))}
     </ul>
   </nav>
-);
+)
 
-export default Menu;
+export default Menu

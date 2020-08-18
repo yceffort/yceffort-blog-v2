@@ -10,8 +10,10 @@
     "start": "gatsby serve -H 0.0.0.0",
     "clean": "gatsby clean && rimraf .cache public",
     "flow": "flow",
-    "lint": "eslint '**/*.{js,ts,tsx}'",
-    "lint:fix": "npm run lint -- --fix"
+    "lint": "eslint '**/*.{js,jsx}'",
+    "lint:fix": "npm run lint --fix",
+    "prettier": "prettier '**/*.{json,yaml}' --check",
+    "prettier:fix": "prettier '**/*.{json,yaml}' --write"
   },
   "repository": "https://github.com/yceffort/yceffort-blog",
   "author": "yceffort <yceffort@gmail.com>",

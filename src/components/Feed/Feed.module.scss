@@ -32,6 +32,7 @@
       font-size: $typographic-base-font-size;
       @include line-height(1);
       @include margin-bottom(.75);
+      word-break: break-all;
     }
 
     &-meta {

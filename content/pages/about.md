@@ -6,4 +6,6 @@ slug: /about/
 socialImage: '/'
 ---
 
-dumbest developer alive
+Frontend Engineer in Korea.
+
+Study Everyday, Dream Always.

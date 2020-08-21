@@ -94,7 +94,7 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "26.2.1",
     "babel-preset-gatsby": "0.5.5",
-    "browserslist": "4.13.0",
+    "browserslist": "4.14.0",
     "concurrently": "5.2.0",
     "flow-bin": "^0.129.0",
     "flow-typed": "^3.2.1",

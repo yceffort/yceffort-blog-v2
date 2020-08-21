@@ -6,4 +6,5 @@ slug: /contacts
 socialImage: '/'
 ---
 
-Contact.
+- yceffort@gmail.com
+- https://github.com/yceffort

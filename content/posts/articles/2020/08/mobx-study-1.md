@@ -5,7 +5,7 @@ tags:
 published: true
 date: 2020-08-21 15:54:00
 description: "MobX 1페이지 요약에 대한 간단한 번역"
-category: javascript
+category: MobX
 template: post
 ---
 

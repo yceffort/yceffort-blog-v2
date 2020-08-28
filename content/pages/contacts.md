@@ -6,5 +6,5 @@ slug: /contacts
 socialImage: '/'
 ---
 
-- root@yceffort.kr
-- https://github.com/yceffort
+- [email](root@yceffort.kr)
+- [homepage](https://github.com/yceffort)

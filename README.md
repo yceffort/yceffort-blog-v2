@@ -1,6 +1,10 @@
 # yceffort-blog v2
 
+<<<<<<< HEAD
 github repository of https://yceffort.kr 
+=======
+https://yceffort.kr 블로그 레파지토리입니다.
+>>>>>>> cdfeabf406cf250917a71ee878d52b12ac392acf
 
 ## Tech
 

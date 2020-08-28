@@ -7,7 +7,7 @@ tags:
   - healthcare
 description: "Blockchain Technology Applications in Health Care
   [원문](https://www.ahajournals.org/doi/abs/10.1161/CIRCOUTCOMES.117.003800)   ##
-  블록체인 어플리케이션  분산 데이터 관리를 위한 블록체인은 금융 서비스를 넘어 다양한 응용프로그램에서 사용할 수 있는 잠재력을..."
+  블록체인 애플리케이션  분산 데이터 관리를 위한 블록체인은 금융 서비스를 넘어 다양한 응용프로그램에서 사용할 수 있는 잠재력을..."
 category: blockchain
 slug: /2018/08/08/blockchain-technology-applications-in-health-care/
 template: post
@@ -17,7 +17,7 @@ Blockchain Technology Applications in Health Care
 [원문](https://www.ahajournals.org/doi/abs/10.1161/CIRCOUTCOMES.117.003800)
 
 
-## 블록체인 어플리케이션
+## 블록체인 애플리케이션
 
 분산 데이터 관리를 위한 블록체인은 금융 서비스를 넘어 다양한 응용프로그램에서 사용할 수 있는 잠재력을 가지고 있다. 블록체인은 잠재적으로 많은 가능성을 가지고 있기 때문에, IBM, 마이크로소프트, 액센츄어등 여러 회사가 블록체인 기반 기술을 개발하고 있는 상황이다. 향후 블록체인 소프트웨어가 제공하는 기능으로 5년내에 금융 서비스 산업에 연간 150억에서 200억 달러를 아낄 수 있다는 예측도 나오고 있다.
 

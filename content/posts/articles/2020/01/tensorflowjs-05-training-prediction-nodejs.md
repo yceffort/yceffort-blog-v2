@@ -9,7 +9,7 @@ published: true
 date: 2020-01-16 01:41:50
 description: "```toc tight: true, from-heading: 1 to-heading: 3 ``` # Training
   and Prediction in Node.js  본 튜토리얼에서는 MLBAM에서 제공하는 피쳐 센서 데이터를 바탕으로, 야구의 칭 유형을
-  추측하는 모델을 만들어볼 예정입니다. 이 튜토리얼은 서버사이드 어플리케이션인 Node.js에서 진행될 ..."
+  추측하는 모델을 만들어볼 예정입니다. 이 튜토리얼은 서버사이드 애플리케이션인 Node.js에서 진행될 ..."
 category: machine-learning
 slug: /2020/01/tensorflowjs-05-training-prediction-nodejs/
 template: post
@@ -22,20 +22,20 @@ to-heading: 3
 
 # Training and Prediction in Node.js
 
-본 튜토리얼에서는 MLBAM에서 제공하는 피쳐 센서 데이터를 바탕으로, 야구의 칭 유형을 추측하는 모델을 만들어볼 예정입니다. 이 튜토리얼은 서버사이드 어플리케이션인 Node.js에서 진행될 예정입니다.
+본 튜토리얼에서는 MLBAM에서 제공하는 피쳐 센서 데이터를 바탕으로, 야구의 칭 유형을 추측하는 모델을 만들어볼 예정입니다. 이 튜토리얼은 서버사이드 애플리케이션인 Node.js에서 진행될 예정입니다.
 
 이 튜토리얼에서는 `tfjs-node`를 서버사이드에서 npm package로 설치하고, 모델을 만든 다음, 실제로 피치 센서 데이터로 훈련까지 진행해 볼 것입니다. 또한 학습 진행 상태를 클라이언트에 제공하고, 훈련된 모델을 바탕으로 예측하는 서버/클라이언트 아키텍쳐도 만들어 볼 것입니다.
 
 ## 1. 소개
 
-이 시간에는 강력하고 유연한 자바스크립트 머신러닝 라이브러리인 Tensorflow.js를 활용하여, 서버에서 야구 피치 유형을 학습하고 분류하는 방법을 배우게 됩니다. 피치 센서 데이터에서 미치 유형을 예측하고, 웹 클라이언트에서 예측을 호출하는 모델을 가진 웹 어플리케이션을 만들어볼 것입니다. 이 코드의 완전 버전은 [Github Repo](https://github.com/tensorflow/tfjs-examples/tree/master/baseball-node)에 있습니다.
+이 시간에는 강력하고 유연한 자바스크립트 머신러닝 라이브러리인 Tensorflow.js를 활용하여, 서버에서 야구 피치 유형을 학습하고 분류하는 방법을 배우게 됩니다. 피치 센서 데이터에서 미치 유형을 예측하고, 웹 클라이언트에서 예측을 호출하는 모델을 가진 웹 애플리케이션을 만들어볼 것입니다. 이 코드의 완전 버전은 [Github Repo](https://github.com/tensorflow/tfjs-examples/tree/master/baseball-node)에 있습니다.
 
 배우게 될 것
 
 - Nodejs를 활용하여 npm package로 tensorflow.js를 설치하는 법
 - Nodejs 환경에서 데이터를 학습시키고 테스트 하는법
 - Nodejs 서버에서 Tensorflowjs에서 모델을 훈련시키는 법
-- 학습된 모델을 배포해서 클라이언트/서버 어플리케이션에서 작동시키는 법
+- 학습된 모델을 배포해서 클라이언트/서버 애플리케이션에서 작동시키는 법
 
 ## 2. 요구 사항
 
@@ -468,9 +468,9 @@ $ npm run start-server
 
 ## 9. 배운것
 
-본 튜토리얼에서는, Tensorflow.js를 활용한 간닪한 머신러닝 웹 어플리케이션을 만들어 보았습니다. 센서 데이터를 활용해서 구질이 무엇인지 분류하는 모델을 만들어 보았습니다. node.js 코드를 작성해서 서버를 만들고, 클라이언트에 데이터를 통해 학습한 모델을 전송합니다.
+본 튜토리얼에서는, Tensorflow.js를 활용한 간닪한 머신러닝 웹 애플리케이션을 만들어 보았습니다. 센서 데이터를 활용해서 구질이 무엇인지 분류하는 모델을 만들어 보았습니다. node.js 코드를 작성해서 서버를 만들고, 클라이언트에 데이터를 통해 학습한 모델을 전송합니다.
 
-[tensorflow.org/js](https://www.tensorflow.org/js)를 방문해서, 더욱 많은 예제와 데모를 보시고, 당신의 어플리케이션에서 Tensorflow.js를 어떻게 활용할수 있을지 살펴보세요.
+[tensorflow.org/js](https://www.tensorflow.org/js)를 방문해서, 더욱 많은 예제와 데모를 보시고, 당신의 애플리케이션에서 Tensorflow.js를 어떻게 활용할수 있을지 살펴보세요.
 
 
 https://codesandbox.io/s/tensorflowjs-05-training-prediction-nodejs-tc6c4

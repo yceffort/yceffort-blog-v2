@@ -30,7 +30,7 @@ to-heading: 3
 
 이번 튜토리얼에서는, 간단한 [teachable machine](https://teachablemachine.withgoogle.com/)을 만들어 볼 것입니다. teachable machine이란, 자바스크립트로 작성된 유연하고도 강력한 머신러닝 라이브러리인 tensorflow.js를 활용하여 브라우저에서 작동할 수 있는 커스텀 이미지 분류기 입니다. 먼저 MobileNet이라고 불리우는 모델을 브라우저 환경에서 불러오고 실행해볼 것입니다. 그 다음에는 전이학습을 활용하여 이미 학습된 MobileNet 모델을 커스터마이징하고 우리의 앱에서 실행할 수 있도록 할 것입니다.
 
-이 튜토리얼에서는 teachable machine 어플리케이션을 만드는데 필요한 이론적 배경을 소개하지는 않습니다. 만약 궁금하다면, [이 튜토리얼](https://beta.observablehq.com/@nsthorat/how-to-build-a-teachable-machine-with-tensorflow-js)을 참고하시기 바랍니다.
+이 튜토리얼에서는 teachable machine 애플리케이션을 만드는데 필요한 이론적 배경을 소개하지는 않습니다. 만약 궁금하다면, [이 튜토리얼](https://beta.observablehq.com/@nsthorat/how-to-build-a-teachable-machine-with-tensorflow-js)을 참고하시기 바랍니다.
 
 ### 배우게 될 것
 
@@ -259,6 +259,6 @@ async function app() {
 
 ## 9. 우리가 배운 것
 
-이 예제에서, Tensorflow.js를 활용하여 간단한 머신러닝 학습 웹 어플리케이션을 구현했습니다. 웹캠에서 이미지를 분류하기 위해 미리 학습된 MobileNet 모델을 로드하고 사용했습니다. 그런 다음 모델을 커스텀하여 이미지를 세가지 사용자 정의 범주로 분류합니다.
+이 예제에서, Tensorflow.js를 활용하여 간단한 머신러닝 학습 웹 애플리케이션을 구현했습니다. 웹캠에서 이미지를 분류하기 위해 미리 학습된 MobileNet 모델을 로드하고 사용했습니다. 그런 다음 모델을 커스텀하여 이미지를 세가지 사용자 정의 범주로 분류합니다.
 
 [예제](https://codesandbox.io/s/tensorflowjs-07-build-an-image-classifier-28kc5)

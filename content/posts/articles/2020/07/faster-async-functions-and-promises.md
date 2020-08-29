@@ -8,7 +8,7 @@ date: 2020-07-16 08:17:28
 description: "[Faster async functions and
   promises](https://v8.dev/blog/fast-async)을 번역 요약한 글입니다. ```toc from-heading: 2
   to-heading: 3 ```  자바스크립트의 비동기 처리는 예전부터 특별히 빠르지 않다는 비판을 많이 받아 왔다. 설상가상으로,
-  자바스크립트 어플리케이션 (특히 ..."
+  자바스크립트 애플리케이션 (특히 ..."
 category: javascript
 slug: /2020/07/faster-async-functions-and-promises/
 template: post
@@ -20,7 +20,7 @@ from-heading: 2
 to-heading: 3
 ```
 
-자바스크립트의 비동기 처리는 예전부터 특별히 빠르지 않다는 비판을 많이 받아 왔다. 설상가상으로, 자바스크립트 어플리케이션 (특히 Node.js 서버) 에서 비동기 프로그래밍이 있을 때 라이브로 디버깅 하는 것은 결코 쉬운일이 아니다. 다행히도, 이러한 흐름에 변화가 있었다. 이 아티클에서는 V8에서 비동기 성능과 Promise를 최적화 한 방법을 살펴보고, 비동기 코드에 대한 디버깅 경험을 향상 시킨 방법에 대해서 소개한다.
+자바스크립트의 비동기 처리는 예전부터 특별히 빠르지 않다는 비판을 많이 받아 왔다. 설상가상으로, 자바스크립트 애플리케이션 (특히 Node.js 서버) 에서 비동기 프로그래밍이 있을 때 라이브로 디버깅 하는 것은 결코 쉬운일이 아니다. 다행히도, 이러한 흐름에 변화가 있었다. 이 아티클에서는 V8에서 비동기 성능과 Promise를 최적화 한 방법을 살펴보고, 비동기 코드에 대한 디버깅 경험을 향상 시킨 방법에 대해서 소개한다.
 
 <iframe width="640px" height="360px" src="https://www.youtube.com/embed/DFP5DKDQfOc" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 

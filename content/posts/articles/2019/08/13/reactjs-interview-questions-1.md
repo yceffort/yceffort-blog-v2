@@ -7,7 +7,7 @@ tags:
   - react
 description: "[목차](/2019/08/13/reactjs-interview-questions/)  ```toc tight:
   true, from-heading: 2 to-heading: 3 ```  ## Core React  ### What is
-  React  리액트는 오픈소스 프론트엔드 자바스크립트 라이브러리로, 특히 싱글 페이지 어플리케이션의 사용자 인터페이스 구축을..."
+  React  리액트는 오픈소스 프론트엔드 자바스크립트 라이브러리로, 특히 싱글 페이지 애플리케이션의 사용자 인터페이스 구축을..."
 category: javascript
 slug: /2019/08/13/reactjs-interview-questions-1/
 template: post
@@ -25,7 +25,7 @@ to-heading: 3
 
 ### What is React
 
-리액트는 오픈소스 프론트엔드 자바스크립트 라이브러리로, 특히 싱글 페이지 어플리케이션의 사용자 인터페이스 구축을 위해 사용된다. 웹가 모바일 앱의 뷰단을 다르기 위하여 사용되고 있다. 리액트는 페이스북에서 일아흔 Jordan Walke가 만들었다. 최초로 리액트 기반으로 만들어진 서비스는 2011년에 페이스북 뉴스 피드이며, 2012년에는 인스타그램도 리액트로 만들어 졌다.
+리액트는 오픈소스 프론트엔드 자바스크립트 라이브러리로, 특히 싱글 페이지 애플리케이션의 사용자 인터페이스 구축을 위해 사용된다. 웹가 모바일 앱의 뷰단을 다르기 위하여 사용되고 있다. 리액트는 페이스북에서 일아흔 Jordan Walke가 만들었다. 최초로 리액트 기반으로 만들어진 서비스는 2011년에 페이스북 뉴스 피드이며, 2012년에는 인스타그램도 리액트로 만들어 졌다.
 
 ### What are the major features of React?
 
@@ -645,7 +645,7 @@ function HOC(WrappedComponent) {
 
 ### What is context?
 
-Context는 props을 탑다운으로 주지 않고도, 어느 레벨에서든 데이터를 컴포넌트 트리에 넘기는 방법이다. 예를 들어 인증받은 사용자, 언어 설정, UI theme 등 어플리케이션 단위에서 다양한 컴포넌트가 사용해야 하는 데이터를 context를 통해서 줄 수 있다.
+Context는 props을 탑다운으로 주지 않고도, 어느 레벨에서든 데이터를 컴포넌트 트리에 넘기는 방법이다. 예를 들어 인증받은 사용자, 언어 설정, UI theme 등 애플리케이션 단위에서 다양한 컴포넌트가 사용해야 하는 데이터를 context를 통해서 줄 수 있다.
 
 ```javascript
 const { Provider, Consumer } = React.createContext(defaultValue);
@@ -890,7 +890,7 @@ class User extends React.Component {
 
 ### What are the advantages of React?
 
-1. Virtual DOM으로 어플리케이션의 성능을 향상시킬 수 있음
+1. Virtual DOM으로 애플리케이션의 성능을 향상시킬 수 있음
 2. JSX를 통해 코들르 쉽게 읽고 쓸수 있음
 3. 클라이언트와 서버사이드 양쪽에서 렌더링 라능
 4. 뷰만 다루는 라이브러리이기 때문에, 다른 프레임워크 (Angular, Backbone) 등과 쉽게 연동 가능
@@ -951,7 +951,7 @@ class ErrorBoundary extends React.Component {
 
 ### What are the recommended ways for static type checking?
 
-보통 `PropTypes`를 많이 사용한다. 그러나 크기가 큰 어플리케이션의 경우에는, Flow나 타입스크립트같은, 컴파일 단계에서 타입체킹을 제공하고 자동완성을 지원해주는 정적 타입 체커를 사용하는 것이 좋다.
+보통 `PropTypes`를 많이 사용한다. 그러나 크기가 큰 애플리케이션의 경우에는, Flow나 타입스크립트같은, 컴파일 단계에서 타입체킹을 제공하고 자동완성을 지원해주는 정적 타입 체커를 사용하는 것이 좋다.
 
 ### What is the use of `react-dom` package?
 
@@ -1200,7 +1200,7 @@ production 모드와 별도로, 주석을 제거하고 코드르 압축시키는
 
 ### What is CRA and its benefits?
 
-CRA(`create-react-app`)는 특별한 설정없이도 빠르고 간편하게 리액트 어플리케이션을 만들수 있도록 해주는 Cli tool이다.
+CRA(`create-react-app`)는 특별한 설정없이도 빠르고 간편하게 리액트 애플리케이션을 만들수 있도록 해주는 Cli tool이다.
 
 ```
 # Installation
@@ -1371,7 +1371,7 @@ this.setState((prevState, props) => ({
 
 ### What is strict mode in React?
 
-`React.StrictMode`는 어플리케이션의 잠재적인 문제를 하이라이팅 해주는 유용한 컴포넌트다. `<Fragment>`와 마찬가지로, `<StrictMode>`는 추가적으로 DOM을 렌더링하지 않는다. 이는 단지 자식 컴포넌트의 추가적인 체크와 경고를 할 뿐이다. 그리고 이러한 체크는 development 에서만 가능하다.
+`React.StrictMode`는 애플리케이션의 잠재적인 문제를 하이라이팅 해주는 유용한 컴포넌트다. `<Fragment>`와 마찬가지로, `<StrictMode>`는 추가적으로 DOM을 렌더링하지 않는다. 이는 단지 자식 컴포넌트의 추가적인 체크와 경고를 할 뿐이다. 그리고 이러한 체크는 development 에서만 가능하다.
 
 ```javascript
 import React from "react";

@@ -52,7 +52,7 @@ First Paint를 향상시킬 수 있는 절대적인 방법은 없다. 따라서 
 
 ![서비스 워커에서의 요청과 응답](https://webdev.imgix.net/apply-instant-loading-with-prpl/service-workers.png)
 
-서비스 워커는 매 방문시 서버에서 필요한 assets을 가져오는 것이 아니라 proxy 처럼 역할하여 assets을 제공한다. 이는 사용자가 오프라인 중에도 어플리케이션을 쓸 수 있게 끔 할 뿐만 아니라, 반복적으로 페이지에 접근했을 때 페이지 로딩을 빠르게 해준다.
+서비스 워커는 매 방문시 서버에서 필요한 assets을 가져오는 것이 아니라 proxy 처럼 역할하여 assets을 제공한다. 이는 사용자가 오프라인 중에도 애플리케이션을 쓸 수 있게 끔 할 뿐만 아니라, 반복적으로 페이지에 접근했을 때 페이지 로딩을 빠르게 해준다.
 
 일반적인 라이브러리가 제공하는 것 이상으로 복잡한 요구사항이 없다면, 써드 파티 라이브러리로 서비스 워커를 만들어 이 과정을 단순화 하는 것을 고려해봄직하다. 예를 들어 [WorkBox](https://web.dev/workbox)는 asset을 캐싱할 수 있는 서비스 워커를 만들고 유지할 수 있는 다양한 툴을 제공한다. 더 많은 서비스 워커에 대한 정보와 오프라인 상태의 유지에 대해 알고 싶다면, [Service worker guide](https://web.dev/service-workers-cache-storage)를 참고하라.
 

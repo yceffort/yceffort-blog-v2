@@ -150,7 +150,7 @@ type Store = {
 }
 ```
 
-store란 어플리케이션의 상태 트리를 가지고 있는 객체다. 리덕스 앱에서는 다양한 리듀서레벨을 합성하여 단하나의 스토어만 둘 수 있다.
+store란 애플리케이션의 상태 트리를 가지고 있는 객체다. 리덕스 앱에서는 다양한 리듀서레벨을 합성하여 단하나의 스토어만 둘 수 있다.
 
 - [dispatch(action)](https://redux.js.org/api/store#dispatchaction)은 base dispatch를 의미한다.
 - [getState()](https://redux.js.org/api/store#getState)는 현재 스토어의 상태 값을 리턴한다.

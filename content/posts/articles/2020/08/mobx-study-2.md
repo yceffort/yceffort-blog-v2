@@ -4,7 +4,7 @@ tags:
   - javascript, MobX
 published: true
 date: 2020-08-24 15:54:00
-description: "MobX를 예제 어플리케이션에 실제로 적용해보기"
+description: "MobX를 예제 애플리케이션에 실제로 적용해보기"
 category: MobX
 template: post
 ---

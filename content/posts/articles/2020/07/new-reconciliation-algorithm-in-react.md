@@ -155,7 +155,7 @@ class ClickCounter {
 
 재조정과정에서, 리액트 엘리먼트의 render 로 부터 리턴된 모든 데이터들은 fiber 노드들의 트리에 병합된다. 모든 리액트 엘리먼트는 이와 대응하는 Fiber 노드가 있다. 리액트 엘리먼트와는 다르게, 파이버는 모든 `render` 시에 재생성되는 것이 아니다. 이는 컴포넌트 상태와 DOM 정보를 가지고 있는 변이가능한 데이터 구조다. 
 
-앞에서 우리는 리액트 엘리먼트의 유형애 따라 프레임워크가 다른 활동을 할 수 있다고 언급했다. 우리의 샘플 어플리케이션에서 `ClickCounter` 클래스 컴포넌트의 경우에는 라이프 사이클 메소드와 렌더 메소드를 호출하고, `<span />` 호스트 컴포넌트의 경우 (DOM 노드) DOM Mutation(변이)를 수행한다. 따라서 리액트의 각 엘리먼트는 수행해야하는 작업을 각 해당하는 Fiber 노드로 변환 시킨다. [해당 코드](https://github.com/facebook/react/blob/769b1f270e1251d9dbdce0fcbd9e92e502d059b8/packages/shared/ReactWorkTags.js)
+앞에서 우리는 리액트 엘리먼트의 유형애 따라 프레임워크가 다른 활동을 할 수 있다고 언급했다. 우리의 샘플 애플리케이션에서 `ClickCounter` 클래스 컴포넌트의 경우에는 라이프 사이클 메소드와 렌더 메소드를 호출하고, `<span />` 호스트 컴포넌트의 경우 (DOM 노드) DOM Mutation(변이)를 수행한다. 따라서 리액트의 각 엘리먼트는 수행해야하는 작업을 각 해당하는 Fiber 노드로 변환 시킨다. [해당 코드](https://github.com/facebook/react/blob/769b1f270e1251d9dbdce0fcbd9e92e502d059b8/packages/shared/ReactWorkTags.js)
 
 **다시 말해 Fiber는 해야할 작업, 해야할 작업의 단위를 나타내는 데이터 구조라고 볼 수 있다. Fiber 아키텍쳐는 또한 작업을 추적, 스케쥴, 중지, 취소하는 편리한 방법을 제공한다.**
 
@@ -171,7 +171,7 @@ class ClickCounter {
 
 ## `Current` 및 `Work in process`
 
-첫번째 렌더링 이후, React는 UI를 렌더링하는데 사용한 어플리케이션 상태를 반영하는 fiber 트리를 반환하게 된다. 이를 `work`라고 한다. 리액트가 업데이트 작업을 시작하면, 화면에 미래의 상태를 반영할 `workInProcess` 트리를 만들게 된다.
+첫번째 렌더링 이후, React는 UI를 렌더링하는데 사용한 애플리케이션 상태를 반영하는 fiber 트리를 반환하게 된다. 이를 `work`라고 한다. 리액트가 업데이트 작업을 시작하면, 화면에 미래의 상태를 반영할 `workInProcess` 트리를 만들게 된다.
 
 Fiber에서 수행되는 모든 `work`는 `workInProgress`트리에서 수행된다. 리액트가 `current`트리를 거칠 때마다, 각 각의 존재하는 fiber 노드는 `workInProgress` 트리를 구성하는 대체 노드를 생성한다. 이 노드는 `render`메소드에 의해 반환된 데이터에 의해 만들어진다. 업데이트 작업이 진행되고 모든 작업이 끝나게 되면, 리액트는 화면에 보여줄 대체 트리를 표시한다. `workInProgress`트리가 화면에 렌더링 되면, 이는 현재의 `current` 트리가 된다.
 

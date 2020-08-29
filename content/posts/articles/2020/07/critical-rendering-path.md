@@ -278,7 +278,7 @@ CSS를 가져오기 위해 한번의 왕복이 더 추가되었고, 그만큼 �
 
 ![css+async javascript](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/images/analysis-dom-css-js-async.png?hl=ko)
 
-더이상 스크립트가 파서를 차단하지 않고, 주요 렌더링 경로에도 포함되지 않았다. 또한 주요 스크립트가 없어서 CSS가 `domContentLoaded`이벤트를 차단하지도 않고, 따라서 어플리케이션 로직이 빠르게 실행되었다는 것을 알 수 있다.
+더이상 스크립트가 파서를 차단하지 않고, 주요 렌더링 경로에도 포함되지 않았다. 또한 주요 스크립트가 없어서 CSS가 `domContentLoaded`이벤트를 차단하지도 않고, 따라서 애플리케이션 로직이 빠르게 실행되었다는 것을 알 수 있다.
 
 ## 주요 렌더링 경로 최적화
 

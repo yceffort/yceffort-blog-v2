@@ -26,7 +26,7 @@ to-heading: 3
 
 ### What is React Router?
 
-React Router는 리액트 최상단에 있는 강력한 라우팅 라이브러리로, 페이지에 보여주는 내용과 URL사이에 동기화를 유지해주고, 어플리케이션에 새로운 화면과 흐름을 추가할 수 있도록 도와준다.
+React Router는 리액트 최상단에 있는 강력한 라우팅 라이브러리로, 페이지에 보여주는 내용과 URL사이에 동기화를 유지해주고, 애플리케이션에 새로운 화면과 흐름을 추가할 수 있도록 도와준다.
 
 ### How React Router is different from history library?
 
@@ -294,7 +294,7 @@ export default injectIntl(MyComponent)
 
 ### How to access current locale with React Intl?
 
-어느 어플리케이션에서든 `injectIntl()`를 사용하면 현재 로케일을 얻을 수 있다.
+어느 애플리케이션에서든 `injectIntl()`를 사용하면 현재 로케일을 얻을 수 있다.
 
 ### How to format date using React Intl?
 
@@ -432,7 +432,7 @@ PASS ./sum.test.js
 
 ### What is flux?
 
-Flux는 어플리케이션 디자인 패러다임으로, 전통적인 모델인 MVC pattern을 대체하기 위해 나왔다. Flux는 프레임워크나 라이브러리가 아닌, React와 양방향 데이터 흐름을 기반으로 하는 새로운 아키텍쳐다. 페이스북이 React를 사용할 때 내부적으로 이 패턴을 활용한다.
+Flux는 애플리케이션 디자인 패러다임으로, 전통적인 모델인 MVC pattern을 대체하기 위해 나왔다. Flux는 프레임워크나 라이브러리가 아닌, React와 양방향 데이터 흐름을 기반으로 하는 새로운 아키텍쳐다. 페이스북이 React를 사용할 때 내부적으로 이 패턴을 활용한다.
 
 dispatcher, sotres, views 컴포넌트 사이 작업흐름은 아래처럼 input과 output이 구별되어 나타난다.
 
@@ -446,7 +446,7 @@ Redux는 flux 디자인 패턴을 기반으로 한 자바스크립트 앱의 예
 
 Redux는 다음 세가지 기본 원칙을 가지고 있다.
 
-1. 신뢰할 수 있는 단일 출처: 어플리케이션의 state는 단일 store에 객체트리 형태로 저장되어 있다. 단일 state tree는 변화를 쉽게 추적ㄷ할 수 있게 해주며, 어플리케이션을 디버그하고 검사하는 것을 쉽게 만들어 준다.
+1. 신뢰할 수 있는 단일 출처: 애플리케이션의 state는 단일 store에 객체트리 형태로 저장되어 있다. 단일 state tree는 변화를 쉽게 추적ㄷ할 수 있게 해주며, 애플리케이션을 디버그하고 검사하는 것을 쉽게 만들어 준다.
 2. state는 읽기 전용: state를 변경할 수 있는 방법은 단한가지로, 객체가 어떤 일이 일어났는지 묘사하는 액션을 보내는 것이다. 이는 views나 네트워크 콜백이 직접 state를 수정하지 않도록 한다.
 3. 변화는 순수 함수로만 이루어진다: 액션별로 state 트리가 어떻게 변화하는지 명세하기 위해, reducer를 사용해야 한다.
 
@@ -470,7 +470,7 @@ const mapStateToProps = state => {
 }
 ```
 
-`mapDispatchToProps()`는 컴포넌트가 이벤트를 발생시킬 수 있도록 도와주는 유틸리티다. (이 이벤트는 어플리케이션의 state에 변화를 가져올 수 있음)
+`mapDispatchToProps()`는 컴포넌트가 이벤트를 발생시킬 수 있도록 도와주는 유틸리티다. (이 이벤트는 애플리케이션의 state에 변화를 가져올 수 있음)
 
 ```javascript
 const mapDispatchToProps = dispatch => {
@@ -508,16 +508,16 @@ export default store
 
 ### What are the drawbacks of MVW pattern?
 
-1. DOM 조작은, 많은 비용을 지불해야 하고, 어플리케이션을 느리고 비효율적으로 만든다.
+1. DOM 조작은, 많은 비용을 지불해야 하고, 애플리케이션을 느리고 비효율적으로 만든다.
 2. 순환 참조로 인해, 복잡한 모델이 모델과 뷰주변에 만들어질 수 있다.
-3. 구글 docs와 같은 협업 어플리케이션에서는 많은 양의 데이터 변경이 일어날 수 있다.
+3. 구글 docs와 같은 협업 애플리케이션에서는 많은 양의 데이터 변경이 일어날 수 있다.
 4. 추가적으로 많은 코드를 쓰지 않고 undo를 쉽게 할 수 없다.
 
 ### Are there any similarities between Redux and RxJS?
 
 두 라이브러리는 목적부터 완전히 다르지만, 약간의 비슷한점을 가지고있다.
 
-Redux는 어플리케이션 전반에서 state를 관리할 수 있게 도와주는 툴이다. 이는 보통 UI 아키텍쳐에서 ㅁ낳이 사용된다. Angular의 대체재라고 볼 수 있다. 반면 Rxjs는 반응형 프로그래밍 라이브러리다. RxJS는 자바스크립트에서 비동기 작업을 수행하기 위해 사용된다. Promise의 대체재라고 볼 수있다. Redux는 Store가 반응형이기 때문에 반응형 패러다임을 사용한다. Store는 액션을 어느정도 거리에서 관찰하다가, 스스로 변화한다. RxJS 또한 반응형 패러다임을 사용하는 반면, 아키텍쳐를 제공하지 않고 Observable 과 같은 블록을 제공한다.
+Redux는 애플리케이션 전반에서 state를 관리할 수 있게 도와주는 툴이다. 이는 보통 UI 아키텍쳐에서 ㅁ낳이 사용된다. Angular의 대체재라고 볼 수 있다. 반면 Rxjs는 반응형 프로그래밍 라이브러리다. RxJS는 자바스크립트에서 비동기 작업을 수행하기 위해 사용된다. Promise의 대체재라고 볼 수있다. Redux는 Store가 반응형이기 때문에 반응형 패러다임을 사용한다. Store는 액션을 어느정도 거리에서 관찰하다가, 스스로 변화한다. RxJS 또한 반응형 패러다임을 사용하는 반면, 아키텍쳐를 제공하지 않고 Observable 과 같은 블록을 제공한다.
 
 ### How to dispatch an action on load?
 
@@ -644,7 +644,7 @@ export default class MyApp extends React.Component {
 
 ### What is the difference between React context and React Redux?
 
-Context는 어플리케이션에서 다이렉트로 사용할 수 있으며, 깊게 중첩된 컴포넌트에 데이터를 전달하는데 유용하다. 반면 Redux는 훨씬 더 강력하며, Context API가 제공하지 않는 기능을 제공한다. 또한, React Redux 는 내부적으로 context를 활용하지만, public api에 공개하지는 않는다.
+Context는 애플리케이션에서 다이렉트로 사용할 수 있으며, 깊게 중첩된 컴포넌트에 데이터를 전달하는데 유용하다. 반면 Redux는 훨씬 더 강력하며, Context API가 제공하지 않는 기능을 제공한다. 또한, React Redux 는 내부적으로 context를 활용하지만, public api에 공개하지는 않는다.
 
 ### Why are Redux state functions called reducers?
 
@@ -706,7 +706,7 @@ export default FilterLink
 
 ### What is the difference between component and container in React Redux?
 
-`Component`는 어플리케이션의 일부분을 표시하는 함수 또는 클래스 컴포넌트를 의미한다.
+`Component`는 애플리케이션의 일부분을 표시하는 함수 또는 클래스 컴포넌트를 의미한다.
 
 `Container`는 비공식적인 용어로, Redux Store와 연결된 컴포넌트를 지칭한다. Container 는 Redux 의 state update 와 action 을 구독하며, DOM element 를 렌더링하지 않는다. 이러한 rendering응ㄴ 하위 component 들에게 위임한다.
 
@@ -794,7 +794,7 @@ import ConnectedComponent from "./containers/ConnectedComponent"
 
 ### How to structure Redux top level directories?
 
-대부분의 어플리케이션이 아래와 같은 상위구조 레벨을 가지고 있다.
+대부분의 애플리케이션이 아래와 같은 상위구조 레벨을 가지고 있다.
 
 1. Components: Redux를 모르는 컴포넌트
 2. Container: Redux와 연결된 컴포넌트
@@ -802,7 +802,7 @@ import ConnectedComponent from "./containers/ConnectedComponent"
 4. Reducer: 상태 키와 일치파는 파일명을 가진 모든 리듀서
 5. Store: 스토어 초기화를 위해 사용
 
-이러한 구조는 중소규모의 어플리케이션에 적합하다.
+이러한 구조는 중소규모의 애플리케이션에 적합하다.
 
 ### What is redux-saga?
 
@@ -810,7 +810,7 @@ redux-saga 는 side effects (데이터를 가져오는 비동기적인 작업이
 
 ### What is the mental model of redux-saga?
 
-`Saga`는 어플리케이션과 분리된 스레드와 같은것으로, 부수적인 역할을 담당하기 위한 책임을 가지고 있다. redux-saga는 redux의 미들웨어로, 메인 application 에서 Redux actions 과 함께 쓰레드를 시작, 중지, 취소 할 수 있으며 전체의 Redux application 상태에 접근할 수 있으며 Redux actions 도 전달할 수 있다.
+`Saga`는 애플리케이션과 분리된 스레드와 같은것으로, 부수적인 역할을 담당하기 위한 책임을 가지고 있다. redux-saga는 redux의 미들웨어로, 메인 application 에서 Redux actions 과 함께 쓰레드를 시작, 중지, 취소 할 수 있으며 전체의 Redux application 상태에 접근할 수 있으며 Redux actions 도 전달할 수 있다.
 
 ### What are the differences between `call()` and `put()` in redux-saga?
 
@@ -909,9 +909,9 @@ Relay와 Redux모두 하나의 스토어를 쓴다는 점에서 같다. 가장 �
 
 ### What is the difference between React Native and React?
 
-React는 자바스크립트 라이브러리로, 프론트엔드와 서버에서 동작하며, 유저인터페이스나 웹 어플리케이션을 만들기 위해 사용된다.
+React는 자바스크립트 라이브러리로, 프론트엔드와 서버에서 동작하며, 유저인터페이스나 웹 애플리케이션을 만들기 위해 사용된다.
 
-React Native는 네이티브 앱 컴포넌트를 컴파일하기 위한 모바일 프레임워크로, 자바스크립트 기반 React로 iOS, Android와 같은 네이티브 어플리케이션을 만들 수 있게 해준다.
+React Native는 네이티브 앱 컴포넌트를 컴파일하기 위한 모바일 프레임워크로, 자바스크립트 기반 React로 iOS, Android와 같은 네이티브 애플리케이션을 만들 수 있게 해준다.
 
 ### How to test React Native apps?
 
@@ -928,7 +928,7 @@ $ react-native log-android
 
 ### How to debug your React Native?
 
-1. iOS 시뮬레이터로 어플리케이션을 실행한다.
+1. iOS 시뮬레이터로 애플리케이션을 실행한다.
 2. `Command + D`를 눌러서 웹페이지가 `http://localhost:8081/debugger-ui`에서 실행되게 한다.
 3. Pause On Caught Exceptions을 활성화 하면 원활하게 디버그가 가능하다.
 4. `Command + Option + I` 또는 `View` -> `Developer` -> `Developer Tools`로 크롬 개발자 도구를 띄운다.

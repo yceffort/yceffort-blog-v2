@@ -7,7 +7,7 @@ published: true
 date: 2020-07-05 09:23:12
 description: "[How CommonJS is making your bundles
   larger](https://web.dev/commonjs-larger-bundles/) 를 번역 & 요약한 글입니다. ```toc
-  tight: true, from-heading: 2 to-heading: 3 ```  **요약: 웹 어플리케이션을 확실하게 최적화해서
+  tight: true, from-heading: 2 to-heading: 3 ```  **요약: 웹 애플리케이션을 확실하게 최적화해서
   번들링하기 위해서는, C..."
 category: javascript
 slug: /2020/07/how-commonjs-is-making-your-bundles-larger/
@@ -21,11 +21,11 @@ from-heading: 2
 to-heading: 3
 ```
 
-**요약: 웹 어플리케이션을 확실하게 최적화해서 번들링하기 위해서는, Common js 모듈을 사용하는 것을 피하고 ECMAS script module synatx를 사용하라**
+**요약: 웹 애플리케이션을 확실하게 최적화해서 번들링하기 위해서는, Common js 모듈을 사용하는 것을 피하고 ECMAS script module synatx를 사용하라**
 
 ## CommonJS란 무엇인가?
 
-CommonJS는 2009년에 만들어진 표준으로, 자바스크립트 모듈을 만들기 위한 일종의 규칙이다. 이 방법은 원래 브라우저를 위해 개발된 것은 아니고, 서버사이드 어플리케이션을 위해 만들어졌다.
+CommonJS는 2009년에 만들어진 표준으로, 자바스크립트 모듈을 만들기 위한 일종의 규칙이다. 이 방법은 원래 브라우저를 위해 개발된 것은 아니고, 서버사이드 애플리케이션을 위해 만들어졌다.
 
 CommonJS 형식으로 모듈을 정의하면, 이를 export 할 수 있고, 다른 모듈에서 import 할 수 있다. 예를 들어, `add` `subtract` `multiply` `divide` `max`라고 하는 다섯가지 함수가 있다고 해보자.
 
@@ -55,9 +55,9 @@ console.log(add(1, 2));
 
 ## CommonJS가 최종 모듈 사이즈에 어떻게 영향을 미치는가?
 
-서버사이드 자바스크립트 어플리케이션의 사이즈는 브라우저만큼 치명적이지는 않으므로, 애초에 딱히 CommonJS를 만들 때는 딱히 프로덕션 번들 사이즈를 줄이는 것에 대한 고려가 되지 않았었다. [https://v8.dev/blog/cost-of-javascript-2019](https://v8.dev/blog/cost-of-javascript-2019) 의 결과에 따르면, 자바스크립트의 번들 사이즈는 브라우저 어플리케이션을 느리게 하는 주범으로 밝혀졌다.
+서버사이드 자바스크립트 애플리케이션의 사이즈는 브라우저만큼 치명적이지는 않으므로, 애초에 딱히 CommonJS를 만들 때는 딱히 프로덕션 번들 사이즈를 줄이는 것에 대한 고려가 되지 않았었다. [https://v8.dev/blog/cost-of-javascript-2019](https://v8.dev/blog/cost-of-javascript-2019) 의 결과에 따르면, 자바스크립트의 번들 사이즈는 브라우저 애플리케이션을 느리게 하는 주범으로 밝혀졌다.
 
-자바스크립트를 번들링하고 최소화하는 `webpack`과 `terser`의 경우, 서로 다른 방식으로 앱 크기를 줄이는 최적화를 진행한다. 빌드 시 어플리케이션을 분석하는 과정에서, 이들은 코드에서 최대한 사용하지 않는 코드를 삭제하려고 한다.
+자바스크립트를 번들링하고 최소화하는 `webpack`과 `terser`의 경우, 서로 다른 방식으로 앱 크기를 줄이는 최적화를 진행한다. 빌드 시 애플리케이션을 분석하는 과정에서, 이들은 코드에서 최대한 사용하지 않는 코드를 삭제하려고 한다.
 
 예를 들어, 위의 코드에서의 경우에는 - `add`함수만 사용하고 있으므로, `utils.js`에는 오로지 `add`만 사용하고 있으므로 `add`외에는 모든 것이 지워질 것이라 기대해볼 수 있다.
 
@@ -111,13 +111,13 @@ console.log(add(1, 2));
 
 최종 번들 결과물에는, `utils.js`에 선언된 코드 뿐만 아니라, `lodash`도 찾아 볼 수 없다. 더욱이, `terser`는 심지어 이 `add`함수를 인라인으로 처리해버렸음을 알 수 있다.
 
-왜 CommonJS의 빌드 결과물이 16000배나 더 컸을까? 물론 이는  단순한 토이 프로젝트 였으므로 실제 웹 어플리케이션 사이즈와 비교했을 때 이정도 차이는 없겠지만, 여전히 CommonJS는 프로덕션 빌드에서 많은 부분을 차지하고 있음을 알 수 있다.
+왜 CommonJS의 빌드 결과물이 16000배나 더 컸을까? 물론 이는  단순한 토이 프로젝트 였으므로 실제 웹 애플리케이션 사이즈와 비교했을 때 이정도 차이는 없겠지만, 여전히 CommonJS는 프로덕션 빌드에서 많은 부분을 차지하고 있음을 알 수 있다.
 
-**CommonJS 모듈은 일반적으로 최적화를 진행하기가 어렵다. 그 이유는 ES Module 대비 더 다이나믹한 방식을 취하고 있기 때문이다. bundler와 minifier 가 성공적으로 어플리케이션을 최적화 할 수 있게 하려면, CommonJS 모듈을 사용하는 것 보다 ECMAScript module syntax를 전체 어플리케이션에 사용하는 것이 좋다.**
+**CommonJS 모듈은 일반적으로 최적화를 진행하기가 어렵다. 그 이유는 ES Module 대비 더 다이나믹한 방식을 취하고 있기 때문이다. bundler와 minifier 가 성공적으로 애플리케이션을 최적화 할 수 있게 하려면, CommonJS 모듈을 사용하는 것 보다 ECMAScript module syntax를 전체 애플리케이션에 사용하는 것이 좋다.**
 
 아무리 `index.js`를 ECMAScript 모듈 방식으로 처리했어도, 다른 모듈 사용을 CommonJS방식으로 한다면, 번들 사이즈는 고통 받을 것이다.
 
-## 왜 CommonJS는 어플리케이션 사이즈를 더 크게 하는가?
+## 왜 CommonJS는 애플리케이션 사이즈를 더 크게 하는가?
 
 이 질문에 답을 하기 위해서는, `webpack`의 `ModuleConcatenationPlugin`이 어떻게 동작하는지 살펴볼 필요가 있다. 그리고, 정적 분석에 대해 살펴보아야 한다. (static analyzability) 이 플러그인은 모든 모듈의 범위를 하나의 클로저로 연결하고, 코드가 브라우저에서 더 빠르게 실행할 수 있도록 도와준다.
 
@@ -242,7 +242,7 @@ CommonJS 모듈이 다이나믹 definition을 하기 때문에 이를 분석하�
 
 ## 결론
 
-번들러가 어플리케이션 최적화를 진행하게 할 수 있도록, CommonJS 모듈을 사용하는 것을 피하고, 전체 어플리케이션에서 ECMAScript module syntax를 사용할 수 있도록 하자.
+번들러가 애플리케이션 최적화를 진행하게 할 수 있도록, CommonJS 모듈을 사용하는 것을 피하고, 전체 애플리케이션에서 ECMAScript module syntax를 사용할 수 있도록 하자.
 
 몇가지 팁을 더 추가한다.
 

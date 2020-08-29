@@ -5,7 +5,7 @@ tags:
 published: true
 date: 2020-07-28 08:25:27
 description: "```toc tight: true, from-heading: 2 to-heading: 3 ``` ## Docker 는
-  무엇인가?  리눅스 컨테이너에 여러가지 기능을 추가하여 어플리케이션을 컨테이너로서 좀더 쉽게 사용할 수 있도록 만든 오픈소스. 이에 대해
+  무엇인가?  리눅스 컨테이너에 여러가지 기능을 추가하여 애플리케이션을 컨테이너로서 좀더 쉽게 사용할 수 있도록 만든 오픈소스. 이에 대해
   정리  해 놓은 [좋은 글](https://subicura.com/2017/01/19/docker-g..."
 category: docker
 slug: /2020/07/docker-study-1/
@@ -19,7 +19,7 @@ to-heading: 3
 
 ## Docker 는 무엇인가?
 
-리눅스 컨테이너에 여러가지 기능을 추가하여 어플리케이션을 컨테이너로서 좀더 쉽게 사용할 수 있도록 만든 오픈소스. 이에 대해 정리  해 놓은 [좋은 글](https://subicura.com/2017/01/19/docker-guide-for-beginners-1.html)이 있으니 여기를 참고.
+리눅스 컨테이너에 여러가지 기능을 추가하여 애플리케이션을 컨테이너로서 좀더 쉽게 사용할 수 있도록 만든 오픈소스. 이에 대해 정리  해 놓은 [좋은 글](https://subicura.com/2017/01/19/docker-guide-for-beginners-1.html)이 있으니 여기를 참고.
 
 > Developing apps today requires so much more than writing code. Multiple languages, frameworks, architectures, and discontinuous interfaces between tools for each lifecycle stage creates enormous complexity. Docker simplifies and accelerates your workflow, while giving developers the freedom to innovate with their choice of tools, application stacks, and deployment environments for each project.
 
@@ -183,7 +183,7 @@ ubuntu@study:~$ docker run -i -t --name network_test -p 80:80 ubuntu:14.04
 80번 호스트 포트 > 80번 컨테이너 포트 > 아파치 웹서비스 80번 포트
 ```
 
-## 컨테이너 어플리케이션 구축
+## 컨테이너 애플리케이션 구축
 
 이번엔 데이터베이서 컨테이너와 웹서버 컨테이너를 각각 별도로 설치하여 연결해보자.
 

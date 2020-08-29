@@ -1,5 +1,5 @@
 ---
-title: 블록체인 어플리케이션 분류
+title: 블록체인 애플리케이션 분류
 date: 2018-10-13 05:40:35
 published: true
 tags:

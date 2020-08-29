@@ -27,7 +27,7 @@ to-heading: 3
 
 ### 2. 파생 (Derivations)
 
-더이상의 추가적인 상호작용없이, 상태에서 파생되어지는 값을 모두 파생 (Derivationos) 이라고 한다. 
+더이상의 추가적인 상호작용없이, 상태에서 파생되어지는 값을 모두 파생 (Derivations) 이라고 한다. 
 
 > 최종적인 interaction 끝에 만들어진 값을 derivations 이라고 하는 것 같습니다.
 

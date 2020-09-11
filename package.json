@@ -12,7 +12,7 @@
     "flow": "flow",
     "lint": "eslint '**/*.{js,jsx}'",
     "lint:fix": "npm run lint --fix",
-    "prettier": "prettier '**/*.{json,yaml}' --check",
+    "prettier": "prettier '**/*.{json,md,yaml}' --check",
     "prettier:fix": "prettier '**/*.{json,yaml}' --write"
   },
   "repository": "https://github.com/yceffort/yceffort-blog",

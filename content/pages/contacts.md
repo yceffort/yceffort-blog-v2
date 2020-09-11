@@ -7,4 +7,5 @@ socialImage: '/'
 ---
 
 - [email](root@yceffort.kr)
-- [homepage](https://github.com/yceffort)
+- [blog](https://yceffort.kr)
+- [github](https://github.com/yceffort)

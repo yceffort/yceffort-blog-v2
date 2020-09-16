@@ -94,6 +94,7 @@ hr {
 a {
   color: $typographic-link-p-font-color;
   text-decoration: none;
+  word-break: break-all;
 
   &:hover,
   &:focus,

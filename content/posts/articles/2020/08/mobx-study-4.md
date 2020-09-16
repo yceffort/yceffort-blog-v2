@@ -4,7 +4,7 @@ tags:
   - javascript, MobX
 published: true
 date: 2020-08-30 19:27:22
-description: "React와 MobX에 대한 10분 설명"
+description: 'React와 MobX에 대한 10분 설명'
 category: MobX
 template: post
 ---
@@ -42,110 +42,106 @@ MobX는 애플리케이션을 마치 스프레드시트 (엑셀) 처럼 다룬�
 
 ```javascript
 class TodoStore {
-	todos = [];
+  todos = []
 
-	get completedTodosCount() {
-    	return this.todos.filter(
-			todo => todo.completed === true
-		).length;
-    }
+  get completedTodosCount() {
+    return this.todos.filter((todo) => todo.completed === true).length
+  }
 
-	report() {
-		if (this.todos.length === 0)
-			return "<none>";
-		const nextTodo = this.todos.find(todo => todo.completed === false);
-		return `Next todo: "${nextTodo ? nextTodo.task : "<none>"}". ` +
-			`Progress: ${this.completedTodosCount}/${this.todos.length}`;
-	}
+  report() {
+    if (this.todos.length === 0) return '<none>'
+    const nextTodo = this.todos.find((todo) => todo.completed === false)
+    return (
+      `Next todo: "${nextTodo ? nextTodo.task : '<none>'}". ` +
+      `Progress: ${this.completedTodosCount}/${this.todos.length}`
+    )
+  }
 
-    addTodo(task) {
-		this.todos.push({
-			task: task,
-			completed: false,
-            assignee: null
-		});
-	}
+  addTodo(task) {
+    this.todos.push({
+      task: task,
+      completed: false,
+      assignee: null,
+    })
+  }
 }
 
-const todoStore = new TodoStore();                     
+const todoStore = new TodoStore()
 ```
 
 `todos` 목록과 함께 `todoStore`를 만들었다. 이번에는 todoStore에 할일 목록을 넣어보자. 주목해야 할 것은, `report`는 항상 최초의 할일을 프린트 하도록 되어 있다는 것이다. 이것은 약간 인위적인 기능이지만, MobX의 기능을 이해하는데 있어서 유효한 예제다.
 
 ```javascript
-todoStore.addTodo("read MobX tutorial");
-console.log(todoStore.report());
+todoStore.addTodo('read MobX tutorial')
+console.log(todoStore.report())
 
-todoStore.addTodo("try MobX");
-console.log(todoStore.report());
+todoStore.addTodo('try MobX')
+console.log(todoStore.report())
 
-todoStore.todos[0].completed = true;
-console.log(todoStore.report());
+todoStore.todos[0].completed = true
+console.log(todoStore.report())
 
-todoStore.todos[1].task = "try MobX in own project";
-console.log(todoStore.report());
+todoStore.todos[1].task = 'try MobX in own project'
+console.log(todoStore.report())
 
-todoStore.todos[0].task = "grok MobX tutorial";
-console.log(todoStore.report());
+todoStore.todos[0].task = 'grok MobX tutorial'
+console.log(todoStore.report())
 ```
 
 ## 반응형으로 만들기.
 
-아직까지, 코드에 특별한 것은 없다. 하지만 만약에 명시적으로 `report()`를 호출하는 대신에, 단지 상태값이 바뀔대 마다 자동으로 호출되게 할 수 있을까? 이는 `report()`에 영향을 미치는 코드를 호출하는 책임에 대해서 자유로워질 수 있다. 
+아직까지, 코드에 특별한 것은 없다. 하지만 만약에 명시적으로 `report()`를 호출하는 대신에, 단지 상태값이 바뀔대 마다 자동으로 호출되게 할 수 있을까? 이는 `report()`에 영향을 미치는 코드를 호출하는 책임에 대해서 자유로워질 수 있다.
 
 이러한 지점이 바로 MobX가 도움이 될 수 있는 부분이다. 상태에만 의존하는 코드를 자동으로 실행하게 해주자. 이는 스프레드시트의 차트처럼 `report`가 자동으로 업데이트 되도록 하는 것이다. 이를 위해, MobX가 TodoStore를 관찰 가능하도록 만들어야 한다.
 
 또한 `completedTodosCount` 의 값은 할일 목록에서 자동으로 파생될 수 있다. `@observable`과 `@computed` 데코레이터를 사용하면 가능하다.
 
-
 ```javascript
 class ObservableTodoStore {
-	@observable todos = [];
-    @observable pendingRequests = 0;
+  @observable todos = []
+  @observable pendingRequests = 0
 
-    constructor() {
-        mobx.autorun(() => console.log(this.report));
-    }
+  constructor() {
+    mobx.autorun(() => console.log(this.report))
+  }
 
-	@computed get completedTodosCount() {
-    	return this.todos.filter(
-			todo => todo.completed === true
-		).length;
-    }
+  @computed get completedTodosCount() {
+    return this.todos.filter((todo) => todo.completed === true).length
+  }
 
-	@computed get report() {
-		if (this.todos.length === 0)
-			return "<none>";
-		const nextTodo = this.todos.find(todo => todo.completed === false);
-		return `Next todo: "${nextTodo ? nextTodo.task : "<none>"}". ` +
-			`Progress: ${this.completedTodosCount}/${this.todos.length}`;
-	}
+  @computed get report() {
+    if (this.todos.length === 0) return '<none>'
+    const nextTodo = this.todos.find((todo) => todo.completed === false)
+    return (
+      `Next todo: "${nextTodo ? nextTodo.task : '<none>'}". ` +
+      `Progress: ${this.completedTodosCount}/${this.todos.length}`
+    )
+  }
 
-	addTodo(task) {
-		this.todos.push({
-			task: task,
-			completed: false,
-			assignee: null
-		});
-	}
+  addTodo(task) {
+    this.todos.push({
+      task: task,
+      completed: false,
+      assignee: null,
+    })
+  }
 }
 
-
-const observableTodoStore = new ObservableTodoStore();
+const observableTodoStore = new ObservableTodoStore()
 ```
 
 이것이 전부다. 일부 속성을 `@observable`하게 만들어서, MobX가 해당 값이 변화할 때마다 추적하도록 한다. `@computed`는 이러한 변화한 상태에 따라서 자동으로 값이 계산되도록 한다.
 
 `pendingRequests`와 `assignee`는 아직 사용되고 있지 않지만, 이후 튜토리얼에서 사용 될 것이다. 간결하게 코딩하기 위하여 이 예제에서는 ES6, JSX, 그리고 데코레이터를 사용한다. 그리고 모든 데코레이터들은 이 대신 사용할 ES5 스펙의 기술들이 대응되어 있다.
 
-`constructor`에서 `autorun`으로 감싼 `report`함수를 볼 수 있다. `Autorun`은 한번 실행되는 reaction을 만들어내며, 이는 함수 내부에서 사용된 관찰 가능한 데이터가 변경될 때마다 자동으로 실행된다. `report`는 관찰할 수 있는 `todos`를 사용하고 있기 때문에, 적절한 때에 자동으로 실행될 것이다. 
+`constructor`에서 `autorun`으로 감싼 `report`함수를 볼 수 있다. `Autorun`은 한번 실행되는 reaction을 만들어내며, 이는 함수 내부에서 사용된 관찰 가능한 데이터가 변경될 때마다 자동으로 실행된다. `report`는 관찰할 수 있는 `todos`를 사용하고 있기 때문에, 적절한 때에 자동으로 실행될 것이다.
 
 ```javascript
-observableTodoStore.addTodo("read MobX tutorial");
-observableTodoStore.addTodo("try MobX");
-observableTodoStore.todos[0].completed = true;
-observableTodoStore.todos[1].task = "try MobX in own project";
-observableTodoStore.todos[0].task = "grok MobX tutorial";
+observableTodoStore.addTodo('read MobX tutorial')
+observableTodoStore.addTodo('try MobX')
+observableTodoStore.todos[0].completed = true
+observableTodoStore.todos[1].task = 'try MobX in own project'
+observableTodoStore.todos[0].task = 'grok MobX tutorial'
 ```
 
 `report` 함수가 자동으로, 동기적으로, 그리고 중간에 값을 유출하지 않는 형태로 프린트 하는 것을 볼 수 있다. 앞선 예제와는 다르게, 마지막 5번째 로그가 출력되지 않는 것을 볼 수 있다. 왜냐하면 실제로 단순히 이름을 변경한 경우이기 때문이다. 반면, 1번째 이름을 변경하게 되면, 해당 이름이 사용되고 있기 때문에 업데이트 되어 로그가 찍히는 것을 볼 수 있다. 이는 `Autorun`에서 `todos`배열 뿐만 아니라, 항목 내부의 개별 속성도 관찰하고 있음을 알 수 있다.
@@ -160,71 +156,68 @@ observableTodoStore.todos[0].task = "grok MobX tutorial";
 @observer
 class TodoList extends React.Component {
   render() {
-    const store = this.props.store;
+    const store = this.props.store
     return (
       <div>
-        { store.report }
+        {store.report}
         <ul>
-        { store.todos.map(
-          (todo, idx) => <TodoView todo={ todo } key={ idx } />
-        ) }
+          {store.todos.map((todo, idx) => (
+            <TodoView todo={todo} key={idx} />
+          ))}
         </ul>
-        { store.pendingRequests > 0 ? <marquee>Loading...</marquee> : null }
-        <button onClick={ this.onNewTodo }>New Todo</button>
+        {store.pendingRequests > 0 ? <marquee>Loading...</marquee> : null}
+        <button onClick={this.onNewTodo}>New Todo</button>
         <small> (double-click a todo to edit)</small>
         <RenderCounter />
       </div>
-    );
+    )
   }
 
   onNewTodo = () => {
-    this.props.store.addTodo(prompt('Enter a new todo:','coffee plz'));
+    this.props.store.addTodo(prompt('Enter a new todo:', 'coffee plz'))
   }
 }
 
 @observer
 class TodoView extends React.Component {
   render() {
-    const todo = this.props.todo;
+    const todo = this.props.todo
     return (
-      <li onDoubleClick={ this.onRename }>
+      <li onDoubleClick={this.onRename}>
         <input
-          type='checkbox'
-          checked={ todo.completed }
-          onChange={ this.onToggleCompleted }
+          type="checkbox"
+          checked={todo.completed}
+          onChange={this.onToggleCompleted}
         />
-        { todo.task }
-        { todo.assignee
-          ? <small>{ todo.assignee.name }</small>
-          : null
-        }
+        {todo.task}
+        {todo.assignee ? <small>{todo.assignee.name}</small> : null}
         <RenderCounter />
       </li>
-    );
+    )
   }
 
   onToggleCompleted = () => {
-    const todo = this.props.todo;
-    todo.completed = !todo.completed;
+    const todo = this.props.todo
+    todo.completed = !todo.completed
   }
 
   onRename = () => {
-    const todo = this.props.todo;
-    todo.task = prompt('Task name', todo.task) || todo.task;
+    const todo = this.props.todo
+    todo.task = prompt('Task name', todo.task) || todo.task
   }
 }
 
 ReactDOM.render(
-  <TodoList store={ observableTodoStore } />,
-  document.getElementById('reactjs-app')
-);
+  <TodoList store={observableTodoStore} />,
+  document.getElementById('reactjs-app'),
+)
 ```
 
 ```javascript
-const store = observableTodoStore;
-store.todos[0].completed = !store.todos[0].completed;
-store.todos[1].task = "Random todo " + Math.random();
-store.todos.push({ task: "Find a fine cheese", completed: true });
+const store = observableTodoStore
+store.todos[0].completed = !store.todos[0].completed
+store.todos[1].task = 'Random todo ' + Math.random()
+store.todos.push({ task: 'Find a fine cheese', completed: true })
 // etc etc.. add your own statements here...
 ```
 
@@ -233,31 +226,31 @@ store.todos.push({ task: "Find a fine cheese", completed: true });
 지금까지는 단순히 원시값과 배열과 함께 작동되는 모습을 보았다. 하지만 참조값과 작동은 어떻게 될까? 아래의 예제를 살펴보자.
 
 ```javascript
-const store = observableTodoStore;
-store.todos[0].completed = !store.todos[0].completed;
-store.todos[1].task = "Random todo " + Math.random();
-store.todos.push({ task: "Find a fine cheese", completed: true });
+const store = observableTodoStore
+store.todos[0].completed = !store.todos[0].completed
+store.todos[1].task = 'Random todo ' + Math.random()
+store.todos.push({ task: 'Find a fine cheese', completed: true })
 // etc etc.. add your own statements here...
 ```
 
-이제 두개의 독립된 store를 갖게 되었다. 하나는 `people`이고 다른 하나는 `todos`다. `assignee`에 `people` store에 있는 값을 할당하기 위해, 단순히 참조값을 할당하였다. 이러한 변화는 자동으로 `TodoView`에 반영된다. MobX에서는, 컴포넌트를 업데이트하기 위하여 더이상 자료형을 정규화할 필요가 없다. 사실, 데이터가 어디에 있든지 상관없다. 객체가 `observable`한 이상, MobX는 이를 실시간으로 추적하게 된다. 
+이제 두개의 독립된 store를 갖게 되었다. 하나는 `people`이고 다른 하나는 `todos`다. `assignee`에 `people` store에 있는 값을 할당하기 위해, 단순히 참조값을 할당하였다. 이러한 변화는 자동으로 `TodoView`에 반영된다. MobX에서는, 컴포넌트를 업데이트하기 위하여 더이상 자료형을 정규화할 필요가 없다. 사실, 데이터가 어디에 있든지 상관없다. 객체가 `observable`한 이상, MobX는 이를 실시간으로 추적하게 된다.
 
 ```html
 <input onkeyup="peopleStore[1].name = event.target.value" />
 ```
 
-## 비동기 액션 
+## 비동기 액션
 
-todo 애플리케이션은 모든 것이 상태에서 파생되기 때문에, 상태가 언제 어떻게 바뀌는지는 정말 문제가 되지 않는다. 이는 비동기 작업을 매우 쉽게 만든다. 
+todo 애플리케이션은 모든 것이 상태에서 파생되기 때문에, 상태가 언제 어떻게 바뀌는지는 정말 문제가 되지 않는다. 이는 비동기 작업을 매우 쉽게 만든다.
 
-코드는 매우 직관적이다. `pendingRequests`값을 업데이트 하게 되면, 이는 바로 UI의 상태 값에 반영된다. 그리고 로딩이 끝나게 되면, 해당 값을 다시 줄이게 된다. 
+코드는 매우 직관적이다. `pendingRequests`값을 업데이트 하게 되면, 이는 바로 UI의 상태 값에 반영된다. 그리고 로딩이 끝나게 되면, 해당 값을 다시 줄이게 된다.
 
 ```javascript
-observableTodoStore.pendingRequests++;
-setTimeout(function() {
-    observableTodoStore.addTodo('Random Todo ' + Math.random());
-    observableTodoStore.pendingRequests--;
-}, 2000);
+observableTodoStore.pendingRequests++
+setTimeout(function () {
+  observableTodoStore.addTodo('Random Todo ' + Math.random())
+  observableTodoStore.pendingRequests--
+}, 2000)
 ```
 
 ## 결론
@@ -267,7 +260,7 @@ setTimeout(function() {
 1.  `@observable` 데코레이터 또는 `observable`을 사용하여 MobX가 해당 객체를 추적가능하게 한다.
 2.  `@computed` 데코레이터를 사용하여 자동으로 상태값으로 부터 값이 계산되는 함수를 만든다.
 3.  `autorun`은 의존하고 있는 `observable`한 값이 변경 될때 마다 자동으로 실행되는 함수다. 이는 로깅, 네트워크 요청 등을 처리할 때 유용하다.
-4.  `mobx-react`의 `@observer`를 사용하여 리액트 컴포넌트를 반응형으로 반들 수 있다. 이는 자동적으로 그리고 효율적으로 컴포넌트를 업데이트 한다. 이는 매우 크고 복잡한 데이터를 다루는 어플리케이션에서도 유용하다.
+4.  `mobx-react`의 `@observer`를 사용하여 리액트 컴포넌트를 반응형으로 반들 수 있다. 이는 자동적으로 그리고 효율적으로 컴포넌트를 업데이트 한다. 이는 매우 크고 복잡한 데이터를 다루는 애플리케이션에서도 유용하다.
 
 ## MobX는 상태 컨테이너가 아니다.
 

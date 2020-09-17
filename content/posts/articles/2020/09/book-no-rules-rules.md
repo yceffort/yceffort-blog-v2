@@ -1,5 +1,5 @@
 ---
-title: [Book] No Rules Rules
+title: '[Book] No Rules Rules'
 tags:
   - book
 published: true

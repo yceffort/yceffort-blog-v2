@@ -37,7 +37,3 @@ to-heading: 3
 ## author
 
 yceffort [email](root@yceffort.kr)
-
-```
-
-```

@@ -1,5 +1,5 @@
 ---
-title: 'Github Code Spaces 베타 당첨 및 후기'
+title: 'Typescript 4.0 릴리즈 노트 '
 tags:
   - typescript
 published: true

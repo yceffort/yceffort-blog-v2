@@ -5,14 +5,15 @@ tags:
   - nodejs
 published: true
 date: 2020-07-16 08:17:28
-description: "[Faster async functions and
+description: '[Faster async functions and
   promises](https://v8.dev/blog/fast-async)을 번역 요약한 글입니다. ```toc from-heading: 2
   to-heading: 3 ```  자바스크립트의 비동기 처리는 예전부터 특별히 빠르지 않다는 비판을 많이 받아 왔다. 설상가상으로,
-  자바스크립트 애플리케이션 (특히 ..."
+  자바스크립트 애플리케이션 (특히 ...'
 category: javascript
 slug: /2020/07/faster-async-functions-and-promises/
 template: post
 ---
+
 [Faster async functions and promises](https://v8.dev/blog/fast-async)을 번역 요약한 글입니다.
 
 ```toc
@@ -33,15 +34,15 @@ Promise가 자바스크립트에 등장하기 전까지, 특시 Node.js에서는
 ```javascript
 function handler(done) {
   validateParams((error) => {
-    if (error) return done(error);
+    if (error) return done(error)
     dbQuery((error, dbResults) => {
-      if (error) return done(error);
+      if (error) return done(error)
       serviceCall(dbResults, (error, serviceResults) => {
-        console.log(result);
-        done(error, serviceResults);
-      });
-    });
-  });
+        console.log(result)
+        done(error, serviceResults)
+      })
+    })
+  })
 }
 ```
 
@@ -54,10 +55,10 @@ function handler() {
   return validateParams()
     .then(dbQuery)
     .then(serviceCall)
-    .then(result => {
-      console.log(result);
-      return result;
-    });
+    .then((result) => {
+      console.log(result)
+      return result
+    })
 }
 ```
 
@@ -65,15 +66,15 @@ function handler() {
 
 ```javascript
 async function handler() {
-  await validateParams();
-  const dbResults = await dbQuery();
-  const results = await serviceCall(dbResults);
-  console.log(results);
-  return results;
+  await validateParams()
+  const dbResults = await dbQuery()
+  const results = await serviceCall(dbResults)
+  console.log(results)
+  return results
 }
 ```
 
-async 함수를 사용하면, 코드는 간결해지고, 데이터의 흐름과 제어권을 보기 더 쉬워 지며, 여전히 비동기 코드로 작성할 수 있다. 
+async 함수를 사용하면, 코드는 간결해지고, 데이터의 흐름과 제어권을 보기 더 쉬워 지며, 여전히 비동기 코드로 작성할 수 있다.
 
 > 자바스크립트의 실행은 여전히 단일 쓰레드에서 이뤄지며, async function이 뭔가 물리적 쓰레드를 새로 만들어서 처리하는 것이 아님을 명심하자.
 
@@ -82,22 +83,24 @@ async 함수를 사용하면, 코드는 간결해지고, 데이터의 흐름과 
 Node.js에서 흔히 볼 수 있는 또다른 비동기 패러다임은 [ReadableStreams](https://nodejs.org/api/stream.html#stream_readable_streams)이다. 예를 들면 아래와 같다.
 
 ```javascript
-const http = require('http');
+const http = require('http')
 
-http.createServer((req, res) => {
-  let body = '';
-  req.setEncoding('utf8');
-  // data를 받아오려면 콜백함수에 접근해야함.
-  req.on('data', (chunk) => {
-    // 콜백함수에서 data에 접근
-    body += chunk;
-  });
-  // 종료 처리 역시 콜백 함수내에서 이뤄져야 함.
-  req.on('end', () => {
-    res.write(body);
-    res.end();
-  });
-}).listen(1337);
+http
+  .createServer((req, res) => {
+    let body = ''
+    req.setEncoding('utf8')
+    // data를 받아오려면 콜백함수에 접근해야함.
+    req.on('data', (chunk) => {
+      // 콜백함수에서 data에 접근
+      body += chunk
+    })
+    // 종료 처리 역시 콜백 함수내에서 이뤄져야 함.
+    req.on('end', () => {
+      res.write(body)
+      res.end()
+    })
+  })
+  .listen(1337)
 ```
 
 이 코드가 조금 읽기 어려울 수 있다. `data`는 콜백 내에서만 처리할 수 있는 `chunck`로 처리되며, 스트림 종료 처리는 콜백 내부에서 발생한다. 함수가 즉시 종료되고 실제 동작은 콜백에서 이뤄져야 한다는 사실을 인지하지 못하면 버그를 만들기 쉽다.
@@ -105,33 +108,35 @@ http.createServer((req, res) => {
 운 좋게도, ES2018 부터 [async iteration](https://2ality.com/2016/10/asynchronous-iteration.html) 이 도입되었고, 위 코드는 아래처럼 단순화 시킬 수 있다.
 
 ```javascript
-http.createServer(async (req, res) => {
-  try {
-    let body = '';
-    req.setEncoding('utf8');
-    for await (const chunk of req) {
-      body += chunk;
+http
+  .createServer(async (req, res) => {
+    try {
+      let body = ''
+      req.setEncoding('utf8')
+      for await (const chunk of req) {
+        body += chunk
+      }
+      res.write(body)
+      res.end()
+    } catch {
+      res.statusCode = 500
+      res.end()
     }
-    res.write(body);
-    res.end();
-  } catch {
-    res.statusCode = 500;
-    res.end();
-  }
-}).listen(1337);
+  })
+  .listen(1337)
 ```
 
-`data` `end` 라고 명명된 두개의 서로 다른 콜백내에서 데이터 처리 로직을 넣는 대신에, 모든 것을 한가지 async 함수 안에 넣어두고, 새롭게 만들어진 `for await...of`를 사용하여 chunk를 비동기적으로 순회하였다. 그리고 추가로 `try-catch`블록을 작성하여 `unhandledRejection` 에러를 처리하였다. 
+`data` `end` 라고 명명된 두개의 서로 다른 콜백내에서 데이터 처리 로직을 넣는 대신에, 모든 것을 한가지 async 함수 안에 넣어두고, 새롭게 만들어진 `for await...of`를 사용하여 chunk를 비동기적으로 순회하였다. 그리고 추가로 `try-catch`블록을 작성하여 `unhandledRejection` 에러를 처리하였다.
 
 ## Async의 성능 향상
 
-v8 개발진은 v8 5.5에서 v8 6.8에 이르기까지 비동기 코드에 대한 성능 향상을 이뤄 왔다. 프로그래머들이 속도에 대한 걱정 없이 새로운 프로그래밍 패러다임을 안정적으로 쓸 수 있도록  제공하였다.
+v8 개발진은 v8 5.5에서 v8 6.8에 이르기까지 비동기 코드에 대한 성능 향상을 이뤄 왔다. 프로그래머들이 속도에 대한 걱정 없이 새로운 프로그래밍 패러다임을 안정적으로 쓸 수 있도록 제공하였다.
 
 ![doxbee benchmark](https://v8.dev/_img/fast-async/doxbee-benchmark.svg)
 
 위 벤치마크는 무거운 Promise 작업을 수행한 코드다. 위 차트에서는 낮을수록 겅능이 더 좋은 것으로 볼 수 있다.
 
-`parrallel 벤치마트에서는 `Promise.all()에 대한 성능을 테스트 하였다.
+`parrallel 벤치마트에서는`Promise.all()에 대한 성능을 테스트 하였다.
 
 ![parallel benchmark](https://v8.dev/_img/fast-async/parallel-benchmark.svg)
 
@@ -139,7 +144,7 @@ v8 개발진은 v8 5.5에서 v8 6.8에 이르기까지 비동기 코드에 대�
 
 ![real world](https://v8.dev/_img/fast-async/http-benchmarks.svg)
 
-위 차트는 몇몇 유명한 HTTP 미들웨어 프레임워크를 대상으로 무거운 promise와 async를 테스트한 결과다. 이 차트는 초당 요청 속도 처리를 나타낸 것으로, 그래프가 높을 수록 성능이 좋은 것이다. 
+위 차트는 몇몇 유명한 HTTP 미들웨어 프레임워크를 대상으로 무거운 promise와 async를 테스트한 결과다. 이 차트는 초당 요청 속도 처리를 나타낸 것으로, 그래프가 높을 수록 성능이 좋은 것이다.
 
 이러한 성능 향상에는 다음 세가지 요소의 도움을 받은 것이다.
 
@@ -150,14 +155,14 @@ v8 개발진은 v8 5.5에서 v8 6.8에 이르기까지 비동기 코드에 대�
 TurboFan의 출시, 그리고 메인쓰레드에서 분리된 가비지 컬렉터 등이 성능에 도움을 주었지만, Node.js 8에서 일부 경우에 마이크로 틱을 건너뛰는 버그를 해결했다는 점도 한몫을 했다. 이 버그는 의도치 않은 스펙 위반으로 시작되었지만, 나중에 최적화 아이디어를 주게 되었다. 일단 이 버그가 무엇인지 살펴보자.
 
 ```javascript
-const p = Promise.resolve();
+const p = Promise.resolve()
 
-(async () => {
-  await p; console.log('after:await');
-})();
+;(async () => {
+  await p
+  console.log('after:await')
+})()
 
-p.then(() => console.log('tick:a'))
- .then(() => console.log('tick:b'));
+p.then(() => console.log('tick:a')).then(() => console.log('tick:b'))
 ```
 
 위 코드에서는 promise `p`를 만들고, `await`결과를 기다린다. 그리고 이 `p`에는 두가지 핸들러가 걸려있다. 이 코드의 실행 순서는 어떻게 될까?
@@ -186,17 +191,17 @@ MDN에 따르면, async 함수는 결과를 반환하는 암묵적인 promise를
 
 ```javascript
 async function computeAnswer() {
-  return 42;
+  return 42
 }
 ```
 
 만약 호출된다면 promise를 리턴하며, 이 함수의 값을 다른 어떤 promise로도 얻을 수 있다.
 
 ```javascript
-const p = computeAnswer();
+const p = computeAnswer()
 // → Promise
 
-p.then(console.log);
+p.then(console.log)
 // prints 42 on the next turn
 ```
 
@@ -204,7 +209,7 @@ p.then(console.log);
 
 ```javascript
 function computeAnswer() {
-  return Promise.resolve(42);
+  return Promise.resolve(42)
 }
 ```
 
@@ -212,8 +217,8 @@ async 함수의 진정한 힘은 `await` 으로 부터 온다. `await`은 promis
 
 ```javascript
 async function fetchStatus(url) {
-  const response = await fetch(url);
-  return response.status;
+  const response = await fetch(url)
+  return response.status
 }
 ```
 
@@ -221,24 +226,24 @@ async function fetchStatus(url) {
 
 ```javascript
 function fetchStatus(url) {
-  return fetch(url).then(response => response.status);
+  return fetch(url).then((response) => response.status)
 }
 ```
 
 여기서 핸들러는 `async` 함수 다음에 있는 `await` 코드가 포함되어 있다.
 
-보통 Promise는 await을 거치지만, 실제로는 임의의 자바스크립트 값에서 대기할 수 있다. 즉 `await`의 값이 실제로 `promise`가 아니더라도, promise로 변환된다. 
+보통 Promise는 await을 거치지만, 실제로는 임의의 자바스크립트 값에서 대기할 수 있다. 즉 `await`의 값이 실제로 `promise`가 아니더라도, promise로 변환된다.
 
 ```javascript
 async function foo() {
-  const v = await 42;
-  return v;
+  const v = await 42
+  return v
 }
 
-const p = foo();
+const p = foo()
 // → Promise
 
-p.then(console.log);
+p.then(console.log)
 // prints `42` eventually
 ```
 
@@ -248,21 +253,20 @@ p.then(console.log);
 class Sleep {
   // sleep 시간을 받는다.
   constructor(timeout) {
-    this.timeout = timeout;
+    this.timeout = timeout
   }
   // 임의로 then이라고 불리우는 함수를 만들었다.
   then(resolve, reject) {
-    const startTime = Date.now();
-    setTimeout(() => resolve(Date.now() - startTime),
-               this.timeout);
+    const startTime = Date.now()
+    setTimeout(() => resolve(Date.now() - startTime), this.timeout)
   }
 }
 
-(async () => {
+;(async () => {
   // await 과 쓰면 실제 비동기 처럼 동작한다.
-  const actualTime = await new Sleep(1000);
-  console.log(actualTime);
-})();
+  const actualTime = await new Sleep(1000)
+  console.log(actualTime)
+})()
 ```
 
 ## await 동작의 이해
@@ -271,8 +275,8 @@ V8에서 `await`이 어떻게 처리되는지 이해하기 위해서는, 스펙�
 
 ```javascript
 async function foo(v) {
-  const w = await v;
-  return w;
+  const w = await v
+  return w
 }
 ```
 
@@ -291,7 +295,7 @@ async function foo(v) {
 요약하자면, `await v`의 초기 동작은
 
 1. `await`으로 넘겨진 값 `v`를 promise로 감싼다
-2. `async` 함수가 재개 되었을 떄 실행할 핸들러를 붙인다.
+2. `async` 함수가 재개 되었을 때 실행할 핸들러를 붙인다.
 3. `async` 함수의 동작을 멈추고, `implicit_promise`를 호출자에게 리턴한다.
 
 이제 각각의 개별 동작을 하나씩 살펴보자. `awaited` 되어 있는 값이 이미 42라는 값을 실행할 `promise`라고 가정해보자. 그러면 엔진은 새로운 `promise`를 만들고 값이 무엇이 되든지간에 resolve 해버린다. 이는 다음 차례에 Promise의 지연된 체인을 수행하며, 명세에서 이야기하는 `PromiseResolveThenableJob`를 통해 표현된다.

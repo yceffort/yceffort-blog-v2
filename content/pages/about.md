@@ -1,7 +1,7 @@
 ---
-title: "About me"
+title: 'About me'
 published: true
-template: "page"
+template: 'page'
 slug: /about/
 socialImage: '/'
 ---
@@ -14,4 +14,4 @@ Study Everyday, Dream Always.
 
 ### github contribution
 
-![yceffort-github-contribution](http://ghchart.rshah.org/yceffort)
+![yceffort-github-contribution](https://ghchart.rshah.org/yceffort)

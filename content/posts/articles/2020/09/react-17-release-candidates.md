@@ -9,6 +9,12 @@ category: react
 template: post
 ---
 
+```toc
+tight: true,
+from-heading: 2
+to-heading: 3
+```
+
 [원문](https://reactjs.org/blog/2020/08/10/react-v17-rc.html)을 대충 요약한 글입니다.
 
 ## 새로운 기능은 없다.

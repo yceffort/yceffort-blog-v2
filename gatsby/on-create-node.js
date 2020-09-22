@@ -14,7 +14,8 @@ const onCreateNode = ({ node, actions, getNode }) => {
         value: node.frontmatter.slug,
       })
     } else {
-      const value = createFilePath({ node, getNode, basePath: 'pages' })
+      let value = createFilePath({ node, getNode, basePath: 'pages' })
+      value = value.replace('posts/articles/', '')
       createNodeField({
         node,
         name: 'slug',

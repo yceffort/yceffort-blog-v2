@@ -1,11 +1,11 @@
 ---
 title: 'Github Code Spaces 베타 당첨 및 후기'
 tags:
-  - javascript, react
+  - github
 published: true
 date: 2020-09-21 18:24:44
 description: '리액트 17.0 새로운 기능은 추가되지 않을 예정. 점진적 업그레이드 추가, 이벤트 위임 방식 변경이 주요 변경 내용인 것 같네용.'
-category: react
+category: github
 template: post
 ---
 

@@ -1,9 +1,9 @@
 ---
 title: useCallback 사용 가이드
 tags:
-  - javascript, react
+  - react, javascript
 published: true
-date: 2020-09-22 21:15:11
+date: 2020-09-22 23:15:11
 description: '아직도 useCallback으로 고통 받다니'
 category: react
 template: post

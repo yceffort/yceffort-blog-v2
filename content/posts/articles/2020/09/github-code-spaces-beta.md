@@ -23,7 +23,7 @@ template: post
 
 지겨운! 도큐먼트는! 보지 않으련다! 대충 몇 가지로 요약해보자
 
-- 각 Codespace는 특정 브랜치 별로 생성할 수 있다. 그러나 이번 베타 기간에는 최대 두 개의 codespace를 개설할 수 있다. 따라서 쓰고 난뒤엔 지워야 한다!
+- 이번 베타 기간에는 최대 두 개의 codespace를 개설할 수 있다. 따라서 쓰고 난뒤엔 지워야 한다.
 - 당연하게도 VSCode와 연동해서 쓸 수 있다! [참고](https://docs.github.com/en/github/developing-online-with-codespaces/connecting-to-your-codespace-from-visual-studio-code)
 - 프로젝트의 Codespace에 기본 설정을 적용해 둘 수 있다. [참고](https://docs.github.com/en/github/developing-online-with-codespaces/configuring-codespaces-for-your-project)
 - 가격은 기존 VS Codespace의 미국 동부기준 가격과 동일하다. 성능별로 차이가 있으며, 아래를 참고하세용. (베타 기간엔 베이직만 존재하는 듯?)

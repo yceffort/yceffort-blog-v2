@@ -1,4 +1,6 @@
-# yceffort-blog v2
+# yceffort-blog
+
+previously, https://github.com/yceffort/yceffort-blog
 
 github repository of https://yceffort.kr
 

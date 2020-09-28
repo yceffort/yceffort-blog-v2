@@ -1,5 +1,5 @@
 ---
-title: ECMAScript 명세 읽어보기 (1)
+title: 크롬 익스텐션 만들기
 tags:
   - chrome
 published: true

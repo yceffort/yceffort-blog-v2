@@ -2,7 +2,7 @@
 title: ECMAScript 명세 읽어보기 (2)
 tags:
   - javascript
-published: true
+published: false
 date: 2020-09-28 20:25:18
 description: '조금은 이해가 될지도?'
 category: javascript

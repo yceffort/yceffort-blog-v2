@@ -14,6 +14,7 @@ category: javascript
 slug: /2020/07/make-use-of-long-term-caching/
 template: post
 ---
+
 [Make use of long-term caching](https://developers.google.com/web/fundamentals/performance/webpack/use-long-term-caching)을 번역한 글입니다.
 
 ```toc
@@ -28,12 +29,14 @@ to-heading: 3
 캐싱을 하는 가장 일반적인 방법은 다음과 같다.
 
 1. 브라우저에 해당 파일의 캐시 기간을 굉장히 길게 설정해 두는 것 (1년 쯤)
+
 ```
 # Server header
 Cache-Control: max-age=31536000
 ```
 
 2. 파일의 이름을 바꿔서 강제로 다운로드 하게 하는 것
+
 ```html
 <!-- Before the change -->
 <script src="./index-v15.js"></script>
@@ -44,7 +47,7 @@ Cache-Control: max-age=31536000
 
 이러한 접근 법은 브라우저에 JS 파일을 다운로드 받게 하고, 이를 캐시하여 캐시된 복사본을 사용하게 한다. 브라우저는 파일명이 바뀌거나 1년이 지난 이후에야 새롭게 네트워크를 통해서 파일을 받을 것이다.
 
-웹팩에서는 이와 동일한 작업을 할 수 있다. 버전명을 사요하는 대신, 파일 해시를 지정해서 사용할 수 있따. 파일명에 해시를 포함하기 위해서는 `[chuckhash]`를 사용하면 된다.
+웹팩에서는 이와 동일한 작업을 할 수 있다. 버전명을 사요하는 대신, 파일 해시를 지정해서 사용할 수 있다. 파일명에 해시를 포함하기 위해서는 `[chuckhash]`를 사용하면 된다.
 
 ```javascript
 // webpack.config.js
@@ -52,9 +55,9 @@ module.exports = {
   entry: './index.js',
   output: {
     filename: 'bundle.[chunkhash].js',
-        // → bundle.8e0d62a03.js
+    // → bundle.8e0d62a03.js
   },
-};
+}
 ```
 
 > 파일명만 바뀌거나, 번들링하는 OS의 버전이 다른 경우에도 다른 해시값이 나올 수도 있다. 이것은 웹팩의 버그로, 아직까지 [뚜렷한 해결책이 없는 듯 하다](https://github.com/webpack/webpack/issues/1479)
@@ -65,7 +68,7 @@ module.exports = {
 
 ```html
 <!-- index.html -->
-<!doctype html>
+<!DOCTYPE html>
 <!-- ... -->
 <script src="bundle.8e0d62a03.js"></script>
 ```
@@ -91,41 +94,46 @@ module.exports = {
 
 1. output 파일명을 `[name].[chunkname].js`로 바꾼다.
    ```javascript
-  // webpack.config.js
-  module.exports = {
-    output: {
-      // Before
-      filename: 'bundle.[chunkhash].js',
-      // After
-      filename: '[name].[chunkhash].js',
-    },
-  };
+   // webpack.config.js
+   module.exports = {
+     output: {
+       // Before
+       filename: 'bundle.[chunkhash].js',
+       // After
+       filename: '[name].[chunkhash].js',
+     },
+   }
    ```
 2. `entry`를 object로 바꾼다.
-  ```javascript
-  // webpack.config.js
-  module.exports = {
-    // Before
-    entry: './index.js',
-    // After
-    entry: {
-      main: './index.js',
-    },
-  };
-  ```
-  위 코드에서, `main`은 chunk의 이름이다. 이 이름은 앞서 언급했던 `[name]`을 대체할 것이다. 그럼 지금부터, 앱을 빌드하게 되면 이 chunk는 모든 앱 코드에 포함되게 된다.
+
+```javascript
+// webpack.config.js
+module.exports = {
+  // Before
+  entry: './index.js',
+  // After
+  entry: {
+    main: './index.js',
+  },
+}
+```
+
+위 코드에서, `main`은 chunk의 이름이다. 이 이름은 앞서 언급했던 `[name]`을 대체할 것이다. 그럼 지금부터, 앱을 빌드하게 되면 이 chunk는 모든 앱 코드에 포함되게 된다.
+
 3. 웹팩4 부터는, `optimization.splitChunks.chunks.: 'all'`을 붙이면 된다.
-  ```javascript
-  // webpack.config.js (for webpack 4)
-  module.exports = {
-    optimization: {
-      splitChunks: {
-        chunks: 'all',
-      }
+
+```javascript
+// webpack.config.js (for webpack 4)
+module.exports = {
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
     },
-  };
-  ```
-  이 코드는 스마트 코드 스플리팅을 가능하게 해준다. 만약 벤더 코드가 30kb가 넘는다면 (최소화 및 gzip 이전에) 따로 추출해낸다. 그리고 이 단계에서 공통 코드도 추출하게 된다. 이는 빌드시에 여러개의 파일이 나올때 유용하다.
+  },
+}
+```
+
+이 코드는 스마트 코드 스플리팅을 가능하게 해준다. 만약 벤더 코드가 30kb가 넘는다면 (최소화 및 gzip 이전에) 따로 추출해낸다. 그리고 이 단계에서 공통 코드도 추출하게 된다. 이는 빌드시에 여러개의 파일이 나올때 유용하다.
 
 이렇게 바꾸고 나면, 매번 빌드시에 두개의 파일이 생성될 것이다. `main.[chunkhash].js` `vendor.[chunkhash].js` (웹팩 4의 경우 `vendors~main.[chunkhash].js`) 웹팩 4의 경우에는, 디펜던시가 그렇게 크지 않다면 벤더 번들을 만들어 내지 않는다.
 
@@ -161,7 +169,6 @@ console.log('Wat');
 ./vendor.d9e134771799ecdf9483.js  47 kB       1  [emitted]  vendor
 ```
 
-
 ```
                             Asset   Size  Chunks             Chunk Names
 ./vendor.e6ea4504d61a1cc1c60b.js  47 kB       1  [emitted]  vendor
@@ -171,9 +178,14 @@ console.log('Wat');
 
 ```javascript
 // vendor.e6ea4504d61a1cc1c60b.js
-script.src = __webpack_require__.p + chunkId + "." + {
-  "0": "2f2269c7f0a55a5c1871"
-}[chunkId] + ".js";
+script.src =
+  __webpack_require__.p +
+  chunkId +
+  '.' +
+  {
+    '0': '2f2269c7f0a55a5c1871',
+  }[chunkId] +
+  '.js'
 ```
 
 웹팩은 런타임을 가작 마지막에 생성된 chunk에 넣는데, 우리의 경우에는 `vendor`가 그 파일이다. chunk가 각각 생길 때 마다, 코드 조각이 바뀌게되고, 이는 `vendor` 파일 전체의 변화를 초래한다.
@@ -186,7 +198,7 @@ module.exports = {
   optimization: {
     runtimeChunk: true,
   },
-};
+}
 ```
 
 이 작업까지 마치게 되면, 세 개의 파일이 생기게 된다.
@@ -230,14 +242,14 @@ webpack runtime을 인라인 코드로 넣는 것도 고려해볼만 하다.
 ```html
 <!-- index.html -->
 <script>
-!function(e){function n(r){if(t[r])return t[r].exports;…}} ([]);
+  !function(e){function n(r){if(t[r])return t[r].exports;…}} ([]);
 </script>
 ```
 
 ```html
 <!-- index.html -->
 <script>
-!function(e){function n(r){if(t[r])return t[r].exports;…}} ([]);
+  !function(e){function n(r){if(t[r])return t[r].exports;…}} ([]);
 </script>
 ```
 
@@ -247,8 +259,8 @@ webpack runtime을 인라인 코드로 넣는 것도 고려해볼만 하다.
 
 ```javascript
 // webpack.config.js
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const InlineSourcePlugin = require('html-webpack-inline-source-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const InlineSourcePlugin = require('html-webpack-inline-source-plugin')
 
 module.exports = {
   plugins: [
@@ -260,45 +272,48 @@ module.exports = {
     // This plugin enables the “inlineSource” option
     new InlineSourcePlugin(),
   ],
-};
+}
 ```
 
 만약 커스텀 서버 로직을 사용하고 있다면,
 
 1. [WebpackManifestPlugin](https://github.com/danethurber/webpack-manifest-plugin)을 추가하여 생성된 런타임 chunk의 이름을 알아낸다.
-  ```javascript
-  // webpack.config.js (for webpack 4)
-  const ManifestPlugin = require('webpack-manifest-plugin');
 
-  module.exports = {
-    plugins: [
-      new ManifestPlugin(),
-    ],
-  };
-  ```
-  이 플러그인과 함께 빌드하면, 아래와 같은 파일이 만들어진다.
-  ```json
-  // manifest.json
-  {
-    "runtime~main.js": "runtime~main.8e0d62a03.js"
-  }
-  ```
+```javascript
+// webpack.config.js (for webpack 4)
+const ManifestPlugin = require('webpack-manifest-plugin')
+
+module.exports = {
+  plugins: [new ManifestPlugin()],
+}
+```
+
+이 플러그인과 함께 빌드하면, 아래와 같은 파일이 만들어진다.
+
+```json
+// manifest.json
+{
+  "runtime~main.js": "runtime~main.8e0d62a03.js"
+}
+```
+
 2. 런타임 chunk의 내용을 편한대로 인라인으로 적어둔다.
-  ```javascript
-  // server.js
-  const fs = require('fs');
-  const manifest = require('./manifest.json');
 
-  const runtimeContent = fs.readFileSync(manifest['runtime~main.js'], 'utf-8');
+```javascript
+// server.js
+const fs = require('fs')
+const manifest = require('./manifest.json')
 
-  app.get('/', (req, res) => {
-    res.send(`
-      …
-      <script>${runtimeContent}</script>
-      …
-    `);
-  });
-  ```
+const runtimeContent = fs.readFileSync(manifest['runtime~main.js'], 'utf-8')
+
+app.get('/', (req, res) => {
+  res.send(`
+    …
+    <script>${runtimeContent}</script>
+    …
+  `)
+})
+```
 
 ## 당장 필요하지 않은 코드는 레이지 로딩으로 처리하기
 
@@ -340,7 +355,7 @@ Time: 4273ms
    ./main.f7e53d8e13e9a2745d6d.js    60 kB       1  [emitted]  main
  ./vendor.4f14b6326a80f4752a98.js    46 kB       2  [emitted]  vendor
 ./runtime.79f17c27b335abc7aaf4.js  1.45 kB       3  [emitted]  runtime
-``` 
+```
 
 그리고 해당 코드를 `import()` 함수를 만날 때만 실행하게 된다.
 
@@ -355,7 +370,7 @@ Time: 4273ms
 
 ## 코드를 라우팅과 페이지 단위로 나누기
 
-애플리케이션에 다양한 페이지와 라우팅이 있는데, 만약 모든 자바스크립트 코드가 하나의 자바스크립트 파일 (`main`)에 의존하고 있다면, 각 요청마다 몇 바이트 씩 더 소비하고 있을 수 있다. 예를 들어, 사용자가 페이지에 방문했을 때 
+애플리케이션에 다양한 페이지와 라우팅이 있는데, 만약 모든 자바스크립트 코드가 하나의 자바스크립트 파일 (`main`)에 의존하고 있다면, 각 요청마다 몇 바이트 씩 더 소비하고 있을 수 있다. 예를 들어, 사용자가 페이지에 방문했을 때
 
 ![](https://developers.google.com/web/fundamentals/performance/webpack/site-home-page.png)
 
@@ -365,7 +380,7 @@ Time: 4273ms
 
 ### 싱글페이지 애플리케이션의 경우
 
-라우팅으로 관리하는 싱글 페이지 애플리케이션의 경우 `import()`를 활용하는 것이 좋다. 만약 프레임워크를 활용하고 있다면, 
+라우팅으로 관리하는 싱글 페이지 애플리케이션의 경우 `import()`를 활용하는 것이 좋다. 만약 프레임워크를 활용하고 있다면,
 
 - 리액트 [react-router의 코드 스플리팅](https://reacttraining.com/react-router/web/guides/code-splitting)
 - 뷰 [vue.js의 레이지 로딩 라우팅](https://router.vuejs.org/en/advanced/lazy-loading.html)
@@ -380,9 +395,9 @@ module.exports = {
   entry: {
     home: './src/Home/index.js',
     article: './src/Article/index.js',
-    profile: './src/Profile/index.js'
+    profile: './src/Profile/index.js',
   },
-};
+}
 ```
 
 각 엔트리 파일별로, 웹팩은 각 엔트리에서 필요한 모듈을 별도의 의존성으로 나누어서 빌드 해준다.
@@ -411,16 +426,16 @@ module.exports = {
   optimization: {
     splitChunks: {
       chunks: 'all',
-    }
+    },
   },
-};
+}
 ```
 
 이 옵션은 스마트 코드 스플리팅을 활성화 시킨다. 이 옵션은 각 다른 파일에 있는 공통 코드를 자동으로 공통단위로 올려준다.
 
 - [웹팩의 entry points](https://webpack.js.org/concepts/entry-points/)
 - [웹팩의 CommonsChunkPlugin](https://webpack.js.org/plugins/commons-chunk-plugin/)
-  
+
 ## 모듈 ID를 더욱 안정적으로 관리하기
 
 코드를 빌드 할때, 웹팩은 각각의 모듈에 ID를 부여한다. 이 ID 는 번들 내의 `require()`로 사용 된다. 이러한 ID들은 모듈 경로 이전에 있는 빌드 결과물에서 볼 수 있다.
@@ -511,10 +526,8 @@ Time: 2150ms
 ```javascript
 // webpack.config.js
 module.exports = {
-  plugins: [
-    new webpack.HashedModuleIdsPlugin(),
-  ],
-};
+  plugins: [new webpack.HashedModuleIdsPlugin()],
+}
 ```
 
 ## 요약

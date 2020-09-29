@@ -13,6 +13,7 @@ category: javascript
 slug: /2020/07/memory-leaks-in-javascript/
 template: post
 ---
+
 ```toc
 tight: true,
 from-heading: 2
@@ -29,11 +30,11 @@ to-heading: 3
 
 ### 메모리 누수란 무엇인가?
 
-메모리 누수는 어떤 이유에서든 지간에, 운영체제 또는 사용가능한 메모리 풀에서 반환되지 않으면서 동시에 애플리케이션에서 더이상 필요로 하지 않는 메모리로 정의 될 수 있다. 프로그래밍 언어는 메모리 관리를 각각 다른 방법으로 처리한다. 이런 방법들은 메모리 누수를 이르킬 확률을 감소시킨다. 그러나 어떠한 메모리가 돌아 오지 않는지는 시스템이 결정할 수 없는 문제다. 즉, [오직 개발자만이 메모리의 일부를 운영제체에 반환할 수 있는지 여부를 명확히 알 수 있다.](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Memory_Management#Release_when_the_memory_is_not_needed_anymore) 어떤 프로그래밍 언어에서는  개발자들이 이 것을 하는데 도움을 주는 기능을 제공한다. 다른 언어에서는 개발자들이 메모리가 사용되지 않을 때를 완전히 명시하는 것을 기대하는 언어도 있다. 
+메모리 누수는 어떤 이유에서든 지간에, 운영체제 또는 사용가능한 메모리 풀에서 반환되지 않으면서 동시에 애플리케이션에서 더이상 필요로 하지 않는 메모리로 정의 될 수 있다. 프로그래밍 언어는 메모리 관리를 각각 다른 방법으로 처리한다. 이런 방법들은 메모리 누수를 이르킬 확률을 감소시킨다. 그러나 어떠한 메모리가 돌아 오지 않는지는 시스템이 결정할 수 없는 문제다. 즉, [오직 개발자만이 메모리의 일부를 운영제체에 반환할 수 있는지 여부를 명확히 알 수 있다.](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Memory_Management#Release_when_the_memory_is_not_needed_anymore) 어떤 프로그래밍 언어에서는 개발자들이 이 것을 하는데 도움을 주는 기능을 제공한다. 다른 언어에서는 개발자들이 메모리가 사용되지 않을 때를 완전히 명시하는 것을 기대하는 언어도 있다.
 
 ### 자바스크립트의 메모리 관리
 
-자바스크립트는 이른바 가비지 콜렉팅 언어(garbage collected languages)라고 불리운다. 가비지 콜렉팅 언어는 이전에 할당된 메모리 영역이 응용프로그램의 다른부분에서 여전히 '다시 참조될 (reached)' 수 있는지  주기적으로 확인하여 개발자가 메모리를 관리하는데 도움을 준다. 즉, 가비지 콜렉팅 언어는 메모리 관리 문제를 '필요한 메모리가 무엇인가?' 에서 '응용 프로그램의 다른부분에서 여전히 도달할 수 있는 메모리가 무엇인가?' 로 문제를 좁히는 것으로 볼 수 있다. 이러한 차이는 미묘하지만 중요하다. 앞으로 할당된 메모리가 필요할지는 개발자 만이 알 수 있지만서도, 더이상 닿을 수 없는 메모리는 알고리즘적으로 결정되어 OS에 다시 돌아오도록 표시할 수 있다.
+자바스크립트는 이른바 가비지 콜렉팅 언어(garbage collected languages)라고 불리운다. 가비지 콜렉팅 언어는 이전에 할당된 메모리 영역이 응용프로그램의 다른부분에서 여전히 '다시 참조될 (reached)' 수 있는지 주기적으로 확인하여 개발자가 메모리를 관리하는데 도움을 준다. 즉, 가비지 콜렉팅 언어는 메모리 관리 문제를 '필요한 메모리가 무엇인가?' 에서 '응용 프로그램의 다른부분에서 여전히 도달할 수 있는 메모리가 무엇인가?' 로 문제를 좁히는 것으로 볼 수 있다. 이러한 차이는 미묘하지만 중요하다. 앞으로 할당된 메모리가 필요할지는 개발자 만이 알 수 있지만서도, 더이상 닿을 수 없는 메모리는 알고리즘적으로 결정되어 OS에 다시 돌아오도록 표시할 수 있다.
 
 > 가비지 콜렉팅 언어가 아닌 언어들은 보통 메모리 관리를 하는데 있어 다른 종류의 기술을 사용한다. 이를 명시적 관리하고 하는데, 개발자가 메모리가 필요하지 않을 때 컴파일러에 명시적으로 알려주거나, 참조카운트를 사용하여 참조되는 횟수가 0에 달하는지 체크하는 방식이다. 이러한 방식은 장단이 있다.
 
@@ -55,7 +56,7 @@ to-heading: 3
 
 띠라서 자바스크립트의 가장 흔한 메모리 누수에 대해 알 기 위해서는, 어떤 종류의 참조가 종종 잊혀지는지 확인을 해봐야 한다.
 
-## 흔한 자바스크립트 메모리 누수 3가지 
+## 흔한 자바스크립트 메모리 누수 3가지
 
 ### 1. 의도치 않은 전역 변수
 
@@ -63,7 +64,7 @@ to-heading: 3
 
 ```javascript
 function foo(arg) {
-    bar = "this is a hidden global variable";
+  bar = 'this is a hidden global variable'
 }
 ```
 
@@ -71,21 +72,21 @@ function foo(arg) {
 
 ```javascript
 function foo(arg) {
-    window.bar = "this is an explicit global variable";
+  window.bar = 'this is an explicit global variable'
 }
 ```
 
-`bar`가 `foo`함수 범위 안에서만 변수에 대한 참조를 보유하도록 처리해두었는데, `var`를 까먹으면 예기치 않은 전역 변수를 생성하게 된다. 
+`bar`가 `foo`함수 범위 안에서만 변수에 대한 참조를 보유하도록 처리해두었는데, `var`를 까먹으면 예기치 않은 전역 변수를 생성하게 된다.
 
 이와 비슷한 또다른 실수는 바로 `this`다.
 
 ```javascript
 function foo() {
-    this.variable = "potential accidental global";
+  this.variable = 'potential accidental global'
 }
 
 // Foo가 호출되면, this는 글로벌 객체인 윈도우를 가리키게 된다.
-foo();
+foo()
 ```
 
 > 이러한 실수가 일어나는 것을 막기 위해서는 `use strict`를 자바스크립트 파일 맨 상단에 선언하면 된다. 이는 자바스크립트를 더 엄격한 모드에서 파싱하게 함으로써 이러한 실수를 방지한다.
@@ -115,16 +116,16 @@ Observer의 경우, 더 이상 필요하지 않은 경우 (또는 관련 객체�
 
 ```javascript
 // 이 element는 onClick에서 참조됨
-var element = document.getElementById('button');
+var element = document.getElementById('button')
 
 function onClick(event) {
-    element.innerHtml = 'text';
+  element.innerHtml = 'text'
 }
 
-element.addEventListener('click', onClick);
+element.addEventListener('click', onClick)
 
-element.removeEventListener('click', onClick);
-element.parentNode.removeChild(element);
+element.removeEventListener('click', onClick)
+element.parentNode.removeChild(element)
 
 // 이제 `element`는 더이상 쓰이 지않는다.
 // `element`와 `onClick`모두 스코프에서 사라져서 모두 해제 대상이 된다.
@@ -142,24 +143,24 @@ jQuery와 같은 프레임워크나 라이브러리는 노드를 없애버리기
 가끔 DOM 노드를 자료구조안에 저장하는 것이 유용할 때가 있다. 테이블의 여러 행을 빠르게 업데이트 하고 싶은 상황을 가정해 보자. DOM을 딕셔너리나 배열에 저장해서 참조해서 쓰는 방법이 있을 것이다. 그렇게 된다면, DOM 트리와 딕셔너리 안에 같은 DOM 참조가 두벌로 존재하게 될 것이다. 만약 나중에 이 두 행을 모두 제거해야할 경우, 두 참조 모두 제거를 해야 한다.
 
 ```javascript
-// 
+//
 var elements = {
-    button: document.getElementById('button'),
-    image: document.getElementById('image'),
-    text: document.getElementById('text')
-};
+  button: document.getElementById('button'),
+  image: document.getElementById('image'),
+  text: document.getElementById('text'),
+}
 
 function doStuff() {
-    image.src = 'http://some.url/image';
-    button.click();
-    console.log(text.innerHTML);
+  image.src = 'http://some.url/image'
+  button.click()
+  console.log(text.innerHTML)
 }
 
 function removeButton() {
-    document.body.removeChild(document.getElementById('button'));
+  document.body.removeChild(document.getElementById('button'))
 
-    // 이 시점에서도 여전히 elements에서 button의 참조를 가지고 있다.
-    // 이 경우 button element는 여전히 메모리에 있으며, GC에 의해 해제 될 수 없다.
+  // 이 시점에서도 여전히 elements에서 button의 참조를 가지고 있다.
+  // 이 경우 button element는 여전히 메모리에 있으며, GC에 의해 해제 될 수 없다.
 }
 ```
 
@@ -169,32 +170,31 @@ function removeButton() {
 
 (뭐야 세개라며)
 
-자바스크립트에서 중요한 부분을 차지하는 것중 하나가 클로저다.  클로저는 상위 스코프의 변수에 접근 가능한 것을 말한다. Meteor 개발자들은 자바스크립트 런타임 구현으로 인해 메모리 누수가 가능한 [특정 사례](https://blog.meteor.com/an-interesting-kind-of-javascript-memory-leak-8b47d2e7f156?gi=c44666acc598)를 발견하였다.
+자바스크립트에서 중요한 부분을 차지하는 것중 하나가 클로저다. 클로저는 상위 스코프의 변수에 접근 가능한 것을 말한다. Meteor 개발자들은 자바스크립트 런타임 구현으로 인해 메모리 누수가 가능한 [특정 사례](https://blog.meteor.com/an-interesting-kind-of-javascript-memory-leak-8b47d2e7f156?gi=c44666acc598)를 발견하였다.
 
 ```javascript
-var theThing = null;
+var theThing = null
 
 var replaceThing = function () {
-  var originalThing = theThing;
+  var originalThing = theThing
   // 상위 스코프인 originalThing을 참조하는 스코프를 갖게됨
   // 동시에 theThing 도 참조하게됨.
   var unused = function () {
-    if (originalThing)
-      console.log("hi");
-  };
+    if (originalThing) console.log('hi')
+  }
 
   //
   theThing = {
     longStr: new Array(1000000).join('*'),
     someMethod: function () {
-      console.log(someMessage);
-    }
-  };
-};
-setInterval(replaceThing, 1000);
+      console.log(someMessage)
+    },
+  }
+}
+setInterval(replaceThing, 1000)
 ```
 
-`replaceThing`이 호출될 때마다, 큰 사이즈의 배열 `longStr`과 `someMethod` 클로저를 생성한다. 동시에 `unused` 변수는 `originalThing`을 참조하는 클로저를 가지게 된다. 중요한 것은,  `unused`와 같은 내부함수에서는 자신을 둘러싼 부모함수의 스코프를 공유한다는 것이다. (스코프 체이닝) `unused`내부 함수가 없다면, `replaceThing`은 매번 실행 될 때 마다 길이가 큰 문자열을 생성하긴 하겠지만, 최신 자바스크립트 엔진 (v8과 같은) 에서는 이전에 호출된 `originalThing`이 사용 되지 않았음을 파악하고, 이전 값을 해제하여 메모리 사용량을 유지 시킨다. 하지만 위 코드에서는 `unused`의 내부 함수로 인해 계속해서 `originalThing`을 참조하게 되고 `unused`가 사용되지 않더라도, 이 코드가 실행 될 때마다 메모리 사용량이 꾸준히 증가하는 것을 볼 수 있다. 따라서 GC가 작동하더라도 메모리 사용량은 크게 줄어들지 않게 된다. 본질적으로 클로저의 참조 목록이 생성되면 (`theThing`으로 부터 생겨난 `root`), 이 클로저 내부에는 큰사이즈 배열에 대한 간접적인 참쪼도 동반하게 되므로 메모리 누수가 발생된다.
+`replaceThing`이 호출될 때마다, 큰 사이즈의 배열 `longStr`과 `someMethod` 클로저를 생성한다. 동시에 `unused` 변수는 `originalThing`을 참조하는 클로저를 가지게 된다. 중요한 것은, `unused`와 같은 내부함수에서는 자신을 둘러싼 부모함수의 스코프를 공유한다는 것이다. (스코프 체이닝) `unused`내부 함수가 없다면, `replaceThing`은 매번 실행 될 때 마다 길이가 큰 문자열을 생성하긴 하겠지만, 최신 자바스크립트 엔진 (v8과 같은) 에서는 이전에 호출된 `originalThing`이 사용 되지 않았음을 파악하고, 이전 값을 해제하여 메모리 사용량을 유지 시킨다. 하지만 위 코드에서는 `unused`의 내부 함수로 인해 계속해서 `originalThing`을 참조하게 되고 `unused`가 사용되지 않더라도, 이 코드가 실행 될 때마다 메모리 사용량이 꾸준히 증가하는 것을 볼 수 있다. 따라서 GC가 작동하더라도 메모리 사용량은 크게 줄어들지 않게 된다. 본질적으로 클로저의 참조 목록이 생성되면 (`theThing`으로 부터 생겨난 `root`), 이 클로저 내부에는 큰사이즈 배열에 대한 간접적인 참쪼도 동반하게 되므로 메모리 누수가 발생된다.
 
 ## 가비지 컬렉터의 비직관적인 동작
 
@@ -216,44 +216,46 @@ setInterval(replaceThing, 1000);
 
 ![GC-1](images/GC1-performance.png)
 
-이 메뉴는 코드에서 비정상적인 메모리 사용 패턴을 발견하는데 필수적으로 사용된다. 
+이 메뉴는 코드에서 비정상적인 메모리 사용 패턴을 발견하는데 필수적으로 사용된다.
 
 ![Memory](images/GC2-Memory.png)
 
-앞으로 자주 봐야하는 메뉴다. Memory 메뉴에서 스냅샷을 찍을 수 있고, 자바스크립트 코드의 메모리 사용량을 볼 수도 있다. 또한 시간에 따라 메모리 할당을 기록할 수도 있다. `summary`와  `comparison`을 사용하면 된다.
+앞으로 자주 봐야하는 메뉴다. Memory 메뉴에서 스냅샷을 찍을 수 있고, 자바스크립트 코드의 메모리 사용량을 볼 수도 있다. 또한 시간에 따라 메모리 할당을 기록할 수도 있다. `summary`와 `comparison`을 사용하면 된다.
 
 ## 크롬 개발자 도구를 활용해서 메모리 누수 찾기 예제
 
-메모리 누수에는 크게 두가지 형태가 있다. 하나는 계속해서 메모리 사용량이 증가하는 것이고, 다른 하나는 단 한번만 메모리 사용량이 증가하는 형태다. 일반적으로 전자는 찾기 쉽다. 하지만 전자는 메모리가 늘어나면 브라우저가 느려지거나 스크립트 실행이 중단되어 성가시다. 후자의 유형인 주기적이지 않은 누수는 다른 메모리 할당에 비해 아주 쉽게 발견할 수 있따. 그러나 이러한 경우는 흔치 않아서, 잘 인지하지 못하고 넘어가는 경구가 많다. 하지만 주기적 메모리 누수는 버그이기 때문에 반드시 해결해야 한다.
+메모리 누수에는 크게 두가지 형태가 있다. 하나는 계속해서 메모리 사용량이 증가하는 것이고, 다른 하나는 단 한번만 메모리 사용량이 증가하는 형태다. 일반적으로 전자는 찾기 쉽다. 하지만 전자는 메모리가 늘어나면 브라우저가 느려지거나 스크립트 실행이 중단되어 성가시다. 후자의 유형인 주기적이지 않은 누수는 다른 메모리 할당에 비해 아주 쉽게 발견할 수 있다. 그러나 이러한 경우는 흔치 않아서, 잘 인지하지 못하고 넘어가는 경구가 많다. 하지만 주기적 메모리 누수는 버그이기 때문에 반드시 해결해야 한다.
 
 ### 주기적으로 메모리 누수가 증가하는 케이스
 
 [크롬이 제공하는 예제](https://developer.chrome.com/devtools/docs/demos/memory/example1)를 살펴보자.
 
 ```javascript
-var x = [];
+var x = []
 
 function createSomeNodes() {
-    var div,
-        i = 100,
-        frag = document.createDocumentFragment();
-    for (;i > 0; i--) {
-        div = document.createElement("div");
-        div.appendChild(document.createTextNode(i + " - "+ new Date().toTimeString()));
-        frag.appendChild(div);
-    }
-    document.getElementById("nodes").appendChild(frag);
+  var div,
+    i = 100,
+    frag = document.createDocumentFragment()
+  for (; i > 0; i--) {
+    div = document.createElement('div')
+    div.appendChild(
+      document.createTextNode(i + ' - ' + new Date().toTimeString()),
+    )
+    frag.appendChild(div)
+  }
+  document.getElementById('nodes').appendChild(frag)
 }
 function grow() {
-    x.push(new Array(1000000).join('x'));
-    createSomeNodes();
-    setTimeout(grow,1000);
+  x.push(new Array(1000000).join('x'))
+  createSomeNodes()
+  setTimeout(grow, 1000)
 }
 ```
 
 `grow`가 호출되면 `div`노드를 만들고, DOM에 추가시킨다. 또한 큰 배열을 할당하고, 이를 글로벌 변수에 참조시킨다. 이 코드는 위에서 언급한 크롬도구로 살펴볼 수 있다.
 
-`Performance` 메뉴를 통해 쉽게 탐지할 수 있다. 
+`Performance` 메뉴를 통해 쉽게 탐지할 수 있다.
 
 ![](images/GC3-example.png)
 
@@ -271,11 +273,11 @@ JS Heap 그래프도 역시 메모리 사용이 증가되고 있음을 보여준
 
 이제 비교할 수 있는 방법이 두가지 있다. `Summary`를 선택 한 다음, `Objects Allocated between Snapshot 1 and Snapshot`를 선택하거나, `Summary`대신 `Comparison`을 선택하면 된다.
 
-여기에서는 쉽게 찾을 수 있다. 
+여기에서는 쉽게 찾을 수 있다.
 
 ![](images/GC5.png)
 
-`(string)`을 살펴보면, `xxxxxxxxx....` 새로운 객체 들이 할당되어 있지만, 해제 되지 않아 많은 메모리를 잡아먹고 있음을 알 수 있다. 
+`(string)`을 살펴보면, `xxxxxxxxx....` 새로운 객체 들이 할당되어 있지만, 해제 되지 않아 많은 메모리를 잡아먹고 있음을 알 수 있다.
 
 ![](images/GC6.png)
 
@@ -291,7 +293,7 @@ JS Heap 그래프도 역시 메모리 사용이 증가되고 있음을 보여준
 
 새로 고침 후에, create snapshot 대신 `Allocation instrumentation on Timeline` 으로 해보자. 기록이 진행되는 동안, 상단에 위 스크린샷 처럼 파란색 기둥 모양 그래프가 생기는 것을 볼 수 있다. 이것은 메모리 할당을 나타낸다. 매초마다 큰 할당이 이뤄지는 것을 볼 수 있다.
 
-타임라인 일부를 선택하면, 해당 기간 동안에 수행되는 할당만 볼 수 있다. 해당영역을 선택하면, 3개의 constructor가 존재하는 것을 알 수 있다. 이 중 하나는 메모리 누수의 원인인 `(string)`이고 다른 하나는 DOM, 그리고 나머지는 `Text` (DOM 마지막에 존재하는 text)요소다. 
+타임라인 일부를 선택하면, 해당 기간 동안에 수행되는 할당만 볼 수 있다. 해당영역을 선택하면, 3개의 constructor가 존재하는 것을 알 수 있다. 이 중 하나는 메모리 누수의 원인인 `(string)`이고 다른 하나는 DOM, 그리고 나머지는 `Text` (DOM 마지막에 존재하는 text)요소다.
 
 `HTMLDivElement` constructor를 선택하고, 하단의 `Allocation Stack`메뉴를 누르면, `grow` 에서 `createSomeNodes`로 참조되어 할당된 요소를 볼 수 있다. 이제 두 스냅샷을 비교하는 것으로 돌아가보면, 이 생성자가 할당은 하지만 삭제를 하지 않는다는 것, 즉 회수를 하지 않는다는 것을 볼 수 있다. 이는 메모리 누수의 징후이며, 이 객체가 어디에 할당되는지 알게 되었다. 이제 이 코드를 고치면 된다.
 

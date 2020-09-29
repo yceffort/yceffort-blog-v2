@@ -1,5 +1,5 @@
 ---
-title: Referer와 Refeerer-Policy를 위한 가이드
+title: Referer와 Referer-Policy를 위한 가이드
 tags:
   - javascript, webpack
 published: true

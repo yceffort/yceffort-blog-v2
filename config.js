@@ -12,7 +12,7 @@ module.exports = {
   useKatex: false,
   menu: [
     {
-      label: 'Articles',
+      label: 'Posts',
       path: '/',
     },
     {
@@ -22,6 +22,10 @@ module.exports = {
     {
       label: 'Contact me',
       path: '/contacts',
+    },
+    {
+      label: 'Study',
+      path: 'https://www.notion.so/yceffort/9f2de57230a241b18f7321f591064486',
     },
   ],
   author: {

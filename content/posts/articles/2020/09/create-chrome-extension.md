@@ -59,7 +59,7 @@ template: post
 - `short_name`: optional 필드
 - `permission`: 어떤 권한이 필요한지를 나타낸다. 획득 가능한 권한들은 [여기](https://developer.chrome.com/extensions/declare_permissions)에 나와 있다. 대표적인 권한 들은 아래와 같다. 예를 들어 `content_scripts`로 현재 웹 페이지의 DOM을 읽어 올 수 있다.
 
-`browser_action`을 사용하여 주소 바 옆에 작은 아이콘을 만들 수 있고, 이를 클릭 했을 떄 html이 나오게 할 수 있다.
+`browser_action`을 사용하여 주소 바 옆에 작은 아이콘을 만들 수 있고, 이를 클릭 했을 때 html이 나오게 할 수 있다.
 
 ```json
 "browser_action": {

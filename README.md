@@ -22,7 +22,7 @@ tags:
 published: true # required
 date: 2020-08-09 03:48:47 # required
 description: '여기에 Description을 적어둡니다.' #required
-slug: /2020/08/docker-study-3/ #optional
+slug: /2020/08/docker-study-3/ #optional. 존재하지 않을 경우 디렉토리명을 따라감. (post/articles 제외)
 template: post #required
 ---
 

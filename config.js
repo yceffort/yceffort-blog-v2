@@ -5,7 +5,7 @@ module.exports = {
   pathPrefix: '/',
   title: 'yceffort',
   subtitle: 'yceffort',
-  copyright: '© All rights reserved.',
+  copyright: 'yceffort © All rights reserved.',
   disqusShortname: '',
   postsPerPage: 5,
   googleAnalyticsId: 'UA-139493546-1',
@@ -16,16 +16,16 @@ module.exports = {
       path: '/',
     },
     {
+      label: 'Study',
+      path: 'https://www.notion.so/yceffort/9f2de57230a241b18f7321f591064486',
+    },
+    {
       label: 'About me',
       path: '/about',
     },
     {
       label: 'Contact me',
       path: '/contacts',
-    },
-    {
-      label: 'Study',
-      path: 'https://www.notion.so/yceffort/9f2de57230a241b18f7321f591064486',
     },
   ],
   author: {

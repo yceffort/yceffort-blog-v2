@@ -270,7 +270,7 @@ JSX에서 [fragment](https://reactjs.org/docs/fragments.html)란 자식 엘리�
 }
 ```
 
-파일마다 JSX 팩토리를 다르게 사용하려면 `/** @jsxFrag */` 주석을 함꼐 사용해야 한다. 아래 예를 보자.
+파일마다 JSX 팩토리를 다르게 사용하려면 `/** @jsxFrag */` 주석을 함께 사용해야 한다. 아래 예를 보자.
 
 ```typescript
 // Note: these pragma comments need to be written

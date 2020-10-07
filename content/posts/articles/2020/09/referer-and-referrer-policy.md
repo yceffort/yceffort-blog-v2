@@ -80,7 +80,7 @@ https://yceffort.kr:443 를 기준으로 비교했을 때,
 
 https://en.wikipedia.org/wiki/HTTP_referer
 
-http 요청은 옵셔널 헤더인 [Referer](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer)를 가지고 있을 수 있다. 이 정보는 이 요청이 만들어진 origin 또는 웹페이지 URL을 가리킨다. [Referrer-Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy)헤더는 요청과 함꼐 얼마나 많은 레퍼럴 정보를 포함해야 하는지 알려준다.
+http 요청은 옵셔널 헤더인 [Referer](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer)를 가지고 있을 수 있다. 이 정보는 이 요청이 만들어진 origin 또는 웹페이지 URL을 가리킨다. [Referrer-Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy)헤더는 요청과 함께 얼마나 많은 레퍼럴 정보를 포함해야 하는지 알려준다.
 
 아래 예제를 보자.
 

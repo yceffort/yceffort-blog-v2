@@ -7,13 +7,14 @@ tags:
   - javascript
 published: true
 date: 2020-02-04 05:41:16
-description: "```toc tight: true, from-heading: 1 to-heading: 3 ``` # Transfer
+description: '```toc tight: true, from-heading: 1 to-heading: 3 ``` # Transfer
   learning audio recognizer  이번 튜토리얼에서는, Tensorflow.js를 활용하여 브라우저에서 학습시키는 커스텀
-  오디오 분류기를 만들어 볼 것입니다. 브라우저에서 슬라이더를 컨트롤을 하여 사운드를 만들어 볼 것입니다...."
+  오디오 분류기를 만들어 볼 것입니다. 브라우저에서 슬라이더를 컨트롤을 하여 사운드를 만들어 볼 것입니다....'
 category: machine-learning
 slug: /2020/02/tensorflowjs-08-build-an-audio-recognizer/
 template: post
 ---
+
 ```toc
 tight: true,
 from-heading: 1
@@ -66,7 +67,7 @@ to-heading: 3
 </html>
 ```
 
-첫번쨰 스크립트 태그는 Tensorflow.js 라이브러리를 , 두번째 스크립트 태그는 이미 학습된 [음성 명령 모델](https://github.com/tensorflow/tfjs-models/tree/master/speech-commands)을 불러옵니다. `<div id="console">` 는 모델에서의 결과를 표시할 것입니다.
+첫번째 스크립트 태그는 Tensorflow.js 라이브러리를 , 두번째 스크립트 태그는 이미 학습된 [음성 명령 모델](https://github.com/tensorflow/tfjs-models/tree/master/speech-commands)을 불러옵니다. `<div id="console">` 는 모델에서의 결과를 표시할 것입니다.
 
 ## 4. 실시간 예측
 
@@ -84,14 +85,14 @@ function predictWord() {
       scores = Array.from(scores).map((s, i) => ({ score: s, word: words[i] }))
       // Find the most probable word.
       scores.sort((s1, s2) => s2.score - s1.score)
-      document.querySelector("#console").textContent = scores[0].word
+      document.querySelector('#console').textContent = scores[0].word
     },
-    { probabilityThreshold: 0.75 }
+    { probabilityThreshold: 0.75 },
   )
 }
 
 async function app() {
-  recognizer = speechCommands.create("BROWSER_FFT")
+  recognizer = speechCommands.create('BROWSER_FFT')
   await recognizer.ensureModelLoaded()
   predictWord()
 }
@@ -152,21 +153,21 @@ function collect(label) {
       let vals = normalize(data.subarray(-frameSize * NUM_FRAMES))
       examples.push({ vals, label })
       document.querySelector(
-        "#console"
+        '#console',
       ).textContent = `${examples.length} examples collected`
     },
     {
       overlapFactor: 0.999,
       includeSpectrogram: true,
       invokeCallbackOnNoiseAndUnknown: true,
-    }
+    },
   )
 }
 
 function normalize(x) {
   const mean = -100
   const std = 10
-  return x.map(x => (x - mean) / std)
+  return x.map((x) => (x - mean) / std)
 }
 ```
 
@@ -195,7 +196,7 @@ let vals = normalize(data.subarray(-frameSize * NUM_FRAMES))
 ```javascript
 const mean = -100
 const std = 10
-return x.map(x => (x - mean) / std)
+return x.map((x) => (x - mean) / std)
 ```
 
 결국엔, 훈련 예제에는 두가지 필드만 남습니다.
@@ -233,18 +234,18 @@ let model
 async function train() {
   toggleButtons(false)
   const ys = tf.oneHot(
-    examples.map(e => e.label),
-    3
+    examples.map((e) => e.label),
+    3,
   )
   const xsShape = [examples.length, ...INPUT_SHAPE]
-  const xs = tf.tensor(flatten(examples.map(e => e.vals)), xsShape)
+  const xs = tf.tensor(flatten(examples.map((e) => e.vals)), xsShape)
 
   await model.fit(xs, ys, {
     batchSize: 16,
     epochs: 10,
     callbacks: {
       onEpochEnd: (epoch, logs) => {
-        document.querySelector("#console").textContent = `Accuracy: ${(
+        document.querySelector('#console').textContent = `Accuracy: ${(
           logs.acc * 100
         ).toFixed(1)}% Epoch: ${epoch + 1}`
       },
@@ -260,23 +261,23 @@ function buildModel() {
     tf.layers.depthwiseConv2d({
       depthMultiplier: 8,
       kernelSize: [NUM_FRAMES, 3],
-      activation: "relu",
+      activation: 'relu',
       inputShape: INPUT_SHAPE,
-    })
+    }),
   )
   model.add(tf.layers.maxPooling2d({ poolSize: [1, 2], strides: [2, 2] }))
   model.add(tf.layers.flatten())
-  model.add(tf.layers.dense({ units: 3, activation: "softmax" }))
+  model.add(tf.layers.dense({ units: 3, activation: 'softmax' }))
   const optimizer = tf.train.adam(0.01)
   model.compile({
     optimizer,
-    loss: "categoricalCrossentropy",
-    metrics: ["accuracy"],
+    loss: 'categoricalCrossentropy',
+    metrics: ['accuracy'],
   })
 }
 
 function toggleButtons(enable) {
-  document.querySelectorAll("button").forEach(b => (b.disabled = !enable))
+  document.querySelectorAll('button').forEach((b) => (b.disabled = !enable))
 }
 
 function flatten(tensors) {
@@ -291,7 +292,7 @@ function flatten(tensors) {
 
 ```javascript
 async function app() {
-  recognizer = speechCommands.create("BROWSER_FFT")
+  recognizer = speechCommands.create('BROWSER_FFT')
   await recognizer.ensureModelLoaded()
   // Add this line.
   buildModel()
@@ -314,13 +315,13 @@ model.add(
   tf.layers.depthwiseConv2d({
     depthMultiplier: 8,
     kernelSize: [NUM_FRAMES, 3],
-    activation: "relu",
+    activation: 'relu',
     inputShape: INPUT_SHAPE,
-  })
+  }),
 )
 model.add(tf.layers.maxPooling2d({ poolSize: [1, 2], strides: [2, 2] }))
 model.add(tf.layers.flatten())
-model.add(tf.layers.dense({ units: 3, activation: "softmax" }))
+model.add(tf.layers.dense({ units: 3, activation: 'softmax' }))
 ```
 
 input 모델의 형태는 `[NUM_FRAMES, 232, 1]`입니다. 이는 각 프레임이 23의 오디오를 갖고 있으며, 또 이들은 각각 232개의 서로 다른 진동수를 포함하고 있습니다. (232인 이유는, 사람의 목소리를 인식하는데 필요한 frequency의 양입니다) 이번 코드랩에서는, 단어 전체를 말하는 대신 소리를 만들기 때문에 3프레임 짜리 (~70ms) 샘플을 사용하고 있습니다.
@@ -331,8 +332,8 @@ input 모델의 형태는 `[NUM_FRAMES, 232, 1]`입니다. 이는 각 프레임�
 const optimizer = tf.train.adam(0.01)
 model.compile({
   optimizer,
-  loss: "categoricalCrossentropy",
-  metrics: ["accuracy"],
+  loss: 'categoricalCrossentropy',
+  metrics: ['accuracy'],
 })
 ```
 
@@ -348,7 +349,7 @@ await model.fit(xs, ys, {
   epochs: 10,
   callbacks: {
     onEpochEnd: (epoch, logs) => {
-      document.querySelector("#console").textContent = `Accuracy: ${(
+      document.querySelector('#console').textContent = `Accuracy: ${(
         logs.acc * 100
       ).toFixed(1)}% Epoch: ${epoch + 1}`
     },
@@ -371,13 +372,13 @@ await model.fit(xs, ys, {
 ```javascript
 async function moveSlider(labelTensor) {
   const label = (await labelTensor.data())[0]
-  document.getElementById("console").textContent = label
+  document.getElementById('console').textContent = label
   if (label == 2) {
     return
   }
   let delta = 0.1
-  const prevValue = +document.getElementById("output").value
-  document.getElementById("output").value =
+  const prevValue = +document.getElementById('output').value
+  document.getElementById('output').value =
     prevValue + (label === 0 ? -delta : delta)
 }
 
@@ -385,12 +386,12 @@ function listen() {
   if (recognizer.isListening()) {
     recognizer.stopListening()
     toggleButtons(true)
-    document.getElementById("listen").textContent = "Listen"
+    document.getElementById('listen').textContent = 'Listen'
     return
   }
   toggleButtons(false)
-  document.getElementById("listen").textContent = "Stop"
-  document.getElementById("listen").disabled = false
+  document.getElementById('listen').textContent = 'Stop'
+  document.getElementById('listen').disabled = false
 
   recognizer.listen(
     async ({ spectrogram: { frameSize, data } }) => {
@@ -405,7 +406,7 @@ function listen() {
       overlapFactor: 0.999,
       includeSpectrogram: true,
       invokeCallbackOnNoiseAndUnknown: true,
-    }
+    },
   )
 }
 ```
@@ -442,9 +443,8 @@ tf.dispose([input, probs, predLabel])
 
 브라우저에서 index.html을 열고, 이전 섹션에서 처럼 3개의 명령에 해당하는 각각의 버튼을 활용해서 데이터를 수집합니다. 데이터를 수집하기 위해서는 각 버튼을 3~4초를 누른 채 유지해야 합니다.
 
-샘플을 수집한 뒤에는, 학습 버튼을 누릅니다. 이 후에 모델이 학습하기 시작하며, 정확도가 90% 이상까지 향상될 것입니다. 모델 성능이 좋지 못하다면, 더 많은 데이터를 수집하세요. 
+샘플을 수집한 뒤에는, 학습 버튼을 누릅니다. 이 후에 모델이 학습하기 시작하며, 정확도가 90% 이상까지 향상될 것입니다. 모델 성능이 좋지 못하다면, 더 많은 데이터를 수집하세요.
 
 학습이 끝나면, '듣기' 버튼을 눌러 마이크를 활용해 슬라이더를 제어하세요.
 
 더많은 예제를 http://js.tensorflow.org/ 에서 확인하세요.
-

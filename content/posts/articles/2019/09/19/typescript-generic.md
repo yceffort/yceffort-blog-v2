@@ -4,13 +4,15 @@ date: 2019-09-20 12:10:14
 published: true
 tags:
   - typescript
-description: "## 제네릭이란 제네릭은 클래스 내부에서 사용하는 데이터의 타입을 외부에서 지정하는 것을 의미한다. 어떤 타입의
+description:
+  '## 제네릭이란 제네릭은 클래스 내부에서 사용하는 데이터의 타입을 외부에서 지정하는 것을 의미한다. 어떤 타입의
   데이터를 쓸지를, 클래스 선언부가 아니라 외부에서 결정하는 것이다. 일단 자바 코드로 한번 살펴보자.  ```java class
-  Person<T>{     public T name; }  Person<String> p1 = new Person<..."
+  Person<T>{     public T name; }  Person<String> p1 = new Person<...'
 category: typescript
 slug: /2019/09/19/typescript-generic/
 template: post
 ---
+
 ## 제네릭이란
 
 제네릭은 클래스 내부에서 사용하는 데이터의 타입을 외부에서 지정하는 것을 의미한다. 어떤 타입의 데이터를 쓸지를, 클래스 선언부가 아니라 외부에서 결정하는 것이다. 일단 자바 코드로 한번 살펴보자.
@@ -34,26 +36,26 @@ Person<StringBuilder> p1 = new Person<StringBuilder>();
 
 ```typescript
 class School {
-  private students: any[] = [];
+  private students: any[] = []
 
   constructor() {}
 
   go(student: any): void {
-    this.students.push(student);
+    this.students.push(student)
   }
 
   bye(): void {
-    this.students.pop();
+    this.students.pop()
   }
 }
 ```
 
 ```typescript
-const school = new School();
-stack.push("라이오넬 멧시");
-stack.push(10);
-stack.pop().substring(0);
-stack.pop().substring(0); // 에러
+const school = new School()
+stack.push('라이오넬 멧시')
+stack.push(10)
+stack.pop().substring(0)
+stack.pop().substring(0) // 에러
 ```
 
 `string`에 이어서 `number`도 일일이 대응하기 위해서는 `any`를 쓰거나, 상속을 받아야 할 것이다.
@@ -62,16 +64,16 @@ stack.pop().substring(0); // 에러
 
 ```typescript
 class School<T> {
-  private students: T[] = [];
+  private students: T[] = []
 
   constructor() {}
 
   go(student: T): void {
-    this.students.push(student);
+    this.students.push(student)
   }
 
   bye(): T {
-    return this.students.pop();
+    return this.students.pop()
   }
 }
 ```
@@ -79,20 +81,20 @@ class School<T> {
 `<T>`는 제네릭을 의미하며, 그안에 타입으로 사용될 `T`를 넣었다. 다른 문자도 되지만, 대게는 `T`를 쓰고 `Type Variables`라고 한다.
 
 ```typescript
-const numberSchool = new School<number>();
-const stringSchool = new School<string>();
-const stringSchool = new School<boolean>();
+const numberSchool = new School<number>()
+const stringSchool = new School<string>()
+const stringSchool = new School<boolean>()
 ```
 
 이제 각각의 타입이 선언되어 사용될 수 가 있다.
 
 ### 함수에 써보기
 
-다양한 타입의 array를 받아서 그 array의 첫번쨰를 리턴하는 함수를 만든다고 가정해보자. any를 사용한다면
+다양한 타입의 array를 받아서 그 array의 첫번째를 리턴하는 함수를 만든다고 가정해보자. any를 사용한다면
 
 ```typescript
 function returnFirstItem(items: any[]): any {
-  return items[0];
+  return items[0]
 }
 ```
 
@@ -100,10 +102,10 @@ function returnFirstItem(items: any[]): any {
 
 ```typescript
 function returnFirstItem<T>(items: T[]): T {
-  return items[0];
+  return items[0]
 }
 
-returnFirstItem<number> [0, 1, 2, 3];
+returnFirstItem < number > [0, 1, 2, 3]
 ```
 
 이 된다.
@@ -112,24 +114,24 @@ returnFirstItem<number> [0, 1, 2, 3];
 
 ```typescript
 function multipleGeneric<T, U>(a1: T, a2: U): [T, U] {
-  return [a1, a2];
+  return [a1, a2]
 }
 
-multipleGeneric<string, boolean>("true", true);
+multipleGeneric<string, boolean>('true', true)
 ```
 
 ### rest에서 제네릭
 
 ```typescript
 interface XYZ {
-  x: any;
-  y: any;
-  z: any;
+  x: any
+  y: any
+  z: any
 }
 
 function dropXYZ<T extends XYZ>(obj: T) {
-  let { x, y, z, ...rest } = obj;
-  return rest;
+  let { x, y, z, ...rest } = obj
+  return rest
 }
 ```
 
@@ -139,18 +141,18 @@ function dropXYZ<T extends XYZ>(obj: T) {
 
 ```typescript
 interface XYZ {
-  x: any;
-  y: any;
-  z: any;
+  x: any
+  y: any
+  z: any
 }
 
 // Pick<T, a>는 T에서 a만 받는 다는 것이다
 // Exclude<keyof T, keyof XYZ>는 앞에 타입에서 뒤에 있는 타입을 제외해준다.
-type DropXYZ<T> = Pick<T, Exclude<keyof T, keyof XYZ>>;
+type DropXYZ<T> = Pick<T, Exclude<keyof T, keyof XYZ>>
 
 function dropXYZ<T extends XYZ>(obj: T): DropXYZ<T> {
-  let { x, y, z, ...rest } = obj;
-  return rest;
+  let { x, y, z, ...rest } = obj
+  return rest
 }
 ```
 

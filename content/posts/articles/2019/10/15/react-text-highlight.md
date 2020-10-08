@@ -7,13 +7,15 @@ tags:
   - typescript
   - algorithm
   - javascript
-description: '## 요구사항 한 엘리먼트안에서 특정한 키워드를 다른 색싱으로 바꿔서 출력하는 것이다.  아래 예시를 살펴보자  ###
+description:
+  '## 요구사항 한 엘리먼트안에서 특정한 키워드를 다른 색싱으로 바꿔서 출력하는 것이다.  아래 예시를 살펴보자  ###
   before  ```jsx <Text>카카오 페이지 카카오 스토리 카카오톡</Text> ```  ### after  ```jsx
   <Text>   <Text color="blue">카카오 </Text>페이지   <Text color="bl...'
 category: react
 slug: /2019/10/15/react-text-highlight/
 template: post
 ---
+
 ## 요구사항
 
 한 엘리먼트안에서 특정한 키워드를 다른 색싱으로 바꿔서 출력하는 것이다.
@@ -41,8 +43,8 @@ template: post
 특정 키워드가 포함되어 있는지, 그리고 그것을 따로 뽑아 낼 수 있는 가장 간단한 방법은 무엇일까? 바로 [split](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/String/split) 일 것이다.
 
 ```javascript
-const splitResult = "카카오 페이지, 카카오 스토리, 카카오톡";
-splitResult.split("카카오"); // ["", " 페이지, ", " 스토리, ", "톡"]
+const splitResult = '카카오 페이지, 카카오 스토리, 카카오톡'
+splitResult.split('카카오') // ["", " 페이지, ", " 스토리, ", "톡"]
 ```
 
 그러나 여기서 두 가지 몰랐던 사실을 알게 된다.
@@ -51,15 +53,15 @@ splitResult.split("카카오"); // ["", " 페이지, ", " 스토리, ", "톡"]
 2. text === seperator 면 결과는 빈 문자열 두개다.
 
 ```javascript
-const splitResult = "카카오";
-splitResult.split("카카오"); //  ["", ""]
+const splitResult = '카카오'
+splitResult.split('카카오') //  ["", ""]
 ```
 
 > 문자열에서 separator가 등장하면 해당 부분은 삭제되고 남은 문자열이 배열로 반환됩니다. separator가 등장하지 않거나 생략되었을 경우 배열은 원본 문자열을 유일한 원소로 가집니다. separator가 빈 문자열일 경우, str은 문자열의 모든 문자를 원소로 가지는 배열로 변환됩니다. separator가 원본 문자열의 처음이나 끝에 등장할 경우 반환되는 배열도 빈 문자열로 시작하거나 끝납니다. 그러므로 원본 문자열에 separator 하나만이 포함되어 있을 경우 빈 문자열 두 개를 원소로 가지는 배열이 반환됩니다.
 
 평소에 잘 몰랐던 split의 심오한 철학이 많이 있으니 가서 확인해보는 것도 좋을 듯 하다.
 
-암튼 첫 번쨰 결과물은 이렇다.
+암튼 첫 번째 결과물은 이렇다.
 
 ```typescript
 const [initial, ...rest] = text.split(highlight)

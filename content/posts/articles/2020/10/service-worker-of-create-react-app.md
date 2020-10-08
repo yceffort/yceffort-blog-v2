@@ -9,7 +9,7 @@ description: '가끔 봤지만 전혀 궁금해 하지 않았던 그 것'
 template: post
 ---
 
-https://blog.bitsrc.io/using-service-workers-with-react-27a4c5e2d1a9
+[원문](https://blog.bitsrc.io/using-service-workers-with-react-27a4c5e2d1a9)
 
 ## 개요
 

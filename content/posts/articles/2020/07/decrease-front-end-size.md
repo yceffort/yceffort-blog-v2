@@ -13,7 +13,8 @@ category: javascript
 slug: /2020/07/decrease-front-end-size/
 template: post
 ---
-[이 글](https://developers.google.com/web/fundamentals/performance/webpack/decrease-frontend-size)을 대충 번역했습니다. 
+
+[이 글](https://developers.google.com/web/fundamentals/performance/webpack/decrease-frontend-size)을 대충 번역했습니다.
 
 ```toc
 tight: true,
@@ -40,32 +41,37 @@ minification이란 코드에서 띄어쓰기를 제거하거나, 변수명을 �
 
 ```javascript
 function map(array, iteratee) {
-  let index = -1;
-  const length = array == null ? 0 : array.length;
-  const result = new Array(length);
+  let index = -1
+  const length = array == null ? 0 : array.length
+  const result = new Array(length)
 
   while (++index < length) {
-    result[index] = iteratee(array[index], index, array);
+    result[index] = iteratee(array[index], index, array)
   }
-  return result;
+  return result
 }
 ```
 
 ```javascript
 // minified
-function map(n,r){let t=-1;for(const a=null==n?0:n.length,l=Array(a);++t<a;)l[t]=r(n[t],t,n);return l}
+function map(n, r) {
+  let t = -1
+  for (const a = null == n ? 0 : n.length, l = Array(a); ++t < a; )
+    l[t] = r(n[t], t, n)
+  return l
+}
 ```
 
 ### 번들 수준의 minification
 
-번들 수준의 minification은 컴파일 이후에 전체 번들을 압축하는 것이다. 
+번들 수준의 minification은 컴파일 이후에 전체 번들을 압축하는 것이다.
 
 ```javascript
 // 1. 코드가 이렇게 있다
 // comments.js
-import './comments.css';
+import './comments.css'
 export function render(data, target) {
-  console.log('Rendered!');
+  console.log('Rendered!')
 }
 ```
 
@@ -75,43 +81,48 @@ export function render(data, target) {
 
 ```javascript
 // bundle.js (part of)
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (immutable) */ __webpack_exports__["render"] = render;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__comments_css__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__comments_css_js___default =
-__webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__comments_css__);
+'use strict'
+Object.defineProperty(__webpack_exports__, '__esModule', { value: true })
+/* harmony export (immutable) */ __webpack_exports__['render'] = render
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__comments_css__ = __webpack_require__(
+  1,
+)
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__comments_css_js___default = __webpack_require__.n(
+  __WEBPACK_IMPORTED_MODULE_0__comments_css__,
+)
 
 function render(data, target) {
-  console.log('Rendered!');
+  console.log('Rendered!')
 }
 ```
 
 ```javascript
 // 3. 압축한다.
 // minified bundle.js (part of)
-"use strict";function t(e,n){console.log("Rendered!")}
-Object.defineProperty(n,"__esModule",{value:!0}),n.render=t;var o=r(1);r.n(o)
+'use strict'
+function t(e, n) {
+  console.log('Rendered!')
+}
+Object.defineProperty(n, '__esModule', { value: !0 }), (n.render = t)
+var o = r(1)
+r.n(o)
 ```
 
 - webpack4에서는 번들 수준 최소화가 프로덕션 모드 또는 명시되지 않은 모드에서 자동으로 진행된다.내부적으로는 [Uglify minifier](https://github.com/mishoo/UglifyJS2)를 사용한다. 만약 최소화를 하고 싶지 않다면, development 모드를 키거나 `optimization.minimize`에 false를 주면 된다.
-- webpack3에서는 [Uglify minifier](https://github.com/mishoo/UglifyJS2)를 직접 사용해야 한다. 해당 플러그인은 webpack에서 자동으로 딸려  오므로, 설정에 아래 코드를 추가하면 된다. 
+- webpack3에서는 [Uglify minifier](https://github.com/mishoo/UglifyJS2)를 직접 사용해야 한다. 해당 플러그인은 webpack에서 자동으로 딸려 오므로, 설정에 아래 코드를 추가하면 된다.
 
 ```javascript
 // webpack.config.js
-const webpack = require('webpack');
+const webpack = require('webpack')
 
 module.exports = {
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin(),
-  ],
-};
+  plugins: [new webpack.optimize.UglifyJsPlugin()],
+}
 ```
-
 
 ### loader-specific 옵션
 
-코드를 줄이는 두번쨰 방법은 loader-specific 옵션을 사용하는 것이다. [loader](https://webpack.js.org/concepts/loaders/) 이 옵션을 사용하면, minifier가 줄이지 못하는 코드를 줄여줄 수 있다. 만약 css를 위해 `css-loader`를 사용하고 있다면, 파일은 아래와 같이 문자열로 컴파일 된다.
+코드를 줄이는 두번째 방법은 loader-specific 옵션을 사용하는 것이다. [loader](https://webpack.js.org/concepts/loaders/) 이 옵션을 사용하면, minifier가 줄이지 못하는 코드를 줄여줄 수 있다. 만약 css를 위해 `css-loader`를 사용하고 있다면, 파일은 아래와 같이 문자열로 컴파일 된다.
 
 ```css
 /* comments.css */
@@ -122,8 +133,8 @@ module.exports = {
 
 ```javascript
 // minified bundle.js (part of)
-exports=module.exports=__webpack_require__(1)(),
-exports.push([module.i,".comment {\r\n  color: black;\r\n}",""]);
+;(exports = module.exports = __webpack_require__(1)()),
+  exports.push([module.i, '.comment {\r\n  color: black;\r\n}', ''])
 ```
 
 minifier는 코드가 문자열이기 때문에 더이상 최소화 할 수 없다. 이를 최소화 하기 위해서는, 아래와 같이 옵션을 추가하면 된다.
@@ -142,7 +153,7 @@ module.exports = {
       },
     ],
   },
-};
+}
 ```
 
 ### 참고할 만한 것들
@@ -162,7 +173,7 @@ module.exports = {
 // vue/dist/vue.runtime.esm.js
 // …
 if (process.env.NODE_ENV !== 'production') {
-  warn('props must be strings when using array syntax.');
+  warn('props must be strings when using array syntax.')
 }
 // …
 ```
@@ -172,9 +183,9 @@ if (process.env.NODE_ENV !== 'production') {
 ```javascript
 // react/index.js
 if (process.env.NODE_ENV === 'production') {
-  module.exports = require('./cjs/react.production.min.js');
+  module.exports = require('./cjs/react.production.min.js')
 } else {
-  module.exports = require('./cjs/react.development.js');
+  module.exports = require('./cjs/react.development.js')
 }
 
 // react/cjs/react.development.js
@@ -182,8 +193,8 @@ if (process.env.NODE_ENV === 'production') {
 warning$3(
   componentClass.getDefaultProps.isReactClassApproved,
   'getDefaultProps is only used on classic React.createClass ' +
-  'definitions. Use a static property named `defaultProps` instead.'
-);
+    'definitions. Use a static property named `defaultProps` instead.',
+)
 // …
 ```
 
@@ -194,10 +205,10 @@ module.exports = {
   optimization: {
     nodeEnv: 'production',
     minimize: true,
- 
+
 ```
 
-이 코드는 `process.env.NODE_ENV`를 모두 `production`으로 바꿔버리는 효과를 가지고 있다. 또한 minifer는 `process.env.NODE_ENV !== 'production'`  코드를 모두 날려버린다. 어쨌든 false라 절대 탈 수 없는 코드 이기 때문이다.
+이 코드는 `process.env.NODE_ENV`를 모두 `production`으로 바꿔버리는 효과를 가지고 있다. 또한 minifer는 `process.env.NODE_ENV !== 'production'` 코드를 모두 날려버린다. 어쨌든 false라 절대 탈 수 없는 코드 이기 때문이다.
 
 ## ES Module 사용하기
 
@@ -205,24 +216,28 @@ module.exports = {
 
 ```javascript
 // comments.js
-export const render = () => { return 'Rendered!'; };
-export const commentRestEndpoint = '/rest/comments';
+export const render = () => {
+  return 'Rendered!'
+}
+export const commentRestEndpoint = '/rest/comments'
 
 // index.js
-import { render } from './comments.js';
-render();
+import { render } from './comments.js'
+render()
 ```
 
 웹팩이 `commentRestEndpoint`는 안쓰는 것으로 판단해 따로 export하지 않는다.
 
 ```javascript
- // bundle.js (part that corresponds to comments.js)
-(function(module, __webpack_exports__, __webpack_require__) {
-  "use strict";
-  const render = () => { return 'Rendered!'; };
-  /* harmony export (immutable) */ __webpack_exports__["a"] = render;
+// bundle.js (part that corresponds to comments.js)
+;(function (module, __webpack_exports__, __webpack_require__) {
+  'use strict'
+  const render = () => {
+    return 'Rendered!'
+  }
+  /* harmony export (immutable) */ __webpack_exports__['a'] = render
 
-  const commentRestEndpoint = '/rest/comments';
+  const commentRestEndpoint = '/rest/comments'
   /* unused harmony export commentRestEndpoint */
 })
 ```
@@ -231,10 +246,16 @@ render();
 
 ```javascript
 // bundle.js (part that corresponds to comments.js)
-(function(n,e){"use strict";var r=function(){return"Rendered!"};e.b=r})
+;(function (n, e) {
+  'use strict'
+  var r = function () {
+    return 'Rendered!'
+  }
+  e.b = r
+})
 ```
 
-> 웹팩에서 minifier가 없다면 트리쉐이킹이 동작하지 않습니다. 사용하지 않는 코드를 export하지 않는 것 (트리쉐이킹)과 사용하지 않는 코드를 지우는 것(minifier)은 한쌍이기 때문입니다. 
+> 웹팩에서 minifier가 없다면 트리쉐이킹이 동작하지 않습니다. 사용하지 않는 코드를 export하지 않는 것 (트리쉐이킹)과 사용하지 않는 코드를 지우는 것(minifier)은 한쌍이기 때문입니다.
 
 > ESModules을 CommonJS 로 컴파일 하지 말기를 바랍니다.
 
@@ -258,13 +279,13 @@ module.exports = {
         },
       },
     ],
-  }
-};
+  },
+}
 ```
 
 ```javascript
 // index.js
-import imageUrl from './image.png';
+import imageUrl from './image.png'
 // → If image.png is smaller than 10 kB, `imageUrl` will include
 // the encoded image: 'data:image/png;base64,iVBORw0KGg…'
 // → If image.png is larger than 10 kB, the loader will create a new file,
@@ -297,7 +318,7 @@ module.exports = {
 `image-webpack-loader`는 이미지 자체를 압축해준다. JPG, PNG, GIF, SVG를 지원한다. 이 옵션은 앞선 두 예시 처럼 따로 임베딩 해주지는 않는다. 함께 사용하기 위해서는, 아래처럼 하면 된다.
 
 ```javascript
- // webpack.config.js
+// webpack.config.js
 module.exports = {
   module: {
     rules: [
@@ -309,12 +330,12 @@ module.exports = {
       },
     ],
   },
-};
+}
 ```
 
 ## 디펜던시 최적화하기
 
-절반이상의 자바스크립트 번들 사이즈는 디펜던시에서 오며, 그 중 일부분은 불필요할 수 있다. 
+절반이상의 자바스크립트 번들 사이즈는 디펜던시에서 오며, 그 중 일부분은 불필요할 수 있다.
 
 `Lodash`의 경우 번들 시에 72kb를 차지하지만, 몇가지 메소드를 사용하지 않는다면 크기를 줄일 수 있다. `Moment.js`는 무려 223KB를 차지하는데, 이는 평균 페이지당 자바스크립트 사이즈를 감안했을때 [452KB](http://httparchive.org/interesting.php?a=All&l=Oct%2016%202017) 엄청나게 큰 비중을 차지한다. 하지만 이중 170kb는 [Locale](https://github.com/moment/moment/tree/4caa268356434f3ae9b5041985d62a0e8c246c78/locale)관련 내용이다. 만약 Moment.js를 가지고 다양한 언어를 지원할 필요가 없다면, 이런 파일은 크기만 차지하게 된다.
 
@@ -326,36 +347,32 @@ module.exports = {
 
 ```javascript
 // index.js
-import {render} from './comments.js';
-render();
+import { render } from './comments.js'
+render()
 
 // comments.js
 export function render(data, target) {
-  console.log('Rendered!');
+  console.log('Rendered!')
 }
 ```
 
 ```javascript
 // bundle.js (part  of)
 /* 0 */
-(function(module, __webpack_exports__, __webpack_require__) {
-
-  "use strict";
-  Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-  var __WEBPACK_IMPORTED_MODULE_0__comments_js__ = __webpack_require__(1);
-  Object(__WEBPACK_IMPORTED_MODULE_0__comments_js__["a" /* render */])();
-
-}),
-/* 1 */
-(function(module, __webpack_exports__, __webpack_require__) {
-
-  "use strict";
-  __webpack_exports__["a"] = render;
-  function render(data, target) {
-    console.log('Rendered!');
-  }
-
-})
+;(function (module, __webpack_exports__, __webpack_require__) {
+  'use strict'
+  Object.defineProperty(__webpack_exports__, '__esModule', { value: true })
+  var __WEBPACK_IMPORTED_MODULE_0__comments_js__ = __webpack_require__(1)
+  Object(__WEBPACK_IMPORTED_MODULE_0__comments_js__['a' /* render */])()
+},
+  /* 1 */
+  function (module, __webpack_exports__, __webpack_require__) {
+    'use strict'
+    __webpack_exports__['a'] = render
+    function render(data, target) {
+      console.log('Rendered!')
+    }
+  })
 ```
 
 과거 이러한 방식은 CommonJS나 AMD 모듈로 부터 분리시키기 위해 필요했다. 그러나 이러한 방식은 각 모듈의 사이즈를 키우고 퍼포먼스를 저하시킨다.
@@ -364,12 +381,12 @@ export function render(data, target) {
 
 ```javascript
 // index.js
-import {render} from './comments.js';
-render();
+import { render } from './comments.js'
+render()
 
 // comments.js
 export function render(data, target) {
-  console.log('Rendered!');
+  console.log('Rendered!')
 }
 ```
 
@@ -379,19 +396,17 @@ export function render(data, target) {
 
 // bundle.js (part of; compiled with ModuleConcatenationPlugin)
 /* 0 */
-(function(module, __webpack_exports__, __webpack_require__) {
-
-  "use strict";
-  Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+;(function (module, __webpack_exports__, __webpack_require__) {
+  'use strict'
+  Object.defineProperty(__webpack_exports__, '__esModule', { value: true })
 
   // CONCATENATED MODULE: ./comments.js
   function render(data, target) {
-    console.log('Rendered!');
+    console.log('Rendered!')
   }
 
   // CONCATENATED MODULE: ./index.js
-  render();
-
+  render()
 })
 ```
 
@@ -405,20 +420,18 @@ module.exports = {
   optimization: {
     concatenateModules: true,
   },
-};
+}
 ```
 
 웹팩3
 
 ```javascript
 // webpack.config.js (for webpack 3)
-const webpack = require('webpack');
+const webpack = require('webpack')
 
 module.exports = {
-  plugins: [
-    new webpack.optimize.ModuleConcatenationPlugin(),
-  ],
-};
+  plugins: [new webpack.optimize.ModuleConcatenationPlugin()],
+}
 ```
 
 ## 웹팩 코드와 웹팩으로 번들링 되지 않은 코드를 같이 슨다면 `externals`를 사용하라
@@ -431,26 +444,26 @@ module.exports = {
 // webpack.config.js
 module.exports = {
   externals: {
-    'react': 'React',
+    react: 'React',
     'react-dom': 'ReactDOM',
   },
-};
+}
 ```
 
 만약 이렇게 설정해둔다면, 웹팩은 `react`와 `react-dom`을 번들링하지 않는다. 대신 아래와 비슷한 일을 한다.
 
 ```javascript
 // bundle.js (part of)
-(function(module, exports) {
+;(function (module, exports) {
   // A module that exports `window.React`. Without `externals`,
   // this module would include the whole React bundle
-  module.exports = React;
-}),
-(function(module, exports) {
-  // A module that exports `window.ReactDOM`. Without `externals`,
-  // this module would include the whole ReactDOM bundle
-  module.exports = ReactDOM;
-})
+  module.exports = React
+},
+  function (module, exports) {
+    // A module that exports `window.ReactDOM`. Without `externals`,
+    // this module would include the whole ReactDOM bundle
+    module.exports = ReactDOM
+  })
 ```
 
 ### `AMD` 패키지의 경우
@@ -461,10 +474,10 @@ module.exports = {
   output: { libraryTarget: 'amd' },
 
   externals: {
-    'react': { amd: '/libraries/react.min.js' },
+    react: { amd: '/libraries/react.min.js' },
     'react-dom': { amd: '/libraries/react-dom.min.js' },
   },
-};
+}
 ```
 
 웹팩은 위 라이브러리를 주소로 번들링 할 것이다.

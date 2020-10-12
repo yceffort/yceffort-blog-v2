@@ -1,4 +1,4 @@
 {
-  "extends": "eslint-config-yceffort",
+  "extends": "eslint-config-yceffort/typescript",
   "rules": {}
 }

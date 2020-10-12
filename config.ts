@@ -1,6 +1,5 @@
-'use strict'
 
-module.exports = {
+export const config = {
   url: 'https://yceffort.kr',
   pathPrefix: '/',
   title: 'yceffort',
@@ -51,3 +50,5 @@ module.exports = {
     },
   },
 }
+
+export default config

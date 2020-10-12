@@ -20,7 +20,7 @@
     "sourceMap": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "typeRoots": ["./typings", "./node_modules/@types"]
+    "typeRoots": ["./typings", "./node_modules/@types"],
   },
   "exclude": ["dist", ".next", "out", "next.config.js"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]

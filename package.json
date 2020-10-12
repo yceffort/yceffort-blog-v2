@@ -71,6 +71,7 @@
     "invariant": "^2.2.4",
     "lodash": "^4.17.19",
     "moment": "^2.27.0",
+    "next": "^9.5.5",
     "node-sass": "^4.14.1",
     "normalize-scss": "^7.0.1",
     "prismjs": "^1.21.0",
@@ -86,13 +87,15 @@
     "@babel/plugin-transform-flow-strip-types": "^7.10.4",
     "@babel/preset-env": "7.10.4",
     "@babel/preset-react": "7.10.4",
-    "eslint-config-yceffort": "0.0.1",
+    "@types/node": "^14.11.8",
+    "@types/react": "^16.9.52",
     "autoprefixer": "9.8.6",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "26.2.1",
     "babel-preset-gatsby": "0.5.5",
     "browserslist": "4.14.0",
     "concurrently": "5.2.0",
+    "eslint-config-yceffort": "0.0.1",
     "flow-bin": "^0.129.0",
     "flow-typed": "^3.2.1",
     "gatsby-cli": "^2.12.82",
@@ -106,6 +109,7 @@
     "rimraf": "3.0.2",
     "stylelint": "13.6.1",
     "stylelint-config-recommended-scss": "4.2.0",
-    "stylelint-scss": "3.18.0"
+    "stylelint-scss": "3.18.0",
+    "typescript": "^4.0.3"
   }
 }

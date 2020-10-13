@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 import Head from 'next/head'
 import styled from 'styled-components'
 
-import config from '../../../config'
+import config from '../../config'
 
 const LayoutDiv = styled.div`
   max-width: 66.875rem;

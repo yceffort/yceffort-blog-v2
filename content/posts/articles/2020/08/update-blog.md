@@ -1,10 +1,11 @@
 ---
 title: 블로그 업데이트에 대한 회고
 tags:
-  - blog, diary
+  - blog
+  - diary
 published: true
 date: 2020-08-31 13:47:56
-description: "백수가 될 때마다 블로그를 갈아엎는 습관"
+description: '백수가 될 때마다 블로그를 갈아엎는 습관'
 category: blog
 template: post
 ---
@@ -19,7 +20,7 @@ to-heading: 3
 
 ## 시작
 
-원래는 https://developer-diary.netlify.app/ 이 블로그를 커스터마이징해서 쓰고 있었다. 고를 때만 해도 꽤 괜찮아서 잘 쓰고 있었는데, 걔속 사용하다 보니 몇가지가 걸렸다. 제목과 부제목 사이의 간격이라던가, Tech Topics 아이콘 수집, 그리고 사이드 바의 간격 등... 몇가지를 계속해서 커스터마이징 하다보니 땜질식의 처방이 되고 있었고, 더 이상 무엇을 더 이쁘게 만들어야 할지 모르겠다는 생각에 까지 이르게 되자, 결국에는 모든 것을 갈아 엎고 새로 만들자는 생각에 이르게 되었다. 
+원래는 https://developer-diary.netlify.app/ 이 블로그를 커스터마이징해서 쓰고 있었다. 고를 때만 해도 꽤 괜찮아서 잘 쓰고 있었는데, 걔속 사용하다 보니 몇가지가 걸렸다. 제목과 부제목 사이의 간격이라던가, Tech Topics 아이콘 수집, 그리고 사이드 바의 간격 등... 몇가지를 계속해서 커스터마이징 하다보니 땜질식의 처방이 되고 있었고, 더 이상 무엇을 더 이쁘게 만들어야 할지 모르겠다는 생각에 까지 이르게 되자, 결국에는 모든 것을 갈아 엎고 새로 만들자는 생각에 이르게 되었다.
 
 ## 시작
 
@@ -48,13 +49,15 @@ https://github.com/yceffort/yceffort-blog-v2/blob/master/content/posts/articles/
 ---
 title: MobX를 공부하자 (4) - React와 Mobx의 10분 요약 글
 tags:
-  - javascript, MobX
+  - javascript
+  - MobX
 published: true
 date: 2020-08-30 19:27:22
-description: "React와 MobX에 대한 10분 설명"
+description: 'React와 MobX에 대한 10분 설명'
 category: MobX
 template: post
 ---
+
 ```
 
 위의 내용이 frontmatter를 의미한다. 기존에는 frontmatter가 몇개 쓰이는 것 없이 깔끔했는데, 이 테마에는 제법 쓰이는 것이 많았다. 아래는 frontmatter에 대한 변경사항이다.
@@ -63,7 +66,7 @@ template: post
 - published: true 는 draft: false 와 동일하게 동작하도록 수정했다.
 - slug는 기존 주소와 호환성을 위해 `/:year/:month/:file-name` 을 유지하도록 했다. slug가 없을 경우 디렉토리 구조에 따라서 파일명을 이전과 같이 설정한다.
 
-frontmatter 에디팅을 위해서 nodejs로 .md 파일을 모두 읽어서 사용했으며, `fs`외에는 별도의 라이브러리를 사용하지 않았습니다. 파일을 line by line 으로 읽어서 `---` 내부의 내용을 읽어 왔다. 
+frontmatter 에디팅을 위해서 nodejs로 .md 파일을 모두 읽어서 사용했으며, `fs`외에는 별도의 라이브러리를 사용하지 않았습니다. 파일을 line by line 으로 읽어서 `---` 내부의 내용을 읽어 왔다.
 
 ### 4. 이미지 경로 업데이트
 
@@ -110,7 +113,7 @@ https://developers.google.com/speed/pagespeed/insights/?hl=ko&url=yceffort.kr
 
 ## 아쉬웠던 점
 
-### 굉장히 느린 빌드 타임 
+### 굉장히 느린 빌드 타임
 
 빌드가 굉장히 느려졌다.
 

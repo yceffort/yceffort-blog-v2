@@ -2,7 +2,8 @@
 title: 'Create React App의 serviceWorker는 무엇일까'
 category: react
 tags:
-  - react, javascript
+  - react
+  - javascript
 published: true
 date: 2020-10-08 23:17:19
 description: '가끔 봤지만 전혀 궁금해 하지 않았던 그 것'

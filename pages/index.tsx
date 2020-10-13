@@ -1,7 +1,7 @@
 import React from 'react'
 import { GetStaticProps } from 'next'
 
-import config from '../config'
+import config from '../src/config'
 import Layout from '../src/components/Layout/Layout'
 import { DEFAULT_NUMBER_OF_POSTS } from '../src/types/const'
 import { Post } from '../src/types/types'

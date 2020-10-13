@@ -1,7 +1,8 @@
 ---
 title: MobX를 공부하자 (4) - React와 Mobx의 10분 요약 글
 tags:
-  - javascript, MobX
+  - javascript
+  - MobX
 published: true
 date: 2020-08-30 19:27:22
 description: 'React와 MobX에 대한 10분 설명'

@@ -2,7 +2,8 @@
 title: 'styled-components로 스타일 적용하는법'
 category: styledComponents
 tags:
-  - styledComponents, javascript
+  - styledComponents
+  - javascript
 published: true
 date: 2020-10-07 21:29:18
 description: 'styled components가 쓰고 싶습니다'

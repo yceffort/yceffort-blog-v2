@@ -1,7 +1,8 @@
 ---
 title: Webpack Module Federation에 대해 알아보자
 tags:
-  - javascript, webpack
+  - javascript
+  - webpack
 published: true
 date: 2020-09-16 17:42:06
 description: '자바스크립트 아키텍쳐의 게임체인저라고 하는데, 과연 그렇게 될 수 있을까?'

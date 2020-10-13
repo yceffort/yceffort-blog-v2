@@ -1,17 +1,18 @@
 ---
 title: eslint-config-yceffort, 나만의 eslint-config 만들기
 tags:
-  - javascript, typescript
+  - javascript
+  - typescript
 published: true
 date: 2020-09-15 11:07:10
-description: "나만의 일관된 javascript code를 위하여 만들어보았습니다."
-category: javascript, typescript
+description: '나만의 일관된 javascript code를 위하여 만들어보았습니다.'
+category: npm
 template: post
 ---
 
 전 회사에서 자체적으로 만든 `eslint-config-***`를 쓰고 있었는데, private 레파지토리에 있어서 내 public 레파지토리에 적용해서 쓰는데에 어려움이 있었다. 1년간 쓰면서 자체적으로 정한 규칙도 맘에 들었고, 만들어 주신 분께서 꽤나 많은 공을 쏟아 주셔서 정말 잘 쓸 수 있었다. 그래서 이와 거의 흡사한 룰을 가진 나만의 `eslint-config-yceffort` 를 만들어서 써보기로 했다. 룰은 물론 거의 비슷하지만, 갖다 배낄 수는 없는 노릇이고 - 이미 퇴사해서 코드는 없으므로 기억나는 룰을 최대한 비슷하게 맞춰보았다.
 
-## 1. eslint-config-*** 만드는 법
+## 1. eslint-config-\*\*\* 만드는 법
 
 만드는 방법은 https://tech.kakao.com/2019/12/05/make-better-use-of-eslint/ 여기에 잘나와 있어서 따로 자세히 포스팅 하지 않으려고 한다. 분명히 예전에 다닐 때는 저런게 없었던 것 같은데 🤔 어느 틈엔가 만들어 쓰고 있었나보다.
 
@@ -19,7 +20,7 @@ template: post
 
 github의 리치한 대부분의 기능, 단순 소스 관리 부터 workflows 에 이르기 까지 모든 기능들을 쓰는데 심취하면서, 이 package registry 까지 github에서 사용해보고 싶었다. https://github.com/features/packages
 
-결론부터 말하자면 그러지 못했다. 
+결론부터 말하자면 그러지 못했다.
 
 https://github.com/yceffort/eslint-config-yceffort/packages
 
@@ -51,6 +52,5 @@ https://www.npmjs.com/package/eslint-config-yceffort
 ## 5. 결론
 
 https://www.npmjs.com/package/eslint-config-yceffort
-
 
 많은 이용 부탁드립니다.

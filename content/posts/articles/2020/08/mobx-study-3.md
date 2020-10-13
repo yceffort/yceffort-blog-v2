@@ -1,7 +1,8 @@
 ---
 title: MobX를 공부하자 (3) - 기본 개념과 원칙
 tags:
-  - javascript, MobX
+  - javascript
+  - MobX
 published: true
 date: 2020-08-25 20:07:31
 description: "MobX 1페이지 요약에 대한 간단한 번역"

@@ -16,6 +16,7 @@ export async function getAllPosts(): Promise<Array<Post>> {
       files.map(async (f) => {
         const file = await readFile(f, { encoding: 'utf8' })
         const { attributes: fm, body } = frontMatter(file)
+        const tags = ((fm as any).tags as string[]).map((tag) => tag.trim())
 
         const slug = f.slice(
           f.indexOf(DIR_REPLACE_STRING) + DIR_REPLACE_STRING.length + 1,
@@ -24,13 +25,14 @@ export async function getAllPosts(): Promise<Array<Post>> {
         return {
           frontmatter: {
             ...(fm as any),
+            tags,
             date: new Date((fm as any).date).getTime(),
           },
           body,
           fields: {
             slug,
             categorySlug: (fm as any).category,
-            tagSlugs: (fm as any).tags,
+            tagSlugs: tags,
           },
           path: f,
         }

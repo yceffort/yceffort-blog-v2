@@ -1,22 +1,44 @@
 import React, { ReactNode } from 'react'
 import Head from 'next/head'
+import styled from 'styled-components'
 
 import config from '../../../config'
 
-type Props = {
-  children: ReactNode,
-  title: string,
-  description?: string,
-  socialImage?: string,
-}
+const LayoutDiv = styled.div`
+  max-width: 66.875rem;
+  margin-left: auto;
+  margin-right: auto;
 
-const Layout = ({ children, title, description, socialImage }: Props) => {
-  const { author, url } = config
-  const metaImage = socialImage != null ? socialImage : author.photo
-  const metaImageUrl = url
+  &:before {
+    content: '';
+    display: table;
+  }
+
+  &:after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+`
+
+const Layout = ({
+  children,
+  title,
+  description,
+  socialImage,
+}: {
+  children: ReactNode
+  title: string
+  description?: string
+  socialImage?: string
+}) => {
+  const {
+    author: { photo },
+  } = config
+  const metaImageUrl = socialImage || photo
 
   return (
-    <div>
+    <LayoutDiv>
       <Head>
         <html lang="kr" />
         <title>{title}</title>
@@ -29,7 +51,7 @@ const Layout = ({ children, title, description, socialImage }: Props) => {
         <meta name="twitter:image" content={metaImageUrl} />
       </Head>
       {children}
-    </div>
+    </LayoutDiv>
   )
 }
 

@@ -1,17 +1,18 @@
 ---
 title: MobX를 공부하자 (1)
 tags:
-  - javascript, MobX
+  - javascript
+  - MobX
 published: true
 date: 2020-08-21 15:54:00
-description: "MobX 1페이지 요약에 대한 간단한 번역"
+description: 'MobX 1페이지 요약에 대한 간단한 번역'
 category: MobX
 template: post
 ---
 
-# MobX One Page Summary 
+# MobX One Page Summary
 
-[MobX One Page Summary](https://mobx.js.org/README.html)를 번역 및 요약 해보았습니다. 
+[MobX One Page Summary](https://mobx.js.org/README.html)를 번역 및 요약 해보았습니다.
 
 > derive는 적절한 단어가 생각이 안나서 '파생'으로 번역했습니다. 여기서 derive는 state(상태)를 변하게 하는 액션을 의미합니다.
 
@@ -27,23 +28,25 @@ to-heading: 3
 
 ## 설치
 
-- 설치 
+- 설치
   - 일반: `npm install mobx --save`
   - 리액트: `npm install mobx-react --save`
-- CDN: 
+- CDN:
   - https://unpkg.com/mobx/lib/mobx.umd.js
-  - https://cdnjs.com/libraries/mobx  
+  - https://cdnjs.com/libraries/mobx
 
 ## 브라우저 지원
 
-- 버전 5이상 부터는 [ES6 proxy를 지원하는 모든 브라우저](https://kangax.github.io/compat-table/es6/#test-Proxy)에서 실행 가능하다. IE11, nodejs 6 미만 오래된 자바스크립트 코어를 가진 리액트 네이티브 안드로이드 등에서는 오류가 날 것이다. 
+- 버전 5이상 부터는 [ES6 proxy를 지원하는 모든 브라우저](https://kangax.github.io/compat-table/es6/#test-Proxy)에서 실행 가능하다. IE11, nodejs 6 미만 오래된 자바스크립트 코어를 가진 리액트 네이티브 안드로이드 등에서는 오류가 날 것이다.
 - 버전 4는 모든 ES5를 지원하는 브라우저에서 동작하며, 계속해서 유지보수 될 것이다. 4와 5의 api 스펙은 동일하지만, 그러나 4에서는 [몇몇 제한](https://mobx.js.org/README.html#mobx-4-vs-mobx-5)이 있다.
 
 > MobX 5 패키지의 진입지점에서는 모든 빌드 도구와의 역호환성을 위하여 ES5 코드가 함께 제공된다. 그러나 위에서 언급했던 것 처럼, 어차피 MobX 5는 모던 브라우저에서만 작동하므로 더빠르고 가벼운 빌드를 위해서 아래와 같은 웹팩 alias를 추가하기를 권한다.
 
 ```javascript
-resolve: { 
-  alias: { mobx: __dirname + "/node_modules/mobx/lib/mobx.es6.js" }
+resolve: {
+  alias: {
+    mobx: __dirname + '/node_modules/mobx/lib/mobx.es6.js'
+  }
 }
 ```
 
@@ -69,19 +72,19 @@ React와 MobX는 모두 애플리케이션 개발에서 발생하는 공통적�
 
 ## 핵심 개념
 
-MobX에는 몇가지 핵심 개념이 존재한다. 
+MobX에는 몇가지 핵심 개념이 존재한다.
 
 ### Observable state (관찰 가능한 상태)
 
 MobX는 객체, 배열, 클래스 인스턴스와 같은 기존 데이트 구조에 예측 가능한 기능을 추가한다. 이것은 단순히 @observable 데코레이터만 추가하면 된다.
 
 ```javascript
-import { observable } from "mobx"
+import { observable } from 'mobx'
 
 class Todo {
-    id = Math.random()
-    @observable title = ""
-    @observable finished = false
+  id = Math.random()
+  @observable title = ''
+  @observable finished = false
 }
 ```
 
@@ -90,33 +93,33 @@ class Todo {
 만약 개발환경에서 데코레이터 문법을 지원하지 않는다면, [이 글](https://mobx.js.org/best/decorators.html)을 참조해봐도 좋다. 그게 아니라면 MobX는 데코레이터 문법을 지원하지 않아도 decorate 유틸리티를 활용해서 똑같이 구현할 수 있다. 대부분의 MobX 유저들은 데코레이터 문법을 선호하는데, 이는 데코레이터 문법이 조금더 간결하기 때문이다.
 
 ```javascript
-import { decorate, observable } from "mobx"
+import { decorate, observable } from 'mobx'
 
 class Todo {
-    id = Math.random()
-    title = ""
-    finished = false
+  id = Math.random()
+  title = ''
+  finished = false
 }
 decorate(Todo, {
-    title: observable,
-    finished: observable,
+  title: observable,
+  finished: observable,
 })
 ```
 
 ### Compute Values (자동 값 계산)
 
-MobX를 활용하면, 관련 데이터가 수정될 때 자동으로 파생된 값을 정의할 수 있다. 이는 `@computed` 데코레이터나, 위에서 `observable`를 사용했다면, getter/setter 함수를 활용해서 구현할 수도 있다. 
+MobX를 활용하면, 관련 데이터가 수정될 때 자동으로 파생된 값을 정의할 수 있다. 이는 `@computed` 데코레이터나, 위에서 `observable`를 사용했다면, getter/setter 함수를 활용해서 구현할 수도 있다.
 
 ```javascript
 class TodoList {
-    @observable todos = []
-    @computed get unfinishedTodoCount() {
-        return this.todos.filter((todo) => !todo.finished).length
-    }
+  @observable todos = []
+  @computed get unfinishedTodoCount() {
+    return this.todos.filter((todo) => !todo.finished).length
+  }
 }
 ```
 
-MobX는 todo가 추가되너가 `finished` 값이 수정되면  `unfinishedTodoCount`를 자동으로 계산한다. 이는 마치 엑셀과 같은 스프레드시트 프로그램에서 자동으로 연산이 되는 것과 같다. 이들은 오로지 필요할 때만 자동으로 업데이트 된다.
+MobX는 todo가 추가되너가 `finished` 값이 수정되면 `unfinishedTodoCount`를 자동으로 계산한다. 이는 마치 엑셀과 같은 스프레드시트 프로그램에서 자동으로 연산이 되는 것과 같다. 이들은 오로지 필요할 때만 자동으로 업데이트 된다.
 
 ### Reaction
 
@@ -127,39 +130,42 @@ Reaction은 Compute Values와 비슷하지만 값을 계산하는 대신 콘솔,
 만약 리액트를 사용하고 있다면, `mobx-react` 패키지에 있는 [observer](http://mobxjs.github.io/mobx/refguide/observer-component.html) 함수/데코레이터를 추가하여 반응형 컴포넌트를 만들 수 있다.
 
 ```javascript
-import React, { Component } from "react"
-import ReactDOM from "react-dom"
-import { observer } from "mobx-react"
+import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
+import { observer } from 'mobx-react'
 
 @observer
 class TodoListView extends Component {
-    render() {
-        return (
-            <div>
-                <ul>
-                    {this.props.todoList.todos.map((todo) => (
-                        <TodoView todo={todo} key={todo.id} />
-                    ))}
-                </ul>
-                Tasks left: {this.props.todoList.unfinishedTodoCount}
-            </div>
-        )
-    }
+  render() {
+    return (
+      <div>
+        <ul>
+          {this.props.todoList.todos.map((todo) => (
+            <TodoView todo={todo} key={todo.id} />
+          ))}
+        </ul>
+        Tasks left: {this.props.todoList.unfinishedTodoCount}
+      </div>
+    )
+  }
 }
 
 const TodoView = observer(({ todo }) => (
-    <li>
-        <input
-            type="checkbox"
-            checked={todo.finished}
-            onClick={() => (todo.finished = !todo.finished)}
-        />
-        {todo.title}
-    </li>
+  <li>
+    <input
+      type="checkbox"
+      checked={todo.finished}
+      onClick={() => (todo.finished = !todo.finished)}
+    />
+    {todo.title}
+  </li>
 ))
 
 const store = new TodoList()
-ReactDOM.render(<TodoListView todoList={store} />, document.getElementById("mount"))
+ReactDOM.render(
+  <TodoListView todoList={store} />,
+  document.getElementById('mount'),
+)
 ```
 
 `observer`는 리액트 컴포넌트를 렌더링하는 데이터의 파생 요소로 변환한다. MobX를 사용하면, 모든 컴포넌트들은 스마트하게 렌더링되지만, 멍청한 방식으로 정의된다. MobX는 오직 필요할 때만 컴포넌트를 다시 렌더링하며 그 이상도 그 이하의 작업도 하지 않는다. 따라서 위의 예제에서, `onClick`핸들러는 적절한 `TodoView`를 렌더링 하도록 강제하고, 오직 완료되지 않는 task 숫자가 변경된 경우에 한해서 만 `TodoLIstView`를 렌더링하게 된다. 그러나 `Tasks left` 라인을 삭제하거나 (혹은 다른 컴포넌트로 분리하거나) 하는 경우에는 `TodoListView`는 더이상 재 렌더링 되지 않는다.
@@ -172,13 +178,13 @@ ReactDOM.render(<TodoListView todoList={store} />, document.getElementById("moun
 
 ```javascript
 autorun(() => {
-    console.log("Tasks left: " + todos.unfinishedTodoCount)
+  console.log('Tasks left: ' + todos.unfinishedTodoCount)
 })
 ```
 
 ### 무엇이 MobX에서 반응하게 하는가?
 
-왜 `unfinishedTodoCount`가 바뀔 때마다 새로운 메시지가 출력될까? 
+왜 `unfinishedTodoCount`가 바뀔 때마다 새로운 메시지가 출력될까?
 
 > MobX는 실제로 추적하는 함수의 실행 중에 읽는 모든 관측가능한 속성에 대해서 반응한다.
 
@@ -199,7 +205,7 @@ autorun(() => {
 이벤트를 트리거하거나, dispatcher를 호출하는 등의 기술적인 필요성은 존재하지 않는다. 리액트 컴포넌트는 결국 상태를 멋있게 표현하는 방식에 지나지 않는다. 이는 MobX가 관리하게 된다.
 
 ```javascript
-store.todos.push(new Todo("Get Coffee"), new Todo("Write simpler code"))
+store.todos.push(new Todo('Get Coffee'), new Todo('Write simpler code'))
 store.todos[0].finished = true
 ```
 
@@ -227,10 +233,9 @@ MobX는 애플리케이션의 모든 파생에 대한 그래프를 구축하여,
 
 ### 간편한 상호운용성
 
-Mobx는 순수 자바스크립트 구조로 작동한다. 따라서 MobX가 작동하기 위해서 특정 라이브러리를 필요로 하지 않는다. 따라서 지금 사용하고 있는 다양한 라이브러리와도 호환된다. 같은 이류로 서버와 클라이언트, 리액트 네이티브 등에서도 활용가능하다. 이러한 결과 MobX를 사용할 때 다른 상태 관리 솔루션에 비해 새로운 개념을 덜 알아도 된다. 
+Mobx는 순수 자바스크립트 구조로 작동한다. 따라서 MobX가 작동하기 위해서 특정 라이브러리를 필요로 하지 않는다. 따라서 지금 사용하고 있는 다양한 라이브러리와도 호환된다. 같은 이류로 서버와 클라이언트, 리액트 네이티브 등에서도 활용가능하다. 이러한 결과 MobX를 사용할 때 다른 상태 관리 솔루션에 비해 새로운 개념을 덜 알아도 된다.
 
 > 실제로 [dependencies에 아무것도 없다.](https://github.com/mobxjs/mobx/blob/6ec6499fb8b55a17fe65f42b14d1188fd7fa1ba1/package.json#L58)
-
 
 ## MobX 4와 5의 차이
 

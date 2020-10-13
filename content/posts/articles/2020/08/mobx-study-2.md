@@ -1,7 +1,8 @@
 ---
 title: MobX를 공부하자 (2)
 tags:
-  - javascript, MobX
+  - javascript
+  - MobX
 published: true
 date: 2020-08-24 15:54:00
 description: "MobX를 예제 애플리케이션에 실제로 적용해보기"

@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import config from '../../../config'
+import config from '../../config'
 import getContactHref from '../../utils/getContactHref'
 import getIcon from '../../utils/getIcon'
 import Icon from '../Icon/Icon'

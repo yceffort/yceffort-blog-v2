@@ -2,7 +2,8 @@
 title: 'Node.js는 어떻게 동작하는가'
 category: nodejs
 tags:
-  - nodejs, javascript
+  - nodejs
+  - javascript
 published: true
 date: 2020-10-06 21:35:47
 description: 'nodejs에 대해서도 공부하자'

@@ -44,7 +44,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
     posts = allPosts.slice(
       pageNo * DEFAULT_NUMBER_OF_POSTS,
-      pageNo * DEFAULT_NUMBER_OF_POSTS + (DEFAULT_NUMBER_OF_POSTS - 1),
+      pageNo * DEFAULT_NUMBER_OF_POSTS + DEFAULT_NUMBER_OF_POSTS,
     )
   }
 

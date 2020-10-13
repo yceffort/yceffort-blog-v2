@@ -1,4 +1,3 @@
-
 export const config = {
   url: 'https://yceffort.kr',
   pathPrefix: '/',

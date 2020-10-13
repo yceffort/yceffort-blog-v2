@@ -3,22 +3,42 @@ import { join } from 'path'
 import { statSync, readdirSync, readFile } from 'promise-fs'
 import frontMatter from 'front-matter'
 
-import { FrontMatter } from '../types/types'
+import { FrontMatter, Post } from '../types/types'
 
 const POST_PATH = `${process.cwd()}/content/posts/articles`
+const DIR_REPLACE_STRING = '/posts/articles'
 
-export async function getAllFrontMatters(): Promise<Array<FrontMatter>> {
+export async function getAllPosts(): Promise<Array<Post>> {
   const files = getFilesRecursively(POST_PATH).reverse()
 
-  return (
+  const posts = (
     await Promise.all(
       files.map(async (f) => {
         const file = await readFile(f, { encoding: 'utf8' })
-        const { attributes: fm } = frontMatter(file)
-        return { ...(fm as any), date: (fm as any).date.getTime(), path: f }
+        const { attributes: fm, body } = frontMatter(file)
+
+        const slug = f.slice(
+          f.indexOf(DIR_REPLACE_STRING) + DIR_REPLACE_STRING.length + 1,
+        )
+
+        return {
+          frontmatter: {
+            ...(fm as any),
+            date: new Date((fm as any).date).getTime(),
+          },
+          body,
+          fields: {
+            slug,
+            categorySlug: (fm as any).category,
+            tagSlugs: (fm as any).tags,
+          },
+          path: f,
+        }
       }),
     )
-  ).sort((a: FrontMatter, b: FrontMatter) => b.date - a.date)
+  ).sort((a, b) => b.frontmatter.date - a.frontmatter.date)
+
+  return posts
 }
 
 function getFilesRecursively(path: string) {

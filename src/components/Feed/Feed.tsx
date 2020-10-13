@@ -1,48 +1,106 @@
 // @flow strict
+import { format, toDate } from 'date-fns'
 import React from 'react'
 import styled from 'styled-components'
 
-import type { Edges } from '../../types'
-
-type Props = {
-  edges: Edges
-}
+import { Post } from '../../types/types'
 
 const FeedItem = styled.div`
-  margin-bottom: 1.25px;
+  margin-bottom: 2.03125rem;
 
   &:last-child {
     margin-bottom: 0.5px;
   }
 `
 
-const Feed = ({ edges }: Props) => (
-  <div className="feed">
-    {edges.map((edge) => (
-      <FeedItem key={edge.node.fields.slug}>
-        <div className="feed__item-meta">
-          <span>10 11 2019</span>
-          {/* <time
-            className='feed__item-meta-time'
-            dateTime={moment(edge.node.frontmatter.date).format('MMMM D, YYYY')}
-          >
-            {moment(edge.node.frontmatter.date).format('MMMM YYYY')}
-          </time> */}
-          <span className="divider" />
-          <span className="feed__item-meta-category">
-            <a className={'feed__item-meta-category-link'}>카테고리영역</a>
-          </span>
-        </div>
-        <h2 className="feed__item-title">
-          <a className="feed__item-title-link">제목 영역</a>
-        </h2>
-        <p className="feed__item-description">
-          {edge.node.frontmatter.description}
-        </p>
-        <a className="feed__item-readmore">읽기 영dur</a>
-      </FeedItem>
-    ))}
-  </div>
+const FeedItemMeta = styled.div`
+  font-size: 0.875rem;
+  color: #222;
+  font-weight: 600;
+  text-transform: uppercase;
+`
+
+const FeedItemMetaTime = styled.time`
+  font-size: 0.875rem;
+  color: #222;
+  font-weight: 600;
+  text-transform: uppercase;
+`
+
+const FeedItemMetaDivider = styled.span`
+  margin: 0 0.3125rem;
+`
+
+const FeedItemMetaCategoryLink = styled.a`
+  font-size: 0.875rem;
+  color: #f7a046;
+  font-weight: 600;
+  text-transform: uppercase;
+
+  &:hover,
+  &:focus {
+    color: #5d93ff;
+  }
+`
+
+const FeedItemTitle = styled.h2`
+  font-size: 1.6875rem;
+  line-height: 2.4375rem;
+  margin-top: 0;
+  margin-bottom: 0.8125rem;
+`
+
+const FeedItemTitleLink = styled.a`
+  color: #222;
+  &:hover,
+  &:focus {
+    color: #222;
+    border-bottom: 1px solid #222;
+  }
+`
+
+const FeedItemDescription = styled.p`
+  font-size: 1rem;
+  line-height: 1.625rem;
+  margin-bottom: 1.21875rem;
+  word-break: break-all;
+`
+
+const FeedItemReadMore = styled.a`
+  font-size: 1rem;
+  color: #5d93ff;
+
+  &:hover,
+  &:focus {
+    color: #5d93ff;
+    border-bottom: 1px solid #5d93ff;
+  }
+`
+
+const Feed = ({ posts }: { posts: Array<Post> }) => (
+  <>
+    {posts.map((post, index) => {
+      const {
+        frontmatter: { date, category, title, description },
+      } = post
+      return (
+        <FeedItem key={index}>
+          <FeedItemMeta>
+            <FeedItemMetaTime>
+              {format(toDate(date), 'MMMM d yyyy')}
+            </FeedItemMetaTime>
+            <FeedItemMetaDivider />
+            <FeedItemMetaCategoryLink>{category}</FeedItemMetaCategoryLink>
+          </FeedItemMeta>
+          <FeedItemTitle>
+            <FeedItemTitleLink>{title}</FeedItemTitleLink>
+          </FeedItemTitle>
+          <FeedItemDescription>{description}</FeedItemDescription>
+          <FeedItemReadMore>Read</FeedItemReadMore>
+        </FeedItem>
+      )
+    })}
+  </>
 )
 
 export default Feed

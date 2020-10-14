@@ -101,7 +101,7 @@ export async function parseBody(body: string): Promise<string> {
       .use(slug)
       .use(math)
       .use(remark2rehype)
-      .use(katex)
+      .use(katex, { strict: false })
       .use(highlightCode)
       .use(stringify)
       .process(body)

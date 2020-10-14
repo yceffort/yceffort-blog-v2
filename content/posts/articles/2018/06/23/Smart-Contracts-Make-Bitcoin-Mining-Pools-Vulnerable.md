@@ -15,6 +15,7 @@ category: blockchain
 slug: /2018/06/23/Smart-Contracts-Make-Bitcoin-Mining-Pools-Vulnerable/
 template: post
 ---
+
 스마트 컨트랙트는 비트코인 마이닝풀을 취약하게 한다.
 
 [원문](http://fc17.ifca.ai/bitcoin/papers/bitcoin17-final38.pdf)

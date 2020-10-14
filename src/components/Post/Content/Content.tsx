@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import CodeBlock from './markdown/Codeblock'
+
 const ContentContainer = styled.div`
   max-width: 59.0625rem;
   padding: 0 0.9375rem;
@@ -84,7 +86,17 @@ export default function Content({
   return (
     <ContentContainer>
       <ContentTitle>{title}</ContentTitle>
-      <ContentBody dangerouslySetInnerHTML={{ __html: body }} />
+      <ContentBody>
+        <MathJax.Provider options="tex">
+          <ReactMarkdown
+            source={body}
+            plugins={[RemarkMathPlugin]}
+            renderers={{
+              code: CodeBlock,
+            }}
+          />
+        </MathJax.Provider>
+      </ContentBody>
     </ContentContainer>
   )
 }

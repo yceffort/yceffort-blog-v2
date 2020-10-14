@@ -6,7 +6,7 @@ import Layout from '../src/components/Layout/Layout'
 import Page from '../src/components/Page/Page'
 import Sidebar from '../src/components/Sidebar/Sidebar'
 import config from '../src/config'
-import { getAllTagsFromPosts } from '../src/utils/frontMatters'
+import { getAllTagsFromPosts } from '../src/utils/FrontMatters'
 export default function Tags({ tags }: { tags: string[] }) {
   return (
     <Layout title={`Tags-${config.title}`}>

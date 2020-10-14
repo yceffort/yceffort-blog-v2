@@ -1,5 +1,6 @@
 // @flow strict
 import { format, toDate } from 'date-fns'
+import Link from 'next/link'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -81,7 +82,8 @@ const Feed = ({ posts }: { posts: Array<Post> }) => (
   <>
     {posts.map((post, index) => {
       const {
-        frontmatter: { date, category, title, description },
+        frontmatter: { date, title, description, tags },
+        fields: { slug },
       } = post
       return (
         <FeedItem key={index}>
@@ -90,13 +92,22 @@ const Feed = ({ posts }: { posts: Array<Post> }) => (
               {format(toDate(date), 'MMMM d yyyy')}
             </FeedItemMetaTime>
             <FeedItemMetaDivider />
-            <FeedItemMetaCategoryLink>{category}</FeedItemMetaCategoryLink>
+
+            {tags.map((tag, index) => (
+              <Link passHref href={`/tag/${tag}/page/1`} key={index}>
+                <FeedItemMetaCategoryLink>{tag} </FeedItemMetaCategoryLink>
+              </Link>
+            ))}
           </FeedItemMeta>
           <FeedItemTitle>
-            <FeedItemTitleLink>{title}</FeedItemTitleLink>
+            <Link passHref href={`/${slug}`}>
+              <FeedItemTitleLink>{title}</FeedItemTitleLink>
+            </Link>
           </FeedItemTitle>
           <FeedItemDescription>{description}</FeedItemDescription>
-          <FeedItemReadMore>Read</FeedItemReadMore>
+          <Link passHref href={`/${slug}`}>
+            <FeedItemReadMore>Read</FeedItemReadMore>
+          </Link>
         </FeedItem>
       )
     })}

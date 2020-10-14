@@ -9,7 +9,7 @@ import Meta from './Meta'
 import Tags from './Tags'
 import styles from './Post.module.scss'
 import type { Node } from '../../types'
-import 'gatsby-remark-mathjax-ssr/mathjax.css'; // eslint-disable-line
+import 'gatsby-remark-mathjax-ssr/mathjax.css' // eslint-disable-line
 
 type Props = {
   post: Node,

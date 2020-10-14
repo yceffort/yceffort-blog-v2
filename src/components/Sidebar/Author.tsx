@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -10,6 +11,7 @@ const AuthorPhoto = styled.img`
   background-clip: padding-box;
   width: 75px;
   height: 75px;
+  cursor: pointer;
 `
 
 const AuthorTitle = styled.h1`
@@ -17,6 +19,7 @@ const AuthorTitle = styled.h1`
   font-weight: 600;
   line-height: 1.82813em;
   margin: 0.8125rem 0;
+  cursor: pointer;
 `
 
 const AuthorSubTitle = styled.p`
@@ -31,8 +34,12 @@ export default function Author() {
   } = config
   return (
     <>
-      <AuthorPhoto alt={name} src={photo} />
-      <AuthorTitle>{name}</AuthorTitle>
+      <Link href="/">
+        <AuthorPhoto alt={name} src={photo} />
+      </Link>
+      <Link href="/">
+        <AuthorTitle>{name}</AuthorTitle>
+      </Link>
       <AuthorSubTitle>{bio}</AuthorSubTitle>
     </>
   )

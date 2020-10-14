@@ -1,4 +1,5 @@
 ---
+
 title: Tensorflow.js - 07. Build an image classifier
 tags:
   - machine-learning
@@ -7,18 +8,15 @@ tags:
   - javascript
 published: true
 date: 2020-02-04 05:41:09
-description: "```toc tight: true, from-heading: 1 to-heading: 3 ``` # Transfer
-  learning image classifier  본 튜토리얼에서는, 브라우저 환경에서 Tesnorflow.js를 활용하여 커스텀 이미지
-  분류기를 만드는 방법을 알아봅니다.  이번 장에서는, 최소한의 데이터를 활용하여 높은 정확도를 가진 모델..."
+description: "`toc tight: true, from-heading: 1 to-heading: 3 ` # Transfer
+learning image classifier 본 튜토리얼에서는, 브라우저 환경에서 Tesnorflow.js를 활용하여 커스텀 이미지
+분류기를 만드는 방법을 알아봅니다. 이번 장에서는, 최소한의 데이터를 활용하여 높은 정확도를 가진 모델..."
 category: machine-learning
 slug: /2020/02/tensorflowjs-07-build-an-image-classifier/
 template: post
 ---
-```toc
-tight: true,
-from-heading: 1
-to-heading: 3
-```
+
+## Table of Contents
 
 # Transfer learning image classifier
 
@@ -80,14 +78,14 @@ index.html을 열고 아래 코드를 넣어주세요.
 let net
 
 async function app() {
-  console.log("Loading mobilenet..")
+  console.log('Loading mobilenet..')
 
   // Load the model.
   net = await mobilenet.load()
-  console.log("Successfully loaded model")
+  console.log('Successfully loaded model')
 
   // Make a prediction through the model on our image.
-  const imgEl = document.getElementById("img")
+  const imgEl = document.getElementById('img')
   const result = await net.classify(imgEl)
   console.log(result)
 }
@@ -125,18 +123,18 @@ index.html을 웹브라우저에서 열어보세요.
 `index.js`를 열고 파일의 최상단에 위 코드를 넣어주세요.
 
 ```javascript
-const webcamElement = document.getElementById("webcam")
+const webcamElement = document.getElementById('webcam')
 ```
 
 이제 `app()` function 내부에서, 이미지를 기반으로한 예측을 제거하고 대신 웹캠 엘리먼트를 통해 예측을 하는 무한루프 로직을 만들 수 있습니다.
 
 ```javascript
 async function app() {
-  console.log("Loading mobilenet..")
+  console.log('Loading mobilenet..')
 
   // Load the model.
   net = await mobilenet.load()
-  console.log("Successfully loaded model")
+  console.log('Successfully loaded model')
 
   // Create an object from Tensorflow.js data API which could capture image
   // from the web camera as Tensor.
@@ -145,7 +143,7 @@ async function app() {
     const img = await webcam.capture()
     const result = await net.classify(img)
 
-    document.getElementById("console").innerText = `
+    document.getElementById('console').innerText = `
       prediction: ${result[0].className}\n
       probability: ${result[0].probability}
     `
@@ -193,22 +191,22 @@ app 함수를 업데이트 합니다.
 
 ```javascript
 async function app() {
-  console.log("Loading mobilenet..")
+  console.log('Loading mobilenet..')
 
   // 모델을 로드한다.
   net = await mobilenet.load()
-  console.log("Successfully loaded model")
+  console.log('Successfully loaded model')
 
   // 웹캠의 데이터를 tensor로 변환하는 tensorflwjs api를 만든다.
   const webcam = await tf.data.webcam(webcamElement)
 
   // 웹캠에서 이미지를 로딩하고, 특정 클래스와 연관짓는다.
-  const addExample = async classId => {
+  const addExample = async (classId) => {
     // Capture an image from the web camera.
     const img = await webcam.capture()
 
     // conv_preds라는 활성함수를 가져오고, KNN 분류기에 넘긴다.
-    const activation = net.infer(img, "conv_preds")
+    const activation = net.infer(img, 'conv_preds')
 
     // 중간 활성화 함수를 분류기에 넘긴다.
     classifier.addExample(activation, classId)
@@ -219,26 +217,26 @@ async function app() {
 
   // 버튼을 클릭하면, 각 클래스별로 예제를 추가한다.
   document
-    .getElementById("class-a")
-    .addEventListener("click", () => addExample(0))
+    .getElementById('class-a')
+    .addEventListener('click', () => addExample(0))
   document
-    .getElementById("class-b")
-    .addEventListener("click", () => addExample(1))
+    .getElementById('class-b')
+    .addEventListener('click', () => addExample(1))
   document
-    .getElementById("class-c")
-    .addEventListener("click", () => addExample(2))
+    .getElementById('class-c')
+    .addEventListener('click', () => addExample(2))
 
   while (true) {
     if (classifier.getNumClasses() > 0) {
       const img = await webcam.capture()
 
       // 웹켐의 mobilnet의 활성함수를 가져온다.
-      const activation = net.infer(img, "conv_preds")
+      const activation = net.infer(img, 'conv_preds')
       // 분류기에서 가장 근접한 결과를 가져온다.
       const result = await classifier.predictClass(activation)
 
-      const classes = ["A", "B", "C"]
-      document.getElementById("console").innerText = `
+      const classes = ['A', 'B', 'C']
+      document.getElementById('console').innerText = `
         prediction: ${classes[result.label]}\n
         probability: ${result.confidences[result.label]}
       `

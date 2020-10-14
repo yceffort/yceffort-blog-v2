@@ -7,18 +7,15 @@ tags:
   - javascript
 published: true
 date: 2020-01-16 01:41:50
-description: "```toc tight: true, from-heading: 1 to-heading: 3 ``` # Training
-  and Prediction in Node.js  본 튜토리얼에서는 MLBAM에서 제공하는 피쳐 센서 데이터를 바탕으로, 야구의 칭 유형을
-  추측하는 모델을 만들어볼 예정입니다. 이 튜토리얼은 서버사이드 애플리케이션인 Node.js에서 진행될 ..."
+description: "`toc tight: true, from-heading: 1 to-heading: 3 ` # Training
+and Prediction in Node.js 본 튜토리얼에서는 MLBAM에서 제공하는 피쳐 센서 데이터를 바탕으로, 야구의 칭 유형을
+추측하는 모델을 만들어볼 예정입니다. 이 튜토리얼은 서버사이드 애플리케이션인 Node.js에서 진행될 ..."
 category: machine-learning
 slug: /2020/01/tensorflowjs-05-training-prediction-nodejs/
 template: post
 ---
-```toc
-tight: true,
-from-heading: 1
-to-heading: 3
-```
+
+## Table of Contents
 
 # Training and Prediction in Node.js
 
@@ -104,7 +101,7 @@ Fastball (2-seam), Fastball (4-seam), Fastball (sinker), Fastball (cutter), Slid
 모델을 만들기전에, 학습 데이터와 테스트 데이터를 준비해야 합니다. `./baseball` 에 `pitch_type.js` 파일을 생성한 후, 아래의 코드를 복사해서 넣어주셋요. 이 코드는 [tf.data.csv](https://js.tensorflow.org/api/latest/#data.csv)를 활용하여 데이터를 로딩합니다. 또한 데이터를 min-maxn normalization을 통해 정규화합니다. (항상 하기를 추천합니다)
 
 ```javascript
-const tf = require("@tensorflow/tfjs")
+const tf = require('@tensorflow/tfjs')
 
 // 주어진 값 사이로 정규화 하는 함수
 function normalize(value, min, max) {
@@ -116,9 +113,9 @@ function normalize(value, min, max) {
 
 // 데이터는 URL또는 로컬 파일로 로딩가능
 const TRAIN_DATA_PATH =
-  "https://storage.googleapis.com/mlb-pitch-data/pitch_type_training_data.csv"
+  'https://storage.googleapis.com/mlb-pitch-data/pitch_type_training_data.csv'
 const TEST_DATA_PATH =
-  "https://storage.googleapis.com/mlb-pitch-data/pitch_type_test_data.csv"
+  'https://storage.googleapis.com/mlb-pitch-data/pitch_type_test_data.csv'
 
 // 데이터 학습을 위한 상수
 const VX0_MIN = -18.885
@@ -185,15 +182,15 @@ const testValidationData = tf.data
 
 ```javascript
 const model = tf.sequential()
-model.add(tf.layers.dense({ units: 250, activation: "relu", inputShape: [8] }))
-model.add(tf.layers.dense({ units: 175, activation: "relu" }))
-model.add(tf.layers.dense({ units: 150, activation: "relu" }))
-model.add(tf.layers.dense({ units: NUM_PITCH_CLASSES, activation: "softmax" }))
+model.add(tf.layers.dense({ units: 250, activation: 'relu', inputShape: [8] }))
+model.add(tf.layers.dense({ units: 175, activation: 'relu' }))
+model.add(tf.layers.dense({ units: 150, activation: 'relu' }))
+model.add(tf.layers.dense({ units: NUM_PITCH_CLASSES, activation: 'softmax' }))
 
 model.compile({
   optimizer: tf.train.adam(),
-  loss: "sparseCategoricalCrossentropy",
-  metrics: ["accuracy"],
+  loss: 'sparseCategoricalCrossentropy',
+  metrics: ['accuracy'],
 })
 ```
 
@@ -206,7 +203,7 @@ model.compile({
 // 학습용 데이터에서 도출한 각 구질별 확률을 리턴합니다.
 async function evaluate(useTestData) {
   let results = {}
-  await trainingValidationData.forEachAsync(pitchTypeBatch => {
+  await trainingValidationData.forEachAsync((pitchTypeBatch) => {
     const values = model.predict(pitchTypeBatch.xs).dataSync()
     const classSize = TRAINING_DATA_LENGTH / NUM_PITCH_CLASSES
     for (let i = 0; i < NUM_PITCH_CLASSES; i++) {
@@ -217,14 +214,14 @@ async function evaluate(useTestData) {
   })
 
   if (useTestData) {
-    await testValidationData.forEachAsync(pitchTypeBatch => {
+    await testValidationData.forEachAsync((pitchTypeBatch) => {
       const values = model.predict(pitchTypeBatch.xs).dataSync()
       const classSize = TEST_DATA_LENGTH / NUM_PITCH_CLASSES
       for (let i = 0; i < NUM_PITCH_CLASSES; i++) {
         results[pitchFromClassNum(i)].validation = calcPitchClassEval(
           i,
           classSize,
-          values
+          values,
         )
       }
     })
@@ -261,21 +258,21 @@ function calcPitchClassEval(pitchIndex, classSize, values) {
 function pitchFromClassNum(classNum) {
   switch (classNum) {
     case 0:
-      return "Fastball (2-seam)"
+      return 'Fastball (2-seam)'
     case 1:
-      return "Fastball (4-seam)"
+      return 'Fastball (4-seam)'
     case 2:
-      return "Fastball (sinker)"
+      return 'Fastball (sinker)'
     case 3:
-      return "Fastball (cutter)"
+      return 'Fastball (cutter)'
     case 4:
-      return "Slider"
+      return 'Slider'
     case 5:
-      return "Changeup"
+      return 'Changeup'
     case 6:
-      return "Curveball"
+      return 'Curveball'
     default:
-      return "Unknown"
+      return 'Unknown'
   }
 }
 
@@ -297,17 +294,17 @@ server.js 라는 새로운 파일을 작성한다음, 서버에서 훈련과 평
 아래 코드를 server.js에 작성해주세요.
 
 ```javascript
-require("@tensorflow/tfjs-node")
+require('@tensorflow/tfjs-node')
 
-const http = require("http")
-const socketio = require("socket.io")
-const pitch_type = require("./pitch_type")
+const http = require('http')
+const socketio = require('socket.io')
+const pitch_type = require('./pitch_type')
 
 const TIMEOUT_BETWEEN_EPOCHS_MS = 500
 const PORT = 8001
 
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms))
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
 // 서버를 시작하고, 모델을 훈련시키고, 현재 상태를 소켓 연결로 내보낸다.
@@ -320,9 +317,9 @@ async function run() {
     console.log(`  > Running socket on port: ${port}`)
   })
 
-  io.on("connection", socket => {
-    socket.on("predictSample", async sample => {
-      io.emit("predictResult", await pitch_type.predictSample(sample))
+  io.on('connection', (socket) => {
+    socket.on('predictSample', async (sample) => {
+      io.emit('predictResult', await pitch_type.predictSample(sample))
     })
   })
 
@@ -330,11 +327,11 @@ async function run() {
   for (var i = 0; i < numTrainingIterations; i++) {
     console.log(`Training iteration : ${i + 1} / ${numTrainingIterations}`)
     await pitch_type.model.fitDataset(pitch_type.trainingData, { epochs: 1 })
-    console.log("accuracyPerClass", await pitch_type.evaluate(true))
+    console.log('accuracyPerClass', await pitch_type.evaluate(true))
     await sleep(TIMEOUT_BETWEEN_EPOCHS_MS)
   }
 
-  io.emit("trainingComplete", true)
+  io.emit('trainingComplete', true)
 }
 
 run()
@@ -404,11 +401,11 @@ Ctrl+C로 서버를 중단시킵니다. 다음 단계에서 다시 이 부분을
 `client.js`를 `./baseball` 폴더에 만들고 아래 내용을 복사합니다.
 
 ```javascript
-import io from "socket.io-client"
-const predictContainer = document.getElementById("predictContainer")
-const predictButton = document.getElementById("predict-button")
+import io from 'socket.io-client'
+const predictContainer = document.getElementById('predictContainer')
+const predictButton = document.getElementById('predict-button')
 
-const socket = io("http://localhost:8001", {
+const socket = io('http://localhost:8001', {
   reconnectionDelay: 300,
   reconnectionDelayMax: 300,
 })
@@ -417,35 +414,35 @@ const testSample = [2.668, -114.333, -1.908, 4.786, 25.707, -45.21, 78, 0] // Cu
 
 predictButton.onclick = () => {
   predictButton.disabled = true
-  socket.emit("predictSample", testSample)
+  socket.emit('predictSample', testSample)
 }
 
 // functions to handle socket events
-socket.on("connect", () => {
-  document.getElementById("waiting-msg").style.display = "none"
-  document.getElementById("trainingStatus").innerHTML = "Training in Progress"
+socket.on('connect', () => {
+  document.getElementById('waiting-msg').style.display = 'none'
+  document.getElementById('trainingStatus').innerHTML = 'Training in Progress'
 })
 
-socket.on("trainingComplete", () => {
-  document.getElementById("trainingStatus").innerHTML = "Training Complete"
-  document.getElementById("predictSample").innerHTML =
-    "[" + testSample.join(", ") + "]"
-  predictContainer.style.display = "block"
+socket.on('trainingComplete', () => {
+  document.getElementById('trainingStatus').innerHTML = 'Training Complete'
+  document.getElementById('predictSample').innerHTML =
+    '[' + testSample.join(', ') + ']'
+  predictContainer.style.display = 'block'
 })
 
-socket.on("predictResult", result => {
+socket.on('predictResult', (result) => {
   plotPredictResult(result)
 })
 
-socket.on("disconnect", () => {
-  document.getElementById("trainingStatus").innerHTML = ""
-  predictContainer.style.display = "none"
-  document.getElementById("waiting-msg").style.display = "block"
+socket.on('disconnect', () => {
+  document.getElementById('trainingStatus').innerHTML = ''
+  predictContainer.style.display = 'none'
+  document.getElementById('waiting-msg').style.display = 'block'
 })
 
 function plotPredictResult(result) {
   predictButton.disabled = false
-  document.getElementById("predictResult").innerHTML = result
+  document.getElementById('predictResult').innerHTML = result
   console.log(result)
 }
 ```
@@ -472,6 +469,4 @@ $ npm run start-server
 
 [tensorflow.org/js](https://www.tensorflow.org/js)를 방문해서, 더욱 많은 예제와 데모를 보시고, 당신의 애플리케이션에서 Tensorflow.js를 어떻게 활용할수 있을지 살펴보세요.
 
-
 https://codesandbox.io/s/tensorflowjs-05-training-prediction-nodejs-tc6c4
-

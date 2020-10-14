@@ -14,11 +14,7 @@ template: post
 
 # MobX와 React를 위한 10분 소개글
 
-```toc
-tight: true,
-from-heading: 2
-to-heading: 3
-```
+## Table of Contents
 
 ## 핵심 아이디어
 

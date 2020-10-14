@@ -6,22 +6,20 @@ tags:
   - react
 published: true
 date: 2020-03-12 02:39:10
-description: 요즘 리액트를 쓰는 많은 프로젝트에서, SSR을 지원하기 위해 [nextjs](https://nextjs.org/)를
+description:
+  요즘 리액트를 쓰는 많은 프로젝트에서, SSR을 지원하기 위해 [nextjs](https://nextjs.org/)를
   쓰고 있다. 초기 로딩 속도나, SEO 지원 이슈 등 등 때문에 아무래도 SPA는 요즘 트렌드에서 많이 밀린 기분이다. 물론
   [razzle](https://github.com/jaredpalmer/razzle) 을 쓰거나 custom ser...
 category: typescript
 slug: /2020/03/nextjs-01-route/
 template: post
 ---
+
 요즘 리액트를 쓰는 많은 프로젝트에서, SSR을 지원하기 위해 [nextjs](https://nextjs.org/)를 쓰고 있다. 초기 로딩 속도나, SEO 지원 이슈 등 등 때문에 아무래도 SPA는 요즘 트렌드에서 많이 밀린 기분이다. 물론 [razzle](https://github.com/jaredpalmer/razzle) 을 쓰거나 custom server 로 맨 바닥에 해딩하는 방법도 있지만 여기저기 컨퍼런스나 주변 사람들의 말을 들어보면 nextjs가 대세이긴 한 것 같다.
 
 입사 이래로 nextjs를 쓰면서 별 생각 없이 썼던 것들이 많은데, 9.3 출시를 기념하여 이참에 하나씩 정리해보려고 한다.
 
-```toc
-tight: true,
-from-heading: 1
-to-heading: 3
-```
+## Table of Contents
 
 ## 1. Page
 
@@ -32,8 +30,8 @@ to-heading: 3
 ### pages/posts/[id].tsx
 
 ```typescript
-import React from "react"
-import { useRouter } from "next/router"
+import React from 'react'
+import { useRouter } from 'next/router'
 
 export default function Post() {
   const router = useRouter()
@@ -51,7 +49,7 @@ nested routes도 위와 마찬가지로 처리하면 된다.
 Nextjs에서는 SPA와 유사한 클라이언트 사이드 라우팅을 지원한다. `Link`라고 불리는 컴포넌트를 활용하면, 클라이언트 사이드 라우팅을 할 수 있다.
 
 ```jsx
-import Link from "next/link"
+import Link from 'next/link'
 
 function Home() {
   return (
@@ -71,7 +69,7 @@ nextjs 는 `Link`를 적절한 a 태그로 변환해 준다.
 - `as`: 브라우저에 실제로 표시될 주소를 넘긴다. `/posts/1`
 
 ```jsx
-import Link from "next/link"
+import Link from 'next/link'
 
 function Home() {
   return (
@@ -105,7 +103,7 @@ nextjs의 라우터 안에는 다음과 같은 정보가 포함되어 있다.
 클라이언트 사이드 트랜지션을 다룰 때 쓰는 api다.
 
 ```tsx
-import Router from "next/router"
+import Router from 'next/router'
 Router.push(url, as, options)
 ```
 
@@ -119,35 +117,35 @@ Router.push(url, as, options)
 `index.tsx`
 
 ```typescript
-import React from "react"
-import { useRouter } from "next/router"
-import { NextPageContext } from "next"
+import React from 'react'
+import { useRouter } from 'next/router'
+import { NextPageContext } from 'next'
 
 export default function Index() {
   const { push } = useRouter()
 
   function pushOnlyUrl() {
-    push("/posts/1")
+    push('/posts/1')
   }
 
   function pushWithAs() {
-    push("/posts/[id]?hello=world", "/posts/1")
+    push('/posts/[id]?hello=world', '/posts/1')
   }
 
   function shallowPush() {
-    push("/?counter=1", undefined, { shallow: true })
+    push('/?counter=1', undefined, { shallow: true })
   }
 
   function notShallowPush() {
-    push("/?counter=1")
+    push('/?counter=1')
   }
 
   function pushUrl() {
-    push("/about")
+    push('/about')
   }
 
   function pushUrlAndAs() {
-    push("/about", "/about")
+    push('/about', '/about')
   }
 
   return (
@@ -180,8 +178,8 @@ export default function Index() {
   )
 }
 
-Index.getInitialProps = function(_: NextPageContext) {
-  console.log("getInitialProps of Index")
+Index.getInitialProps = function (_: NextPageContext) {
+  console.log('getInitialProps of Index')
 
   return {}
 }
@@ -190,21 +188,21 @@ Index.getInitialProps = function(_: NextPageContext) {
 `[id].tsx`
 
 ```typescript
-import React from "react"
-import { useRouter } from "next/router"
-import { NextPageContext } from "next"
+import React from 'react'
+import { useRouter } from 'next/router'
+import { NextPageContext } from 'next'
 
 export default function Post() {
   const router = useRouter()
 
-  console.log("Router", JSON.stringify(router))
+  console.log('Router', JSON.stringify(router))
 
   const { id } = router.query
   return <div>Post id {id}</div>
 }
 
-Post.getInitialProps = function({ req }: NextPageContext) {
-  console.log("getInitialProps of Post")
+Post.getInitialProps = function ({ req }: NextPageContext) {
+  console.log('getInitialProps of Post')
 
   return {}
 }
@@ -213,15 +211,15 @@ Post.getInitialProps = function({ req }: NextPageContext) {
 `about.tsx`
 
 ```typescript
-import React from "react"
-import { NextPageContext } from "next"
+import React from 'react'
+import { NextPageContext } from 'next'
 
 export default function About() {
   return <div>about page</div>
 }
 
-About.getInitialProps = function(_: NextPageContext) {
-  console.log("getInitialProps of about")
+About.getInitialProps = function (_: NextPageContext) {
+  console.log('getInitialProps of about')
 
   return {}
 }
@@ -286,7 +284,7 @@ function App({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     router.beforePopState(() => {
-      console.log("beforePopState!!")
+      console.log('beforePopState!!')
       return true
     })
 
@@ -316,8 +314,8 @@ Router에서 일어나는 다양한 이벤트를 감지 할 수 있다.
 
 ```typescript
 useEffect(() => {
-  router.events.on("routeChangeStart", as => {
-    console.log("routeChangeStart", as)
+  router.events.on('routeChangeStart', (as) => {
+    console.log('routeChangeStart', as)
   })
 }, [])
 ```

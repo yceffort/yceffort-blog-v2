@@ -4,27 +4,24 @@ tags:
   - javascript
 published: true
 date: 2020-06-29 07:42:01
-description: "[Case Study: Analyzing Notion app
+description: '[Case Study: Analyzing Notion app
   performance](https://3perf.com/blog/notion/)를 제멋대로 요약한 글입니다. 왠만하면 저 글을 참고하세요.
   ```toc tight: true, from-heading: 2 to-heading: 3 ```  ## 자바스크립트의 비용  보통 `로딩
-  속도`를 이야기하면..."
+  속도`를 이야기하면...'
 category: javascript
 slug: /2020/06/notion-app-performance-case-study/
 template: post
 ---
+
 [Case Study: Analyzing Notion app performance](https://3perf.com/blog/notion/)를 제멋대로 요약한 글입니다. 왠만하면 저 글을 참고하세요.
 
-```toc
-tight: true,
-from-heading: 2
-to-heading: 3
-```
+## Table of Contents
 
 ## 자바스크립트의 비용
 
 보통 `로딩 속도`를 이야기하면, 네트워크 성능을 떠올리는 경우가 많다. 네트워킹이라는 관점에서는 노션은 꽤 괜찮았다. [HTTP/2](https://developers.google.com/web/fundamentals/performance/http2?hl=ko)를 사용하고, 파일을 gzip으로 압축했으며, [CDN 프록시](https://cdn.hosting.kr/cdn%EC%9D%B4%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80%EC%9A%94/)를 위해 클라우드페어를 잘 쓰고 있었다. 그러나 `로딩 속도`를 차지 하는 다른 한켠에는 `처리 성능`이 포함되어 있다. gzip을 압축해제하고, 이미지는 디코드 되야 하며, 자바스크립트는 실행되어야 한다. 이런 것들이 처리 성능에 포함되어 있다.
 
-더 좋은 품질의 네트워크를 사용하면 향상되면 네트워크 성능과는 다르게, 처리 성능은 그렇지 않다. 오로지 사용자의 CPU가 더 좋아야 한다. 그리고 스마트폰의 사용자의 CPU라고 한다면 - 특히 안드로이드 폰의 경우 구리다. 
+더 좋은 품질의 네트워크를 사용하면 향상되면 네트워크 성능과는 다르게, 처리 성능은 그렇지 않다. 오로지 사용자의 CPU가 더 좋아야 한다. 그리고 스마트폰의 사용자의 CPU라고 한다면 - 특히 안드로이드 폰의 경우 구리다.
 
 ![스마트폰 별 노션 앱 로딩 속도](https://3perf.com/static/c7e7dd1756462191f79441053ce9d5a7/28bdc/cost-of-js.png)
 
@@ -44,13 +41,14 @@ to-heading: 3
 
 ## 자바스크립트 실행을 지연시키기.
 
-먼저 번들 실행 과정을 살펴보자. 
+먼저 번들 실행 과정을 살펴보자.
 
 ![](https://3perf.com/static/c59467702c58246f5c3cf04b4cd54843/28bdc/js-trace-execution.png)
 
 - 함수는 모두 `bkwR`과 같은 네글자로 되어 있다. 웹팩이 번들을 만들때, 각 모듈을 함수로 감싼다. 그리고 이 감싼 것들에 ID를 부여한다. 이 ID들이 바로 함수명이 된다. (이 것은 [optimization.moduleIdes:'hashed'](https://v4.webpack.js.org/configuration/optimization/#optimizationmoduleids)나 [HashedModuleIdsPlugins](https://webpack.js.org/plugins/hashed-module-ids-plugin/)를 사용하면 발생한다.)
 
 before
+
 ```javascript
 import formatDate from './formatDate.js`
 //....
@@ -67,22 +65,20 @@ after
    // ...
   },
 ```
+
 - 그리고 저기서 자주 보이는 `s`함수는 사실 `__webpack_require__`다. 이는 웹팩의 내부 함수로 모듈을 요구할 때 사용된다. 다시 말해 코드에서 `import`를 사용하면, 웹팩이 `__Webpack_require__()`로 바꾼다.
 
 번들 초기화는 굉장히 많은 시간을 할애하는데, 그 이유는 모든 모듈을 실행하기 때문이다. 각 모듈은 실행하는데 몇 밀리초가 걸릴뿐이지만, 노션의 경우 이러한 모듈이 1100개가 넘게 있다. 이것을 해결하는 유일한 방법은 초기화에 더 적은 모듈을 실행하는 것이다.
 
-### 코드 스플리팅 
+### 코드 스플리팅
 
 첫 화면을 띄우는 시간을 줄이는 가장 좋은 방법은 당장 필요하지 않은 기능들을 나누는 코드 스플릿 방식이다. 웹팩에서는, [import()](https://webpack.js.org/guides/code-splitting/)를 사용한다.
 
 ```html
 // Before
-<Button onClick={openModal} />
+<button onClick="{openModal}" />
 
-// After
-<Button
-  onClick={() => import('./Modal').then(m => m.openModal())}
-/>
+// After <Button onClick={() => import('./Modal').then(m => m.openModal())} />
 ```
 
 코드 스플릿은 여러분이 할 수 있는 가장 최선의 성능최적화다. 이는 많은 성능상 이점을 가져다 준다. 코드 스플릿팅을 하게되면, 로딩 시간을 60% 감소시킬 수 있다. 노션의 경우 40~45% 를 절감하는 효과를 가져왔다.
@@ -97,7 +93,7 @@ after
 
 - Settings, import, trash와 같이 사용자가 자주 사용하지 않는 UI
 - 사이드바, share, page options와 같이 자주 사용하지만 앱 시작하는데 바로 보여줄 필요가 없는 UI. 이 영역 들은 앱이 시작된 이후에 준비해도 된다.
-- 페이지 로딩을 가로막는 무거운 요소들. 몇몇 글 조각들은 꽤 무겁다. 일례로 코드 블록의 경우 `Prism.js`를 활용하여 68 종류의 언어를 지원하는데, 이는 압축되어있지만 최소 120KB가 나간다. 
+- 페이지 로딩을 가로막는 무거운 요소들. 몇몇 글 조각들은 꽤 무겁다. 일례로 코드 블록의 경우 `Prism.js`를 활용하여 68 종류의 언어를 지원하는데, 이는 압축되어있지만 최소 120KB가 나간다.
 
 ### ModuleConcatenationPlugin이 제대로 작동하는지 확인하기
 
@@ -109,7 +105,7 @@ after
 
 > 모든 imports가 `__webpack_require__` 함수로 변경된다는 것을 기억하는가? 같은 함수가 초기화 단계에서 1100번 넘게 호출되면 어떻게 될까? 이 함수는 엄청난 시간을 잡아먹게 된다 (...)
 > ![](https://3perf.com/static/befda82857003648779614db0961125d/713f0/hot-path.png)
-> 
+>
 > [그러나 이부분은 딱히 최적화 될것 같지 않다.](https://github.com/webpack/webpack/issues/2219)
 
 ### Babel `plugin-transform-modules-common-js`의 `lazy`옵션을 활용하기
@@ -120,16 +116,16 @@ after
 
 ```javascript
 // Before
-import formatDate from './formatDate.js';
+import formatDate from './formatDate.js'
 export function getToday() {
-  return formatDate(new Date());
+  return formatDate(new Date())
 }
 
 // After
-const formatDate = require('./formatDate.js');
+const formatDate = require('./formatDate.js')
 exports.getToday = function getToday() {
-  return formatDate(new Date());
-};
+  return formatDate(new Date())
+}
 ```
 
 그리고 `lazy`옵션이 활성화 되면, 아래과 같이 바뀌게 된다.
@@ -137,8 +133,8 @@ exports.getToday = function getToday() {
 ```javascript
 // After, with `lazy: (path) => true`, simplified
 exports.getToday = function getToday() {
-  return require('./formatDate.js')(new Date());
-};
+  return require('./formatDate.js')(new Date())
+}
 ```
 
 고맙게도, `getToday`가 호출되지 않는다면 `./formatDate.js`도 import 되지 않는다. 그러나 여기엔 몇가지 하자가 있는데
@@ -154,7 +150,7 @@ exports.getToday = function getToday() {
 > 페이지가 새로고침되면서, 최초 렌더링시에 얼마나 많은 코드가 실행되었는지 보여준다.
 > 노션의 경우 39%가 `vendor`, 61%가 `app` 번들에서 페이지 렌더링 이후에 사용되지 않는다.
 > ![](https://3perf.com/static/7aed4a03203dae92b7f153801229ff8d/28bdc/coverage.png)
-> 
+>
 > 오직 빨간 부분만 페이지 렌더링에 사용되었다.
 
 ## 사용하지 않는 JS 코드 삭제하기
@@ -167,7 +163,7 @@ V8엔진은 다른 자바스크립트 엔진처럼, 자바스크립트를 [just-
 
 ### 코드 스플리팅
 
-또 나왔다. 코드 스플리팅은 최초 번들 초기화 시간을 줄여줄 뿐만 아니라, 컴파일에 소요되는 시간도 줄여준다. 코드가 적을 수록, 컴파일도 빠르다. 
+또 나왔다. 코드 스플리팅은 최초 번들 초기화 시간을 줄여줄 뿐만 아니라, 컴파일에 소요되는 시간도 줄여준다. 코드가 적을 수록, 컴파일도 빠르다.
 
 ### 사용하지 않는 vendor 코드 삭제
 
@@ -189,7 +185,7 @@ V8엔진은 다른 자바스크립트 엔진처럼, 자바스크립트를 [just-
 여기에서 최적화 하기 쉬운 모듈은 `moment` `lodash` `libpnoenumber-js`다. 날짜를 다루는 자바스크립트 라이브러리 `moment`는 모든 localization 데이터를 포함하면 번들링되도 160kb가 넘는다. 노션은 어차피 영어만 지원하므로, 이 `localization`은 별로 필요치 않다. 따라서
 
 1. [moment-locales-wepback-plugin](https://www.npmjs.com/package/moment-locales-webpack-plugin)을 활용하여 사용하지 않는 `moment` locale을 지운다.
-2, `moment`를 [date-fns](https://date-fns.org/)로 바꾸는 것을 고려해본다. `moment`와 다르게, `date-fns`를 사용하면, 오로지 필요한 메소드만 import할 수 있다. 
+   2, `moment`를 [date-fns](https://date-fns.org/)로 바꾸는 것을 고려해본다. `moment`와 다르게, `date-fns`를 사용하면, 오로지 필요한 메소드만 import할 수 있다.
 
 데이터 조작 유틸리티인 [lodash](https://github.com/lodash/lodash)의 경우 300개가 넘는 함수들을 제공하고 있다. 이는 좀 과도하다. 보통 많아봐야 5~30개 정도의 메소드만 사용할 뿐이다. 이를 해결할 좋은 방법은 [babel-plugin-lodash](https://github.com/lodash/babel-plugin-lodash)를 사용하는 것이다. [lodash-webpack-plugin](https://www.npmjs.com/package/lodash-webpack-plugin)도 마찬가지로 사용하지 않는 loadash 메소드를 날려준다.
 
@@ -203,8 +199,8 @@ V8엔진은 다른 자바스크립트 엔진처럼, 자바스크립트를 [just-
 
 여기엔 두가지 문제가 존재한다.
 
-1. 불필요하다. 노션의 경우 크롬 81버전에서 테스트하는데, 해당 버전은 대부분의 모던 자바스크립트 기능을 지원한다. 그러나 이 번들에는 여전히 `Symbol` `Object.assign`등의 폴리필이 포함되어 있다. 
-2. 노션 앱에 불필요하다. 데스크톱 또는 모바일 앱에서도 마찬가지로 자바스크립트 엔진 또한 1번처럼 모던하다. 
+1. 불필요하다. 노션의 경우 크롬 81버전에서 테스트하는데, 해당 버전은 대부분의 모던 자바스크립트 기능을 지원한다. 그러나 이 번들에는 여전히 `Symbol` `Object.assign`등의 폴리필이 포함되어 있다.
+2. 노션 앱에 불필요하다. 데스크톱 또는 모바일 앱에서도 마찬가지로 자바스크립트 엔진 또한 1번처럼 모던하다.
 
 그러면 대신 무엇을 해야할까? 오래된 브라우저를 위한 폴리필을 지원하되, 몇가지 안쓰는 폴리필은 삭제하는 것이다. 해당 방법은 [이글](https://3perf.com/blog/polyfills/)을 참조하면 좋다.
 
@@ -217,18 +213,18 @@ V8엔진은 다른 자바스크립트 엔진처럼, 자바스크립트를 [just-
 카피라이트 모듈은 아래와 같은 모습을 띄고 있다.
 
 ```javascript
-var core = require('./_core');
-var global = require('./_global');
-var SHARED = '__core-js_shared__';
-var store = global[SHARED] || (global[SHARED] = {});
+var core = require('./_core')
+var global = require('./_global')
+var SHARED = '__core-js_shared__'
+var store = global[SHARED] || (global[SHARED] = {})
 
-(module.exports = function (key, value) {
-  return store[key] || (store[key] = value !== undefined ? value : {});
+;(module.exports = function (key, value) {
+  return store[key] || (store[key] = value !== undefined ? value : {})
 })('versions', []).push({
   version: core.version,
   mode: require('./_library') ? 'pure' : 'global',
   copyright: '© 2019 Denis Pushkarev (zloirock.ru)',
-});
+})
 ```
 
 - `var core = require('./_core'); core.version`는 라이브러리의 버전이고
@@ -248,7 +244,7 @@ var store = global[SHARED] || (global[SHARED] = {});
 - `2.6.9`는 글로벌 모드에
 - `2.6.11`는 글로벌 모드에
 - `2.6.11`는 pure 모드에
- 
+
 있다는 것이다.
 
 [사실 이는 흔한 문제다.](https://twitter.com/iamakulov/status/1225069880988270592) 내 앱에서는 특정버전 `core-js`에 의존하고 있지만, 어딘가 내 다른 디펜던시에서 다른 `core-js`버전을 의존하고 있는 것이다.
@@ -278,22 +274,22 @@ https://webpagetest.org/result/200418_KE_d8c556d0fa8e60a79cd2370f224b3ad7/1/deta
 ```javascript
 // Before
 async function installThirdParties() {
-  if (state.isIntercomEnabled) intercom.installIntercom();
+  if (state.isIntercomEnabled) intercom.installIntercom()
 
-  if (state.isSegmentEnabled) segment.installSegment();
+  if (state.isSegmentEnabled) segment.installSegment()
 
-  if (state.isAmplitudeEnabled) amplitude.installAmplitude();
+  if (state.isAmplitudeEnabled) amplitude.installAmplitude()
 }
 
 // After
 async function installThirdParties() {
   setTimeout(() => {
-    if (state.isIntercomEnabled) intercom.installIntercom();
+    if (state.isIntercomEnabled) intercom.installIntercom()
 
-    if (state.isSegmentEnabled) segment.installSegment();
+    if (state.isSegmentEnabled) segment.installSegment()
 
-    if (state.isAmplitudeEnabled) amplitude.installAmplitude();
-  }, 15 * 1000);
+    if (state.isAmplitudeEnabled) amplitude.installAmplitude()
+  }, 15 * 1000)
 }
 ```
 
@@ -302,8 +298,7 @@ async function installThirdParties() {
 > setTimeout vs requestIdleCallback vs events
 > setTimeout은 최선의 접근 법은 아니지만, 쓸만하다.
 > 가장 좋은 방법은 `페이지가 완전히 로드되었다`라는 이벤트를 참고 하는 것이다.
-> [requestIdleCallback](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback)는 이러한 문제를 해결하는데 최적화된 도구인 것 같지만 서도 그렇지 않다. 크로미움에서 테스트 했을때, 너무 빨리 트리거 되었다. 
-
+> [requestIdleCallback](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback)는 이러한 문제를 해결하는데 최적화된 도구인 것 같지만 서도 그렇지 않다. 크로미움에서 테스트 했을때, 너무 빨리 트리거 되었다.
 
 ## API 데이터를 미리 로딩하기
 
@@ -311,21 +306,21 @@ async function installThirdParties() {
 
 ![](https://3perf.com/static/3612a04461fce98c8355e6188d41bfd8/335b6/waterfall-api.png)
 
-각 요청은 최소 70ms에서 최대 500ms가 소요되었으며, 이 요청은 각 순차적으로 이루어졌다. 즉 한 가지 요청이 끝나야 다음 것이 시작되었다. 즉 api 요청에 대한 응답이 느려진다면 지연이 더 발생한다는 것을 의미한다. 이러한 지연시간을 없애는 좋은 방법은 무엇이 있을까? 
+각 요청은 최소 70ms에서 최대 500ms가 소요되었으며, 이 요청은 각 순차적으로 이루어졌다. 즉 한 가지 요청이 끝나야 다음 것이 시작되었다. 즉 api 요청에 대한 응답이 느려진다면 지연이 더 발생한다는 것을 의미한다. 이러한 지연시간을 없애는 좋은 방법은 무엇이 있을까?
 
 가장 좋은 방법은 서버사이드에서 데이터를 데이터를 가져오고 이를 HTML안에 때려 넣는 것이다.
 
 ```javascript
 app.get('*', (req, res) => {
   /* ... */
-  
+
   // Send the bundles so the browser can start loading them
   res.write(`
     <div id="notion-app"></div>
     <script src="/vendors-2b1c131a5683b1af62d9.js" defer></script>
     <script src="/app-c87b8b1572429828e701.js" defer></script>
   `);
-  
+
   // Send the initial state when it’s ready
   const stateJson = await getStateAsJsonObject();
   res.write(`
@@ -347,23 +342,24 @@ app.get('*', (req, res) => {
 ```html
 <div id="notion-app"></div>
 <script>
-  fetchAnalytics();
-  fetchExperiments();
-  fetchPageChunk();
+  fetchAnalytics()
+  fetchExperiments()
+  fetchPageChunk()
 
   function fetchAnalytics() {
-    window._analyticsSettings = fetch(
-      '/api/v3/getUserAnalyticsSettings',
-      {
-        method: 'POST',
-        body: '{"platform": "web"}',
-      }
-    ).then((response) => response.json());
+    window._analyticsSettings = fetch('/api/v3/getUserAnalyticsSettings', {
+      method: 'POST',
+      body: '{"platform": "web"}',
+    }).then((response) => response.json())
   }
 
-  async function fetchExperiments() { /* ... */ }
+  async function fetchExperiments() {
+    /* ... */
+  }
 
-  async function fetchPageChunk() { /* ... */ }
+  async function fetchPageChunk() {
+    /* ... */
+  }
 </script>
 <script src="/vendors-2b1c131a5683b1af62d9.js"></script>
 <script src="/app-c87b8b1572429828e701.js"></script>
@@ -400,6 +396,6 @@ app.get('*', (req, res) => {
 - API를 미리 로딩해서 10% 정도의 성능 효과를 볼 수 있었다.
 - 써드 파티라이브러리를 지연 시킴으로서 1초 정도를 더 줄였다.
 
-대충 계산해서, 이러한 것들을 활용해서 기존의 12.6초에서 약 3.9초 정도를 절감할 수 있었다. 
+대충 계산해서, 이러한 것들을 활용해서 기존의 12.6초에서 약 3.9초 정도를 절감할 수 있었다.
 
-알고보면, 거의 모든 앱에서 번들러 구성을 조정하고, 몇가지 정밀한 코드 변경만으로도 이뤄낼 수 있는 최적화들이 존재했다. [3perf.com](https://3perf.com/#services)에서 가장 쉬운 방법을 찾아보자. 
+알고보면, 거의 모든 앱에서 번들러 구성을 조정하고, 몇가지 정밀한 코드 변경만으로도 이뤄낼 수 있는 최적화들이 존재했다. [3perf.com](https://3perf.com/#services)에서 가장 쉬운 방법을 찾아보자.

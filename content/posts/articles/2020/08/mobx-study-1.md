@@ -16,11 +16,7 @@ template: post
 
 > derive는 적절한 단어가 생각이 안나서 '파생'으로 번역했습니다. 여기서 derive는 state(상태)를 변하게 하는 액션을 의미합니다.
 
-```toc
-tight: true,
-from-heading: 2
-to-heading: 3
-```
+## Table of Contents
 
 ## MobX
 

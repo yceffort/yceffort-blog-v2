@@ -7,18 +7,15 @@ tags:
   - typescript
 published: true
 date: 2020-01-22 03:57:45
-description: "```toc tight: true, from-heading: 2 to-heading: 3 ``` ## 1.
-  서론  자바스크립트에서 http 요청을 하는 것은 이제 비일비재한 일이 되었다. 서버에서 모든 데이터를 가져와서 static 한 html을
-  만들어서 보여주고 있는 웹페이지는 아마 찾기 어려울 것이다. 맨 처음 웹을 배울 때, jquery의 ajax ..."
+description: "`toc tight: true, from-heading: 2 to-heading: 3 ` ## 1.
+서론 자바스크립트에서 http 요청을 하는 것은 이제 비일비재한 일이 되었다. 서버에서 모든 데이터를 가져와서 static 한 html을
+만들어서 보여주고 있는 웹페이지는 아마 찾기 어려울 것이다. 맨 처음 웹을 배울 때, jquery의 ajax ..."
 category: browser
 slug: /2020/01/think-about-fetch/
 template: post
 ---
-```toc
-tight: true,
-from-heading: 2
-to-heading: 3
-```
+
+## Table of Contents
 
 ## 1. 서론
 
@@ -35,13 +32,13 @@ to-heading: 3
 ```javascript
 var xmlHttp = new XMLHttpRequest()
 
-xmlHttp.onreadystatechange = function() {
+xmlHttp.onreadystatechange = function () {
   if (this.status == 200 && this.readyState == this.DONE) {
     console.log(xmlHttp.responseText)
   }
 }
 
-xmlHttp.open("GET", "/yceffort/request.txt", true)
+xmlHttp.open('GET', '/yceffort/request.txt', true)
 
 xmlHttp.send()
 ```
@@ -56,8 +53,8 @@ xmlHttp.send()
 
 ```javascript
 $.ajax({
-  url: "/yceffort/request.txt",
-  success: function(data) {
+  url: '/yceffort/request.txt',
+  success: function (data) {
     console.log(data)
   },
 })
@@ -102,7 +99,7 @@ es7 에서 추가된 async await과 fetch api를 활용한다면, 위의 코드�
 - [wahtwg: fetch](https://fetch.spec.whatwg.org/)
 
 ```javascript
-const response1 = await fetch("/yceffort/data1.json")
+const response1 = await fetch('/yceffort/data1.json')
 const result1 = await response1.json()
 
 const response2 = await fetch(`/yceffort/data2.json?${result1.data}`)
@@ -170,10 +167,10 @@ const signal = controller.signal
 setTimeout(() => controller.abort(), 5000)
 
 fetch(url, { signal })
-  .then(response => {
+  .then((response) => {
     return response.text()
   })
-  .then(text => {
+  .then((text) => {
     console.log(text)
   })
 ```
@@ -188,17 +185,17 @@ fetch시에 발생한 exception이 abort인지를 구별하기 위해서는 아�
 
 ```javascript
 fetch(url, { signal })
-  .then(response => {
+  .then((response) => {
     return response.text()
   })
-  .then(text => {
+  .then((text) => {
     console.log(text)
   })
-  .catch(err => {
-    if (err.name === "AbortError") {
-      console.log("Fetch aborted by user")
+  .catch((err) => {
+    if (err.name === 'AbortError') {
+      console.log('Fetch aborted by user')
     } else {
-      console.error("other error", err)
+      console.error('other error', err)
     }
   })
 ```

@@ -4,21 +4,18 @@ tags:
   - javascript
 published: true
 date: 2020-06-26 04:25:30
-description: "들어가기에 앞서 더 좋고 제가 많이 참고한 글이
+description: '들어가기에 앞서 더 좋고 제가 많이 참고한 글이
   [여기](https://poiemaweb.com/js-execution-context)에 있습니다. 이글을 보시는게 낫습니다. ```toc
   tight: true, from-heading: 1 to-heading: 4 ```  # 자바스크립트 실행컨텍스트  이번 포스팅으로
-  자바스크립트 실행 컨텍스트에 대해 온..."
+  자바스크립트 실행 컨텍스트에 대해 온...'
 category: javascript
 slug: /2020/06/javascript-execution-context/
 template: post
 ---
+
 들어가기에 앞서 더 좋고 제가 많이 참고한 글이 [여기](https://poiemaweb.com/js-execution-context)에 있습니다. 이글을 보시는게 낫습니다.
 
-```toc
-tight: true,
-from-heading: 1
-to-heading: 4
-```
+## Table of Contents
 
 # 자바스크립트 실행컨텍스트
 
@@ -43,12 +40,12 @@ ECStack = [globalContext];
 Function Code (aka 함수 코드): 함수 코드에 진입하게 되었을 때, ECStack에 새로운 엘리먼트가 푸쉬된다. 여기에서 중요한 것은, 함수 내부의 함수 코드는 포함되지 않는 다는 것이다. 무슨 말인고 하니, 아래 코드를 살펴보자.
 
 ```javascript
-(function foo(flag) {
+;(function foo(flag) {
   if (flag) {
-    return;
+    return
   }
-  foo(true);
-})(false);
+  foo(true)
+})(false)
 ```
 
 이에 ECStack은 이렇게 수정된다.
@@ -59,16 +56,16 @@ ECStack = [
   <foo> functionContext
   globalContext
 ];
-  
+
 // 재귀적으로 다시 foo를 실행한다.
 ECStack = [
-  <foo> functionContext – recursively 
+  <foo> functionContext – recursively
   <foo> functionContext
   globalContext
 ];
 ```
 
-모든 함수의 return 문은 현재 실행 컨텍스트를 끝내며, (에러를 던져도 `throw Error` 끝나긴 한다.) 이에 따라 `ECStack`에서 `pop()`된다. 이런 과정을 거치다보면, 결국 `ECStack`은 프로그램 종료시점에 `globalStack`만 남게 된다. 
+모든 함수의 return 문은 현재 실행 컨텍스트를 끝내며, (에러를 던져도 `throw Error` 끝나긴 한다.) 이에 따라 `ECStack`에서 `pop()`된다. 이런 과정을 거치다보면, 결국 `ECStack`은 프로그램 종료시점에 `globalStack`만 남게 된다.
 
 `Eval` Code: 자바스크립트 시간에 쓰지말라고 신신당부하는 그 코드다. 굳이 쓸일이 없으니 자세한 설명은 생략한다.
 
@@ -165,7 +162,7 @@ foo()
 
 엔진은 스코프 체인을 활용해서 렉시컬 스코프를 파악한다. 함수가 `foo()`처럼 중첩되어 있을때, 하위함수 안에서 상위함수, 심지어 전역 스코프 까지 참조할 수 있는건 이것은 스코프 체인이 있기 때문에 가능한 것이다. 함수 실행중에 변수를 만나면 그변수를 현재 스코프인 `AO`에서 검색해보고, 검색에 실패하면 스코프체인의 순서대로 한단계씩 위로 검색을 이어가게 된다.
 
-그러나 이렇게 순차적으로 검색했는데 실패한다면, 정의되지 않는 변수에 접근하는 것으로 인식하고 잘 아는 에러인 Reference에러가 나게 된다. 
+그러나 이렇게 순차적으로 검색했는데 실패한다면, 정의되지 않는 변수에 접근하는 것으로 인식하고 잘 아는 에러인 Reference에러가 나게 된다.
 
 위의 코드에 debugger를 추가해서 크롬 콘솔에서 실행해보면 위에서 설명한 내용을 볼 수가 있다.
 
@@ -249,7 +246,8 @@ ECStack = [globalContext -> {VO, SC, this}];
 
 ![EC2](images/EC2.png)
 
-위 스샷을 보자. 
+위 스샷을 보자.
+
 - 1번에 따라서 hello 파라미터의 값이 'hello' argument로 설정되어 있다.
 - 2번에 따라서 bar가 `f bar()`를 가르키고 있다.
 - 3번에 따라서 y, h가 undefined로 세팅되어 있다.
@@ -260,7 +258,7 @@ ECStack = [globalContext -> {VO, SC, this}];
 
 ![EC3](images/EC3.png)
 
-여기에서 foo함수는 `[[Scopes]]`로 Global을 가르키고 있다. 근데 잠깐, 이거 어디서 본것 같은데, 싶었는데 여기서 0번의 `Global`은 스코프 체인의 0번에 있는 Global과 같다. 우리는 여기서 `[[Scopes]]`가 함수 객체가 실행되는 환경을 가지고 있다는 것을 알 수 있다. 
+여기에서 foo함수는 `[[Scopes]]`로 Global을 가르키고 있다. 근데 잠깐, 이거 어디서 본것 같은데, 싶었는데 여기서 0번의 `Global`은 스코프 체인의 0번에 있는 Global과 같다. 우리는 여기서 `[[Scopes]]`가 함수 객체가 실행되는 환경을 가지고 있다는 것을 알 수 있다.
 
 내부 함수의 `[[Scopes]]`는 결론적으로
 
@@ -272,10 +270,9 @@ ECStack = [globalContext -> {VO, SC, this}];
 
 함수 선언식은 (일반적인 `function hello() {...}`) 함수명을 프로퍼티로 함수 객체를 할당한다. 그리고 VO에 함수명을 프로퍼티로 추가하고 즉시 할당한다.
 
-그러나 함수 표현식은 `const hello = function () {...}` 일반적인 변수의 방식을 따른다. 따라서 선언식은 함수를 선언하기 이전에 함수를 호출할 수 있다. 
+그러나 함수 표현식은 `const hello = function () {...}` 일반적인 변수의 방식을 따른다. 따라서 선언식은 함수를 선언하기 이전에 함수를 호출할 수 있다.
 
 이것을 함수의 호이스팅이라고 한다.
-
 
 #### 변수 선언의 처리
 
@@ -285,7 +282,7 @@ ECStack = [globalContext -> {VO, SC, this}];
 - 초기화 단계: 변수객체에 등록된 변수를 메모리에 할당한다. 변수는 undefined로 선언된다.
 - 할당단계: undefined로 초기화 된 변수에 실제 값을 할당된다.
 
-`var` 키워드는 선언과 초기화가 한번에 이루어진다. 즉 변수등록과 초기화가 한번에 이루어진다. 따라서 변수 선언 이전에 접근하여도 Variable Object에 변수가 이미 존재하고 있기 때문에 에러가 발생하지 않고 undefined가 리턴된다. 
+`var` 키워드는 선언과 초기화가 한번에 이루어진다. 즉 변수등록과 초기화가 한번에 이루어진다. 따라서 변수 선언 이전에 접근하여도 Variable Object에 변수가 이미 존재하고 있기 때문에 에러가 발생하지 않고 undefined가 리턴된다.
 
 이를 변수의 호이스팅이라고 한다.
 
@@ -314,7 +311,7 @@ foo('hello')
 
 ### 변수에 값 할당
 
-전역변수 x에 숫자를 할당하기 위해서, 실행 컨텍승트는 스코프체인이 참고하고 있는 Variable Object를 검색하기 시작한다. `x`를 발견하면  값 `xxx`를 할당한다.
+전역변수 x에 숫자를 할당하기 위해서, 실행 컨텍승트는 스코프체인이 참고하고 있는 Variable Object를 검색하기 시작한다. `x`를 발견하면 값 `xxx`를 할당한다.
 
 ### 함수의 실행
 
@@ -334,7 +331,7 @@ foo('hello')
 
 #### Variable Instantiation 실행
 
-앞서 만든 Activation Object를 Variable Object로서 실행된다. 
+앞서 만든 Activation Object를 Variable Object로서 실행된다.
 
 먼저 `foo`함수 안에 있는 `bar`를 바인딩한다. 그리고 이 때 `bar`의 `[[Scopes]]`의 값은 GO와 AO를 참조하는 리스트가 된다.
 

@@ -9,11 +9,7 @@ category: javascript
 template: post
 ---
 
-```toc
-tight: true,
-from-heading: 2
-to-heading: 4
-```
+## Table of Contents
 
 ## 자바스크립트 메모리 누수란 무엇인가
 

@@ -16,11 +16,7 @@ template: post
 
 [이 글](https://developers.google.com/web/fundamentals/performance/webpack/decrease-frontend-size)을 대충 번역했습니다.
 
-```toc
-tight: true,
-from-heading: 2
-to-heading: 4
-```
+## Table of Contents
 
 ## webpack 4버전 이상의 경우 프로덕션 모드를 사용하기
 

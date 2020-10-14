@@ -12,11 +12,7 @@ template: post
 
 [이 글](https://indepth.dev/webpack-5-module-federation-a-game-changer-in-javascript-architecture/)을 위주로 번역한 글이며, 추가적으로 micro frontend에 대한 개념도 넣어두었습니다.
 
-```toc
-tight: false,
-from-heading: 2
-to-heading: 3
-```
+## Table of Contents
 
 > Module Federation은 서버, 클라이언트 모두에서 자바스크립트 애플리케이션을 다른 번들/빌드로 부터 코드를 다이나믹하게 실행해준다.
 

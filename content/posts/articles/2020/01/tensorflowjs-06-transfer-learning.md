@@ -7,18 +7,13 @@ tags:
   - javascript
 published: true
 date: 2020-01-23 07:06:36
-description: "```toc tight: true, from-heading: 1 to-heading: 3 ``` # 전이 학습이란
-  무엇인가?  정교한 딥러닝 모델은 수백만개의 파라미터 (가중치)를 가지고 있으며, 이를 처음 부터 훈련하려면 엄청난 양의 컴퓨팅 자원이
-  필요한 경우가 많습니다. 전이학습은, 이미 관련된 작업에 대해 훈련받은 모델의 한 부분을 취해서, 새로운 ..."
+description: "`toc tight: true, from-heading: 1 to-heading: 3 ` # 전이 학습이란
+무엇인가? 정교한 딥러닝 모델은 수백만개의 파라미터 (가중치)를 가지고 있으며, 이를 처음 부터 훈련하려면 엄청난 양의 컴퓨팅 자원이
+필요한 경우가 많습니다. 전이학습은, 이미 관련된 작업에 대해 훈련받은 모델의 한 부분을 취해서, 새로운 ..."
 category: machine-learning
 slug: /2020/01/tensorflowjs-06-transfer-learning/
 template: post
 ---
-```toc
-tight: true,
-from-heading: 1
-to-heading: 3
-```
 
 # 전이 학습이란 무엇인가?
 

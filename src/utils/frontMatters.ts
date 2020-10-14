@@ -43,6 +43,17 @@ export async function getAllPosts(): Promise<Array<Post>> {
   return posts
 }
 
+export async function getAllTagsFromPosts(): Promise<string[]> {
+  const tags = (await getAllPosts()).reduce((prev, curr) => {
+    curr.frontmatter.tags.forEach(
+      (tag) => !prev.includes(tag) && prev.push(tag),
+    )
+    return prev
+  }, [] as string[])
+
+  return tags
+}
+
 function getFilesRecursively(path: string) {
   const getFiles = (path: string) =>
     readdirSync(path)

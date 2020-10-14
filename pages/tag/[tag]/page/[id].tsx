@@ -9,7 +9,10 @@ import Sidebar from '../../../../src/components/Sidebar/Sidebar'
 import config from '../../../../src/config'
 import { DEFAULT_NUMBER_OF_POSTS } from '../../../../src/types/const'
 import { Post } from '../../../../src/types/types'
-import { getAllPosts } from '../../../../src/utils/frontMatters'
+import {
+  getAllPosts,
+  getAllTagsFromPosts,
+} from '../../../../src/utils/frontMatters'
 
 export default function Tag({
   posts,
@@ -19,18 +22,19 @@ export default function Tag({
 }: {
   posts: Array<Post>
   tag: string
-  pageNo: number
+  pageNo: string
   hasNextPage: boolean
 }) {
+  const page = parseInt(pageNo)
   return (
     <Layout title={`Tag - ${tag}`} description={config.subtitle}>
       <Sidebar />
       <Page title={tag}>
         <Feed posts={posts} />
         <Pagination
-          prevPagePath={pageNo === 1 ? '/' : `/tag/${tag}/page/${pageNo - 1}`}
-          nextPagePath={`/tag/${tag}/page/${pageNo + 1}`}
-          hasPrevPage={pageNo > 1}
+          prevPagePath={page === 1 ? '/' : `/tag/${tag}/page/${page - 1}`}
+          nextPagePath={`/tag/${tag}/page/${page + 1}`}
+          hasPrevPage={page > 1}
           hasNextPage={hasNextPage}
         />
       </Page>
@@ -39,16 +43,8 @@ export default function Tag({
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  let allTags: string[] = []
+  const allTags = await getAllTagsFromPosts()
   const posts = await getAllPosts()
-
-  posts.forEach(({ frontmatter: { tags } }) => {
-    tags.forEach((tag) => {
-      allTags.push(tag.trim())
-    })
-  })
-
-  allTags = [...new Set(allTags)]
 
   const paths: any[] = []
   allTags.forEach((tag) => {

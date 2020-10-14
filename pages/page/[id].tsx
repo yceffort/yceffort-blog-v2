@@ -5,19 +5,35 @@ import { getAllPosts } from '../../src/utils/frontMatters'
 import { DEFAULT_NUMBER_OF_POSTS } from '../../src/types/const'
 import { Post } from '../../src/types/types'
 import Feed from '../../src/components/Feed/Feed'
+import Layout from '../../src/components/Layout/Layout'
+import config from '../../src/config'
+import Sidebar from '../../src/components/Sidebar/Sidebar'
+import Page from '../../src/components/Page/Page'
+import Pagination from '../../src/components/Pagination/Pagination'
 
-export default function Page({
+export default function IndexPage({
   pageNo,
   posts,
+  hasNextPage,
 }: {
-  pageNo: number
+  pageNo: string
   posts: Array<Post>
+  hasNextPage: boolean
 }) {
+  const page = parseInt(pageNo)
   return (
-    <>
-      <>페이지 {pageNo}</>
-      <Feed posts={posts} />
-    </>
+    <Layout title={`Page No ${page}`} description={config.title}>
+      <Sidebar />
+      <Page>
+        <Feed posts={posts} />
+        <Pagination
+          prevPagePath={page === 1 ? '/' : `/page/${page - 1}`}
+          nextPagePath={`/page/${page + 1}`}
+          hasPrevPage={true}
+          hasNextPage={hasNextPage}
+        />
+      </Page>
+    </Layout>
   )
 }
 
@@ -38,6 +54,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const allPosts = await getAllPosts()
   let posts: Array<Post> = allPosts.slice(0, DEFAULT_NUMBER_OF_POSTS)
   let pageNo = 1
+  let hasNextPage = true
 
   if (params && params.id && typeof params.id === 'string') {
     pageNo = parseInt(params.id)
@@ -46,9 +63,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       pageNo * DEFAULT_NUMBER_OF_POSTS,
       pageNo * DEFAULT_NUMBER_OF_POSTS + DEFAULT_NUMBER_OF_POSTS,
     )
+
+    hasNextPage = Math.floor(allPosts.length / DEFAULT_NUMBER_OF_POSTS) > pageNo
   }
 
   return {
-    props: { posts, pageNo },
+    props: { posts, pageNo, hasNextPage },
   }
 }

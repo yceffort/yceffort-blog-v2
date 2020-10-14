@@ -11,6 +11,11 @@ module.exports = {
         destination: '/tag/:tag/page/1',
         permanent: true,
       },
+      {
+        source: '/categories',
+        destination: '/tags',
+        permanent: true,
+      },
     ]
   },
 }

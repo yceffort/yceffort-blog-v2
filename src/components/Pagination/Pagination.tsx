@@ -44,7 +44,6 @@ export default function Pagination({
   hasNextPage: boolean
   hasPrevPage: boolean
 }) {
-  console.log(hasPrevPage, hasNextPage)
   return (
     <PaginationContainer>
       <PaginationButton $direction={'left'}>

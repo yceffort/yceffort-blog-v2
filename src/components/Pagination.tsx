@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-import PAGINATION from '../../constants/pagination'
+import PAGINATION from '../constants/pagination'
 
 const PaginationContainer = styled.div`
   margin-top: 3.25rem;

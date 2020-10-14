@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import Head from 'next/head'
 import styled from 'styled-components'
 
 import { Post } from '../../types/types'
@@ -50,18 +51,26 @@ const PostHomeButton = styled.a`
 
 export default function PostRenderer({ post }: { post: Post }) {
   const {
-    body,
+    parsedBody,
     frontmatter: { tags, date, title },
   } = post
 
   return (
     <div>
+      <Head>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+          integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X"
+          crossOrigin="anonymous"
+        />
+      </Head>
       <Link href="/" passHref>
         <PostHomeButton>All Posts</PostHomeButton>
       </Link>
 
       <div>
-        <Content title={title} body={body} />
+        {parsedBody ? <Content title={title} body={parsedBody} /> : null}
       </div>
 
       <PostFooter>

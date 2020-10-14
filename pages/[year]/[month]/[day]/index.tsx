@@ -3,8 +3,9 @@ import React from 'react'
 
 import Layout from '../../../../src/components/Layout/Layout'
 import PostRenderer from '../../../../src/components/Post/Post'
+import config from '../../../../src/config'
 import { Post } from '../../../../src/types/types'
-import { getAllPosts } from '../../../../src/utils/frontMatters'
+import { getAllPosts, parseBody } from '../../../../src/utils/FrontMatters'
 
 export default function PostPage({ post }: { post: Post }) {
   const {
@@ -40,8 +41,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     const posts = await getAllPosts()
     post = posts.find(({ fields: { slug: postSlug } }) => postSlug === slug)
 
-    if (!post) {
-      post = posts.find(({ fields: { slug: postSlug } }) => postSlug === slug)
+    if (post) {
+      post.parsedBody = await parseBody(post.body)
     }
   }
 

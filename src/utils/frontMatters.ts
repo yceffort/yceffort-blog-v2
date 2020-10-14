@@ -2,6 +2,16 @@ import { join } from 'path'
 
 import { statSync, readdirSync, readFile } from 'promise-fs'
 import frontMatter from 'front-matter'
+import unified from 'unified'
+import markdown from 'remark-parse'
+import math from 'remark-math'
+import remark2rehype from 'remark-rehype'
+import katex from 'rehype-katex'
+import stringify from 'rehype-stringify'
+// TODO: 타입추가 필요. 현재 강제로 임포트 중
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import highlightCode from '@mapbox/rehype-prism'
 
 import { Post } from '../types/types'
 
@@ -74,4 +84,17 @@ function getFilesRecursively(path: string) {
     .reduce((a, b) => a.concat(b), [])
 
   return files.concat(getFiles(path)).filter((f) => f.endsWith('.md'))
+}
+
+export async function parseBody(body: string): Promise<string> {
+  return (
+    await unified()
+      .use(markdown)
+      .use(math)
+      .use(remark2rehype)
+      .use(katex)
+      .use(highlightCode)
+      .use(stringify)
+      .process(body)
+  ).toString()
 }

@@ -2,8 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 
 import config from '../../config'
-import getContactHref from '../../utils/getContactHref'
-import getIcon from '../../utils/getIcon'
+import getContactHref from '../../utils/Contact'
+import getIcon from '../../utils/Icon'
 import Icon from '../Icon/Icon'
 
 const ContactDiv = styled.div`

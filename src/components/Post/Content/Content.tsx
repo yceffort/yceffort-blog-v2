@@ -1,8 +1,7 @@
 import React from 'react'
-import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
 
-import CodeBlock from './markdown/Codeblock'
+import 'prismjs/themes/prism-coy.css'
 
 const ContentContainer = styled.div`
   max-width: 59.0625rem;
@@ -56,8 +55,8 @@ const ContentBody = styled.div`
 
   * {
     max-width: 40rem;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
 
   img {
@@ -87,14 +86,7 @@ export default function Content({
   return (
     <ContentContainer>
       <ContentTitle>{title}</ContentTitle>
-      <ContentBody>
-        <ReactMarkdown
-          source={body}
-          renderers={{
-            code: CodeBlock,
-          }}
-        />
-      </ContentBody>
+      <ContentBody dangerouslySetInnerHTML={{ __html: body }}></ContentBody>
     </ContentContainer>
   )
 }

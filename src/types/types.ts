@@ -17,5 +17,6 @@ export interface Post {
   }
   frontmatter: FrontMatter
   body: string
+  parsedBody?: string
   path: string
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import { GetStaticPaths, GetStaticProps } from 'next'
 
-import { getAllPosts } from '../../src/utils/frontMatters'
+import { getAllPosts } from '../../src/utils/FrontMatters'
 import { DEFAULT_NUMBER_OF_POSTS } from '../../src/types/const'
 import { Post } from '../../src/types/types'
 import Feed from '../../src/components/Feed/Feed'

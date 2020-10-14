@@ -3,7 +3,7 @@ import { join } from 'path'
 import { statSync, readdirSync, readFile } from 'promise-fs'
 import frontMatter from 'front-matter'
 
-import { FrontMatter, Post } from '../types/types'
+import { Post } from '../types/types'
 
 const POST_PATH = `${process.cwd()}/content/posts/articles`
 const DIR_REPLACE_STRING = '/posts/articles'
@@ -18,9 +18,9 @@ export async function getAllPosts(): Promise<Array<Post>> {
         const { attributes: fm, body } = frontMatter(file)
         const tags = ((fm as any).tags as string[]).map((tag) => tag.trim())
 
-        const slug = f.slice(
-          f.indexOf(DIR_REPLACE_STRING) + DIR_REPLACE_STRING.length + 1,
-        )
+        const slug = f
+          .slice(f.indexOf(DIR_REPLACE_STRING) + DIR_REPLACE_STRING.length + 1)
+          .replace('.md', '')
 
         return {
           frontmatter: {

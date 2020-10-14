@@ -20,7 +20,7 @@ const PostTemplate = ({ data }: Props) => {
     title: postTitle,
     description: postDescription,
     socialImage,
-  } = frontmatter
+} = frontmatter
   const metaDescription =
     postDescription !== null ? postDescription : siteSubtitle
 

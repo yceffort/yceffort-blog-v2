@@ -2,6 +2,11 @@ import { GetStaticPaths, GetStaticProps } from 'next'
 import React from 'react'
 
 import Feed from '../../../../src/components/Feed/Feed'
+import Layout from '../../../../src/components/Layout/Layout'
+import Page from '../../../../src/components/Page/Page'
+import Pagination from '../../../../src/components/Pagination/Pagination'
+import Sidebar from '../../../../src/components/Sidebar/Sidebar'
+import config from '../../../../src/config'
 import { DEFAULT_NUMBER_OF_POSTS } from '../../../../src/types/const'
 import { Post } from '../../../../src/types/types'
 import { getAllPosts } from '../../../../src/utils/frontMatters'
@@ -10,16 +15,26 @@ export default function Tag({
   posts,
   tag,
   pageNo,
+  hasNextPage,
 }: {
   posts: Array<Post>
   tag: string
   pageNo: number
+  hasNextPage: boolean
 }) {
   return (
-    <>
-      태그 {tag} 페이지 {pageNo}
-      <Feed posts={posts} />
-    </>
+    <Layout title={`Tag - ${tag}`} description={config.subtitle}>
+      <Sidebar />
+      <Page title={tag}>
+        <Feed posts={posts} />
+        <Pagination
+          prevPagePath={pageNo === 1 ? '/' : `/tag/${tag}/page/${pageNo - 1}`}
+          nextPagePath={`/tag/${tag}/page/${pageNo + 1}`}
+          hasPrevPage={pageNo > 1}
+          hasNextPage={hasNextPage}
+        />
+      </Page>
+    </Layout>
   )
 }
 
@@ -56,24 +71,29 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const allPosts = await getAllPosts()
-  let posts: Array<Post> = allPosts
-  let tagName = 'javascript'
+  let resultPosts: Array<Post> = []
+  let tag = 'javascript'
+  let pageNo = 1
+  let hasNextPage = true
 
   if (params) {
-    tagName = (params.tag as string) || 'javascript'
-    const pageNo = (params.id || 1) as number
+    tag = (params.tag as string) || 'javascript'
+    pageNo = (params.id || 1) as number
 
-    posts = posts.filter((post) =>
-      post.frontmatter.tags.some((tag) => tag === tagName),
+    const postsWithTag = allPosts.filter((post) =>
+      post.frontmatter.tags.some((t) => t === tag),
     )
 
-    posts = allPosts.slice(
-      pageNo * DEFAULT_NUMBER_OF_POSTS,
-      pageNo * DEFAULT_NUMBER_OF_POSTS + DEFAULT_NUMBER_OF_POSTS,
-    )
+    const startIndex = (pageNo - 1) * DEFAULT_NUMBER_OF_POSTS
+    const endIndex = startIndex + DEFAULT_NUMBER_OF_POSTS
+
+    resultPosts = postsWithTag.slice(startIndex, endIndex)
+
+    hasNextPage =
+      Math.round(postsWithTag.length / DEFAULT_NUMBER_OF_POSTS) > pageNo
   }
 
   return {
-    props: { posts, tag: tagName, pageNo: 1 },
+    props: { posts: resultPosts, tag, pageNo, hasNextPage },
   }
 }

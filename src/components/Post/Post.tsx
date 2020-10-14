@@ -4,10 +4,10 @@ import Head from 'next/head'
 import styled from 'styled-components'
 
 import { Post } from '../../types/types'
-import Tags from './Tags/Tags'
-import Author from './Author/Author'
-import Meta from './Meta/meta'
-import Content from './Content/Content'
+import Tags from './components/Tags'
+import Author from './components/Author'
+import Meta from './components/meta'
+import Content from './components/Content'
 
 const PostFooter = styled.div`
   max-width: 40rem;

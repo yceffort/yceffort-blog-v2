@@ -12,6 +12,10 @@ import stringify from 'rehype-stringify'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import highlightCode from '@mapbox/rehype-prism'
+import toc from 'remark-toc'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import slug from 'remark-slug'
 
 import { Post } from '../types/types'
 
@@ -90,6 +94,8 @@ export async function parseBody(body: string): Promise<string> {
   return (
     await unified()
       .use(markdown)
+      .use(toc)
+      .use(slug)
       .use(math)
       .use(remark2rehype)
       .use(katex)

@@ -2,14 +2,14 @@ import React from 'react'
 import { GetStaticProps } from 'next'
 
 import config from '../src/config'
-import Layout from '../src/components/Layout/Layout'
+import Layout from '../src/components/Layout'
 import { DEFAULT_NUMBER_OF_POSTS } from '../src/types/const'
 import { Post } from '../src/types/types'
 import { getAllPosts } from '../src/utils/FrontMatters'
 import Sidebar from '../src/components/Sidebar/Sidebar'
-import Page from '../src/components/Page/Page'
-import Feed from '../src/components/Feed/Feed'
-import Pagination from '../src/components/Pagination/Pagination'
+import Page from '../src/components/Page'
+import Feed from '../src/components/Feed'
+import Pagination from '../src/components/Pagination'
 
 export default function Index({ recentPosts }: { recentPosts: Array<Post> }) {
   return (

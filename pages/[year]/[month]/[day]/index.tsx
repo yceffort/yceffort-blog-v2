@@ -1,28 +1,29 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
 import React from 'react'
 
-import Layout from '../../../../src/components/Layout/Layout'
+import Layout from '../../../../src/components/Layout'
 import PostRenderer from '../../../../src/components/Post/Post'
 import config from '../../../../src/config'
 import { Post } from '../../../../src/types/types'
 import { getAllPosts, parseBody } from '../../../../src/utils/FrontMatters'
 
-export default function PostPage({ post }: { post: Post }) {
-  const {
-    frontmatter: { title, description },
-  } = post
-  return (
-    <Layout title={title} description={description || config.subtitle}>
+export default function PostPage({ post }: { post?: Post }) {
+  return post ? (
+    <Layout
+      title={post.frontmatter.title}
+      description={post.frontmatter.description || config.subtitle}
+    >
       <PostRenderer post={post} />
     </Layout>
-  )
+  ) : null
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const allPosts = await getAllPosts()
   const paths = allPosts.reduce((prev, { fields: { slug } }) => {
-    const [year, month, title] = `${slug.replace('.md', '')}`.split('/')
-    if (title) {
+    const splits = `${slug.replace('.md', '')}`.split('/')
+    if (splits.length === 3) {
+      const [year, month, title] = splits
       prev.push({ params: { year, month, day: title } })
     }
     return prev

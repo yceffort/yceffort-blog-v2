@@ -12,6 +12,8 @@ template: post
 
 먼저 [styled components](https://styled-components.com/)를 쓰는 방법을 간단하게 살펴보자.
 
+## Table of Contents
+
 ## Create
 
 ```javascript

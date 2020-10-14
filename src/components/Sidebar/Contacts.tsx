@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import config from '../../config'
 import getContactHref from '../../utils/Contact'
 import getIcon from '../../utils/Icon'
-import Icon from '../Icon/Icon'
+import Icon from '../Icon'
 
 const ContactDiv = styled.div`
   margin-bottom: 1.625rem;

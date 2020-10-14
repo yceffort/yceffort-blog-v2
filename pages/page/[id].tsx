@@ -4,12 +4,12 @@ import { GetStaticPaths, GetStaticProps } from 'next'
 import { getAllPosts } from '../../src/utils/FrontMatters'
 import { DEFAULT_NUMBER_OF_POSTS } from '../../src/types/const'
 import { Post } from '../../src/types/types'
-import Feed from '../../src/components/Feed/Feed'
-import Layout from '../../src/components/Layout/Layout'
+import Feed from '../../src/components/Feed'
+import Layout from '../../src/components/Layout'
 import config from '../../src/config'
 import Sidebar from '../../src/components/Sidebar/Sidebar'
-import Page from '../../src/components/Page/Page'
-import Pagination from '../../src/components/Pagination/Pagination'
+import Page from '../../src/components/Page'
+import Pagination from '../../src/components/Pagination'
 
 export default function IndexPage({
   pageNo,

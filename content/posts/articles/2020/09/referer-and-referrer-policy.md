@@ -10,11 +10,7 @@ category: javascript
 template: post
 ---
 
-```toc
-tight: true,
-from-heading: 2
-to-heading: 3
-```
+## Table of Contents
 
 ## same-site와 same-origin의 차이
 

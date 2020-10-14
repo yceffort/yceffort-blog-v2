@@ -14,19 +14,14 @@ category: javascript
 slug: /2020/07/critical-rendering-path/
 template: post
 ---
+
 [Critical Rendering Path](https://developers.google.com/web/fundamentals/performance/critical-rendering-path?hl=ko)를 요약했습니다. 이글을 보는게 더 나아요 사실
 
-```toc
-tight: true,
-from-heading: 2
-to-heading: 3
-```
-
+## Table of Contents
 
 성능 최적화를 위해서는 HTML, CSS, 자바스크립트를 바이트 단위로 수신 한 뒤 브라우저에서 렌더링된 픽셀로 변환하기 까지, 어떠한 일들이 있었는지 알아야 한다. 이러한 단계를 바로 `Critical Rendering Path`라고 한다.
 
 ![progressive page rendering](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/images/progressive-rendering.png?hl=ko)
-
 
 ## 객체 모델 생성
 
@@ -36,7 +31,7 @@ to-heading: 3
 
 ![](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/images/full-process.png?hl=ko)
 
-1. 바이트 
+1. 바이트
 2. 문자
 3. 토큰
 4. 노드
@@ -48,8 +43,8 @@ HTML은 DOM(Document Object Model)로, CSS는 CSSOM(CSS Object Model)로 변환�
 
 ## 렌더링 트리 생성과 레이아웃 프린트
 
-- DOM과 CSSDOM 이 만들어졌다면, 이 두 트리를 결합하여 렌더링 트리를 생성한다. 
-- 이 렌더링 트리에는 페이지를 렌더링하는데 필요한 노드만 포함된다. 예를 들어서 `display:none`으로 처리된 것은 렌더링 처리에서 누락된다. 
+- DOM과 CSSDOM 이 만들어졌다면, 이 두 트리를 결합하여 렌더링 트리를 생성한다.
+- 이 렌더링 트리에는 페이지를 렌더링하는데 필요한 노드만 포함된다. 예를 들어서 `display:none`으로 처리된 것은 렌더링 처리에서 누락된다.
 - 레이아웃 단계에서는, 각 객체의 정확한 위치와 크기를 계산한다.
 - 마지막으로 페인트 단계를 거치는데, 픽셀을 화면에 렌더링한다.
 
@@ -71,17 +66,16 @@ CSSOM이 생성되기 전까지, 브라우저는 처리되는 모든 컨텐츠�
 
 ```html
 <!-- 기본적으로 렌더링을 차단한다. -->
-<link href="style.css" rel="stylesheet">
+<link href="style.css" rel="stylesheet" />
 <!-- 위의 선언과 같다. -->
-<link href="style.css" rel="stylesheet" media="all">
+<link href="style.css" rel="stylesheet" media="all" />
 <!-- 컨텐츠가 인쇄될 때만 적용된다. 따라서 렌더링이 차단되지 않는다.-->
-<link href="print.css" rel="stylesheet" media="print">
+<link href="print.css" rel="stylesheet" media="print" />
 <!-- 브라우저가 해당 조건을 만족하면 차단된다. -->
-<link href="other.css" rel="stylesheet" media="(min-width: 40em)">
+<link href="other.css" rel="stylesheet" media="(min-width: 40em)" />
 ```
 
 한 가지 중요한 것은, 위 미디어 쿼리가 있다고 하더라도 해당 리소스에 대해 초기 렌더링을 보류해야 하는지만 나타낸다. 어떤 경우든지, 브라우저는 CSS를 모두 다운받으며, 단지 초기 렌더링을 보류 해야하는지만을 나타낸다.
-
 
 ## 자바스크립트로 상호작용 추가
 
@@ -122,24 +116,31 @@ CSSOM이 생성되기 전까지, 브라우저는 처리되는 모든 컨텐츠�
 <html>
   <head>
     <title>Critical Path: Measure</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link href="style.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link href="style.css" rel="stylesheet" />
     <script>
       function measureCRP() {
         var t = window.performance.timing,
           interactive = t.domInteractive - t.domLoading,
           dcl = t.domContentLoadedEventStart - t.domLoading,
-          complete = t.domComplete - t.domLoading;
-        var stats = document.createElement('p');
-        stats.textContent = 'interactive: ' + interactive + 'ms, ' +
-            'dcl: ' + dcl + 'ms, complete: ' + complete + 'ms';
-        document.body.appendChild(stats);
+          complete = t.domComplete - t.domLoading
+        var stats = document.createElement('p')
+        stats.textContent =
+          'interactive: ' +
+          interactive +
+          'ms, ' +
+          'dcl: ' +
+          dcl +
+          'ms, complete: ' +
+          complete +
+          'ms'
+        document.body.appendChild(stats)
       }
     </script>
   </head>
   <body onload="measureCRP()">
     <p>Hello <span>web performance</span> students!</p>
-    <div><img src="awesome-photo.jpg"></div>
+    <div><img src="awesome-photo.jpg" /></div>
   </body>
 </html>
 ```
@@ -162,7 +163,7 @@ interactive: 229ms, dcl: 230ms, complete: 956ms
 
 ![example1.png](images/example.png)
 
-`DOMContentLoaded`가 호출되는데 약 300ms 정도가 소요되었다. 그리고 이는 파란색 수직선으로 체크 되었다. 이미지 로딩은 이에 영향을 받지 않았다. 주요 렌더링 경로에는 HTML, CSS, 자바스크립트만 포함된다. 
+`DOMContentLoaded`가 호출되는데 약 300ms 정도가 소요되었다. 그리고 이는 파란색 수직선으로 체크 되었다. 이미지 로딩은 이에 영향을 받지 않았다. 주요 렌더링 경로에는 HTML, CSS, 자바스크립트만 포함된다.
 
 하지만 `load`이벤트는 이미지에서 차단되었다. `onload`는 따라서 모든 리소스가 다운로드 된 후에 호출된다는 것을 알 수 있다.
 
@@ -173,12 +174,12 @@ interactive: 229ms, dcl: 230ms, complete: 956ms
 <html>
   <head>
     <title>Critical Path: Measure Script</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link href="style.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link href="style.css" rel="stylesheet" />
   </head>
   <body onload="measureCRP()">
     <p>Hello <span>web performance</span> students!</p>
-    <div><img src="awesome-photo.jpg"></div>
+    <div><img src="awesome-photo.jpg" /></div>
     <script src="timing.js"></script>
   </body>
 </html>
@@ -204,12 +205,12 @@ interactive: 229ms, dcl: 230ms, complete: 956ms
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Critical Path: No Style</title>
   </head>
   <body>
     <p>Hello <span>web performance</span> students!</p>
-    <div><img src="awesome-photo.jpg"></div>
+    <div><img src="awesome-photo.jpg" /></div>
   </body>
 </html>
 ```
@@ -222,12 +223,12 @@ interactive: 229ms, dcl: 230ms, complete: 956ms
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link href="style.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link href="style.css" rel="stylesheet" />
   </head>
   <body>
     <p>Hello <span>web performance</span> students!</p>
-    <div><img src="awesome-photo.jpg"></div>
+    <div><img src="awesome-photo.jpg" /></div>
   </body>
 </html>
 ```
@@ -242,12 +243,12 @@ CSS를 가져오기 위해 한번의 왕복이 더 추가되었고, 그만큼 �
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link href="style.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link href="style.css" rel="stylesheet" />
   </head>
   <body>
     <p>Hello <span>web performance</span> students!</p>
-    <div><img src="awesome-photo.jpg"></div>
+    <div><img src="awesome-photo.jpg" /></div>
     <script src="app.js"></script>
   </body>
 </html>
@@ -265,12 +266,12 @@ CSS를 가져오기 위해 한번의 왕복이 더 추가되었고, 그만큼 �
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link href="style.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link href="style.css" rel="stylesheet" />
   </head>
   <body>
     <p>Hello <span>web performance</span> students!</p>
-    <div><img src="awesome-photo.jpg"></div>
+    <div><img src="awesome-photo.jpg" /></div>
     <script src="app.js" async></script>
   </body>
 </html>

@@ -6,17 +6,16 @@ tags:
 published: true
 mathjax: true
 date: 2020-07-23 06:39:54
-description: "```toc from-heading: 2 to-heading: 3 ``` ## 개념  - 정수: 1, 2, 3과 같은
+description:
+  '```toc from-heading: 2 to-heading: 3 ``` ## 개념  - 정수: 1, 2, 3과 같은
   자연수, 없음을 나타내는 0, 그리고 자연수와 반대 부호인 수 (-1, -2, -3...) - 배수: 어떤 정수에 다른 정수를 곱하여
-  만들어진 정수 (15는 3과 5의 배수) - 약수: 어떤 정수를 나머지 없이 나눌 수 있는 수 - 소수:..."
+  만들어진 정수 (15는 3과 5의 배수) - 약수: 어떤 정수를 나머지 없이 나눌 수 있는 수 - 소수:...'
 category: programming
 slug: /2020/07/math-for-programmer-chapter2-1-integer/
 template: post
 ---
-```toc
-from-heading: 2
-to-heading: 3
-```
+
+## Table of Contents
 
 ## 개념
 
@@ -25,14 +24,17 @@ to-heading: 3
 - 약수: 어떤 정수를 나머지 없이 나눌 수 있는 수
 - 소수: 자기 자신과 1외에는 다른 약수가 없는 수
 - 합성수: 1과 자기 자신외의 약수가 있어서 그 약수의 곱으로 나타낼 수 있는 수
-  - 1보다 큰 모든 정수는 소수이거나, 합성수 이다. 
+  - 1보다 큰 모든 정수는 소수이거나, 합성수 이다.
 - 소인수분해: 소수인 약수들의 곱셉 형태로 합성수를 나타내는 것
+
   $$
   72 = 8 \times 9  = (2 \times 2 \times 2) \times  (3 \times 3) = 2^3 \times 3^2
   $$
+
   소인수 분해는 고성능 컴퓨터로도 오래걸리며, 현대 암호학은 소수의 성질에 의존하고 있다. 소수를 골라 낼 때는 에라토스테네스의 체를 사용한다.
-  
+
   - 에라토스테네스의 체
+
   ```
   2부터 소수를 구하고자 하는 구간의 모든 수를 나열한다. 그림에서 회색 사각형으로 두른 수들이 여기에 해당한다.
   2는 소수이므로 오른쪽에 2를 쓴다. (빨간색)
@@ -48,22 +50,26 @@ to-heading: 3
 
   ```javascript
   function solution(n) {
-      const arr = new Array(n).fill(true)
-      
-      for (let i = 2; i * i <= n; i += 1) {
-          if (arr[i]) {
-              for (let j = i * i; j <= n; j += i) {
-                  arr[j] = false;
-              }
-          }
+    const arr = new Array(n).fill(true)
+
+    for (let i = 2; i * i <= n; i += 1) {
+      if (arr[i]) {
+        for (let j = i * i; j <= n; j += i) {
+          arr[j] = false
+        }
       }
-      
-      arr.splice(0, 2, false, false);
-      
-      return arr.map((value, index) => value ? index : false).filter(value => Boolean(value))
+    }
+
+    arr.splice(0, 2, false, false)
+
+    return arr
+      .map((value, index) => (value ? index : false))
+      .filter((value) => Boolean(value))
   }
   ```
+
   어떤수 $N$ 이 $a^m \times a^b$ 로 소인수 분해 할 수 있다면, $N$ 의 약수는 총 $(m+1) \times (n+1)$개 다.
+
 - 공약수: 두 수의 약수 중에 공통되는 것
 - 최대 공약수: 공약 수 중 가장 큰 수
 - 서로소: 1외에 공약수가 없는수
@@ -86,7 +92,7 @@ A : (G \times a) \times (1, 2, 3 ... )
 B : (G \times b) \times (1, 2, 3 ... )
 $$
 
-여기서 최소공배수를 구해보자. 
+여기서 최소공배수를 구해보자.
 
 $$
 A: (G \times a) \times b
@@ -101,4 +107,3 @@ L = G \times a \times b
 $$
 
 로 표현될 수 있다.
-

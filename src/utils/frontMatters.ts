@@ -30,7 +30,10 @@ export async function getAllPosts(): Promise<Array<Post>> {
       files.map(async (f) => {
         const file = await readFile(f, { encoding: 'utf8' })
         const { attributes: fm, body } = frontMatter(file)
-        const tags = ((fm as any).tags as string[]).map((tag) => tag.trim())
+
+        const tags = (((fm as any).tags as string[]) || []).map((tag) =>
+          tag.trim(),
+        )
 
         const slug = f
           .slice(f.indexOf(DIR_REPLACE_STRING) + DIR_REPLACE_STRING.length + 1)

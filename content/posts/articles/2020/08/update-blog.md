@@ -12,11 +12,7 @@ template: post
 
 블로그를 업데이트 했다. 업데이트를 하게 되면서 배운 점과 개선해 나가야할 점들에 대해서 간단히 요약해 본다.
 
-```toc
-tight: true,
-from-heading: 2
-to-heading: 3
-```
+## Table of Contents
 
 ## 시작
 

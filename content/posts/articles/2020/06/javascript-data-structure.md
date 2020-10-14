@@ -1,22 +1,20 @@
 ---
+
 title: 자바스크립트 자료 구조
 tags:
   - javascript
   - typescript
 published: true
 date: 2020-06-29 07:42:01
-description: "```toc tight: true, from-heading: 1 to-heading: 4 ``` 타입스크립트로
-  구현해보는 일반적인 자료구조  ## Stack  - push와 pop으로 구성된 stack - LIFO  ```javascript
-  export default class Stack<T> {   private stack: T[]    construc..."
+description: "`toc tight: true, from-heading: 1 to-heading: 4 ` 타입스크립트로
+구현해보는 일반적인 자료구조 ## Stack - push와 pop으로 구성된 stack - LIFO ```javascript
+export default class Stack<T> { private stack: T[] construc..."
 category: javascript
 slug: /2020/06/javascript-data-structure/
 template: post
 ---
-```toc
-tight: true,
-from-heading: 1
-to-heading: 4
-```
+
+## Table of Contents
 
 타입스크립트로 구현해보는 일반적인 자료구조
 
@@ -96,7 +94,7 @@ export default class PriorityQueue<T> {
 
   dequeue(): PQItem<T> | undefined {
     let entry = 0
-    
+
     this.queue.forEach((_, i) => {
       const nextIndex = i + 1
 
@@ -120,7 +118,7 @@ export default class PriorityQueue<T> {
 
 ```typescript
 export class Node<T> {
-  data: T 
+  data: T
   next: Node<T> | null
 
   constructor(data: T) {

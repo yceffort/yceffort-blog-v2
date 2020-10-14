@@ -4,13 +4,15 @@ tags:
   - github
 published: true
 date: 2020-07-16 04:55:31
-description: Github actions가 나오면서 cron job을 실행하기가 더 편해졌습니다. 굳이 내 컴퓨터를 24시간 돌리고
+description:
+  Github actions가 나오면서 cron job을 실행하기가 더 편해졌습니다. 굳이 내 컴퓨터를 24시간 돌리고
   있을 필요도 없고, 비싼 돈 주며 어디 이상한 compute를 쓸 필요도 없어졌습니다. [물론 공짜로 쓸 수 있는 Cron
   서비스](https://www.easycron.com/)도 있지만 아무래도 github 과 연동할 수 있다는 점이 큰...
 category: github
 slug: /2020/07/cron-job-with-github-actions/
 template: post
 ---
+
 Github actions가 나오면서 cron job을 실행하기가 더 편해졌습니다. 굳이 내 컴퓨터를 24시간 돌리고 있을 필요도 없고, 비싼 돈 주며 어디 이상한 compute를 쓸 필요도 없어졌습니다. [물론 공짜로 쓸 수 있는 Cron 서비스](https://www.easycron.com/)도 있지만 아무래도 github 과 연동할 수 있다는 점이 큰 장점인 거 같네요.
 
 ## cron 설정
@@ -34,7 +36,7 @@ jobs:
     strategy:
       matrix:
         node-version: [12.x]
-  
+
     # 현재 레파지토리를 체크아웃합니다.
     # https://github.com/actions/checkout
     steps:
@@ -44,11 +46,11 @@ jobs:
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2.1.0
         with:
-          node-version: ${{ matrix.node-version }}          
+          node-version: ${{ matrix.node-version }}
 
       # 캐시된 노드모듈이 있다면 그것을 쓰도록 합니다.
       # https://docs.github.com/en/actions/configuring-and-managing-workflows/caching-dependencies-to-speed-up-workflows#using-the-cache-action 를 참고했습니다.
-      # key: key를 활용해서 cache를 만들어 저장합니다. 
+      # key: key를 활용해서 cache를 만들어 저장합니다.
       # path: 캐시될 파일의 위치입니다.
       # OS와 package-lock.json을 기준으로 node_modules의 캐시를 만듭니다.
       - name: Cache node modules
@@ -61,12 +63,12 @@ jobs:
           restore-keys: |
             ${{ runner.OS }}-build-${{ env.cache-name }}-
             ${{ runner.OS }}-build-
-          
+
       # 일반적인 ci를 실행합니다.
       - name: CI
         run: |
           npm ci
-      
+
       # cron job을 실행합니다.
       - name: Run Cron
         run: |

@@ -7,18 +7,15 @@ tags:
   - javascript
 published: true
 date: 2020-01-03 03:52:09
-description: "```toc tight: true, from-heading: 1 to-heading: 3 ``` #
-  Handwritten digit recognition with CNNs  이 튜토리얼에서는, Tensorflow.js의 CNN을 활용해
-  손글씨 숫자를 인식하는 모델을 만들어 볼 것입니다. 먼저, 손으로 쓴 수천개의 숫자 이미지와 이들의 라벨 (어떤 숫자인지..."
+description: "`toc tight: true, from-heading: 1 to-heading: 3 ` #
+Handwritten digit recognition with CNNs 이 튜토리얼에서는, Tensorflow.js의 CNN을 활용해
+손글씨 숫자를 인식하는 모델을 만들어 볼 것입니다. 먼저, 손으로 쓴 수천개의 숫자 이미지와 이들의 라벨 (어떤 숫자인지..."
 category: machine-learning
 slug: /2020/01/tensorflowjs-04-cnn/
 template: post
 ---
-```toc
-tight: true,
-from-heading: 1
-to-heading: 3
-```
+
+## Table of Contents
 
 # Handwritten digit recognition with CNNs
 
@@ -87,7 +84,7 @@ to-heading: 3
 2. 1번과 같은 레벨에 `script.js`를 생성하고, 아래 내용을 붙여 넣어주세요.
 
 ```javascript
-console.log("Hello TensorFlow")
+console.log('Hello TensorFlow')
 ```
 
 > 여기에서 알려드린 코드에서는, 스크립트 태그로 로딩을 하고 있습니다. 많은 수의 자바스크립트 개발자들은 npm 으로 dependencies를 설치하고, 번들러로 프로젝트를 빌드하는 것을 선호합니다. 만약 할 수 있다면, `tensorflow.js`와 `tfjs-vis`를 npm으로 설치해보세요.
@@ -128,13 +125,13 @@ MnistData 클래스는 또한 데이터를 섞고 정규화하는 중요한 일�
 데이터를 로딩해보고, 테스트 해서 한번 제대로 되는지 확인해 봅시다.
 
 ```javascript
-import { MnistData } from "./data.js"
+import { MnistData } from './data.js'
 
 async function showExamples(data) {
   // Create a container in the visor
   const surface = tfvis
     .visor()
-    .surface({ name: "Input Data Examples", tab: "Input Data" })
+    .surface({ name: 'Input Data Examples', tab: 'Input Data' })
 
   // Get the examples
   const examples = data.nextTestBatch(20)
@@ -149,10 +146,10 @@ async function showExamples(data) {
         .reshape([28, 28, 1])
     })
 
-    const canvas = document.createElement("canvas")
+    const canvas = document.createElement('canvas')
     canvas.width = 28
     canvas.height = 28
-    canvas.style = "margin: 4px;"
+    canvas.style = 'margin: 4px;'
     await tf.browser.toPixels(imageTensor, canvas)
     surface.drawArea.appendChild(canvas)
 
@@ -166,7 +163,7 @@ async function run() {
   await showExamples(data)
 }
 
-document.addEventListener("DOMContentLoaded", run)
+document.addEventListener('DOMContentLoaded', run)
 ```
 
 페이지를 새로고침하면, 몇 초 뒤에 이미지가 있는 패널이 나타날 것입니다.
@@ -260,9 +257,9 @@ model.add(
     kernelSize: 5,
     filters: 8,
     strides: 1,
-    activation: "relu",
-    kernelInitializer: "varianceScaling",
-  })
+    activation: 'relu',
+    kernelInitializer: 'varianceScaling',
+  }),
 )
 ```
 
@@ -301,9 +298,9 @@ const NUM_OUTPUT_CLASSES = 10
 model.add(
   tf.layers.dense({
     units: NUM_OUTPUT_CLASSES,
-    kernelInitializer: "varianceScaling",
-    activation: "softmax",
-  })
+    kernelInitializer: 'varianceScaling',
+    activation: 'softmax',
+  }),
 )
 ```
 
@@ -365,10 +362,10 @@ Categorical cross entropy는 실제 주어진 label과 비교했을 때 얼마�
 
 ```javascript
 async function train(model, data) {
-  const metrics = ["loss", "val_loss", "acc", "val_acc"]
+  const metrics = ['loss', 'val_loss', 'acc', 'val_acc']
   const container = {
-    name: "Model Training",
-    styles: { height: "1000px" },
+    name: 'Model Training',
+    styles: { height: '1000px' },
   }
   const fitCallbacks = tfvis.show.fitCallbacks(container, metrics)
 
@@ -398,7 +395,7 @@ async function train(model, data) {
 
 ```javascript
 const model = getModel()
-tfvis.show.modelSummary({ name: "Model Architecture" }, model)
+tfvis.show.modelSummary({ name: 'Model Architecture' }, model)
 
 await train(model, data)
 ```
@@ -413,7 +410,7 @@ await train(model, data)
 ### 메트릭 모니터링
 
 ```javascript
-const metrics = ["loss", "val_loss", "acc", "val_acc"]
+const metrics = ['loss', 'val_loss', 'acc', 'val_acc']
 ```
 
 여기에서 우리는 어떤 요소들을 모니터링 할 것이지 선언합니다. 여기에서는 학습 세트의 loss, 정확성 뿐만 아니라 validation set (val_loss, val_acc)의 loss와 정확성을 모니터링합니다. 아래에서 좀더 자세히 알아봅시다.
@@ -466,16 +463,16 @@ validation 데이터를 학습과정에서 넘기지 않는 다는 것은, 학�
 
 ```javascript
 const classNames = [
-  "Zero",
-  "One",
-  "Two",
-  "Three",
-  "Four",
-  "Five",
-  "Six",
-  "Seven",
-  "Eight",
-  "Nine",
+  'Zero',
+  'One',
+  'Two',
+  'Three',
+  'Four',
+  'Five',
+  'Six',
+  'Seven',
+  'Eight',
+  'Nine',
 ]
 
 function doPrediction(model, data, testDataSize = 500) {
@@ -498,7 +495,7 @@ function doPrediction(model, data, testDataSize = 500) {
 async function showAccuracy(model, data) {
   const [preds, labels] = doPrediction(model, data)
   const classAccuracy = await tfvis.metrics.perClassAccuracy(labels, preds)
-  const container = { name: "Accuracy", tab: "Evaluation" }
+  const container = { name: 'Accuracy', tab: 'Evaluation' }
   tfvis.show.perClassAccuracy(container, classAccuracy, classNames)
 
   labels.dispose()
@@ -507,11 +504,11 @@ async function showAccuracy(model, data) {
 async function showConfusion(model, data) {
   const [preds, labels] = doPrediction(model, data)
   const confusionMatrix = await tfvis.metrics.confusionMatrix(labels, preds)
-  const container = { name: "Confusion Matrix", tab: "Evaluation" }
+  const container = { name: 'Confusion Matrix', tab: 'Evaluation' }
   tfvis.render.confusionMatrix(
     container,
     { values: confusionMatrix },
-    classNames
+    classNames,
   )
 
   labels.dispose()
@@ -563,7 +560,7 @@ function doPrediction(model, data, testDataSize = 500) {
 async function showAccuracy() {
   const [preds, labels] = doPrediction()
   const classAccuracy = await tfvis.metrics.perClassAccuracy(labels, preds)
-  const container = { name: "Accuracy", tab: "Evaluation" }
+  const container = { name: 'Accuracy', tab: 'Evaluation' }
   tfvis.show.perClassAccuracy(container, classAccuracy, classNames)
 
   labels.dispose()
@@ -578,7 +575,7 @@ async function showAccuracy() {
 async function showConfusion() {
   const [preds, labels] = doPrediction()
   const confusionMatrix = await tfvis.metrics.confusionMatrix(labels, preds)
-  const container = { name: "Confusion Matrix", tab: "Evaluation" }
+  const container = { name: 'Confusion Matrix', tab: 'Evaluation' }
   tfvis.show.confusionMatrix(container, confusionMatrix, classNames)
 
   labels.dispose()

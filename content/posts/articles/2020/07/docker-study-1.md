@@ -1,25 +1,23 @@
 ---
+
 title: Docker 공부 (1) - 도커 기초부터 볼륨 공유까지
 tags:
   - docker
 published: true
 date: 2020-07-28 08:25:27
-description: "```toc tight: true, from-heading: 2 to-heading: 3 ``` ## Docker 는
-  무엇인가?  리눅스 컨테이너에 여러가지 기능을 추가하여 애플리케이션을 컨테이너로서 좀더 쉽게 사용할 수 있도록 만든 오픈소스. 이에 대해
-  정리  해 놓은 [좋은 글](https://subicura.com/2017/01/19/docker-g..."
+description: "`toc tight: true, from-heading: 2 to-heading: 3 ` ## Docker 는
+무엇인가? 리눅스 컨테이너에 여러가지 기능을 추가하여 애플리케이션을 컨테이너로서 좀더 쉽게 사용할 수 있도록 만든 오픈소스. 이에 대해
+정리 해 놓은 [좋은 글](https://subicura.com/2017/01/19/docker-g..."
 category: docker
 slug: /2020/07/docker-study-1/
 template: post
 ---
-```toc
-tight: true,
-from-heading: 2
-to-heading: 3
-```
+
+## Table of Contents
 
 ## Docker 는 무엇인가?
 
-리눅스 컨테이너에 여러가지 기능을 추가하여 애플리케이션을 컨테이너로서 좀더 쉽게 사용할 수 있도록 만든 오픈소스. 이에 대해 정리  해 놓은 [좋은 글](https://subicura.com/2017/01/19/docker-guide-for-beginners-1.html)이 있으니 여기를 참고.
+리눅스 컨테이너에 여러가지 기능을 추가하여 애플리케이션을 컨테이너로서 좀더 쉽게 사용할 수 있도록 만든 오픈소스. 이에 대해 정리 해 놓은 [좋은 글](https://subicura.com/2017/01/19/docker-guide-for-beginners-1.html)이 있으니 여기를 참고.
 
 > Developing apps today requires so much more than writing code. Multiple languages, frameworks, architectures, and discontinuous interfaces between tools for each lifecycle stage creates enormous complexity. Docker simplifies and accelerates your workflow, while giving developers the freedom to innovate with their choice of tools, application stacks, and deployment environments for each project.
 
@@ -29,7 +27,7 @@ to-heading: 3
 
 ## 실습 위치
 
-이번에 나온 [Toast Compute Instance](https://console.toast.com/) 를 활용. AWS free tier는 진작에 소진 했고, 돈내고 쓸 수 있는 곳 중에서 가장 싼 인스턴스를 제공하는 서비스는 Toast 였다. 
+이번에 나온 [Toast Compute Instance](https://console.toast.com/) 를 활용. AWS free tier는 진작에 소진 했고, 돈내고 쓸 수 있는 곳 중에서 가장 싼 인스턴스를 제공하는 서비스는 Toast 였다.
 
 ## 컨테이너 생성
 
@@ -38,9 +36,9 @@ $ docker run -i -t ubuntu:14.04
 
 Unable to find image 'ubuntu:14.04' locally
 14.04: Pulling from library/ubuntu
-2e6e20c8e2e6: Pull complete 
-30bb187ac3fc: Pull complete 
-b7a5bcc4a58a: Pull complete 
+2e6e20c8e2e6: Pull complete
+30bb187ac3fc: Pull complete
+b7a5bcc4a58a: Pull complete
 Digest: sha256:ffc76f71dd8be8c9e222d420dc96901a07b61616689a44c7b3ef6a10b7213de4
 Status: Downloaded newer image for ubuntu:14.04
 
@@ -49,7 +47,7 @@ root@ec01158d61da:/# ls
 bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
 ```
 
-명령어 실행과 동시에 컨테이너 생성, 실행, 컨테이너 내부로 진입이 한꺼번에 이뤄짐. 기본 사용자 root에 호스트이름은 무작위 16진수 해쉬값을 가지게 된다. 
+명령어 실행과 동시에 컨테이너 생성, 실행, 컨테이너 내부로 진입이 한꺼번에 이뤄짐. 기본 사용자 root에 호스트이름은 무작위 16진수 해쉬값을 가지게 된다.
 
 > docker 명령어에서 shell을 사용하기 위해서는 -i (상호입출력) -t (tty)를 활성화 시켜야 한다.
 
@@ -61,7 +59,7 @@ bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  s
 ubuntu@study:~$ docker pull centos:7
 
 7: Pulling from library/centos
-524b0c1e57f8: Pull complete 
+524b0c1e57f8: Pull complete
 Digest: sha256:e9ce0b76f29f942502facd849f3e468232492b259b9d9f076f71b392293f1582
 Status: Downloaded newer image for centos:7
 docker.io/library/centos:7
@@ -101,7 +99,7 @@ CONTAINER ID        IMAGE               COMMAND             CREATED             
 42d20904cc1a        centos:7            "/bin/bash"         2 minutes ago       Up 9 seconds                            mycentos
 ```
 
-`ps` 명령어는 정지 되지 않은 컨테이너 목록만 출력. 정지 하지 않고, 단순히 빠져 나오기만 하고 싶다면, `control+p+q`로 나올 수 있다.  모든 컨테이너를 보고 싶다면 `-a`를 붙이면 된다.
+`ps` 명령어는 정지 되지 않은 컨테이너 목록만 출력. 정지 하지 않고, 단순히 빠져 나오기만 하고 싶다면, `control+p+q`로 나올 수 있다. 모든 컨테이너를 보고 싶다면 `-a`를 붙이면 된다.
 
 ```shell
 ubuntu@study:~$ docker ps -a
@@ -126,7 +124,7 @@ mycentos
 ubuntu@study:~$ docker ps -a
 CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                      PORTS               NAMES
 ec01158d61da        ubuntu:14.04        "/bin/bash"         24 minutes ago      Exited (0) 22 minutes ago                       goofy_aryabhata
-ubuntu@study:~$ 
+ubuntu@study:~$
 ```
 
 ## 컨테이너를 외부에 노출 시키기
@@ -136,26 +134,26 @@ ubuntu@study:~$
 ```shell
 ubuntu@study:~$ docker run -i -t --name network_test ubuntu:14.04
 root@b505ea44b935:/# ifconfig
-eth0      Link encap:Ethernet  HWaddr 02:42:ac:11:00:02  
+eth0      Link encap:Ethernet  HWaddr 02:42:ac:11:00:02
           inet addr:172.17.0.2  Bcast:172.17.255.255  Mask:255.255.0.0
           UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
           RX packets:9 errors:0 dropped:0 overruns:0 frame:0
           TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
-          collisions:0 txqueuelen:0 
+          collisions:0 txqueuelen:0
           RX bytes:766 (766.0 B)  TX bytes:0 (0.0 B)
 
-lo        Link encap:Local Loopback  
+lo        Link encap:Local Loopback
           inet addr:127.0.0.1  Mask:255.0.0.0
           UP LOOPBACK RUNNING  MTU:65536  Metric:1
           RX packets:0 errors:0 dropped:0 overruns:0 frame:0
           TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
-          collisions:0 txqueuelen:1000 
+          collisions:0 txqueuelen:1000
           RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
 
-root@b505ea44b935:/# 
+root@b505ea44b935:/#
 ```
 
-아무런 설정도 하지 않았다면, 외부에서 접근할 수 없으며 도커가 설치된 호스트에서만 접근할 수 있다. 
+아무런 설정도 하지 않았다면, 외부에서 접근할 수 없으며 도커가 설치된 호스트에서만 접근할 수 있다.
 
 ```shell
 ubuntu@study:~$ docker run -i -t --name network_test -p 80:80 ubuntu:14.04
@@ -175,7 +173,7 @@ ubuntu@study:~$ docker run -i -t --name network_test -p 80:80 ubuntu:14.04
   ...
 ```
 
-실제 아파치 서버가 설치 된 것은 컨테이너 내부이므로, 호스트에는 아무런 영향이 없다. 
+실제 아파치 서버가 설치 된 것은 컨테이너 내부이므로, 호스트에는 아무런 영향이 없다.
 
 다시 정리하자면, 호스트의 80번 포트를 컨테이너의 80번 포트와 연결했고, 아파치 웹서비스의 80번 포트가 컨테이너의 포트와 연결되어 있는 것이다.
 
@@ -198,7 +196,7 @@ ubuntu@study:~$ docker port wordpress
 
 여기서 실행할 때 사용한 몇가지 파라미터에 대해 알아보자
 
-- `-d`: detach 모드로 실행한다. docker 내에서 정의한 프로그램을 background에서 실행한다. `-i -t`와는 다르게 입출력이 없는 상태에서 시작하게 된다. 
+- `-d`: detach 모드로 실행한다. docker 내에서 정의한 프로그램을 background에서 실행한다. `-i -t`와는 다르게 입출력이 없는 상태에서 시작하게 된다.
 - `-e`: 환경변수를 설정한다.
 - `--link`: 내부 IP를 알 필요 없이, 항상 컨테이너에 alias로 접근할 수 있도록 하는 것. 즉 두 번째로 싱행된 웹서버 컨테이너는, wordpressdb의 ip를 몰라도, `mysql`이라는 호스트 이름으로 요청을 전송하면, `wordpressdb` 컨테이너의 내부 IP로 접근할 수 있다. 그러나 해당 명령어는 deprecated 되어 있으며, 도커 브릿지를 사용해서 연결해야 한다.
 
@@ -239,11 +237,11 @@ ca-key.pem  client-cert.pem  ib_buffer_pool  ib_logfile0  ibtmp1       performan
 ubuntu@study:~$ docker run -i -t --name volume_overide -v /home/wordpress_db:/home/testdir_2 alicek106/volume_test
 Unable to find image 'alicek106/volume_test:latest' locally
 latest: Pulling from alicek106/volume_test
-56eb14001ceb: Pull complete 
-7ff49c327d83: Pull complete 
-6e532f87f96d: Pull complete 
-3ce63537e70c: Pull complete 
-587f7dba3172: Pull complete 
+56eb14001ceb: Pull complete
+7ff49c327d83: Pull complete
+6e532f87f96d: Pull complete
+3ce63537e70c: Pull complete
+587f7dba3172: Pull complete
 Digest: sha256:e0287b5cfd550b270e4243344093994b7b1df07112b4661c1bf324d9ac9c04aa
 Status: Downloaded newer image for alicek106/volume_test:latest
 root@e3364f2e3f69:/# exit
@@ -252,7 +250,7 @@ ubuntu@study:~$ docker run -i -t --name volumes_from_container --volumes-from vo
 root@03ae3b0ae3c0:/# ls /home/testdir_2/
 auto.cnf    ca.pem           client-key.pem  ib_logfile0  ibdata1  performance_schema  public_key.pem   server-key.pem  wordpress
 ca-key.pem  client-cert.pem  ib_buffer_pool  ib_logfile1  mysql    private_key.pem     server-cert.pem  sys
-root@03ae3b0ae3c0:/# 
+root@03ae3b0ae3c0:/#
 ```
 
 컨테이너 생서이 `--volumes-from`을 사용하면, `-v`를 적용한 컨테이너의 볼륨디렉토리를 사용할 수 있다. 첫번째 예제에서, `-v`를 사용해서 `volume_test`를 만들었고, 두번째 예제에서 `-volumes-from`을 사용해서 `volume_test`의 볼륨을 사용하고 있는 모습이다. 이러한 옵션을 활용하면, 단순히 볼륨을 공유해주는 역할만 하는 컨테이너를 만들 수도 있다.
@@ -281,10 +279,10 @@ ubuntu@study:~$ docker run -i -t --name myvolume_1 -v myvolume:/root/ ubuntu:14.
 ```shell
 ubuntu@study:~$ docker run -i -t --name myvolume_1 -v myvolume:/root/ ubuntu:14.04
 root@f351516e97a1:/# echo hell, volume! >> /root/volume
-root@f351516e97a1:/# exit                              
+root@f351516e97a1:/# exit
 exit
 ubuntu@study:~$ docker run -i -t --name myvolume_2 -v myvolume:/root/ ubuntu:14.04
-root@e2131dc32f0a:/# cat /root/volume 
+root@e2131dc32f0a:/# cat /root/volume
 hell, volume!
 ```
 
@@ -307,7 +305,7 @@ ubuntu@study:~$ docker inspect --type volume myvolume
 
 `docker inspect` 를 활용해 볼륨의 정보를 알 수 있다.
 
-`docker volume create`를 사용하지 않아도, `-v`옵션으로 볼륨을 그냥 만들어 버릴 수 있다. `-v \root` 형태로 실행하면, 무작위 형태의 이름을 가진 볼륨을 생성해 자동으로 그것을 사용한다. 
+`docker volume create`를 사용하지 않아도, `-v`옵션으로 볼륨을 그냥 만들어 버릴 수 있다. `-v \root` 형태로 실행하면, 무작위 형태의 이름을 가진 볼륨을 생성해 자동으로 그것을 사용한다.
 
 ```shell
 ubuntu@study:~$ docker volume prune
@@ -326,4 +324,3 @@ Total reclaimed space: 300.5MB
 ### 결론
 
 컨테이너가 아닌 외부에서 데이터를 저장하고, 컨테이너는 컨테이너 그 데이터 만으로 동작하도록 설계하는 것을 stateless 컨테이너라고 한다. 컨테이너 자체에는 어떠한 정보나 상태가 존재하지 않고, 다만 그 컨테이너에 있는 정보를 기반으로 실행할 뿐이다. 필요한 유동적인 정보는 외부 volume에서 받는다. 반대로 컨테이너 내부에 상태나 정보가 있으면 stateful 컨테이너라고 한다. 그러나 이와 같은 컨테이너는 컨테이너 자체에 정보를 보관하므로, 이러한 설계는 지양하는 것이 좋다.
-

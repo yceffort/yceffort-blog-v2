@@ -5,7 +5,7 @@ tags:
   - MobX
 published: true
 date: 2020-08-25 20:07:31
-description: "MobX 1페이지 요약에 대한 간단한 번역"
+description: 'MobX 1페이지 요약에 대한 간단한 번역'
 category: MobX
 template: post
 ---
@@ -14,11 +14,7 @@ template: post
 
 # 개념과 원칙
 
-```toc
-tight: true,
-from-heading: 2
-to-heading: 3
-```
+## Table of Contents
 
 ## 개념
 
@@ -28,7 +24,7 @@ to-heading: 3
 
 ### 2. 파생 (Derivations)
 
-더이상의 추가적인 상호작용없이, 상태에서 파생되어지는 값을 모두 파생 (Derivations) 이라고 한다. 
+더이상의 추가적인 상호작용없이, 상태에서 파생되어지는 값을 모두 파생 (Derivations) 이라고 한다.
 
 > 최종적인 interaction 끝에 만들어진 값을 derivations 이라고 하는 것 같습니다.
 
@@ -53,7 +49,6 @@ MobX를 처음 사용하는 초심자들은, 리액션을 너무 자주 사용�
 
 액션은 MobX에 명시적으로 정의되어있어서, 코드를 보다 명확하게 구성할 수 있다. MobX가 엄격모드로 동작될경우, MobX는 어떤 상태도 외부 액션으로 수정할 수 없도록 강제될 것이다.
 
-
 ## 원칙
 
 MobX는 액션이 상태를 변경하는 단방향 데이터 흐름을 지원하고, 이에 영향을 받는 모든 뷰를 업데이트 한다.
@@ -70,27 +65,31 @@ MobX는 액션이 상태를 변경하는 단방향 데이터 흐름을 지원하
 아래 예제는 위에서 언급한 기본 개념과 원칙을 묘사하고 있다.
 
 ```jsx
-import { observable, autorun } from "mobx"
+import { observable, autorun } from 'mobx'
 
 var todoStore = observable({
-    /* 관찰의 대상이되는 state */
-    todos: [],
+  /* 관찰의 대상이되는 state */
+  todos: [],
 
-    /* 관찰의 대상에서 파생된 값 */
-    get completedCount() {
-        return this.todos.filter((todo) => todo.completed).length
-    },
+  /* 관찰의 대상에서 파생된 값 */
+  get completedCount() {
+    return this.todos.filter((todo) => todo.completed).length
+  },
 })
 
 /* 상태값을 관찰하는 함수 */
 autorun(function () {
-    console.log("Completed %d of %d items", todoStore.completedCount, todoStore.todos.length)
+  console.log(
+    'Completed %d of %d items',
+    todoStore.completedCount,
+    todoStore.todos.length,
+  )
 })
 
 /* 상태값을 수정하는 액션 */
 todoStore.todos[0] = {
-    title: "Take a walk",
-    completed: false,
+  title: 'Take a walk',
+  completed: false,
 }
 // -> 동기적으로 콘솔에 로그를 찍는다. 'Completed 0 of 1 items'
 

@@ -5,21 +5,17 @@ published: true
 tags:
   - javascript
   - react
-description: "[목차](/2019/08/13/reactjs-interview-questions/)  ```toc tight:
+description: '[목차](/2019/08/13/reactjs-interview-questions/)  ```toc tight:
   true, from-heading: 2 to-heading: 3 ```  ## Core React  ### What is
-  React  리액트는 오픈소스 프론트엔드 자바스크립트 라이브러리로, 특히 싱글 페이지 애플리케이션의 사용자 인터페이스 구축을..."
+  React  리액트는 오픈소스 프론트엔드 자바스크립트 라이브러리로, 특히 싱글 페이지 애플리케이션의 사용자 인터페이스 구축을...'
 category: javascript
 slug: /2019/08/13/reactjs-interview-questions-1/
 template: post
 ---
+
 [목차](/2019/08/13/reactjs-interview-questions/)
 
-
-```toc
-tight: true,
-from-heading: 2
-to-heading: 3
-```
+## Table of Contents
 
 ## Core React
 
@@ -47,9 +43,9 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <h1>{"Welcome to React world!"}</h1>
+        <h1>{'Welcome to React world!'}</h1>
       </div>
-    );
+    )
   }
 }
 ```
@@ -61,7 +57,7 @@ class App extends React.Component {
 리액트에서 `element`를 만드는 예시는 아래와 같다.
 
 ```javascript
-const element = React.createElement("div", { id: "login-btn" }, "Login");
+const element = React.createElement('div', { id: 'login-btn' }, 'Login')
 ```
 
 위 함수는 아래와 같은 object를 리턴한다
@@ -86,10 +82,10 @@ const element = React.createElement("div", { id: "login-btn" }, "Login");
 
 ```javascript
 const Button = ({ onLogin }) => (
-  <div id={"login-btn"} onClick={onLogin}>
+  <div id={'login-btn'} onClick={onLogin}>
     Login
   </div>
-);
+)
 ```
 
 JSX는 이를 `React.createElement()` 함수로 트랜스파일 시킬 것이다.
@@ -107,7 +103,7 @@ onClick: onLogin }, 'Login' )
 
 ```javascript
 function Greeting({ message }) {
-  return <h1>{`Hello, ${message}`}</h1>;
+  return <h1>{`Hello, ${message}`}</h1>
 }
 ```
 
@@ -116,7 +112,7 @@ function Greeting({ message }) {
 ```javascript
 class Greeting extends React.Component {
   render() {
-    return <h1>{`Hello, ${this.props.message}`}</h1>;
+    return <h1>{`Hello, ${this.props.message}`}</h1>
   }
 }
 ```
@@ -138,11 +134,11 @@ class Greeting extends React.Component {
 ```javascript
 class User extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
-      message: "Welcome to React world"
-    };
+      message: 'Welcome to React world',
+    }
   }
 
   render() {
@@ -150,7 +146,7 @@ class User extends React.Component {
       <div>
         <h1>{this.state.message}</h1>
       </div>
-    );
+    )
   }
 }
 ```
@@ -170,13 +166,13 @@ class User extends React.Component {
 예를 들어, `reactProp` 을 만들어서 쓴다고 가정해 보자.
 
 ```javascript
-<Element reactProp={"1"} />
+<Element reactProp={'1'} />
 ```
 
 `reactProp`은 (뭐라고 정의했던 지 간에) React를 사용하여 생성된 component에서 접근이 가능하고, React native props에서 접근하여 사용할 수 있다.
 
 ```javascript
-props.reactProp;
+props.reactProp
 ```
 
 ### What is the difference between state and props?
@@ -188,14 +184,14 @@ props.reactProp;
 `state`를 아래와 같이 바로 업데이트 하면 렌더링이 일어나지 않는다.
 
 ```javascript
-this.state.message = "Hello world";
+this.state.message = 'Hello world'
 ```
 
 대신에 `setState()` 메서드를 사용하자.이는 `state`의 변경이 있을 때 `component`를 업데이트 해준다. `state`에 변화가 있을 경우, 컴포넌트는 리렌더링으로 응답한다.
 
 ```javascript
 //Correct
-this.setState({ message: "Hello World" });
+this.setState({ message: 'Hello World' })
 ```
 
 주의: state를 직접 할당할 수 있는 곳은 `constructor` 혹은 자바스크립트 클래스의 필드를 선언하는 syntax 뿐이다.
@@ -207,9 +203,9 @@ this.setState({ message: "Hello World" });
 주의: 콜백함수를 사용하는 것보다 라이프사이클 메서드를 사용하는게 더 좋다.
 
 ```javascript
-setState({ name: "John" }, () =>
-  console.log("The name has updated and component re-rendered")
-);
+setState({ name: 'John' }, () =>
+  console.log('The name has updated and component re-rendered'),
+)
 ```
 
 ### What is the difference between HTML and React event handling?
@@ -236,8 +232,8 @@ React는 camelCase를 사용한다.
 
 ```javascript
 function handleClick(event) {
-  event.preventDefault();
-  console.log("The link was clicked.");
+  event.preventDefault()
+  console.log('The link was clicked.')
 }
 ```
 
@@ -248,8 +244,8 @@ function handleClick(event) {
 ```javascript
 class Component extends React.Componenet {
   constructor(props) {
-    super(props);
-    this.handleClick = this.handleClick.bind(this);
+    super(props)
+    this.handleClick = this.handleClick.bind(this)
   }
 
   handleClick() {
@@ -262,10 +258,10 @@ class Component extends React.Componenet {
 
 ```javascript
 handleClick = () => {
-  console.log("this is:", this);
-};
+  console.log('this is:', this)
+}
 
-<button onClick={this.handleClick}> Click me </button>;
+;<button onClick={this.handleClick}> Click me </button>
 ```
 
 > 클래스 필드(class field)
@@ -273,7 +269,7 @@ handleClick = () => {
 
 ```javascript
 class Foo {
-  name = ""; // SyntaxError
+  name = '' // SyntaxError
 
   constructor() {}
 }
@@ -285,7 +281,7 @@ class Foo {
 3. 화살표함수: 콜백에 화살표 함수를 사용할 수도 있다.
 
 ```javascript
-<button onClick={event => this.handleClick(event)}>{"Click me"}</button>
+<button onClick={(event) => this.handleClick(event)}>{'Click me'}</button>
 ```
 
 주의: 콜백이 하위 컴포넌트에 `prop`으로 전달된다면, component가 리렌더링 될 수도 있다. 이러한 경우에는, 성능을 고려해서 1, 2번의 예제를 활용하는 것이 낫다.
@@ -307,10 +303,10 @@ class Foo {
 두 방식 이외에도, 아래와 같은 배열 함수 방식으로 정의해서 전달할 수도 있다.
 
 ```javascript
-<button onClick={this.handleClick(id)} />;
-handleClick = id => () => {
-  console.log("Hello, your ticket number is", id);
-};
+;<button onClick={this.handleClick(id)} />
+handleClick = (id) => () => {
+  console.log('Hello, your ticket number is', id)
+}
 ```
 
 ### What are synthetic events in React?
@@ -344,9 +340,7 @@ const todoItems = todos.map(todo =>
 
 ```html
 const todoItems = todos.map((todo, index) =>
-<li key="{index}">
-  {todo.text}
-</li>
+<li key="{index}">{todo.text}</li>
 )
 ```
 
@@ -367,11 +361,11 @@ const todoItems = todos.map((todo, index) =>
 ```javascript
 class MyComponent extends React.Component {
   constructor(props) {
-    super(props);
-    this.myRef = React.createRef();
+    super(props)
+    this.myRef = React.createRef()
   }
   render() {
-    return <div ref={this.myRef} />;
+    return <div ref={this.myRef} />
   }
 }
 ```
@@ -381,15 +375,15 @@ class MyComponent extends React.Component {
 ```javascript
 class SearchBar extends Component {
   constructor(props) {
-    super(props);
-    this.txtSearch = null;
-    this.state = { term: "" };
-    this.setInputSearchRef = e => {
-      this.txtSearch = e;
-    };
+    super(props)
+    this.txtSearch = null
+    this.state = { term: '' }
+    this.setInputSearchRef = (e) => {
+      this.txtSearch = e
+    }
   }
   onInputChange(event) {
-    this.setState({ term: this.txtSearch.value });
+    this.setState({ term: this.txtSearch.value })
   }
   render() {
     return (
@@ -398,7 +392,7 @@ class SearchBar extends Component {
         onChange={this.onInputChange.bind(this)}
         ref={this.setInputSearchRef}
       />
-    );
+    )
   }
 }
 ```
@@ -416,11 +410,11 @@ const ButtonElement = React.forwardRef((props, ref) => (
   <button ref={ref} className="CustomButton">
     {props.children}
   </button>
-));
+))
 
 // Create ref to the DOM button:
-const ref = React.createRef();
-<ButtonElement ref={ref}>{"Forward Ref"}</ButtonElement>;
+const ref = React.createRef()
+;<ButtonElement ref={ref}>{'Forward Ref'}</ButtonElement>
 ```
 
 ### Which is preferred option with in callback refs and findDOMNode()?
@@ -432,11 +426,11 @@ callback ref를 쓰는 것이 더 선호된다. 왜냐하면 `findDOMNode()`는 
 ```javascript
 class MyComponent extends Component {
   componentDidMount() {
-    findDOMNode(this).scrollIntoView();
+    findDOMNode(this).scrollIntoView()
   }
 
   render() {
-    return <div />;
+    return <div />
   }
 }
 ```
@@ -446,15 +440,15 @@ class MyComponent extends Component {
 ```javascript
 class MyComponent extends Component {
   constructor(props) {
-    super(props);
-    this.node = createRef();
+    super(props)
+    this.node = createRef()
   }
   componentDidMount() {
-    this.node.current.scrollIntoView();
+    this.node.current.scrollIntoView()
   }
 
   render() {
-    return <div ref={this.node} />;
+    return <div ref={this.node} />
   }
 }
 ```
@@ -470,16 +464,16 @@ class MyComponent extends Component {
 
 ```javascript
 class MyComponent extends Component {
-  renderRow = index => {
+  renderRow = (index) => {
     // 동작하지 않는다. ref는 MyComponent가 아닌 DataTable에 연결될 것이다.
-    return <input ref={"input-" + index} />;
+    return <input ref={'input-' + index} />
 
     // 이거는 동작한다. callback ref가 짱이다.
-    return <input ref={input => (this["input-" + index] = input)} />;
-  };
+    return <input ref={(input) => (this['input-' + index] = input)} />
+  }
 
   render() {
-    return <DataTable data={this.props.data} renderRow={this.renderRow} />;
+    return <DataTable data={this.props.data} renderRow={this.renderRow} />
   }
 }
 ```
@@ -532,26 +526,26 @@ uncontrolled components란 내부적으로 자기 자신의 state를 가지고 �
 ```javascript
 class UserProfile extends React.Component {
   constructor(props) {
-    super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.input = React.createRef();
+    super(props)
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.input = React.createRef()
   }
 
   handleSubmit(event) {
-    alert("A name was submitted: " + this.input.current.value);
-    event.preventDefault();
+    alert('A name was submitted: ' + this.input.current.value)
+    event.preventDefault()
   }
 
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
         <label>
-          {"Name:"}
+          {'Name:'}
           <input type="text" ref={this.input} />
         </label>
         <input type="submit" value="Submit" />
       </form>
-    );
+    )
   }
 }
 ```
@@ -631,15 +625,15 @@ function HOC(WrappedComponent) {
   return class Test extends Component {
     render() {
       const newProps = {
-        title: "New Header",
+        title: 'New Header',
         footer: false,
         showFeatureX: false,
-        showFeatureY: true
-      };
+        showFeatureY: true,
+      }
 
-      return <WrappedComponent {...this.props} {...newProps} />;
+      return <WrappedComponent {...this.props} {...newProps} />
     }
-  };
+  }
 }
 ```
 
@@ -648,7 +642,7 @@ function HOC(WrappedComponent) {
 Context는 props을 탑다운으로 주지 않고도, 어느 레벨에서든 데이터를 컴포넌트 트리에 넘기는 방법이다. 예를 들어 인증받은 사용자, 언어 설정, UI theme 등 애플리케이션 단위에서 다양한 컴포넌트가 사용해야 하는 데이터를 context를 통해서 줄 수 있다.
 
 ```javascript
-const { Provider, Consumer } = React.createContext(defaultValue);
+const { Provider, Consumer } = React.createContext(defaultValue)
 ```
 
 ### What is children prop?
@@ -659,18 +653,18 @@ React API에서 이러한 형태로 다양한 prop을 제공하고 있다. `Reac
 
 ```javascript
 const MyDiv = React.createClass({
-  render: function() {
-    return <div>{this.props.children}</div>;
-  }
-});
+  render: function () {
+    return <div>{this.props.children}</div>
+  },
+})
 
 ReactDOM.render(
   <MyDiv>
-    <span>{"Hello"}</span>
-    <span>{"World"}</span>
+    <span>{'Hello'}</span>
+    <span>{'World'}</span>
   </MyDiv>,
-  node
-);
+  node,
+)
 ```
 
 ### How to write comments in React?
@@ -704,9 +698,9 @@ props 넘기는 경우
 ```javascript
 class MyComponent extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
 
-    console.log(this.props); // prints { name: 'John', age: 42 }
+    console.log(this.props) // prints { name: 'John', age: 42 }
   }
 }
 ```
@@ -716,17 +710,17 @@ props 안 넘기는 경우
 ```javascript
 class MyComponent extends React.Component {
   constructor(props) {
-    super();
+    super()
 
-    console.log(this.props); // prints undefined
+    console.log(this.props) // prints undefined
 
     // but props parameter is still available
-    console.log(props); // prints { name: 'John', age: 42 }
+    console.log(props) // prints { name: 'John', age: 42 }
   }
 
   render() {
     // no difference outside constructor
-    console.log(this.props); // prints { name: 'John', age: 42 }
+    console.log(this.props) // prints { name: 'John', age: 42 }
   }
 }
 ```
@@ -763,14 +757,14 @@ export const UnusedComponent = /* ... */;
 
 ```javascript
 // IntermediateComponent.js
-export { SomeComponent as default } from "./MoreComponents.js";
+export { SomeComponent as default } from './MoreComponents.js'
 ```
 
 그리고 lazy 함수를 이용해서 아래와 같이 임포트 할 수 있다.
 
 ```javascript
-import React, { lazy } from "react";
-const SomeComponent = lazy(() => import("./IntermediateComponent.js"));
+import React, { lazy } from 'react'
+const SomeComponent = lazy(() => import('./IntermediateComponent.js'))
 ```
 
 ### Why React uses `className` over `class` attribute?
@@ -822,7 +816,7 @@ render() {
 portals 은 상위 Component 의 DOM 계층 구조 외부에 존재하는 DOM 노드로, 자식을 render 하는데 권장되는 방법이다.
 
 ```javascript
-ReactDOM.createPortal(child, container);
+ReactDOM.createPortal(child, container)
 ```
 
 첫번째 인자는 React Child에서만 렌더링이 가능하며, 여기에는 element, string, fragment 가 포함된다. 두번째 인자는 DOM 엘리먼트다.
@@ -838,8 +832,8 @@ state의 사용에 종속적인 컴포넌트를 stateful component라고 한다.
 ```javascript
 class App extends Component {
   constructor(props) {
-    super(props);
-    this.state = { count: 0 };
+    super(props)
+    this.state = { count: 0 }
   }
 
   render() {
@@ -866,14 +860,14 @@ React가 development로 실행한다면, 자동으로 컴포넌트에 있는 pro
 아래와 같이 쓸수 있다.
 
 ```javascript
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react'
+import PropTypes from 'prop-types'
 
 class User extends React.Component {
   static propTypes = {
     name: PropTypes.string.isRequired,
-    age: PropTypes.number.isRequired
-  };
+    age: PropTypes.number.isRequired,
+  }
 
   render() {
     return (
@@ -881,7 +875,7 @@ class User extends React.Component {
         <h1>{`Welcome, ${this.props.name}`}</h1>
         <h2>{`Age, ${this.props.age}`}</h2>
       </>
-    );
+    )
   }
 }
 ```
@@ -913,26 +907,26 @@ Error boundaries란 하위 component tree 에서 자바스크립트 에러 를 c
 ```javascript
 class ErrorBoundary extends React.Component {
   constructor(props) {
-    super(props);
-    this.state = { hasError: false };
+    super(props)
+    this.state = { hasError: false }
   }
 
   componentDidCatch(error, info) {
     // 에러 리포틍 서비스를 위해 로그를 기록할 수도 있고
-    logErrorToMyService(error, info);
+    logErrorToMyService(error, info)
   }
 
   static getDerivedStateFromError(error) {
     // fallback UI를 표현하기 위해여 state를 업데이트 할 수도 있다.
-    return { hasError: true };
+    return { hasError: true }
   }
 
   render() {
     if (this.state.hasError) {
       // custom Fallback UI를 그릴 수 있다.
-      return <h1>{"Something went wrong."}</h1>;
+      return <h1>{'Something went wrong.'}</h1>
     }
-    return this.props.children;
+    return this.props.children
   }
 }
 ```
@@ -984,16 +978,16 @@ ReactDOM.render(element, container[, callback])
 
 ```jsx
 // using Express
-import { renderToString } from "react-dom/server";
-import MyPage from "./MyPage";
+import { renderToString } from 'react-dom/server'
+import MyPage from './MyPage'
 
-app.get("/", (req, res) => {
-  res.write("<!DOCTYPE html><html><head><title>My Page</title></head><body>");
-  res.write('<div id="content">');
-  res.write(renderToString(<MyPage />));
-  res.write("</div></body></html>");
-  res.end();
-});
+app.get('/', (req, res) => {
+  res.write('<!DOCTYPE html><html><head><title>My Page</title></head><body>')
+  res.write('<div id="content">')
+  res.write(renderToString(<MyPage />))
+  res.write('</div></body></html>')
+  res.end()
+})
 ```
 
 ### How to use innerHTML in React?
@@ -1002,11 +996,11 @@ browser DOM에서 `innerHTML`대신 `dangerouslySetInnerHTML`를 사용할 수 �
 
 ```javascript
 function createMarkup() {
-  return { __html: "First &middot; Second" };
+  return { __html: 'First &middot; Second' }
 }
 
 function MyComponent() {
-  return <div dangerouslySetInnerHTML={createMarkup()} />;
+  return <div dangerouslySetInnerHTML={createMarkup()} />
 }
 ```
 
@@ -1033,7 +1027,7 @@ React 엘리먼트에서 이벤트를 다루는 것은 문법상 약간의 차�
 
 ```jsx
 {
-  todos.map((todo, index) => <Todo {...todo} key={index} />);
+  todos.map((todo, index) => <Todo {...todo} key={index} />)
 }
 ```
 
@@ -1041,7 +1035,7 @@ React 엘리먼트에서 이벤트를 다루는 것은 문법상 약간의 차�
 
 ```jsx
 {
-  todos.map(todo => <Todo {...todo} key={todo.id} />);
+  todos.map((todo) => <Todo {...todo} key={todo.id} />)
 }
 ```
 
@@ -1067,16 +1061,16 @@ componentDidMount() {
 ```jsx
 class MyComponent extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       records: [],
-      inputValue: this.props.inputValue
-    };
+      inputValue: this.props.inputValue,
+    }
   }
 
   render() {
-    return <div>{this.state.inputValue}</div>;
+    return <div>{this.state.inputValue}</div>
   }
 }
 ```
@@ -1086,15 +1080,15 @@ props를 render 함수 내에서 쓰면 값을 업데이트 한다.
 ```jsx
 class MyComponent extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
-      record: []
-    };
+      record: [],
+    }
   }
 
   render() {
-    return <div>{this.props.inputValue}</div>;
+    return <div>{this.props.inputValue}</div>
   }
 }
 ```
@@ -1109,7 +1103,7 @@ const MyComponent = ({ name, address }) => (
     <h2>{name}</h2>
     {address && <p>{address}</p>}
   </div>
-);
+)
 ```
 
 if-else도 삼항연산자를 활용하면 아래와 같이 할 수 있다.
@@ -1118,9 +1112,9 @@ if-else도 삼항연산자를 활용하면 아래와 같이 할 수 있다.
 const MyComponent = ({ name, address }) => (
   <div>
     <h2>{name}</h2>
-    {address ? <p>{address}</p> : <p>{"Address is not available"}</p>}
+    {address ? <p>{address}</p> : <p>{'Address is not available'}</p>}
   </div>
-);
+)
 ```
 
 ### Why we need to be careful when spreading props on DOM elements?
@@ -1129,12 +1123,12 @@ spread prop를 쓴다면, HTML에 알수없는 속성을 추가할 수 있는 �
 
 ```javascript
 const ComponentA = () => (
-  <ComponentB isDisplay={true} className={"componentStyle"} />
-);
+  <ComponentB isDisplay={true} className={'componentStyle'} />
+)
 
 const ComponentB = ({ isDisplay, ...domProps }) => (
-  <div {...domProps}>{"ComponentB"}</div>
-);
+  <div {...domProps}>{'ComponentB'}</div>
+)
 ```
 
 ### How you use decorators in React?
@@ -1142,21 +1136,21 @@ const ComponentB = ({ isDisplay, ...domProps }) => (
 클래스 컴포넌트에 데코레이터를 쓸 수 있으며, 이는 함수에 컴포넌트를 넘기는 것과 동일하다. 데코레이터는 유연하고 읽기 쉬운 방법으로 컴포넌트를 기능적으로 수정할 수 있도록 한다.
 
 ```javascript
-@setTitle("Profile")
+@setTitle('Profile')
 class Profile extends React.Component {
   //....
 }
-const setTitle = title => WrappedComponent => {
+const setTitle = (title) => (WrappedComponent) => {
   return class extends React.Component {
     componentDidMount() {
-      document.title = title;
+      document.title = title
     }
 
     render() {
-      return <WrappedComponent {...this.props} />;
+      return <WrappedComponent {...this.props} />
     }
-  };
-};
+  }
+}
 ```
 
 주의: 데코레이터는 es7 문법에 포함되지 못하고 현재 stage2 단계에 있다.
@@ -1166,17 +1160,17 @@ const setTitle = title => WrappedComponent => {
 함수형 컴포넌트를 기반으로한 메모이제이션이 가능한 라이브러리가 있다. 예를 들어, `moize`라이브러리를 활용하면, 다른 컴포넌트 내에서 컴포넌트를 메모이제이션 할 수 있다.
 
 ```javascript
-import moize from "moize";
-import Component from "./components/Component"; // this module exports a non-memoized component
+import moize from 'moize'
+import Component from './components/Component' // this module exports a non-memoized component
 
-const MemoizedFoo = moize.react(Component);
+const MemoizedFoo = moize.react(Component)
 
 const Consumer = () => {
-  <div>
-    {"I will memoize the following entry:"}
+  ;<div>
+    {'I will memoize the following entry:'}
     <MemoizedFoo />
-  </div>;
-};
+  </div>
+}
 ```
 
 ### How you implement Server Side Rendering or SSR?
@@ -1184,10 +1178,10 @@ const Consumer = () => {
 React는 이미 노드 서버에서 렌더링을 다룰 수 있도록 지원되고 있다. 클라이언트 사이드와 동일하게 렌더링할 수 있는 특수한 버전의 DOM renderer가 제공되고 있다.
 
 ```javascript
-import ReactDOMServer from "react-dom/server";
-import App from "./App";
+import ReactDOMServer from 'react-dom/server'
+import App from './App'
 
-ReactDOMServer.renderToString(<App />);
+ReactDOMServer.renderToString(<App />)
 ```
 
 이 메소드는 일반적인 HTML을 string으로 내보내며, 이는 서버의 응답 일부를 페이지 본문 내부에 위치시킬 수 있다. 클라이언트 사이드에서, 리액트는 미리 렌더링된 컨텐츠를 감지하고 나머지를 원활하게 렌더링할 수 있다.
@@ -1284,9 +1278,9 @@ render props와 HOC 모두 한개의 자식만 렌더링 하지만, 대부분의
 
 ```javascript
 export default React.createClass({
-  displayName: "TodoApp"
+  displayName: 'TodoApp',
   // ...
-});
+})
 ```
 
 이렇게 하는게 더 좋다.
@@ -1323,27 +1317,27 @@ export default class TodoApp extends React.Component {
 아래 코드 참조.
 
 ```javascript
-import HomePage from "./HomePage";
-import AboutPage from "./AboutPage";
-import ServicesPage from "./ServicesPage";
-import ContactPage from "./ContactPage";
+import HomePage from './HomePage'
+import AboutPage from './AboutPage'
+import ServicesPage from './ServicesPage'
+import ContactPage from './ContactPage'
 
 const PAGES = {
   home: HomePage,
   about: AboutPage,
   services: ServicesPage,
-  contact: ContactPage
-};
+  contact: ContactPage,
+}
 
-const Page = props => {
-  const Handler = PAGES[props.page] || ContactPage;
+const Page = (props) => {
+  const Handler = PAGES[props.page] || ContactPage
 
-  return <Handler {...props} />;
-};
+  return <Handler {...props} />
+}
 
 Page.propTypes = {
-  page: PropTypes.oneOf(Object.keys(PAGES)).isRequired
-};
+  page: PropTypes.oneOf(Object.keys(PAGES)).isRequired,
+}
 ```
 
 ### Why we need to pass a function to setState()?
@@ -1354,9 +1348,9 @@ Page.propTypes = {
 
 ```javascript
 // assuming this.state.count === 0
-this.setState({ count: this.state.count + 1 });
-this.setState({ count: this.state.count + 1 });
-this.setState({ count: this.state.count + 1 });
+this.setState({ count: this.state.count + 1 })
+this.setState({ count: this.state.count + 1 })
+this.setState({ count: this.state.count + 1 })
 // this.state.count === 1, not 3
 ```
 
@@ -1364,8 +1358,8 @@ this.setState({ count: this.state.count + 1 });
 
 ```javascript
 this.setState((prevState, props) => ({
-  count: prevState.count + props.increment
-}));
+  count: prevState.count + props.increment,
+}))
 // this.state.count === 3 as expected
 ```
 
@@ -1374,7 +1368,7 @@ this.setState((prevState, props) => ({
 `React.StrictMode`는 애플리케이션의 잠재적인 문제를 하이라이팅 해주는 유용한 컴포넌트다. `<Fragment>`와 마찬가지로, `<StrictMode>`는 추가적으로 DOM을 렌더링하지 않는다. 이는 단지 자식 컴포넌트의 추가적인 체크와 경고를 할 뿐이다. 그리고 이러한 체크는 development 에서만 가능하다.
 
 ```javascript
-import React from "react";
+import React from 'react'
 
 function ExampleApplication() {
   return (
@@ -1388,7 +1382,7 @@ function ExampleApplication() {
       </React.StrictMode>
       <Footer />
     </div>
-  );
+  )
 }
 ```
 
@@ -1401,12 +1395,12 @@ function ExampleApplication() {
 가장 유명한 사용법중 하나는 `PureRenderMixin`이다. 이전 props또는 state와 얕은 비교를 했을 때 일치하는 경우, 리렌더링을 막아주는 역할을 한다.
 
 ```javascript
-const PureRenderMixin = require("react-addons-pure-render-mixin");
+const PureRenderMixin = require('react-addons-pure-render-mixin')
 
 const Button = React.createClass({
-  mixins: [PureRenderMixin]
+  mixins: [PureRenderMixin],
   // ...
-});
+})
 ```
 
 ### Why is `isMounted()` an anti-pattern and what is the proper solution?
@@ -1455,15 +1449,15 @@ class SomeComponent extends Component {
 ```javascript
 class myComponent extends Component {
   render() {
-    return <div />;
+    return <div />
   }
 }
 
-export default myComponent;
+export default myComponent
 ```
 
 ```javascript
-import MyComponent from "./MyComponent";
+import MyComponent from './MyComponent'
 ```
 
 ### Are custom DOM attributes supported in React v16?
@@ -1473,7 +1467,7 @@ import MyComponent from "./MyComponent";
 예를 들어, 과거에는 아래와 같이 동작했다.
 
 ```javascript
-<div mycustomattribute={"something"} />
+<div mycustomattribute={'something'} />
 ```
 
 ```html
@@ -1497,10 +1491,10 @@ es6
 ```javascript
 class MyComponent extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       /* initial state */
-    };
+    }
   }
 }
 ```
@@ -1512,9 +1506,9 @@ const MyComponent = React.createClass({
   getInitialState() {
     return {
       /* initial state */
-    };
-  }
-});
+    }
+  },
+})
 ```
 
 ### Can you force a component to re-render without calling setState?
@@ -1522,7 +1516,7 @@ const MyComponent = React.createClass({
 기본적으로, state나 prop의 변화가 있을 때만 컴포넌트가 리렌더링 된다. 만약 `render()` 메서드가 외부의 다른 데이터에 의존적이라면, `forceUpdate()`를 통해서 컴포넌트를 리렌더링 할 수 있다.
 
 ```javascript
-component.forceUpdate(callback);
+component.forceUpdate(callback)
 ```
 
 다만 이러한 방법은 권장되지 않으며, `render()`메소드에서 `this.props`나 `this.state`를 참조하는 것이 권장된다.
@@ -1534,8 +1528,8 @@ component.forceUpdate(callback);
 ```javascript
 class MyComponent extends React.Component {
   constructor(props) {
-    super(props);
-    console.log(this.props); // { name: 'John', ... }
+    super(props)
+    console.log(this.props) // { name: 'John', ... }
   }
 }
 ```
@@ -1543,8 +1537,8 @@ class MyComponent extends React.Component {
 ```javascript
 class MyComponent extends React.Component {
   constructor(props) {
-    super();
-    console.log(this.props); // undefined
+    super()
+    console.log(this.props) // undefined
   }
 }
 ```
@@ -1596,10 +1590,10 @@ ReactComponent.propTypes = {
   arrayWithShape: React.PropTypes.arrayOf(
     React.PropTypes.shape({
       color: React.PropTypes.string.isRequired,
-      fontSize: React.PropTypes.number.isRequired
-    })
-  ).isRequired
-};
+      fontSize: React.PropTypes.number.isRequired,
+    }),
+  ).isRequired,
+}
 ```
 
 ### How to conditionally apply class attributes?
@@ -1651,13 +1645,17 @@ for는 자바스크립트의 예약어이므로, `htmlFor`를 사용해야 한�
 spread 연산자를 사용하면 된다.
 
 ```html
- <button style={{...styles.panel.button, ...styles.panel.submitButton}}>{'Submit'}</button>
+<button style="{{...styles.panel.button," ...styles.panel.submitButton}}>
+  {'Submit'}
+</button>
 ```
 
 React Native라면 array를 사용하면 된다.
 
 ```html
-<button style={[styles.panel.button, styles.panel.submitButton]}>{'Submit'}</button>
+<button style="{[styles.panel.button," styles.panel.submitButton]}>
+  {'Submit'}
+</button>
 ```
 
 ### How to re-render the view when the browser is resized?
@@ -1666,11 +1664,11 @@ React Native라면 array를 사용하면 된다.
 
 ```javascript
 class WindowDimensions extends React.Component {
-  constructor(props){
-    super(props);
-    this.updateDimensions = this.updateDimensions.bind(this);
+  constructor(props) {
+    super(props)
+    this.updateDimensions = this.updateDimensions.bind(this)
   }
-   
+
   componentWillMount() {
     this.updateDimensions()
   }
@@ -1684,11 +1682,15 @@ class WindowDimensions extends React.Component {
   }
 
   updateDimensions() {
-    this.setState({width: window.innerWidth, height: window.innerHeight})
+    this.setState({ width: window.innerWidth, height: window.innerHeight })
   }
 
   render() {
-    return <span>{this.state.width} x {this.state.height}</span>
+    return (
+      <span>
+        {this.state.width} x {this.state.height}
+      </span>
+    )
   }
 }
 ```
@@ -1763,11 +1765,7 @@ const data = { name: 'John', age: 42 }
 
 class User extends React.Component {
   render() {
-    return (
-      <pre>
-        {JSON.stringify(data, null, 2)}
-      </pre>
-    )
+    return <pre>{JSON.stringify(data, null, 2)}</pre>
   }
 }
 
@@ -1783,7 +1781,7 @@ props은 불변이며, 하향식으로 전달되는 것이 `React`의 철학이�
 `input` 엘리먼트에 ref를 만들고, 이를 `componentDidMount()`에서 쓰면 된다.
 
 ```javascript
-class App extends React.Component{
+class App extends React.Component {
   componentDidMount() {
     this.nameInput.focus()
   }
@@ -1791,11 +1789,9 @@ class App extends React.Component{
   render() {
     return (
       <div>
+        <input defaultValue={"Won't focus"} />
         <input
-          defaultValue={'Won\'t focus'}
-        />
-        <input
-          ref={(input) => this.nameInput = input}
+          ref={(input) => (this.nameInput = input)}
           defaultValue={'Will focus'}
         />
       </div>
@@ -1810,24 +1806,27 @@ ReactDOM.render(<App />, document.getElementById('app'))
 
 1. state를 병합할 object를 `setState()`에 서 사용하는 법
    - `Object.assign()로 Object의 복사본을 만든다.
+
 ```javascript
 const user = Object.assign({}, this.state.user, { age: 42 })
 this.setState({ user })-
 ```
-   - spread 연산자를 사용하는 법 
+
+- spread 연산자를 사용하는 법
+
 ```javascript
 const user = { ...this.state.user, age: 42 }
 this.setState({ user })
 ```
 
 2. `setState()`와 함수를 사용하는 법
-   
+
 ```javascript
-this.setState(prevState => ({
+this.setState((prevState) => ({
   user: {
     ...prevState.user,
-    age: 42
-  }
+    age: 42,
+  },
 }))
 ```
 
@@ -1849,7 +1848,7 @@ this.setState({
 ```javascript
 // Correct
 this.setState((prevState, props) => ({
-  counter: prevState.counter + props.increment
+  counter: prevState.counter + props.increment,
 }))
 ```
 
@@ -1862,27 +1861,31 @@ const REACT_VERSION = React.version
 
 ReactDOM.render(
   <div>{`React version: ${REACT_VERSION}`}</div>,
-  document.getElementById('app')
+  document.getElementById('app'),
 )
 ```
 
 ### What are the approaches to include polyfills in your `create-react-app`?
 
 1. `core-js`를 수동으로 임포트하는 법
-`polyfills.js`과 같은 파일을 만들고, 이를 루트인 `index.js`에서 임포트 한다. 그리고 `core-js`를 설치하여 필요한 기능을 임포트 한다.
+   `polyfills.js`과 같은 파일을 만들고, 이를 루트인 `index.js`에서 임포트 한다. 그리고 `core-js`를 설치하여 필요한 기능을 임포트 한다.
+
 ```javascript
 import 'core-js/fn/array/find'
 import 'core-js/fn/array/includes'
 import 'core-js/fn/number/is-nan'
 ```
+
 2. 폴리필 서비스를 이용하는 방법
-`polyfill.io`를 CDN으로 가져와서, `index.html`에 추가하는 방법
+   `polyfill.io`를 CDN으로 가져와서, `index.html`에 추가하는 방법
+
 ```html
-<script src='https://cdn.polyfill.io/v2/polyfill.min.js?features=default,Array.prototype.includes'></script>
+<script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=default,Array.prototype.includes"></script>
 ```
+
 ### How to use https instead of http in create-react-app?
 
-환경설정에 `HTTPS=true`를 세팅하면 된다. 
+환경설정에 `HTTPS=true`를 세팅하면 된다.
 
 pacakge.json
 
@@ -1932,11 +1935,13 @@ componentWillUnmount() {
 react는 자동으로 vender prefix를 붙여주지 않으므로, 수동으로 붙여야 한다.
 
 ```javascript
-<div style={{
-  transform: 'rotate(90deg)',
-  WebkitTransform: 'rotate(90deg)', // note the capital 'W' here
-  msTransform: 'rotate(90deg)' // 'ms' is the only lowercase vendor prefix
-}} />
+<div
+  style={{
+    transform: 'rotate(90deg)',
+    WebkitTransform: 'rotate(90deg)', // note the capital 'W' here
+    msTransform: 'rotate(90deg)', // 'ms' is the only lowercase vendor prefix
+  }}
+/>
 ```
 
 ### How to import and export components using React and ES6?
@@ -1948,12 +1953,8 @@ import React from 'react'
 import User from 'user'
 
 export default class MyProfile extends React.Component {
-  render(){
-    return (
-      <User type="customer">
-        //...
-      </User>
-    )
+  render() {
+    return <User type="customer">//...</User>
   }
 }
 ```
@@ -1995,10 +1996,11 @@ callback을 통한 ref prop를 사용하여 HTMLInputElement 객체에 대한 �
 1. render 메서드에서 ref를 생성한다.
 
 ```javascript
-<input ref={input => this.inputElement = input} />
+<input ref={(input) => (this.inputElement = input)} />
 ```
 
 2. 이벤트 핸들러에서 클릭 이벤트를 트리거 한다.
+
 ```javascript
 this.inputElement.click()
 ```
@@ -2037,6 +2039,7 @@ profile/
 ```
 
 2. 파일 타입 별로 분류하는 법
+
 ```
 api/
 ├─ APIUtils.js
@@ -2069,16 +2072,10 @@ React Transition Group과 React Motion이 React 생태계에서 유명한 애니
 export const colors = {
   white,
   black,
-  blue
+  blue,
 }
 
-export const space = [
-  0,
-  8,
-  16,
-  32,
-  64
-]
+export const space = [0, 8, 16, 32, 64]
 ```
 
 그리고 각각의 컴포넌트에서 이를 임포트 하면 된다.
@@ -2103,33 +2100,33 @@ class MyComponent extends React.Component {
     super(props)
     this.state = {
       employees: [],
-      error: null
+      error: null,
     }
   }
 
   componentDidMount() {
     fetch('https://api.example.com/items')
-      .then(res => res.json())
+      .then((res) => res.json())
       .then(
         (result) => {
           this.setState({
-            employees: result.employees
+            employees: result.employees,
           })
         },
         (error) => {
           this.setState({ error })
-        }
+        },
       )
   }
 
   render() {
     const { error, employees } = this.state
     if (error) {
-      return <div>Error: {error.message}</div>;
+      return <div>Error: {error.message}</div>
     } else {
       return (
         <ul>
-          {employees.map(item => (
+          {employees.map((item) => (
             <li key={employee.name}>
               {employee.name}-{employees.experience}
             </li>
@@ -2146,10 +2143,7 @@ class MyComponent extends React.Component {
 **Render Props**는 값이 함수인 prop을 활용하여 컴포넌트 간에 코드를 share할 수 있게 해주는 방법이다. 아래 컴포넌트는 `render prop`을 활용하여 React element를 리턴한다.
 
 ```javascript
-<DataProvider render={data => (
-  <h1>{`Hello ${data.target}`}</h1>
-)}/>
+<DataProvider render={(data) => <h1>{`Hello ${data.target}`}</h1>} />
 ```
 
 React Router 와 DownShift 라이브러리가 이 패턴을 사용한다.
-

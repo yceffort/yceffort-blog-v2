@@ -9,11 +9,7 @@ category: typescript
 template: post
 ---
 
-```toc
-tight: true,
-from-heading: 2
-to-heading: 3
-```
+## Table of Contents
 
 출처는 [여기](https://devblogs.microsoft.com/typescript/announcing-typescript-4-0/)
 
@@ -112,14 +108,14 @@ const c4 = curry(fn1, 1, 'abc', true, ['x', 'y']) // () => number
 튜플에 이름을 지정할 수 있다.
 
 ```typescript
-type Range = [start: number, end: number];
-type Foo = [first: number, second?: string, ...rest: any[]];
+type Range = [start: number, end: number]
+type Foo = [first: number, second?: string, ...rest: any[]]
 ```
 
 대신 하나라도 이름을 지정하면, 그 뒤에도 주르륵 이름을 지정해야 한다.
 
 ```typescript
-type Bar = [first: string, number];
+type Bar = [first: string, number]
 // error! Tuple members must all have names or all not have names.
 ```
 
@@ -203,27 +199,27 @@ a = a ?? b
 
 ```typescript
 const obj = {
-    get prop() {
-        console.log("getter has run");
+  get prop() {
+    console.log('getter has run')
 
-        // Replace me!
-        return Math.random() < 0.5;
-    },
-    set prop(_val: boolean) {
-        console.log("setter has run");
-    }
-};
-
-function foo() {
-    console.log("right side evaluated");
-    return true;
+    // Replace me!
+    return Math.random() < 0.5
+  },
+  set prop(_val: boolean) {
+    console.log('setter has run')
+  },
 }
 
-console.log("This one always runs the setter");
-obj.prop = obj.prop || foo();
+function foo() {
+  console.log('right side evaluated')
+  return true
+}
 
-console.log("This one *sometimes* runs the setter");
-obj.prop ||= foo();
+console.log('This one always runs the setter')
+obj.prop = obj.prop || foo()
+
+console.log('This one *sometimes* runs the setter')
+obj.prop ||= foo()
 ```
 
 ## catch binding에 unknown사용

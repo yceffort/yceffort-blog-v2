@@ -1,5 +1,5 @@
 ---
-title: "Fiber: 리액트의 새로운 재조정 알고리즘인 Fiber에 대해 살펴보기"
+title: 'Fiber: 리액트의 새로운 재조정 알고리즘인 Fiber에 대해 살펴보기'
 tags:
   - javascript
   - web
@@ -14,13 +14,10 @@ category: javascript
 slug: /2020/07/new-reconciliation-algorithm-in-react/
 template: post
 ---
-[Inside Fiber: in-depth overview of the new reconciliation algorithm in React](https://indepth.dev/inside-fiber-in-depth-overview-of-the-new-reconciliation-algorithm-in-react/)을 번역했습니다. 
 
-```toc
-tight: true,
-from-heading: 2
-to-heading: 3
-```
+[Inside Fiber: in-depth overview of the new reconciliation algorithm in React](https://indepth.dev/inside-fiber-in-depth-overview-of-the-new-reconciliation-algorithm-in-react/)을 번역했습니다.
+
+## Table of Contents
 
 React는 사용자 인터페이스를 구축하기 위한 자바스크립트 라이브러리다. 이것의 중심에는 컴포넌트의 상태 변화를 추적하고, 업데이트된 상태를 화면에 반영하는 메커니즘(Change Detection)이 존재한다. 리액트에서는 이것을 Reconciliation(이하 재조정)이라고 한다. `setState`메소드를 호출하여 `state`또는 `prop`값이 변화하였는지 확인하고, UI의 컴포넌트를 다시 렌더링 한다.
 
@@ -28,9 +25,9 @@ React는 사용자 인터페이스를 구축하기 위한 자바스크립트 라
 
 리액트 엘리먼트 트리외에도, 프레임워크에는 state를 유지하기 위해 다양한 인스턴스를 사용한다. (컴포넌트, DOM 노드 등) 리액트 버전 16부터는, 내부 인스턴스 트리와 이를 관리하는 알고리즘을 코드명 `Fiber`로 새롭게 구현했다. Fiber 아키텍쳐가 제공하는 이점에 대한 자세한 내용은 [여기](https://indepth.dev/the-how-and-why-on-reacts-usage-of-linked-list-in-fiber-to-walk-the-components-tree/)를 참조하면 된다.
 
-이 아티클은 리액트 내부 구조를 알리기 위한 목적으로 제작된 첫번째 글이다. 이 글에서 알고리즘과 관련된 중요한 개념과, 데이터 구조에 대한 심층적인 개요를 제공한다. 이 후에는, Fiber트리를 횡단하고 처리하는데 사용되는 알고리즘과 주요 기능을 탐구할 것이다. 다음 글에서는 리액트가 알고리즘을 활용하여 초기 렌더링과 `state`를 처리하는 법, 그리고 `props`을 업데이트 하는 법을 볼 것이다. 그 다음에 스케줄러의 세부사항, 재조정과정, 그리고 이를 작성하는 메커니즘을 볼 것이다. 
+이 아티클은 리액트 내부 구조를 알리기 위한 목적으로 제작된 첫번째 글이다. 이 글에서 알고리즘과 관련된 중요한 개념과, 데이터 구조에 대한 심층적인 개요를 제공한다. 이 후에는, Fiber트리를 횡단하고 처리하는데 사용되는 알고리즘과 주요 기능을 탐구할 것이다. 다음 글에서는 리액트가 알고리즘을 활용하여 초기 렌더링과 `state`를 처리하는 법, 그리고 `props`을 업데이트 하는 법을 볼 것이다. 그 다음에 스케줄러의 세부사항, 재조정과정, 그리고 이를 작성하는 메커니즘을 볼 것이다.
 
-리액트의 동시성 작업에 숨겨진 마술을 이해하기 위해 이 글을 보기를 권한다. 만약 리액트에 기여할 생각이 있다면, 이 글은 훌륭한 가이드가 될 것이다. 
+리액트의 동시성 작업에 숨겨진 마술을 이해하기 위해 이 글을 보기를 권한다. 만약 리액트에 기여할 생각이 있다면, 이 글은 훌륭한 가이드가 될 것이다.
 
 확실히 많은 내용을 담고 있으니, 이해되지 않더라고 스트레스는 받을 필요가 없다. 모든 가치있는 것을 이해하는데는 시간이 든다. 리액트를 사용하기 위해 이 모든 것을 알 필요가 없다. 다만 내부에서 어떻게 작동하는지를 이해하는데 도움이 된다.
 
@@ -38,28 +35,28 @@ React는 사용자 인터페이스를 구축하기 위한 자바스크립트 라
 
 이 글에서 다룰 예제를 소개한다. 버튼 하나가 있고, 이버튼이 화면에 나와있는 숫자를 하나씩 업데이트 한다.
 
-
 ```javascript
 class ClickCounter extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {count: 0};
-        this.handleClick = this.handleClick.bind(this);
-    }
+  constructor(props) {
+    super(props)
+    this.state = { count: 0 }
+    this.handleClick = this.handleClick.bind(this)
+  }
 
-    handleClick() {
-        this.setState((state) => {
-            return {count: state.count + 1};
-        });
-    }
+  handleClick() {
+    this.setState((state) => {
+      return { count: state.count + 1 }
+    })
+  }
 
-
-    render() {
-        return [
-            <button key="1" onClick={this.handleClick}>Update counter</button>,
-            <span key="2">{this.state.count}</span>
-        ]
-    }
+  render() {
+    return [
+      <button key="1" onClick={this.handleClick}>
+        Update counter
+      </button>,
+      <span key="2">{this.state.count}</span>,
+    ]
+  }
 }
 ```
 
@@ -137,7 +134,7 @@ class ClickCounter {
 ]
 ```
 
-여기서 우리는 리액트가 [$$typeof](https://overreacted.io/why-do-react-elements-have-typeof-property/)를 오브젝트애ㅔ 추가하여 각 리엑트 엘리먼트를 구별하는 것을 볼 수 있다. 여기에는 다시 `type` `key` `props`등 의 프로퍼티를 가지고 있다. 이 값들은 `React.createElement`에서 넘어온 값들이다. 리액트가 어떻게 `span` `button` 등의 하위 노드에서 텍스트를 어떻게 나타내는지 주목하자. 그리고 클릭 핸들러는 `button` 컴포넌트의 props로 구성되어 있다. 그리고 이 문서에서는 다루지 않는 ref와 같은 다른 필드들도 리엑트 엘리먼트에 존재한다.
+여기서 우리는 리액트가 [\$\$typeof](https://overreacted.io/why-do-react-elements-have-typeof-property/)를 오브젝트애ㅔ 추가하여 각 리엑트 엘리먼트를 구별하는 것을 볼 수 있다. 여기에는 다시 `type` `key` `props`등 의 프로퍼티를 가지고 있다. 이 값들은 `React.createElement`에서 넘어온 값들이다. 리액트가 어떻게 `span` `button` 등의 하위 노드에서 텍스트를 어떻게 나타내는지 주목하자. 그리고 클릭 핸들러는 `button` 컴포넌트의 props로 구성되어 있다. 그리고 이 문서에서는 다루지 않는 ref와 같은 다른 필드들도 리엑트 엘리먼트에 존재한다.
 
 `ClickCounter`의 리액트 엘리먼트는 별다른 key나 props를 가지고 있지 않다.
 
@@ -153,7 +150,7 @@ class ClickCounter {
 
 ### Fiber 노드
 
-재조정과정에서, 리액트 엘리먼트의 render 로 부터 리턴된 모든 데이터들은 fiber 노드들의 트리에 병합된다. 모든 리액트 엘리먼트는 이와 대응하는 Fiber 노드가 있다. 리액트 엘리먼트와는 다르게, 파이버는 모든 `render` 시에 재생성되는 것이 아니다. 이는 컴포넌트 상태와 DOM 정보를 가지고 있는 변이가능한 데이터 구조다. 
+재조정과정에서, 리액트 엘리먼트의 render 로 부터 리턴된 모든 데이터들은 fiber 노드들의 트리에 병합된다. 모든 리액트 엘리먼트는 이와 대응하는 Fiber 노드가 있다. 리액트 엘리먼트와는 다르게, 파이버는 모든 `render` 시에 재생성되는 것이 아니다. 이는 컴포넌트 상태와 DOM 정보를 가지고 있는 변이가능한 데이터 구조다.
 
 앞에서 우리는 리액트 엘리먼트의 유형애 따라 프레임워크가 다른 활동을 할 수 있다고 언급했다. 우리의 샘플 애플리케이션에서 `ClickCounter` 클래스 컴포넌트의 경우에는 라이프 사이클 메소드와 렌더 메소드를 호출하고, `<span />` 호스트 컴포넌트의 경우 (DOM 노드) DOM Mutation(변이)를 수행한다. 따라서 리액트의 각 엘리먼트는 수행해야하는 작업을 각 해당하는 Fiber 노드로 변환 시킨다. [해당 코드](https://github.com/facebook/react/blob/769b1f270e1251d9dbdce0fcbd9e92e502d059b8/packages/shared/ReactWorkTags.js)
 
@@ -193,10 +190,8 @@ function updateHostComponent(current, workInProgress, renderExpirationTime) {...
 
 대부분의 `state` 또는 `props` 의 변화가 어떤 부수효과를 야기할 수 있을지 알수 있다. 그리고 effect를 적용하는 것은 일종의 작업의 종류이기 때문에, Fiber노드는 이러한 effect를 추적하기 위한 편리한 메커니즘이다. 각 fiber 노드는 그것과 관련된 효과만을 가질 수 있다. 그리고 이것은 `effectTag`에 포함되어있다.
 
-
 ## 효과 목록
 
 리액트는 업데이트를 처리하기 위해 매우 신속하게 빠르고 처리하기 위해, 몇가지 흥미로운 기술을 사용했다. **그 중 하나가 빠른 반복을 위한 Fiber nodes와 effect 의 선형 리스트를 만드는 것이다.** 선형 리스트를 순회하는 것은 트리보다 훨씬 빠르며, 부수효과가 없는 노드에 시간을 할애할 필요도 없다.
 
 이 리스트의 목적은 DOM 업데이트 및 effect가 존재하는 노드를 표시하는 것이다. 이들은 `finishedWork` 트리의 서브셋이며, 이들은 `current` 및 `workInProgress`의 트리 자식 속성을 사용하는 대신 `nextEffect`라고 하는 속성을 사용한다.
-

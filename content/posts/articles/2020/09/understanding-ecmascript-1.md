@@ -9,11 +9,7 @@ category: javascript
 template: post
 ---
 
-```toc
-tight: true,
-from-heading: 2
-to-heading: 3
-```
+## Table of Contents
 
 ## 서두
 

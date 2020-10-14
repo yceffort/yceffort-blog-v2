@@ -6,13 +6,15 @@ tags:
   - javascript
 published: true
 date: 2020-01-09 09:09:03
-description: "# 문제의 시작 지난 주말, 엄청나게 급하게 빠른 속도로 프로젝트를 heroku에 올릴 일이 있었다. DB도
+description:
+  '# 문제의 시작 지난 주말, 엄청나게 급하게 빠른 속도로 프로젝트를 heroku에 올릴 일이 있었다. DB도
   새로만들어야하고, 로그인도 필요한 사이트라 DB는 Heroku의 Clean DB를, 로그인은 [google sign-in for
-  websites](https://developers.google.com/identity/sign-in/web)을 사용하..."
+  websites](https://developers.google.com/identity/sign-in/web)을 사용하...'
 category: browser
 slug: /2020/01/chrome-cookie-same-site-secure/
 template: post
 ---
+
 # 문제의 시작
 
 지난 주말, 엄청나게 급하게 빠른 속도로 프로젝트를 heroku에 올릴 일이 있었다. DB도 새로만들어야하고, 로그인도 필요한 사이트라 DB는 Heroku의 Clean DB를, 로그인은 [google sign-in for websites](https://developers.google.com/identity/sign-in/web)을 사용하였다. 처음에는 [passport google auth](https://github.com/jaredhanson/passport-google-oauth2)를 사용하려다가, 그냥 하는 김에 직접 api 도큐먼트를 보면서 진행하였다.
@@ -27,7 +29,7 @@ https://bugs.chromium.org/p/chromium/issues/detail?id=1019168#c26
 
 생각해보니 네이버 페이에서도 아래와 같은 메일을 받은 기억이 난다.
 
-```text
+```
 안녕하세요. 네이버페이입니다.
 구글에서 서비스하고 있는 크롬 브라우저 80버전에서부터 변경될 새로운 쿠키 정책 ( SameSite Cookie ) 에 따라
 네이버페이 Javascript SDK PC 결제창 호출 방식 중 레이어 타입 지원을 종료하게 될 예정입니다.
@@ -70,7 +72,7 @@ Cookie: visited=true
 이러한 쿠키는 사이트내 javascript 에서도 `document.cookie`를 통해 관리할 수 있다.
 
 ```javascript
-document.cookie = "visited=true; Max-Age=2600000; Secure"
+document.cookie = 'visited=true; Max-Age=2600000; Secure'
 document.cookie
 ```
 

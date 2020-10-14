@@ -15,11 +15,7 @@ slug: /2020/02/tensorflowjs-08-build-an-audio-recognizer/
 template: post
 ---
 
-```toc
-tight: true,
-from-heading: 1
-to-heading: 3
-```
+## Table of Contents
 
 # Transfer learning audio recognizer
 

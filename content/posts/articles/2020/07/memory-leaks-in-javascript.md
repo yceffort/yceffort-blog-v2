@@ -14,11 +14,7 @@ slug: /2020/07/memory-leaks-in-javascript/
 template: post
 ---
 
-```toc
-tight: true,
-from-heading: 2
-to-heading: 3
-```
+## Table of Contents
 
 [4 Types of Memory Leaks in JavaScript and How to Get Rid Of Them](https://auth0.com/blog/four-types-of-leaks-in-your-javascript-code-and-how-to-get-rid-of-them/)을 번역한 글입니다.
 

@@ -15,13 +15,10 @@ category: javascript
 slug: /2020/07/change-detection-in-angular-react/
 template: post
 ---
+
 [What every front-end developer should know about change detection in Angular and React](https://indepth.dev/what-every-front-end-developer-should-know-about-change-detection-in-angular-and-react/)를 번역/요약한 것입니다.
 
-```toc
-tight: true,
-from-heading: 2
-to-heading: 3
-```
+## Table of Contents
 
 요즘 거의 대부분의 웹 애플리케이션에서 Change Detection을 찾을 수 있다. 이는 인기있는 웹 프레임워크의 필수적인 부분이다. Data Grids나 stateful jquery 플러그인 등도 충분히 발전된 Change Detection를 가지고 있다. 그리고 아마도 대부분의 애플리케이션 코드 베이스에는 Change Detection가 존재할 가능성이 크다.
 
@@ -42,7 +39,7 @@ to-heading: 3
 상태 변화는, 이것을 감지해야 하며 이러한 변화를 반영해야 한다.
 
 ![](https://admin.indepth.dev/content/images/2019/11/image-10.png)
- 
+
 예제를 살펴보자.
 
 ## Rating Widget
@@ -55,75 +52,75 @@ to-heading: 3
 
 ```javascript
 export class RatingsComponent {
-    constructor() {
-        this._rating = 1;
-    }
+  constructor() {
+    this._rating = 1
+  }
 }
 ```
 
-위젯의 상태가 변화하게되면, 이를 화면에 반영해야 된다. 
+위젯의 상태가 변화하게되면, 이를 화면에 반영해야 된다.
 
 ```html
 <ul class="ratings">
-    <li class="star solid"></li>
-    <li class="star solid"></li>
-    <li class="star solid"></li>
-    <li class="star outline"></li>
-    <li class="star outline"></li>
+  <li class="star solid"></li>
+  <li class="star solid"></li>
+  <li class="star solid"></li>
+  <li class="star outline"></li>
+  <li class="star outline"></li>
 </ul>
 ```
 
 ### 초기화
 
-먼저, 구현하는데 필요한 돔 노드를 만들어야 한다. 
+먼저, 구현하는데 필요한 돔 노드를 만들어야 한다.
 
 ```javascript
 export class RatingsComponent {
-    // ...
-    init(container) {
-        this.list = document.createElement('ul');
-        this.list.classList.add('ratings');
-        this.list.addEventListener('click', (event) => {
-            this.rating = event.target.dataset.value;
-        });
+  // ...
+  init(container) {
+    this.list = document.createElement('ul')
+    this.list.classList.add('ratings')
+    this.list.addEventListener('click', (event) => {
+      this.rating = event.target.dataset.value
+    })
 
-        this.elements = [1, 2, 3, 4, 5].map((value) => {
-            const li = document.createElement('li');
-            li.classList.add('star', 'outline');
-            li.dataset.value = value;
-            this.list.appendChild(li);
-            return li;
-        });
+    this.elements = [1, 2, 3, 4, 5].map((value) => {
+      const li = document.createElement('li')
+      li.classList.add('star', 'outline')
+      li.dataset.value = value
+      this.list.appendChild(li)
+      return li
+    })
 
-        container.appendChild(this.list);
-    }
+    container.appendChild(this.list)
+  }
 }
 ```
 
 ### Change Detection
 
-별점에 변화가 있을 때 마다 이를 알아채야 한다. Change Detection의 기본적인 구현에서는, 자바스크립트에서 제공하는 [setter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/set)를 활용할 것이다. 따라서 별점을 위한 setter를 정의하고, 그 값이 변경될 때 마다 업데이트를 트리거 한다. DOM 업데이트는 목록 항목의 클래스를 변경하면서 수행한다. 
+별점에 변화가 있을 때 마다 이를 알아채야 한다. Change Detection의 기본적인 구현에서는, 자바스크립트에서 제공하는 [setter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/set)를 활용할 것이다. 따라서 별점을 위한 setter를 정의하고, 그 값이 변경될 때 마다 업데이트를 트리거 한다. DOM 업데이트는 목록 항목의 클래스를 변경하면서 수행한다.
 
 ```javascript
 export class RatingsComponent {
-    // ...
-    set rating(v) {
-        this._rating = v;
+  // ...
+  set rating(v) {
+    this._rating = v
 
-        // triggers DOM update
-        this.updateRatings();
-    }
+    // triggers DOM update
+    this.updateRatings()
+  }
 
-    get rating() {
-        return this._rating;
-    }
+  get rating() {
+    return this._rating
+  }
 
-    updateRatings() {
-        this.elements.forEach((element, index) => {
-            element.classList.toggle('solid', this.rating > index);
-            element.classList.toggle('outline', this.rating <= index);
-        });
-    }
+  updateRatings() {
+    this.elements.forEach((element, index) => {
+      element.classList.toggle('solid', this.rating > index)
+      element.classList.toggle('outline', this.rating <= index)
+    })
+  }
 }
 ```
 
@@ -141,11 +138,11 @@ export class RatingsComponent {
 
 ```html
 <ul class="rating" (click)="handleClick($event)">
-    <li [className]="'star ' + (rating > 0 ? 'solid' : 'outline')"></li>
-    <li [className]="'star ' + (rating > 1 ? 'solid' : 'outline')"></li>
-    <li [className]="'star ' + (rating > 2 ? 'solid' : 'outline')"></li>
-    <li [className]="'star ' + (rating > 3 ? 'solid' : 'outline')"></li>
-    <li [className]="'star ' + (rating > 4 ? 'solid' : 'outline')"></li>
+  <li [className]="'star ' + (rating > 0 ? 'solid' : 'outline')"></li>
+  <li [className]="'star ' + (rating > 1 ? 'solid' : 'outline')"></li>
+  <li [className]="'star ' + (rating > 2 ? 'solid' : 'outline')"></li>
+  <li [className]="'star ' + (rating > 3 ? 'solid' : 'outline')"></li>
+  <li [className]="'star ' + (rating > 4 ? 'solid' : 'outline')"></li>
 </ul>
 ```
 
@@ -167,7 +164,7 @@ export class RatingsComponent {
 
 ## Change Detection구현
 
-DOM 요소의 속성에 값을 준다는 것은 기본적으로 두 프레임워크 모두 동일하지만, 기본적인 메커니즘에서 차이가 있다. 
+DOM 요소의 속성에 값을 준다는 것은 기본적으로 두 프레임워크 모두 동일하지만, 기본적인 메커니즘에서 차이가 있다.
 
 ### Angular
 
@@ -179,7 +176,7 @@ DOM 요소의 속성에 값을 준다는 것은 기본적으로 두 프레임워
 
 `[className]="'star ' + ((ctx.rating > 0) ? 'solid' : 'outline')"`
 
-템플릿의 이부분에 대해 컴파일러는 바인딩을 설정하고, 더티 체크를 수행하며 필요한 경우 DOM을 업데이트 한다. 
+템플릿의 이부분에 대해 컴파일러는 바인딩을 설정하고, 더티 체크를 수행하며 필요한 경우 DOM을 업데이트 한다.
 
 ```javascript
 if (initialization) {
@@ -238,7 +235,7 @@ export class RatingComponent extends ReactComponent {
 }
 ```
 
-리액트에서, 템플릿은 `React.createElement` 함수를 호출해서 컴파일 된다. 
+리액트에서, 템플릿은 `React.createElement` 함수를 호출해서 컴파일 된다.
 
 ```javascript
 const el = React.createElement;
@@ -256,19 +253,19 @@ export class RatingComponent extends ReactComponent {
 
 `React.createElement` 함수가 호출될 때마다, 가상 DOM 노드라고 하는 데이터 구조를 생성하게 된다. 전혀 새로울 것이 없는, HTML 요소를 표현하는 일반적인 자바스크립트 오브젝트다. 이게 여러번 호출되면, 가상 돔 트리를 만들게 된다. 결과적으로, render 메소드는 가상 돔트리를 만들어 낸다.
 
- ```javascript
- export class RatingComponent extends ReactComponent {
-    ...
-    render() {
-        return {
-            tagName: 'UL',
-            properties: {className: 'ratings'},
-            children: [
-                {tagName: 'LI', properties: {className: 'outline'}},
-                ...
-            ]
-        }
-    }
+```javascript
+export class RatingComponent extends ReactComponent {
+   ...
+   render() {
+       return {
+           tagName: 'UL',
+           properties: {className: 'ratings'},
+           children: [
+               {tagName: 'LI', properties: {className: 'outline'}},
+               ...
+           ]
+       }
+   }
 }
 ```
 
@@ -278,10 +275,9 @@ render 함수가 호출될 때마다, 컴포넌트에 있는 프로퍼티를 보
 
 ![](https://admin.indepth.dev/content/images/2019/11/image-12.png)
 
-
 이 값은 가상 돔의 `className`에 사용되는 값이다. 이 가상 돔 트리에 기반하여, 리액트는 class 값을 포함하는 리스트 아이템을 생성하게 된다.
 
-만약 값이 0에서 1로 바뀌었다면 
+만약 값이 0에서 1로 바뀌었다면
 
 `{ className: rating > 0 ? 'solid' : 'outline' }`
 
@@ -298,7 +294,6 @@ render 함수가 호출될 때마다, 컴포넌트에 있는 프로퍼티를 보
 Change Detection에 대한 이해를 하기 위해서는, React의 렌더 함수 또는 Angular의 측정이 언제 호출되는지 알아야 한다.
 
 생각해보면, 변화를 감지하는 방법엔 두가지가 있다. 먼저 프레임워크에 변화가 있거나 혹은 변화가 있을 수 있는 것들을 알려서, Change Detection을 실행해야 한다는 것을 알리는 것이다.
-
 
 ### React
 
@@ -321,14 +316,14 @@ export class RatingComponent extends React.Component {
 
 ```javascript
 class RatingWidget {
-    constructor(changeDetector) {
-        this.cd = changeDetector;
-    }
+  constructor(changeDetector) {
+    this.cd = changeDetector
+  }
 
-    handleClick(event) {
-        this.rating = Number(event.target.dataset.value);
-        this.cd.detectChanges();
-    };
+  handleClick(event) {
+    this.rating = Number(event.target.dataset.value)
+    this.cd.detectChanges()
+  }
 }
 ```
 
@@ -336,9 +331,9 @@ class RatingWidget {
 
 ```javascript
 class RatingWidget {
-    handleClick(event) {
-        this.rating = Number(event.target.dataset.value);
-    };
+  handleClick(event) {
+    this.rating = Number(event.target.dataset.value)
+  }
 }
 ```
 
@@ -347,4 +342,3 @@ class RatingWidget {
 앵귤러가 제공하는 메커니즘을 활용하여, 템플릿의 UI 이벤트에 바인딩 하기 때문에 모든 UI 이벤트 리스너에 대해 알수 있다.이 이벤트 리스너를 가로챈다는 것은, 애플리케이션 코드 실행이 끝난후 변경 탐지 실행을 스케줄링할 수 있다는 것을 의미한다. 이것은 기발한 아이디어지만, 이 메커니즘으로 모든 비동기 이벤트를 가로챌수는 없다.
 
 `setTimout`이나 `XHR` 과 같은 이벤트에 앵귤러 매커니즘을 바인딩 할 수 없으므로, Change Detection이 자동으로 이루어질 수 없다. 이러한 문제를 해결하기 위해 zone.js라는 라이브러리를 사용한다. 브라우저의 모든 비동기 이벤트를 패치한다음, 특정 이벤트가 발생할때 앵귤러에 알릴 수 있다. UI 이벤트와 마찬가지로, 앵귤러는 애플리케이션 의 실행이 완료될 때 까지 기다렸다가 자동으로 변경을 탐지할 수 있다.
-

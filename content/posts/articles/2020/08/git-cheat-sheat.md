@@ -4,18 +4,14 @@ tags:
   - git
 published: true
 date: 2020-08-21 11:52:53
-description: "이제 git도 GUI 대신에 커맨드를 활용해서 작업해보자."
+description: '이제 git도 GUI 대신에 커맨드를 활용해서 작업해보자.'
 category: git
 template: post
 ---
 
 여기저기 잘 만들어져 있는 Git Cheat Sheet를 모아서 한글로 번역해 보았다. 작성시 `[]`는 제거해야 한다.
 
-```toc
-tight: true,
-from-heading: 2
-to-heading: 2
-```
+## Table of Contents
 
 ## SETUP
 
@@ -90,8 +86,6 @@ git이 무시하기를 원하는 파일들의 패턴을 `.gitignore`에 기록�
 - `git stash list`: stack 순서로 되어 있는 모든 stash 목록을 보여준다.
 - `git stash pop`: stash stack 최상단에 있는 변경사항을 적용한다.
 - `git stash drop`: stash stack 최상단에 stash를 제거한다.
-
-
 
 ### References
 

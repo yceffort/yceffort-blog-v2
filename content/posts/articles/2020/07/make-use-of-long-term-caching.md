@@ -17,10 +17,7 @@ template: post
 
 [Make use of long-term caching](https://developers.google.com/web/fundamentals/performance/webpack/use-long-term-caching)을 번역한 글입니다.
 
-```toc
-from-heading: 2
-to-heading: 3
-```
+## Table of Contents
 
 앱 로딩 속도를 향상시킬 수 있는 방법 중 하나는 캐싱을 활용하는 것이다. 캐싱을 활용하면, 클라이언트에서 매번 리소스를 다시 다운로드 하는 것을 방지해준다.
 
@@ -183,7 +180,7 @@ script.src =
   chunkId +
   '.' +
   {
-    '0': '2f2269c7f0a55a5c1871',
+    0: '2f2269c7f0a55a5c1871',
   }[chunkId] +
   '.js'
 ```

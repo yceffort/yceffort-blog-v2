@@ -6,21 +6,18 @@ tags:
   - react
 published: true
 date: 2020-03-12 02:39:10
-description: "[nextjs의 공식
+description: '[nextjs의 공식
   문서](https://nextjs.org/docs/basic-features/data-fetching)를 보고 요약한 내용입니다.
   ```toc tight: true, from-heading: 1 to-heading: 2 ```  ## 1.
-  getInitialProps  Nextjs 9.3 이전에는 `getInitialProps` 밖에..."
+  getInitialProps  Nextjs 9.3 이전에는 `getInitialProps` 밖에...'
 category: typescript
 slug: /2020/03/nextjs-02-data-fetching/
 template: post
 ---
+
 [nextjs의 공식 문서](https://nextjs.org/docs/basic-features/data-fetching)를 보고 요약한 내용입니다.
 
-```toc
-tight: true,
-from-heading: 1
-to-heading: 2
-```
+## Table of Contents
 
 ## 1. getInitialProps
 
@@ -33,9 +30,9 @@ Nextjs 9.3 이전에는 `getInitialProps` 밖에 존재하지 않는다. 최신 
 예제를 살펴보자.
 
 ```typescript
-import { NextPageContext } from "next"
-import React from "react"
-import fetch from "isomorphic-fetch"
+import { NextPageContext } from 'next'
+import React from 'react'
+import fetch from 'isomorphic-fetch'
 
 interface EmployeeInterface {
   id: number
@@ -57,7 +54,7 @@ export default function Data({ data }: { data: EmployeeInterface[] }) {
             <span>${employee_salary}</span>
             <span> {employee_age} years old</span>
           </div>
-        )
+        ),
       )}
     </>
   )
@@ -65,7 +62,7 @@ export default function Data({ data }: { data: EmployeeInterface[] }) {
 
 Data.getInitialProps = async (_: NextPageContext) => {
   const response = await fetch(
-    "http://dummy.restapiexample.com/api/v1/employees"
+    'http://dummy.restapiexample.com/api/v1/employees',
   )
   const { data } = await response.json()
 
@@ -85,9 +82,9 @@ Data.getInitialProps = async (_: NextPageContext) => {
 
 ```typescript
 Data.getInitialProps = async ({ req }: NextPageContext) => {
-  console.log("fetch some data")
+  console.log('fetch some data')
   const response = await fetch(
-    "http://dummy.restapiexample.com/api/v1/employees"
+    'http://dummy.restapiexample.com/api/v1/employees',
   )
   const { data } = await response.json()
 
@@ -108,11 +105,11 @@ Data.getInitialProps = async ({ req }: NextPageContext) => {
 ```typescript
 export async function getStaticProps(_: NextPageContext) {
   const response = await fetch(
-    "http://dummy.restapiexample.com/api/v1/employees"
+    'http://dummy.restapiexample.com/api/v1/employees',
   )
   const { data } = await response.json()
 
-  console.log("fetchData in build time!")
+  console.log('fetchData in build time!')
 
   return {
     props: { data },
@@ -197,9 +194,9 @@ data를 빌드시에 미리 땡겨와서 static하게 제공한다는 것을 알
 **/pages/post/[id].tsx**
 
 ```typescript
-import React from "react"
-import fetch from "isomorphic-fetch"
-import { GetStaticProps } from "next"
+import React from 'react'
+import fetch from 'isomorphic-fetch'
+import { GetStaticProps } from 'next'
 
 interface PostInterface {
   userId: number
@@ -222,7 +219,7 @@ export default function Employee({ todo }: { todo: PostInterface }) {
 }
 
 export async function getStaticPaths() {
-  const response = await fetch("https://jsonplaceholder.typicode.com/posts")
+  const response = await fetch('https://jsonplaceholder.typicode.com/posts')
   const data = await response.json()
 
   const paths = data.map(({ id }: PostInterface) => ({
@@ -234,7 +231,7 @@ export async function getStaticPaths() {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const response = await fetch(
-    `https://jsonplaceholder.typicode.com/posts/${params?.id}`
+    `https://jsonplaceholder.typicode.com/posts/${params?.id}`,
   )
   const data = await response.json()
 
@@ -258,7 +255,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
 ```typescript
 export async function getStaticPaths() {
-  const response = await fetch("https://jsonplaceholder.typicode.com/todos/")
+  const response = await fetch('https://jsonplaceholder.typicode.com/todos/')
   const data = await response.json()
 
   const paths = data.map(({ id, userId }: TodoInterface) => ({
@@ -273,20 +270,20 @@ export async function getStaticPaths() {
 
 ```typescript
 export async function getStaticPaths() {
-  const response = await fetch("https://jsonplaceholder.typicode.com/posts/")
+  const response = await fetch('https://jsonplaceholder.typicode.com/posts/')
   const data = await response.json()
 
   const paths = data.reduce(
     (
       acc: Array<{ params: { slug: string[] } }>,
-      { userId, id }: PostInterface
+      { userId, id }: PostInterface,
     ) => {
       return acc.concat([
         { params: { slug: [String(userId), String(id)] } },
         { params: { slug: [String(id)] } },
       ])
     },
-    []
+    [],
   )
 
   return { paths, fallback: false }
@@ -336,7 +333,7 @@ export default function Employee({ todo }: { todo: PostInterface }) {
 }
 
 export async function getStaticPaths() {
-  const response = await fetch("https://jsonplaceholder.typicode.com/posts")
+  const response = await fetch('https://jsonplaceholder.typicode.com/posts')
   const data = await response.json()
 
   const paths = data.map(({ id }: PostInterface) => ({

@@ -5,22 +5,17 @@ published: true
 tags:
   - javascript
   - react
-description: "[목차](/2019/08/13/reactjs-interview-questions/) # table of
+description: '[목차](/2019/08/13/reactjs-interview-questions/) # table of
   contents  ```toc tight: true, from-heading: 2 to-heading: 3 ```  ## React
-  Router  ### What is React Router?  React Router는 리액트 최상단에 있는 강력한 라우..."
+  Router  ### What is React Router?  React Router는 리액트 최상단에 있는 강력한 라우...'
 category: javascript
 slug: /2019/08/21/reactjs-interview-questions-2/
 template: post
 ---
+
 [목차](/2019/08/13/reactjs-interview-questions/)
 
-# table of contents
-
-```toc
-tight: true,
-from-heading: 2
-to-heading: 3
-```
+## Table of Contents
 
 ## React Router
 
@@ -59,16 +54,16 @@ Component 내에서 프로그래밍으로 라우팅/네비게이팅 하는 방�
    HOF의 `withRouter()`는 컴포넌트의 prop에 히스토리 오브젝트를 인젝트 한다. 이 오브젝트는 `push()` `replace()`를 제공하여 context의 사용을 피하게 해준다.
 
 ```javascript
-import { withRouter } from "react-router-dom" // this also works with 'react-router-native'
+import { withRouter } from 'react-router-dom' // this also works with 'react-router-native'
 
 const Button = withRouter(({ history }) => (
   <button
     type="button"
     onClick={() => {
-      history.push("/new-location")
+      history.push('/new-location')
     }}
   >
-    {"Click Me!"}
+    {'Click Me!'}
   </button>
 ))
 ```
@@ -77,7 +72,7 @@ const Button = withRouter(({ history }) => (
    `<Route>`는 `withRouter()`와 같은 props를 넘기므로, history prop을 통해 histoy 메서드에 접근할 수 있을 것이다.
 
 ```javascript
-import { Route } from "react-router-dom"
+import { Route } from 'react-router-dom'
 
 const Button = () => (
   <Route
@@ -85,10 +80,10 @@ const Button = () => (
       <button
         type="button"
         onClick={() => {
-          history.push("/new-location")
+          history.push('/new-location')
         }}
       >
-        {"Click Me!"}
+        {'Click Me!'}
       </button>
     )}
   />
@@ -103,10 +98,10 @@ const Button = (props, context) => (
   <button
     type="button"
     onClick={() => {
-      context.history.push("/new-location")
+      context.history.push('/new-location')
     }}
   >
-    {"Click Me!"}
+    {'Click Me!'}
   </button>
 )
 
@@ -122,7 +117,7 @@ Button.contextTypes = {
 수년간 다른 구현 지원에 대한 사용자들의 많은 요청 때문에, React Router v4에서는 query string을 parsing 하는 방법은 사라졌다. 이는 유저가 원하는 대로 구현할 수 있는 자유도를 주었다. 추천하는 방법은, query string 라이브러리를 사용하는 것이다.
 
 ```javascript
-const queryString = require("query-string")
+const queryString = require('query-string')
 const parsed = queryString.parse(props.location.search)
 ```
 
@@ -130,7 +125,7 @@ native 방식을 선호한다면 `URLSearchParam`을 사용할 수도 있다.
 
 ```javascript
 const params = new URLSearchParams(props.location.search)
-const foo = params.get("name")
+const foo = params.get('name')
 ```
 
 다만 IE11에서는 폴리필이 필요하다.
@@ -140,16 +135,14 @@ const foo = params.get("name")
 Route는 `<Switch>` 블록으로 감싸줘야 하는데, 왜냐하면 `<Switch>`는 라우트를 베타적으로 감싸기 때문이다. 먼저 `Switch`를 임포트 해야 한다.
 
 ```javascript
-import { Switch, Router, Route } from "react-router"
+import { Switch, Router, Route } from 'react-router'
 ```
 
 그리고 route를 `<Switch>` 블록에 넣어햐 한다.
 
 ```html
 <Router>
-  <Switch>
-    <Route {/* ... */} /> <Route {/* ... */} />
-  </Switch>
+  <Switch> <Route {/* ... */} /> <Route {/* ... */} /> </Switch>
 </Router>
 ```
 
@@ -159,8 +152,8 @@ history 객체에 props를 보낼 수 있다.
 
 ```javascript
 this.props.history.push({
-  pathname: "/template",
-  search: "?name=sudheer",
+  pathname: '/template',
+  search: '?name=sudheer',
   state: { detail: response.data },
 })
 ```
@@ -184,7 +177,7 @@ this.props.history.push({
 1. history 오브젝트를 익스포트 하는 모듈을 만들고, 프로젝트 전체에서 해당 모듈을 임포트 한다. 예를들어,
 
 ```javascript
-import { createBrowserHistory } from "history"
+import { createBrowserHistory } from 'history'
 
 export default createBrowserHistory({
   /* pass a configuration object here if needed */
@@ -194,15 +187,15 @@ export default createBrowserHistory({
 2. 빌트인 라우터 대신에, `<Router>` 컴포넌트를 쓴다. 위에서 만든 `history.js`를 `index.js`에 임포트 한다.
 
 ```javascript
-import { Router } from "react-router-dom"
-import history from "./history"
-import App from "./App"
+import { Router } from 'react-router-dom'
+import history from './history'
+import App from './App'
 
 ReactDOM.render(
   <Router history={history}>
     <App />
   </Router>,
-  holder
+  holder,
 )
 ```
 
@@ -210,9 +203,9 @@ ReactDOM.render(
 
 ```javascript
 // some-other-file.js
-import history from "./history"
+import history from './history'
 
-history.push("/go-here")
+history.push('/go-here')
 ```
 
 ### How to perform automatic redirect after login?
@@ -220,15 +213,15 @@ history.push("/go-here")
 `react-router`sms `<Redirect>` 컴포넌트를 제공한다. `<Redirect>`를 렌더링 하면 새로운 위치로 이동하게 된다. 서버사이드 리다이렉트와 마찬가지로, 새로운 위치는 현재 히스토리 스택에 있는 현재 위치를 덮어쓰게 된다.
 
 ```javascript
-import React, { Component } from "react"
-import { Redirect } from "react-router"
+import React, { Component } from 'react'
+import { Redirect } from 'react-router'
 
 export default class LoginComponent extends Component {
   render() {
     if (this.state.isLoggedIn === true) {
       return <Redirect to="/your/redirect/page" />
     } else {
-      return <div>{"Login Please"}</div>
+      return <div>{'Login Please'}</div>
     }
   }
 }
@@ -256,16 +249,16 @@ string, number, date를 포맷팅하는 방법은 react 컴포넌트 또는 api�
 
 ```jsx
 <FormattedMessage
-  id={"account"}
-  defaultMessage={"The amount is less than minimum balance."}
+  id={'account'}
+  defaultMessage={'The amount is less than minimum balance.'}
 />
 ```
 
 ```javascript
 const messages = defineMessages({
   accountMessage: {
-    id: "account",
-    defaultMessage: "The amount is less than minimum balance.",
+    id: 'account',
+    defaultMessage: 'The amount is less than minimum balance.',
   },
 })
 
@@ -277,11 +270,11 @@ formatMessage(messages.accountMessage)
 `<Formatted... />` 컴포넌트는 plain text가 아닌 elements를 반환하므로, placeholder, alt text처럼 string이 필요한 곳에는 쓸 수 없다. 따라서 여기에서는 `formatMessage()`를 사용해야한다. higher-order component인 injectIntl()을 사용하여, 컴포넌트에 intl 객체를 주입하고, 객체에서 사용할 수 있는 `formatMessage()`를 사용하여 message를 포맷팅할 수 있다.
 
 ```jsx
-import React from "react"
-import { injectIntl, intlShape } from "react-intl"
+import React from 'react'
+import { injectIntl, intlShape } from 'react-intl'
 
 const MyComponent = ({ intl }) => {
-  const placeholder = intl.formatMessage({ id: "messageId" })
+  const placeholder = intl.formatMessage({ id: 'messageId' })
   return <input placeholder={placeholder} />
 }
 
@@ -301,12 +294,12 @@ export default injectIntl(MyComponent)
 higher-order 컴포넌트 `injectIntl()`는 컴포넌트의 props에 `formatDate()`메서드를 제공한다. 이 메서드는 내부적으로 `FormattedDate`인스턴스를 활용하고, 이는 포맷된 날짜를 string으로 제공한다.
 
 ```jsx
-import { injectIntl, intlShape } from "react-intl"
+import { injectIntl, intlShape } from 'react-intl'
 
 const stringDate = this.props.intl.formatDate(date, {
-  year: "numeric",
-  month: "numeric",
-  day: "numeric",
+  year: 'numeric',
+  month: 'numeric',
+  day: 'numeric',
 })
 
 const MyComponent = ({ intl }) => (
@@ -330,25 +323,25 @@ export default injectIntl(MyComponent)
 function MyComponent() {
   return (
     <div>
-      <span className={"heading"}>{"Title"}</span>
-      <span className={"description"}>{"Description"}</span>
+      <span className={'heading'}>{'Title'}</span>
+      <span className={'description'}>{'Description'}</span>
     </div>
   )
 }
 ```
 
 ```javascript
-import ShallowRenderer from "react-test-renderer/shallow"
+import ShallowRenderer from 'react-test-renderer/shallow'
 
 const renderer = new ShallowRenderer()
 renderer.render(<MyComponent />)
 
 const result = renderer.getRenderOutput()
 
-expect(result.type).toBe("div")
+expect(result.type).toBe('div')
 expect(result.props.children).toEqual([
-  <span className={"heading"}>{"Title"}</span>,
-  <span className={"description"}>{"Description"}</span>,
+  <span className={'heading'}>{'Title'}</span>,
+  <span className={'description'}>{'Description'}</span>,
 ])
 ```
 
@@ -357,12 +350,12 @@ expect(result.props.children).toEqual([
 `TestRenderer` 패키지는 component 를 DOM 또는 Native mobile 환경에 의존없이 순수 Javascript Object 로 렌더링 할 수 있는 renderer 를 제공한다. 이 패키지를 사용하면 브라우저 또는 jsdom 의 사용없이 ReactDOM 또는 React Native 에서 렌더링 되는 플랫폼의 뷰 계층구조 (DOM 트리와 유사) 의 스냅샷을 쉽게 가져올 수 있다.
 
 ```jsx
-import TestRenderer from "react-test-renderer"
+import TestRenderer from 'react-test-renderer'
 
 const Link = ({ page, children }) => <a href={page}>{children}</a>
 
 const testRenderer = TestRenderer.create(
-  <Link page={"https://www.facebook.com/"}>{"Facebook"}</Link>
+  <Link page={'https://www.facebook.com/'}>{'Facebook'}</Link>,
 )
 
 console.log(testRenderer.toJSON())
@@ -403,9 +396,9 @@ export default sum
 테스트를 수행하는 `sum.test.js`를 작성
 
 ```javascript
-import sum from "./sum"
+import sum from './sum'
 
-test("adds 1 + 2 to equal 3", () => {
+test('adds 1 + 2 to equal 3', () => {
   expect(sum(1, 2)).toBe(3)
 })
 ```
@@ -463,7 +456,7 @@ Flux와 비교했을 때, Redux는 몇가지 단점을 가지고 있다.
 `mapStateToProps()`는 컴포넌트에서 다른 컴포넌트에 의해 업데이트된 state를 가져올수 있도록 도와주는 유틸리티다.
 
 ```javascript
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     todos: getVisibleTodos(state.todos, state.visibilityFilter),
   }
@@ -473,9 +466,9 @@ const mapStateToProps = state => {
 `mapDispatchToProps()`는 컴포넌트가 이벤트를 발생시킬 수 있도록 도와주는 유틸리티다. (이 이벤트는 애플리케이션의 state에 변화를 가져올 수 있음)
 
 ```javascript
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    onTodoClick: id => {
+    onTodoClick: (id) => {
       dispatch(toggleTodo(id))
     },
   }
@@ -531,14 +524,14 @@ class App extends Component {
 
   render() {
     return this.props.isLoaded ? (
-      <div>{"Loaded"}</div>
+      <div>{'Loaded'}</div>
     ) : (
-      <div>{"Not Loaded"}</div>
+      <div>{'Not Loaded'}</div>
     )
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   isLoaded: state.isLoaded,
 })
 
@@ -555,8 +548,8 @@ container에서 store를 사용하기 위해서는 아래 두단계를 따라야
 2. 위 props를 Container 와 연결: `mapStateToProps()`에 의해 리턴되는 객체들은 컨테이너와 연결된다. 이를 `react-redux`의 `connect`로 import 할 수 있다.
 
 ```jsx
-import React from "react"
-import { connect } from "react-redux"
+import React from 'react'
+import { connect } from 'react-redux'
 
 class App extends React.Component {
   render() {
@@ -583,7 +576,7 @@ const appReducer = combineReducers({
 })
 
 const rootReducer = (state, action) => {
-  if (action.type === "USER_LOGOUT") {
+  if (action.type === 'USER_LOGOUT') {
     state = undefined
   }
 
@@ -600,10 +593,10 @@ const rootReducer = (state, action) => {
 데코레이터가 없는 redux를 예로 들어보자.
 
 ```javascript
-import React from "react"
-import * as actionCreators from "./actionCreators"
-import { bindActionCreators } from "redux"
-import { connect } from "react-redux"
+import React from 'react'
+import * as actionCreators from './actionCreators'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 
 function mapStateToProps(state) {
   return { todos: state.todos }
@@ -621,10 +614,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(MyApp)
 ```
 
 ```javascript
-import React from "react"
-import * as actionCreators from "./actionCreators"
-import { bindActionCreators } from "redux"
-import { connect } from "react-redux"
+import React from 'react'
+import * as actionCreators from './actionCreators'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 
 function mapStateToProps(state) {
   return { todos: state.todos }
@@ -656,9 +649,9 @@ Reducers 는 항상 모든 이전과 현재의 action을 기반으로한 상태�
 
 ```javascript
 export function fetchAccount(id) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(setLoadingAccountState()) // Show a loading spinner
-    fetch(`/account/${id}`, response => {
+    fetch(`/account/${id}`, (response) => {
       dispatch(doneFetchingAccount()) // Hide loading spinner
       if (response.status === 200) {
         dispatch(setAccount(response.json)) // Use a normal function to set the received state
@@ -670,7 +663,7 @@ export function fetchAccount(id) {
 }
 
 function setAccount(data) {
-  return { type: "SET_Account", data: data }
+  return { type: 'SET_Account', data: data }
 }
 ```
 
@@ -685,9 +678,9 @@ Redux Store 에서는 Data를 저장하고, 컴포넌트 내부에서는 UI 에 
 conenct를 사용한 `<FilterLink>` component예제를 아래에서 살펴보자.
 
 ```javascript
-import { connect } from "react-redux"
-import { setVisibilityFilter } from "../actions"
-import Link from "../components/Link"
+import { connect } from 'react-redux'
+import { setVisibilityFilter } from '../actions'
+import Link from '../components/Link'
 
 const mapStateToProps = (state, ownProps) => ({
   active: ownProps.filter === state.visibilityFilter,
@@ -717,12 +710,12 @@ export default FilterLink
 일반적으로 `constant.js`또는 `actionTypes.js`에 저장한다.
 
 ```javascript
-export const ADD_TODO = "ADD_TODO"
-export const DELETE_TODO = "DELETE_TODO"
-export const EDIT_TODO = "EDIT_TODO"
-export const COMPLETE_TODO = "COMPLETE_TODO"
-export const COMPLETE_ALL = "COMPLETE_ALL"
-export const CLEAR_COMPLETED = "CLEAR_COMPLETED"
+export const ADD_TODO = 'ADD_TODO'
+export const DELETE_TODO = 'DELETE_TODO'
+export const EDIT_TODO = 'EDIT_TODO'
+export const COMPLETE_TODO = 'COMPLETE_TODO'
+export const COMPLETE_ALL = 'COMPLETE_ALL'
+export const CLEAR_COMPLETED = 'CLEAR_COMPLETED'
 ```
 
 이 파일은 두 군데에서 사용된다.
@@ -730,7 +723,7 @@ export const CLEAR_COMPLETED = "CLEAR_COMPLETED"
 1. 액션 생성시
 
 ```javascript
-import { ADD_TODO } from "./actionTypes"
+import { ADD_TODO } from './actionTypes'
 
 export function addTodo(text) {
   return { type: ADD_TODO, text }
@@ -740,7 +733,7 @@ export function addTodo(text) {
 2. 리듀서
 
 ```javascript
-import { ADD_TODO } from "./actionTypes"
+import { ADD_TODO } from './actionTypes'
 
 export default (state = [], action) => {
   switch (action.type) {
@@ -763,11 +756,11 @@ export default (state = [], action) => {
 `mapDispatchToProps()` 안에서 dispatch() 를 사용하여 action creators를 바인딩하는 방법은 몇가지가 있다.
 
 ```javascript
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   action: () => dispatch(action()),
 })
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   action: bindActionCreators(action, dispatch),
 })
 
@@ -779,9 +772,8 @@ const mapDispatchToProps = { action }
 `ownProps` 파라미터가 명시되어 있다면, React Redux는 component로 전달된 props를 연결된 함수로 전달한다. 그래서 만약 connected component를 사용한다면,
 
 ```javascript
-import ConnectedComponent from "./containers/ConnectedComponent"
-
-;<ConnectedComponent user={"john"} />
+import ConnectedComponent from './containers/ConnectedComponent'
+;<ConnectedComponent user={'john'} />
 ```
 
 `mapStateToProps()`와 `mapDispatchToProps()`안의 `ownProps`는 객체가 될 것이다.
@@ -826,7 +818,7 @@ function* fetchUserSaga(action) {
 
   // Instructing middleware to dispatch corresponding action.
   yield put({
-    type: "FETCH_USER_SUCCESS",
+    type: 'FETCH_USER_SUCCESS',
     userData,
   })
 }
@@ -859,7 +851,7 @@ Selectors 는 Redux state 를 인수로받고 데이터를 반환하여 componen
 예를 들어, state에서 유저 상태정보를 받는다면 아래와 같이 처리할 수 있다.
 
 ```javascript
-const getUserData = state => state.user.data
+const getUserData = (state) => state.user.data
 ```
 
 ### What is Redux Form?
@@ -877,10 +869,10 @@ Redux Form은 React와 Redux와 동시에 작동하며, React 폼 내에서 Redu
 `applyMiddleware()`를 사용하면 된다. 예를 들어, `applyMiddleware()`를 사용하여 `redux-thunk`와 `logger`를 추가할 수 있다.
 
 ```javascript
-import { createStore, applyMiddleware } from "redux"
+import { createStore, applyMiddleware } from 'redux'
 const createStoreWithMiddleware = applyMiddleware(
   ReduxThunk,
-  logger
+  logger,
 )(createStore)
 ```
 
@@ -895,7 +887,7 @@ const rootReducer = combineReducers({
 })
 
 const initialState = {
-  todos: [{ id: 123, name: "example", completed: false }],
+  todos: [{ id: 123, name: 'example', completed: false }],
 }
 
 const store = createStore(rootReducer, initialState)

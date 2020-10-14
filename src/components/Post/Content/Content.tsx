@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
 
 import CodeBlock from './markdown/Codeblock'
@@ -87,15 +88,12 @@ export default function Content({
     <ContentContainer>
       <ContentTitle>{title}</ContentTitle>
       <ContentBody>
-        <MathJax.Provider options="tex">
-          <ReactMarkdown
-            source={body}
-            plugins={[RemarkMathPlugin]}
-            renderers={{
-              code: CodeBlock,
-            }}
-          />
-        </MathJax.Provider>
+        <ReactMarkdown
+          source={body}
+          renderers={{
+            code: CodeBlock,
+          }}
+        />
       </ContentBody>
     </ContentContainer>
   )

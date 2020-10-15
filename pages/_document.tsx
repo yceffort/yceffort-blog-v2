@@ -47,10 +47,6 @@ export default class MyDocument extends Document<Props> {
           <meta httpEquiv="x-ua-compatible" content="ie=edge" />
           <meta property="og:type" content="blog" />
           <meta property="og:locale" content="ko_KR" />
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, minimum-scale=1, viewport-fit=cover"
-          />
 
           <script
             async

@@ -1,5 +1,6 @@
 import React from 'react'
 import Document, {
+  Html,
   Head,
   Main,
   NextScript,
@@ -40,7 +41,7 @@ export default class MyDocument extends Document<Props> {
     } = this
 
     return (
-      <html lang="ko">
+      <Html lang="ko">
         <Head>
           {styleTags}
           <meta httpEquiv="x-ua-compatible" content="ie=edge" />
@@ -50,7 +51,6 @@ export default class MyDocument extends Document<Props> {
             name="viewport"
             content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, minimum-scale=1, viewport-fit=cover"
           />
-          <meta name="msapplication-TileColor" content="#1CC0A6" />
 
           <script
             async
@@ -82,7 +82,7 @@ export default class MyDocument extends Document<Props> {
           <Main />
           <NextScript />
         </body>
-      </html>
+      </Html>
     )
   }
 }

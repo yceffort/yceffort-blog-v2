@@ -6,7 +6,7 @@ import getContactHref from '../../../utils/Contact'
 
 const AuthorContainer = styled.div`
   border-top: 1px solid #e6e6e6;
-  max-width: 40rem;
+  max-width: 59.0625rem;
   padding-top: 1.25rem;
   line-height: 1.625rem;
   margin-top: 1.625rem;

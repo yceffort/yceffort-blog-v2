@@ -87,8 +87,6 @@ export async function parseMarkdownToHTML(body: string): Promise<string> {
       .process(body)
   ).toString()
 
-  console.log(result)
-
   return result
 }
 

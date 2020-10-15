@@ -166,6 +166,11 @@ figcaption {
   padding-right: 0.875rem !important;
 }
 
+iframe {
+  width: 100% !important;
+  height: calc(59.0625rem * 0.666) !important;
+}
+
 @media screen and (min-width: 685px) {
   figure.float-left,
   figure.float-right {

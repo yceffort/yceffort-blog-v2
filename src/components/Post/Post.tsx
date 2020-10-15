@@ -10,7 +10,7 @@ import Meta from './components/meta'
 import Content from './components/Content'
 
 const PostFooter = styled.div`
-  max-width: 40rem;
+  max-width: 59.0625rem;
   margin: 0 auto;
   padding: 0 0.9375rem;
 

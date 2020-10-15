@@ -71,6 +71,27 @@ export async function getAllTagsFromPosts(): Promise<string[]> {
   return tags
 }
 
+export async function parseMarkdownToHTML(body: string): Promise<string> {
+  const result = (
+    await unified()
+      .use(markdown)
+      .use(toc)
+      .use(slug)
+      .use(math)
+      .use(remark2rehype, {
+        allowDangerousHtml: true,
+      })
+      .use(katex, { strict: false })
+      .use(highlightCode)
+      .use(stringify, { allowDangerousHtml: true })
+      .process(body)
+  ).toString()
+
+  console.log(result)
+
+  return result
+}
+
 function getFilesRecursively(path: string) {
   const getFiles = (path: string) =>
     readdirSync(path)
@@ -91,19 +112,4 @@ function getFilesRecursively(path: string) {
     .reduce((a, b) => a.concat(b), [])
 
   return files.concat(getFiles(path)).filter((f) => f.endsWith('.md'))
-}
-
-export async function parseBody(body: string): Promise<string> {
-  return (
-    await unified()
-      .use(markdown)
-      .use(toc)
-      .use(slug)
-      .use(math)
-      .use(remark2rehype)
-      .use(katex, { strict: false })
-      .use(highlightCode)
-      .use(stringify)
-      .process(body)
-  ).toString()
 }

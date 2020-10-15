@@ -5,7 +5,7 @@ import Layout from '../../../../src/components/Layout'
 import PostRenderer from '../../../../src/components/Post/Post'
 import config from '../../../../src/config'
 import { Post } from '../../../../src/types/types'
-import { getAllPosts, parseBody } from '../../../../src/utils/FrontMatters'
+import { getAllPosts, parseMarkdownToHTML } from '../../../../src/utils/Markdown'
 
 export default function PostPage({ post }: { post?: Post }) {
   return post ? (
@@ -43,7 +43,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     post = posts.find(({ fields: { slug: postSlug } }) => postSlug === slug)
 
     if (post) {
-      post.parsedBody = await parseBody(post.body)
+      post.parsedBody = await parseMarkdownToHTML(post.body)
     }
   }
 

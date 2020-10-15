@@ -12,7 +12,7 @@ import { Post } from '../../../../src/types/types'
 import {
   getAllPosts,
   getAllTagsFromPosts,
-} from '../../../../src/utils/FrontMatters'
+} from '../../../../src/utils/Markdown'
 
 export default function Tag({
   posts,

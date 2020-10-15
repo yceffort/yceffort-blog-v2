@@ -14,15 +14,19 @@ export const config = {
       path: '/',
     },
     {
+      label: 'Tags',
+      path: '/tags',
+    },
+    {
       label: 'Study',
       path: 'https://www.notion.so/yceffort/9f2de57230a241b18f7321f591064486',
     },
     {
-      label: 'About me',
+      label: 'about',
       path: '/about',
     },
     {
-      label: 'Contact me',
+      label: 'contact',
       path: '/contacts',
     },
   ],

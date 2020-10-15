@@ -54,7 +54,7 @@ const ContentBody = styled.div`
   }
 
   * {
-    max-width: 40rem;
+    /* max-width: 40rem; */
     margin-left: auto !important;
     margin-right: auto !important;
   }

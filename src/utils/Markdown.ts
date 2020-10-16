@@ -58,18 +58,18 @@ export async function getAllPosts(): Promise<Array<Post>> {
     }
   }
 
-  return posts
+  return posts.sort((a, b) => b.frontmatter.date - a.frontmatter.a)
 }
 
 export async function getAllTagsFromPosts(): Promise<string[]> {
   const tags = (await getAllPosts()).reduce((prev, curr) => {
-    curr.frontmatter.tags.forEach(
-      (tag) => !prev.includes(tag) && prev.push(tag),
-    )
+    curr.frontmatter.tags.forEach((tag) => {
+      prev.push(tag)
+    })
     return prev
   }, [] as string[])
 
-  return tags
+  return [...new Set(tags)]
 }
 
 export async function parseMarkdownToHTML(body: string): Promise<string> {

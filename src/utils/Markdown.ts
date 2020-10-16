@@ -32,7 +32,7 @@ export async function getAllPosts(): Promise<Array<Post>> {
     const file = await readFile(f, { encoding: 'utf8' })
     const { attributes, body } = frontMatter(file)
     const fm: FrontMatter = attributes as any
-    const { tags: fmTags, published, date, category } = fm
+    const { tags: fmTags, published, date } = fm
 
     if (published) {
       const tags = (fmTags || []).map((tag) => tag.trim())

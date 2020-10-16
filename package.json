@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "sitemap": "ts-node --project ./tsconfig.node.json ./src/SiteMap.ts",
-    "build": "npm run sitemap && next build",
+    "build-nextjs": "next build",
+    "build": "npm run sitemap && npm run build-nextjs",
     "start": "next start",
     "lint": "eslint '**/*.{ts,tsx}'",
     "lint:fix": "npm run lint --fix",

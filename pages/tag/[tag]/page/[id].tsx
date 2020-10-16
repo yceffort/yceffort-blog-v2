@@ -53,7 +53,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const paths: any[] = []
   allTags.forEach((tag) => {
     const tagsCount: number = posts.filter((post) =>
-      post.frontmatter.tags.some((t) => t === tag),
+      post.frontmatter.tags.find((t) => t === tag),
     ).length
 
     ;[
@@ -65,7 +65,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths,
-    fallback: false,
+    fallback: true,
   }
 }
 
@@ -81,7 +81,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     pageNo = (params.id || 1) as number
 
     const postsWithTag = allPosts.filter((post) =>
-      post.frontmatter.tags.some((t) => t === tag),
+      post.frontmatter.tags.find((t) => t === tag),
     )
 
     const startIndex = (pageNo - 1) * DEFAULT_NUMBER_OF_POSTS

@@ -17,45 +17,48 @@ import toc from 'remark-toc'
 // @ts-ignore
 import slug from 'remark-slug'
 
-import { Post } from '../types/types'
+import { FrontMatter, Post } from '../types/types'
 
 const POST_PATH = `${process.cwd()}/content/posts/articles`
 const DIR_REPLACE_STRING = '/posts/articles'
 
 export async function getAllPosts(): Promise<Array<Post>> {
   const files = getFilesRecursively(POST_PATH).reverse()
+  const posts: Array<Post> = []
 
-  const posts = (
-    await Promise.all(
-      files.map(async (f) => {
-        const file = await readFile(f, { encoding: 'utf8' })
-        const { attributes: fm, body } = frontMatter(file)
+  // await Promise.all
 
-        const tags = (((fm as any).tags as string[]) || []).map((tag) =>
-          tag.trim(),
-        )
+  for await (const f of files) {
+    const file = await readFile(f, { encoding: 'utf8' })
+    const { attributes, body } = frontMatter(file)
+    const fm: FrontMatter = attributes as any
+    const { tags: fmTags, published, date, category } = fm
 
-        const slug = f
-          .slice(f.indexOf(DIR_REPLACE_STRING) + DIR_REPLACE_STRING.length + 1)
-          .replace('.md', '')
+    if (published) {
+      const tags = (fmTags || []).map((tag) => tag.trim())
 
-        return {
-          frontmatter: {
-            ...(fm as any),
-            tags,
-            date: new Date((fm as any).date).getTime(),
-          },
-          body,
-          fields: {
-            slug,
-            categorySlug: (fm as any).category,
-            tagSlugs: tags,
-          },
-          path: f,
-        }
-      }),
-    )
-  ).sort((a, b) => b.frontmatter.date - a.frontmatter.date)
+      const slug = f
+        .slice(f.indexOf(DIR_REPLACE_STRING) + DIR_REPLACE_STRING.length + 1)
+        .replace('.md', '')
+
+      const result: Post = {
+        frontmatter: {
+          ...fm,
+          tags,
+          date: new Date(date).getTime(),
+        },
+        body,
+        fields: {
+          slug,
+          categorySlug: category,
+          tagSlugs: tags,
+        },
+        path: f,
+      }
+
+      posts.push(result)
+    }
+  }
 
   return posts
 }

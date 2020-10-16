@@ -4,12 +4,12 @@ tags:
   - git
 published: true
 date: 2020-09-15 10:56:58
-description: "왜 바꿔야 하는지는 비밀"
+description: '왜 바꿔야 하는지는 비밀'
 category: git
 template: post
 ---
 
-```
+```bash
 GIT_COMMITTER_DATE="Tue Sep 15 2020 10:57:29 +0900" git commit --date="Tue Sep 15 2020 10:57:29 +0900"
 ```
 

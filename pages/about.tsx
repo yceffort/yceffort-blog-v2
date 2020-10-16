@@ -7,7 +7,11 @@ import config from '../src/config'
 
 export default function About() {
   return (
-    <Layout title="about" description={config.author.name}>
+    <Layout
+      title="about"
+      description={config.author.name}
+      url="https://yceffort.kr/about"
+    >
       <Sidebar />
       <Page title="About">
         <div>

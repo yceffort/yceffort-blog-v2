@@ -26,29 +26,36 @@ const Layout = ({
   title,
   description,
   socialImage,
+  url,
 }: {
   children: ReactNode
   title: string
   description?: string
   socialImage?: string
+  url: string
 }) => {
   const {
     author: { photo },
+    subtitle,
   } = config
-  const metaImageUrl = socialImage || photo
+  const layoutMetaImageUrl = socialImage || photo
+  const layoutDescription = description || subtitle
 
   return (
     <LayoutDiv>
       <Head>
         <html lang="kr" />
         <title>{title}</title>
-        <meta name="description" content={description} />
+        <meta name="description" content={layoutDescription} />
         <meta property="og:site_name" content={title} />
-        <meta property="og:image" content={metaImageUrl} />
-        <meta name="twitter:card" content="summary" />
+        <meta property="og:title" content={title} />
+        <meta property="og:url" content={url} />
+        <meta property="og:image" content={layoutMetaImageUrl} />
+        <meta property="og:description" content={layoutDescription} />
         <meta name="twitter:title" content={title} />
-        <meta name="twitter:description" content={description} />
-        <meta name="twitter:image" content={metaImageUrl} />
+        <meta name="twitter:description" content={layoutDescription} />
+        <meta name="twitter:image" content={layoutMetaImageUrl} />
+        <meta name="twitter:card" content="summary" />
       </Head>
       {children}
     </LayoutDiv>

@@ -6,7 +6,11 @@ import Sidebar from '../src/components/Sidebar/Sidebar'
 import config from '../src/config'
 export default function Contacts() {
   return (
-    <Layout title="contact" description={config.author.name}>
+    <Layout
+      title="contact"
+      description={config.author.name}
+      url="https://yceffort.kr/contacts"
+    >
       <Sidebar />
       <Page title="Contact">
         <div>

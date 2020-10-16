@@ -27,7 +27,11 @@ export default function Tag({
 }) {
   const page = parseInt(pageNo)
   return (
-    <Layout title={`Tag - ${tag}`} description={config.subtitle}>
+    <Layout
+      title={`Tag - ${tag}`}
+      description={config.subtitle}
+      url={`https://yceffort.kr/tag/${tag}/page/${pageNo}`}
+    >
       <Sidebar />
       <Page title={tag}>
         <Feed posts={posts} />

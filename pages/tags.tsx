@@ -9,7 +9,7 @@ import config from '../src/config'
 import { getAllTagsFromPosts } from '../src/utils/Markdown'
 export default function Tags({ tags }: { tags: string[] }) {
   return (
-    <Layout title={`Tags-${config.title}`}>
+    <Layout title={`Tags-${config.title}`} url="https://yceffort.kr/tags">
       <Sidebar />
       <Page title="tags">
         <ul>

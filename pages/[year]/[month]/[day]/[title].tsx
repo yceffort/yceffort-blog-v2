@@ -15,6 +15,7 @@ export default function PostPage({ post }: { post?: Post }) {
     <Layout
       title={post.frontmatter.title}
       description={post.frontmatter.description || config.subtitle}
+      url={`https://yceffort.kr/${post.fields.slug}`}
     >
       <PostRenderer post={post} />
     </Layout>

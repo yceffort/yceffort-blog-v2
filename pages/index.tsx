@@ -13,7 +13,11 @@ import Pagination from '../src/components/Pagination'
 
 export default function Index({ recentPosts }: { recentPosts: Array<Post> }) {
   return (
-    <Layout title={config.title} description={config.subtitle}>
+    <Layout
+      title={config.title}
+      description={config.subtitle}
+      url="https://yceffort.kr"
+    >
       <Sidebar />
       <Page>
         <Feed posts={recentPosts} />

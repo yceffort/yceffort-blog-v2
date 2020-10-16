@@ -3,15 +3,18 @@ import React from 'react'
 
 import Layout from '../../../../src/components/Layout'
 import PostRenderer from '../../../../src/components/Post/Post'
-import config from '../../../../src/config'
 import { Post } from '../../../../src/types/types'
-import { getAllPosts, parseMarkdownToHTML } from '../../../../src/utils/Markdown'
+import {
+  getAllPosts,
+  parseMarkdownToHTML,
+} from '../../../../src/utils/Markdown'
 
 export default function PostPage({ post }: { post?: Post }) {
   return post ? (
     <Layout
       title={post.frontmatter.title}
-      description={post.frontmatter.description || config.subtitle}
+      description={post.frontmatter.description}
+      url={`https://yceffort.kr/${post.fields.slug}`}
     >
       <PostRenderer post={post} />
     </Layout>

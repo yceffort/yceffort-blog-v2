@@ -22,7 +22,11 @@ export default function IndexPage({
 }) {
   const page = parseInt(pageNo)
   return (
-    <Layout title={`Page No ${page}`} description={config.title}>
+    <Layout
+      title={`Page No ${page}`}
+      description={config.title}
+      url={`https://yceffort/page/${page}`}
+    >
       <Sidebar />
       <Page>
         <Feed posts={posts} />

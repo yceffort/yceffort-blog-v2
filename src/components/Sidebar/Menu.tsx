@@ -38,14 +38,12 @@ const MenuItem = styled.a<{ $active?: boolean }>`
     color: #5d93ff;
     border-bottom: 1px solid #5d93ff;
   }
-  /* TODO: 메뉴 활성화 시에 $color-base처리 */
 `
 
 export default function Menu() {
   const { menu: menus } = config
   const { pathname } = useRouter()
 
-  console.log(pathname)
   return (
     <MenuNav>
       <MenuList>

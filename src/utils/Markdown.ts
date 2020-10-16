@@ -7,7 +7,7 @@ import markdown from 'remark-parse'
 import math from 'remark-math'
 import remark2rehype from 'remark-rehype'
 import katex from 'rehype-katex'
-import stringify from 'rehype-stringify'
+import html from 'rehype-stringify'
 // TODO: 타입추가 필요. 현재 강제로 임포트 중
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -16,6 +16,7 @@ import toc from 'remark-toc'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import slug from 'remark-slug'
+import gfm from 'remark-gfm'
 
 import { FrontMatter, Post } from '../types/types'
 
@@ -25,8 +26,6 @@ const DIR_REPLACE_STRING = '/posts/articles'
 export async function getAllPosts(): Promise<Array<Post>> {
   const files = getFilesRecursively(POST_PATH).reverse()
   const posts: Array<Post> = []
-
-  // await Promise.all
 
   for await (const f of files) {
     const file = await readFile(f, { encoding: 'utf8' })
@@ -79,12 +78,13 @@ export async function parseMarkdownToHTML(body: string): Promise<string> {
       .use(toc)
       .use(slug)
       .use(math)
+      .use(gfm)
       .use(remark2rehype, {
         allowDangerousHtml: true,
       })
       .use(katex, { strict: false })
       .use(highlightCode)
-      .use(stringify, { allowDangerousHtml: true })
+      .use(html, { allowDangerousHtml: true })
       .process(body)
   ).toString()
 

@@ -58,7 +58,7 @@ export async function getAllPosts(): Promise<Array<Post>> {
     }
   }
 
-  return posts.sort((a, b) => b.frontmatter.date - a.frontmatter.a)
+  return posts.sort((a, b) => b.frontmatter.date - a.frontmatter.date)
 }
 
 export async function getAllTagsFromPosts(): Promise<string[]> {

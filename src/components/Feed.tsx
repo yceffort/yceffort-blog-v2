@@ -78,39 +78,43 @@ const FeedItemReadMore = styled.a`
   }
 `
 
-const Feed = ({ posts }: { posts: Array<Post> }) => (
+const Feed = ({ posts }: { posts?: Array<Post> }) => (
   <>
-    {posts.map((post, index) => {
-      const {
-        frontmatter: { date, title, description, tags },
-        fields: { slug },
-      } = post
-      return (
-        <FeedItem key={index}>
-          <FeedItemMeta>
-            <FeedItemMetaTime>
-              {format(toDate(date), 'MMMM d yyyy')}
-            </FeedItemMetaTime>
-            <FeedItemMetaDivider />
+    {posts && posts.length ? (
+      posts.map((post, index) => {
+        const {
+          frontmatter: { date, title, description, tags },
+          fields: { slug },
+        } = post
+        return (
+          <FeedItem key={index}>
+            <FeedItemMeta>
+              <FeedItemMetaTime>
+                {format(toDate(date), 'MMMM d yyyy')}
+              </FeedItemMetaTime>
+              <FeedItemMetaDivider />
 
-            {tags.map((tag, index) => (
-              <Link passHref href={`/tag/${tag}/page/1`} key={index}>
-                <FeedItemMetaCategoryLink>{tag} </FeedItemMetaCategoryLink>
+              {tags.map((tag, index) => (
+                <Link passHref href={`/tag/${tag}/page/1`} key={index}>
+                  <FeedItemMetaCategoryLink>{tag} </FeedItemMetaCategoryLink>
+                </Link>
+              ))}
+            </FeedItemMeta>
+            <FeedItemTitle>
+              <Link passHref href={`/${slug}`}>
+                <FeedItemTitleLink>{title}</FeedItemTitleLink>
               </Link>
-            ))}
-          </FeedItemMeta>
-          <FeedItemTitle>
+            </FeedItemTitle>
+            <FeedItemDescription>{description}</FeedItemDescription>
             <Link passHref href={`/${slug}`}>
-              <FeedItemTitleLink>{title}</FeedItemTitleLink>
+              <FeedItemReadMore>Read</FeedItemReadMore>
             </Link>
-          </FeedItemTitle>
-          <FeedItemDescription>{description}</FeedItemDescription>
-          <Link passHref href={`/${slug}`}>
-            <FeedItemReadMore>Read</FeedItemReadMore>
-          </Link>
-        </FeedItem>
-      )
-    })}
+          </FeedItem>
+        )
+      })
+    ) : (
+      <>there are no posts</>
+    )}
   </>
 )
 

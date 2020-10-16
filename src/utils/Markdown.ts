@@ -50,8 +50,6 @@ export async function getAllPosts(): Promise<Array<Post>> {
         body,
         fields: {
           slug,
-          categorySlug: category,
-          tagSlugs: tags,
         },
         path: f,
       }

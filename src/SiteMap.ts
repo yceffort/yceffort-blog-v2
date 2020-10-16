@@ -14,13 +14,13 @@ export async function createSiteMap() {
   xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
   xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
   <url>
-    <loc>${`https://yceffort.kr/about`}</loc>
+    <loc>https://yceffort.kr/about</loc>
   </url>
   <url>
-    <loc>${`https://yceffort.kr/contacts`}</loc>
+    <loc>https://yceffort.kr/contacts</loc>
   </url>
   <url>
-    <loc>${`https://yceffort.kr/tags`}</loc>
+    <loc>https://yceffort.kr/tags</loc>
   </url>
     ${posts
       .map(({ fields: { slug } }) => {

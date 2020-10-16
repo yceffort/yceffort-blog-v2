@@ -12,8 +12,6 @@ export interface FrontMatter {
 export interface Post {
   fields: {
     slug: string
-    categorySlug?: string
-    tagSlugs?: string[]
   }
   frontmatter: FrontMatter
   body: string

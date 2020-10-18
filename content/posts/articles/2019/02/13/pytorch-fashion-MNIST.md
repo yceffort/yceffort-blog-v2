@@ -4,13 +4,15 @@ date: 2019-02-13 09:36:35
 published: true
 tags:
   - pytorch
-description: "pytorch를 활용해서 옷 이미지를 구별하는 예제를 해봤었는데, 다시 한번 복습하는 차원에서 기본적인 기능으로
+description:
+  'pytorch를 활용해서 옷 이미지를 구별하는 예제를 해봤었는데, 다시 한번 복습하는 차원에서 기본적인 기능으로
   해보려고 한다. ### 1. 데이터셋 준비  ```python import torch from torchvision import
-  datasets, transforms import helper  # Define a transform to norm..."
+  datasets, transforms import helper  # Define a transform to norm...'
 category: pytorch
 slug: /2019/02/13/pytorch-fashion-MNIST/
 template: post
 ---
+
 pytorch를 활용해서 옷 이미지를 구별하는 예제를 해봤었는데, 다시 한번 복습하는 차원에서 기본적인 기능으로 해보려고 한다.
 
 ### 1. 데이터셋 준비
@@ -74,7 +76,7 @@ imshow(image[0,:]);
 
 만들어볼 네트워크는 아래와 같다.
 
-- input layer: 28 * 28 = 764
+- input layer: 28 \* 28 = 764
 - hidden layer: 2개, 각각 256, 128 개의 뉴런을 갖고 있음
 - output layer: 10개 (구별할 옷이 열 종류)
 - Adam Optimizer 와 NLLLoss 활용
@@ -87,14 +89,14 @@ class Classifier(nn.Module):
         self.fc2 = nn.Linear(256, 128)
         self.fc3 = nn.Linear(128, 64)
         self.fc4 = nn.Linear(64, 10)
-        
+
     def forward(self, x):
         x = x.view(x.shape[0], -1)
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = F.relu(self.fc3(x))
         x = F.log_softmax(self.fc4(x), dim=1)
-        
+
         return x
 ```
 
@@ -114,21 +116,21 @@ for e in range(epochs):
         result = model(images)
         # 오차 계산
         loss = criterion(result, labels)
-        
+
         # 초기화
         optimizer.zero_grad()
         # 역전파
         loss.backward()
         # 스텝
         optimizer.step()
-        
+
         # 오차값을 총 오차에 더함
         running_loss += loss.item()
     else:
         print(f"Training loss: {running_loss/len(trainloader)}")
 ```
 
-```
+```bash
 Training loss: 0.5118639363504168
 Training loss: 0.3933752618714182
 Training loss: 0.35750402640432183
@@ -167,8 +169,8 @@ view_classify(img.resize_(1, 28, 28), ps, version='Fashion')
 
 ![image-2](../images/fashion-mnist2.png)
 
-
 ### 5. 총 accuracy 구하기
+
 ```python
 model = Classifier()
 criterion = nn.NLLLoss()
@@ -181,28 +183,28 @@ train_losses, test_losses = [], []
 for e in range(epochs):
     running_loss = 0
     for images, labels in trainloader:
-        
+
         optimizer.zero_grad()
-        
+
         log_ps = model(images)
         loss = criterion(log_ps, labels)
         loss.backward()
         optimizer.step()
-        
+
         running_loss += loss.item()
-        
+
     # for 문이 끝나면 실행한다.
     else:
         test_loss = 0
         accuracy = 0
-        
+
         # Turn off gradients for validation, saves memory and computations
         # 자동 미분을 꺼서 pytorch가 쓸 떼 없는 짓을 안하게 한다. (어차피 test set에서 하는 작업이므로)
         with torch.no_grad():
             for images, labels in testloader:
                 log_ps = model(images)
                 test_loss += criterion(log_ps, labels)
-                
+
                 # 로그 확률에 지수 적용
                 ps = torch.exp(log_ps)
                 # topk는 k번째로 큰 숫자를 찾아내는 것이다.
@@ -212,7 +214,7 @@ for e in range(epochs):
                 equals = top_class == labels.view(*top_class.shape)
                 # equals를 float으로 바꾸고 평균 정확도를 구한다.
                 accuracy += torch.mean(equals.type(torch.FloatTensor))
-                
+
         train_losses.append(running_loss/len(trainloader))
         test_losses.append(test_loss/len(testloader))
 
@@ -222,7 +224,7 @@ for e in range(epochs):
               "Test Accuracy: {:.3f}".format(accuracy/len(testloader)))
 ```
 
-```
+```bash
 Epoch: 1/30..  Training Loss: 0.521..  Test Loss: 0.461..  Test Accuracy: 0.833
 Epoch: 2/30..  Training Loss: 0.395..  Test Loss: 0.429..  Test Accuracy: 0.839
 Epoch: 3/30..  Training Loss: 0.357..  Test Loss: 0.393..  Test Accuracy: 0.862
@@ -254,6 +256,7 @@ Epoch: 28/30..  Training Loss: 0.195..  Test Loss: 0.415..  Test Accuracy: 0.879
 Epoch: 29/30..  Training Loss: 0.193..  Test Loss: 0.418..  Test Accuracy: 0.883
 Epoch: 30/30..  Training Loss: 0.187..  Test Loss: 0.412..  Test Accuracy: 0.879
 ```
+
 ### 6. loss 확인해보기
 
 ```python
@@ -269,8 +272,7 @@ plt.legend(frameon=False)
 
 ![image-3](../images/fashion-mnist3.png)
 
-training loss는 점차 감소하지만,  validation loss는 널뛰기 하고 있다. 이 말인 즉슨, 현재 overfitting 현상이 일어나고 있는 것이다.
-
+training loss는 점차 감소하지만, validation loss는 널뛰기 하고 있다. 이 말인 즉슨, 현재 overfitting 현상이 일어나고 있는 것이다.
 
 ### 7. dropout
 
@@ -305,7 +307,7 @@ class Classifier(nn.Module):
         return x
 ```
 
-dropout은 주의해야할 것이, training 과정에서만 이루어져야 한다는 것이다. 
+dropout은 주의해야할 것이, training 과정에서만 이루어져야 한다는 것이다.
 
 ```python
 model = Classifier()
@@ -319,20 +321,20 @@ train_losses, test_losses = [], []
 for e in range(epochs):
     running_loss = 0
     for images, labels in trainloader:
-        
+
         optimizer.zero_grad()
-        
+
         log_ps = model(images)
         loss = criterion(log_ps, labels)
         loss.backward()
         optimizer.step()
-        
+
         running_loss += loss.item()
-        
+
     else:
         test_loss = 0
         accuracy = 0
-        
+
         with torch.no_grad():
             # test 과정에 들어간다. dropout을 안하게 된다.
             # 정확하게 말하면, dropout 하는 비율이 0이 된다.
@@ -340,15 +342,15 @@ for e in range(epochs):
             for images, labels in testloader:
                 log_ps = model(images)
                 test_loss += criterion(log_ps, labels)
-                
+
                 ps = torch.exp(log_ps)
                 top_p, top_class = ps.topk(1, dim=1)
                 equals = top_class == labels.view(*top_class.shape)
                 accuracy += torch.mean(equals.type(torch.FloatTensor))
-        
+
         # 다시 트레이닝 과정으로 돌아간다.
         model.train()
-        
+
         train_losses.append(running_loss/len(trainloader))
         test_losses.append(test_loss/len(testloader))
 
@@ -358,7 +360,7 @@ for e in range(epochs):
               "Test Accuracy: {:.3f}".format(accuracy/len(testloader)))
 ```
 
-```
+```bash
 Epoch: 1/30..  Training Loss: 0.602..  Test Loss: 0.508..  Test Accuracy: 0.818
 Epoch: 2/30..  Training Loss: 0.482..  Test Loss: 0.454..  Test Accuracy: 0.835
 Epoch: 3/30..  Training Loss: 0.450..  Test Loss: 0.429..  Test Accuracy: 0.848
@@ -402,4 +404,3 @@ plt.legend(frameon=False)
 ![image-4](../images/fashion-mnist4.png)
 
 dropout이 overfitting을 방지해 주는 것을 알 수 있다.
-

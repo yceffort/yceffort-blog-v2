@@ -2,12 +2,17 @@ import React from 'react'
 import Link from 'next/link'
 import Head from 'next/head'
 import styled from 'styled-components'
+import { Fab, Action } from 'react-tiny-fab'
+import { BiPlus, BiArrowToTop } from 'react-icons/bi'
+import { GoIssueOpened } from 'react-icons/go'
 
 import { Post } from '../../types/types'
 import Tags from './components/Tags'
 import Author from './components/Author'
 import Meta from './components/meta'
 import Content from './components/Content'
+
+import 'react-tiny-fab/dist/styles.css'
 
 const PostFooter = styled.div`
   max-width: 59.0625rem;
@@ -78,6 +83,30 @@ export default function PostRenderer({ post }: { post: Post }) {
         <Tags tags={tags} />
         <Author />
       </PostFooter>
+
+      <Fab
+        icon={<BiPlus />}
+        event="click"
+        mainButtonStyles={{ backgroundColor: '#00b7ff' }}
+        style={{ bottom: 0, right: 0 }}
+      >
+        <Action
+          text="tope"
+          onClick={() =>
+            window.open('https://github.com/yceffort/yceffort-blog-v2/issues')
+          }
+          style={{ backgroundColor: 'rgb(77, 139, 198)' }}
+        >
+          <GoIssueOpened />
+        </Action>
+        <Action
+          text="issue"
+          onClick={() => window.scrollTo(0, 0)}
+          style={{ backgroundColor: 'rgb(77, 139, 198)' }}
+        >
+          <BiArrowToTop />
+        </Action>
+      </Fab>
     </div>
   )
 }

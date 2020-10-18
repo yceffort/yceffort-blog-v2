@@ -60,6 +60,14 @@ export default function PostRenderer({ post }: { post: Post }) {
     frontmatter: { tags, date, title },
   } = post
 
+  const scrollToTop = () => {
+    const c = document.documentElement.scrollTop || document.body.scrollTop
+    if (c > 0) {
+      window.requestAnimationFrame(scrollToTop)
+      window.scrollTo(0, c - c / 8)
+    }
+  }
+
   return (
     <div>
       <Head>
@@ -101,7 +109,7 @@ export default function PostRenderer({ post }: { post: Post }) {
         </Action>
         <Action
           text="issue"
-          onClick={() => window.scrollTo(0, 0)}
+          onClick={scrollToTop}
           style={{ backgroundColor: 'rgb(77, 139, 198)' }}
         >
           <BiArrowToTop />

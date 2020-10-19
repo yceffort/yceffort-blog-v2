@@ -12,9 +12,7 @@ import Page from '../src/components/Page'
 // import Feed from '../src/components/Feed'
 import Pagination from '../src/components/Pagination'
 
-const Feed = dynamic(() => import('../src/components/Feed'), {
-  ssr: false,
-})
+const Feed = dynamic(() => import('../src/components/Feed'))
 
 export default function Index({ recentPosts }: { recentPosts: Array<Post> }) {
   return (

@@ -51,6 +51,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   }
 
   return {
-    props: { post },
+    props: { post: { ...post, path: '' } },
   }
 }

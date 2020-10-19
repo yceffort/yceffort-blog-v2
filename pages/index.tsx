@@ -1,5 +1,6 @@
 import React from 'react'
 import { GetStaticProps } from 'next'
+import dynamic from 'next/dynamic'
 
 import config from '../src/config'
 import Layout from '../src/components/Layout'
@@ -8,8 +9,12 @@ import { Post } from '../src/types/types'
 import { getAllPosts } from '../src/utils/Markdown'
 import Sidebar from '../src/components/Sidebar/Sidebar'
 import Page from '../src/components/Page'
-import Feed from '../src/components/Feed'
+// import Feed from '../src/components/Feed'
 import Pagination from '../src/components/Pagination'
+
+const Feed = dynamic(() => import('../src/components/Feed'), {
+  ssr: false,
+})
 
 export default function Index({ recentPosts }: { recentPosts: Array<Post> }) {
   return (

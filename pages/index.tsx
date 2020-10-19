@@ -1,6 +1,5 @@
 import React from 'react'
 import { GetStaticProps } from 'next'
-import dynamic from 'next/dynamic'
 
 import config from '../src/config'
 import Layout from '../src/components/Layout'

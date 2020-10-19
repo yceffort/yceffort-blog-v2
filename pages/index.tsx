@@ -36,6 +36,6 @@ export const getStaticProps: GetStaticProps = async () => {
   const recentPosts = (await getAllPosts()).slice(0, DEFAULT_NUMBER_OF_POSTS)
 
   return {
-    props: { recentPosts },
+    props: { recentPosts: recentPosts.map((post) => ({ ...post, path: '' })) },
   }
 }

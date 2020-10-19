@@ -72,6 +72,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   }
 
   return {
-    props: { posts, pageNo, hasNextPage },
+    props: {
+      posts: posts.map((post) => ({ ...post, path: '' })),
+      pageNo,
+      hasNextPage,
+    },
   }
 }

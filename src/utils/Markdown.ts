@@ -8,13 +8,8 @@ import math from 'remark-math'
 import remark2rehype from 'remark-rehype'
 import katex from 'rehype-katex'
 import html from 'rehype-stringify'
-// TODO: 타입추가 필요. 현재 강제로 임포트 중
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import highlightCode from '@mapbox/rehype-prism'
 import toc from 'remark-toc'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import slug from 'remark-slug'
 import gfm from 'remark-gfm'
 

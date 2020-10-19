@@ -1,1 +1,0 @@
-declare var slug: () => void

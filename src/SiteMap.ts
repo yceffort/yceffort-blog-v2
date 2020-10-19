@@ -31,7 +31,7 @@ export async function createSiteMap() {
       })
       .join('\n')}
 </urlset>
-    `.replace(/^\s+|\r\n|\n|\r|(>)\s+(<)|\s+$/gm, '$1$2')
+    `
 
   await writeFile('public/sitemap.xml', sitemap, { encoding: 'utf-8' })
 }

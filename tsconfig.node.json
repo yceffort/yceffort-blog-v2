@@ -13,8 +13,9 @@
     "strictPropertyInitialization": false,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "lib": ["es2017", "dom", "esnext.array"]
+    "lib": ["es2017", "dom", "esnext.array"],
+    "typeRoots": ["./typings", "./node_modules/@types"]
   },
   "exclude": ["node_modules", "**/*spec.ts", "./src/**/*.tsx"],
-  "include": ["./src/**/*.ts"]
+  "include": ["./src/**/*.ts", "./typings"]
 }

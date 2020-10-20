@@ -86,7 +86,17 @@ export default function Content({
   return (
     <ContentContainer>
       <ContentTitle>{title}</ContentTitle>
-      <ContentBody dangerouslySetInnerHTML={{ __html: body }}></ContentBody>
+      <ContentBody
+        dangerouslySetInnerHTML={{ __html: body }}
+        onClick={(e) => {
+          const clickedTarget = e.target as HTMLElement
+          console.log(clickedTarget.tagName)
+          if (clickedTarget.tagName === 'IMG') {
+            const img = clickedTarget as HTMLImageElement
+            window.open(img.src)
+          }
+        }}
+      ></ContentBody>
     </ContentContainer>
   )
 }

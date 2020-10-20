@@ -99,16 +99,18 @@ export default function PostRenderer({ post }: { post: Post }) {
         style={{ bottom: 0, right: 0 }}
       >
         <Action
-          text="tope"
+          text="create discussion"
           onClick={() =>
-            window.open('https://github.com/yceffort/yceffort-blog-v2/issues')
+            window.open(
+              `https://github.com/yceffort/yceffort-blog-v2/issues/new?labels=%F0%9F%92%AC%20Discussion&title=[Discussion]&assignees=yceffort&body=https://yceffort.kr/${post.fields.slug}`,
+            )
           }
           style={{ backgroundColor: 'rgb(77, 139, 198)' }}
         >
           <GoIssueOpened />
         </Action>
         <Action
-          text="issue"
+          text="TOP"
           onClick={scrollToTop}
           style={{ backgroundColor: 'rgb(77, 139, 198)' }}
         >

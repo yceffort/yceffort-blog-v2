@@ -10,7 +10,7 @@ description: 'HOC는 좋지만, hooks을 사용하는 습관을 기르자.'
 
 요즘 대부분의 리액트 코드는 함수형 컴포넌트와 리액트 hooks의 조합으로 개발된다. 그러나 여전히 [higher-order components(이하 HOC)](https://ko.reactjs.org/docs/higher-order-components.html)는 클래스형, 그리고 함수형 모두에 적용할 수 있다. 따라서 HOC는 레거시와 모던한 리액트 컴포넌트 사이에서 재사용 가능성을 높이며 쓸 수 있는 훌륭한 다리 역할을 하고 있다.
 
-그러나 때때로 HOC의 사용은 자제해야하며, 몇몇 문제들은 hooks만으로도 해결할 수 있다. 
+그러나 때때로 HOC의 사용은 자제해야하며, 몇몇 문제들은 hooks만으로도 해결할 수 있다.
 
 ## HOC와 HOOKS: Prop에서 오는 혼동
 
@@ -48,7 +48,7 @@ export default withError
 
 위 코드 또한 `error` prop을 제거하고도 정상적으로 작동한다. 그러나 위 버전 또한 HOC를 사용하는 경우 오는 Props의 혼동을 피할 수는 없다. 전개 연산자를 사용하여 HOC에 props를 넘겨주었지만, 이 props들이 어디에 필요한지 명확히 하기가 굉장히 어렵다.
 
-이는 HOC의 첫번쨰 약점이다. HOC가 어떤 컴포넌드들과 합성되어 있는지 빠르게 알 수 없기 때문에, 어떤 컴포넌에 어떤 것을 넘겨야 할지 예측이 어렵다. 예를 들어, loading 인디케이터가 있는 HOC를 하나더 만들어 보자.
+이는 HOC의 첫번째 약점이다. HOC가 어떤 컴포넌드들과 합성되어 있는지 빠르게 알 수 없기 때문에, 어떤 컴포넌에 어떤 것을 넘겨야 할지 예측이 어렵다. 예를 들어, loading 인디케이터가 있는 HOC를 하나더 만들어 보자.
 
 ```javascript
 import * as React from 'react'

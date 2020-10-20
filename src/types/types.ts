@@ -18,3 +18,8 @@ export interface Post {
   parsedBody?: string
   path: string
 }
+
+export interface TagWithCount {
+  tag: string
+  count: number
+}

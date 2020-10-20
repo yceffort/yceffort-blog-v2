@@ -6,16 +6,17 @@ import Layout from '../src/components/Layout'
 import Page from '../src/components/Page'
 import Sidebar from '../src/components/Sidebar/Sidebar'
 import config from '../src/config'
+import { TagWithCount } from '../src/types/types'
 import { getAllTagsFromPosts } from '../src/utils/Markdown'
-export default function Tags({ tags }: { tags: string[] }) {
+export default function Tags({ tags }: { tags: Array<TagWithCount> }) {
   return (
     <Layout title={`Tags-${config.title}`} url="https://yceffort.kr/tags">
       <Sidebar />
       <Page title="tags">
         <ul>
-          {tags.map((tag, index) => (
+          {tags.map(({ tag, count }, index) => (
             <li key={index}>
-              <Link href={`/tag/${tag}/page/1`}>{tag}</Link>
+              <Link href={`/tag/${tag}/page/1`}>{`${tag} (${count})`}</Link>
             </li>
           ))}
         </ul>

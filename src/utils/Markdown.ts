@@ -17,7 +17,7 @@ import toc from 'remark-toc'
 import slug from 'remark-slug'
 import gfm from 'remark-gfm'
 
-import { FrontMatter, Post } from '../types/types'
+import { FrontMatter, Post, TagWithCount } from '../types/types'
 
 const POST_PATH = `${process.cwd()}/content/posts/articles`
 const DIR_REPLACE_STRING = '/posts/articles'
@@ -59,7 +59,7 @@ export async function getAllPosts(): Promise<Array<Post>> {
   return posts.sort((a, b) => b.frontmatter.date - a.frontmatter.date)
 }
 
-export async function getAllTagsFromPosts(): Promise<string[]> {
+export async function getAllTagsFromPosts(): Promise<Array<TagWithCount>> {
   const tags = (await getAllPosts()).reduce((prev, curr) => {
     curr.frontmatter.tags.forEach((tag) => {
       prev.push(tag)
@@ -67,7 +67,12 @@ export async function getAllTagsFromPosts(): Promise<string[]> {
     return prev
   }, [] as string[])
 
-  return [...new Set(tags)]
+  const tagWithCount = [...new Set(tags)].map((tag) => ({
+    tag,
+    count: tags.filter((t) => t === tag).length,
+  }))
+
+  return tagWithCount.sort((a, b) => b.count - a.count)
 }
 
 export async function parseMarkdownToHTML(body: string): Promise<string> {

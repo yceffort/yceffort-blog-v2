@@ -4,6 +4,7 @@ import 'normalize.css'
 import '../src/assets/css/global.css'
 import Head from 'next/head'
 
+
 function App({ Component, pageProps }: AppProps) {
   return (
     <>

@@ -90,7 +90,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     resultPosts = postsWithTag.slice(startIndex, endIndex)
 
     hasNextPage =
-      Math.floor(postsWithTag.length / DEFAULT_NUMBER_OF_POSTS) > pageNo
+      Math.ceil(postsWithTag.length / DEFAULT_NUMBER_OF_POSTS) > pageNo
   }
 
   return {

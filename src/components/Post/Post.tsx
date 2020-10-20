@@ -4,7 +4,7 @@ import Head from 'next/head'
 import styled from 'styled-components'
 import { Fab, Action } from 'react-tiny-fab'
 import { BiPlus, BiArrowToTop } from 'react-icons/bi'
-import { GoIssueOpened } from 'react-icons/go'
+import { ImGithub } from 'react-icons/im'
 
 import { Post } from '../../types/types'
 import Tags from './components/Tags'
@@ -93,7 +93,7 @@ export default function PostRenderer({ post }: { post: Post }) {
       </PostFooter>
 
       <Fab
-        icon={<BiPlus />}
+        icon={<BiPlus size="2em" />}
         event="click"
         mainButtonStyles={{ backgroundColor: '#00b7ff' }}
         style={{ bottom: 0, right: 0 }}
@@ -107,14 +107,14 @@ export default function PostRenderer({ post }: { post: Post }) {
           }
           style={{ backgroundColor: 'rgb(77, 139, 198)' }}
         >
-          <GoIssueOpened />
+          <ImGithub size="2em" />
         </Action>
         <Action
           text="TOP"
           onClick={scrollToTop}
           style={{ backgroundColor: 'rgb(77, 139, 198)' }}
         >
-          <BiArrowToTop />
+          <BiArrowToTop size="2em" />
         </Action>
       </Fab>
     </div>

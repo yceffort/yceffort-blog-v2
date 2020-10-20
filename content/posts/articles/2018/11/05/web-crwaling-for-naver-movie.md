@@ -1,10 +1,11 @@
 ---
-title: "초보를 위한 웹크롤링: 네이버 영화 댓글 크롤링하기"
+title: '초보를 위한 웹크롤링: 네이버 영화 댓글 크롤링하기'
 date: 2018-11-06 04:44:01
 published: true
 tags:
   - python
-description: "e 파이썬과 파이썬 라이브러리 (beatifulSoup)를 활용하여 네이버 영화 댓글 크롤링 해보기 ## 1.
+description:
+  "e 파이썬과 파이썬 라이브러리 (beatifulSoup)를 활용하여 네이버 영화 댓글 크롤링 해보기 ## 1.
   크롤링하려는 웹페이지의 구조를 살펴보기  인크레더블 평점 댓글 페이지를 먼저 살펴보겠습니다.
   [여기](https://movie.naver.com/movie/bi/mi/point.nhn?code=136990&onlyActualPoin\
   tYn=Y#po..."
@@ -12,6 +13,7 @@ category: python
 slug: /2018/11/05/web-crwaling-for-naver-movie/
 template: post
 ---
+
 e
 파이썬과 파이썬 라이브러리 (beatifulSoup)를 활용하여 네이버 영화 댓글 크롤링 해보기
 
@@ -55,7 +57,7 @@ html = BeautifulSoup(resp.content, 'html.parser')
 html
 ```
 
-```
+```html
 <!DOCTYPE html>
 
 <html lang="ko">
@@ -107,31 +109,51 @@ lis[0]
 
 결과
 
-```
+```html
 <li>
-<div class="star_score">
-<span class="st_off"><span class="st_on" style="width:100.0%"></span></span><em>10</em>
-</div>
-<div class="score_reple">
-<p>처음에 만두 같은게 나와서 상영관 잘못 들어온줄  </p>
-<dl>
-<dt>
-<em>
-<a href="#" onclick="javascript:showPointListByNid(14315731, 'after');parent.clickcr(this, 'ara.uid', '', '', event); return false;" target="_top">
-<span>크리스탈(a8d5****)</span>
-</a>
-</em>
-<em>2018.07.18 09:07</em>
-</dt>
-<dd>
-<a class="go_report2" href="#" onclick="parent.clickcr(this, 'ara.report', '', '', event); common.report('false','a8d5****', 'mwNBVSIMqNRoWDHCxeN1YFkIC/JtxnOSpwYTkFE2Qos=', '처음에 만두 같은게 나와서 상영관 잘못 들어온줄 ', '14315731', 'point_after', false);return false;"><em>신고</em></a>
-</dd>
-</dl>
-</div>
-<div class="btn_area">
-<a class="_sympathyButton" href="#" onclick="parent.clickcr(this, 'ara.sym', '', '', event);"><span class="blind">공감</span></a><strong><span class="sympathy_14315731 count">2406</span></strong>
-<a class="_notSympathyButton" href="#" onclick="parent.clickcr(this, 'ara.opp', '', '', event);"><span class="blind">비공감</span></a><strong><span class="notSympathy_14315731 count v2">141</span></strong>
-</div>
+  <div class="star_score">
+    <span class="st_off"><span class="st_on" style="width:100.0%"></span></span
+    ><em>10</em>
+  </div>
+  <div class="score_reple">
+    <p>처음에 만두 같은게 나와서 상영관 잘못 들어온줄</p>
+    <dl>
+      <dt>
+        <em>
+          <a
+            href="#"
+            onclick="javascript:showPointListByNid(14315731, 'after');parent.clickcr(this, 'ara.uid', '', '', event); return false;"
+            target="_top"
+          >
+            <span>크리스탈(a8d5****)</span>
+          </a>
+        </em>
+        <em>2018.07.18 09:07</em>
+      </dt>
+      <dd>
+        <a
+          class="go_report2"
+          href="#"
+          onclick="parent.clickcr(this, 'ara.report', '', '', event); common.report('false','a8d5****', 'mwNBVSIMqNRoWDHCxeN1YFkIC/JtxnOSpwYTkFE2Qos=', '처음에 만두 같은게 나와서 상영관 잘못 들어온줄 ', '14315731', 'point_after', false);return false;"
+          ><em>신고</em></a
+        >
+      </dd>
+    </dl>
+  </div>
+  <div class="btn_area">
+    <a
+      class="_sympathyButton"
+      href="#"
+      onclick="parent.clickcr(this, 'ara.sym', '', '', event);"
+      ><span class="blind">공감</span></a
+    ><strong><span class="sympathy_14315731 count">2406</span></strong>
+    <a
+      class="_notSympathyButton"
+      href="#"
+      onclick="parent.clickcr(this, 'ara.opp', '', '', event);"
+      ><span class="blind">비공감</span></a
+    ><strong><span class="notSympathy_14315731 count v2">141</span></strong>
+  </div>
 </li>
 ```
 
@@ -144,8 +166,8 @@ review_text = lis[0].find('p').getText()
 review_text
 ```
 
-```
-'처음에 만두 같은게 나와서 상영관 잘못 들어온줄  '
+```python
+'처음에 만두 같은게 나와서 상영관 잘못 들어온줄 '
 ```
 
 #### 평점
@@ -155,7 +177,7 @@ score = lis[0].find('em').getText()
 score
 ```
 
-```
+```python
 '1'
 ```
 
@@ -178,7 +200,7 @@ nickname = lis[0].findAll('a')[0].find('span').getText()
 nickname
 ```
 
-```
+```python
 '크리스탈(a8d5****)'
 ```
 
@@ -190,7 +212,7 @@ created_at = datetime.strptime(li.find('dt').findAll('em')[-1].getText(), "%Y.%m
 created_at
 ```
 
-```
+```python
 datetime.datetime(2018, 7, 18, 9, 7)
 ```
 
@@ -229,7 +251,7 @@ result = html.find('div', {'class':'score_total'}).find('strong').findChildren('
 int(result.replace(',', ''))
 ```
 
-```
+```python
 9926
 ```
 
@@ -248,7 +270,7 @@ for i in range(1, int(total_count / 10) + 1):
     get_data(url)
 ```
 
-```
+```bash
 일산빵셔틀(rnra****) 평론가 임수연씨의 마블보다 재밌다는 평을보고 코웃음치고 보러갔는데 마블빠인 내가봐도 마블보다 재밌었다 히어로물은 언제까지나 마블의 독주일꺼라는 착각을 씻어내준 가족액션 히어로물 진짜 너무재밌다   10 488 32 2018-07-18 23:49:00 False
 url: "https://movie.naver.com/movie/bi/mi/pointWriteFormList.nhn?code=136990&type=after&page=1&page=4" is parsing....
 크리스탈(a8d5****) 처음에 만두 같은게 나와서 상영관 잘못 들어온줄   10 2406 141 2018-07-18 09:07:00 False

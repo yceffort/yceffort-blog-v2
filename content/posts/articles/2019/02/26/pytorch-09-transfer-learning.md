@@ -4,13 +4,15 @@ date: 2019-02-26 11:17:54
 published: true
 tags:
   - pytorch
-description: "Pytorch - 09) Transfer Learning ## Transfer Learning  기존에 만들어진 모델을
+description:
+  'Pytorch - 09) Transfer Learning ## Transfer Learning  기존에 만들어진 모델을
   이용하여, 새로운 모델이 조금더 빠르게 학습하고 예측을 더 높이는 방법이다.  실질적으로, CNN을 처음부터 학습시키는 일은 많지 않다. 이
-  모델은 고려해야할 사항이 많고, (Layer의 숫자, 활성화함수의 종류, 기타 hyper par..."
+  모델은 고려해야할 사항이 많고, (Layer의 숫자, 활성화함수의 종류, 기타 hyper par...'
 category: pytorch
 slug: /2019/02/26/pytorch-09-transfer-learning/
 template: post
 ---
+
 Pytorch - 09) Transfer Learning
 
 ## Transfer Learning
@@ -26,11 +28,11 @@ Pytorch - 09) Transfer Learning
 
 ## AlexNet
 
-2012년 ImageNet Large Scale Visual Recognition Challenge에서 우승한 팀 논문의 첫번째 저자가 Alex 머시기 인데, 그 사람의 이름을 따서 개발한 CNN을 AlexNet이라 한다. 구조적인 관점에서는 LeNet과 크게 다르지 않지만, GPU를 사용하여 의미있는 결과를 얻었다. 이후 연구자들은 CNN구조를 설계 할 때 GPU를 고려하는 것이 유행처럼 번졌다. 
+2012년 ImageNet Large Scale Visual Recognition Challenge에서 우승한 팀 논문의 첫번째 저자가 Alex 머시기 인데, 그 사람의 이름을 따서 개발한 CNN을 AlexNet이라 한다. 구조적인 관점에서는 LeNet과 크게 다르지 않지만, GPU를 사용하여 의미있는 결과를 얻었다. 이후 연구자들은 CNN구조를 설계 할 때 GPU를 고려하는 것이 유행처럼 번졌다.
 
-총 5개의 Convolutional Layer와 3개의 fully-connected layer로 구성되어 있으며, 맨마지막 1000개의 category분류를 위해 Softmax를 사용한다. 이렇게 만들어진 AlexNet은 65만개의 perceptron, 6000만개의 parameter와 6억 3천만개의 connection으로 구성되어 있다. 
+총 5개의 Convolutional Layer와 3개의 fully-connected layer로 구성되어 있으며, 맨마지막 1000개의 category분류를 위해 Softmax를 사용한다. 이렇게 만들어진 AlexNet은 65만개의 perceptron, 6000만개의 parameter와 6억 3천만개의 connection으로 구성되어 있다.
 
-LeNet은 32x32크기의 흑백영상이라 크기가 매우작았찌만, AlexNet은 227x227x3로 구성되어 있기 때문에, 첫번째 kernel의 크기가 11x11x3으로 크다. (stride=4) 결과적으로 96개의 필터를 생성하기 때문에 결과는 55x55x96이 된다. 
+LeNet은 32x32크기의 흑백영상이라 크기가 매우작았찌만, AlexNet은 227x227x3로 구성되어 있기 때문에, 첫번째 kernel의 크기가 11x11x3으로 크다. (stride=4) 결과적으로 96개의 필터를 생성하기 때문에 결과는 55x55x96이 된다.
 
 ![AlexNet](https://www.researchgate.net/profile/Jaime_Gallego2/publication/318168077/figure/fig1/AS:578190894927872@1514862859810/AlexNet-CNN-architecture-layers.png)
 
@@ -42,17 +44,16 @@ LeNet은 32x32크기의 흑백영상이라 크기가 매우작았찌만, AlexNet
 
 주요 특징은 아래와 같다.
 
-- 입력: 224*224 크기의 고정된 RGB 이미지
-- 구조:  
-    - Convoluitional Layer (3x3 filter, stride=1, padding=True)
-    - Max-Pooling Layer (2x2 filtter, stride=2)
-    - 1x1 Conv Layer (1x1 filter, stride=1)
-    - Fully Connected Layer (4096 > 4096 > 1000)
+- 입력: 224\*224 크기의 고정된 RGB 이미지
+- 구조:
+  - Convoluitional Layer (3x3 filter, stride=1, padding=True)
+  - Max-Pooling Layer (2x2 filtter, stride=2)
+  - 1x1 Conv Layer (1x1 filter, stride=1)
+  - Fully Connected Layer (4096 > 4096 > 1000)
 - 특징:
-    - 모든  레이어에 3x3 필터 적용
-    - 1x1 Conv Layer 사용
-    - 다섯장의 Max-Pooling Layer 사용
-
+  - 모든 레이어에 3x3 필터 적용
+  - 1x1 Conv Layer 사용
+  - 다섯장의 Max-Pooling Layer 사용
 
 ## 코드
 
@@ -68,7 +69,7 @@ model = models.alexnet(pretrained=True)
 model
 ```
 
-```
+```bash
 AlexNet(
   (features): Sequential(
     (0): Conv2d(3, 64, kernel_size=(11, 11), stride=(4, 4), padding=(2, 2))
@@ -118,7 +119,7 @@ model.classifier[-1] = last_layer
 model
 ```
 
-```
+```bash
 AlexNet(
   (features): Sequential(
     (0): Conv2d(3, 64, kernel_size=(11, 11), stride=(4, 4), padding=(2, 2))

@@ -13,6 +13,7 @@ category: bitcoin
 slug: /2018/05/31/i-bought-bitcoin-and/
 template: post
 ---
+
 2016년 4월 Posting
 
 비트코인을 드디어 샀다. 깔깔깔깔
@@ -32,7 +33,7 @@ template: post
 
 나의 개인적인 질문에도 답을 해주었다.
 
-```
+```bash
 ** dr*** : ** I don’t mine bitcoins. I am just doing trading here. I lived in New Zealand, so mining cost can be very expensive- - - - - -
 
 **savurself11: ** Do you mine bitcoin yourself or just engage in bitcoin trade? It is just my curiosity.</div> 
@@ -46,7 +47,7 @@ template: post
 
 영수증
 
-```
+```bash
 Receipt
 ==== LocalBitcoins.com Receipt Contact====
 Seller: dr***
@@ -74,7 +75,7 @@ Amount: 5.00 USD
 
 이 짤이 나돌면서 나는 비트코인을 샀다는 것을 이제서야 기억하게 되는데...
 
-```
+```bash
 Receipt
 ==== LocalBitcoins.com Receipt Contact====
 Seller: savurself11

@@ -6,13 +6,14 @@ tags:
   - react
 published: true
 date: 2020-04-29 06:09:18
-description: "https://redux.js.org/glossary#state ## 용어 모음  ### State
+description: 'https://redux.js.org/glossary#state ## 용어 모음  ### State
   (상태)  ```typescript type State = any ```  State (State tree라고 도 불리운다)는 Redux
-  API에서는 보통 스토어에서 관리하고, `getState()`에 의해 반환되는 단일 값을 가리킨다.  관례적으로, 가장..."
+  API에서는 보통 스토어에서 관리하고, `getState()`에 의해 반환되는 단일 값을 가리킨다.  관례적으로, 가장...'
 category: typescript
 slug: /2020/04/redux-study-3/
 template: post
 ---
+
 https://redux.js.org/glossary#state
 
 ## 용어 모음
@@ -104,7 +105,7 @@ dispatching function (간단히 dispatch function)는 함수가 액션 또는 �
 
 `Base Dispatch function`은 스토어의 리듀서에 동기 액션을 제공해야 하는데, 여기에는 이전의 상태값을 통해서 계산된 새로운 상태값이 포함되어야 한다.
 
-미들웨어는 `dispatch function`을 래핑한다. 이는 `dispatch function`이 비동기 액션을 다룰 수 있또록 한다. 미들웨어는 transform, delay, ignore 등 action을 interpret하는 어떤 것이 될수도 있다. 또한 다음 미들웨어에 넘기기전 비동기 액션이 될 수도 있다. 자세한 것은 하단의 내용을 참고하길 바란다.
+미들웨어는 `dispatch function`을 래핑한다. 이는 `dispatch function`이 비동기 액션을 다룰 수 있도록 한다. 미들웨어는 transform, delay, ignore 등 action을 interpret하는 어떤 것이 될수도 있다. 또한 다음 미들웨어에 넘기기전 비동기 액션이 될 수도 있다. 자세한 것은 하단의 내용을 참고하길 바란다.
 
 ### Action Creator
 

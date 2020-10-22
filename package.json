@@ -11,7 +11,8 @@
     "lint": "eslint '**/*.{ts,tsx}'",
     "lint:fix": "npm run lint --fix",
     "prettier": "prettier '**/*.{json,yaml}' --check",
-    "prettier:fix": "prettier '**/*.{json,yaml}' --write"
+    "prettier:fix": "prettier '**/*.{json,yaml}' --write",
+    "algolia": "ts-node --project ./tsconfig.node.json ./src/algolia.ts"
   },
   "repository": "https://github.com/yceffort/yceffort-blog-v2",
   "author": "yceffort <yceffort@gmail.com>",
@@ -23,6 +24,7 @@
   ],
   "dependencies": {
     "@mapbox/rehype-prism": "^0.5.0",
+    "algoliasearch": "^4.5.1",
     "date-fns": "^2.16.1",
     "front-matter": "^4.0.2",
     "next": "^9.5.5",

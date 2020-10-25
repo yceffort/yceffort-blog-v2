@@ -1,17 +1,19 @@
 ---
-title: Step by Step machine laerning - 01
+title: Step by Step machine learning - 01
 date: 2018-11-09 04:44:01
 published: true
 tags:
   - machine-learning
   - scikit-learn
-description: "California Housing 데이터를 바탕으로 scikt-learn을 활용한 머신러닝 예제. ## 1. 기본적인
+description:
+  'California Housing 데이터를 바탕으로 scikt-learn을 활용한 머신러닝 예제. ## 1. 기본적인
   데이터 로딩  프록시 환경이라, 프록시를 핸들러에 추가하였습니다.  ```python import os import tarfile from
-  six.moves import urllib import numpy as np import panda..."
+  six.moves import urllib import numpy as np import panda...'
 category: machine-learning
 slug: /2018/11/08/step-by-step-machine-learning-01/
 template: post
 ---
+
 California Housing 데이터를 바탕으로 scikt-learn을 활용한 머신러닝 예제.
 
 ## 1. 기본적인 데이터 로딩
@@ -32,7 +34,7 @@ HOUSING_URL = "http://www.dcc.fc.up.pt/~ltorgo/Regression/cal_housing.tgz"
 def fetching_housing_data(housing_url=HOUSING_URL, housing_path=HOUSING_PATH):
     if not os.path.isdir(housing_path):
         os.makedirs(housing_path)
-        
+
     proxy = urllib.request.ProxyHandler({'http': 'http://proxy.url', 'https':'http://proxy.url'})
     opener = urllib.request.build_opener(proxy)
     urllib.request.install_opener(opener)
@@ -142,7 +144,7 @@ housing.head()
 housing.info()
 ```
 
-```
+```bash
 <class 'pandas.core.frame.DataFrame'>
 RangeIndex: 20640 entries, 0 to 20639
 Data columns (total 10 columns):
@@ -166,7 +168,7 @@ memory usage: 1.6+ MB
 housing['ocean_proximity'].value_counts()
 ```
 
-```
+```bash
 <1H OCEAN     9136
 INLAND        6551
 NEAR OCEAN    2658
@@ -344,7 +346,7 @@ for train_index, test_index in split.split(housing, housing['income_cat']):
 strat_test_set["income_cat"].value_counts() / len(strat_test_set)
 ```
 
-```
+```bash
 3.0    0.350533
 2.0    0.318798
 4.0    0.176357
@@ -377,8 +379,8 @@ housing.plot(kind="scatter", x="longitude", y="latitude", alpha=0.1)
 
 ```python
 housing.plot(kind="scatter", #산점도
-             x="longitude", 
-             y="latitude", 
+             x="longitude",
+             y="latitude",
              alpha=0.4, #투명도
              s=housing['population'] / 100, #나타낼 데이터
              label="population", #라벨
@@ -534,7 +536,7 @@ corr_matrix["median_house_value"].sort_values(ascending=False)
 
 값은 ~1 부터 1 사이의 값을 가지며, 1에 가까울 수록 강한 positive 상관관계를, -1에 가까울 수록 강한 negative 상관관계를 갖는다.
 
-```
+```bash
 median_house_value    1.000000
 median_income         0.687160
 total_rooms           0.135097
@@ -552,7 +554,6 @@ Name: median_house_value, dtype: float64
 ![correlation-and-dependence](https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Correlation_examples2.svg/800px-Correlation_examples2.svg.png)
 
 상관관계가 있을 수록, plot이 우/좌상향 분포를 나타낸다. 과연 그런지 봅시다.
-
 
 ```python
 from pandas.plotting import scatter_matrix
@@ -585,8 +586,7 @@ corr_matrix = housing.corr()
 corr_matrix['median_house_value'].sort_values(ascending=False)
 ```
 
-```
-
+```bash
 median_house_value          1.000000
 median_income               0.687160
 rooms_per_household         0.146285
@@ -602,7 +602,7 @@ bedrooms_per_room          -0.259984
 Name: median_house_value, dtype: float64
 ```
 
-## 3. 머신러닝 알고리즘 활용을 위한  데이터 준비
+## 3. 머신러닝 알고리즘 활용을 위한 데이터 준비
 
 ### 1) 데이터 클리닝
 
@@ -629,7 +629,7 @@ imputer.statistics_
 housing_num.median().values
 ```
 
-```
+```bash
 array([-118.51  ,   34.26  ,   29.    , 2119.5   ,  433.    , 1164.    ,
         408.    ,    3.5409])
 ```
@@ -724,7 +724,7 @@ housing_cat = housing['ocean_proximity']
 housing_cat.head(10)
 ```
 
-```
+```bash
 17606     <1H OCEAN
 18632     <1H OCEAN
 14650    NEAR OCEAN
@@ -746,14 +746,14 @@ housing_cat_encoded[:10]
 housing_categories
 ```
 
-```
+```bash
 array([0, 0, 1, 2, 0, 2, 0, 2, 0, 0])
 Index(['<1H OCEAN', 'NEAR OCEAN', 'INLAND', 'NEAR BAY', 'ISLAND'], dtype='object')
 ```
 
 너의 text 적당한 number로 카테고리 되었다. Korean 불만있어요?
 
-근데 이렇게 한다면, 0과 1을 비슷한 값으로, 0과 4를 안비슷한 값으로 판단해버릴 것이다. 사실 숫자에는 별의미가 없기 때문에 저런일이 발생해서는 안된다. 그래서 사용하는 것이 `one-hot encoding`이다. `one hot endoing`은 이런 카테고리 데이터를 벡터화 하는 것이다. [여기](https://brunch.co.kr/@sokoban/8)에 잘 정리 되어 있다. 
+근데 이렇게 한다면, 0과 1을 비슷한 값으로, 0과 4를 안비슷한 값으로 판단해버릴 것이다. 사실 숫자에는 별의미가 없기 때문에 저런일이 발생해서는 안된다. 그래서 사용하는 것이 `one-hot encoding`이다. `one hot endoing`은 이런 카테고리 데이터를 벡터화 하는 것이다. [여기](https://brunch.co.kr/@sokoban/8)에 잘 정리 되어 있다.
 
 ```python
 from sklearn.preprocessing import OneHotEncoder
@@ -766,7 +766,7 @@ housing_cat_1hot = encoder.fit_transform(housing_cat_encoded.reshape(-1, 1))
 housing_cat_1hot.toarray()
 ```
 
-```
+```bash
 array([[1., 0., 0., 0., 0.],
        [1., 0., 0., 0., 0.],
        [0., 1., 0., 0., 0.],
@@ -778,7 +778,7 @@ array([[1., 0., 0., 0., 0.],
 
 ### 3) 커스텀 트랜스포머 만들기
 
-이제 이 과정을 데이터가 들어올 때 마다 일일히 할 수 없는 노릇이므로, 이를 자동화하는 과정을 만들어 보려고 한다. scikit-learn에서는 이러한 데이터 클린업 과정을 자동화 할 수 있는 Class를 만들 수 있다. 이를 위한 클래스에서 필요한 것은 `fit()`, (무조건 `return self`), `transform()`, `fit_transform()`이 세가지 메소드를 구현해야 한다. 그리고 이를 위해서는 `TransformerMixin`클래스를 더해야 한다. 추가로 `BaseEstimator`를 더하면,`get_params()`와 `set_params()`메소드도 구현할 수 있는데, 이는 [hyperparameter](https://en.wikipedia.org/wiki/Hyperparameter)를 튜닝할  때 유용하게 사용할 수 있다.
+이제 이 과정을 데이터가 들어올 때 마다 일일히 할 수 없는 노릇이므로, 이를 자동화하는 과정을 만들어 보려고 한다. scikit-learn에서는 이러한 데이터 클린업 과정을 자동화 할 수 있는 Class를 만들 수 있다. 이를 위한 클래스에서 필요한 것은 `fit()`, (무조건 `return self`), `transform()`, `fit_transform()`이 세가지 메소드를 구현해야 한다. 그리고 이를 위해서는 `TransformerMixin`클래스를 더해야 한다. 추가로 `BaseEstimator`를 더하면,`get_params()`와 `set_params()`메소드도 구현할 수 있는데, 이는 [hyperparameter](https://en.wikipedia.org/wiki/Hyperparameter)를 튜닝할 때 유용하게 사용할 수 있다.
 
 ```python
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -788,7 +788,7 @@ rooms_ix, bedrooms_ix, population_ix, household_ix = 3, 4, 5, 6
 # TransformerMixin Custom Cleanup Operation을 하기 위한 필수요소
 # 필수로 구현해야 하는 것
 # fit (return self)
-# transform () 
+# transform ()
 # fit_transform ()
 # BaseEstimator 는 (*args, **kargs)룰 피할 수 있으며
 # 두가지 method를 추가로 구현 가능, get_params(), set_params()
@@ -922,7 +922,7 @@ housing_extra_attribs.head()
 
 ## 4. 모델 적용하기
 
-머신러닝을 할 때 중요한 것은 데이터 보정이다. 이 데이터에서 방의 갯수는 최소 6개에서 최대 39,320개 까지 있고 (우리집 방 한개...ㅠㅠ) median_income은 손을 댄 관계로 1~15까지 밖에 없다. 이러한 숫자들을 조정하는 방법에는 크게 두가지가 있다. 
+머신러닝을 할 때 중요한 것은 데이터 보정이다. 이 데이터에서 방의 갯수는 최소 6개에서 최대 39,320개 까지 있고 (우리집 방 한개...ㅠㅠ) median_income은 손을 댄 관계로 1~15까지 밖에 없다. 이러한 숫자들을 조정하는 방법에는 크게 두가지가 있다.
 
 #### (1) Min Max Scaling - Normalization (정규화)
 
@@ -938,7 +938,7 @@ housing_extra_attribs.head()
 
 암튼 이런 transforamation 스텝을 순서에 맞게 거쳐서 이쁜 값을 만드는 것이 중요할 것이다. 이를 위해서 `PipeLine` 클래스를 사용할 것이다.
 
-`Pipeline`의 `fit`을 부르면, 안에 tuple로 있는 모든 메소드들의 `fit_transform()`을 순차저긍로 호출하게 된다. 마지막까지 다 하게 되면, 마지막에는 `fit()`을 호출하고 끝낸다. 
+`Pipeline`의 `fit`을 부르면, 안에 tuple로 있는 모든 메소드들의 `fit_transform()`을 순차저긍로 호출하게 된다. 마지막까지 다 하게 되면, 마지막에는 `fit()`을 호출하고 끝낸다.
 
 ```py
 from sklearn.pipeline import Pipeline
@@ -958,7 +958,7 @@ num_pipeline = Pipeline([
 num_pipeline.fit_transform(housing_num)
 ```
 
-```
+```bash
 array([[-1.15604281,  0.77194962,  0.74333089, ..., -0.31205452,
         -0.08649871,  0.15531753],
        [-1.17602483,  0.6596948 , -1.1653172 , ...,  0.21768338,
@@ -1056,7 +1056,7 @@ print("Predictions:", lin_reg.predict(some_data_prepared))
 print("Labels:", list(some_labels))
 ```
 
-```
+```bash
 Predictions: [210644.6046718  317768.80715244 210956.43323562  59218.98852743
  189747.55850878]
 Labels:      [286600.0, 340600.0, 196900.0, 46300.0, 254500.0]
@@ -1073,17 +1073,16 @@ lin_rmse = np.sqrt(lin_mse)
 lin_rmse
 ```
 
-```
+```bash
 68628.19819848923
 ```
 
-median_housing_values가 120,000~265,000 인걸 감안했을때, 68628은 너무나 큰 값이다. 굉장히 underfit한 상태임을 알 수 있다. 
+median_housing_values가 120,000~265,000 인걸 감안했을때, 68628은 너무나 큰 값이다. 굉장히 underfit한 상태임을 알 수 있다.
 
 이번엔 `DecsionTreeRegressor`를 활용해보자. 이 모델은 linear하지 않은 데이터 들 사이에 상관관계를 찾을 때 유용하다. [여기](https://ko.wikipedia.org/wiki/%EA%B2%B0%EC%A0%95_%ED%8A%B8%EB%A6%AC_%ED%95%99%EC%8A%B5%EB%B2%95) 에서 자세하게 공부해 볼 수 있다.
 
-
 ```py
-# 디시전 트리를 사용해보자. 
+# 디시전 트리를 사용해보자.
 from sklearn.tree import DecisionTreeRegressor
 
 tree_reg = DecisionTreeRegressor()
@@ -1095,20 +1094,20 @@ tree_rmse = np.sqrt(tree_mse)
 tree_rmse
 ```
 
-```
-0 
+```bash
+0
 ```
 
 에러가 전혀 없다고 나온다. 이건 좀 아니지 않나요?
 
-## 5. Cross-Validation으로 evlautaion을 향상 시키기
+## 5. Cross-Validation으로 evlaution을 향상 시키기
 
 training set을 training set과 validation set으로 일정비율로 나누어, 테스트해보자. 이방식 중 하나 가 `K-fold cross-validation`이라고 하는데, 일정한 비율로 랜덤하게 n회 누어서, 반복해서 테스트 하는 방법이다.
 
 ```py
 # 트레이닝셋을 벨리데이션 셋으로 또 나눠서 10번 cross-validation을 해보자.
 # K-fold cross validation
-# 트레이닝셋을 10개로 나눠서, 디시젼 트리 모델을 각각 10번 테스트 해보는 것이다. 
+# 트레이닝셋을 10개로 나눠서, 디시젼 트리 모델을 각각 10번 테스트 해보는 것이다.
 
 from sklearn.model_selection import cross_val_score
 scores = cross_val_score(tree_reg, housing_prepared, housing_labels, scoring="neg_mean_squared_error", cv=10)
@@ -1116,7 +1115,7 @@ tree_rmse_scores  = np.sqrt(-scores)
 tree_rmse_scores
 ```
 
-10번 돌린 결과가 나왔다. 
+10번 돌린 결과가 나왔다.
 
 ```
 array([68226.82910941, 67439.68375039, 70350.36780248, 68827.53048332,
@@ -1133,7 +1132,7 @@ def display_scores(scores):
 display_scores(tree_rmse_scores)
 ```
 
-```
+```bash
 Scores: [68226.82910941 67439.68375039 70350.36780248 68827.53048332
  69029.59842291 75828.55054539 70465.73078927 71469.01269653
  76190.79186194 69329.49606677]
@@ -1144,13 +1143,13 @@ Standard derivation: 2865.9683978538446
 디시전 트리를 활용한결과, 그다지 좋아보이지 않는다. Linear Model보다 구려보이기까지 하다. Cross-Validation은 단순히 모델을 평가하는 것 뿐만 예측치가 얼마나 정확한지 제공 (정규분표) 한다.
 
 ```py
-lin_scores = cross_val_score(lin_reg, housing_prepared, housing_labels, 
+lin_scores = cross_val_score(lin_reg, housing_prepared, housing_labels,
                              scoring='neg_mean_squared_error', cv=10)
 lin_rmse_scores = np.sqrt(-lin_scores)
 display_scores(lin_rmse_scores)
 ```
 
-```
+```bash
 Scores: [66782.73844323 66960.1179304  70347.95241464 74739.57053231
  68031.13387784 71193.84183403 64969.63055912 68281.61137905
  71552.91570804 67665.10081912]
@@ -1175,7 +1174,7 @@ forest_rmse_scores  = np.sqrt(-scores)
 display_scores(forest_rmse_scores)
 ```
 
-```
+```bash
 Scores: [52997.4173118  50186.47321364 53029.31828865 54414.07187827
  52394.46338811 56393.90724324 51383.83051346 50054.41972395
  55828.51540902 51771.1262269 ]
@@ -1183,7 +1182,7 @@ Mean: 52845.35431970437
 Standard derivation: 2058.1934731131732
 ```
 
-표준 편차가 조금더 줄어들었지만, 아직도 만족스러운 결과라 할 수는 없다. 
+표준 편차가 조금더 줄어들었지만, 아직도 만족스러운 결과라 할 수는 없다.
 
 #### 참고: 모델을 파일로 떨구는 방법
 
@@ -1207,7 +1206,7 @@ from sklearn.model_selection import GridSearchCV
 
 # 첫번째: n_estimator 3개 * max_features 4개 로 총 12가지 의 조합으로 하이퍼 파라미터로 평가함
 # 두번째: 2 *3 개 총 6가지 조합으로 테스트 해봄.
-# 총 18가지 조합으로 RandomForestRegressor를 실행. 
+# 총 18가지 조합으로 RandomForestRegressor를 실행.
 # 그리고 cv=5, 즉 Five-fold test를 하므로 총 90가지의 경우의 트레이닝을 고려하게됨.
 
 
@@ -1226,8 +1225,7 @@ grid_search.best_estimator_
 
 param_grid를 통해 Scikit-learn은 첫번째로 12가지 의 조합(3 * 4)을, 두번째에는 6가지의 조합(2*3)을 활용하여 총 18가지의 방법으로 Grid Search를 진행했다. 그리고 이 모델을 cv(Cross-validation)을 5번씩 해서 총 90번의 연산이 돌아가게 된다.
 
-
-```
+```bash
 {'max_features': 8, 'n_estimators': 30}
 RandomForestRegressor(bootstrap=True, criterion='mse', max_depth=None,
            max_features=8, max_leaf_nodes=None, min_impurity_decrease=0.0,
@@ -1243,7 +1241,7 @@ for mean_score, params in zip(cvres['mean_test_score'], cvres['params']):
     print(np.sqrt(-mean_score), params)
 ```
 
-```
+```bash
 63620.795837027006 {'max_features': 2, 'n_estimators': 3}
 55548.92569283444 {'max_features': 2, 'n_estimators': 10}
 53050.85861795343 {'max_features': 2, 'n_estimators': 30}
@@ -1272,7 +1270,7 @@ RMSE가 제일 작은 50199.124440913874 {'max_features': 8, 'n_estimators': 30}
 
 ### Esemble Method
 
-다른 방법으로는 좋은 결과를 내고 있는 모델들을 짬뽕시키는 것이다. 
+다른 방법으로는 좋은 결과를 내고 있는 모델들을 짬뽕시키는 것이다.
 
 ## 7. 최적의 모델과 에러를 분석하기
 
@@ -1281,7 +1279,7 @@ feature_importances = grid_search.best_estimator_.feature_importances_
 feature_importances
 ```
 
-```
+```bash
 array([7.25174043e-02, 6.40038155e-02, 4.30423521e-02, 1.50651260e-02,
        1.41694078e-02, 1.55005328e-02, 1.36335231e-02, 3.85814812e-01,
        4.51628522e-02, 1.08855596e-01, 4.37230361e-02, 5.91899634e-03,
@@ -1290,7 +1288,7 @@ array([7.25174043e-02, 6.40038155e-02, 4.30423521e-02, 1.50651260e-02,
 
 각 속성별 중요도를 알아봅시다,,
 
-``` py
+```py
 extra_attribs = ['rooms_per_hhold', 'pop_per_hhold', 'bedrooms_per_room']
 cat_encoder = cat_pipeline.named_steps['cat_pipeline']
 cat_hone_hot_attribs = list(cat_encoder.categories_[0])
@@ -1298,7 +1296,7 @@ attributes = num_attribs + extra_attribs + cat_hone_hot_attribs
 sorted(zip(feature_importances, attributes), reverse=True)
 ```
 
-```
+```bash
 [(0.3858148117438145, 'median_income'),
  (0.16564142348730257, 'INLAND'),
  (0.10885559563684136, 'pop_per_hhold'),
@@ -1321,7 +1319,7 @@ sorted(zip(feature_importances, attributes), reverse=True)
 
 ## 8. 최종적으로 예측하기
 
-```py
+```python
 final_model = grid_search.best_estimator_
 
 X_test = strat_test_set.drop("median_house_value", axis=1)
@@ -1336,6 +1334,6 @@ final_rmse = np.sqrt(final_mse)
 final_rmse
 ```
 
-```
+```bash
 68139.43891327262
 ```

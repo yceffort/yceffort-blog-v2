@@ -1,18 +1,20 @@
 ---
-title: Step by Step machine laerning - 03
+title: Step by Step machine learning - 03
 date: 2018-11-24 04:44:01
 published: true
 tags:
   - machine-learning
   - scikit-learn
 mathjax: true
-description: "Classification 2 ## ROC 커브  ROC 커브는 Binary Classification에서 가장 잘
+description:
+  'Classification 2 ## ROC 커브  ROC 커브는 Binary Classification에서 가장 잘
   사용하는 검증기다. 왼쪽 위로 그래프가 상승해 있을 수록 (우하단 면적이 넓을 수록) 좋은 분류기라고 할 수 있다.  ```py # ROC
-  커브는 binary classifiers에서 잘 사용하는 검증기다. # 왼쪽 위로 그래프로 올라갈 수..."
+  커브는 binary classifiers에서 잘 사용하는 검증기다. # 왼쪽 위로 그래프로 올라갈 수...'
 category: machine-learning
 slug: /2018/11/23/step-by-step-machine-learning-03/
 template: post
 ---
+
 Classification 2
 
 ## ROC 커브
@@ -33,20 +35,21 @@ def plot_roc_curve(fpr, tpr, label=None):
     plt.axis([0, 1, 0, 1])
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
-    
+
 plot_roc_curve(fpr, tpr)
 plt.show()
 ```
 
 ![ml-2-3.png](../images/ml-2-3.png)
 
-이런 그래프가 아니고, 점수를 보고 싶다면 
+이런 그래프가 아니고, 점수를 보고 싶다면
 
 ```py
-# 점수로 보고 싶다면, 
+# 점수로 보고 싶다면,
 from sklearn.metrics import roc_auc_score
 roc_auc_score(y_train_5, y_scores)
 ```
+
 ```
 0.963161488618153
 ```
@@ -81,12 +84,12 @@ RandomForestClassifier가 더 낫다는 것을 알 수 있다.
 
 ## Multiple Class Classifier
 
-이런 다양한 클래스를 구분하는 Classifier에는 `RandomForestClassifier`와 `BayesClassifier`가 있다. 그리고 Binary Clasifier에는 `SupportVectorMachine`과 `LinearClassifier`가 있다.앞서서는 5인지 아닌지만 확인했다. 만약 1~10까지를 
-구별해야 한다면 어떻게 해야할까? 
+이런 다양한 클래스를 구분하는 Classifier에는 `RandomForestClassifier`와 `BayesClassifier`가 있다. 그리고 Binary Clasifier에는 `SupportVectorMachine`과 `LinearClassifier`가 있다.앞서서는 5인지 아닌지만 확인했다. 만약 1~10까지를
+구별해야 한다면 어떻게 해야할까?
 
-1) MultipleClassifier 를 사용하는 법
-2) One Versus All: OVA) 0~9를 구별하는 binary 분류기 10개를 만들기. 즉 이것이 무슨 숫자인지 10개의 분류기를 모두 거치는 방법이다.
-3) One Versus One: OVO) 이름 그대로, 각각 맞짱(?) 뜨는 방법이다. 0과 1분류기를 거치고, 0과 2분류기를 거치고, 0과 3분류기를 거치고... 이런식으로 가지수가 나올 수 있는 모든 분류기를 만드는 방법이다. 이 방법은 $$N\times(N-1)$$ 개의 분류기가 필요할 것이다. OVO는 시간은 물론 오래걸리지만, (45개) 트레이닝세트가 적게 필요하므로 더 이점이 있다. 
+1. MultipleClassifier 를 사용하는 법
+2. One Versus All: OVA) 0~9를 구별하는 binary 분류기 10개를 만들기. 즉 이것이 무슨 숫자인지 10개의 분류기를 모두 거치는 방법이다.
+3. One Versus One: OVO) 이름 그대로, 각각 맞짱(?) 뜨는 방법이다. 0과 1분류기를 거치고, 0과 2분류기를 거치고, 0과 3분류기를 거치고... 이런식으로 가지수가 나올 수 있는 모든 분류기를 만드는 방법이다. 이 방법은 $$N\times(N-1)$$ 개의 분류기가 필요할 것이다. OVO는 시간은 물론 오래걸리지만, (45개) 트레이닝세트가 적게 필요하므로 더 이점이 있다.
 
 SVM과 같은 일부 알고리즘은 트레이닝 세트의 크기에 민감해서, 크기가 커질 경우 성능이 뚝뚝 떨어지는데, OVO를 사용하면 더 빠르게 구별할 수 있다. 그러나, 이 외의 경우에는 OVA를 보통 선호 한다고 한다.
 
@@ -101,12 +104,13 @@ sgd_clf.predict([some_digit])
 array([5.])
 ```
 
-이 코드에서는, 5만 구별한 `y_train_5`대신 원래 타겟을 사용하여 `SGDClassifier`를 훈련시켰다. 그런다음 예측을 하나 만들어 냈는데, 내부에서는 scikit-learn이 실제로 10개의 이진 분류기를 훈련시키고 각각의 결정점수를 얻어서 가장 높은 클래스 (5) 를  호출해 낸것이다. 
+이 코드에서는, 5만 구별한 `y_train_5`대신 원래 타겟을 사용하여 `SGDClassifier`를 훈련시켰다. 그런다음 예측을 하나 만들어 냈는데, 내부에서는 scikit-learn이 실제로 10개의 이진 분류기를 훈련시키고 각각의 결정점수를 얻어서 가장 높은 클래스 (5) 를 호출해 낸것이다.
 
 ```py
 some_digit_scores = sgd_clf.decision_function([some_digit])
 some_digit_scores
 ```
+
 ```
 array([[-210257.90046371, -417036.80313781, -405317.41607626,
          -81007.86225196, -357657.92769475,   32836.21879306,

@@ -1,18 +1,20 @@
 ---
-title: Step by Step machine laerning - 05
+title: Step by Step machine learning - 05
 date: 2018-12-17 07:43:27
 published: true
 tags:
   - machine-learning
   - scikit-learn
 mathjax: true
-description: '## Training Models ### 정규 방정식을 활용한 선형 회귀  ```python import numpy
+description:
+  '## Training Models ### 정규 방정식을 활용한 선형 회귀  ```python import numpy
   as np  X = 2 * np.random.rand(100, 1) y = 4 + 3 * X + np.random.randn(100, 1)
   ```  테스트 용으로 데이터를 만들어 보겠습니다.  ```python plt.plot(X, y, "...'
 category: machine-learning
 slug: /2018/12/17/step-by-step-machine-learning-05/
 template: post
 ---
+
 ## Training Models
 
 ### 정규 방정식을 활용한 선형 회귀

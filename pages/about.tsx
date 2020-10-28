@@ -48,12 +48,6 @@ export default function About() {
             </a>
             github contribution
           </h3>
-          <p>
-            <img
-              src="https://ghchart.rshah.org/yceffort"
-              alt="yceffort-github-contribution"
-            />
-          </p>
         </div>
       </Page>
     </Layout>

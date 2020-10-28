@@ -1,10 +1,11 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import React from 'react'
 import styled from 'styled-components'
 
 import config from '../../config'
 
-const AuthorPhoto = styled.img`
+const AuthorPhoto = styled(Image)`
   display: inline-block;
   margin-bottom: 0;
   border-radius: 50%;
@@ -35,7 +36,7 @@ export default function Author() {
   return (
     <>
       <Link href="/">
-        <AuthorPhoto alt={name} src={photo} />
+        <AuthorPhoto alt={name} src={photo} width={75} height={75} />
       </Link>
       <Link href="/">
         <AuthorTitle>{name}</AuthorTitle>

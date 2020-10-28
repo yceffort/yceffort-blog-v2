@@ -3,8 +3,9 @@ title: 'Nextjs 10 릴리즈 및 적용 후기'
 tags:
   - javascript
   - nextjs
+  - react
 published: true
-date: 2020-10-28 10:24:01
+date: 2020-10-28 19:24:01
 description: 'nextjs 정말 열일하네'
 ---
 
@@ -150,7 +151,13 @@ https://nextjs.org/analytics
 
 당장은 vercel만 지원하는 것 같은데(?) 운좋게도(?) 블로그가 vercel로 서빙되고 있기 때문에 당장 시도해보러 갔다.
 
-> production 배포가 필요해서 잠시 후에...
+![analytics](./analytics1.png)
+
+![analytics](./analytics2.png)
+
+(점수가 깎이는 것은 아마도 메인페이지의 페이지 전환 버튼 떄문인 것 같다. 현재 타이틀 제목 길이에 따라서 페이징 버튼이 위아래로 일관되지 못하게 움직이는 버그가 있다.)
+
+일단 모양새와 제공데이터는 구글 라이트 하우스와 비슷한데, 차이가 있다면 page 별로 데이터도 지원한다는 것이다. 다만 서두에도 말한 것 처럼 vercel을 써야만 누릴 수 있는 기능이라 🤔 근데 라이트 하우스에 비해 크게 차별점도 없다면...
 
 ## 커머스 키트 제공
 
@@ -160,7 +167,7 @@ Next.js가 본격적으로 돈을 벌 만한 비즈니스를 시작하는 것 �
 
 ## 리액트 17 지원
 
-react 17을 지원한다. breaking change가 없으므로 바로 적용 가능하며 react를 import 하지 않아도 사용할 수 있는 jsx tranform 기능도 사용할 수 있게 되었다.
+react 17을 지원한다. breaking change가 없으므로 바로 적용 가능하며 react를 import 하지 않아도 사용할 수 있는 jsx transform 기능도 사용할 수 있게 되었다.
 
 https://reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html
 
@@ -206,7 +213,7 @@ nextjs 에서 기능이 deprecated 되는 등의 대규모 코드 베이스 변�
 
 https://nextjs.org/docs/advanced-features/codemods
 
-## `getStaticPaths`에 블로킹 폴백 추가
+## `getStaticPaths`에 블로킹 fallback 추가
 
 `getStaticProps` 와 `getStaticPaths`에 `fallback` 속성이 추가되어 있었다. 이 속성은 최초에는 정적 페이지 (fallback 페이지)를 제공하고, 이후 요청 시에는 완전히 렌더링된 콘텐츠를 제공할 수 있도록 도와주는 기능이었다. 그러나 몇몇 개발자들이, 사용자가 페이지를 처음 요청할때는 사전 렌더링을 차단할 수 있는 옵션을 요구했었나 보다. (나또한 fallback 페이지를 보여주는 것이 사용자들에게 안좋은 사용자 경험을 제공한다고 생각했다. ) 그래서 `blocking`옵션이 추가되었다.
 
@@ -222,6 +229,12 @@ export function getStaticPaths() {
 
 ## 결론
 
+여러가지로 nextjs는 정말로 잘 관리되고 있는 리액트 SSR 프레임워크다. 단순히 nextjs 뿐만 아니라 여러가지로 nextjs를 중심으로 다양한 생태계를 만들어 가려는 것이 보인다.
+
+모질라나 webpack 등 순수하게 기부로 운영되고 있는 대규모 오픈소스 프로젝트들이 코로나 시국이 닥치면서 생존 문제에 직면한 것을 보고 마음이 안타까웠다. 이러한 문제를 vercel도 알고 있는 듯, 여러가지로 수익화를 하려는 노력이 보였다. `vercel`, `next commerce` 등의 비즈니스를 통해서, 단순히 기부에 의존하는 것이 아니라 다각도로 생존에 대해 고민하고 있는 것이 보인다. 개인적으로 다 잘되었으면 하는 바람이다.
+
 회사를 옮기면서 nextjs는 업무에서는 더 이상 쓰지 못하고 있지만 (ㅠㅠ) 블로그나 개인 프로젝트에서는 나름 적극적으로 사용하고 있었다. 심지어 지금 하고있는 nextjs conf 도 꼬박 꼬박 잘챙겨보고 있다. (미리 신청해서 티켓도 받아놨었는데 어디간지 모르겠네)
 
-전 회사 사람들은 next github에 issue 도 올려서 contribute도 했는데 아직도 나는 가져다 쓰고 구글링 하기에 바쁘다 😇 같은, 그리고 연차도 더 많은 개발자로서 부끄럽지 않을 수가 없는 일이다. 조만간 오픈소스에 기여할 날도 오기를 바라며 열심히 공부를 해야겠다. 
+전 회사 사람들은 next github에 issue 도 올려서 contribute도 했는데 아직도 나는 가져다 쓰고 구글링 하기에 바쁘다 😇
+
+같은, 그리고 연차도 더 많은 개발자로서 부끄럽지 않을 수가 없는 일이다. 조만간 오픈소스에 기여할 날도 오기를 바라며 열심히 공부를 해야겠다.

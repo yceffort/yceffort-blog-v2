@@ -1,4 +1,5 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
+import { useRouter } from 'next/router'
 import React from 'react'
 
 import Feed from '../../../../src/components/Feed'
@@ -26,6 +27,13 @@ export default function Tag({
   hasNextPage: boolean
 }) {
   const page = parseInt(pageNo)
+
+  const router = useRouter()
+
+  if (router.isFallback) {
+    return <div>Loading...</div>
+  }
+
   return (
     <Layout
       title={`Tag - ${tag}`}
@@ -65,7 +73,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths,
-    fallback: true,
+    fallback: 'blocking',
   }
 }
 

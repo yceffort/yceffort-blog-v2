@@ -39,7 +39,7 @@ Module Federation은 자바스크립트 애플리케이션이 다른 애플리�
 
 ## federated application 만들어보기
 
-`./src/App`을 `app_one_remote`라고 선언하였다. 이는 다른 애플리케이션에서 실행도리 수 있다.
+`./src/App`을 `app_one_remote`라고 선언하였다. 이는 다른 애플리케이션에서 실행될 수 있다.
 
 ```javascript
 const HtmlWebpackPlugin = require('html-webpack-plugin')

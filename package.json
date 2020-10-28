@@ -33,6 +33,7 @@
     "promise-fs": "^2.1.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-is": "^17.0.1",
     "react-helmet": "^6.1.0",
     "react-icons": "^3.11.0",
     "react-tiny-fab": "^4.0.1",

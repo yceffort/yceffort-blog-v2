@@ -5,16 +5,6 @@ import styled from 'styled-components'
 
 import config from '../../config'
 
-const AuthorPhoto = styled(Image)`
-  display: inline-block;
-  margin-bottom: 0;
-  border-radius: 50%;
-  background-clip: padding-box;
-  width: 75px;
-  height: 75px;
-  cursor: pointer;
-`
-
 const AuthorTitle = styled.h1`
   font-size: 1.125em;
   font-weight: 600;
@@ -36,7 +26,19 @@ export default function Author() {
   return (
     <>
       <Link href="/">
-        <AuthorPhoto alt={name} src={photo} width={75} height={75} />
+        <Image
+          alt={name}
+          src={photo}
+          width={75}
+          height={75}
+          style={{
+            display: 'inline-block',
+            marginBottom: '0px',
+            borderRadius: '50%',
+            backgroundClip: 'padding-box',
+            cursor: 'pointer',
+          }}
+        />
       </Link>
       <Link href="/">
         <AuthorTitle>{name}</AuthorTitle>

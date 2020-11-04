@@ -46,6 +46,17 @@ const Layout = ({
       <Head>
         <html lang="kr" />
         <title>{title}</title>
+
+        <meta name="application-name" content="yceffort's blog" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="yceffort's blog" />
+        <meta name="description" content="yceffort's blog" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="msapplication-TileColor" content="#00b7ff" />
+        <meta name="msapplication-tap-highlight" content="no" />
+
         <meta name="description" content={layoutDescription} />
         <meta property="og:site_name" content={title} />
         <meta property="og:title" content={title} />

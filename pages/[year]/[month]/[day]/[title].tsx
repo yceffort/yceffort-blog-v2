@@ -1,5 +1,6 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
 import React from 'react'
+import DefaultErrorPage from 'next/error'
 
 import { Post } from '../../../../src/types/types'
 import PostRenderer from '../../../../src/components/Post/Post'
@@ -19,7 +20,9 @@ export default function PostPage({ post }: { post?: Post }) {
     >
       <PostRenderer post={post} />
     </Layout>
-  ) : null
+  ) : (
+    <DefaultErrorPage statusCode={404} />
+  )
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -52,6 +55,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   }
 
   return {
-    props: { post: { ...post, path: '' } },
+    props: { post: post ? { ...post, path: '' } : null },
   }
 }

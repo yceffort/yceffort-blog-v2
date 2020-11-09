@@ -20,7 +20,16 @@
     "sourceMap": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "typeRoots": ["./typings", "./node_modules/@types"]
+    "typeRoots": ["./typings", "./node_modules/@types"],
+    "paths": {
+      "$pages/*": ["pages/*"],
+      "#public/*": ["public/*"],
+      "#components/*": ["src/components/*"],
+      "#constants/*": ["src/constants/*"],
+      "#utils/*": ["src/utils/*"],
+      "#types/*": ["src/types/*"],
+      "#src/*": ["src/*"]
+    }
   },
   "exclude": ["dist", ".next", "out", "next.config.js"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "*.ts"]

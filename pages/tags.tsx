@@ -3,12 +3,12 @@ import Link from 'next/link'
 import React from 'react'
 import styled from 'styled-components'
 
-import Layout from '../src/components/Layout'
-import Page from '../src/components/Page'
-import Sidebar from '../src/components/Sidebar/Sidebar'
-import config from '../src/config'
-import { TagWithCount } from '../src/types/types'
-import { getAllTagsFromPosts } from '../src/utils/Markdown'
+import Layout from '#components/Layout'
+import Page from '#components/Page'
+import Sidebar from '#components/Sidebar/Sidebar'
+import config from '#src/config'
+import { TagWithCount } from '#types/types'
+import { getAllTagsFromPosts } from '#utils/Markdown'
 
 const TagList = styled.ul`
   list-style: none;

@@ -2,14 +2,11 @@ import { GetStaticPaths, GetStaticProps } from 'next'
 import React from 'react'
 import DefaultErrorPage from 'next/error'
 
-import { Post } from '../../../../src/types/types'
-import PostRenderer from '../../../../src/components/Post/Post'
-import Layout from '../../../../src/components/Layout'
-import config from '../../../../src/config'
-import {
-  getAllPosts,
-  parseMarkdownToHTML,
-} from '../../../../src/utils/Markdown'
+import { getAllPosts, parseMarkdownToHTML } from '#utils/Markdown'
+import Layout from '#components/Layout'
+import PostRenderer from '#components/Post/Post'
+import config from '#src/config'
+import { Post } from '#types/types'
 
 export default function PostPage({ post }: { post?: Post }) {
   return post ? (

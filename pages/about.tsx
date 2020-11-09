@@ -1,9 +1,9 @@
 import React from 'react'
 
-import Layout from '../src/components/Layout'
-import Page from '../src/components/Page'
-import Sidebar from '../src/components/Sidebar/Sidebar'
-import config from '../src/config'
+import Layout from '#components/Layout'
+import Page from '#components/Page'
+import Sidebar from '#components/Sidebar/Sidebar'
+import config from '#src/config'
 
 export default function About() {
   return (

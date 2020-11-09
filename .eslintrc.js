@@ -1,7 +1,4 @@
 module.exports = {
-  "extends": [
-    "eslint-config-yceffort/typescript",
-  ],
-  "rules": {
-  }
+  extends: ['eslint-config-yceffort/typescript'],
+  rules: {},
 }

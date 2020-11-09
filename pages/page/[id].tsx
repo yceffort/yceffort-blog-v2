@@ -1,15 +1,15 @@
 import React from 'react'
 import { GetStaticPaths, GetStaticProps } from 'next'
 
-import { getAllPosts } from '../../src/utils/Markdown'
-import { DEFAULT_NUMBER_OF_POSTS } from '../../src/types/const'
-import { Post } from '../../src/types/types'
-import Feed from '../../src/components/Feed'
-import Layout from '../../src/components/Layout'
-import config from '../../src/config'
-import Sidebar from '../../src/components/Sidebar/Sidebar'
-import Page from '../../src/components/Page'
-import Pagination from '../../src/components/Pagination'
+import { DEFAULT_NUMBER_OF_POSTS } from '#types/const'
+import { getAllPosts } from '#utils/Markdown'
+import { Post } from '#types/types'
+import Feed from '#components/Feed'
+import Layout from '#components/Layout'
+import config from '#src/config'
+import Sidebar from '#components/Sidebar/Sidebar'
+import Page from '#components/Page'
+import Pagination from '#components/Pagination'
 
 export default function IndexPage({
   pageNo,

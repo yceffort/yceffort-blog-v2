@@ -2,18 +2,15 @@ import { GetStaticPaths, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 import React from 'react'
 
-import Feed from '../../../../src/components/Feed'
-import Layout from '../../../../src/components/Layout'
-import Page from '../../../../src/components/Page'
-import Pagination from '../../../../src/components/Pagination'
-import Sidebar from '../../../../src/components/Sidebar/Sidebar'
-import config from '../../../../src/config'
-import { DEFAULT_NUMBER_OF_POSTS } from '../../../../src/types/const'
-import { Post } from '../../../../src/types/types'
-import {
-  getAllPosts,
-  getAllTagsFromPosts,
-} from '../../../../src/utils/Markdown'
+import Feed from '#components/Feed'
+import Layout from '#components/Layout'
+import Page from '#components/Page'
+import Pagination from '#components/Pagination'
+import Sidebar from '#components/Sidebar/Sidebar'
+import config from '#src/config'
+import { DEFAULT_NUMBER_OF_POSTS } from '#types/const'
+import { Post } from '#types/types'
+import { getAllPosts, getAllTagsFromPosts } from '#utils/Markdown'
 
 export default function Tag({
   posts,

@@ -6,11 +6,12 @@ import { Fab, Action } from 'react-tiny-fab'
 import { BiPlus, BiArrowToTop } from 'react-icons/bi'
 import { ImGithub } from 'react-icons/im'
 
-import { Post } from '../../types/types'
 import Tags from './components/Tags'
 import Author from './components/Author'
 import Meta from './components/meta'
 import Content from './components/Content'
+
+import { Post } from '#types/types'
 
 import 'react-tiny-fab/dist/styles.css'
 

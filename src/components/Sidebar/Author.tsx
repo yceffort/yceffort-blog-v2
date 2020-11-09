@@ -3,7 +3,7 @@ import Image from 'next/image'
 import React from 'react'
 import styled from 'styled-components'
 
-import config from '../../config'
+import config from '#src/config'
 
 const AuthorTitle = styled.h1`
   font-size: 1.125em;

@@ -2,6 +2,7 @@
 title: 'eslint, prettier, editorconfig 로 코드 컨벤션을 맞춘 후기'
 tags:
   - javascript  
+  - eslint
 published: true
 date: 2020-11-11 22:06:31
 description: '예민이가 된 기분'
@@ -48,7 +49,8 @@ https://github.com/eslint/eslint/issues/10930
 
 https://github.com/prettier/eslint-config-prettier
 
-> Turns off all rules that are unnecessary or might conflict with Prettier. ;> This lets you use your favorite shareable config without letting its stylistic choices get in the way when using Prettier.
+> Turns off all rules that are unnecessary or might conflict with Prettier. ;
+> This lets you use your favorite shareable config without letting its stylistic choices get in the way when using Prettier.
 
 ## 특정 라이브러리 import 방지
 

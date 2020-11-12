@@ -185,7 +185,7 @@ let obj = {
 Object.preventExtensions(obj)
 obj.x = 100 // 100 으로 변경된다.
 obj.z.c = 3 // 가능
-delete obj.z // 가능. 왜냐면 확장만 막기 떄문.
+delete obj.z // 가능. 왜냐면 확장만 막기 때문.
 ```
 
-갑자기 이 글을 쓴 이유는 https://v8.dev/blog/react-cliff 이것 떄문이다. 다음에 계속 🤔
+갑자기 이 글을 쓴 이유는 https://v8.dev/blog/react-cliff 이것 때문이다. 다음에 계속 🤔

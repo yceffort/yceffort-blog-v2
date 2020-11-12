@@ -47,7 +47,7 @@ export default function StudentsList({ students }) {
 
 ![paypal-bug](https://kentcdodds.com/static/330366840b58941a34169d30db87884b/e3189/no-contacts.png)
 
-자바스크립트에서 `0`은 `falsy`한 값으로 취급되기 때문에, `&&` 우측에 있는 값은 계산하지 않는다. 근데 어디까지나 `falsy`한 값인 거지, `null`이나 `undefined`처럼 렌더링을 안하는 값은 아니기 떄문에 (순수하게 빈값으로 계산되지는 않으므로) 0이 나오게 된다.
+자바스크립트에서 `0`은 `falsy`한 값으로 취급되기 때문에, `&&` 우측에 있는 값은 계산하지 않는다. 근데 어디까지나 `falsy`한 값인 거지, `null`이나 `undefined`처럼 렌더링을 안하는 값은 아니기 때문에 (순수하게 빈값으로 계산되지는 않으므로) 0이 나오게 된다.
 
 ![terrible](https://upload.inven.co.kr/upload/2014/12/23/bbs/i3324974586.jpg)
 

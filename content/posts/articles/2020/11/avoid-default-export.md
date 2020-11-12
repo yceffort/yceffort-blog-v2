@@ -8,7 +8,7 @@ date: 2020-11-09 23:05:08
 description: '근데 쓰는게 뭔가 더 안정적인 기분이야'
 ---
 
-`export default` 구문은 보통 파일 내에서 한개만 `export`하거나, 대표로 `export`할 것이 있을 떄 많이 쓴다.
+`export default` 구문은 보통 파일 내에서 한개만 `export`하거나, 대표로 `export`할 것이 있을 때 많이 쓴다.
 
 ```typescript
 function Foo {

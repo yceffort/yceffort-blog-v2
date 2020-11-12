@@ -67,7 +67,7 @@ description: '크롬에서 자바스크립트를 로딩하는 순서'
 
 #### 사용처
 
-사용할 떄 주의 해야 한다. (https://calendar.perfplanet.com/2016/prefer-defer-over-async/) 요즘 들어 중요하지 않은 스크립트를 로딩 할 때 많이 사용하고 있지만, 로딩 우선순위만 낮을 뿐 실행 우선순위는 높다는 것을 기억해야 한다.
+사용할 때 주의 해야 한다. (https://calendar.perfplanet.com/2016/prefer-defer-over-async/) 요즘 들어 중요하지 않은 스크립트를 로딩 할 때 많이 사용하고 있지만, 로딩 우선순위만 낮을 뿐 실행 우선순위는 높다는 것을 기억해야 한다.
 
 ### `<script defer />`
 

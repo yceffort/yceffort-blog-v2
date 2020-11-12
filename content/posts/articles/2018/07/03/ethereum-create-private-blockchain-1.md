@@ -17,7 +17,7 @@ Geth client 설치부터 사설 블록체인 시작까지
 
 ### 1. 이더리움 설치
 
-```
+```bash
 sudo apt-get install software-properties-common
 sudo add-apt-repository -y ppa:ethereum/ethereum
 sudo apt-get update
@@ -27,7 +27,7 @@ sudo apt-get -y install ethereum
 
 ### 2. geth 실행 확인해보기
 
-```
+```bash
 deploy@jayg-blockchain2:~$ geth
 INFO [07-03|10:55:27] Maximum peer count                       ETH=25 LES=0 total=25
 INFO [07-03|10:55:27] Starting peer-to-peer node               instance=Geth/v1.8.11-stable-dea1ce05/linux-amd64/go1.10
@@ -51,7 +51,7 @@ INFO [07-03|10:55:29] IPC endpoint opened                      url=/home/deploy/
 
 ### 3. Account 만들기
 
-```
+```bash
 deploy@jayg-blockchain3:~$ geth --datadir ./ethereum/data/ account new
 INFO [07-03|10:42:38] Maximum peer count                       ETH=25 LES=0 total=25
 Your new account is locked with a password. Please give a password. Do not forget this password.
@@ -64,7 +64,7 @@ Address: {44e74080949320292839b9a0df55e4459dd51434}
 
 ### 4. Account 확인하기
 
-```
+```bash
 deploy@jayg-blockchain3:~$ geth --datadir ./ethereum/data/ account list
 INFO [07-03|10:42:57] Maximum peer count                       ETH=25 LES=0 total=25
 Account #0: {44e74080949320292839b9a0df55e4459dd51434} keystore:///home/deploy/ethereum/data/keystore/UTC--2018-07-03T01-42-40.966434322Z--44e74080949320292839b9a0df55e4459dd51434
@@ -115,7 +115,7 @@ Genesis Block은 블록체인에서 가장 첫번째로 생성되는 블록으�
 
 파일을 생성하고, 제네시스 블록으로 시작합니다.
 
-```
+```bash
 deploy@jayg-blockchain3:~$ touch genesis.json
 deploy@jayg-blockchain3:~$ geth --datadir ./ethereum/data/ init ./genesis.json
 INFO [07-03|11:57:49] Maximum peer count                       ETH=25 LES=0 total=25
@@ -132,7 +132,7 @@ INFO [07-03|11:57:49] Successfully wrote genesis state         database=lightcha
 
 ### 6. 이더리움 네트워크 실행하기
 
-```
+```bash
 deploy@jayg-blockchain3:~$ geth --identity 'PrivateNetwork' --datadir ./ethereum/data/ -port '33333' --rpc --rpcaddr 0.0.0.0 --rpcport '8123' --rpccorsdomain '*' --nodiscover --networkid 1900 --nat 'any' --rpcapi 'db,eth,net,web3,miner' console
 INFO [07-03|12:07:27] Maximum peer count                       ETH=25 LES=0 total=25
 INFO [07-03|12:07:27] Starting peer-to-peer node               instance=Geth/PrivateNetwork/v1.8.11-stable-dea1ce05/linux-amd64/go1.10

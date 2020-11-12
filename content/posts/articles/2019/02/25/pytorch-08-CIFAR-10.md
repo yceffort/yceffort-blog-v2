@@ -172,7 +172,7 @@ class LeNet(nn.Module):
 
 ### 결과
 
-```
+```bash
 ===================================================
 epoch:  1
 training loss: 1.51251, acc: 44.908001
@@ -273,7 +273,7 @@ class LeNet_2(nn.Module):
 
 ### 결과
 
-```
+```bash
 ===================================================
 epoch:  1
 training loss: 1.51715, acc: 44.712002
@@ -370,7 +370,7 @@ validation_loader = torch.utils.data.DataLoader(dataset=validation_dataset, batc
 
 ### 결과
 
-```
+```bash
 ===================================================
 epoch:  1
 training loss: 1.69155, acc: 38.206001

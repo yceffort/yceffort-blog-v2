@@ -5,11 +5,7 @@ published: true
 tags:
   - javascript
 description: "ES6에서부터 생긴 `arrow function`은 일반적으로 `()=>{}`의 모양을 하고 있으며, 동작도
-  비슷해보인다. 하지만 이 두 선언방식은 두가지 분명한 차이를 가지고 있다. 하지만 그전에 this를 알아야 한다.  ## 0.
-  this  `this` 는 현재 실행 문맥을 뜻한다. 즉, 호출한 것이 누구냐는 것이다.  ```javascript co..."
-category: javascript
-slug: /2020/05/difference-between-function-and-arrow/
-template: post
+  비슷해보인다. 하지만 이 두 선언방식은 두가지 분명한 차이를 가지고 있다. 하지만 그전에 this를 알아야 한다."
 ---
 ES6에서부터 생긴 `arrow function`은 일반적으로 `()=>{}`의 모양을 하고 있으며, 동작도 비슷해보인다. 하지만 이 두 선언방식은 두가지 분명한 차이를 가지고 있다.
 

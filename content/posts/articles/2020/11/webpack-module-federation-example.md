@@ -5,7 +5,7 @@ tags:
   - webpack
 published: true
 date: 2020-11-05 22:19:14
-description: 'Micron Frontend 🤔'
+description: 'Micro Frontend 🤔'
 ---
 
 https://yceffort.kr/2020/09/webpack-module-federation 에서 이어진다.

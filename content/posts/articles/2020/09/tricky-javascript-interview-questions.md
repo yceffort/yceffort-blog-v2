@@ -108,7 +108,7 @@ arrayFromValue(10); // ???
 
 ### 정답
 
-단순히 return 뒤애 새줄이 생겼고, 그 뒤에 `[item]`이 존재한다. 이 경우, 자바스크립트는 return 뒤에 자동으로 `;`을 붙여버리게 된다. 따라서 그 뒷줄에 있는 코드는 아무런 역할을 하지 않는다. (물론 lint에 걸리는게 정상이곘지만) 따라서 답은 `undeinfed`다.
+단순히 return 뒤애 새줄이 생겼고, 그 뒤에 `[item]`이 존재한다. 이 경우, 자바스크립트는 return 뒤에 자동으로 `;`을 붙여버리게 된다. 따라서 그 뒷줄에 있는 코드는 아무런 역할을 하지 않는다. (물론 lint에 걸리는게 정상이곘지만) 따라서 답은 `undefined`다.
 
 ## 문제 5
 
@@ -171,7 +171,7 @@ const myConst = 3.14;
 
 ### 정답
 
-https://yceffort.kr/2020/05/var-let-const-hoisting/ 에서도 다뤘듯이, `let`과 `const`는 TDZ에 들어가게 된다. 따라서 첫번째 줄에서는 undeinfed, 2번째 줄에서는 에러가 날 것이다.
+https://yceffort.kr/2020/05/var-let-const-hoisting/ 에서도 다뤘듯이, `let`과 `const`는 TDZ에 들어가게 된다. 따라서 첫번째 줄에서는 undefined, 2번째 줄에서는 에러가 날 것이다.
 
 ```javascript
 var myVar; // TDZ에 들어가지않고, 호이스팅 된다.

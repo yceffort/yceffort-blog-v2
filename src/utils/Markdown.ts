@@ -43,7 +43,7 @@ export async function getAllPosts(): Promise<Array<Post>> {
         frontmatter: {
           ...fm,
           tags,
-          date: new Date(date).getTime(),
+          date: new Date(date).getTime() - 9 * 60 * 60 * 1000, // 한국시간
         },
         body,
         fields: {

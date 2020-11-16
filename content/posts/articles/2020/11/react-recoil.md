@@ -188,7 +188,7 @@ function TempCelsius() {
 - [리액트 동시성 모드가 사용가능해지면 이를 지원할 수도 있다는 언급이 있었다.](https://recoiljs.org/docs/introduction/motivation/) 왜냐하면 [Recoil은 내부적으로 React의 상태를 사용하고 있으며](https://github.com/facebookexperimental/Recoil/blob/55059f54ad1d09bfac8d086316bb18bed9cc2879/src/hooks/Recoil_Hooks.js#L20) 이는 곧 [React에서 내놓을 동시성 모드](https://ko.reactjs.org/docs/concurrent-mode-intro.html)를 지원할 수도 있다는 가능성이 존재한다고 볼 수 있기 때문이다. (실제로 motivation에서 그렇게 이야기 하기도 했고) 사용이 간편하다, Facebook이 만들었다는 것 외에 다른 상태 관리 라이브러리와 다른 가장 큰 차별점 & 그리고 도입을 해야하는 이유가 있다면 바로 이것 때문이 아닐 까 싶다. (물론 아직은 멀었지만)
 > We have the possibility of compatibility with Concurrent Mode and other new React features as they become available.
 
-## 더 알아뵤기
+## 더 알아보기
 
 - https://www.youtube.com/watch?v=_ISAA_Jt9kI&ab_channel=ReactEurope
 - https://ui.toast.com/weekly-pick/ko_20200616

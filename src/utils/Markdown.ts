@@ -19,8 +19,8 @@ import gfm from 'remark-gfm'
 
 import { FrontMatter, Post, TagWithCount } from '../types/types'
 
-const POST_PATH = `${process.cwd()}/content/posts/articles`
-const DIR_REPLACE_STRING = '/posts/articles'
+const DIR_REPLACE_STRING = '/posts'
+const POST_PATH = `${process.cwd()}${DIR_REPLACE_STRING}`
 
 export async function getAllPosts(): Promise<Array<Post>> {
   const files = getFilesRecursively(POST_PATH).reverse()

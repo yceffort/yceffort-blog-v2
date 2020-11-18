@@ -202,7 +202,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 - https://github.com/webpack/webpack/blob/master/lib/container/ModuleFederationPlugin.js
 - https://github.com/module-federation/module-federation-examples
 
-를 그냥 참고 하면서 했다. 다른 여타 기능들 처럼 webpack document에서 옵션으로 들어갈 수 있는 object의 특징이나 값을 명시해주었으면 좋곘다. 
+를 그냥 참고 하면서 했다. 다른 여타 기능들 처럼 webpack document에서 옵션으로 들어갈 수 있는 object의 특징이나 값을 명시해주었으면 좋겠다. 
 
 https://webpack.js.org/concepts/module-federation/#containerplugin-low-level
 

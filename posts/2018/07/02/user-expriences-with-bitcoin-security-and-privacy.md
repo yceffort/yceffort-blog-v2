@@ -28,7 +28,7 @@ The Other Side of the Coin: User Experiences with Bitcoin Security and Privacy
 
 가장 많이 사용되는 CMT(Coin Management Tool)인 CoinBase, Xapo는 보안 책임을 제3자에게 넘기는 웹기반 도구 이다. 그러나 사용자의 1/3이 이 데이터가 암호화되어 있는지, 백업되어 있는지 알지 못하는 것으로 나타났다. 이 솔루션을 사용하는 사용자중 50%는 이 솔루션 만을 사용한다고 하였고, 나머지는 관리를 위해 다른 제품도 사용하는 것으로 나타났다. 위험 시나리오와 관련하여, 두번째로 큰 위험은 이런 CMT의 취약성으로 인해 나타났다.
 
-또한 익명으로 남는 다는 것에 대한 오해가 생각보다 많은 사용자에게 나타나는 것도 발견되었다. 또한 사용자의 25%가 보안으로 취약한 '토르 위에서 비트코인을 사용'하는 것으로 나타났다. 참고([Bitcoin over Tor isn't a good idea](https://arxiv.org/abs/1410.6079)). 그리고 이미 사용자의 22.5%가 보안 침해로 인해 비트코인을 잃어버렸다고 이야기 했다. 이 중 절반 가량은 이 손실을 자신들의 잘못으로 여기고 있고, 대다수는 그 잃어버린 자산을 영원히 되찾지 못햇다.
+또한 익명으로 남는 다는 것에 대한 오해가 생각보다 많은 사용자에게 나타나는 것도 발견되었다. 또한 사용자의 25%가 보안으로 취약한 '토르 위에서 비트코인을 사용'하는 것으로 나타났다. 참고([Bitcoin over Tor isn't a good idea](https://arxiv.org/abs/1410.6079)). 그리고 이미 사용자의 22.5%가 보안 침해로 인해 비트코인을 잃어버렸다고 이야기 했다. 이 중 절반 가량은 이 손실을 자신들의 잘못으로 여기고 있고, 대다수는 그 잃어버린 자산을 영원히 되찾지 못했다.
 
 <iframe width="640px" height="360px" src="https://www.youtube.com/embed/gd5NZvsyAfw" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 

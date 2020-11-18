@@ -1622,7 +1622,7 @@ React 패키지내에는 엘리먼트와 컴포넌트 클래스에 도움을 줄
 
 ### Why ReactDOM is separated from React?
 
-React 팀은 DOM조작과 관련된 모든 기능을 `ReactDOM` 라이브러리로 옮겼다. 이는 React v0.14에서 처음으로 분리되었다. 이 때 패키지를 보자면, `react-native` `react-art` `react-canvas` `react-three`등 패키지 분리가 깔끔해졌으며, `React`패키지 자체에는 브라우저 DOM 조작과 관련된 라이브러리가 없다는 것이 명확해졌다. React가 다수의 환경에서 렌더링을 지원하기 위해, React팀은 React와 React-dom을 분리할 계획을 수립햇다. 이러한 방법론은 웹 버전에서 쓰이는 React와 React-Native사이에 컴포넌트를 쓰는 방법론을 공유할 수 있도록 해준다.
+React 팀은 DOM조작과 관련된 모든 기능을 `ReactDOM` 라이브러리로 옮겼다. 이는 React v0.14에서 처음으로 분리되었다. 이 때 패키지를 보자면, `react-native` `react-art` `react-canvas` `react-three`등 패키지 분리가 깔끔해졌으며, `React`패키지 자체에는 브라우저 DOM 조작과 관련된 라이브러리가 없다는 것이 명확해졌다. React가 다수의 환경에서 렌더링을 지원하기 위해, React팀은 React와 React-dom을 분리할 계획을 수립했다. 이러한 방법론은 웹 버전에서 쓰이는 React와 React-Native사이에 컴포넌트를 쓰는 방법론을 공유할 수 있도록 해준다.
 
 ### How to use React label element?
 

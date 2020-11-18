@@ -127,7 +127,7 @@ for (const d of Object.values(Direction)) {
 }
 ```
 
-`as const`를 사용하여, `Direction`에 강한 const assertion을 추가햇다. 이는 타입스크립트에서 타입추론의 범위를 줄이는 효과를 가져온다.
+`as const`를 사용하여, `Direction`에 강한 const assertion을 추가했다. 이는 타입스크립트에서 타입추론의 범위를 줄이는 효과를 가져온다.
 
 ![as const를 사용하지 않았을 때](./images/not_as_const.png)
 

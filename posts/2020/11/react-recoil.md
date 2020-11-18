@@ -128,7 +128,7 @@ function selector<T>({
 - `set?`: 만약 이 `set`이 설정되면, `selector` 는 쓰기 가능한 `state`를 리턴하게 된다. 
   - `get`: 위와 마찬가지로 다른 `atom` `selector`에서 값을 가져오기 위해 제공되는 함수다.
   - `set`: `recoil`의 state 값을 쓰기 위해 제공 되는 함수다. 첫번째 파라미트로는 `Recoil`의 state를, 두번째 파라미터로는 새로운 값을 넘겨주면 된다.
-- `dangerouslyAllowMutability`: `selector`는 파생된 상태로 부터의 순수함수 이기 때문에, 의존성의 같은 input이 제공되면 항상 같은 값을 리턴해야 한다. 이 옵션을 오버라이드 하고 싶을 떄 쓴다.
+- `dangerouslyAllowMutability`: `selector`는 파생된 상태로 부터의 순수함수 이기 때문에, 의존성의 같은 input이 제공되면 항상 같은 값을 리턴해야 한다. 이 옵션을 오버라이드 하고 싶을 때 쓴다.
 
 예제를 살펴보자.
 

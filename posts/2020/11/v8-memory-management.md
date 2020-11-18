@@ -91,7 +91,7 @@ V8의 가비지 컬렉터는 V8 프로세스에서 재사용하기 위하여, �
 
 마이너 GC의 처리과정을 살짝 보자.
 
-앞서 말했듯, `New Space`는 두개의 같은 사이즈인 `semi-space`로 이루어져 있다. 하나는 `to-space`고 다른 하나는 `from-space`다. 대부분의 할당은 `from-space`에서 이루어진다. (`old space`에 할당되는 실행가능한 코드들은 여기에 저장되지 않는다) `from-space`가 가득차게 되면 마이너 GC 가 가동된다.ㅣ
+앞서 말했듯, `New Space`는 두개의 같은 사이즈인 `semi-space`로 이루어져 있다. 하나는 `to-space`고 다른 하나는 `from-space`다. 대부분의 할당은 `from-space`에서 이루어진다. (`old space`에 할당되는 실행가능한 코드들은 여기에 저장되지 않는다) `from-space`가 가득차게 되면 마이너 GC 가 가동된다.
 
 <script async class="speakerdeck-embed" data-id="5fff2548e55c4bb0a9c837c7eb598bee" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
 
@@ -109,7 +109,7 @@ V8의 가비지 컬렉터는 V8 프로세스에서 재사용하기 위하여, �
 12. 마이너 GC는 `to-space`와 `from-space`를 스왑하며, 모든 객체들은 `from-space`로 이동하고 `to-space` 는 비어지게 된다.
 13. 새로운 객체가 `from-space`에 할당된다.
 
-마이너 GC가 어떻게 `young generation`에 공간을 요청하고 이를 간결하게 유지하는지 살펴보았다. 이러한 일련의 과정은 프로세스를 중단시키지만, 너무 빠르고 효율적이기 떄문에 대부분의 경우 무시할 수 있는 수준이다. 이 프로세스는 `nes space`의 참조를 위해 `old space`의 객체를 스캔하지 않기 떄문에, 이전 space에서 새로운 메모리에 이르는 모든 포인터의 레지스터를 사용한다. 이는 [write barrier](https://www.memorymanagement.org/glossary/w.html#term-write-barrier)라고 불리는 과정에 의해 버퍼에 기록된다.
+마이너 GC가 어떻게 `young generation`에 공간을 요청하고 이를 간결하게 유지하는지 살펴보았다. 이러한 일련의 과정은 프로세스를 중단시키지만, 너무 빠르고 효율적이기 때문에 대부분의 경우 무시할 수 있는 수준이다. 이 프로세스는 `nes space`의 참조를 위해 `old space`의 객체를 스캔하지 않기 때문에, 이전 space에서 새로운 메모리에 이르는 모든 포인터의 레지스터를 사용한다. 이는 [write barrier](https://www.memorymanagement.org/glossary/w.html#term-write-barrier)라고 불리는 과정에 의해 버퍼에 기록된다.
 
 ### Major GC
 
@@ -130,7 +130,7 @@ V8의 가비지 컬렉터는 V8 프로세스에서 재사용하기 위하여, �
 - 증분 GC: GC는 하나가 아닌 여러 증분 단계로 수행된다.
 - 동시 marking: 마킹은 메인 자바스크립트 스레드에 영향을 주지 않기 위해 여러 헬퍼 스레드를 사용하여 동시에 수행된다. `Writes Barrier`는 헬퍼가 마킹을 하는 동안 자바스크립트하 생성하는 객체 간에 새로운 참조를 추적하기 위하여 사용된다.
 - 동시 Sweeping, compacting: 메인 자바스크립트 스레드에 영향을 주지 않기 위해 Sweeping과 Compacting은 헬퍼 쓰레드에서 동시에 이루어진다.
-- 게으른 Sweeping: 게으른 Sweeping 은 메모리가 필요로 할 떄까지 페이지에서 가비지 삭제를 지연 시키는 것을 포함한다.
+- 게으른 Sweeping: 게으른 Sweeping 은 메모리가 필요로 할 때까지 페이지에서 가비지 삭제를 지연 시키는 것을 포함한다.
 
 Major GC의 프로세스를 살펴보자.
 

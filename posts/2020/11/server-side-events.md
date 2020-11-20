@@ -16,7 +16,7 @@ description: '이거 꼭 한번 해보고 싶었는데 😭'
 
 ## vs Web Socket?
 
-그렇다면 우리가 일반적으로 알고 있는 web socket 과의 차이는 무엇일까? 웹 소켓은 양반향 통신을 위한 프로토콜은 제공하지만 (채팅과 같은), 일부 시나리오에서는 그러한 양방향 통신이 필요하지 않을 때가 있다. 클라이언트에서 굳이 데이터를 전송하지 않고, 서버의 데이터만 클라이언트에 보내서 업데이트를 해야하는 경우가 있다. (긴 시간이 걸리는 요청에 대해서 요청을 일부분씩 나눠서 보내는 등) 이러한 경우에는 Web Socket보다는 SSE가 훨씬 더 좋은 대안이 될 수 있다. 또한 웹 소켓과는 다르게, 전통적인 HTTP로도 전송이 가능하다. 즉, 특별한 프로토콜이나 서버구현이 필요하지 않다. 
+그렇다면 우리가 일반적으로 알고 있는 web socket 과의 차이는 무엇일까? 웹 소켓은 양반향 통신을 위한 프로토콜은 제공하지만 (채팅과 같은), 일부 시나리오에서는 그러한 양방향 통신이 필요하지 않을 때가 있다. 클라이언트에서 굳이 데이터를 전송하지 않고, 서버의 데이터만 클라이언트에 보내서 업데이트를 해야하는 경우가 있다. (긴 시간이 걸리는 요청에 대해서 요청을 일부분씩 나눠서 보내는 등) 이러한 경우에는 Web Socket보다는 SSE가 훨씬 더 좋은 대안이 될 수 있다. 또한 웹 소켓과는 다르게, 전통적인 HTTP로도 전송이 가능하다. 즉, 특별한 프로토콜이나 서버구현이 필요하지 않다.
 
 ## How to use
 
@@ -34,33 +34,45 @@ https://caniuse.com/eventsource
 
 ```javascript
 if (!!window.EventSource) {
-  var source = new EventSource('stream.php');
+  var source = new EventSource('stream.php')
 } else {
   // SSE를 사용할 수 없는 환경
 }
 ```
 
-만약 URL이 절대 주소로 되어 있다면, 호출 페이지와 scheme, domain, port 등이 일치해야 한다. 
+만약 URL이 절대 주소로 되어 있다면, 호출 페이지와 scheme, domain, port 등이 일치해야 한다.
 
 이제 소스에 이벤트 핸들러를 달아서 실제로 구독을 해보자.
 
 ```javascript
-source.addEventListener('message', function(e) {
-  console.log(e.data);
-}, false);
+source.addEventListener(
+  'message',
+  function (e) {
+    console.log(e.data)
+  },
+  false,
+)
 
-source.addEventListener('open', function(e) {
-  // 연결성공
-}, false);
+source.addEventListener(
+  'open',
+  function (e) {
+    // 연결성공
+  },
+  false,
+)
 
-source.addEventListener('error', function(e) {
-  if (source.readyState == EventSource.CLOSED) {
-    // 연결이 닫히는 경우
-  }
-}, false);
+source.addEventListener(
+  'error',
+  function (e) {
+    if (source.readyState == EventSource.CLOSED) {
+      // 연결이 닫히는 경우
+    }
+  },
+  false,
+)
 ```
 
-서버에서 데이터를 푸쉬하면, `message`가 실행되고, `e.data`에서 데이터를 가져올 수 있다. 
+서버에서 데이터를 푸쉬하면, `message`가 실행되고, `e.data`에서 데이터를 가져올 수 있다.
 
 소스의 이벤트 스트림은 SSE 형식인 `Content-type` `text/event-stream`을 사용하여 텍스트 응답을 작성해야 한다. 기본적인 응답형식은 아래와 같다.
 
@@ -70,14 +82,14 @@ data: response \n\n
 
 `data:`행 다음에 메시지가 오고, 스트림 맨 마지막에는 `\n` 문자가 두개 있다면 스트림이 끝난 것으로 간주한다.
 
-메시지가 길어서 여러줄을 보내야 한다면, `data:`행을 사용하여 메시지를 분할하면 된다. 
+메시지가 길어서 여러줄을 보내야 한다면, `data:`행을 사용하여 메시지를 분할하면 된다.
 
 ```bash
 data: first response\n
 data: second response\n\n
 ```
 
-`\n`으로 하나만 줄바꿈이 되어 있다면, `message`이벤트는 하나만 발생한다. 
+`\n`으로 하나만 줄바꿈이 되어 있다면, `message`이벤트는 하나만 발생한다.
 
 JSON 데이터를 보내야 한다면 어떻게 할까?
 
@@ -89,13 +101,17 @@ data: }\n\n
 ```
 
 ```javascript
-source.addEventListener('message', function(e) {
-  var data = JSON.parse(e.data);
-  console.log(data.id, data.msg);
-}, false);
+source.addEventListener(
+  'message',
+  function (e) {
+    var data = JSON.parse(e.data)
+    console.log(data.id, data.msg)
+  },
+  false,
+)
 ```
 
-물론 json 데이터를 압축해서 한줄로 보내도 가능할 것이다. 
+물론 json 데이터를 압축해서 한줄로 보내도 가능할 것이다.
 
 이벤트에 ID를 달아서 고유한 ID도 함께 보낼 수 있다.
 
@@ -127,20 +143,32 @@ data: {"username": "John123", "emotion": "happy"}\n\n
 ```
 
 ```javascript
-source.addEventListener('message', function(e) {
-  var data = JSON.parse(e.data);
-  console.log(data.msg);
-}, false);
+source.addEventListener(
+  'message',
+  function (e) {
+    var data = JSON.parse(e.data)
+    console.log(data.msg)
+  },
+  false,
+)
 
-source.addEventListener('userlogon', function(e) {
-  var data = JSON.parse(e.data);
-  console.log('User login:' + data.username);
-}, false);
+source.addEventListener(
+  'userlogon',
+  function (e) {
+    var data = JSON.parse(e.data)
+    console.log('User login:' + data.username)
+  },
+  false,
+)
 
-source.addEventListener('update', function(e) {
-  var data = JSON.parse(e.data);
-  console.log(data.username + ' is now ' + data.emotion);
-}, false);
+source.addEventListener(
+  'update',
+  function (e) {
+    var data = JSON.parse(e.data)
+    console.log(data.username + ' is now ' + data.emotion)
+  },
+  false,
+)
 ```
 
 ## 예제
@@ -151,37 +179,37 @@ const Router = require('koa-router')
 
 const router = new Router()
 
-router.get('/event', async(ctx) => {
-  ctx.res.writeHead(200,  {
-    "Content-Type": "text/event-stream",
-    "Cache-Control": "no-store",
-    "Access-Control-Allow-Origin": "*"
-  });
+router.get('/event', async (ctx) => {
+  ctx.res.writeHead(200, {
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-store',
+    'Access-Control-Allow-Origin': '*',
+  })
 
-  const lastEventId = Number(ctx.request.headers["last-event-id"]) || Number(ctx.query.id) || 100
+  const lastEventId =
+    Number(ctx.request.headers['last-event-id']) || Number(ctx.query.id) || 100
   let timeoutId = 0
   let i = lastEventId
   let c = i + 100
-
 
   let f = function () {
     if (++i < c) {
       ctx.res.write(`id: ${i} \n`)
       ctx.res.write(`data: ${i} \n\n`)
-      timeoutId = setTimeout(f, 1000);
+      timeoutId = setTimeout(f, 1000)
     } else {
       ctx.res.end()
     }
   }
 
-  f();
+  f()
 
   ctx.res.on('close', function () {
     clearTimeout(timeoutId)
   })
 })
 
-router.get('/', async(ctx) => {
+router.get('/', async (ctx) => {
   ctx.res.write(`<!DOCTYPE html>
   <html>
   <head>
@@ -217,7 +245,7 @@ async function main() {
   const app = new koa()
 
   app.use(router.routes()).use(router.allowedMethods())
-  
+
   app.listen(3001)
 }
 
@@ -227,7 +255,6 @@ try {
   console.error(err)
 }
 ```
-
 
 결과
 

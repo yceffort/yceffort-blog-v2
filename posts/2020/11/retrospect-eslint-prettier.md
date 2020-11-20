@@ -1,7 +1,7 @@
 ---
 title: 'eslint, prettier, editorconfig 로 코드 컨벤션을 맞춘 후기'
 tags:
-  - javascript  
+  - javascript
   - eslint
 published: true
 date: 2020-11-11 22:06:31
@@ -46,7 +46,6 @@ https://github.com/eslint/eslint/issues/10930
 
 이런 경우에는 `prettier`가 할 수 있는 일은 `prettier`에게 모두 맡기고, 관련 `eslint`룰은 모두 끄는 것이 좋다.
 
-
 https://github.com/prettier/eslint-config-prettier
 
 > Turns off all rules that are unnecessary or might conflict with Prettier. ;
@@ -58,10 +57,10 @@ https://github.com/prettier/eslint-config-prettier
 
 ```javascript
 // 설정이 잘 되어있어도 lodash 모든 것들을 가져온다.
-import { sortBy } from "lodash";
+import { sortBy } from 'lodash'
 
 // sortBy 경로에서 가져온다.
-import sortBy from "lodash-es/sortBy";
+import sortBy from 'lodash-es/sortBy'
 ```
 
 https://yceffort.kr/2020/07/how-commonjs-is-making-your-bundles-larger
@@ -72,7 +71,7 @@ https://yceffort.kr/2020/07/how-commonjs-is-making-your-bundles-larger
 
 ```javascript
 "no-restricted-imports": [
-    "error", 
+    "error",
     {
     "name": "lodash",
     "message": "lodash has been prohibited due to bundle size. use lodash-es instead."
@@ -84,7 +83,7 @@ https://yceffort.kr/2020/07/how-commonjs-is-making-your-bundles-larger
 
 만약 기존에 이미 `no-restricted-imports` 룰이 있다면, 별개의 `eslintrc`룰을 만들어서 `eslint`를 한번 더 돌리면 된다. 뭔가 이 룰을 고도화 하자는 issue도 있었는데, `eslint`팀에서 복잡성을 이유로 거절했었다.
 
-## husky, lint-staged 
+## husky, lint-staged
 
 `prettier`와 `lint`에 대한 점검은 보통 CI 단계에서 하는 경우가 많은데, 코드를 커밋하기 전에도 할 수 있다.
 
@@ -95,17 +94,14 @@ https://yceffort.kr/2020/07/how-commonjs-is-making-your-bundles-larger
 
 ```json
 {
-   "husky": {
+  "husky": {
     "hooks": {
       "pre-commit": "lint-staged -q"
     }
   },
   "lint-staged": {
-    "**/*.{js}": [
-      "eslint",
-      "git add"
-    ]
-  },
+    "**/*.{js}": ["eslint", "git add"]
+  }
 }
 ```
 
@@ -113,13 +109,13 @@ https://yceffort.kr/2020/07/how-commonjs-is-making-your-bundles-larger
 
 ## 취향을 타는 룰은 변경보다는 현상 유지가 낫다.
 
-나는 대표적인 80width 2indent 파인데, 이는 굉장히 개인적인 취향의 영역이다. ([물론 prettier는 합리적인 선택이라고 주장하지만 서도](https://prettier.io/docs/en/options.html#print-width)) 이렇게 취향을 타는, 그리고 전체적인 코드 베이스를 수정해야 하는 룰은 그대로 두는게 낫다. 
+나는 대표적인 80width 2indent 파인데, 이는 굉장히 개인적인 취향의 영역이다. ([물론 prettier는 합리적인 선택이라고 주장하지만 서도](https://prettier.io/docs/en/options.html#print-width)) 이렇게 취향을 타는, 그리고 전체적인 코드 베이스를 수정해야 하는 룰은 그대로 두는게 낫다.
 
 고치는게 어렵다거나, 수정이 많아진다거나 하는 이유가 아니고, 전반적인 코드의 history를 오염시킬 수 있기 때문이다. 온갖 코드에 히스토리가 바로 보이지 않고, 직전 히스토리에 `변경된 eslint 룰 적용`이라는 커밋 메시지만 잔뜩 남아있으면 git blame 하기가 여간 쉽지 않을 것이다.
 
 ## prettier 1.0과 2.0 사이에 default 값의 변화가 있다.
 
-이건 내가 ~~멍청해서~~ 잘 못 찾고 삽질하던 영역인데, 1.0에서 2.0으로 업그레이드 하면서 기본값에서 몇가지 변화가 있었다. (내가 헤매던건 `trailing commas`) 
+이건 내가 ~~멍청해서~~ 잘 못 찾고 삽질하던 영역인데, 1.0에서 2.0으로 업그레이드 하면서 기본값에서 몇가지 변화가 있었다. (내가 헤매던건 `trailing commas`)
 
 https://prettier.io/docs/en/options.html
 
@@ -127,7 +123,7 @@ https://prettier.io/docs/en/options.html
 
 ## react/exhaustive-deps는 죄가 없다.
 
-리액트 코드들을 많이 살펴보면 이 `react/exhaustive-deps`룰을 warning처리 해놓거나, 혹은 eslint-disable을 도배해놓은 걸 볼 때가 많다. 
+리액트 코드들을 많이 살펴보면 이 `react/exhaustive-deps`룰을 warning처리 해놓거나, 혹은 eslint-disable을 도배해놓은 걸 볼 때가 많다.
 
 경험적으로 봤을 때, 그리고 많은 아티클을 참고 했을 때 이룰은 `error` 로 두고, 필요할 때만 `eslint-disable-line` 을 해두는 것이 좋다.
 
@@ -145,7 +141,7 @@ https://eslint.org/docs/rules/camelcase
 
 ## .editorconfig도 쓰자.
 
-[.editorconfig](https://editorconfig-specification.readthedocs.io/en/latest/)는 다양한 편집기와 IDE에서 작엏바는 여러 개발자들을 일관된 코딩스타일로 묶어주는데 도움을 준다. 따라서 이것도 프로젝트 코딩 컨벤션과 맞춰서 작성해서 제공하는게 좋다. 
+[.editorconfig](https://editorconfig-specification.readthedocs.io/en/latest/)는 다양한 편집기와 IDE에서 작엏바는 여러 개발자들을 일관된 코딩스타일로 묶어주는데 도움을 준다. 따라서 이것도 프로젝트 코딩 컨벤션과 맞춰서 작성해서 제공하는게 좋다.
 
 `.editorconfig`는 편집기 그 자체를 코딩 컨벤션에 맞춰서 자동으로 구성되게 해주기 때문에, `editorconfig` `prettier` `eslint`이 모든 것을 사용하는 것이 모두에게 일관된 코딩 스타일을 제공하는데 효과적이다.
 
@@ -197,13 +193,13 @@ eslint와는 조금 다른 얘기지만, 오타도 점검내지는 고쳐줬으�
 
 ## `warn`은 결국 `off`나 `error`로 가야 한다.
 
-`warn`으로 설정하는 이유의 대부분은 
+`warn`으로 설정하는 이유의 대부분은
 
 > 문제가 있는건 알지만 일단 나중에 한꺼번에 고치자
 > 문제인건 알지만 나중에 다시 논의 해보자
 > 문제인건 알지만 에러까지는 아니고, 알아서 조심하자
 
-정도로 나눠 볼 수 있을 것 같다. 그러나 이 `warn`을 장기간 방치해두면 그 경고가 쌓이게 되어, 정작 코드 컨벤션을 맞추기 위한 `eslint`의 의미를 퇴색시키고, 다른 경고들도 볼 수 없게 된다. 
+정도로 나눠 볼 수 있을 것 같다. 그러나 이 `warn`을 장기간 방치해두면 그 경고가 쌓이게 되어, 정작 코드 컨벤션을 맞추기 위한 `eslint`의 의미를 퇴색시키고, 다른 경고들도 볼 수 없게 된다.
 
 개인적인 생각으로는, `warn`으로 할 바엔 `off`로 하든, 혹은 `error`로 두고 예외적인 부분만 disable 처리하고 코멘트를 달아두는게 나은 것 같다. `warn`은 어디까지나 임시일뿐, 결국엔 `eslint`의 이점을 누릴 수 없게 만든다.
 
@@ -215,8 +211,10 @@ eslint 는 아래와 같은 순서로 동작한다.
 
 1. javascript 코드를 읽는다
 2. parser로 AST를 만든다.
-  - 여기서 parser는 `Espree` `babel-eslint`등이 존재한다. 
-  - AST는 소스코드의 구조를 트리 형태로 표현한 것이다. 
+
+- 여기서 parser는 `Espree` `babel-eslint`등이 존재한다.
+- AST는 소스코드의 구조를 트리 형태로 표현한 것이다.
+
 3. linter와 rule을 활용하여 AST를 검사한다.
 4. 검사결과에 따라서 에러를 뱉거나 고친다.
 
@@ -301,4 +299,3 @@ console.log(hello)
 ```
 
 이러한 구조를 이해해야 `eslint`가 어떻게 동작하는지 알수 있으며, 나아가 단순히 룰을 조합하는 `eslint-config`뿐만 아니라 내가 직접 custom rule을 만들 수도 있다.
-

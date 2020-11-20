@@ -23,7 +23,7 @@ Nodejs의 메모리 누수를 이해하기 위해서는, nodejs의 메모리 관
 - Stack: 메소드, 함수 프레임, 원시값, 객체의 포인터등 정적인 데이터가 저장되는 곳
 - Heap: 객체 또는 다이나믹 데이터 등이 저장되는 곳. 메모리 블록중 가장 큰 영역이며, GC가 작업을 하는 곳
 
-> V8은 가비지 콜렉션을 이용해서 힙 메모리를 관리한다. 간단히 얘기해, 스택에서 더이상 참조하지 않는 객체의 메모리를 해제하여 다른 객체가 메모리를 할당하여 쓸 수 있도록 한다. V8의 가비지 컬렉터는 더이상 사용하지 않는 메모리를 해제하여 공간을 확보하는 책임이 있다. V8 가비지 컬렉터는 객체를 생성시점으로 묶어서 각각 다른 스테이지별로 별도로 관리한다. V8 가비지 컬렉터는 2개의 다른 스테이지와 세개의 다른 알고리즘을 사용한다. 
+> V8은 가비지 콜렉션을 이용해서 힙 메모리를 관리한다. 간단히 얘기해, 스택에서 더이상 참조하지 않는 객체의 메모리를 해제하여 다른 객체가 메모리를 할당하여 쓸 수 있도록 한다. V8의 가비지 컬렉터는 더이상 사용하지 않는 메모리를 해제하여 공간을 확보하는 책임이 있다. V8 가비지 컬렉터는 객체를 생성시점으로 묶어서 각각 다른 스테이지별로 별도로 관리한다. V8 가비지 컬렉터는 2개의 다른 스테이지와 세개의 다른 알고리즘을 사용한다.
 
 ![V8 Garbage Collector](https://d33wubrfki0l68.cloudfront.net/e3979bee7b7b51e6124594ea36dfde4eb7015da5/5c860/images/blog/2020-05/mark-sweep-compact.gif)
 
@@ -44,42 +44,42 @@ V8의 가비지 콜렉터와 같은 자동 메모리 관리는 메모리 누수�
 
 ### 전역 변수의 사용을 줄인다.
 
-전역 변수는 절대로 가비지 컬렉팅 되지 않으므로, 전역변수를 남용하지 않는 것이 제일 좋다. 
+전역 변수는 절대로 가비지 컬렉팅 되지 않으므로, 전역변수를 남용하지 않는 것이 제일 좋다.
 
 #### 실수로 전역변수를 선언하는 것을 주의하자.
 
-만약 undeclare한 변수를 선언하게 되면, 자동으로 자바스크립트는 이를 호이스팅해서 전역 변수로 만들어 버린다. 이는 곧 메모리 누수로 이어지게 된다. 
+만약 undeclare한 변수를 선언하게 되면, 자동으로 자바스크립트는 이를 호이스팅해서 전역 변수로 만들어 버린다. 이는 곧 메모리 누수로 이어지게 된다.
 
 ```javascript
 function hello() {
   // 전역변수로 호이스팅 된다.
-  foo = "Message";
+  foo = 'Message'
 }
 
 function hello() {
   // 여기서 this는 global 이기 때문에 마찬가지로 호이스팅되어 전역변수가 된다.
-  this.foo = "Message";
+  this.foo = 'Message'
 }
 ```
 
 이러한 원치 안흔ㄴ 사고를 방지 하기 위해서는, 자바스크립트 파일 상단에 `'use strict';`를 선언해 두면된다. 엄격한 모드에서는, 위의 코드는 에러를 발생시킨다. 만약 ES 모듈이나 타입스크립트 또는 바벨과 같은 프랜스파일러를 사용한다면, 굳이 하지 않아도 된다. 최근 버전의 Nodejs에서는, `--use_strict` 옵션으로 nodejs 환경 전역에 이 모드를 활성화 시킬 수 있다.
 
 ```javascript
-"use strict";
+'use strict'
 
 // This will not be hoisted as global variable
 function hello() {
-    foo = "Message"; // will throw runtime error
+  foo = 'Message' // will throw runtime error
 }
 
 // This will not become global variable as global functions
 // have their own `this` in strict mode
 function hello() {
-  this.foo = "Message";
+  this.foo = 'Message'
 }
 ```
 
-화살표 함수를 사용하면, 마찬가지로 전역변수를 생성할수도 있다는 사실을 조심해야 한다. 이러한 경우에는 엄격모드로는 해결할 수가 없고, eslint의 `no-invalid-this`로 해결하면 된다. 
+화살표 함수를 사용하면, 마찬가지로 전역변수를 생성할수도 있다는 사실을 조심해야 한다. 이러한 경우에는 엄격모드로는 해결할 수가 없고, eslint의 `no-invalid-this`로 해결하면 된다.
 
 ```javascript
 // 전역변수로 할당된다.
@@ -139,20 +139,20 @@ function myFunc(foo) {}
 참고: https://blog.meteor.com/an-interesting-kind-of-javascript-memory-leak-8b47d2e7f156?gi=275d4bdd446b
 
 ```javascript
-var theThing = null;
+var theThing = null
 var replaceThing = function () {
-    var originalThing = theThing;
-    var unused = function () {
-        if (originalThing) console.log("hi");
-    };
-    theThing = {
-        longStr: new Array(1000000).join("*"),
-        someMethod: function () {
-            console.log(someMessage);
-        },
-    };
-};
-setInterval(replaceThing, 1000);
+  var originalThing = theThing
+  var unused = function () {
+    if (originalThing) console.log('hi')
+  }
+  theThing = {
+    longStr: new Array(1000000).join('*'),
+    someMethod: function () {
+      console.log(someMessage)
+    },
+  }
+}
+setInterval(replaceThing, 1000)
 ```
 
 위 코드는 여러 클로져를 만들고, 이 클로져들은 각각 객체 참조를 가지고 있게 된다. 이 경우 메모리 누수를 해결하기 위해서는 `replaceThing`함수 끝에서 `originalThing`을 `null`로 선언해주어야 한다. 이러한 경우도 객체의 복사본을 만들거나, 앞서 언급한 `null`을 하는 전략으로 메모리 누수를 피할 수 있다.
@@ -165,7 +165,6 @@ setInterval(replaceThing, 1000);
 
 - https://github.com/lloyd/node-memwatch
 - https://nodejs.org/en/docs/guides/debugging-getting-started/
-
 
 출처
 

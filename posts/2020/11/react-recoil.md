@@ -30,7 +30,7 @@ https://github.com/facebook/react/issues/14110#issuecomment-448074060
 
 https://github.com/reduxjs/react-redux/releases/tag/v7.0.1
 
-또한 Provider의 값이 배열이나 객체 인 경우, 여기에서 구조가 조금이라도 바뀌게 된다면 `Context`를 구독하고 있는 하위 모든 컴포넌트가 다시 렌더링되는 참사가 발생된다. 
+또한 Provider의 값이 배열이나 객체 인 경우, 여기에서 구조가 조금이라도 바뀌게 된다면 `Context`를 구독하고 있는 하위 모든 컴포넌트가 다시 렌더링되는 참사가 발생된다.
 
 React Context API는 분명 나쁜 API는 아니지만, 그 한계가 어느정도 있다는 것을 알 수 있다. 그렇기 때문에 Facebook 팀에서도 그 한계를 인지하고 Recoil 을 만든게 아닐 까 싶다.
 
@@ -47,18 +47,15 @@ React Context API는 분명 나쁜 API는 아니지만, 그 한계가 어느정�
 `recoil` 의 state를 사용하기 위해서는 부모 트리에 `RecoilRoot`를 선언해야 한다. 가장 좋은 위치는 바로 Root다.
 
 ```javascript
-import React from 'react';
-import {
-  RecoilRoot,
-  atom
-} from 'recoil';
+import React from 'react'
+import { RecoilRoot, atom } from 'recoil'
 
 function App() {
   return (
     <RecoilRoot>
       <Component />
     </RecoilRoot>
-  );
+  )
 }
 ```
 
@@ -68,9 +65,9 @@ function App() {
 
 ```javascript
 const textState = atom({
-  key: 'textState', // unique ID 
+  key: 'textState', // unique ID
   default: '', // 기본값
-});
+})
 ```
 
 ### useRecoilState
@@ -122,10 +119,10 @@ function selector<T>({
 })
 ```
 
-- `key`: 유니크 아이디로, 애플리케이션 전체에서 다른 `selector`나 `atom`과 중복되서는 안된다. 
+- `key`: 유니크 아이디로, 애플리케이션 전체에서 다른 `selector`나 `atom`과 중복되서는 안된다.
 - `get`: 상태로 부터 연산할 수 있는 값이다. 단순히 값이나 `Promise`로 부터 야기되는 비동기 값을 가져올 수 있으며, 또한 같은 타입을 갖는 `atom`이나 `selector` 를 리턴할 수도 있다.
   - get: 다른 `atom` `selector`에서 값을 가져오기 위해 제공되는 함수다. 이 `get`을 거치는 모든 `atom`과 `selector`는 의존성을 가진 것으로 간주된다. 따라서 이 `get`에서 쓰이는 값이 변하게 되면, 이 selector 또한 변하게 된다.
-- `set?`: 만약 이 `set`이 설정되면, `selector` 는 쓰기 가능한 `state`를 리턴하게 된다. 
+- `set?`: 만약 이 `set`이 설정되면, `selector` 는 쓰기 가능한 `state`를 리턴하게 된다.
   - `get`: 위와 마찬가지로 다른 `atom` `selector`에서 값을 가져오기 위해 제공되는 함수다.
   - `set`: `recoil`의 state 값을 쓰기 위해 제공 되는 함수다. 첫번째 파라미트로는 `Recoil`의 state를, 두번째 파라미터로는 새로운 값을 넘겨주면 된다.
 - `dangerouslyAllowMutability`: `selector`는 파생된 상태로 부터의 순수함수 이기 때문에, 의존성의 같은 input이 제공되면 항상 같은 값을 리턴해야 한다. 이 옵션을 오버라이드 하고 싶을 때 쓴다.
@@ -133,36 +130,36 @@ function selector<T>({
 예제를 살펴보자.
 
 ```javascript
-import {atom, selector, useRecoilState, DefaultValue} from 'recoil';
+import { atom, selector, useRecoilState, DefaultValue } from 'recoil'
 
 // 화씨 온도를 저장해 두는 atom
 const tempFahrenheit = atom({
   key: 'tempFahrenheit',
   default: 32,
-});
+})
 
 // 섭씨 온도는 화씨로 부터 파생된다.
 const tempCelsius = selector({
   key: 'tempCelsius',
   // 현재 화씨 값을 기준으로 연산하여 화씨 값을 가져온다.
-  get: ({get}) => ((get(tempFahrenheit) - 32) * 5) / 9,
+  get: ({ get }) => ((get(tempFahrenheit) - 32) * 5) / 9,
   // 섭씨 값을 설정하면, 화씨 값을 set 한다.
-  set: ({set}, newValue) =>
+  set: ({ set }, newValue) =>
     set(
       tempFahrenheit,
-      newValue instanceof DefaultValue ? newValue : (newValue * 9) / 5 + 32
+      newValue instanceof DefaultValue ? newValue : (newValue * 9) / 5 + 32,
     ),
-});
+})
 
 function TempCelsius() {
   // selector와 atom 모두 useRecoilState를 활용하여 값을 설정하고 가져오는 것을 알 수 있다.
-  const [tempF, setTempF] = useRecoilState(tempFahrenheit);
-  const [tempC, setTempC] = useRecoilState(tempCelsius);
-  const resetTemp = useResetRecoilState(tempCelsius);
+  const [tempF, setTempF] = useRecoilState(tempFahrenheit)
+  const [tempC, setTempC] = useRecoilState(tempCelsius)
+  const resetTemp = useResetRecoilState(tempCelsius)
 
-  const addTenCelsius = () => setTempC(tempC + 10);
-  const addTenFahrenheit = () => setTempF(tempF + 10);
-  const reset = () => resetTemp();
+  const addTenCelsius = () => setTempC(tempC + 10)
+  const addTenFahrenheit = () => setTempF(tempF + 10)
+  const reset = () => resetTemp()
 
   return (
     <div>
@@ -176,17 +173,17 @@ function TempCelsius() {
       <br />
       <button onClick={reset}>>Reset</button>
     </div>
-  );
+  )
 }
 ```
 
 ## 느낌
 
 - 일단 API가 굉장히 단순하고, hook을 사용하고 있기 때문에 리액트의 hook 생태계에 익숙한 사람들에게 낮은 러닝 커브로 다가올 것 같은 생각이 든다. 또 현재 `state`로 되어 있는 리액트 프로젝트를 굉장히 빠르게 마이그레이션 할 수 있을 것 같다. `<RecoilRoot/>`로 루트 프로젝트를 감싸고, `useState`를 `useRecoilState`로 바꾸면 일단은 된다.
-- 컴포넌트가 사용하는 데이터만 별개로 사용할 수 있어서 좋았다. 
+- 컴포넌트가 사용하는 데이터만 별개로 사용할 수 있어서 좋았다.
 - `selector` 라는 이름이 주는 혼란함이 있었다. `selector` 인데 `set`이 왜 됨???
 - [리액트 동시성 모드가 사용가능해지면 이를 지원할 수도 있다는 언급이 있었다.](https://recoiljs.org/docs/introduction/motivation/) 왜냐하면 [Recoil은 내부적으로 React의 상태를 사용하고 있으며](https://github.com/facebookexperimental/Recoil/blob/55059f54ad1d09bfac8d086316bb18bed9cc2879/src/hooks/Recoil_Hooks.js#L20) 이는 곧 [React에서 내놓을 동시성 모드](https://ko.reactjs.org/docs/concurrent-mode-intro.html)를 지원할 수도 있다는 가능성이 존재한다고 볼 수 있기 때문이다. (실제로 motivation에서 그렇게 이야기 하기도 했고) 사용이 간편하다, Facebook이 만들었다는 것 외에 다른 상태 관리 라이브러리와 다른 가장 큰 차별점 & 그리고 도입을 해야하는 이유가 있다면 바로 이것 때문이 아닐 까 싶다. (물론 아직은 멀었지만)
-> We have the possibility of compatibility with Concurrent Mode and other new React features as they become available.
+  > We have the possibility of compatibility with Concurrent Mode and other new React features as they become available.
 
 ## 더 알아보기
 

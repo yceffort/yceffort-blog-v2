@@ -15,7 +15,7 @@ description: '블로그 다크모드 지원시에 고려해보겠습니다 🤔'
 - 애플리케이션의 상태를 탭 사이에 맞춰야 하는 경우
 - 가장 최근에 가져온 인증 정보를 브라우저 탭 간에 공유가 필요한 경우
 
-이를 달성할 수 있는 방법이 무엇이 있을까? 
+이를 달성할 수 있는 방법이 무엇이 있을까?
 
 ## Local Storage
 
@@ -24,17 +24,17 @@ description: '블로그 다크모드 지원시에 고려해보겠습니다 🤔'
 ```javascript
 React.useEffect(() => {
   function listener(event: StorageEvent) {
-    if (event.storageArea !== localStorage) return;
+    if (event.storageArea !== localStorage) return
     if (event.key === LOGGINED) {
-      setLoginTime(parseInt(event.newValue || "0", 10));
+      setLoginTime(parseInt(event.newValue || '0', 10))
     }
   }
-  window.addEventListener("storage", listener);
+  window.addEventListener('storage', listener)
 
   return () => {
-    window.removeEventListener("storage", listener);
-  };
-}, []);
+    window.removeEventListener('storage', listener)
+  }
+}, [])
 ```
 
 https://codesandbox.io/s/tab-communications-1-localstorage-5ldjw
@@ -88,14 +88,14 @@ https://codesandbox.io/s/tab-communications-2-braodcast-channel-m50d6
 
 다만 문제점은 [Broadcast Channel Api는 너무 힙한 나머지 사파리와 IE에서 쓸 수 없다는 점](https://caniuse.com/broadcastchannel)ㅣ다.
 
-## Service Worker 
+## Service Worker
 
 [서비스 워커](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration)를 이용하는 방법도 있다.
 
 ```javascript
 window.navigator.serviceWorker.controller?.postMessage({
-  [LOGGINED]: currentDateTime
-});
+  [LOGGINED]: currentDateTime,
+})
 ```
 
 그리고 이 정보를 서비스워커에서 받으면 된다. 그러나 서비스 워커를 세팅하는 것은 쉽지 않고, 추가적으로 `serviceWorker.js`등을 만드는 등의 노력이 필요하다. 그리고 [서비스 워커도 마찬가지로 IE에서 지원하지 않는다.](https://caniuse.com/serviceworkers)
@@ -109,11 +109,14 @@ targetWindow.postMessage(message, targetOrigin)
 ```
 
 ```javascript
-window.addEventListener("message", (event) => {
-  if (event.origin !== "http://localhost:8080")
-    return;
-  // Do something
-}, false);
+window.addEventListener(
+  'message',
+  (event) => {
+    if (event.origin !== 'http://localhost:8080') return
+    // Do something
+  },
+  false,
+)
 ```
 
 이 방법의 장점은 cross-origin을 지원한다는 것이다. 그러나 단점은 위 코드에서 알 수 있듯이 브라우저 탭의 레퍼런스를 가지고 있어야 한다. (`targetWindow`를 가지고 있는 것 같이) 그래서 이 방식은 `window.open()`이나 `document.open()`을 통해서 탭을 열었을 때만 사용 가능하다.

@@ -20,10 +20,10 @@ https://ko.wikipedia.org/wiki/%EB%A9%94%EB%AA%A8%EC%9D%B4%EC%A0%9C%EC%9D%B4%EC%8
 const cache = {}
 function addTwo(input) {
   if (!cache[input]) {
-    console.log("계산 중..")
+    console.log('계산 중..')
     cache[input] = input + 2
   } else {
-    console.log("계산된 값을 그대로 돌려드립니다.")
+    console.log('계산된 값을 그대로 돌려드립니다.')
   }
   return cache[input]
 }
@@ -54,20 +54,21 @@ addTwo(2) // 계산된 값을 그대로 돌려드립니다.
 
 > The useMemo Hook lets you cache calculations between multiple renders by “remembering” the previous computation:
 
-바로 이전의 값만 메모이제이션 한다는 것이다. 
+바로 이전의 값만 메모이제이션 한다는 것이다.
 
 ```javascript
 const Memoized = React.memo(Component)
 ```
+
 ```html
 <!-- 새롭게 렌더링 -->
-<Memoized num={1} /> 
+<Memoized num="{1}" />
 <!-- 직전 elements를 사용 -->
-<Memoized num={1} />
+<Memoized num="{1}" />
 <!-- 새롭게 렌더링 -->
-<Memoized num={2} />
+<Memoized num="{2}" />
 <!-- 새롭게 렌더링 -->
-<Memoized num={1} />
+<Memoized num="{1}" />
 ```
 
 `useMemo` `useCallback`도 마찬가지로, 직전의 값만 메모이제이션한다. 코드로 풀면 이런 느낌의 메모이제이션일 것이다.,
@@ -93,8 +94,7 @@ function someFunction(input) {
 1. 비싼 연산을 반복하는 것을 피하여 성능을 향상시킨다
 2. 안정된 값 제공
 
-1번에 대해서는 모든 리액트 개발자들이 공감하고 있을 것이기 때문에 생략하고, 2번에 대해서 이야기 해보자. 
-
+1번에 대해서는 모든 리액트 개발자들이 공감하고 있을 것이기 때문에 생략하고, 2번에 대해서 이야기 해보자.
 
 ```javascript
 function App() {
@@ -102,10 +102,10 @@ function App() {
   const fetchOptions = {
     method: 'POST',
     body,
-    headers: {'content-type': 'application/json'},
+    headers: { 'content-type': 'application/json' },
   }
 
-  const callApi = () => (body ? fetch('/url', fetchOptions): null)
+  const callApi = () => (body ? fetch('/url', fetchOptions) : null)
 
   useEffect(() => {
     const result = callApi()
@@ -121,10 +121,10 @@ function App() {
 따라서 이 값을 안정시키기 위해서 memoization을, 정확히는 `useCallback`을 사용해야 한다.
 
 ```javascript
-const callApi = useCallback(() => 
-  (body ? fetch('/url', fetchOptions): null), 
-  [body, fetchOptions]
-)
+const callApi = useCallback(() => (body ? fetch('/url', fetchOptions) : null), [
+  body,
+  fetchOptions,
+])
 ```
 
 그러나 `fetchOptions`역시 컴포넌트가 렌더링 될 때마다 새롭게 생성될 것이므로, `fetchOptions`도 memoization을 거쳐야 한다.
@@ -134,8 +134,8 @@ const fetchOptions = useMemo(() => {
   return {
     method: 'POST',
     body,
-    headers: {'content-type': 'application/json'},
-  }  
+    headers: { 'content-type': 'application/json' },
+  }
 }, [body])
 ```
 
@@ -152,7 +152,7 @@ useEffect(() => {
   const fetchOptions = {
     method: 'POST',
     body,
-    headers: {'content-type': 'application/json'},
+    headers: { 'content-type': 'application/json' },
   }
 
   fetch('/url', fetchOptions)

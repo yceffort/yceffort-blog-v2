@@ -356,7 +356,7 @@ spec:
 
 `development.yml`
 
-```
+```yaml
 # deployment.yml
 
 apiVersion: apps/v1

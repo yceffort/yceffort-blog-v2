@@ -1,5 +1,5 @@
 {
-  "name": "yceffort's blog",
+  "name": "yceffort",
   "short_name": "yceffort",
   "icons": [{
       "src": "\/favicon\/android-icon-36x36.png",
@@ -43,5 +43,4 @@
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait"
-
 }

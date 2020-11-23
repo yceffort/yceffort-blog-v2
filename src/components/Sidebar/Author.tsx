@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import React from 'react'
 import styled from 'styled-components'
+import Router from 'next/router'
 
 import config from '#src/config'
 
@@ -25,24 +26,8 @@ export default function Author() {
   } = config
   return (
     <>
-      <Link href="/">
-        <Image
-          alt={name}
-          src={photo}
-          width={75}
-          height={75}
-          style={{
-            display: 'inline-block',
-            marginBottom: '0px',
-            borderRadius: '50%',
-            backgroundClip: 'padding-box',
-            cursor: 'pointer',
-          }}
-        />
-      </Link>
-      <Link href="/">
-        <AuthorTitle>{name}</AuthorTitle>
-      </Link>
+      <Image alt={name} src={photo} width={75} height={75} />
+      <AuthorTitle onClick={() => Router.push('/')}>{name}</AuthorTitle>
       <AuthorSubTitle>{bio}</AuthorSubTitle>
     </>
   )

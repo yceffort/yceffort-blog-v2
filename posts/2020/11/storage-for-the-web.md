@@ -115,3 +115,5 @@ try {
 ## 왜 indexedDB 래퍼를 사용해야 할까?
 
 IndexedDB는 저수준 API로, 아주 작은 양의 데이터를 저장하는데 사용한다 할지라도 처음 설치에 있어 많은 심혈을 기울여야 한다. 다른 모든 promise 기반 API와는 다르게, 이벤트 베이스로 작동된다. [idb](https://github.com/jakearchibald/idb)를 사용하면 일부 강력한 기능을 사용할수 없지만 트랜잭션과 스키바 버전과 같은 복잡한 기능을 사용하지 않더라도 promise 기반의 indexeddb를 사용할 수 있게 해준다.
+
+출처: https://web.dev/storage-for-the-web/

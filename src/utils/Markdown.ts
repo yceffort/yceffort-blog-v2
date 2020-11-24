@@ -16,15 +16,19 @@ import toc from 'remark-toc'
 // @ts-ignore
 import slug from 'remark-slug'
 import gfm from 'remark-gfm'
+import memoize from 'memoizee'
 
 import { FrontMatter, Post, TagWithCount } from '../types/types'
 
 const DIR_REPLACE_STRING = '/posts'
 const POST_PATH = `${process.cwd()}${DIR_REPLACE_STRING}`
 
-export async function getAllPosts(): Promise<Array<Post>> {
+export const getAllPosts = memoize(retreiveAllPosts)
+
+export async function retreiveAllPosts(): Promise<Array<Post>> {
   const files = getFilesRecursively(POST_PATH).reverse()
   const posts: Array<Post> = []
+  const draftPosts = []
 
   for await (const f of files) {
     const file = await readFile(f, { encoding: 'utf8' })
@@ -32,12 +36,12 @@ export async function getAllPosts(): Promise<Array<Post>> {
     const fm: FrontMatter = attributes as any
     const { tags: fmTags, published, date } = fm
 
+    const slug = f
+      .slice(f.indexOf(DIR_REPLACE_STRING) + DIR_REPLACE_STRING.length + 1)
+      .replace('.md', '')
+
     if (published) {
       const tags = (fmTags || []).map((tag) => tag.trim())
-
-      const slug = f
-        .slice(f.indexOf(DIR_REPLACE_STRING) + DIR_REPLACE_STRING.length + 1)
-        .replace('.md', '')
 
       const result: Post = {
         frontmatter: {
@@ -53,6 +57,8 @@ export async function getAllPosts(): Promise<Array<Post>> {
       }
 
       posts.push(result)
+    } else {
+      draftPosts.push(slug)
     }
   }
 

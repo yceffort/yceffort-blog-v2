@@ -6,7 +6,7 @@ tags:
   - javascript
 published: true
 date: 2020-11-26 13:09:01
-description: '힝싱 브라우저에 감사하십시오 frontend developers.'
+description: '항상 브라우저에 감사하십시오 frontend developers.'
 ---
 
 뒤로가기/앞으로가기 캐시 (이해 bfcache)는 브라우저에서 일어나는 최적화로, 앞으로가기나 뒤로가기가 발생했을 때 화면을 즉시 보여주는 역할을 한다. 이는 사용자의 브라우저 사용성을 향상시키는데, 특히 느린 네트워크/디바이스에서 빛을 발한다.

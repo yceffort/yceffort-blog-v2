@@ -63,6 +63,10 @@ const ContentBody = styled.div`
     max-width: 100%;
   }
 
+  p > code {
+    background-color: rgb(246, 249, 252);
+  }
+
   @media screen and (min-width: 960px) {
     font-size: 1.125rem;
     line-height: 1.82813rem;

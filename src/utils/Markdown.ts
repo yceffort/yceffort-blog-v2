@@ -44,6 +44,7 @@ export async function getAllDraftPosts() {
     }
   }
 
+  console.table(draftPosts)
   return draftPosts
 }
 

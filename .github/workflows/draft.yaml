@@ -11,8 +11,8 @@ jobs:
       node-version: [12.x]
 
   steps:
-    uses: peter-evans/create-or-update-comment@v1.4.4
-    with:
-      issue-number: 1
-      body: |
-        hello world
+    - uses: peter-evans/create-or-update-comment@v1.4.4
+      with:
+        issue-number: 1
+        body: |
+          hello world

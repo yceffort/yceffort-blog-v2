@@ -4,6 +4,7 @@
   "description": "yceffort-blog",
   "scripts": {
     "dev": "next dev",
+    "draft": "ts-node --project ./tsconfig.node.json -e 'import { getAllDraftPosts } from \"./src/utils/Markdown\"; getAllDraftPosts();'",
     "sitemap": "ts-node --project ./tsconfig.node.json ./src/SiteMap.ts",
     "build-nextjs": "next build",
     "build": "npm run sitemap && npm run build-nextjs",

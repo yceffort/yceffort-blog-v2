@@ -40,11 +40,11 @@ export async function getAllDraftPosts() {
       .replace('.md', '')
 
     if (!published) {
-      draftPosts.push(slug)
+      draftPosts.push(`/${slug}`)
     }
   }
 
-  console.table(draftPosts)
+  return draftPosts
 }
 
 export async function retreiveAllPosts(): Promise<Array<Post>> {

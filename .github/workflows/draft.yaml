@@ -19,7 +19,9 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
       - name: Get draft posts
-        run: output=$(npm run draft) \ echo "$output" >> $DRAFT_POSTS
+        run: |
+          output=$(npm run draft) 
+          echo ::set-env name=DRAFT_POSTS::$output
       - uses: peter-evans/create-or-update-comment@v1.4.4
         with:
           issue-number: ${{ github.event.number }}

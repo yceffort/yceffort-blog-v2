@@ -17,6 +17,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+      - run: npm ci
       - name: Get draft posts
         run: output=$(npm run draft) \ echo "$output" >> $DRAFT_POSTS
       - uses: peter-evans/create-or-update-comment@v1.4.4

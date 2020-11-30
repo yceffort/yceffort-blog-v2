@@ -17,8 +17,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Get draft posts
+        run: echo "npm run draft" >> $draft
       - uses: peter-evans/create-or-update-comment@v1.4.4
         with:
           issue-number: ${{ github.event.number }}
           body: |
-            hello world
+            ${{draft}}

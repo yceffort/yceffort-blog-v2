@@ -25,10 +25,31 @@ const POST_PATH = `${process.cwd()}${DIR_REPLACE_STRING}`
 
 export const getAllPosts = memoize(retreiveAllPosts)
 
+export async function getAllDraftPosts() {
+  const files = getFilesRecursively(POST_PATH).reverse()
+  const draftPosts: Array<string> = []
+
+  for await (const f of files) {
+    const file = await readFile(f, { encoding: 'utf8' })
+    const { attributes } = frontMatter(file)
+    const fm: FrontMatter = attributes as any
+    const { published } = fm
+
+    const slug = f
+      .slice(f.indexOf(DIR_REPLACE_STRING) + DIR_REPLACE_STRING.length + 1)
+      .replace('.md', '')
+
+    if (!published) {
+      draftPosts.push(slug)
+    }
+  }
+
+  console.table(draftPosts)
+}
+
 export async function retreiveAllPosts(): Promise<Array<Post>> {
   const files = getFilesRecursively(POST_PATH).reverse()
   const posts: Array<Post> = []
-  const draftPosts = []
 
   for await (const f of files) {
     const file = await readFile(f, { encoding: 'utf8' })
@@ -57,8 +78,6 @@ export async function retreiveAllPosts(): Promise<Array<Post>> {
       }
 
       posts.push(result)
-    } else {
-      draftPosts.push(slug)
     }
   }
 

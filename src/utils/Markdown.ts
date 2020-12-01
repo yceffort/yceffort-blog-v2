@@ -45,6 +45,7 @@ export async function getAllDraftPosts() {
   }
 
   console.table(draftPosts)
+  return draftPosts
 }
 
 export async function retreiveAllPosts(): Promise<Array<Post>> {

@@ -4,13 +4,15 @@ date: 2019-02-21 06:58:00
 published: true
 tags:
   - pytorch
-description: "Pytorch - 05) Image Recognition 마지막으루다가 손글씨 분류해보는 실습을 해보겠습니다.  ###
+description:
+  'Pytorch - 05) Image Recognition 마지막으루다가 손글씨 분류해보는 실습을 해보겠습니다.  ###
   Dataset  ```python import torch import matplotlib.pyplot as plt import numpy
-  as np  from torch import nn from torch.nn import functi..."
+  as np  from torch import nn from torch.nn import functi...'
 category: pytorch
 slug: /2019/02/21/pytorch-05-image-recognition/
 template: post
 ---
+
 Pytorch - 05) Image Recognition
 
 마지막으루다가 손글씨 분류해보는 실습을 해보겠습니다.
@@ -89,7 +91,7 @@ class Classifier(nn.Module):
     self.linear1 = nn.Linear(n_input, H1)
     self.linear2 = nn.Linear(H1, H2)
     self.linear3 = nn.Linear(H2, n_output)
-  
+
   def forward(self, x):
     x = F.relu(self.linear1(x))
     x = F.relu(self.linear2(x))
@@ -104,7 +106,7 @@ model = Classifier(784, 125, 65, 10)
 model
 ```
 
-```
+```bash
 Classifier(
   (linear1): Linear(in_features=784, out_features=125, bias=True)
   (linear2): Linear(in_features=125, out_features=65, bias=True)
@@ -112,7 +114,7 @@ Classifier(
 )
 ```
 
-이미지가 28*28이므로 784개의 input, 총 10개 (0~9)로 구별해야 하므로 output은 10개로 나타넀다. 가운데 125와 65는 그냥 임의로 넣어봤다. 해보면서 조절해보면 된다.
+이미지가 28\*28이므로 784개의 input, 총 10개 (0~9)로 구별해야 하므로 output은 10개로 나타넀다. 가운데 125와 65는 그냥 임의로 넣어봤다. 해보면서 조절해보면 된다.
 
 ```python
 criterion = nn.CrossEntropyLoss()
@@ -127,64 +129,64 @@ classification 문제라서 CrossEntroypyLoss를, 그리고 optimizer로는 Adam
 epochs = 12
 running_loss_history = []
 running_correct_history = []
-validation_running_loss_history = [] 
+validation_running_loss_history = []
 validation_running_correct_history = []
 
 for e in range(epochs):
-  
+
   running_loss = 0.0
   running_correct = 0.0
   validation_running_loss = 0.0
   validation_running_correct = 0.0
-  
-  for inputs, labels in training_loader:    
-     
+
+  for inputs, labels in training_loader:
+
     inputs = inputs.view(inputs.shape[0], -1)
     outputs = model(inputs)
     loss = criterion(outputs, labels)
-    
+
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
-    
+
     _, preds = torch.max(outputs, 1)
-    
+
     running_correct += torch.sum(preds == labels.data)
     running_loss += loss.item()
-    
-    
-    
-  else:    
+
+
+
+  else:
     # 훈련팔 필요가 없으므로 메모리 절약
     with torch.no_grad():
-      
+
       for val_input, val_label in validation_loader:
         val_input = val_input.view(val_input.shape[0], -1)
         val_outputs = model(val_input)
         val_loss = criterion(val_outputs, val_label)
-        
+
         _, val_preds = torch.max(val_outputs, 1)
         validation_running_loss += val_loss.item()
-        validation_running_correct += torch.sum(val_preds == val_label.data) 
-    
-    
+        validation_running_correct += torch.sum(val_preds == val_label.data)
+
+
     epoch_loss = running_loss / len(training_loader)
     epoch_acc = running_correct.float() / len(training_loader)
     running_loss_history.append(epoch_loss)
     running_correct_history.append(epoch_acc)
-    
+
     val_epoch_loss = validation_running_loss / len(validation_loader)
     val_epoch_acc = validation_running_correct.float() / len(validation_loader)
     validation_running_loss_history.append(val_epoch_loss)
     validation_running_correct_history.append(val_epoch_acc)
-    
+
     print("===================================================")
     print("epoch: ", e + 1)
     print("training loss: {:.5f}, {:5f}".format(epoch_loss, epoch_acc))
     print("validation loss: {:.5f}, {:5f}".format(val_epoch_loss, val_epoch_acc))
 ```
 
-```
+```bash
 ===================================================
 epoch:  1
 training loss: 0.34698, 89.241669
@@ -290,7 +292,7 @@ _, pred = torch.max(outputs, 1)
 print(pred.item())
 ```
 
-```
+```bash
 5
 ```
 

@@ -4,13 +4,15 @@ date: 2019-02-19 06:16:25
 published: true
 tags:
   - pytorch
-description: "Pytorch - 01) Tensor ## Tensor  이제는 더 이상 기초를 다루지 않겠다. (마지막 기초
+description:
+  'Pytorch - 01) Tensor ## Tensor  이제는 더 이상 기초를 다루지 않겠다. (마지막 기초
   공부)  ```python # 기초적인 배열 선언 v = torch.tensor([1, 2, 3]) v ```  ``` tensor([1,
-  2, 3]) ```  ```python # 타입 확인 v.dtype ```  ``` torch.int64 ..."
+  2, 3]) ```  ```python # 타입 확인 v.dtype ```  ``` torch.int64 ...'
 category: pytorch
 slug: /2019/02/19/pytorch-01-tensor/
 template: post
 ---
+
 Pytorch - 01) Tensor
 
 ## Tensor
@@ -23,7 +25,7 @@ v = torch.tensor([1, 2, 3])
 v
 ```
 
-```
+```bash
 tensor([1, 2, 3])
 ```
 
@@ -32,7 +34,7 @@ tensor([1, 2, 3])
 v.dtype
 ```
 
-```
+```bash
 torch.int64
 ```
 
@@ -49,27 +51,25 @@ f = torch.FloatTensor([1, 2, 3, 4, 5, 6])
 f
 ```
 
-```
+```bash
 tensor([1., 2., 3., 4., 5., 6.])
 ```
-
 
 ```python
 # 크기 확인
 f.size()
 ```
 
-```
+```bash
 torch.Size([6])
 ```
-
 
 ```python
 # view를 써서 배열 형태를 조작할 수도 있다.
 v.view(6, 1)
 ```
 
-```
+```bash
 tensor([[1],
         [2],
         [3],
@@ -78,18 +78,16 @@ tensor([[1],
         [6]])
 ```
 
-
 ```python
 # 3만 줄테니 알아서 사이즈를 조절해라
 v.view(3, -1)
 ```
 
-```
+```bash
 tensor([[1, 2],
         [3, 4],
         [5, 6]])
 ```
-
 
 ```python
 # numpy array를 tensor array를  상호간에 변환하는 것이 가능하다.
@@ -98,17 +96,16 @@ tensor_cnv = torch.from_numpy(a)
 print(tensor_cnv, tensor_cnv.type())
 ```
 
-```
+```bash
 tensor([1, 2, 3, 4, 5]) torch.LongTensor
 ```
-
 
 ```python
 numpy_cnv = tensor_cnv.numpy()
 numpy_cnv
 ```
 
-```
+```bash
 array([1, 2, 3, 4, 5])
 ```
 
@@ -126,7 +123,7 @@ y = torch.exp(x)
 y
 ```
 
-```
+```bash
 tensor([1.0000e+00, 1.1063e+00, 1.2239e+00, 1.3540e+00, 1.4979e+00, 1.6571e+00,
         1.8332e+00, 2.0280e+00, 2.2436e+00, 2.4821e+00, 2.7459e+00, 3.0377e+00,
         3.3606e+00, 3.7178e+00, 4.1130e+00, 4.5501e+00, 5.0337e+00, 5.5688e+00,
@@ -168,23 +165,21 @@ two_d = one_d.view(3, 3)
 two_d
 ```
 
-```
+```bash
 tensor([0, 1, 2, 3, 4, 5, 6, 7, 8])
 tensor([[0, 1, 2],
         [3, 4, 5],
         [6, 7, 8]])
 ```
 
-
 ```python
 # dim으로 차원을 확인할 수 있다.
 two_d.dim()
 ```
 
-```
+```bash
 2
 ```
-
 
 ```python
 # 2개의 블록, 3로우, 3컬럼의 형태로 만들어진다.
@@ -192,7 +187,7 @@ x = torch.arange(18).view(2, 3, 3)
 x
 ```
 
-```
+```bash
 tensor([[[ 0,  1],
          [ 2,  3],
          [ 4,  5]],
@@ -212,6 +207,7 @@ mat_b = torch.tensor([3, 4, 3, -2, 4, -2]).view(3, 2)
 torch.matmul(mat_a, mat_b)
 mat_a @ mat_b
 ```
+
 matmul 과 @ 은 서로 곱할 수 있는 크기의 매트릭스를 곱하는 식이다. 고등학교때 행렬 열심히 하기를 잘했다.
 
 ## autograd
@@ -229,13 +225,12 @@ x = torch.tensor(2.0, requires_grad=True)
 y = 9*x**4 + 2*x**3 + 3*x**2 + 6*x + 1
 ```
 
-```
+```bash
 tensor(2., requires_grad=True)
 tensor(185., grad_fn=<AddBackward0>)
 ```
 
 자동미분을 True로 세팅하여, 모든 연산에 대해 추적을 할 수 있게 해둔 것이다. 계산작업이 모두 수행 되었으므로 (y) .backward를 수행하여, 모든 그라디어트를 자동으로 계산하게 할 수 있다. 그리고 그 그라디언트는 .grad에 누적되어 저장된다.
-
 
 ```python
 y.backward()
@@ -246,10 +241,9 @@ $$ 4 \times 9x^3 + 3 \times 2x^2 + 2 \times 3 x + 6$$
 
 여기에 2를 대입하면
 
-```
+```bash
 tensor(330.)
 ```
-
 
 ```python
 x = torch.tensor(1.0, requires_grad=True)

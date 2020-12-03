@@ -4,14 +4,16 @@ date: 2019-02-21 09:05:35
 published: true
 tags:
   - pytorch
+  - python
 mathjax: true
-description: "Pytorch - 06) Convolutional Neural Network (1) ## Convolutional
+description: 'Pytorch - 06) Convolutional Neural Network (1) ## Convolutional
   Neural Network (CNN)  ### Fully Connected Layer의 문제점  Convolutional Neural
-  Network (이하 CNN)은 이미지, 비디오, 텍스트, 사운드를 분류하는 딥러닝에서 가장 많이 사용되는 ..."
+  Network (이하 CNN)은 이미지, 비디오, 텍스트, 사운드를 분류하는 딥러닝에서 가장 많이 사용되는 ...'
 category: pytorch
 slug: /2019/02/21/pytorch-06-convolutional-neural-network(1)/
 template: post
 ---
+
 Pytorch - 06) Convolutional Neural Network (1)
 
 ## Convolutional Neural Network (CNN)
@@ -24,13 +26,13 @@ Convolutional Neural Network (이하 CNN)은 이미지, 비디오, 텍스트, �
 
 ![cnn1](../images/cnn1.png)
 
-예를 들어 가까운 픽셀은 값이 비슷하거나, rgb값이 비슷하거나 하는 ㄹ등의 정보가 있을 수 있지만, 1차원으로 쭉 늘어트리게 되면 이러한 정보 (패턴)가 모두 무시되어 버린다. 
+예를 들어 가까운 픽셀은 값이 비슷하거나, rgb값이 비슷하거나 하는 ㄹ등의 정보가 있을 수 있지만, 1차원으로 쭉 늘어트리게 되면 이러한 정보 (패턴)가 모두 무시되어 버린다.
 
 또한, 큰이미지가 인풋으로 들어오게되면 weight로 설정해야 하는 값이 기하급수적으로 많아지게 되며, 이는 성능저하를 불러온다.
 
 ### Convolution
 
-합성곱연산은, 특징정 크기 (width, height)를 갖는 필터(filter, kernel)를 일정간격(stride)로 이동해가며 입력데이터에 적용하는 것을 의미한다. 
+합성곱연산은, 특징정 크기 (width, height)를 갖는 필터(filter, kernel)를 일정간격(stride)로 이동해가며 입력데이터에 적용하는 것을 의미한다.
 
 ![cnn](https://cdn-images-1.medium.com/max/1600/1*7S266Kq-UCExS25iX_I_AQ.png)
 
@@ -38,7 +40,7 @@ Convolutional Neural Network (이하 CNN)은 이미지, 비디오, 텍스트, �
 
 원본이미지에서 필터를 곱하는 것을 합성곱(convolution)이라고 한다. 이렇게 주어진 필터를 이미지 전체에 stride에 따라서 적용하면서, 이미지의 특징을 찾아내는 것이다.
 
-이렇게 하게 되면, 해당 필터는 필터가 갖고 있는 특징이 데이터에 있는지 없는지를 검출 해 줄 수 있다. 
+이렇게 하게 되면, 해당 필터는 필터가 갖고 있는 특징이 데이터에 있는지 없는지를 검출 해 줄 수 있다.
 
 ![filter](https://adeshpande3.github.io/assets/Filter.png)
 
@@ -48,11 +50,11 @@ Convolutional Neural Network (이하 CNN)은 이미지, 비디오, 텍스트, �
 
 ![filter2](https://adeshpande3.github.io/assets/FirstPixelMulitiplication.png)
 
-이런 식으로, 쥐의 엉덩이에 있는 곡선의 특징을 이미지에서 찾아내게 되는 것이다. Linear에 비유하자면, weight가 filter가 되는 것이다. 마찬가지로 bias (편향) 도 포함될 것이다. 
+이런 식으로, 쥐의 엉덩이에 있는 곡선의 특징을 이미지에서 찾아내게 되는 것이다. Linear에 비유하자면, weight가 filter가 되는 것이다. 마찬가지로 bias (편향) 도 포함될 것이다.
 
 ### padding
 
-cnn을 하기전에, 입력데이터 주변을 특정값으로 채우는 단계로, 이는 주로 입력 데이터와 출력데이터의 크기를 맞추기 위해서 쓴다. 
+cnn을 하기전에, 입력데이터 주변을 특정값으로 채우는 단계로, 이는 주로 입력 데이터와 출력데이터의 크기를 맞추기 위해서 쓴다.
 
 ![padding](https://adeshpande3.github.io/assets/Pad.png)
 
@@ -62,7 +64,7 @@ cnn을 하기전에, 입력데이터 주변을 특정값으로 채우는 단계�
 
 ### stride
 
-필터를 적용하는 위치의 간격을 의미한다. stride가 커지면, 당연히 간격이 넓어지므로 출력크기가 작아진다. 
+필터를 적용하는 위치의 간격을 의미한다. stride가 커지면, 당연히 간격이 넓어지므로 출력크기가 작아진다.
 
 ![stride](http://deeplearning.stanford.edu/wiki../../../images/6/6c/Convolution_schematic.gif)
 
@@ -84,11 +86,11 @@ $$ OW = \frac{W + 2P - FW}{S} + 1 $$
 
 ### 3차원 데이터 (RGB 이미지)
 
-3차원 이미지 데이터에 대해서는, 필터도 이미지와 마찬가지로 같은 수의 채널을 갖고 있어야 한다. 
+3차원 이미지 데이터에 대해서는, 필터도 이미지와 마찬가지로 같은 수의 채널을 갖고 있어야 한다.
 
 ### Pooling
 
-이렇게 input에서 filter 를 적용하여 특징을 추출했다면, 이를 어떻게 판단할지가 중요 하다. 이렇게 추출된 map을 인위적으로 줄이는 작업을 pooling이라고 한다. 
+이렇게 input에서 filter 를 적용하여 특징을 추출했다면, 이를 어떻게 판단할지가 중요 하다. 이렇게 추출된 map을 인위적으로 줄이는 작업을 pooling이라고 한다.
 
 ![pooling](https://upload.wikimedia.org/wikipedia/commons/e/e9/Max_pooling.png)
 
@@ -100,22 +102,20 @@ pooling 하는 방법은 크게 max와 average가 있는데, 위 샘플 이미�
 
 자동차 인식을 위해 CNN을 적용한 모습이다. Conv-Relu-Conv-Relu-Pool-Conv-Relu-Conv-Relu-Pool-Conv-Relu-Conv-Relu-Pool를 적용해서 인식을 해낸 모습이다.
 
-정리하자면, 이미지에서 특징을 추출해내는 작업을 몇번 거치고, 그뒤에 이를 fully connect 하여 perceptron을 바탕으로 최종적으로 예측을 하는 것이라고 할 수 있다. 
-
+정리하자면, 이미지에서 특징을 추출해내는 작업을 몇번 거치고, 그뒤에 이를 fully connect 하여 perceptron을 바탕으로 최종적으로 예측을 하는 것이라고 할 수 있다.
 
 ### ReLU를 쓰는이유
 
 - 대부분의 실제 예제는 linear한 상황이 별로 없다.
 - ReLU는 negative값을 모두 무시하기 때문에, 조금 더 낫다.
 - tanh와 sigmoid는 vanishing gradient 문제를 갖고 있다.
-    - Deep Neural Netwrok는 Backpropagation (역전파)를 하기 위해서 gradient descent (경사하강법)을 적용하여 parameter를 조정한다. 
-    - 그러나 이 gradient 값이 매우 작아지게 되면, 이것을 효율적으로 개선해나가는 것이 쉽지 않아지고, 느려진다. 
-    - sigmoid는 중간 값에서는 경사가 있지만, 값이 작거나 커질 수록 극도로 경사가 작은 값을 갖게 된다. (0과 가까워 진다.)
-    - 따라서 아무리 계산을 누적해도 굉장히 작은 값이 나오게 된다.
-- Relu는 input이 음수면 그냥 0을 리턴, 양수면 같은 값을 리턴한다. 
-- 따라서 값이 극도로 작아지거나 커진다고 해서 gredient가 사라지지 않는다. 
-
+  - Deep Neural Netwrok는 Backpropagation (역전파)를 하기 위해서 gradient descent (경사하강법)을 적용하여 parameter를 조정한다.
+  - 그러나 이 gradient 값이 매우 작아지게 되면, 이것을 효율적으로 개선해나가는 것이 쉽지 않아지고, 느려진다.
+  - sigmoid는 중간 값에서는 경사가 있지만, 값이 작거나 커질 수록 극도로 경사가 작은 값을 갖게 된다. (0과 가까워 진다.)
+  - 따라서 아무리 계산을 누적해도 굉장히 작은 값이 나오게 된다.
+- Relu는 input이 음수면 그냥 0을 리턴, 양수면 같은 값을 리턴한다.
+- 따라서 값이 극도로 작아지거나 커진다고 해서 gredient가 사라지지 않는다.
 
 ![cnn2](../images/cnn2.png)
 
-MNIST 손글씨 데이터셋에 CNN을 적용한다면 위의 이미지와 같은  \모습이 될것이다.
+MNIST 손글씨 데이터셋에 CNN을 적용한다면 위의 이미지와 같은 \모습이 될것이다.

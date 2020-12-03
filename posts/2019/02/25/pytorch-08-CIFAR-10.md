@@ -4,17 +4,20 @@ date: 2019-02-25 06:03:38
 published: true
 tags:
   - pytorch
-description: "Pytorch - 08) CIFAR 10 CIFAR 10 는 열가지 단어별 이미지가 있는 데이터 셋이다. 기존에
+  - python
+description:
+  'Pytorch - 08) CIFAR 10 CIFAR 10 는 열가지 단어별 이미지가 있는 데이터 셋이다. 기존에
   손글씨를 분류하는 것 보다는 확실히 어려운 작업이 될
   것이다.   ![CIFAR10](../images/CIFAR10.png)  ## 전처리 작업  ```python
-  import torch import matplotlib.py..."
+  import torch import matplotlib.py...'
 category: pytorch
 slug: /2019/02/25/pytorch-08-CIFAR-10/
 template: post
 ---
+
 Pytorch - 08) CIFAR 10
 
-CIFAR 10 는 열가지 단어별 이미지가 있는 데이터 셋이다. 기존에 손글씨를 분류하는 것 보다는 확실히 어려운 작업이 될 것이다. 
+CIFAR 10 는 열가지 단어별 이미지가 있는 데이터 셋이다. 기존에 손글씨를 분류하는 것 보다는 확실히 어려운 작업이 될 것이다.
 
 ![CIFAR10](../images/CIFAR10.png)
 
@@ -76,68 +79,67 @@ optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 epochs = 12
 running_loss_history = []
 running_correct_history = []
-validation_running_loss_history = [] 
+validation_running_loss_history = []
 validation_running_correct_history = []
 
 for e in range(epochs):
-  
+
   running_loss = 0.0
   running_correct = 0.0
   validation_running_loss = 0.0
   validation_running_correct = 0.0
-  
-  for inputs, labels in training_loader:    
-     
+
+  for inputs, labels in training_loader:
+
     inputs = inputs.to(device)
     labels = labels.to(device)
     outputs = model(inputs)
     loss = criterion(outputs, labels)
-    
+
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
-    
+
     _, preds = torch.max(outputs, 1)
-    
+
     running_correct += torch.sum(preds == labels.data)
     running_loss += loss.item()
-    
-    
-    
-  else:    
+
+
+
+  else:
     # 훈련팔 필요가 없으므로 메모리 절약
     with torch.no_grad():
-      
+
       for val_input, val_label in validation_loader:
-        
+
         val_input = val_input.to(device)
         val_label = val_label.to(device)
         val_outputs = model(val_input)
         val_loss = criterion(val_outputs, val_label)
-        
+
         _, val_preds = torch.max(val_outputs, 1)
         validation_running_loss += val_loss.item()
-        validation_running_correct += torch.sum(val_preds == val_label.data) 
-    
-    
+        validation_running_correct += torch.sum(val_preds == val_label.data)
+
+
     epoch_loss = running_loss / len(training_loader)
     epoch_acc = running_correct.float() / len(training_loader)
     running_loss_history.append(epoch_loss)
     running_correct_history.append(epoch_acc)
-    
+
     val_epoch_loss = validation_running_loss / len(validation_loader)
     val_epoch_acc = validation_running_correct.float() / len(validation_loader)
     validation_running_loss_history.append(val_epoch_loss)
     validation_running_correct_history.append(val_epoch_acc)
-    
+
     print("===================================================")
     print("epoch: ", e + 1)
     print("training loss: {:.5f}, acc: {:5f}".format(epoch_loss, epoch_acc))
     print("validation loss: {:.5f}, acc: {:5f}".format(val_epoch_loss, val_epoch_acc))
 ```
 
-
-## 1st try 
+## 1st try
 
 LeNet을 활용하여, 기존에 손글씨를 분류했을 때 썼던 파라미터 그대로 해보자.
 
@@ -145,7 +147,7 @@ LeNet을 활용하여, 기존에 손글씨를 분류했을 때 썼던 파라미�
 
 ```python
 class LeNet(nn.Module):
-  
+
   def __init__(self):
     super().__init__()
     # RGB세개 1채널, 20개 특징 추출, filter 크기, stride 1
@@ -237,7 +239,7 @@ Convolution을 하나더 추가해서, 특징을 조금더 뽑아내는 방향�
 
 ```python
 class LeNet_2(nn.Module):
-  
+
   def __init__(self):
     super().__init__()
     # 32px 이었다가, conv를 거치면서 절반으로 감소
@@ -247,7 +249,7 @@ class LeNet_2(nn.Module):
     self.fc1 = nn.Linear(4*4*64, 500)
     self.dropout1 = nn.Dropout(0.5)
     self.fc2 = nn.Linear(500, 10)
-    
+
   def forward(self, x):
     x = F.relu(self.conv1(x))
     x = F.max_pool2d(x, 2, 2)
@@ -267,9 +269,8 @@ class LeNet_2(nn.Module):
 따라서 각각의 convolution을 거칠 때마다 입력값이 절반으로 줄어들게 된다. (MaxPooling 사이즈가 2, 2 이므로)
 
 | input | conv1 | pool1 | conv2 | pool2 | conv3 | pool3 |
-|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
-| 32   | 32    | 16    | 16     | 8     | 8 | 4|
-
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+|  32   |  32   |  16   |  16   |   8   |   8   |   4   |
 
 ### 결과
 
@@ -364,9 +365,8 @@ validation_loader = torch.utils.data.DataLoader(dataset=validation_dataset, batc
 - `transforms.RandomHorizontalFlip()` 0.5확률로 이미지를 뒤집음
 - `transforms.RandomRotation(10)` 10도 이하로 랜덤하게 기울인다.
 - `transforms.RandomAffine(0, shear=10, scale=(0.8, 1.2)` 기하학(...)에서 쓰이는 아핀변환이다.
-![CIFAR10-6](../images/CIFAR10-6.png)
+  ![CIFAR10-6](../images/CIFAR10-6.png)
 - `transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2)` 밝기, 대비, 채도를 랜덤하게 조절한다.
-
 
 ### 결과
 

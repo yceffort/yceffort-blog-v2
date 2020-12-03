@@ -4,6 +4,7 @@ date: 2019-02-22 07:21:57
 published: true
 tags:
   - pytorch
+  - python
 mathjax: true
 description: "Pytorch - 07) Convolutional Neural Network (2) 이번에는 코드로
   구현해보자.  ```python class LeNet(nn.Module):      def

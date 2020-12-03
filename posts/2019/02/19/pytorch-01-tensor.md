@@ -4,10 +4,8 @@ date: 2019-02-19 06:16:25
 published: true
 tags:
   - pytorch
-description:
-  'Pytorch - 01) Tensor ## Tensor  이제는 더 이상 기초를 다루지 않겠다. (마지막 기초
-  공부)  ```python # 기초적인 배열 선언 v = torch.tensor([1, 2, 3]) v ```  ``` tensor([1,
-  2, 3]) ```  ```python # 타입 확인 v.dtype ```  ``` torch.int64 ...'
+  - python
+description: '이제 기초는 그만해야겠다.'
 category: pytorch
 slug: /2019/02/19/pytorch-01-tensor/
 template: post

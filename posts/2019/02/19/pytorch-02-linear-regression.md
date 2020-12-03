@@ -4,6 +4,7 @@ date: 2019-02-19 06:46:13
 published: true
 tags:
   - pytorch
+  - python
 description: 'Pytorch - 02) Linear Regression ## Linear Regression  Linear
   Regression이 한국말로 뭐였더라?  ```python import torch import torch.nn as nn import
   matplotlib.pyplot as plt import numpy as np ```  ### 데이터셋 만들기 ...'

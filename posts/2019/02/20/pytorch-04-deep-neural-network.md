@@ -4,6 +4,7 @@ date: 2019-02-20 11:36:43
 published: true
 tags:
   - pytorch
+  - python
 mathjax: true
 description: "Pytorch - 04) Deep Neural Network ## Deep Neural Network  이전
   [Perceptron](https://yceffort.github.io/2019/02/19/pytorch-03-perceptron.html\

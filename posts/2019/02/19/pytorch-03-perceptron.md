@@ -4,6 +4,7 @@ date: 2019-02-19 11:36:43
 published: true
 tags:
   - pytorch
+  - python
 mathjax: true
 description: "Pytorch - 03) Perceptron ## Perceptron  (마지막 정리가 되길
   바라며)  Perceptron은 우리 두뇌 (뉴런)의 인지능력을 모방하도록 만든 인위적인
@@ -13,6 +14,7 @@ category: pytorch
 slug: /2019/02/19/pytorch-03-perceptron/
 template: post
 ---
+
 Pytorch - 03) Perceptron
 
 ## Perceptron
@@ -27,9 +29,9 @@ Perceptron은 우리 두뇌 (뉴런)의 인지능력을 모방하도록 만든 �
 
 각 입력신호에 weight가 부여되며, 이 weight가 클수록 해당 입력값이 중요한 역할을 한다고 볼 수 있다. 머신러닝에서 하는 것은 이 weight을 조정하는 작업이라고 할 수 있다.
 
-이렇게만 보면, 앞에서 보았던 linear classification 모형이라고도 볼 수 있다. 실수형의 input 벡터를 받아서, 이를 선형으로 계산하는 것이라고도 볼 수 있다. 
+이렇게만 보면, 앞에서 보았던 linear classification 모형이라고도 볼 수 있다. 실수형의 input 벡터를 받아서, 이를 선형으로 계산하는 것이라고도 볼 수 있다.
 
-처음에는 임의로 설정된 weight으로 시작하여, 여기에 training data를 모형에 입력하며 weight을 결과값에 맞도록 개선 나간다. 
+처음에는 임의로 설정된 weight으로 시작하여, 여기에 training data를 모형에 입력하며 weight을 결과값에 맞도록 개선 나간다.
 
 $$ b + w1x1 + w2x2 < 0 $$
 
@@ -47,7 +49,7 @@ xor 연산은 (1,0)이나 (0,1) 일 때 활성화되는데, 선으로는 이를 
 
 ![multi-layer-perceptron](https://www.oreilly.com/library/view/getting-started-with/9781786468574/graphics/B05474_04_05.jpg)
 
-## perceptron in pytorch 
+## perceptron in pytorch
 
 ### 데이터셋 만들기
 
@@ -87,7 +89,7 @@ tensor([[0.],
 def scatter_plot():
   plt.scatter(X[y==0, 0], X[y==0, 1])
   plt.scatter(X[y==1, 0], X[y==1, 1])
-  
+
 scatter_plot()
 ```
 
@@ -99,17 +101,17 @@ scatter_plot()
 
 ```python
 class Model(nn.Module):
-  
+
   def __init__(self, input_size, output_size):
-    super().__init__()    
+    super().__init__()
     self.linear = nn.Linear(input_size, output_size)
-    
+
   def forward(self, X):
     pred = torch.sigmoid(self.linear(X))
     return pred
-  
+
   def predict(self, x):
-    return 1 if pred >= 0.5 else 0     
+    return 1 if pred >= 0.5 else 0
 ```
 
 활성화 함수로 sigmoid함수를 사용하였다.
@@ -133,7 +135,7 @@ list(model.parameters())
 [Parameter containing:
  tensor([[ 0.1622, -0.1683]], requires_grad=True), Parameter containing:
  tensor([0.1939], requires_grad=True)]
- ```
+```
 
 input 값이 두개이고, output은 하나인 model을 만들어 냈다.
 
@@ -145,7 +147,7 @@ b1 = b[0]
 
 def get_params():
   return w1.item(), w2.item(), b.item()
-  
+
 print(w1.item(), w2.item(), b1.item())
 ```
 
@@ -160,7 +162,7 @@ def plot_fit(title):
   plt.title = title
   w1, w2, b1 = get_params()
   # 0 = w1*x1 + w2*x2 + b
-  x1 = np.array([-2.0, 2.0])  
+  x1 = np.array([-2.0, 2.0])
   # 0 = w1*x1 + w2*x2 + b
   # 를 x2 입장에서 계산
   x2 = (w1*x1 + b1) / -w2
@@ -191,14 +193,13 @@ $$ \text{Cross Entropy} = P(X) * -log(Q(x)) $$
 
 예측이 맞을때에는 0으로 수렴하고, 틀릴 경우에는 무한대로 발산하는 특성을 가지고 있다. 즉, 틀릴수록 loss를 크게 두어서 가중치를 조절할 수 있게 하는 것이다.
 
-
 ### training
 
 ```python
 epochs = 1000
 losses = []
 for i in range(epochs):
-  
+
   y_pred = model.forward(x_data)
   loss = criterion(y_pred, y_data)
   print("epoch: ", i, "loss: ", loss.item())

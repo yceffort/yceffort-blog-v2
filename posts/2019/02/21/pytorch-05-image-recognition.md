@@ -4,6 +4,7 @@ date: 2019-02-21 06:58:00
 published: true
 tags:
   - pytorch
+  - python
 description:
   'Pytorch - 05) Image Recognition 마지막으루다가 손글씨 분류해보는 실습을 해보겠습니다.  ###
   Dataset  ```python import torch import matplotlib.pyplot as plt import numpy

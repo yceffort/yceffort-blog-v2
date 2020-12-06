@@ -2,7 +2,6 @@ import queryString from 'querystring'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 import chromium from 'chrome-aws-lambda'
-import slugify from 'slugify'
 import cloudinary from 'cloudinary'
 import fetch from 'isomorphic-fetch'
 
@@ -58,8 +57,8 @@ const putImage = async function (title: string, buffer: any) {
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const realQuery = JSON.parse(JSON.stringify(req.query).replace(/amp;/gi, ''))
-  const slugTitle = slugify(realQuery.title)
-  const exisitingImage = await getImage(slugTitle)
+  const title = realQuery.title
+  const exisitingImage = await getImage(title)
   const postUrl = `https://yceffort.kr/generate-screenshot?${queryString.stringify(
     realQuery,
   )}`
@@ -70,7 +69,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const screenshot = await takeScreenshot(postUrl)
-  const uploadedImage = await putImage(slugTitle, screenshot)
+  const uploadedImage = await putImage(title, screenshot)
 
   res.setHeader('location', uploadedImage)
   return res.status(308).redirect(uploadedImage)

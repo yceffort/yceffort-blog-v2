@@ -7,6 +7,8 @@ export interface FrontMatter {
   description: string
   template: string
   path: string
+  socialImageUrl?: string
+  socialImageCredit?: string
 }
 
 export interface Post {

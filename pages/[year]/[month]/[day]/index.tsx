@@ -13,6 +13,13 @@ export default function PostPage({ post }: { post?: Post }) {
       title={post.frontmatter.title}
       description={post.frontmatter.description}
       url={`https://yceffort.kr/${post.fields.slug}`}
+      socialImage={`/api/screenshot?title=${
+        post.frontmatter.title
+      }&tags=${post.frontmatter.tags.join(',')}&imageSrc=${
+        post.frontmatter.socialImageUrl || ''
+      }&imageCredit=${
+        post.frontmatter.socialImageCredit || ''
+      }&url=${`https://yceffort.kr/${post.fields.slug}`}`}
     >
       <PostRenderer post={post} />
     </Layout>

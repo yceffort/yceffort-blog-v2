@@ -63,7 +63,7 @@ const Image = styled.img`
 
 const H1 = styled.h1`
   margin: 0;
-  font-size: 4em;
+  font-size: 3em;
   grid-area: title;
 `
 

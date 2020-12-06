@@ -64,9 +64,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const realQuery = JSON.parse(JSON.stringify(req.query).replace(/amp;/gi, ''))
   const title = encodeURI(realQuery.title)
   const exisitingImage = await getImage(title)
-  const postUrl = `https://yceffort.kr/generate-screenshot?${queryString.stringify(
-    realQuery,
-  )}`
+  const postUrl = `${
+    local ? 'http://localhost:3000' : 'https://yceffort.kr'
+  }/generate-screenshot?${queryString.stringify(realQuery)}`
 
   if (exisitingImage) {
     res.setHeader('location', exisitingImage)

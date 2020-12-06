@@ -4,6 +4,11 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import chromium from 'chrome-aws-lambda'
 import cloudinary from 'cloudinary'
 import fetch from 'isomorphic-fetch'
+;(async () => {
+  await chromium.font(
+    'https://github.com/yceffort/yceffort-blog-v2/raw/master/font/GamjaFlower-Regular.ttf',
+  )
+})()
 
 const CLOUDINARY_CLOUD = process.env.CLOUDINARY_CLOUD || 'yceffort'
 const CLOUDINARY_KEY = process.env.CLOUDINARY_KEY || ''
@@ -57,7 +62,7 @@ const putImage = async function (title: string, buffer: any) {
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const realQuery = JSON.parse(JSON.stringify(req.query).replace(/amp;/gi, ''))
-  const title = realQuery.title
+  const title = encodeURI(realQuery.title)
   const exisitingImage = await getImage(title)
   const postUrl = `https://yceffort.kr/generate-screenshot?${queryString.stringify(
     realQuery,

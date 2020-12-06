@@ -26,6 +26,7 @@
   "dependencies": {
     "@mapbox/rehype-prism": "^0.5.0",
     "algoliasearch": "^4.5.1",
+    "chrome-aws-lambda": "^5.5.0",
     "cloudinary": "^1.23.0",
     "date-fns": "^2.16.1",
     "front-matter": "^4.0.2",
@@ -36,7 +37,7 @@
     "normalize.css": "^8.0.1",
     "prismjs": "^1.22.0",
     "promise-fs": "^2.1.1",
-    "puppeteer": "^5.5.0",
+    "puppeteer-core": "^5.5.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-icons": "^3.11.0",

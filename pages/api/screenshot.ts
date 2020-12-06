@@ -1,7 +1,7 @@
 import queryString from 'querystring'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
-import puppeteer from 'puppeteer'
+import chromium from 'chrome-aws-lambda'
 import slugify from 'slugify'
 import cloudinary from 'cloudinary'
 import fetch from 'isomorphic-fetch'
@@ -18,7 +18,7 @@ cloudinary.v2.config({
 })
 
 const takeScreenshot = async function (url: string) {
-  const browser = await puppeteer.launch()
+  const browser = await chromium.puppeteer.launch({ product: 'chrome' })
   const page = await browser.newPage()
   await page.setViewport({ height: 630, width: 1200 })
   await page.goto(url)
@@ -28,7 +28,8 @@ const takeScreenshot = async function (url: string) {
 }
 
 const getImage = async function (title: string) {
-  const url = `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD}/image/upload/social-images/${title}.png`
+  const url = `https://res.cloudinary.com/${CLOUDINARY_CLOUD}/image/upload/social-images/${title}.png`
+  console.log(url)
   const response = await fetch(url)
 
   return response.ok ? url : null
@@ -47,14 +48,10 @@ const putImage = async function (title: string, buffer: any) {
   return response.url
 }
 
-type Data = {
-  imageUrl: string
-}
-
-export default async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
   const local = process.env.NODE_ENV === 'development'
   if (local) {
-    res.status(404).json({ imageUrl: '' })
+    return res.status(404)
   }
   const slugTitle = slugify(req.query.title as string)
   const exisitingImage = await getImage(slugTitle)
@@ -63,12 +60,13 @@ export default async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   )}`
 
   if (exisitingImage) {
-    res.status(200).json({ imageUrl: exisitingImage })
+    res.setHeader('location', exisitingImage)
+    return res.status(308).redirect(exisitingImage)
   }
 
   const screenshot = await takeScreenshot(postUrl)
   const uploadedImage = await putImage(slugTitle, screenshot)
 
   res.setHeader('location', uploadedImage)
-  return res.status(308).json({ imageUrl: uploadedImage })
+  return res.status(308).redirect(uploadedImage)
 }

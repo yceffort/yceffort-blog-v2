@@ -38,7 +38,6 @@ const takeScreenshot = async function (url: string) {
 
 const getImage = async function (title: string) {
   const url = `https://res.cloudinary.com/${CLOUDINARY_CLOUD}/image/upload/social-images/${title}.png`
-  console.log(url)
   const response = await fetch(url)
 
   return response.ok ? url : null

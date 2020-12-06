@@ -16,9 +16,13 @@ cloudinary.v2.config({
   api_secret: CLOUDINARY_SECRET, // eslint-disable-line
 })
 
+const local = process.env.NODE_ENV === 'development'
+
 const takeScreenshot = async function (url: string) {
   const browser = await chromium.puppeteer.launch({
-    executablePath: await chromium.executablePath,
+    executablePath: local
+      ? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+      : await chromium.executablePath,
     args: chromium.args,
     defaultViewport: chromium.defaultViewport,
     headless: chromium.headless,
@@ -54,14 +58,11 @@ const putImage = async function (title: string, buffer: any) {
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const local = process.env.NODE_ENV === 'development'
-  if (local) {
-    return res.status(404)
-  }
-  const slugTitle = slugify(req.query.title as string)
+  const realQuery = JSON.parse(JSON.stringify(req.query).replace(/amp;/gi, ''))
+  const slugTitle = slugify(realQuery.title)
   const exisitingImage = await getImage(slugTitle)
   const postUrl = `https://yceffort.kr/generate-screenshot?${queryString.stringify(
-    req.query,
+    realQuery,
   )}`
 
   if (exisitingImage) {

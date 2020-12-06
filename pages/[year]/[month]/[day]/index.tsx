@@ -1,6 +1,7 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
 import React from 'react'
 import DefaultErrorPage from 'next/error'
+import queryString from 'query-string'
 
 import { Post } from '#types/types'
 import { getAllPosts, parseMarkdownToHTML } from '#utils/Markdown'
@@ -13,13 +14,13 @@ export default function PostPage({ post }: { post?: Post }) {
       title={post.frontmatter.title}
       description={post.frontmatter.description}
       url={`https://yceffort.kr/${post.fields.slug}`}
-      socialImage={`/api/screenshot?title=${
-        post.frontmatter.title
-      }&tags=${post.frontmatter.tags.join(',')}&imageSrc=${
-        post.frontmatter.socialImageUrl || ''
-      }&imageCredit=${
-        post.frontmatter.socialImageCredit || ''
-      }&url=${`https://yceffort.kr/${post.fields.slug}`}`}
+      socialImage={`/api/screenshot?${queryString.stringify({
+        title: post.frontmatter.title,
+        tags: post.frontmatter.tags.map((tag) => tag.trim()).join(','),
+        imageSrc: post.frontmatter.socialImageUrl,
+        imageCredit: post.frontmatter.socialImageCredit,
+        url: `https://yceffort.kr/${post.fields.slug}`,
+      })}`}
     >
       <PostRenderer post={post} />
     </Layout>

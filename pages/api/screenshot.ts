@@ -7,9 +7,8 @@ import cloudinary from 'cloudinary'
 import fetch from 'isomorphic-fetch'
 
 const CLOUDINARY_CLOUD = process.env.CLOUDINARY_CLOUD || 'yceffort'
-const CLOUDINARY_KEY = process.env.CLOUDINARY_KEY || '789373479369932'
-const CLOUDINARY_SECRET =
-  process.env.CLOUDINARY_SECRET || 'Aff3KgwUhhEL-IXGiU7mmuUbbQ0'
+const CLOUDINARY_KEY = process.env.CLOUDINARY_KEY || ''
+const CLOUDINARY_SECRET = process.env.CLOUDINARY_SECRET || ''
 
 cloudinary.v2.config({
   cloud_name: CLOUDINARY_CLOUD, // eslint-disable-line
@@ -18,7 +17,13 @@ cloudinary.v2.config({
 })
 
 const takeScreenshot = async function (url: string) {
-  const browser = await chromium.puppeteer.launch({ product: 'chrome' })
+  const browser = await chromium.puppeteer.launch({
+    executablePath: await chromium.executablePath,
+    args: chromium.args,
+    defaultViewport: chromium.defaultViewport,
+    headless: chromium.headless,
+  })
+
   const page = await browser.newPage()
   await page.setViewport({ height: 630, width: 1200 })
   await page.goto(url)

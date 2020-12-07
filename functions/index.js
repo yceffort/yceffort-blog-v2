@@ -6,9 +6,9 @@ const fetch = require('node-fetch')
 const queryString = require('query-string')
 
 const CLOUDINARY_CLOUD = process.env.CLOUDINARY_CLOUD || 'yceffort'
-const CLOUDINARY_KEY = process.env.CLOUDINARY_KEY || '135156986266348'
+const CLOUDINARY_KEY = process.env.CLOUDINARY_KEY || ''
 const CLOUDINARY_SECRET =
-  process.env.CLOUDINARY_SECRET || 'ZH50DrK1FUILXqdxTDJtijuo4VY'
+  process.env.CLOUDINARY_SECRET || ''
 
 admin.initializeApp()
 const db = admin.firestore()

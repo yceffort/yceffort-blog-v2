@@ -10,28 +10,14 @@ const CLOUDINARY_KEY = process.env.CLOUDINARY_KEY || '135156986266348'
 const CLOUDINARY_SECRET =
   process.env.CLOUDINARY_SECRET || 'ZH50DrK1FUILXqdxTDJtijuo4VY'
 
-// const local = process.env.NODE_ENV !== 'production'
+admin.initializeApp()
+const db = admin.firestore()
 
-async function main() {
-  admin.initializeApp()
-  // ;(async () => {
-  //   await chromium.font(
-  //     'https://rawcdn.githack.com/yceffort/yceffort-blog-v2/f07d74f18bfdabe1e639dc18fdf559fe008a8287/font/GamjaFlower-Regular.ttf',
-  //   )
-  // })()
-
-  cloudinary.v2.config({
-    cloud_name: CLOUDINARY_CLOUD, // eslint-disable-line
-    api_key: CLOUDINARY_KEY, // eslint-disable-line
-    api_secret: CLOUDINARY_SECRET, // eslint-disable-line
-  })
-}
-
-try {
-  main()
-} catch (e) {
-  console.error(e)
-}
+cloudinary.v2.config({
+  cloud_name: CLOUDINARY_CLOUD, // eslint-disable-line
+  api_key: CLOUDINARY_KEY, // eslint-disable-line
+  api_secret: CLOUDINARY_SECRET, // eslint-disable-line
+})
 
 const takeScreenshot = async function (url) {
   const chromiumPath = await chromium.executablePath
@@ -74,19 +60,24 @@ const putImage = async function (title, buffer) {
 exports.screenshot = functions.https.onRequest(async (req, res) => {
   const query = req.query
   const title = encodeURI(query.slug)
-  const existingImage = await getImage(title)
+  const firebaseTitle = title.replace(/\//gi, '-')
+  const screenshotRef = db.collection('screenshot')
 
-  const postUrl = `http://yceffort.kr/generate-screenshot?${queryString.stringify(
-    query,
-  )}`
+  const exist = await screenshotRef.doc(firebaseTitle).get()
 
-  if (existingImage) {
-    res.redirect(existingImage)
+  if (exist.exists) {
+    return res.redirect(exist.data().url)
   }
 
   try {
+    const postUrl = `http://yceffort.kr/generate-screenshot?${queryString.stringify(
+      query,
+    )}`
     const screenshot = await takeScreenshot(postUrl)
     const uploadedImage = await putImage(title, screenshot)
+    screenshotRef.doc(firebaseTitle).set({
+      url: uploadedImage,
+    })
     res.redirect(uploadedImage)
   } catch (e) {
     console.error(e)

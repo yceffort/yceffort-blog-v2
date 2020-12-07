@@ -153,11 +153,22 @@ export default function GenerateScreenshot({
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const {
-    query: { title, tags, url, imageSrc = '', imageCredit = '' },
-  } = context
+  const query: any = {}
+  Object.keys(context.query).forEach(
+    (key) => (query[key.replace(/amp;/, '')] = context.query[key]),
+  ) as any
+
+  const { title, tags, url, imageSrc = '', imageCredit = '', slug } = query
+
+  let engTitle = ''
+
+  if (slug) {
+    const splitSlug = (slug as string).split('/')
+    const tempTitle = splitSlug[splitSlug.length - 1].replace(/-/gi, ' ')
+    engTitle = tempTitle.charAt(0).toUpperCase() + tempTitle.slice(1)
+  }
 
   return {
-    props: { title, tags, url, imageSrc, imageCredit },
+    props: { title: engTitle || title, tags, url, imageSrc, imageCredit },
   }
 }

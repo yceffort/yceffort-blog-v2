@@ -38,7 +38,7 @@ const Layout = ({
     author: { photo },
     subtitle,
   } = config
-  const layoutMetaImageUrl = `https://yceffort.kr${socialImage || photo}`
+  const layoutMetaImageUrl = socialImage || `https://yceffort.kr${photo}`
   const layoutDescription = description || subtitle
 
   return (

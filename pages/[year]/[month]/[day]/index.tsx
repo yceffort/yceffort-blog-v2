@@ -1,25 +1,27 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
 import React from 'react'
 import DefaultErrorPage from 'next/error'
+import qs from 'query-string'
 
 import { Post } from '#types/types'
 import { getAllPosts, parseMarkdownToHTML } from '#utils/Markdown'
 import Layout from '#components/Layout'
 import PostRenderer from '#components/Post/Post'
 
-export default function PostPage({ post }: { post?: Post }) {
+export default function PostPage({
+  post,
+  thumbnailUrl,
+}: {
+  post?: Post
+  thumbnailUrl: string
+}) {
+  console.log(thumbnailUrl)
   return post ? (
     <Layout
       title={post.frontmatter.title}
       description={post.frontmatter.description}
       url={`https://yceffort.kr/${post.fields.slug}`}
-      // socialImage={`/api/screenshot?${queryString.stringify({
-      //   title: post.frontmatter.title,
-      //   tags: post.frontmatter.tags.map((tag) => tag.trim()).join(','),
-      //   imageSrc: post.frontmatter.socialImageUrl,
-      //   imageCredit: post.frontmatter.socialImageCredit,
-      //   url: `https://yceffort.kr/${post.fields.slug}`,
-      // })}`}
+      socialImage={thumbnailUrl}
     >
       <PostRenderer post={post} />
     </Layout>
@@ -46,6 +48,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
 }
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   let post: Post | undefined
+  let thumbnailUrl = ''
+
   if (params) {
     const { year, month, day: title } = params
     const slug = [year, month, title].join('/')
@@ -54,10 +58,21 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
     if (post) {
       post.parsedBody = await parseMarkdownToHTML(post.body)
+
+      const thumbnailHost = `https://us-central1-yceffort.cloudfunctions.net/screenshot`
+
+      const queryString = qs.stringify({
+        tags: post.frontmatter.tags.map((tag) => tag.trim()).join(','),
+        title: post.frontmatter.title,
+        url: `https://yceffort.kr/${post.fields.slug}`,
+        slug: post.fields.slug,
+      })
+
+      thumbnailUrl = `${thumbnailHost}?${queryString}`
     }
   }
 
   return {
-    props: { post: post ? { ...post, path: '' } : null },
+    props: { post: post ? { ...post, path: '' } : null, thumbnailUrl },
   }
 }

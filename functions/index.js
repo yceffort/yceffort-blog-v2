@@ -7,8 +7,7 @@ const queryString = require('query-string')
 
 const CLOUDINARY_CLOUD = process.env.CLOUDINARY_CLOUD || 'yceffort'
 const CLOUDINARY_KEY = process.env.CLOUDINARY_KEY || ''
-const CLOUDINARY_SECRET =
-  process.env.CLOUDINARY_SECRET || ''
+const CLOUDINARY_SECRET = process.env.CLOUDINARY_SECRET || ''
 
 admin.initializeApp()
 const db = admin.firestore()
@@ -58,7 +57,11 @@ const putImage = async function (title, buffer) {
 }
 
 exports.screenshot = functions.https.onRequest(async (req, res) => {
-  const query = req.query
+  const query = {}
+  Object.keys(req.query).forEach(
+    (key) => (query[key.replace(/amp;/, '')] = req.query[key]),
+  )
+
   const title = encodeURI(query.slug)
   const firebaseTitle = title.replace(/\//gi, '-')
   const screenshotRef = db.collection('screenshot')

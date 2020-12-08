@@ -15,7 +15,6 @@ export default function PostPage({
   post?: Post
   thumbnailUrl: string
 }) {
-  console.log(thumbnailUrl)
   return post ? (
     <Layout
       title={post.frontmatter.title}
@@ -73,6 +72,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   }
 
   return {
-    props: { post: post ? { ...post, path: '' } : null, thumbnailUrl },
+    props: {
+      post: post ? { ...post, path: '' } : null,
+      thumbnailUrl: process.env.NODE_ENV === 'production' ? thumbnailUrl : '',
+    },
   }
 }

@@ -153,12 +153,14 @@ export default function GenerateScreenshot({
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const query: any = {}
-  Object.keys(context.query).forEach(
-    (key) => (query[key.replace(/amp;/, '')] = context.query[key]),
-  ) as any
-
-  const { title, tags, url, imageSrc = '', imageCredit = '', slug } = query
+  const {
+    title,
+    tags,
+    url,
+    imageSrc = '',
+    imageCredit = '',
+    slug,
+  } = context.query
 
   let engTitle = ''
 

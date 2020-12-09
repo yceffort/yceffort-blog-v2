@@ -19,7 +19,6 @@
     "firebase-functions": "^3.11.0",
     "iltorb": "^2.4.5",
     "isomorphic-fetch": "^3.0.0",
-    "node-fetch": "^2.6.1",
     "puppeteer-core": "^5.5.0",
     "query-string": "^6.13.7"
   },

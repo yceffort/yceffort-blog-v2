@@ -2,7 +2,6 @@ const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 const chromium = require('chrome-aws-lambda')
 const cloudinary = require('cloudinary')
-const fetch = require('node-fetch')
 const queryString = require('query-string')
 
 const CLOUDINARY_CLOUD = process.env.CLOUDINARY_CLOUD || 'yceffort'
@@ -34,13 +33,6 @@ const takeScreenshot = async function (url) {
   const buffer = await page.screenshot({ encoding: 'base64' })
   await browser.close()
   return `data:image/png;base64,${buffer}`
-}
-
-const getImage = async function (title) {
-  const url = `https://res.cloudinary.com/${CLOUDINARY_CLOUD}/image/upload/social-images/${title}.png`
-  const response = await fetch(url)
-
-  return response.ok ? url : null
 }
 
 const putImage = async function (title, buffer) {

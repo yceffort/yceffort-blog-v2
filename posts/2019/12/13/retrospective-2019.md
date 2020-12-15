@@ -3,6 +3,8 @@ title: 2019년 회고
 date: 2019-12-14 06:25:46
 tags:
   - diary
+  - TIL
+  - retrospective
 published: false
 description: "2019년도 이제 2주가 채 남지 않았습니다. 2019년에 대해 잠시 뒤돌아 보는 시간을 갖도록 하겠습니다. ##
   Achievement  ### 1. 퇴사 그리고 이직  사실 K사에 있었을 때에는, 나름에 그 다음 이직에 대한 몇가지 원칙이

@@ -21,7 +21,7 @@ description: 'PWA에서 가장 적절한 것은 무엇일까'
 
 물론 이 외에도 브라우저에서 사용할 수 있는 다른 스토리지가 존재한다. 그러나 이들은 사용에 제한이 있으며, 성능적인 문제 또한 존재한다.
 
-- [SessionStorage](https://developer.mozilla.org/ko/docs/Web/API/Window/sessionStorage): 데이터가 탭과 연결되어 있기 때문에, 탭의 라이프타임과 함꼐 한다. 따라서 세션과 관련된 작은 양의 데이터를 저장하는데 유용하다. (IndexedDB의 키 등) 또한 동기로 작동하며 메인스레드를 블로킹하기 때문에 사용에 주의가 필요하다. 5MB 까지의 데이터만 저장가능하며, 문자열만 가능하다. 또한 탭에 묶여 있기 때문에, 웹워커나 서비스워커에서는 사용이 불가능하다.
+- [SessionStorage](https://developer.mozilla.org/ko/docs/Web/API/Window/sessionStorage): 데이터가 탭과 연결되어 있기 때문에, 탭의 라이프타임과 함께 한다. 따라서 세션과 관련된 작은 양의 데이터를 저장하는데 유용하다. (IndexedDB의 키 등) 또한 동기로 작동하며 메인스레드를 블로킹하기 때문에 사용에 주의가 필요하다. 5MB 까지의 데이터만 저장가능하며, 문자열만 가능하다. 또한 탭에 묶여 있기 때문에, 웹워커나 서비스워커에서는 사용이 불가능하다.
 - [LocalStorage](https://developer.mozilla.org/ko/docs/Web/API/Window/localStorage): 마찬가지로 메인스레드를 블로킹하고 동기로 작동한다. 마찬가지로 5MB까지 가능하며, 문자열 데이터만 저장가능하다. 웹 워커와 서비스워커에서는 사용이 불가능하다.
 - [Cookies](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies): 쿠키는 쿠키 나름대로의 사용처가 있기 때문에, 데이터 저장용도로 사용해서는 안된다. 쿠키는 모든 HTTP 요청에 함께 보내지기 때문에, 큰 데이터를 저장했다가는 모든 HTTP 요청에 함께 날라가게 되므로 신 사이즈가 커지게 된다. 또한 이들은 동기로 작동하며, 웹워커에서는 접근이 불가능하다. 위 두개와 마찬가지로, 문자열 데이터만 저장 가능하다.
 - [File System API](https://developer.mozilla.org/en-US/docs/Web/API/File_and_Directory_Entries_API/Introduction): 샌드박스 (제한된 영역의) 파일시스템에 파일을 읽고 쓸 수 있도록 도와준다. 비동기로 작동되는 반면 [크로미윰에서만 지원되기 때문에](https://caniuse.com/filesystem) 널리 사용하기는 어렵다.

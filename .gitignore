@@ -35,3 +35,5 @@ yarn-error.log*
 public/sw.js
 public/sw.js.map
 public/workbox-*
+
+node_modules/

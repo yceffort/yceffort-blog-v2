@@ -334,6 +334,12 @@ export default class MyDocument extends Document<Props> {
           `,
             }}
           ></script>
+
+          <script
+            data-ad-client="ca-pub-4790268107504100"
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+          ></script>
         </Head>
         <body>
           <Main />

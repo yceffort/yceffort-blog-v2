@@ -38,9 +38,9 @@ description: '맨날 맥만 봐서 이런 줄도 몰랐다 반성합니다'
 
 문제는 `overflow-y: scroll`이다. 해당 옵션을 수정하면 컨텐츠가 넘쳐날 때만 스크롤 바가 뜬다.
 
-![linkedin-post-window-scroll-auto](./linkedin-post-window-scroll-auto.PNG)
+![linkedin-post-window-scroll-auto](./linkedin-post-window-scroll-auto.png)
 
-![linkedin-post-window-scroll](./linkedin-post-window-scroll.PNG)
+![linkedin-post-window-scroll](./linkedin-post-window-scroll.png)
 
 > 스크롤바를 의도한 걸 수도 있다. 하지만 대부분은 버그입니다.
 

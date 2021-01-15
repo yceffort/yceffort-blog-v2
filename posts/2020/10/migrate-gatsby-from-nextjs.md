@@ -153,7 +153,7 @@ module.exports = {
 
 일단 빌드 시간이 엄청나게 빨라졌다.
 
-![gatsby](gatsby-build.png)
+![gatsby](./images/gatsby-build.png)
 
 7분 가까이 빌드에 소요되었었다. ㅠㅠ
 
@@ -168,7 +168,7 @@ module.exports = {
 
 정적파일 빌드 하는데 3분이 넘게 걸렸고, 쓸데 없이 이미지 썸네일 만드는데에 5분까지 걸렸다.
 
-![nextjs](nextjs-build.png)
+![nextjs](./images/nextjs-build.png)
 
 빌드도 빨라지고, 빌드 결과물도 기존 232.34mb에서 29.02mb로 다이어트 할 수 있었다. (nextjs는 다이나믹 path에 대해서 모두 빌드해두는 것이 아니라, 최초 페이지 접근 요청이 올 때만 빌드하고, 이 후 접근엔 이전에 빌드해둔 페이지를 보여준다.)
 

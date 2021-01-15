@@ -9,7 +9,7 @@ description: '왜 이걸 이제 알았나 자괴감 들고 괴로워'
 
 웹 사이트의 크기는 해가 갈 수록 커지고 있다. 3년 전과 비교 했을 때, 데스크톱 사이트는 20.5%, 모바일 웹 사이트의 경우에는 24.1%나 커졌다.
 
-![total-kb](./website-total-kilobytes.png)
+![total-kb](./images/website-total-kilobytes.png)
 
 https://httparchive.org/reports/page-weight?start=2016_11_15&end=latest&view=list
 
@@ -75,7 +75,7 @@ gzip_vary on;
 
 https://tools.keycdn.com/brotli-test 에서 brotli를 지원하는지 확인할 수 있다.
 
-![yceffort blog](./yceffort-brotli.png)
+![yceffort blog](./images/yceffort-brotli.png)
 
 > content-encoding이 br로 되어 있으면 brotli를 사용한다는 뜻이다.
 
@@ -132,6 +132,6 @@ http{
 
 https://caniuse.com/brotli
 
-![can-i-use-brotli](./can-i-use-brotli.png)
+![can-i-use-brotli](./images/can-i-use-brotli.png)
 
 따라서, ie 환경을 고려하고 있다면 gzip 방식으로도 컨텐츠를 제공해야 한다.

@@ -19,7 +19,7 @@ nextjs 10.0.0이 릴리즈 되었다. 내가 좋아하는 오픈소스 중 하�
 
 ### 대상 이미지
 
-![blog profile](profile.png)
+![blog profile](./images/profile.png)
 
 ### 적용전
 
@@ -151,9 +151,9 @@ https://nextjs.org/analytics
 
 당장은 vercel만 지원하는 것 같은데(?) 운좋게도(?) 블로그가 vercel로 서빙되고 있기 때문에 당장 시도해보러 갔다.
 
-![analytics](./analytics1.png)
+![analytics](./images/analytics1.png)
 
-![analytics](./analytics2.png)
+![analytics](./images/analytics2.png)
 
 (점수가 깎이는 것은 아마도 메인페이지의 페이지 전환 버튼 때문인 것 같다. 현재 타이틀 제목 길이에 따라서 페이징 버튼이 위아래로 일관되지 못하게 움직이는 버그가 있다.)
 

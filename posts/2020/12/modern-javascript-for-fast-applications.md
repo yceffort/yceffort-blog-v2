@@ -113,7 +113,7 @@ module.exports = {
 
 ## Optimize Plugin
 
-[Optimize Plugin](https://github.com/developit/optimize-plugin)은 개별 자바스크립트 파일을 레거시 자바스크립트로 만드는 대신에, 최종적으로 만들어진 모던 번들 코드를 레거시 자바스크립트로 변환시켜주는 도구다. 웹팩 설정을 통해 모든 것이 모던 자바스크립트라고 가정하기 때문에, 특별한 처리가 필요하지 않다. 또한 이는 개별 모듈이 아닌 번들 레벨에서 동작하므로 애플리케이션의 코드와 디펜던시를 동등하게 처리한다. 이는 최종 번들링된 파일을 다시 레거시 문법으로 만드는 것이기 때문에, 전통적인 방식보다 빠를 수 잇다. 이러한 두개의 모듈은 [module/nomodule pattern](https://web.dev/serve-modern-code-to-modern-browsers/)에서 사용된다.
+[Optimize Plugin](https://github.com/developit/optimize-plugin)은 개별 자바스크립트 파일을 레거시 자바스크립트로 만드는 대신에, 최종적으로 만들어진 모던 번들 코드를 레거시 자바스크립트로 변환시켜주는 도구다. 웹팩 설정을 통해 모든 것이 모던 자바스크립트라고 가정하기 때문에, 특별한 처리가 필요하지 않다. 또한 이는 개별 모듈이 아닌 번들 레벨에서 동작하므로 애플리케이션의 코드와 디펜던시를 동등하게 처리한다. 이는 최종 번들링된 파일을 다시 레거시 문법으로 만드는 것이기 때문에, 전통적인 방식보다 빠를 수 있다. 이러한 두개의 모듈은 [module/nomodule pattern](https://web.dev/serve-modern-code-to-modern-browsers/)에서 사용된다.
 
 ```javascript
 // webpack.config.js

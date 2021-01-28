@@ -12,8 +12,7 @@
     "lint": "eslint '**/*.{ts,tsx}'",
     "lint:fix": "npm run lint --fix",
     "prettier": "prettier '**/*.{json,yaml}' --check",
-    "prettier:fix": "prettier '**/*.{json,yaml}' --write",
-    "algolia": "ts-node --project ./tsconfig.node.json ./src/algolia.ts"
+    "prettier:fix": "prettier '**/*.{json,yaml}' --write"
   },
   "repository": "https://github.com/yceffort/yceffort-blog-v2",
   "author": "yceffort <yceffort@gmail.com>",

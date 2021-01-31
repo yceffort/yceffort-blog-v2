@@ -27,7 +27,7 @@
     "date-fns": "^2.16.1",
     "front-matter": "^4.0.2",
     "memoizee": "^0.4.14",
-    "next": "10.0.1",
+    "next": "^10.0.6",
     "next-pwa": "^3.1.5",
     "normalize.css": "^8.0.1",
     "prismjs": "^1.22.0",

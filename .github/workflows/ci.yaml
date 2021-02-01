@@ -19,6 +19,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+      - run: npx browserslist@latest --update-db
       - run: npm ci
       - run: npm run build-nextjs
       - run: npm run lint

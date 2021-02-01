@@ -1,7 +1,8 @@
 ---
-title: 'CSS와 네트워크 속도'
+title: 'CSS와 웹페이지 성능과의 관계'
 tags:
   - browser
+  - javascript
   - CSS
 published: true
 date: 2021-02-01 16:19:06

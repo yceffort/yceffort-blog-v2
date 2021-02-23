@@ -86,12 +86,6 @@ export default function Page({
 }) {
   const pageRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    if (pageRef && pageRef.current) {
-      pageRef.current.scrollIntoView()
-    }
-  }, [])
-
   return (
     <PageDiv ref={pageRef}>
       <PageInner>

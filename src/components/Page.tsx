@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useRef } from 'react'
+import React, { ReactNode, useRef } from 'react'
 import styled from 'styled-components'
 
 const PageDiv = styled.div`

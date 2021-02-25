@@ -5,7 +5,7 @@ tags:
   - javascript  
 published: true
 date: 2021-02-25 22:46:17
-description: '내 일이 아니라고 생각하면 관심이 안가더라고'
+description: 'https://overreacted.io/a-complete-guide-to-useeffect/ 도 시간나면 읽어보세용'
 ---
 
 아래 코드는 일반적으로 `useEffect`를 활용해서 데이터를 가져오는 방식이다.

@@ -97,6 +97,6 @@ async function d() {
 }
 ```
 
-**이 것은 어디까지나 `try ... catch` 블록에서만 유효하다.** 그 외의 영역에서는 `return await`은 의미하다. `async` 함수 내에 있는 `return await`은 프로미스를 기다렸다가 결과가 나올떄까지, 현재의 함수를 콜스택에 넣어두며, 외부 promise가 resolve 되기전에 추가로 마이크로 태스크가 생기게 된다. 따라서 `try ... catch` 블록이 아니라면 단순히 `return something`으로 처리하면 된다.
+**이 것은 어디까지나 `try ... catch` 블록에서만 유효하다.** 그 외의 영역에서는 `return await`은 의미하다. `async` 함수 내에 있는 `return await`은 프로미스를 기다렸다가 결과가 나올때까지, 현재의 함수를 콜스택에 넣어두며, 외부 promise가 resolve 되기전에 추가로 마이크로 태스크가 생기게 된다. 따라서 `try ... catch` 블록이 아니라면 단순히 `return something`으로 처리하면 된다.
 
 https://github.com/eslint/eslint/blob/master/docs/rules/no-return-await.md

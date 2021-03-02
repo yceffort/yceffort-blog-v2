@@ -5,10 +5,10 @@ tags:
   - browser
 published: true
 date: 2021-02-27 23:40:05
-description: '자바스크립트 성능에 중요한 건 번들크기가 다가 아니다. 근데 번들크기가 가장 보기 쉬우니까 다들 이거에 집착하는 듯'
+description: '자바스크립트 성능에 중요한 건 번들크기 만은 아니다. 근데 개발 하느라 이것도 잘 못챙기고 있는듯.'
 ---
 
-## Table of Conents
+## Table of Contents
 
 ## 시작하며
 
@@ -213,5 +213,28 @@ Chrome Performance Monitor Tab은 Performance Tab과 다르다. 수동으로 추
 
 자바스크립트 모듈의 디스크 사용량이 번들 크기와 직접적인 상관관계가 있다고 생각할 수 있지만, 꼭 그런것 만은 아니다. 예를 들어 [emoji-picker-element](https://github.com/nolanlawson/emoji-picker-element)의 경우, 이모지 데이터를 indexeddb에서 꽤나 무겁게 사용하고 있기 때문에, 데이터베이스가 디스크 사용을 어떻게 사용하고 있는지 인식해야 한다.
 
-물론 서비스워커 캐시, 로컬 스토리지 등의 스토리지 크기를 측정하려면 이 스크립트를 조정해야 할 필요가 있다. 운영
+![application-storage](./images/application-storage.png)
 
+크롬 DevTools에 있는 Application Tab에서 현재 웹사이트가 사용하고 있는 전체 용량을 알 수가 있다. 처음 보기엔 괜찮아 보이지만, IndexedDB 의 경우 브라우저 마다 구현 방식이 다르기 때문에 브라우저 마다 차지하는 용량이 다르게 나타날 수 있다. 이를 해결할 수 있는 방법 중하나는 Puppeteer와 비슷한 [Playwright](https://github.com/microsoft/playwright)에서 아래 코드를 실행하는 것이다.
+
+```javascript
+function getIdbFolder (browserType, userDataDir) {
+  switch (browserType) {
+    case 'chromium':
+      return path.join(userDataDir, `Default/IndexedDB/http_localhost_${port}.indexeddb.leveldb`)
+    case 'firefox':
+      return path.join(userDataDir, `storage/default/http+++localhost+${port}/idb`)
+    case 'webkit':
+      return path.join(userDataDir, `databases/indexeddb/v1/http_localhost_${port}`)
+  }
+}
+```
+
+초기화된 빈 브라우저를 시작할 수 있으므로, 브라우저를 먼저 시작하고 `/temp`에 스토리지를 기록한다음, 인덱싱된 스토리지를 측정하는 것이 가능하다.
+
+## 결론
+
+성능이란 것은 다방면적인 측면을 고려 해야 한다. 번들 사이즈만 줄여서 해결된다면 좋겠지만, 여러가지 측면을 고려해야 한다. 이 때문에 이것이 굉장히 부담스럽게 느껴질 수도 있다. 그래서 [core web vital](https://web.dev/vitals/)이나 번들 사이즈에 집중해서 문제를 해결하는 것이 꼭 나쁜 것 만은 아니다. 웹 애플리케이션 성능 측정에 여러가지를 고민해야 한다고 말하면, 사람들은 이에 압도되서 아무것도 안 할수도 있다. 그렇지만, 이런 것도 있다는 것을 알아둔다면 최적화에 도움이 되지 않을까.
+
+
+> 참고: https://nolanlawson.com/2021/02/23/javascript-performance-beyond-bundle-size/

@@ -131,7 +131,7 @@ export function stop (name) {
 
 또 다른 유용한 도구는 [mark loader](https://github.com/statianzo/mark-loader)다. 이 플러그인은 디펜던시 런타임 비용을 볼수 있오록 모듈을 측정 api로 감싸는 웹팩 플러그인이다. 
 
-런타임 성능을 측정 할 때 한 가지 주의해야 할 점은, 축소된 코드와 그렇지 않은 코드 사이에 다를 수 있따는 것이다. 사용되지 않는 함수들이 제거 될 수 있고, 코드가 더 작아지고 최적화 될 수 있으며, `env.NODE_ENV === 'development'`로 인해 프로덕션 모드에서 코드가 정제될 수도 있다. 이러한 상황을 잘 해결할 수 있는 방법은, `performance.mark`와 `performance.measure`를 활용하는 것이다. 
+런타임 성능을 측정 할 때 한 가지 주의해야 할 점은, 축소된 코드와 그렇지 않은 코드 사이에 다를 수 있다는 것이다. 사용되지 않는 함수들이 제거 될 수 있고, 코드가 더 작아지고 최적화 될 수 있으며, `env.NODE_ENV === 'development'`로 인해 프로덕션 모드에서 코드가 정제될 수도 있다. 이러한 상황을 잘 해결할 수 있는 방법은, `performance.mark`와 `performance.measure`를 활용하는 것이다. 
 
 ### Poser Usage
 

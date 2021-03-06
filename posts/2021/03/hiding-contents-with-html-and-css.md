@@ -11,7 +11,7 @@ description: '원래 알던건 두 세가지밖에 안됨'
 
 ## 요약
 
-|                              	| Visible   	| Accessible 	|
+|            method            	| Visible   	| Accessible 	|
 |------------------------------	|-----------	|------------	|
 | `.sr-only`                   	| X         	| O          	|
 | `aria-hidden="true"`         	| O         	| X          	|

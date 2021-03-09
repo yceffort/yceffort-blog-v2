@@ -80,7 +80,7 @@ console.log([...countDown]) // [ 1, 2, 3, 4 ]
 
 ### 1. Genenrator
 
-`Generator`는, 하나의 값을 리턴하는 일반적인 함수와는 다르게 결과의 순서를 생성해 내는 함수라고 볼 수 있다. 앞서 설명한 `itertor`와 동일하게, `next()`를 호출하면, `{value: any, done: boolean}`을 리턴한다.
+`Generator`는, 하나의 값을 리턴하는 일반적인 함수와는 다르게 결과의 순서를 생성해 내는 함수라고 볼 수 있다. 앞서 설명한 `iterator`와 동일하게, `next()`를 호출하면, `{value: any, done: boolean}`을 리턴한다.
 
 ```javascript
 function * generator() {

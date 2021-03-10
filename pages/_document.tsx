@@ -10,11 +10,9 @@ import { ServerStyleSheet } from 'styled-components'
 
 import config from '../src/config'
 
-interface Props {
-  styleTags: any
-}
-
-export default class MyDocument extends Document<Props> {
+export default class MyDocument extends Document<{
+  styleTags: Array<React.ReactElement<{}>>
+}> {
   static async getInitialProps(context: DocumentContext) {
     const { req, renderPage } = context
     const sheet = new ServerStyleSheet()

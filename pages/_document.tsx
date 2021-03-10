@@ -15,7 +15,8 @@ interface Props {
 }
 
 export default class MyDocument extends Document<Props> {
-  static async getInitialProps({ req, renderPage }: DocumentContext) {
+  static async getInitialProps(context: DocumentContext) {
+    const { req, renderPage } = context
     const sheet = new ServerStyleSheet()
     const page = renderPage((App: any) => (props: any) =>
       sheet.collectStyles(<App {...props} />),
@@ -27,9 +28,10 @@ export default class MyDocument extends Document<Props> {
       userAgent = req.headers['user-agent']
     }
 
-    // const initialProps = await Document.getInitialProps(context);
+    const initialProps = await Document.getInitialProps(context)
     return {
       ...page,
+      ...initialProps,
       styleTags,
       isPublic: !userAgent || !userAgent.match(/(iOS|Android)/i),
     }
@@ -118,6 +120,7 @@ export default class MyDocument extends Document<Props> {
             href="/favicon/favicon-16x16.png"
           />
           <link rel="manifest" href="/manifest.json" />
+
           <meta name="msapplication-TileColor" content="#00b7ff" />
           <meta name="application-name" content="yceffort" />
           <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -284,7 +287,6 @@ export default class MyDocument extends Document<Props> {
             href="/splash/apple-splash-1136-640.jpg"
             media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
           />
-
           <script
             async
             src={`https://www.googletagmanager.com/gtag/js?id=${config.googleAnalyticsId}`}
@@ -303,7 +305,6 @@ export default class MyDocument extends Document<Props> {
                   `,
             }}
           />
-
           <style
             type="text/css"
             dangerouslySetInnerHTML={{

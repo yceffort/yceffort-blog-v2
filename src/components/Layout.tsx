@@ -44,7 +44,6 @@ const Layout = ({
   return (
     <LayoutDiv>
       <Head>
-        <html lang="kr" />
         <title>{title}</title>
         <meta name="description" content={layoutDescription} />
         <meta property="og:site_name" content={title} />

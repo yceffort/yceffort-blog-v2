@@ -1,21 +1,11 @@
 import React from 'react'
-import App, { AppContext } from 'next/app'
+import App from 'next/app'
 import 'normalize.css'
 import '../src/assets/css/global.css'
 import Head from 'next/head'
 import Router from 'next/router'
 
 class MyApp extends App {
-  static async getInitialProps({ Component, ctx }: AppContext) {
-    const pageProps = Component.getInitialProps
-      ? await Component.getInitialProps(ctx)
-      : {}
-
-    return {
-      pageProps,
-    }
-  }
-
   componentDidMount() {
     window.history.scrollRestoration = 'auto'
 

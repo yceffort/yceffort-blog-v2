@@ -12,9 +12,9 @@ admin.initializeApp()
 const db = admin.firestore()
 
 cloudinary.v2.config({
-  cloud_name: CLOUDINARY_CLOUD, // eslint-disable-line
-  api_key: CLOUDINARY_KEY, // eslint-disable-line
-  api_secret: CLOUDINARY_SECRET, // eslint-disable-line
+  cloud_name: CLOUDINARY_CLOUD,
+  api_key: CLOUDINARY_KEY,
+  api_secret: CLOUDINARY_SECRET,
 })
 
 const takeScreenshot = async function (url) {
@@ -37,8 +37,8 @@ const takeScreenshot = async function (url) {
 
 const putImage = async function (title, buffer) {
   const cloudinaryOptions = {
-    public_id: `social-images/${title}`, // eslint-disable-line
-    unique_filename: false, // eslint-disable-line
+    public_id: `social-images/${title}`,
+    unique_filename: false,
   }
   const response = await cloudinary.v2.uploader.upload(
     buffer,

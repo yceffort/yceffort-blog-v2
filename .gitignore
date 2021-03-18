@@ -28,6 +28,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+ui-debug.log*
+firebase-debug.log*
 
 # IDE
 .vscode/
@@ -37,3 +39,5 @@ public/sw.js.map
 public/workbox-*
 
 node_modules/
+
+functions/secret/sdk.json

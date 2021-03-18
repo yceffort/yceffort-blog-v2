@@ -1,0 +1,12 @@
+{
+  "functions": {
+    "source": ".",
+    "runtime": "nodejs12"
+  },
+  "emulators": {
+    "functions": {
+      "port": 5000,
+      "host": "0.0.0.0"
+    }
+  }
+}

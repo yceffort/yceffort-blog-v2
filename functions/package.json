@@ -13,6 +13,7 @@
   },
   "main": "index.js",
   "dependencies": {
+    "@google-cloud/firestore": "^4.9.8",
     "chrome-aws-lambda": "^5.5.0",
     "cloudinary": "^1.23.0",
     "firebase-admin": "^9.2.0",

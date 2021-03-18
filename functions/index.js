@@ -8,7 +8,10 @@ const CLOUDINARY_CLOUD = process.env.CLOUDINARY_CLOUD || 'yceffort'
 const CLOUDINARY_KEY = process.env.CLOUDINARY_KEY || ''
 const CLOUDINARY_SECRET = process.env.CLOUDINARY_SECRET || ''
 
+const APPLE_HEALTH_SECRET = process.env.APPLE_HEALTH_SECRET || ''
+
 admin.initializeApp()
+
 const db = admin.firestore()
 
 cloudinary.v2.config({
@@ -78,4 +81,34 @@ exports.screenshot = functions.https.onRequest(async (req, res) => {
     console.error(e)
     res.json({ error: e.toString() })
   }
+})
+
+exports.health = functions.https.onRequest(async (req, res) => {
+  // {'health': {'run': '28.88118937860876', 'timestamps': '2021-03-17T08:45:00+09:00', 'unit': 'km'}}
+  const {
+    health: { run, timestamps },
+  } = req.body
+
+  const { secret } = req.headers
+
+  if (secret !== APPLE_HEALTH_SECRET) {
+    return res.send('permission denied! 🤬')
+  }
+
+  const healthRef = db.collection('apple_health')
+
+  const date = new Date(timestamps)
+  const timeZoneFromDB = +9.0
+  const tzDifference = timeZoneFromDB * 60 + date.getTimezoneOffset()
+  const offsetDate = new Date(date.getTime() + tzDifference * 60 * 1000)
+
+  const key = `${offsetDate.getFullYear()}${
+    offsetDate.getMonth() + 1
+  }${offsetDate.getDate()}`
+
+  healthRef.doc('daily').set({
+    [key]: run,
+  })
+
+  res.send('성공')
 })

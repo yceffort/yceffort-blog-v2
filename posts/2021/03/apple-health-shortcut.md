@@ -3,6 +3,7 @@ title: '애플 단축어와 GCP로 내 건강정보 업로드하기'
 tags:
   - apple
   - gcp
+  - javascript
 published: true
 date: 2021-03-17 23:19:59
 description: '간만에 했본 간단하고 재밌는 일'

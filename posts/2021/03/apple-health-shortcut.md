@@ -17,6 +17,10 @@ description: '간만에 했본 간단하고 재밌는 일'
 ![shortcut1](./images/shortcut1.jpeg)
 ![shortcut2](./images/shortcut2.jpeg)
 ![shortcut3](./images/shortcut3.jpeg)
+![shortcut4](./images/shortcut4.jpeg)
+
+> 추가: 자동화와 연결해서 자기전에 자동으로 업로드 하도록 했다. 그러나 아이폰이 잠겨있을 경우에는 업로드가 되지 않으므로, 아이폰 잠금을 해제해 둬야 한다. 🤪
+
 
 당연히, 헤더 정보에 secret 키 등으로 접근을 하지 못하게 막아둬야 한다. (누가 여기에 업로드 할 일이 있을지는 모르겠지만,,)
 
@@ -37,21 +41,23 @@ exports.health = functions.https.onRequest(async (req, res) => {
 
   const healthRef = db.collection('apple_health')
 
-  // +09:00
   const date = new Date(timestamps)
   const timeZoneFromDB = +9.0
   const tzDifference = timeZoneFromDB * 60 + date.getTimezoneOffset()
   const offsetDate = new Date(date.getTime() + tzDifference * 60 * 1000)
 
-  const key = `${offsetDate.getFullYear()}${
-    offsetDate.getMonth() + 1
-  }${offsetDate.getDate()}`
+  const key = `${offsetDate.getFullYear()}${(offsetDate.getMonth() + 1)
+    .toString()
+    .padStart(2, 0)}${offsetDate.getDate()}`
+
+  const data = (await healthRef.doc('daily').get()).data()
 
   healthRef.doc('daily').set({
+    ...data,
     [key]: run,
   })
 
-  // 응답을 단순 텍스트 정보로 쏴줘야 애플 알림을 쓸 수 있다.
+  // 응답을 단순 text로 쏘면 아이폰에서 알림을 내보낼 수 있다.
   res.send('성공')
 })
 ```

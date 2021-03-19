@@ -102,11 +102,14 @@ exports.health = functions.https.onRequest(async (req, res) => {
   const tzDifference = timeZoneFromDB * 60 + date.getTimezoneOffset()
   const offsetDate = new Date(date.getTime() + tzDifference * 60 * 1000)
 
-  const key = `${offsetDate.getFullYear()}${
-    offsetDate.getMonth() + 1
-  }${offsetDate.getDate()}`
+  const key = `${offsetDate.getFullYear()}${(offsetDate.getMonth() + 1)
+    .toString()
+    .padStart(2, 0)}${offsetDate.getDate()}`
+
+  const data = (await healthRef.doc('daily').get()).data()
 
   healthRef.doc('daily').set({
+    ...data,
     [key]: run,
   })
 

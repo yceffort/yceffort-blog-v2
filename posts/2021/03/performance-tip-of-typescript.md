@@ -205,7 +205,7 @@ declare function printSchedule(schedule: Schedule)
 
 기본값으로, 타입스크립트는 개발자가 import 했던 안했던 간에 `node_modules`에 있는 `@types` 패키지를 자동으로 포함시킨다. 이 말인 즉슨, `node.js` `jasmine` `mocha` 와 같이 import 하지 않은 패키지라 할지라도, 단순히 글로벌 환경에서 로드 되어 사용될 수 있다는 것을 의미한다.
 
-이는 때떄로 컴파일과 코드 에디팅 하는 시간을 지연시킬 수 있으며, 심지어 이것들의 선언이 서로 충돌이 나서 다음과 같은 문제가 날 수도 있다.
+이는 때때로 컴파일과 코드 에디팅 하는 시간을 지연시킬 수 있으며, 심지어 이것들의 선언이 서로 충돌이 나서 다음과 같은 문제가 날 수도 있다.
 
 ```bash
 Duplicate identifier 'IteratorResult'.

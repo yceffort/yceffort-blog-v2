@@ -149,7 +149,7 @@ https://github.com/microsoft/TypeScript/wiki/Performance#preferring-interfaces-o
 
 > Interfaces create a single flat object type that detects property conflicts, which are usually important to resolve! Intersections on the other hand just recursively merge properties, and in some cases produce never. 
 
-여러 `type` 혹은 `interface`를 `&`하거나 `extends`할 때를 생각해보자. `interface`는 속성간 충돌을 해결하기 위해 단순한 객체 타입을 만든다. (그것이 `interface`이므로) 그러나 타입의 경우, 재귀적으로 순회하면서 속성을 머지하는데, 이 경우에 일부 `never`가 나오면서 제대로 머지가 안될 수 있다. 아래 예제를 살펴보자.
+여러 `type` 혹은 `interface`를 `&`하거나 `extends`할 때를 생각해보자. `interface`는 속성간 충돌을 해결하기 위해 단순한 객체 타입을 만든다. 왜냐하면 interface는 객체의 타입을 만들기 위한 것이고, 어차피 객체 만 오기 때문에 단순히 합치기만 하면 되기 때문이다. 그러나 타입의 경우, 재귀적으로 순회하면서 속성을 머지하는데, 이 경우에 일부 `never`가 나오면서 제대로 머지가 안될 수 있다. `interface`와는 다르게, `type`은 원시 타입이 올수도 있으므로, 충돌이 나서 제대로 머지가 안되는 경우에는 `never`가 떨어진다. 아래 예제를 살펴보자.
 
 ```typescript
 type type2 = { a: 1 } & { b: 2 } // 잘 머지됨
@@ -160,7 +160,7 @@ const t3: type3 = { a: 1, b: 3 } // Type 'number' is not assignable to type 'nev
 const t3: type3 = { a: 1, b: 2 } // Type 'number' is not assignable to type 'never'.(2322)
 ```
 
-따라서 타입 간 속성을 머지 할 때는 주의를 필요로 한다.
+따라서 타입 간 속성을 머지 할 때는 주의를 필요로 한다. 어차피 객체에서만 쓰는 용도라면, `interface`를 쓰는 것이 훨씬 낫다.
 
 > Interfaces also display consistently better, whereas type aliases to intersections can't be displayed in part of other intersections. 
 

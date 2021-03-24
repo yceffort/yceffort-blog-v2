@@ -5,7 +5,7 @@ isProduction && require('dotenv').config()
 
 module.exports = withPWA({
   env: {
-    VERCEL_URL: isProduction
+    HOST_URL: isProduction
       ? `https://${process.env.VERCEL_URL}`
       : process.env.VERCEL_URL,
     PROJECT_ID: process.env.PROJECT_ID,

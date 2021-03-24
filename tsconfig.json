@@ -29,7 +29,7 @@
       "#constants/*": ["src/constants/*"],
       "#utils/*": ["src/utils/*"],
       "#src/*": ["src/*"]
-    }
+    }    
   },
   "exclude": ["dist", ".next", "out", "next.config.js"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "*.ts"]

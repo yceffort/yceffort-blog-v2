@@ -4,7 +4,7 @@ import Link from 'next/link'
 import React from 'react'
 import styled from 'styled-components'
 
-import { Post } from '#types/types'
+import { Post } from '#commons/types'
 
 const FeedItem = styled.div`
   margin-bottom: 2.03125rem;

@@ -7,7 +7,7 @@ import Layout from '#components/Layout'
 import Page from '#components/Page'
 import Sidebar from '#components/Sidebar/Sidebar'
 import config from '#src/config'
-import { TagWithCount } from '#types/types'
+import { TagWithCount } from '#commons/types'
 import { getAllTagsFromPosts } from '#utils/Markdown'
 
 const TagList = styled.ul`

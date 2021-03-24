@@ -75,12 +75,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const query = qs.stringify({ start_date: startDate, end_date: endDate })
 
-  console.log('===================================')
-  console.log(process.env.NODE_ENV)
-  console.log(process.env.VERCEL_URL)
-  console.log(HOST_URL)
-  console.log('===================================')
-
   const response = await fetch(`${HOST_URL}/api/run?${query}`)
   const data: Array<{
     run: number

@@ -28,9 +28,8 @@
       "#components/*": ["src/components/*"],
       "#constants/*": ["src/constants/*"],
       "#utils/*": ["src/utils/*"],
-      "#types/*": ["src/common/*"],
       "#src/*": ["src/*"]
-    }
+    }    
   },
   "exclude": ["dist", ".next", "out", "next.config.js"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "*.ts"]

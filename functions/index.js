@@ -4,23 +4,21 @@ const chromium = require('chrome-aws-lambda')
 const cloudinary = require('cloudinary')
 const queryString = require('query-string')
 
-const CLOUDINARY_CLOUD = process.env.CLOUDINARY_CLOUD || 'yceffort'
-const CLOUDINARY_KEY = process.env.CLOUDINARY_KEY || ''
-const CLOUDINARY_SECRET = process.env.CLOUDINARY_SECRET || ''
-
-const APPLE_HEALTH_SECRET = process.env.APPLE_HEALTH_SECRET || ''
-
 admin.initializeApp()
 
 const db = admin.firestore()
 
-cloudinary.v2.config({
-  cloud_name: CLOUDINARY_CLOUD,
-  api_key: CLOUDINARY_KEY,
-  api_secret: CLOUDINARY_SECRET,
-})
-
 const takeScreenshot = async function (url) {
+  const CLOUDINARY_CLOUD = functions.config().env.config.CLOUDINARY_CLOUD
+  const CLOUDINARY_KEY = functions.config().env.config.CLOUDINARY_KEY
+  const CLOUDINARY_SECRET = functions.config().env.config.CLOUDINARY_SECRET
+
+  cloudinary.v2.config({
+    cloud_name: CLOUDINARY_CLOUD,
+    api_key: CLOUDINARY_KEY,
+    api_secret: CLOUDINARY_SECRET,
+  })
+
   const chromiumPath = await chromium.executablePath
 
   const browser = await chromium.puppeteer.launch({
@@ -79,12 +77,13 @@ exports.screenshot = functions.https.onRequest(async (req, res) => {
     res.redirect(uploadedImage)
   } catch (e) {
     console.error(e)
-    res.json({ error: e.toString() })
+    res.json({ error: JSON.stringify(e) })
   }
 })
 
 exports.health = functions.https.onRequest(async (req, res) => {
   // {'health': {'run': '28.88118937860876', 'timestamps': '2021-03-17T08:45:00+09:00', 'unit': 'km'}}
+  const APPLE_HEALTH_SECRET = functions.config().env.config.APPLE_HEALTH_SECRET
   const {
     health: { run, timestamps },
   } = req.body
@@ -95,23 +94,29 @@ exports.health = functions.https.onRequest(async (req, res) => {
     return res.send('permission denied! 🤬')
   }
 
-  const healthRef = db.collection('apple_health')
-
   const date = new Date(timestamps)
-  const timeZoneFromDB = +9.0
-  const tzDifference = timeZoneFromDB * 60 + date.getTimezoneOffset()
-  const offsetDate = new Date(date.getTime() + tzDifference * 60 * 1000)
 
-  const key = `${offsetDate.getFullYear()}${(offsetDate.getMonth() + 1)
-    .toString()
-    .padStart(2, 0)}${offsetDate.getDate()}`
+  const startDate = new Date(date.getTime())
+  startDate.setHours(0, 0, 0, 0)
 
-  const data = (await healthRef.doc('daily').get()).data()
+  const endDate = new Date(date.getTime())
+  endDate.setHours(23, 59, 59, 0)
 
-  healthRef.doc('daily').set({
-    ...data,
-    [key]: run,
-  })
+  const doc = await db
+    .collection('/apple_health/daily/data')
+    .where('date', '>=', startDate)
+    .where('date', '<=', endDate)
+    .get()
+
+  if (!doc.empty) {
+    const id = doc.docs[0].id
+    const data = doc.docs[0].data()
+    await db.doc(`/apple_health/daily/data/${id}`).update({ ...data, run })
+  } else {
+    await db
+      .collection('/apple_health/daily/data')
+      .add({ date: startDate, run })
+  }
 
   res.send('성공')
 })

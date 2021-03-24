@@ -4,7 +4,7 @@ process.env.NODE_ENV !== 'production' && require('dotenv').config()
 
 module.exports = withPWA({
   env: {
-    HOST_URL: process.env.VERCEL_URL || process.env.HOST_URL,
+    VERCEL_URL: process.env.VERCEL_URL || process.env.HOST_URL,
     PROJECT_ID: process.env.PROJECT_ID,
     PRIVATE_KEY: process.env.PRIVATE_KEY,
     CLIENT_EMAIL: process.env.CLIENT_EMAIL,

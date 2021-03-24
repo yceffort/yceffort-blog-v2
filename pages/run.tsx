@@ -10,7 +10,7 @@ import Layout from '#components/Layout'
 import Sidebar from '#components/Sidebar/Sidebar'
 import Page from '#components/Page'
 
-const HOST_URL = process.env.HOST_URL
+const HOST_URL = process.env.VERCEL_URL
 
 type DATE_TYPE = Array<{ x: string; y: number }>
 

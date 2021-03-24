@@ -24,8 +24,13 @@
   ],
   "dependencies": {
     "@mapbox/rehype-prism": "^0.5.0",
+    "@nivo/core": "^0.67.0",
+    "@nivo/line": "^0.67.0",
     "date-fns": "^2.19.0",
+    "dotenv": "^8.2.0",
+    "firebase-admin": "^9.5.0",
     "front-matter": "^4.0.2",
+    "isomorphic-fetch": "^3.0.0",
     "memoizee": "^0.4.14",
     "next": "^10.0.8",
     "next-pwa": "^5.0.6",
@@ -52,6 +57,7 @@
   },
   "devDependencies": {
     "@types/date-fns": "^2.6.0",
+    "@types/isomorphic-fetch": "0.0.35",
     "@types/memoizee": "^0.4.5",
     "@types/node": "^14.11.8",
     "@types/promise-fs": "^2.1.0",

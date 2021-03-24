@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 const withPWA = require('next-pwa')
-process.env.NODE_ENV !== 'production' && require('dotenv').config()
+const isProduction = process.env.NODE_ENV !== 'production'
+isProduction && require('dotenv').config()
 
 module.exports = withPWA({
   env: {
-    VERCEL_URL: process.env.VERCEL_URL || process.env.HOST_URL,
+    VERCEL_URL: isProduction
+      ? `https://${process.env.VERCEL_URL}`
+      : process.env.VERCEL_URL,
     PROJECT_ID: process.env.PROJECT_ID,
     PRIVATE_KEY: process.env.PRIVATE_KEY,
     CLIENT_EMAIL: process.env.CLIENT_EMAIL,

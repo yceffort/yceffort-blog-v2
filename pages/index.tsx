@@ -3,7 +3,7 @@ import { GetStaticProps } from 'next'
 
 import config from '#src/config'
 import Layout from '#components/Layout'
-import { DEFAULT_NUMBER_OF_POSTS } from '#types/const'
+import { DEFAULT_NUMBER_OF_POSTS } from '#common/const'
 import { Post } from '#types/types'
 import { getAllPosts } from '#utils/Markdown'
 import Sidebar from '#components/Sidebar/Sidebar'

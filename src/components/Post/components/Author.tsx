@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import config from '#src/config'
-import getContactHref from '#utils/Contact'
+import getContactHref from '#constants/Contact'
 
 const AuthorContainer = styled.div`
   border-top: 1px solid #e6e6e6;

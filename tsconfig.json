@@ -24,10 +24,11 @@
     "paths": {
       "$pages/*": ["pages/*"],
       "#public/*": ["public/*"],
+      "#commons/*": ["src/common/*"],
       "#components/*": ["src/components/*"],
       "#constants/*": ["src/constants/*"],
       "#utils/*": ["src/utils/*"],
-      "#types/*": ["src/types/*"],
+      "#types/*": ["src/common/*"],
       "#src/*": ["src/*"]
     }
   },

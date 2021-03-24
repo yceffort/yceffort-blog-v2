@@ -16,8 +16,8 @@
     "lib": ["es2017", "dom", "esnext.array"],
     "typeRoots": ["./typings", "./node_modules/@types"],
     "paths": {
-      "#commons/*": ["common/*"],
-    }   
+      "#commons/*": ["common/*"]
+    }
   },
   "exclude": ["node_modules", "**/*spec.ts", "./src/**/*.tsx"],
   "include": ["./src/**/*.ts", "./typings"]

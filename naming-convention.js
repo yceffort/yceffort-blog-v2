@@ -6,6 +6,9 @@ const excludeWords = [
   'access_type',
   'public_id',
   'unique_filename',
+  'client_email',
+  'private_key',
+  'project_id',
 ]
 const regex = `${excludeWords.join('|')})$`
 

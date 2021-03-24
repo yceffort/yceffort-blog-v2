@@ -7,7 +7,7 @@ import { getAllPosts, parseMarkdownToHTML } from '#utils/Markdown'
 import Layout from '#components/Layout'
 import PostRenderer from '#components/Post/Post'
 import config from '#src/config'
-import { Post } from '#types/types'
+import { Post } from '#commons/types'
 
 export default function PostPage({
   post,

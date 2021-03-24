@@ -10,7 +10,7 @@ import Author from '#components/Post/components/Author'
 import Meta from '#components/Post/components/meta'
 import Content from '#components/Post/components/Content'
 import Tags from '#components/Post/components/Tags'
-import { Post } from '#types/types'
+import { Post } from '#commons/types'
 
 import 'react-tiny-fab/dist/styles.css'
 

@@ -3,7 +3,7 @@ import React from 'react'
 import DefaultErrorPage from 'next/error'
 import qs from 'query-string'
 
-import { Post } from '#types/types'
+import { Post } from '#commons/types'
 import { getAllPosts, parseMarkdownToHTML } from '#utils/Markdown'
 import Layout from '#components/Layout'
 import PostRenderer from '#components/Post/Post'

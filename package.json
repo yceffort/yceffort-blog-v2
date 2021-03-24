@@ -24,8 +24,7 @@
   ],
   "dependencies": {
     "@mapbox/rehype-prism": "^0.5.0",
-    "@nivo/core": "^0.67.0",
-    "@nivo/line": "^0.67.0",
+    "chart.js": "^2.9.4",
     "date-fns": "^2.19.0",
     "dotenv": "^8.2.0",
     "firebase-admin": "^9.5.0",
@@ -39,6 +38,7 @@
     "promise-fs": "^2.1.1",
     "query-string": "^6.13.7",
     "react": "^17.0.1",
+    "react-chartjs-2": "^2.11.1",
     "react-dom": "^17.0.1",
     "react-icons": "^4.2.0",
     "react-is": "^17.0.1",

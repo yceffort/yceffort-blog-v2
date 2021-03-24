@@ -1,6 +1,6 @@
 import admin from 'firebase-admin'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { addDays, parse } from 'date-fns'
+import { addDays, parse, subDays } from 'date-fns'
 
 const CLIENT_EMAIL = process.env.CLIENT_EMAIL
 const PRIVATE_KEY = process.env.PRIVATE_KEY
@@ -19,9 +19,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const startDate = getStartDate(req.query.start_date as string)
   const endDate = req.query.end_date
     ? getEndDate(req.query.end_date as string)
-    : addDays(startDate, 6)
-
-  console.log(startDate, endDate)
+    : addDays(startDate, 7)
 
   const db = admin.firestore()
 
@@ -35,6 +33,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const data = doc.data()
     return {
       ...data,
+      id: doc.id,
       date: data['date'].toDate(),
     }
   })
@@ -45,11 +44,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 function getStartDate(targetDate?: string) {
   const date = targetDate
     ? parse(targetDate, 'yyyy-MM-dd', new Date())
-    : new Date()
+    : subDays(new Date(), 7)
   const timeZoneFromDB = +9.0
   const tzDifference = timeZoneFromDB * 60 + date.getTimezoneOffset()
   const offsetDate = new Date(date.getTime() + tzDifference * 60 * 1000)
   offsetDate.setHours(0, 0, 0, 0)
+
   return offsetDate
 }
 

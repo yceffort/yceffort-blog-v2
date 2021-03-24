@@ -41,4 +41,4 @@ public/workbox-*
 
 node_modules/
 
-functions/secret/sdk.json
+functions/env.json

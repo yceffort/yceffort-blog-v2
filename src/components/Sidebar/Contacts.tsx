@@ -1,10 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import config from '../../config'
-import getContactHref from '../../utils/Contact'
-import getIcon from '../../utils/Icon'
-import Icon from '../Icon'
+import config from '#src/config'
+import getContactHref from '#constants/Contact'
+import getIcon from '#constants/Icon'
+import Icon from '#components/Icon'
 
 const ContactDiv = styled.div`
   margin-bottom: 1.625rem;

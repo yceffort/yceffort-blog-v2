@@ -18,7 +18,7 @@ import slug from 'remark-slug'
 import gfm from 'remark-gfm'
 import memoize from 'memoizee'
 
-import { FrontMatter, Post, TagWithCount } from '../types/types'
+import { FrontMatter, Post, TagWithCount } from '#types/types'
 
 const DIR_REPLACE_STRING = '/posts'
 const POST_PATH = `${process.cwd()}${DIR_REPLACE_STRING}`

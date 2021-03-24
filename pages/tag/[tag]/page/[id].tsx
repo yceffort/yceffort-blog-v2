@@ -8,7 +8,7 @@ import Page from '#components/Page'
 import Pagination from '#components/Pagination'
 import Sidebar from '#components/Sidebar/Sidebar'
 import config from '#src/config'
-import { DEFAULT_NUMBER_OF_POSTS } from '#types/const'
+import { DEFAULT_NUMBER_OF_POSTS } from '#common/const'
 import { Post } from '#types/types'
 import { getAllPosts, getAllTagsFromPosts } from '#utils/Markdown'
 

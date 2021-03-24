@@ -1,7 +1,7 @@
 import React from 'react'
 import { GetStaticPaths, GetStaticProps } from 'next'
 
-import { DEFAULT_NUMBER_OF_POSTS } from '#types/const'
+import { DEFAULT_NUMBER_OF_POSTS } from '#common/const'
 import { getAllPosts } from '#utils/Markdown'
 import { Post } from '#types/types'
 import Feed from '#components/Feed'

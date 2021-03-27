@@ -2,7 +2,8 @@
   "name": "functions",
   "description": "Cloud Functions for Firebase",
   "scripts": {
-    "env-var": "firebase functions:config:set env=\"$(cat env.json)\"",
+    "env-var:get": "firebase functions:config:get",
+    "env-var:set": "firebase functions:config:set env=\"$(cat env.json)\"",
     "serve": "firebase emulators:start --only functions",
     "shell": "firebase functions:shell",
     "start": "npm run shell",

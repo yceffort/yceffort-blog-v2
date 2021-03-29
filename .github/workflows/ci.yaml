@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm install
-      - run: npm run build-nextjs
+      - run: npm ci
       - run: npm run lint
       - run: npm run prettier
+      - run: npm run build-nextjs

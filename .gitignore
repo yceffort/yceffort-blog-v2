@@ -42,3 +42,4 @@ public/workbox-*
 node_modules/
 
 functions/env.json
+.lighthouseci

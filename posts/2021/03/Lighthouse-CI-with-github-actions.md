@@ -2,8 +2,9 @@
 title: github workflow로 lighthouse ci 추가하기
 date: 2021-03-31 23:39:50
 tags:
-  - browser
+  - website
   - github
+  - github actions
   - performance
 published: true
 description: "점수의 노예가 되버린 나"

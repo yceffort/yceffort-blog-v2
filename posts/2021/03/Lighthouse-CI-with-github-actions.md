@@ -174,4 +174,22 @@ https://github.com/yceffort/yceffort-blog-v2/pull/278
 
 ![image2](./images/lighthouse-ci-github-action2.png)
 
-추가로 [여기](https://github.com/apps/lighthouse-ci)를 방문해서 app을 설치하고 레파지토리에 `LHCI_GITHUB_APP_TOKEN`를 키값으로 값을 추가해준다면, PR에 메시지도 남겨준다.
+추가로 [여기](https://github.com/apps/lighthouse-ci)를 방문해서 app을 설치하고 레파지토리에 `LHCI_GITHUB_APP_TOKEN`를 키값으로 값을 추가해준다면, PR에 메시지도 남겨준다. 물론, secret 추가 이후에는 아까 만들었던 github action yaml 도 변경해주어야 한다.
+
+
+```yaml
+- name: run Lighthouse CI
+  env:
+    LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+  run: |
+    npm install -g @lhci/cli@0.3.x
+    lhci autorun --upload.target=temporary-public-storage || echo "LHCI failed!"
+```
+
+## 후기
+
+나름 블로그 최초 개설 시엔 신경을 썼었는데 시간이 지나고 이것저것 덕지덕지 붙으면서 점수가 점점 바닥으로 가고 있는 중이라는 것을 이제 알게 되었다. 🤪 
+
+여기서 개선은 모르겠고,,, 블로그 v3.0을 계획하고 있습니다. 블로그 v3.0 작업시에 lighthouse 점수를 수시로 확인하면서 작업을 해야겠다. 그리고 지금 내가 몸담고 있는 프로젝트에도 Lighthouse CI를 들이밀어 봐야겠다. 라이트하우스 함무바라 (점수보고) 디진다 퍼뜩 무봐라
+
+![try lighthouse](https://mgall.app/api/file/9477923)

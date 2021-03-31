@@ -141,10 +141,10 @@ module.exports = {
               npm install -g @lhci/cli@0.3.x
               lhci autorun --upload.target=temporary-public-storage || echo "LHCI failed!"
    ```
-  1. nodejs 설치
-  2. npm ci 
-  3. 프로젝트 빌드
-  4. lhci 설치 및 실행
+   1. nodejs 설치
+   2. npm ci 
+   3. 프로젝트 빌드
+   4. lhci 설치 및 실행
 3. assert 를 추가
    ```javascript
     module.exports = {
@@ -167,3 +167,11 @@ module.exports = {
    ```
 
 이제 코드를 푸쉬하면 아래와 같이 작동하는 것을 볼 수 있다.
+
+https://github.com/yceffort/yceffort-blog-v2/pull/278
+
+![image1](./images/lighthouse-ci-github-action1.png)
+
+![image2](./images/lighthouse-ci-github-action2.png)
+
+추가로 [여기](https://github.com/apps/lighthouse-ci)를 방문해서 app을 설치하고 레파지토리에 `LHCI_GITHUB_APP_TOKEN`를 키값으로 값을 추가해준다면, PR에 메시지도 남겨준다.

@@ -17,7 +17,7 @@ npm에서 다양한 도커 관련 패키지를 관리하듯, 도커는 기본적
 
 `docker create`, `docker run`, `docker pull` 등의 명령어로 이미지를 내려받을 때는 이 Docker hub에서 검색한 뒤에 내려받는다. 다만 주의 할 것은 누구나 올릴 수 있으므로, `official` 딱지가 붙어있는 이미지를 사용하는 것이 좋다.
 
-```
+```shell
 ubuntu@study:~$ docker search ubuntu
 NAME                                                      DESCRIPTION                                     STARS               OFFICIAL            AUTOMATED
 ubuntu                                                    Ubuntu is a Debian-based Linux operating sys…   11187               [OK]
@@ -52,7 +52,7 @@ ubuntu를 검색하면 다양한 이미지가 있는 것을 볼 수 있다.
 
 ## 나만의 이미지 만들기
 
-```
+```shell
 ubuntu@study:~$ docker run -i -t --name commit_test ubuntu:14.04
 root@db92d7141b48:/# echo first_test! >> first
 root@db92d7141b48:/# exit
@@ -64,7 +64,7 @@ ubuntu@study:~$
 
 이미지 이름을 `commit_test`로, 태그는 `first`로 했다. `-a`는 제작자(author)를 의미한다. 이제 이미지가 생성되었는지 확인해보자.
 
-```
+```shell
 ubuntu@study:~$ docker images
 REPOSITORY              TAG                 IMAGE ID            CREATED              SIZE  
 commit_test             first               0ae047cd0bde        About a minute ago   197MB 
@@ -73,7 +73,7 @@ ubuntu@study:~$
 
 이제 같은 방법으로 `commit_test:first`를 활용하여 두번째 이미지를 만들어보자.
 
-```
+```shell
 ubuntu@study:~$ docker run -i -t --name commit_test2 commit_test:first
 root@42a13487a0bf:/# echo second_test! >> second
 root@42a13487a0bf:/# exit
@@ -82,7 +82,7 @@ ubuntu@study:~$ docker commit -a 'yceffort' -m 'my second commit' commit_test2 c
 sha256:c5d7289a7e1eaec8e34050d78e6006c181b0080743126c357308df8664916b3a
 ```
 
-```
+```shell
 ubuntu@study:~$ docker images
 REPOSITORY              TAG                 IMAGE ID            CREATED             SIZE  
 commit_test             second              c5d7289a7e1e        12 seconds ago      197MB 
@@ -95,7 +95,7 @@ commit_test             first               0ae047cd0bde        2 minutes ago   
 
 `docker inspect 이미지명` 명령어로 이미지의 구조를 확인해볼 수 있다. 다만 너무 길어져서 layer 부분만 따로 떼어 내본다.
 
-```
+```shell
 ubuntu@study:~$ docker inspect ubuntu:14.04
 ```
 
@@ -107,7 +107,7 @@ ubuntu@study:~$ docker inspect ubuntu:14.04
 ]
 ```
 
-```
+```shell
 ubuntu@study:~$ docker inspect commit_test:first
 ```
 
@@ -121,7 +121,7 @@ ubuntu@study:~$ docker inspect commit_test:first
 ]
 ```
 
-```
+```shell
 ubuntu@study:~$ docker inspect commit_test:second
 ```
 
@@ -139,7 +139,7 @@ ubuntu@study:~$ docker inspect commit_test:second
 
 삭제를 하기 위해서는 `docker rmi`를 사용하면 된다.
 
-```
+```shell
 ubuntu@study:~$ docker rmi commit_test:first
 Error response from daemon: conflict: unable to remove repository reference "commit_test:first" (must force) - container 42a13487a0bf is using its referenced image 0ae047cd0bde
 ```
@@ -148,7 +148,7 @@ Error response from daemon: conflict: unable to remove repository reference "com
 
 사실 `commit_test:first`를 삭제했다고 해서, 실제로 해당 이미지의 레이어 파일이 삭제되는 것은 아니다. 왜냐하면 이 이미지를 기반으로 한 `commit_test:second`가 존재하기 때문이다. 따라서 실제 이미지 파일을 삭제하지 않고, 그냥 레이어에 부여한 이름만 삭제한다.
 
-```
+```shell
 ubuntu@study:~$ docker rmi commit_test:second
 Untagged: commit_test:second
 Deleted: sha256:c5d7289a7e1eaec8e34050d78e6006c181b0080743126c357308df8664916b3a
@@ -159,11 +159,11 @@ Deleted: sha256:994c3bba470f6e08dbd29fbb0523d05994796aa687c085ddda6a0eebe8e66284
 
 ## 이미지 추출하고 로드하기
 
-```
+```shell
 ubuntu@study:~$ docker save -o ubuntu_14_04.tar ubuntu:14.04
 ```
 
-```
+```shell
 ubuntu@study:~$ docker load -i ubuntu_14_04.tar 
 Loaded image: ubuntu:14.04
 ```

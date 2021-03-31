@@ -288,7 +288,7 @@ class Foo {
 
 ### How to pass a parameter to an event handler or callback?
 
-이벤트 핸들러와 파라미터 전달을ㅇ 화살표 함수로 감쌀 수 있다.
+이벤트 핸들러와 파라미터 전달을 화살표 함수로 감쌀 수 있다.
 
 ```html
 <button onClick={() => this.handleClick(id)} />
@@ -1240,7 +1240,7 @@ v16.3 부터 `UNSAFE_` prefix가 붙고, v17에서는 삭제된다.
 
 ### What is the purpose of `getDerivedStateFromProps()` lifecycle method?
 
-새로운 라이프 사이클 메서드 `getDerivedStateFromProps()`는 component가 인스턴스화 된 후, 다시 렌더링 되기전에 호출된다. object를 반환하여 state를 업데이트 하거나, null을 리턴하ㅕㅇ 새로운 props에서 state update가 필요하지 않도록 나타낼 수도 있다.
+새로운 라이프 사이클 메서드 `getDerivedStateFromProps()`는 component가 인스턴스화 된 후, 다시 렌더링 되기전에 호출된다. object를 반환하여 state를 업데이트 하거나, null을 리턴하여 새로운 props에서 state update가 필요하지 않도록 나타낼 수도 있다.
 
 ```javascript
 class MyComponent extends React.Component {

@@ -198,7 +198,7 @@ function logProps(InputComponent) {
 const EnhancedComponent = logProps(InputComponent);
 ```
 
-위 코드에는 여러가지 문제가 있다. 그 중 하나는 `EnhancedComponent`로 부터 분리되어 `inputComponent`를 재사용할 수 없다는 것이다. 더 끔찍한 것은, 기존 컴포넌트의 `ComponentDidUpdate`도 엎어버린다는 것이다. 또한 이는 라이프 사이클 메소드가 없는 함수형 컴포넌트에서는 사용할 수가 ㅇ벗다.
+위 코드에는 여러가지 문제가 있다. 그 중 하나는 `EnhancedComponent`로 부터 분리되어 `inputComponent`를 재사용할 수 없다는 것이다. 더 끔찍한 것은, 기존 컴포넌트의 `ComponentDidUpdate`도 엎어버린다는 것이다. 또한 이는 라이프 사이클 메소드가 없는 함수형 컴포넌트에서는 사용할 수가 없다.
 
 컴포넌트를 변경하는 HOC는 추상화를 누출 시키는 것이다. 다른 HOC와의 충돌을 막기 위해서는, 어떻게 구현되는지 알아야 한다.
 

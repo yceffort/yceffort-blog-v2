@@ -317,7 +317,7 @@ export default injectIntl(MyComponent)
 
 ### What is Shallow Renderer in React testing?
 
-`Shallow rendering`는 React에서 유닛테스트 케이스를 작성할 때 유용하다. 이는 컴포넌트를 한단계 더 깊이 렌더링하며, 렌더링되지 않은 하위 컴포넌트에 대한 고민 ㅇ벗이 렌더링 메서드가 반환하는 것에 대해 asset를 수행할 수 있다.
+`Shallow rendering`는 React에서 유닛테스트 케이스를 작성할 때 유용하다. 이는 컴포넌트를 한단계 더 깊이 렌더링하며, 렌더링되지 않은 하위 컴포넌트에 대한 고민 없이 렌더링 메서드가 반환하는 것에 대해 asset를 수행할 수 있다.
 
 ```jsx
 function MyComponent() {

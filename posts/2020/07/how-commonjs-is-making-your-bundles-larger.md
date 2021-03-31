@@ -79,7 +79,7 @@ $ cd dist && ls -lah
 625K Apr 13 13:04 out.js
 ```
 
-번들 사이즈가 625kb라는 것에 주목하라. `utils.js` 함수를 살펴보면, `lodash`로 부터 생성된 온갖 모듈들이 추가되어 있음을 볼 수 있다. `index.js`ㅇ에서는 그 어떠한 `loadsh`패키지를 사용하지 않았지만, 프로덕션 에셋에는 엄청난 부분을 차지하고 있음을 볼 수 있다.
+번들 사이즈가 625kb라는 것에 주목하라. `utils.js` 함수를 살펴보면, `lodash`로 부터 생성된 온갖 모듈들이 추가되어 있음을 볼 수 있다. `index.js`에서는 그 어떠한 `loadsh`패키지를 사용하지 않았지만, 프로덕션 에셋에는 엄청난 부분을 차지하고 있음을 볼 수 있다.
 
 같은 코드를 [ECMAScript modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)을 사용해보자.
 

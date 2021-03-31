@@ -29,6 +29,10 @@ export const config = {
       label: 'contact',
       path: '/contacts',
     },
+    {
+      label: '🏃🏃🏃',
+      path: '/run',
+    },
   ],
   author: {
     name: 'yceffort',

@@ -5,6 +5,7 @@ import fetch from 'isomorphic-fetch'
 import { format, subDays } from 'date-fns'
 import qs from 'query-string'
 import { Line } from 'react-chartjs-2'
+import Link from 'next/link'
 
 import Layout from '#components/Layout'
 import Sidebar from '#components/Sidebar/Sidebar'
@@ -19,7 +20,7 @@ export default function Run({ data }: { data: DATE_TYPE }) {
     <Layout title="Daily Running (Beta)" url={`${HOST_URL}/run`}>
       <Sidebar />
       <Page title="Daily Running (Beta)">
-        <div style={{ height: '70vh', overflowX: 'scroll' }}>
+        <div style={{ overflowX: 'scroll' }}>
           <div style={{ width: '1500px' }}>
             <Line
               width={100}
@@ -28,7 +29,7 @@ export default function Run({ data }: { data: DATE_TYPE }) {
                 labels: data.map((d) => d.x),
                 datasets: [
                   {
-                    label: 'daily',
+                    label: 'daily (km)',
                     data: data.map((d) => d.y),
                   },
                 ],
@@ -59,6 +60,7 @@ export default function Run({ data }: { data: DATE_TYPE }) {
             />
           </div>
         </div>
+        <Link href="/2021/03/apple-health-shortcut">How does it work?</Link>
       </Page>
     </Layout>
   )

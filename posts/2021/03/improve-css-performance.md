@@ -56,7 +56,7 @@ Critical CSS란 화면에 보이는 컨텐츠 (above-the-fold content)의 CSS �
 
 첫 렌더링 시의 라운드트립을 최소화 하기 위해서는, above-the-fold content의 크기를 14kb내로 유지해야 한다. (압축시)
 
-Critical CSS를 정확히 정의하는 것은 어렵다. 디바이스의 크기에 따라서 사용자가 보이는 영역이 달라지기 때문이다. 이는 특히 매우 유동적인 사이트의 인 경우에는 더욱 어려워 진다. 그러나 이는 여전히 성능 향상에 중요한 부분 이므로, [Critical](https://github.com/addyosmani/critical) [CriticalCSS](https://github.com/filamentgroup/criticalCSS) [Penthouse](https://github.com/pocketjoso/penthouse) 등의 도구를 활용해서 자동화 할 필요가 있따.
+Critical CSS를 정확히 정의하는 것은 어렵다. 디바이스의 크기에 따라서 사용자가 보이는 영역이 달라지기 때문이다. 이는 특히 매우 유동적인 사이트의 인 경우에는 더욱 어려워 진다. 그러나 이는 여전히 성능 향상에 중요한 부분 이므로, [Critical](https://github.com/addyosmani/critical) [CriticalCSS](https://github.com/filamentgroup/criticalCSS) [Penthouse](https://github.com/pocketjoso/penthouse) 등의 도구를 활용해서 자동화 할 필요가 있다.
 
 ### CSS 비동기로 불러오기
 
@@ -105,7 +105,7 @@ Critical CSS를 정확히 정의하는 것은 어렵다. 디바이스의 크기�
 
 페이지에 애니메이션이 있는 요소가 있는 경우, [브라우저는 종종 문서 내 요소의 위치와 크기를 재 계산한다.](https://calibreapp.com/blog/investigate-animation-performance-with-devtools#animation-performance) (레이아웃 발생) 예를 들어, 어떤 요소의 너비를 바꾸게 되면, 그 자식 요소들 까지 영향을 미치면서 페이지 내부에서 큰 레이아웃이 발생할 수 있다. 그리고 이 레이아웃의 크기가 커질 수록, 성능에 안좋은 영향을 미칠 것이다.
 
-요소에 애니베이션을 넣을 떄는, 레이아웃과 리페인트가 최소한으로 이뤄지도록 해야 한다. 모든 CSS 애니메이션 기술이 동일하지 않으며, 모던 브라우저에서는 위치, 크기, 회전, 불투명도 등을 가진 고성능 애니메이션을 만들 수 있다.
+요소에 애니베이션을 넣을 때는, 레이아웃과 리페인트가 최소한으로 이뤄지도록 해야 한다. 모든 CSS 애니메이션 기술이 동일하지 않으며, 모던 브라우저에서는 위치, 크기, 회전, 불투명도 등을 가진 고성능 애니메이션을 만들 수 있다.
 
 - `height` `width` 대신 `transform: scale()`을 쓰자
 - 요소를 움직이게 하기 위해서는, `top` `right` `bottom` `left` 대신 `transform: translate()`를 쓰자.

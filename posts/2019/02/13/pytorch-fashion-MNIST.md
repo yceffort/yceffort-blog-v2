@@ -34,7 +34,7 @@ testset = datasets.FashionMNIST('~/.pytorch/F_MNIST_data/', download=True, train
 testloader = torch.utils.data.DataLoader(testset, batch_size=64, shuffle=True)
 ```
 
-먼저 데이터를 받기전에, 해당 데이터를 torch tensor로 바꾸고, Normalize할 수 있ㅅ는 transform을 준비했다. 그리고 굳이 test set과 train set을 손수 나누지 않아도 저렇게 구별할 수 있게 해주었다. 그리고 각각의 데이터를 dataloader에 실어 넣었다.
+먼저 데이터를 받기전에, 해당 데이터를 torch tensor로 바꾸고, Normalize할 수 있는 transform을 준비했다. 그리고 굳이 test set과 train set을 손수 나누지 않아도 저렇게 구별할 수 있게 해주었다. 그리고 각각의 데이터를 dataloader에 실어 넣었다.
 
 이미지를 잠깐 살펴보기 위하여, imshow라는 메소드를 하나 만들었다.
 

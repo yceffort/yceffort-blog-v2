@@ -57,7 +57,7 @@ date: Wed, 28 Oct 2020 02:05:42 GMT
 etag: W/"078a2ad86a1350e007d801e7f74b073ed415e5bdd60a60e5b65b9fafe972af03"
 server: Vercel
 status: 200
-strict-transport-security: max-age=63072000
+strict-transport-security: max-age=63072000w
 x-content-type-options: nosniff
 x-frame-options: DENY
 x-vercel-cache: HIT

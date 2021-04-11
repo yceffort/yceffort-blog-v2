@@ -514,7 +514,7 @@ Redux는 애플리케이션 전반에서 state를 관리할 수 있게 도와주
 
 ### How to dispatch an action on load?
 
-`componentDidMount()`와 `render()`메서드에서 데이터를 확인하는 액션을 전닥ㄹ할 수 있고 데이터를 확인할 수 있다.
+`componentDidMount()`와 `render()`메서드에서 데이터를 확인하는 액션을 전달할 수 있고 데이터를 확인할 수 있다.
 
 ```jsx
 class App extends Component {

@@ -11,7 +11,11 @@ import Page from '#components/Page'
 import Feed from '#components/Feed'
 import Pagination from '#components/Pagination'
 
-export default function Index({ recentPosts }: { recentPosts: Array<Post> }) {
+export default function Index({
+  recentPosts: posts,
+}: {
+  recentPosts: Array<Post>
+}) {
   return (
     <Layout
       title={config.title}
@@ -20,7 +24,7 @@ export default function Index({ recentPosts }: { recentPosts: Array<Post> }) {
     >
       <Sidebar />
       <Page>
-        <Feed posts={recentPosts} />
+        <Feed posts={posts} />
         <Pagination
           hasPrevPage={false}
           hasNextPage={true}

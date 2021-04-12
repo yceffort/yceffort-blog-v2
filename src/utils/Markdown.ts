@@ -1,22 +1,21 @@
 import { join } from 'path'
 
+import renderToString from 'next-mdx-remote/render-to-string'
 import { statSync, readdirSync, readFile } from 'promise-fs'
 import frontMatter from 'front-matter'
-import unified from 'unified'
-import markdown from 'remark-parse'
-import math from 'remark-math'
-import remark2rehype from 'remark-rehype'
-import katex from 'rehype-katex'
-import html from 'rehype-stringify'
+import remarkMath from 'remark-math'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import highlightCode from '@mapbox/rehype-prism'
+import rehypeKatex from 'rehype-katex'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import prism from 'remark-prism'
 import toc from 'remark-toc'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import slug from 'remark-slug'
-import gfm from 'remark-gfm'
 import memoize from 'memoizee'
+import { MdxRemote } from 'next-mdx-remote/types'
 
 import { FrontMatter, Post, TagWithCount } from '#commons/types'
 
@@ -101,24 +100,16 @@ export async function getAllTagsFromPosts(): Promise<Array<TagWithCount>> {
   return tagWithCount.sort((a, b) => b.count - a.count)
 }
 
-export async function parseMarkdownToHTML(body: string): Promise<string> {
-  const result = (
-    await unified()
-      .use(markdown)
-      .use(toc)
-      .use(slug)
-      .use(math)
-      .use(gfm)
-      .use(remark2rehype, {
-        allowDangerousHtml: true,
-      })
-      .use(katex, { strict: false })
-      .use(highlightCode)
-      .use(html, { allowDangerousHtml: true })
-      .process(body)
-  ).toString()
-
-  return result
+export async function parseMarkdownToMDX(
+  body: string,
+): Promise<MdxRemote.Source> {
+  return renderToString(body, {
+    mdxOptions: {
+      remarkPlugins: [prism, remarkMath, toc, slug],
+      rehypePlugins: [rehypeKatex],
+      compilers: [],
+    },
+  })
 }
 
 function getFilesRecursively(path: string) {

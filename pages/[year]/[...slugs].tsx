@@ -36,12 +36,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const allPosts = await getAllPosts()
   const paths = allPosts.reduce((prev, { fields: { slug } }) => {
     const splits = `${slug.replace('.md', '')}`.split('/')
-    if (splits.length === 3) {
-      const [year, month, title] = splits
-      prev.push({ params: { year, month, day: title } })
-    }
+    const [year, ...slugs] = splits
+
+    prev.push({ params: { year, slugs } })
     return prev
-  }, [] as Array<{ params: { year: string; month: string; day: string } }>)
+  }, [] as Array<{ params: { year: string; slugs: string[] } }>)
 
   return {
     paths,
@@ -51,11 +50,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   let post: Post | undefined
   let thumbnailUrl = ''
-  let mdx
+  let mdx = null
 
   if (params) {
-    const { year, month, day: title } = params
-    const slug = [year, month, title].join('/')
+    const { year, slugs } = params
+    const slug = [year, ...(slugs as string[])].join('/')
     const posts = await getAllPosts()
     post = posts.find(({ fields: { slug: postSlug } }) => postSlug === slug)
 

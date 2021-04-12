@@ -203,7 +203,6 @@ new ModuleFederationPlugin({
 
 트위터에 제작자가 공유해준 실제 코드를 살펴보자.
 
-<iframe id="twitter-widget-2" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" class="" style="position: static; visibility: visible; width: 352px; height: 592px; display: block; flex-grow: 1;" title="Twitter Tweet" src="https://platform.twitter.com/embed/index.html?creatorScreenName=indepth_dev&amp;dnt=false&amp;embedId=twitter-widget-2&amp;frame=false&amp;hideCard=false&amp;hideThread=false&amp;id=1234383702433468416&amp;lang=en&amp;origin=https%3A%2F%2Findepth.dev%2Fwebpack-5-module-federation-a-game-changer-in-javascript-architecture%2F&amp;siteScreenName=https%3A%2F%2Ftwitter.com%2Findepth_dev%2F&amp;theme=light&amp;widgetsVersion=219d021%3A1598982042171&amp;width=550px" data-tweet-id="1234383702433468416"></iframe>
 
 네트워크 탭을 살펴보면, 세 코드가 모두 다른 번들에 존재하고 있음을 알 수 있다.
 

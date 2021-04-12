@@ -321,7 +321,7 @@ JSDoc 에서 `/** @deprecated */`를 사용할 수 있도록 지원한다.
 
 좌측 (구버전)과 우버전 (신버전) 을 비교하면 확연한 속도 차이를 느낄 수 있다.
 
-<video loop="" autoplay="" muted="" style="width:100%;height:100%;" src="https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2020/08/partialModeFast.mp4" class="x-hidden-focus"></video>
+https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2020/08/partialModeFast.mp4
 
 ## 더 똑똑해진 자동 임포트
 

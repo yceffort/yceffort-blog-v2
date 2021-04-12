@@ -36,9 +36,6 @@ Economist Nouriel Roubini Says 'Blockchain Is Useless, All ICOs Are Scams'
 
 나는 이더리움에 관한 주제로 넘어갔다. 하지만 그는 스마트 컨트랙트가 디자인된 방식을 믿지 않는다고 그는 말했다. ICO 산업 전체가 사기입니다. 사람들은 도둑질을 하고 가치가 없는 프로젝트를 위한 기금을 모으고 있다고 덧붙였다. 나는 강하게 반대했다. 많은 ICO들이 진정한 가치를 가지고 있지 않다는 것은 사실이다. 하지만 같은 붓으로 업계 전체를 칠할 수는 없다. (몇가지 사례로 전체를 볼 수 없다.) 특히 정부가 기술을 채택한 공급 측면과 블록 체인과 A.I의 조합으로 산업을 바꿀 수 있는 Ethereum의 실제 사용 사례가 있다.
 
-<blockquote class="twitter-tweet" data-lang="ko"><p lang="en" dir="ltr"><a href="https://twitter.com/Nouriel?ref_src=twsrc%5Etfw">@Nouriel</a> has expressed himself against cryptocurrencies<a href="https://twitter.com/VitalikButerin?ref_src=twsrc%5Etfw">@VitalikButerin</a><a href="https://t.co/G2xx4x3Ytl">https://t.co/G2xx4x3Ytl</a></p>&mdash; The Cryptonomist (@Cryptonomist_en) <a href="https://twitter.com/Cryptonomist_en/status/1049404923069308928?ref_src=twsrc%5Etfw">2018년 10월 8일</a></blockquote>
-
-<blockquote class="twitter-tweet" data-lang="ko"><p lang="en" dir="ltr">Dcentralization is a myth:  miners, exchanges, developers are centralized (Buterin is &quot;dictator for life&quot; ) &amp; the inequality coefficient of BTC is worse than North Korea that has the worst inequality on earth.  Crypto beats Kim Un Jung in regards to centralization  &amp; inequality</p>&mdash; Nouriel Roubini (@Nouriel) <a href="https://twitter.com/Nouriel/status/1049379800761217030?ref_src=twsrc%5Etfw">2018년 10월 8일</a></blockquote>
-
-<blockquote class="twitter-tweet" data-lang="ko"><p lang="en" dir="ltr">Calling this a Blockchain is a joke: it is private, &quot;permissioned &amp; trusted&quot;, not distributed, not based on a consensus mechanism &amp; all managed by IBM in a centralized way.  Calling&quot;Enterprise DLT&quot; a Blockchain is a joke. It is a centralized database <br> <a href="https://t.co/p1Lza0kkY4">https://t.co/p1Lza0kkY4</a></p>&mdash; Nouriel Roubini (@Nouriel) <a href="https://twitter.com/Nouriel/status/1049276123815825411?ref_src=twsrc%5Etfw">2018년 10월 8일</a></blockquote>
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+- https://twitter.com/Cryptonomist_en/status/1049404923069308928?ref_src=twsrc%5Etfw
+- https://twitter.com/Nouriel/status/1049379800761217030?ref_src=twsrc%5Etfw
+- https://twitter.com/Nouriel/status/1049276123815825411?ref_src=twsrc%5Etfw

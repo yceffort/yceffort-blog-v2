@@ -11,7 +11,7 @@ template: post
 
 ## 지극히 주관적인 책 리뷰
 
-<iframe type="text/html" width="336" height="550" frameborder="0" allowfullscreen style="max-width:100%" src="https://read.amazon.com/kp/card?asin=B081Y3R657&preview=inline&linkCode=kpe&ref_=cm_sw_r_kb_dp_X.RyFb5WBPP20" ></iframe>
+https://read.amazon.com/kp/card?asin=B081Y3R657&preview=inline&linkCode=kpe&ref_=cm_sw_r_kb_dp_X.RyFb5WBPP20
 
 넷플릭스의 조직 문화하면 가장 먼저 떠오르는 것은, 아마도 gizmodo에서 쓴 기사일 것이다. [Working at Netflix Sounds Like Hell
 ](https://gizmodo.com/working-at-netflix-sounds-like-hell-1830020977)

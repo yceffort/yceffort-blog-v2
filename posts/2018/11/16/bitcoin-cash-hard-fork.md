@@ -80,15 +80,10 @@ Wright는 비트코인캐시 포크의 Bitcoin ABC 쪽을 트위터로 공격하
 
 그러나 오늘 초, Bitcoin Cash의 가장 큰 지지자 중 한 명인 Roger Ver는 Bitcoin.com 풀이 Bitcoin Cash 네트워크 전체보다 더 많은 해시 속도를 자랑한다고 트윗을 했다.
 
-<blockquote class="twitter-tweet" data-lang="ko"><p lang="en" dir="ltr">The <a href="https://t.co/6EeRmpfaH7">https://t.co/6EeRmpfaH7</a> pool now has more hash rate on it than the entire BCH network had earlier today.  <br>Bitcoin is cash for the world!  <a href="https://twitter.com/hashtag/BitcoinCash?src=hash&amp;ref_src=twsrc%5Etfw">#BitcoinCash</a> <a href="https://twitter.com/hashtag/bitcoincashfork?src=hash&amp;ref_src=twsrc%5Etfw">#bitcoincashfork</a> <a href="https://t.co/n2MqQ5mlfK">pic.twitter.com/n2MqQ5mlfK</a></p>&mdash; Roger Ver (@rogerkver) <a href="https://twitter.com/rogerkver/status/1063123138081370112?ref_src=twsrc%5Etfw">2018년 11월 15일</a></blockquote>
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
-<blockquote class="twitter-tweet" data-lang="ko"><p lang="en" dir="ltr">Possible Bitcoin Cash hash war scenario<br><br>Bitcoin dot com added 4 exahash. If Bitmain and Jihan&#39;s camp redirects more hash power to BCH (estimated to be 20 EH), it&#39;s game over for faketoshi.<br><br>All depends on Calvin Ayre, but it&#39;s becoming more likely that faketoshi will lose out.</p>&mdash; Joseph Young (@iamjosephyoung) <a href="https://twitter.com/iamjosephyoung/status/1063122543165370370?ref_src=twsrc%5Etfw">2018년 11월 15일</a></blockquote>
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
-<blockquote class="twitter-tweet" data-lang="ko"><p lang="en" dir="ltr">Possible Bitcoin Cash hash war scenario<br><br>Bitcoin dot com added 4 exahash. If Bitmain and Jihan&#39;s camp redirects more hash power to BCH (estimated to be 20 EH), it&#39;s game over for faketoshi.<br><br>All depends on Calvin Ayre, but it&#39;s becoming more likely that faketoshi will lose out.</p>&mdash; Joseph Young (@iamjosephyoung) <a href="https://twitter.com/iamjosephyoung/status/1063122543165370370?ref_src=twsrc%5Etfw">2018년 11월 15일</a></blockquote>
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
+- https://twitter.com/rogerkver/status/1063123138081370112?ref_src=twsrc%5Etfw
+- https://twitter.com/iamjosephyoung/status/1063122543165370370?ref_src=twsrc%5Etfw
+- https://twitter.com/iamjosephyoung/status/1063122543165370370?ref_src=twsrc%5Etfw
+- 
 중국 광산 하드웨어 제조업체인 Bitmain의 설립자와 가까운 소식통에 따르면 Wright의 51 % 공격의 심각한 위협이 발생할 경우 BTC 체인을 채굴하는 것으로 알려진 9만 개의 마이닝 유닛이 여전히 Bitcoin ABC로 전환 될 수 있다고 한다.
 
 분명히 Wright는 현재 산출하는 것으로 보이는 것보다 많은 해시 속도를 필요로 한다. 지금은 51%의 공격과 몇 달 동안의 ‘2014년 가격’에 대한 그의 발언이 단지 위협에 그칠 것으로 보인다.

@@ -42,7 +42,7 @@ Monacoin, bitcoin gold, zencash, verge, 그리고 litecoin cash.
 
 젠캐시의 창립자는 마이닝 환경을 효과적으로 임대하고 설치할 수 있는 환경이 구축되어, 더 많은 시간이 나 돈을 쓰지 않고도 이러한 공격이 잦아졌다고 주장했다. 또한, 시장이 더많은 해시 파워를 축적하고 있기 때문에 공격하기가 쉬워지고 있다. [Crypto51](https://www.crypto51.app/)은 암호화폐가 51% 공격에 당하기 위해서는 얼마나 많은 피용이 필요한지 보여주고 있다.
 
-<iframe width="640px" height="360px" id="datawrapper-chart-cZFIQ" style="width: 0px; min-width: 100% !important; height: 233px;" src="//datawrapper.dwcdn.net/cZFIQ/1/" width="300" height="232" frameborder="0" scrolling="no"></iframe>
+https://datawrapper.dwcdn.net/cZFIQ/1/
 
 ## 해결책: 더 오래 기다리자
 

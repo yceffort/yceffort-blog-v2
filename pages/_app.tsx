@@ -1,7 +1,7 @@
 import React from 'react'
 import App from 'next/app'
 import 'normalize.css'
-import '../src/assets/css/global.css'
+import 'tailwindcss/tailwind.css'
 import Head from 'next/head'
 import Router from 'next/router'
 

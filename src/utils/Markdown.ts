@@ -4,6 +4,7 @@ import renderToString from 'next-mdx-remote/render-to-string'
 import { statSync, readdirSync, readFile } from 'promise-fs'
 import frontMatter from 'front-matter'
 import remarkMath from 'remark-math'
+import remarkToReHype from 'remark-rehype'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import rehypeKatex from 'rehype-katex'
@@ -105,7 +106,13 @@ export async function parseMarkdownToMDX(
 ): Promise<MdxRemote.Source> {
   return renderToString(body, {
     mdxOptions: {
-      remarkPlugins: [prism, remarkMath, toc, slug],
+      remarkPlugins: [
+        prism,
+        remarkMath,
+        toc,
+        slug,
+        [remarkToReHype, { allowDangerousHtml: true }],
+      ],
       rehypePlugins: [rehypeKatex],
       compilers: [],
     },

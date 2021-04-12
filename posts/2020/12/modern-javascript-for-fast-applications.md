@@ -16,8 +16,6 @@ description: '아니 그래서 IE 11 언제 없앨 건데요'
 
 > 아마도 엣지 레거시와 구 IE를 제거한 수치로 보면 될 것 같다. 우리나라에서는 약 93% 정도 된다.
 
-<div id="all-browser-KR-monthly-201912-202011" width="600" height="400" style="width:600px; height: 400px;"></div><!-- You may change the values of width and height above to resize the chart --><p>Source: <a href="https://gs.statcounter.com/browser-market-share/all/south-korea/#monthly-201912-202011-bar">StatCounter Global Stats - Browser Market Share</a></p><script type="text/javascript" src="https://www.statcounter.com/js/fusioncharts.js"></script><script type="text/javascript" src="https://gs.statcounter.com/chart.php?all-browser-KR-monthly-201912-202011&chartWidth=600"></script>
-
 여기서 말하는 문법은 이정도다.
 
 - 클래스 (ES2015)
@@ -127,11 +125,7 @@ module.exports = {
 
 `Optimize Plugin`은 모던 코드와 레거시 코드를 따로 번들링 하는 기존 방식보다 더 빠르고 효율적이다. 또한 `Babel`처리도 가능하며, `Terser`를 활용하여 각각의 번들 크기를 줄일 수도 있다. 마지막으로, 레거시 번들에 필요한 폴리필을 따로 관리하기 때문에, 모던 브라우저에서 이를 로딩하지 않도록 도와준다.
 
-<video style="width: 100%;" controls="" autoplay="" loop="" muted="" class="w-screenshot">
-    <source src="https://storage.googleapis.com/web-dev-assets/fast-publish-modern-javascript/transpile-before-after.webm" type="video/webm">
-    <source src="https://storage.googleapis.com/web-dev-assets/fast-publish-modern-javascript/transpile-before-after.mp4" type="video/mp4">
-  </video>
-
+https://storage.googleapis.com/web-dev-assets/fast-publish-modern-javascript/transpile-before-after.webm
   ## BabelEsmPlugin
 
   웹팩 플러그인 중 하나인 [BabelEsmPlugin](https://github.com/prateekbh/babel-esm-plugin)는 `@babel/preset-env` 와 함께 사용할 수 있으며, 현재 가지고 있는 번들을 모던 브라우저에 서비스 할 수 있도록 트랜스파일링을 최소화 해준다. 이는 Next.js나 preact cli에서도 사용하는 가장 유명한 module/nomodule 솔루션이다.

@@ -41,7 +41,7 @@ CN N역시 입력층, 중간층, 출력층으로 구성되어 있으며 각 층�
 
 ![convolutional-layer](http://deeplearning.stanford.edu/wiki../../../images/6/6c/Convolution_schematic.gif)
 
-<iframe width="640px" height="360px" src="https://cs231n.github.io/assets/conv-demo/index.html" width="100%" height="700px;" style="border:none;"></iframe>
+https://cs231n.github.io/assets/conv-demo/index.html
 
 ## 손글씨 이미지 분류하기
 

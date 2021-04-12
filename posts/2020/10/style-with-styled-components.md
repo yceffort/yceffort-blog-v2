@@ -58,12 +58,7 @@ const App = () => {
 
 이렇게 해서 만들어진 `button`을 한번 살펴보자.
 
-<iframe src="https://codesandbox.io/embed/sweet-forest-1eix4?fontsize=14&hidenavigation=1&theme=dark"
-     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
-     title="sweet-forest-1eix4"
-     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
-   ></iframe>
+https://codesandbox.io/embed/sweet-forest-1eix4?fontsize=14&hidenavigation=1&theme=dark
 
 ```html
 <style data-styled="active" data-styled-version="5.2.0">

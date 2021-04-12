@@ -26,7 +26,7 @@ https://github.com/facebook/react/issues/14110#issuecomment-448074060
 
 그리고 실제로 React의 Context API를 쓰던 Redux가 성능상의 문제로 인해 이를 철회한 사건도 있었다.
 
-> In v6, we switched from individual components subscribing to the store, to having <Provider> subscribe and components read the store state from React's Context API. This worked, but unfortunately the Context API isn't as optimized for frequent updates as we'd hoped, and our usage patterns led to some folks reporting performance issues in some scenarios.
+> In v6, we switched from individual components subscribing to the store, to having `<Provider>` subscribe and components read the store state from React's Context API. This worked, but unfortunately the Context API isn't as optimized for frequent updates as we'd hoped, and our usage patterns led to some folks reporting performance issues in some scenarios.
 
 https://github.com/reduxjs/react-redux/releases/tag/v7.0.1
 

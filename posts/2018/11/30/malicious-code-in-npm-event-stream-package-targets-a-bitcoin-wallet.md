@@ -23,11 +23,8 @@ event stream npm 패키지는 원래 [Dominic Tarr](https://github.com/dominicta
 
 악의적인 패키지는 지정된 공격을 목표로 수행되었으며, [bitpay/copay](https://github.com/bitpay/copay)라는 오픈 소스 앱에 영향을 미친다. Copay는 데스크톱과 모바일 장치 모두를 위한 안전한 비트코인 지갑 플랫폼이다. 해당 모듈의 package.json (모듈에서 의존하고 있는 패키지 목록)에서 AES256 (암호화)를 디크립트 하는 패키지가 발견되었으며, 이는 copay앱을 타겟으로 하고 있는 것으로 보였다.
 
-<blockquote class="twitter-tweet" data-lang="ko"><p lang="en" dir="ltr">Hey internet,<br><br>Here is my statement on the event-stream issue: <a href="https://t.co/OmvlVuECHL">https://t.co/OmvlVuECHL</a><br><br>Thanks to everyone who sent me friendly emoji ;) I&#39;m okay. But this is really a much bigger issue (the viability of open source). I&#39;m glad that this incidence is raising awareness!</p>&mdash; Dominic Tarr (@dominictarr) <a href="https://twitter.com/dominictarr/status/1067186943304159233?ref_src=twsrc%5Etfw">2018년 11월 26일</a></blockquote>
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
-<blockquote class="twitter-tweet" data-lang="ko"><p lang="en" dir="ltr">My comment on this incident, since Dominic is getting a lot of blame and I work closely with him.<br><br>1/ Yes he did a mistake (with huge proportions), but you have to understand Dominic has 700+ packages and this one is just one more. Each package has several issues and comments. <a href="https://t.co/XgYBBS7Ypb">https://t.co/XgYBBS7Ypb</a></p>&mdash; André Staltz (@andrestaltz) <a href="https://twitter.com/andrestaltz/status/1067157915398746114?ref_src=twsrc%5Etfw">2018년 11월 26일</a></blockquote>
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+- https://twitter.com/dominictarr/status/1067186943304159233?ref_src=twsrc%5Etfw
+- https://twitter.com/andrestaltz/status/1067157915398746114?ref_src=twsrc%5Etfw
 
 이 악의적인 코드의 영향을받는 사용자는 이벤트 스트림의 버전 3.3.4를 사용하거나, 제거하는 것이 좋다.
 

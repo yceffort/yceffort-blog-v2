@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 const withPWA = require('next-pwa')
 const isProduction = process.env.NODE_ENV === 'production'
+
 isProduction && require('dotenv').config()
 
 module.exports = withPWA({

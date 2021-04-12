@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import 'prismjs/themes/prism-coy.css'
+import 'prismjs/themes/prism-okaidia.css'
 
 const ContentContainer = styled.div`
   max-width: 59.0625rem;
@@ -84,14 +84,13 @@ export default function Content({
   body,
   title,
 }: {
-  body: string
+  body: string | React.ReactNode
   title: string
 }) {
   return (
     <ContentContainer>
       <ContentTitle>{title}</ContentTitle>
       <ContentBody
-        dangerouslySetInnerHTML={{ __html: body }}
         onClick={(e) => {
           const clickedTarget = e.target as HTMLElement
           if (clickedTarget.tagName === 'IMG') {
@@ -99,7 +98,9 @@ export default function Content({
             window.open(img.src)
           }
         }}
-      ></ContentBody>
+      >
+        {body}
+      </ContentBody>
     </ContentContainer>
   )
 }

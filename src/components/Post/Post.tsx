@@ -5,6 +5,8 @@ import styled from 'styled-components'
 import { Fab, Action } from 'react-tiny-fab'
 import { BiPlus, BiArrowToTop } from 'react-icons/bi'
 import { ImGithub } from 'react-icons/im'
+import hydrate from 'next-mdx-remote/hydrate'
+import { MdxRemote } from 'next-mdx-remote/types'
 
 import Author from '#components/Post/components/Author'
 import Meta from '#components/Post/components/meta'
@@ -54,9 +56,14 @@ const PostHomeButton = styled.a`
   }
 `
 
-export default function PostRenderer({ post }: { post: Post }) {
+export default function PostRenderer({
+  post,
+  mdx,
+}: {
+  post: Post
+  mdx: MdxRemote.Source
+}) {
   const {
-    parsedBody,
     frontmatter: { tags, date, title },
   } = post
 
@@ -83,7 +90,7 @@ export default function PostRenderer({ post }: { post: Post }) {
       </Link>
 
       <div>
-        {parsedBody ? <Content title={title} body={parsedBody} /> : null}
+        <Content title={title} body={hydrate(mdx)} />
       </div>
 
       <PostFooter>

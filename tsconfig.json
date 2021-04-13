@@ -32,5 +32,5 @@
     }
   },
   "exclude": ["dist", ".next", "out", "next.config.js"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "*.ts"]
+  "include": ["next-env.d.ts", "typing/*.d.ts", "**/*.ts", "**/*.tsx", "*.ts"]
 }

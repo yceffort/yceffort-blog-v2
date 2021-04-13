@@ -1,4 +1,4 @@
-export const config = {
+export const SiteConfig = {
   url: 'https://yceffort.kr',
   pathPrefix: '/',
   title: 'yceffort',
@@ -25,14 +25,6 @@ export const config = {
       label: 'about',
       path: '/about',
     },
-    {
-      label: 'contact',
-      path: '/contacts',
-    },
-    {
-      label: '🏃🏃🏃',
-      path: '/run',
-    },
   ],
   author: {
     name: 'yceffort',
@@ -58,4 +50,4 @@ export const config = {
   },
 }
 
-export default config
+export default SiteConfig

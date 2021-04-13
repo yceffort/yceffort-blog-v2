@@ -1,49 +1,13 @@
 import React from 'react'
-import Document, {
-  Html,
-  Head,
-  Main,
-  NextScript,
-  DocumentContext,
-} from 'next/document'
-import { ServerStyleSheet } from 'styled-components'
+import Document, { Html, Head, Main, NextScript } from 'next/document'
 
 import config from '../src/config'
 
-export default class MyDocument extends Document<{
-  styleTags: Array<React.ReactElement<{}>>
-}> {
-  static async getInitialProps(context: DocumentContext) {
-    const { req, renderPage } = context
-    const sheet = new ServerStyleSheet()
-    const page = renderPage((App: any) => (props: any) =>
-      sheet.collectStyles(<App {...props} />),
-    )
-    const styleTags = sheet.getStyleElement()
-
-    let userAgent
-    if (req && req.headers) {
-      userAgent = req.headers['user-agent']
-    }
-
-    const initialProps = await Document.getInitialProps(context)
-    return {
-      ...page,
-      ...initialProps,
-      styleTags,
-      isPublic: !userAgent || !userAgent.match(/(iOS|Android)/i),
-    }
-  }
-
+export default class MyDocument extends Document {
   render() {
-    const {
-      props: { styleTags },
-    } = this
-
     return (
       <Html lang="ko">
         <Head>
-          {styleTags}
           <meta httpEquiv="x-ua-compatible" content="ie=edge" />
           <meta property="og:type" content="blog" />
           <meta property="og:locale" content="ko_KR" />

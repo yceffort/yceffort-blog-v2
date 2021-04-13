@@ -1,5 +1,6 @@
 import React from 'react'
 import { format } from 'date-fns'
+import qs from 'query-string'
 
 import { FrontMatter } from '#commons/types'
 import SectionContainer from '#components/SectionContainer'
@@ -12,12 +13,23 @@ import SiteConfig from '#src/config'
 export default function PostLayout({
   children,
   frontMatter,
+  slug,
 }: {
+  slug: string
   children: React.ReactNode
   frontMatter: FrontMatter
 }) {
   const { date, title, tags, description } = frontMatter
   const updatedAt = format(new Date(date), 'yyyy-MM-dd')
+  const thumbnailHost = `https://us-central1-yceffort.cloudfunctions.net/screenshot`
+
+  const queryString = qs.stringify({
+    tags: frontMatter.tags.map((tag) => tag.trim()).join(','),
+    title: frontMatter.title,
+    url: `https://yceffort.kr/${slug}`,
+    slug: slug,
+  })
+  const thumbnailUrl = `${thumbnailHost}?${queryString}`
 
   return (
     <SectionContainer>
@@ -28,7 +40,7 @@ export default function PostLayout({
         updatedAt={updatedAt}
         url=""
         tags={tags}
-        images={[]}
+        images={[thumbnailUrl]}
       />
       <article>
         <div className="xl:divide-y xl:divide-gray-200 xl:dark:divide-gray-700">
@@ -52,7 +64,7 @@ export default function PostLayout({
             style={{ gridTemplateRows: 'auto 1fr' }}
           >
             <dl className="pt-6 pb-10 xl:pt-11 xl:border-b xl:border-gray-200 xl:dark:border-gray-700">
-              <dt className="sr-only">Authors</dt>
+              <dt className="sr-only">Author</dt>
               <dd>
                 <ul className="flex justify-center space-x-8 xl:block sm:space-x-12 xl:space-x-0 xl:space-y-8">
                   <li className="flex items-center space-x-2">
@@ -66,18 +78,6 @@ export default function PostLayout({
                       <dd className="text-gray-900 dark:text-gray-100">
                         {SiteConfig.author.name}
                       </dd>
-                      {/* <dt className="sr-only">Twitter</dt>
-                      <dd>
-                        <Link
-                          href={siteMetdata.twitter}
-                          className="text-blue-500 hover:text-blue-600 dark:hover:text-blue-400"
-                        >
-                          {siteMetdata.twitter.replace(
-                            'https://twitter.com/',
-                            '@',
-                          )}
-                        </Link>
-                      </dd> */}
                     </dl>
                   </li>
                 </ul>
@@ -88,11 +88,11 @@ export default function PostLayout({
                 {children}
               </div>
               <div className="pt-6 pb-6 text-sm text-gray-700 dark:text-gray-300">
-                {/* <Link href={discussUrl(slug)} rel="nofollow">
-                  {'Discuss on Twitter'}
-                </Link>
-                {` • `} */}
-                {/* <Link href={editUrl(fileName)}>{'View on GitHub'}</Link> */}
+                <CustomLink
+                  href={`https://github.com/yceffort/yceffort-blog-v2/issues/new?labels=%F0%9F%92%AC%20Discussion&title=[Discussion]&assignees=yceffort&body=${SiteConfig.url}/blog/${slug}`}
+                >
+                  {'Issue on GitHub'}
+                </CustomLink>
               </div>
             </div>
             <footer>

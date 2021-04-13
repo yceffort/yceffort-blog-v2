@@ -64,12 +64,10 @@ export const BlogSeo = ({
 }) => {
   const publishedAt = new Date(date).toISOString()
   const modifiedAt = new Date(updatedAt || date).toISOString()
-  const imagesArr =
-    images.length === 0 ? [] : typeof images === 'string' ? [images] : images
 
-  const featuredImages = imagesArr.map((img) => {
+  const featuredImages = images.map((img) => {
     return {
-      url: `${SiteConfig.url}${img}`,
+      url: img,
       alt: title,
     }
   })
@@ -96,7 +94,7 @@ export const BlogSeo = ({
         additionalMetaTags={[
           {
             name: 'twitter:image',
-            content: '', // todo
+            content: images[0],
           },
         ]}
       />

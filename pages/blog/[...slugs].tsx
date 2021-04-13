@@ -7,6 +7,7 @@ import hydrate from 'next-mdx-remote/hydrate'
 import { Post } from '#commons/types'
 import { getAllPosts, parseMarkdownToMDX } from '#utils/Markdown'
 import PostLayout from '#components/layouts/Post'
+import MDXComponents from '#components/MDXComponents'
 
 export default function PostPage({
   post,
@@ -16,7 +17,16 @@ export default function PostPage({
   mdx: MdxRemote.Source
   thumbnailUrl: string
 }) {
-  return <PostLayout frontMatter={post?.frontmatter}>{hydrate(mdx)}</PostLayout>
+  return (
+    mdx &&
+    post && (
+      <PostLayout frontMatter={post?.frontmatter} slug={post.fields.slug}>
+        {hydrate(mdx, {
+          components: MDXComponents,
+        })}
+      </PostLayout>
+    )
+  )
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {

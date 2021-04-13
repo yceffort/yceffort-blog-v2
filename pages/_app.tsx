@@ -1,9 +1,14 @@
+import 'src/tailwind.css'
+
 import React from 'react'
 import App from 'next/app'
-import 'normalize.css'
-import 'tailwindcss/tailwind.css'
 import Head from 'next/head'
 import Router from 'next/router'
+import { ThemeProvider } from 'next-themes'
+import { DefaultSeo } from 'next-seo'
+
+import { SEO } from '#components/SEO'
+import LayoutWrapper from '#components/LayoutWrapper'
 
 class MyApp extends App {
   componentDidMount() {
@@ -42,16 +47,17 @@ class MyApp extends App {
 
   render() {
     const { Component, pageProps } = this.props
+
     return (
-      <>
+      <ThemeProvider attribute="class">
         <Head>
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=0, minimum-scale=1, viewport-fit=cover"
-          />
+          <meta content="width=device-width, initial-scale=1" name="viewport" />
         </Head>
-        <Component {...pageProps} />
-      </>
+        <DefaultSeo {...SEO} />
+        <LayoutWrapper>
+          <Component {...pageProps} />
+        </LayoutWrapper>{' '}
+      </ThemeProvider>
     )
   }
 }

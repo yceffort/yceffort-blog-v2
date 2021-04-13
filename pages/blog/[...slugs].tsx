@@ -1,46 +1,32 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
 import React from 'react'
-import DefaultErrorPage from 'next/error'
 import qs from 'query-string'
 import { MdxRemote } from 'next-mdx-remote/types'
+import hydrate from 'next-mdx-remote/hydrate'
 
 import { Post } from '#commons/types'
 import { getAllPosts, parseMarkdownToMDX } from '#utils/Markdown'
-import Layout from '#components/Layout'
-import PostRenderer from '#components/Post/Post'
+import PostLayout from '#components/layouts/Post'
 
 export default function PostPage({
   post,
-  thumbnailUrl,
   mdx,
 }: {
-  post?: Post
-  mdx?: MdxRemote.Source
+  post: Post
+  mdx: MdxRemote.Source
   thumbnailUrl: string
 }) {
-  return post && mdx ? (
-    <Layout
-      title={post.frontmatter.title}
-      description={post.frontmatter.description}
-      url={`https://yceffort.kr/${post.fields.slug}`}
-      socialImage={thumbnailUrl}
-    >
-      <PostRenderer post={post} mdx={mdx} />
-    </Layout>
-  ) : (
-    <DefaultErrorPage statusCode={404} />
-  )
+  return <PostLayout frontMatter={post?.frontmatter}>{hydrate(mdx)}</PostLayout>
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const allPosts = await getAllPosts()
   const paths = allPosts.reduce((prev, { fields: { slug } }) => {
-    const splits = `${slug.replace('.md', '')}`.split('/')
-    const [year, ...slugs] = splits
+    const slugs = `${slug.replace('.md', '')}`.split('/')
 
-    prev.push({ params: { year, slugs } })
+    prev.push({ params: { slugs } })
     return prev
-  }, [] as Array<{ params: { year: string; slugs: string[] } }>)
+  }, [] as Array<{ params: { slugs: string[] } }>)
 
   return {
     paths,
@@ -53,8 +39,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   let mdx = null
 
   if (params) {
-    const { year, slugs } = params
-    const slug = [year, ...(slugs as string[])].join('/')
+    const { slugs } = params
+    const slug = (slugs as string[]).join('/')
     const posts = await getAllPosts()
     post = posts.find(({ fields: { slug: postSlug } }) => postSlug === slug)
 

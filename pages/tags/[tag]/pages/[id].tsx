@@ -1,16 +1,12 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { useRouter } from 'next/router'
 import React from 'react'
 
-import Feed from '#components/Feed'
-import Layout from '#components/Layout'
-import Page from '#components/Page'
-import Pagination from '#components/Pagination'
-import Sidebar from '#components/Sidebar/Sidebar'
-import config from '#src/config'
+import { SiteConfig } from '#src/config'
 import { DEFAULT_NUMBER_OF_POSTS } from '#commons/const'
 import { Post } from '#commons/types'
 import { getAllPosts, getAllTagsFromPosts } from '#utils/Markdown'
+import { PageSeo } from '#components/SEO'
+import ListLayout from '#components/layouts/List'
 
 export default function Tag({
   posts,
@@ -18,36 +14,28 @@ export default function Tag({
   pageNo,
   hasNextPage,
 }: {
-  posts: Array<Post>
   tag: string
-  pageNo: string
+  posts: Array<Post>
+  pageNo: number
   hasNextPage: boolean
 }) {
-  const page = parseInt(pageNo)
-
-  const router = useRouter()
-
-  if (router.isFallback) {
-    return <div>Loading...</div>
-  }
-
+  const title = tag[0].toUpperCase() + tag.split(' ').join('-').slice(1)
   return (
-    <Layout
-      title={`Tag - ${tag}`}
-      description={config.subtitle}
-      url={`https://yceffort.kr/tag/${tag}/page/${pageNo}`}
-    >
-      <Sidebar />
-      <Page title={tag}>
-        <Feed posts={posts} />
-        <Pagination
-          prevPagePath={page === 1 ? '/' : `/tag/${tag}/page/${page - 1}`}
-          nextPagePath={`/tag/${tag}/page/${page + 1}`}
-          hasPrevPage={page > 1}
-          hasNextPage={hasNextPage}
-        />
-      </Page>
-    </Layout>
+    <>
+      <PageSeo
+        title={`${tag} - ${SiteConfig.title}`}
+        description={`${tag} tags - ${SiteConfig.title}`}
+        url={`${SiteConfig.url}/tags/${tag}`}
+      />
+      <ListLayout
+        posts={posts}
+        title={title}
+        pageNo={pageNo}
+        hasNextPage={hasNextPage}
+        nextPath={`/tags/${tag}/pages/${pageNo + 1}`}
+        prevPath={`/tags/${tag}/pages/${pageNo - 1}`}
+      />
+    </>
   )
 }
 
@@ -81,9 +69,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   let pageNo = 1
   let hasNextPage = true
 
-  if (params) {
+  if (params && params.id && typeof params.id === 'string') {
     tag = (params.tag as string) || 'javascript'
-    pageNo = (params.id || 1) as number
+    pageNo = parseInt(params.id)
 
     const postsWithTag = allPosts.filter((post) =>
       post.frontmatter.tags.find((t) => t === tag),

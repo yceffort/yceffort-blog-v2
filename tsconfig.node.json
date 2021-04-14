@@ -5,6 +5,6 @@
     "moduleResolution": "node",
     "target": "es2017",
     "strict": true,
-    "lib": ["es2017", "dom", "esnext.array"],    
+    "lib": ["es2017", "dom", "esnext.array"]
   }
 }

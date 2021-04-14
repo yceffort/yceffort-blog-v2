@@ -43,38 +43,6 @@ const tokenClassNames: { [key in TokenType]: string } = {
   comment: 'text-gray-400 italic',
 }
 
-const imgToJSX = (_: any) => (tree: any) => {
-  visit(
-    tree,
-    // only visit p tags that contain an img element
-    (node: any) =>
-      node.type === 'paragraph' &&
-      node.children.some((n: any) => n.type === 'image'),
-    (node: any) => {
-      const imageNode = node.children.find((n: any) => n.type === 'image')
-
-      // only local files
-      if (!imageNode.url.startsWith('http')) {
-        console.log(imageNode, tree)
-        const dimensions = sizeOf(`${process.cwd()}/public${imageNode.url}`)
-
-        // Convert original node to next/image
-        imageNode.type = 'jsx'
-        imageNode.value = `<Image
-          alt={\`${imageNode.alt}\`}
-          src={\`${imageNode.url}\`}
-          width={${dimensions.width}}
-          height={${dimensions.height}}
-      />`
-
-        // Change node type from p to div to avoid nesting error
-        node.type = 'div'
-        node.children = [imageNode]
-      }
-    },
-  )
-}
-
 export async function parseMarkdownToMDX(
   body: string,
   path: string,

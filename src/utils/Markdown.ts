@@ -13,6 +13,7 @@ import toc from 'remark-toc'
 import slug from 'remark-slug'
 import { MdxRemote } from 'next-mdx-remote/types'
 import visit from 'unist-util-visit'
+import { Node } from 'unist'
 
 import MDXComponents from '../components/MDXComponents'
 
@@ -56,10 +57,9 @@ export async function parseMarkdownToMDX(
         slug,
         remarkMath,
         () => {
-          return (tree: any) => {
+          return (tree: Node) => {
             visit(
               tree,
-              // only visit p tags that contain an img element
               (node: any) =>
                 node.type === 'paragraph' &&
                 node.children.some((n: any) => n.type === 'image'),

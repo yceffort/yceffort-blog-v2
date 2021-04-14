@@ -29,7 +29,7 @@ export default function ListLayout({
           </h1>
         </div>
         <ul>
-          {posts.map(({ fields: { slug }, frontmatter }) => {
+          {posts.map(({ fields: { slug }, frontMatter: frontmatter }) => {
             const { date, title, description, tags } = frontmatter
             const updatedAt = format(new Date(date), 'yyyy-MM-dd')
             return (

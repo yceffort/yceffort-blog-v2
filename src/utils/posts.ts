@@ -38,7 +38,7 @@ export async function getAllDraftPosts() {
 export async function getAllTagsFromPosts(): Promise<Array<TagWithCount>> {
   const tags: string[] = (await getAllPosts()).reduce<string[]>(
     (prev, curr) => {
-      curr.frontmatter.tags.forEach((tag: string) => {
+      curr.frontMatter.tags.forEach((tag: string) => {
         prev.push(tag)
       })
       return prev
@@ -94,7 +94,7 @@ export async function retreiveAllPosts(): Promise<Array<Post>> {
       const tags: string[] = (fmTags || []).map((tag: string) => tag.trim())
 
       const result: Post = {
-        frontmatter: {
+        frontMatter: {
           ...fm,
           tags,
           date: new Date(date).getTime() - 9 * 60 * 60 * 1000, // 한국시간
@@ -110,5 +110,5 @@ export async function retreiveAllPosts(): Promise<Array<Post>> {
     }
   }
 
-  return posts.sort((a, b) => b.frontmatter.date - a.frontmatter.date)
+  return posts.sort((a, b) => b.frontMatter.date - a.frontMatter.date)
 }

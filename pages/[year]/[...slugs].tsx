@@ -21,7 +21,7 @@ export default function PostPage({
   return (
     mdx &&
     post && (
-      <PostLayout frontMatter={post?.frontmatter} slug={post.fields.slug}>
+      <PostLayout frontMatter={post?.frontMatter} slug={post.fields.slug}>
         {hydrate(mdx, {
           components: MDXComponents,
         })}
@@ -59,8 +59,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       const thumbnailHost = `https://us-central1-yceffort.cloudfunctions.net/screenshot`
 
       const queryString = qs.stringify({
-        tags: post.frontmatter.tags.map((tag) => tag.trim()).join(','),
-        title: post.frontmatter.title,
+        tags: post.frontMatter.tags.map((tag) => tag.trim()).join(','),
+        title: post.frontMatter.title,
         url: `https://yceffort.kr/${post.fields.slug}`,
         slug: post.fields.slug,
       })

@@ -68,7 +68,7 @@ export default function ListLayout({
         </ul>
       </div>
       <div className="flex">
-        <div className="flex md:w-1/2 text-base font-medium leading-6 justify-start">
+        <div className="flex w-1/2 text-base font-medium leading-6 justify-start">
           {pageNo !== 1 && (
             <CustomLink
               href={prevPath || `/pages/${pageNo - 1}`}
@@ -80,7 +80,7 @@ export default function ListLayout({
           )}
         </div>
 
-        <div className="flex md:w-1/2 text-base font-medium leading-6 justify-end">
+        <div className="flex w-1/2 text-base font-medium leading-6 justify-end">
           {hasNextPage && (
             <CustomLink
               href={nextPath || `/pages/${pageNo + 1}`}

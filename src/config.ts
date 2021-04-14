@@ -11,7 +11,7 @@ export const SiteConfig = {
   menu: [
     {
       label: 'Posts',
-      path: '/',
+      path: '/pages/1',
     },
     {
       label: 'Tags',

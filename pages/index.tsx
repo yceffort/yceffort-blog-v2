@@ -32,7 +32,7 @@ export default function Home({ posts }: { posts: Array<Post> }) {
         <ul className="divide-y divide-gray-200 dark:divide-gray-700">
           {posts
             .slice(0, MAX_DISPLAY)
-            .map(({ frontmatter, fields: { slug } }) => {
+            .map(({ frontMatter: frontmatter, fields: { slug } }) => {
               const { date, title, tags, description } = frontmatter
               const updatedAt = format(new Date(date), 'yyyy-MM-dd')
               return (

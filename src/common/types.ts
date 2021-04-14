@@ -15,7 +15,7 @@ export interface Post {
   fields: {
     slug: string
   }
-  frontmatter: FrontMatter
+  frontMatter: FrontMatter
   body: string
   path: string
 }

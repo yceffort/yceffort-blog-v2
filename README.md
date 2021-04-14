@@ -8,8 +8,9 @@ github repository of https://yceffort.kr
 
 - React
 - Typescript
-- Styled Components
+- tailwindcss + custom styles
 - Nextjs
+- next-mdx-remote
 - vercel
 
 ## Frontmatter

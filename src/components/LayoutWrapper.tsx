@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'next/image'
 
 import Link from './Link'
 import SectionContainer from './SectionContainer'
@@ -17,9 +18,11 @@ const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
             <Link href="/" aria-label="Tailwind CSS Blog">
               <div className="flex items-center justify-between">
                 <div className="mr-3">
-                  <img
+                  <Image
                     src={SiteConfig.author.photo}
                     alt="avatar"
+                    width={40}
+                    height={40}
                     className="w-10 h-10 rounded-full"
                   />
                 </div>

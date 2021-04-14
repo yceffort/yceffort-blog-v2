@@ -324,7 +324,11 @@ export default class MyDocument extends Document {
             integrity="sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw"
             crossOrigin="anonymous"
           />
-          {/* firebase */}
+        </Head>
+        <body className="antialiased text-black bg-white dark:bg-gray-900 dark:text-white">
+          <Main />
+          <NextScript />
+
           <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js" />
           <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-analytics.js" />
           {process.env.NODE_ENV === 'production' && (
@@ -348,10 +352,6 @@ export default class MyDocument extends Document {
               }}
             ></script>
           )}
-        </Head>
-        <body className="antialiased text-black bg-white dark:bg-gray-900 dark:text-white">
-          <Main />
-          <NextScript />
         </body>
       </Html>
     )

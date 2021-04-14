@@ -6,7 +6,6 @@ import Footer from './Footer'
 import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
 
-import Profile from '#components/icons/profile.svg'
 import SiteConfig from '#src/config'
 
 const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
@@ -18,7 +17,11 @@ const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
             <Link href="/" aria-label="Tailwind CSS Blog">
               <div className="flex items-center justify-between">
                 <div className="mr-3">
-                  <Profile />
+                  <img
+                    src={SiteConfig.author.photo}
+                    alt="avatar"
+                    className="w-10 h-10 rounded-full"
+                  />
                 </div>
                 <div className="hidden h-6 text-2xl font-semibold sm:block">
                   {SiteConfig.title}

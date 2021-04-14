@@ -2,7 +2,7 @@ import React from 'react'
 import { GetStaticPaths, GetStaticProps } from 'next'
 
 import { Post } from '#commons/types'
-import { getAllPosts } from '#utils/Markdown'
+import { getAllPosts } from '#utils/posts'
 import { DEFAULT_NUMBER_OF_POSTS } from '#commons/const'
 import SiteConfig from '#src/config'
 import { PageSeo } from '#components/SEO'
@@ -20,9 +20,9 @@ export default function Blog({
   return (
     <>
       <PageSeo
-        title={`Blog - ${SiteConfig.author.name}`}
+        title={`Posts (${pageNo})`}
         description={SiteConfig.subtitle}
-        url={`${SiteConfig.url}/blog`}
+        url={`${SiteConfig.url}`}
       />
       <ListLayout
         posts={posts}

@@ -7,8 +7,8 @@ import { PageSeo } from '#components/SEO'
 import SiteConfig from '#src/config'
 import CustomLink from '#components/Link'
 import Tag from '#components/Tag'
-import { getAllPosts } from '#utils/Markdown'
 import { DEFAULT_NUMBER_OF_POSTS } from '#commons/const'
+import { getAllPosts } from '#utils/posts'
 
 const MAX_DISPLAY = 5
 
@@ -16,7 +16,7 @@ export default function Home({ posts }: { posts: Array<Post> }) {
   return (
     <>
       <PageSeo
-        title={SiteConfig.title}
+        title={'Home'}
         description={SiteConfig.subtitle}
         url={SiteConfig.url}
       />
@@ -53,7 +53,7 @@ export default function Home({ posts }: { posts: Array<Post> }) {
                           <div>
                             <h2 className="text-2xl font-bold leading-8 tracking-tight">
                               <CustomLink
-                                href={`/blog/${slug}`}
+                                href={`/${slug}`}
                                 className="text-gray-900 dark:text-gray-100"
                               >
                                 {title}
@@ -71,7 +71,7 @@ export default function Home({ posts }: { posts: Array<Post> }) {
                         </div>
                         <div className="text-base font-medium leading-6">
                           <CustomLink
-                            href={`/blog/${slug}`}
+                            href={`/${slug}`}
                             className="text-blue-500 hover:text-blue-600 dark:hover:text-blue-400"
                             aria-label={`Read "${title}"`}
                           >

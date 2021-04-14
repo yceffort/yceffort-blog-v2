@@ -4,7 +4,7 @@ import React from 'react'
 import { SiteConfig } from '#src/config'
 import { DEFAULT_NUMBER_OF_POSTS } from '#commons/const'
 import { Post } from '#commons/types'
-import { getAllPosts, getAllTagsFromPosts } from '#utils/Markdown'
+import { getAllPosts, getAllTagsFromPosts } from '#utils/posts'
 import { PageSeo } from '#components/SEO'
 import ListLayout from '#components/layouts/List'
 
@@ -19,11 +19,13 @@ export default function Tag({
   pageNo: number
   hasNextPage: boolean
 }) {
-  const title = tag[0].toUpperCase() + tag.split(' ').join('-').slice(1)
+  const title = `${
+    tag[0].toUpperCase() + tag.split(' ').join('-').slice(1)
+  } ${pageNo}`
   return (
     <>
       <PageSeo
-        title={`${tag} - ${SiteConfig.title}`}
+        title={`${tag} (${pageNo})`}
         description={`${tag} tags - ${SiteConfig.title}`}
         url={`${SiteConfig.url}/tags/${tag}`}
       />

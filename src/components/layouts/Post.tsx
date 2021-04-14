@@ -89,7 +89,7 @@ export default function PostLayout({
               </div>
               <div className="pt-6 pb-6 text-sm text-gray-700 dark:text-gray-300">
                 <CustomLink
-                  href={`https://github.com/yceffort/yceffort-blog-v2/issues/new?labels=%F0%9F%92%AC%20Discussion&title=[Discussion]&assignees=yceffort&body=${SiteConfig.url}/blog/${slug}`}
+                  href={`https://github.com/yceffort/yceffort-blog-v2/issues/new?labels=%F0%9F%92%AC%20Discussion&title=[Discussion]&assignees=yceffort&body=${SiteConfig.url}/${slug}`}
                 >
                   {'Issue on GitHub'}
                 </CustomLink>
@@ -109,30 +109,6 @@ export default function PostLayout({
                     </div>
                   </div>
                 )}
-                {/* {(next || prev) && (
-                  <div className="flex justify-between py-4 xl:block xl:space-y-8 xl:py-8">
-                    {prev && (
-                      <div>
-                        <h2 className="text-xs tracking-wide text-gray-500 uppercase dark:text-gray-400">
-                          Previous Article
-                        </h2>
-                        <div className="text-blue-500 hover:text-blue-600 dark:hover:text-blue-400">
-                          <Link href={`/blog/${prev.slug}`}>{prev.title}</Link>
-                        </div>
-                      </div>
-                    )}
-                    {next && (
-                      <div>
-                        <h2 className="text-xs tracking-wide text-gray-500 uppercase dark:text-gray-400">
-                          Next Article
-                        </h2>
-                        <div className="text-blue-500 hover:text-blue-600 dark:hover:text-blue-400">
-                          <Link href={`/blog/${next.slug}`}>{next.title}</Link>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )} */}
               </div>
               <div className="pt-4 xl:pt-8">
                 <CustomLink

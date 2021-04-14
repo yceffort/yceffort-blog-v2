@@ -5,9 +5,10 @@ import { MdxRemote } from 'next-mdx-remote/types'
 import hydrate from 'next-mdx-remote/hydrate'
 
 import { Post } from '#commons/types'
-import { getAllPosts, parseMarkdownToMDX } from '#utils/Markdown'
+import { parseMarkdownToMDX } from '#utils/Markdown'
 import PostLayout from '#components/layouts/Post'
 import MDXComponents from '#components/MDXComponents'
+import { getAllPosts } from '#utils/posts'
 
 export default function PostPage({
   post,
@@ -32,11 +33,11 @@ export default function PostPage({
 export const getStaticPaths: GetStaticPaths = async () => {
   const allPosts = await getAllPosts()
   const paths = allPosts.reduce((prev, { fields: { slug } }) => {
-    const slugs = `${slug.replace('.md', '')}`.split('/')
+    const [year, ...slugs] = `${slug.replace('.md', '')}`.split('/')
 
-    prev.push({ params: { slugs } })
+    prev.push({ params: { year, slugs } })
     return prev
-  }, [] as Array<{ params: { slugs: string[] } }>)
+  }, [] as Array<{ params: { year: string; slugs: string[] } }>)
 
   return {
     paths,
@@ -49,8 +50,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   let mdx = null
 
   if (params) {
-    const { slugs } = params
-    const slug = (slugs as string[]).join('/')
+    const { year, slugs } = params
+    const slug = [year, ...(slugs as string[])].join('/')
     const posts = await getAllPosts()
     post = posts.find(({ fields: { slug: postSlug } }) => postSlug === slug)
 

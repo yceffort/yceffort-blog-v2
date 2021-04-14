@@ -10,10 +10,7 @@ const DIR_REPLACE_STRING = '/posts'
 
 const POST_PATH = `${process.cwd()}${DIR_REPLACE_STRING}`
 
-export const getAllPosts =
-  process.env.NODE_ENV === 'production'
-    ? memoize(retreiveAllPosts)
-    : retreiveAllPosts
+export const getAllPosts: () => Promise<Array<Post>> = memoize(retreiveAllPosts)
 
 export async function getAllDraftPosts() {
   const files = getFilesRecursively(POST_PATH).reverse()

@@ -47,22 +47,23 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }
 }
 
+interface PageInterface {
+  [key: string]: string | undefined
+  id: string
+}
+
 export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const { id } = params as PageInterface
   const allPosts = await getAllPosts()
-  let posts: Array<Post> = []
-  let pageNo = 1
-  let hasNextPage = true
+  const pageNo = parseInt(id)
 
-  if (params && params.id && typeof params.id === 'string') {
-    pageNo = parseInt(params.id)
+  const startIndex = (pageNo - 1) * DEFAULT_NUMBER_OF_POSTS
+  const endIndex = startIndex + DEFAULT_NUMBER_OF_POSTS
 
-    posts = allPosts.slice(
-      (pageNo - 1) * DEFAULT_NUMBER_OF_POSTS,
-      (pageNo - 1) * DEFAULT_NUMBER_OF_POSTS + DEFAULT_NUMBER_OF_POSTS,
-    )
+  const posts = allPosts.slice(startIndex, endIndex)
 
-    hasNextPage = Math.floor(allPosts.length / DEFAULT_NUMBER_OF_POSTS) > pageNo
-  }
+  const hasNextPage =
+    Math.floor(allPosts.length / DEFAULT_NUMBER_OF_POSTS) > pageNo
 
   return {
     props: {

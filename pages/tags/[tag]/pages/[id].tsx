@@ -64,29 +64,28 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }
 }
 
+interface PageInterface {
+  [key: string]: string | undefined
+  tag: string
+  id: string
+}
+
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const allPosts = await getAllPosts()
-  let resultPosts: Array<Post> = []
-  let tag = 'javascript'
-  let pageNo = 1
-  let hasNextPage = true
+  const { tag = 'javascript', id = '1' } = params as PageInterface
+  const pageNo = parseInt(id)
 
-  if (params && params.id && typeof params.id === 'string') {
-    tag = (params.tag as string) || 'javascript'
-    pageNo = parseInt(params.id)
+  const postsWithTag = allPosts.filter((post) =>
+    post.frontMatter.tags.find((t) => t === tag),
+  )
 
-    const postsWithTag = allPosts.filter((post) =>
-      post.frontMatter.tags.find((t) => t === tag),
-    )
+  const startIndex = (pageNo - 1) * DEFAULT_NUMBER_OF_POSTS
+  const endIndex = startIndex + DEFAULT_NUMBER_OF_POSTS
 
-    const startIndex = (pageNo - 1) * DEFAULT_NUMBER_OF_POSTS
-    const endIndex = startIndex + DEFAULT_NUMBER_OF_POSTS
+  const resultPosts = postsWithTag.slice(startIndex, endIndex)
 
-    resultPosts = postsWithTag.slice(startIndex, endIndex)
-
-    hasNextPage =
-      Math.ceil(postsWithTag.length / DEFAULT_NUMBER_OF_POSTS) > pageNo
-  }
+  const hasNextPage =
+    Math.ceil(postsWithTag.length / DEFAULT_NUMBER_OF_POSTS) > pageNo
 
   return {
     props: {

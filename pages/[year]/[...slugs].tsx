@@ -19,25 +19,27 @@ export default function PostPage({
   thumbnailUrl: string
 }) {
   return (
-    mdx &&
-    post && (
-      <PostLayout frontMatter={post?.frontMatter} slug={post.fields.slug}>
-        {hydrate(mdx, {
-          components: MDXComponents,
-        })}
-      </PostLayout>
-    )
+    <PostLayout frontMatter={post?.frontMatter} slug={post.fields.slug}>
+      {hydrate(mdx, {
+        components: MDXComponents,
+      })}
+    </PostLayout>
   )
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const allPosts = await getAllPosts()
-  const paths = allPosts.reduce((prev, { fields: { slug } }) => {
-    const [year, ...slugs] = `${slug.replace('.md', '')}`.split('/')
+  const paths: Array<{
+    params: { year: string; slugs: string[] }
+  }> = allPosts.reduce<Array<{ params: { year: string; slugs: string[] } }>>(
+    (prev, { fields: { slug } }) => {
+      const [year, ...slugs] = `${slug.replace('.md', '')}`.split('/')
 
-    prev.push({ params: { year, slugs } })
-    return prev
-  }, [] as Array<{ params: { year: string; slugs: string[] } }>)
+      prev.push({ params: { year, slugs } })
+      return prev
+    },
+    [],
+  )
 
   return {
     paths,

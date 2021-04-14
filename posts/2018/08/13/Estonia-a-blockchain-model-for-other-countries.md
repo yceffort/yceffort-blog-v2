@@ -37,7 +37,7 @@ Estonia, A Blockchain Model For Other Countries?
 
 X-Road는 국가 전체의 디지털 인프라가 운영되는 오픈소스 백본이다. 2001년에 처음으로 실행된 이래 (여러번 업그레이드 되고 변경되었다.) X-Road는 세계에서 가장 큰 블록체인 회사 중 하나인 [Guardtime에서 개발한 KSI라는 블록체인](https://guardtime.com/technology)을 바탕으로 한다. 이 블록체인은 나토와 미 국방부에서도 사용되고 있다. 
 
-<iframe width="640px" height="360px" src="https://www.youtube.com/embed/9PaHinkJlvA" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<iframe width="640px" height="360px" src="https://www.youtube.com/embed/9PaHinkJlvA" frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
 
 X-Road의 주요 혁신은 결코 지우거나 다시 쓸 수 없는 분산원장을 활용하는 것이다. 이 말은 비트코인 처럼 암호화폐를 가능하게 하는 블록체인의 원리와 같다. 에스토니아에서는 분산 원장이 사람들이 데이터를 잘 제어할 수 있게 도와주며, 해당 데이터를 제어할 수 있는 중앙 권한을 박탈하게 할 수도 있다.
 

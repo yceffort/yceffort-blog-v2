@@ -19,7 +19,7 @@ template: post
 
 ## Table of Contents
 
-<iframe width="640px" height="360px" src="https://www.youtube.com/embed/X9eRLElSW1c" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<iframe width="640px" height="360px" src="https://www.youtube.com/embed/X9eRLElSW1c" frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
 
 2019년 들어서 자바스크립트를 처리하는데 드는 주요 비용은 다운로드와 CPU 실행 시간이다. 유저 인터랙션은 브라우저의 메인쓰레드가 자바스크립트를 실행하는라 바쁘다면 약간 지연 될 수 있다. 따라서 스크립스 실행 시간 및 네트워크 병목현상을 최적화 하는 것이 효과적이다.
 
@@ -123,7 +123,7 @@ JSON 문자열은 딱 한번 수행되기 때문에, `JSON.parse` 접근은 자�
 
 ![`JSON.parse`가 훨씬 더 파싱하고, 컴파일하고, 실행하기 빠르다.](https://v8.dev/_img/cost-of-javascript-2019/json.svg)
 
-<iframe width="640px" height="360px" src="https://www.youtube.com/embed/ff4fgQxPaO0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<iframe width="640px" height="360px" src="https://www.youtube.com/embed/ff4fgQxPaO0" frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
 
 ## 재 방문시 파싱과 컴파일은 어떻게 이루어 지는가?
 

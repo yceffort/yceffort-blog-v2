@@ -6,9 +6,7 @@ tags:
 published: true
 mathjax: true
 date: 2020-07-24 06:34:51
-description: "## 기수법 우리가 흔히 사용하는 숫자 1234는 다음과 같이 표현할 수 있다.  $$ 1234 = (1 \\times
-  10^3) + (2 \\times 10^2) + (3 \\times 10^1) + (3 \\times 10^0) $$  여기 나오는
-  `10`처럼 그 거듭 제곱으로 자리의 값을 취하는 숫자를 `밑` 이라고 하고, 체계의 이름은 `진법`이라는 말을..."
+description: "우리가 흔히 사용하는 숫자 1234는 다음과 같이 표현할 수 있다"
 category: programming
 slug: /2020/07/math-for-programmer-chapter2-2-notation/
 template: post
@@ -31,9 +29,7 @@ $$
 
 $$
 1101_{2} = (1 \times 2^3) + (1 \times 2^2) + (1 \times 2^1) + (1 \times 2^0)
-\\
 = ( 8 + 4 + 0 + 1)
-\\
 13_{10}
 $$
 
@@ -57,7 +53,6 @@ $$
 
 $$
 1011\space1110\space1110\space1111_{2}
-\\
 BEEF_{16}
 $$
 

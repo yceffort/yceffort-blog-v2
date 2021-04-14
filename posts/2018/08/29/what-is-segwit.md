@@ -21,7 +21,7 @@ Segwit (Segregated Witness)는 데이터 저장 방법을 변경하는 프로토
 
 개발자 Pieter Wiulle은 2015년 12월 Scaling Bitcoin 컨퍼런스에서 아이디어를 처음 발표했다.
 
-<iframe width="640px" height="360px" src="https://www.youtube.com/embed/NOYNZB5BCHM" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<iframe width="640px" height="360px" src="https://www.youtube.com/embed/NOYNZB5BCHM" frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
 
 많은 사람들은 비트코인 스케일링 문제에 대한 오랫동안 기다려온 해결책으로 굉장히 환영했다. 주 프로토콜의 최대 블록크기 1mb는 비트코인이 처리할 수 있는 트랜잭션의 수를 초당 약 7개로 제한한다. 이는 비트코인의 잠재적인 성장을 제한하고, 많은 양을 처리하는 지불 시스템이 되는 것을 막을 것이다.
 

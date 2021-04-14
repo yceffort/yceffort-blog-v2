@@ -8,7 +8,7 @@ mathjax: true
 date: 2020-07-16 06:53:30
 description:
   "```toc from-heading: 2 to-heading: 3 ``` ## 명제  명제란 참인지 거짓인지 판별할 수
-  있는 문장이나 수식을 말한다.  - 달은 지구의 위성이다 (참) - 고래는 어류다 (거짓) - $7 \\times 8 = 56$ (참) -
+  있는 문장이나 수식을 말한다.  - 달은 지구의 위성이다 (참) - 고래는 어류다 (거짓) - $7times 8 = 56$ (참) -
   $x^2 - 2x - 1 = 0$  ($x$ 값이 정해지지 않아 알수 없다. 이는 명제다 가이다.)..."
 category: programming
 slug: /2020/07/math-for-programmer-chapter1-1-logical-operation/
@@ -97,7 +97,6 @@ not(A and B)=(not A) or (not B)
 
 $$
 p \lor F \equiv p
-\\
 p \land F \equiv p
 $$
 
@@ -105,7 +104,6 @@ $$
 
 $$
 p \lor p \equiv p
-\\
 p \land p \equiv p
 $$
 
@@ -113,7 +111,6 @@ $$
 
 $$
 p \lor q \equiv q \lor p
-\\
 p \land q \equiv q \land p
 $$
 
@@ -121,7 +118,6 @@ $$
 
 $$
 (p \lor q) \lor r \equiv p \lor (q \lor r)
-\\
 (p \land q) \land r \equiv p \land (q \land r)
 $$
 
@@ -129,7 +125,6 @@ $$
 
 $$
 p \lor (q \land r) \equiv (p \lor q) \land (p \lor r)
-\\
 p \land (q \lor r) \equiv (p \land q) \lor (p \land r)
 $$
 
@@ -141,9 +136,7 @@ $$
 
 $$
 p \oplus T \equiv \lnot p
-\\
 p \oplus F \equiv \lnot p
-\\
 p \oplus p \equiv F
 $$
 
@@ -157,9 +150,7 @@ $$
 
 $$
 (p \oplus q) \oplus q
-\\
 p \oplus (q \oplus q)
-\\
 p \oplus F \equiv p
 $$
 
@@ -181,13 +172,9 @@ $$
 
 $$
 (\lnot p \lor q) \land \lnot(p \land q)
-\\
 (\lnot p \lor q) \land (\lnot p \lor \lnot q)
-\\
 \lnot p \lor (q \land \lnot q)
-\\
 \lnot p \lor F
-\\
 \lnot p
 $$
 

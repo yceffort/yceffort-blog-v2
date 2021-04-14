@@ -250,23 +250,13 @@ export default class MyDocument extends Document {
             media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
           />
           <script
-            async
-            src={`https://www.googletagmanager.com/gtag/js?id=${config.googleAnalyticsId}`}
-          />
-          <script
-            defer
             dangerouslySetInnerHTML={{
-              __html: `
-                    window.dataLayer = window.dataLayer || [];
-                    function gtag(){dataLayer.push(arguments);}
-                    gtag('js', new Date());
-
-                    gtag('config', '${config.googleAnalyticsId}', {
-                      page_path: window.location.pathname,
-                    });
-                  `,
+              __html: `window.ga=window.ga||function(){(ga.q = ga.q || []).push(arguments)}
+            ;ga.l=+new Date; ga('create', '${config.googleAnalyticsId}', 'auto'); ga('send',
+            'pageview');`,
             }}
           />
+          <script async src="https://www.google-analytics.com/analytics.js" />
           <link rel="alternate" type="application/rss+xml" href="/index.xml" />
           <link
             rel="preconnect"

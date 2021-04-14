@@ -66,7 +66,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       })
 
       thumbnailUrl = `${thumbnailHost}?${queryString}`
-      mdx = await parseMarkdownToMDX(post.body)
+      mdx = await parseMarkdownToMDX(post.body, post.path)
     }
   }
 

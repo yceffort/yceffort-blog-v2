@@ -1,3 +1,4 @@
+import sizeOf from 'image-size'
 import renderToString from 'next-mdx-remote/render-to-string'
 import remarkMath from 'remark-math'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -42,44 +43,105 @@ const tokenClassNames: { [key in TokenType]: string } = {
   comment: 'text-gray-400 italic',
 }
 
-// const imgToJSX = (_: any) => (tree: any) => {
-//   visit(
-//     tree,
-//     // only visit p tags that contain an img element
-//     (node: any) =>
-//       node.type === 'paragraph' &&
-//       node.children.some((n) => n.type === 'image'),
-//     (node) => {
-//       const imageNode = node.children.find((n) => n.type === 'image')
+const imgToJSX = (_: any) => (tree: any) => {
+  visit(
+    tree,
+    // only visit p tags that contain an img element
+    (node: any) =>
+      node.type === 'paragraph' &&
+      node.children.some((n: any) => n.type === 'image'),
+    (node: any) => {
+      const imageNode = node.children.find((n: any) => n.type === 'image')
 
-//       // only local files
-//       if (fs.existsSync(`${process.cwd()}/public${imageNode.url}`)) {
-//         const dimensions = sizeOf(`${process.cwd()}/public${imageNode.url}`)
+      // only local files
+      if (!imageNode.url.startsWith('http')) {
+        console.log(imageNode, tree)
+        const dimensions = sizeOf(`${process.cwd()}/public${imageNode.url}`)
 
-//         // Convert original node to next/image
-//         imageNode.type = 'jsx'
-//         imageNode.value = `<Image
-//           alt={\`${imageNode.alt}\`}
-//           src={\`${imageNode.url}\`}
-//           width={${dimensions.width}}
-//           height={${dimensions.height}}
-//       />`
+        // Convert original node to next/image
+        imageNode.type = 'jsx'
+        imageNode.value = `<Image
+          alt={\`${imageNode.alt}\`}
+          src={\`${imageNode.url}\`}
+          width={${dimensions.width}}
+          height={${dimensions.height}}
+      />`
 
-//         // Change node type from p to div to avoid nesting error
-//         node.type = 'div'
-//         node.children = [imageNode]
-//       }
-//     },
-//   )
-// }
+        // Change node type from p to div to avoid nesting error
+        node.type = 'div'
+        node.children = [imageNode]
+      }
+    },
+  )
+}
 
 export async function parseMarkdownToMDX(
   body: string,
+  path: string,
 ): Promise<MdxRemote.Source> {
+  const postPrefix = 'posts/'
   return renderToString(body, {
     components: MDXComponents,
     mdxOptions: {
-      remarkPlugins: [toc, slug, remarkMath],
+      remarkPlugins: [
+        toc,
+        slug,
+        remarkMath,
+        () => {
+          return (tree: any) => {
+            visit(
+              tree,
+              // only visit p tags that contain an img element
+              (node: any) =>
+                node.type === 'paragraph' &&
+                node.children.some((n: any) => n.type === 'image'),
+              (node: any) => {
+                const imageNode = node.children.find(
+                  (n: any) => n.type === 'image',
+                )
+
+                if (!imageNode.url.startsWith('http')) {
+                  const startIndex = path.indexOf(postPrefix)
+                  const endIndex = path.lastIndexOf('/')
+                  const tempImgPath = path.slice(
+                    startIndex + postPrefix.length,
+                    endIndex,
+                  )
+
+                  // /year/month/day 로 되어 있던 이미지 지원.
+                  const tempImgSplit = tempImgPath.split('/')
+                  const imgPath =
+                    tempImgSplit.length > 2
+                      ? [tempImgSplit[0], tempImgSplit[1]].join('/')
+                      : tempImgPath
+
+                  const imageIndex = imageNode.url.indexOf('/') + 1
+                  const imagePath = `${process.cwd()}/public/${imgPath}/${imageNode.url.slice(
+                    imageIndex,
+                  )}`
+
+                  const imageURL = `/${imgPath}/${imageNode.url.slice(
+                    imageIndex,
+                  )}`
+
+                  const dimensions = sizeOf(imagePath)
+
+                  imageNode.type = 'jsx'
+                  imageNode.value = `<Image
+                  alt={\`${imageNode.alt}\`}
+                  src={\`${imageURL}\`}
+                  width={${dimensions.width}}
+                  height={${dimensions.height}}
+                />`
+
+                  node.type = 'div'
+                  node.children = [imageNode]
+                }
+              },
+            )
+          }
+        },
+      ],
       rehypePlugins: [
         rehypeKatex,
         prism,

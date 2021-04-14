@@ -31,7 +31,7 @@ export const SiteConfig = {
     photo: '/profile.png',
     bio: 'frontend engineer',
     contacts: {
-      email: 'yceffort@gmail.com',
+      email: 'root@yceffort.kr',
       facebook: '',
       telegram: '',
       twitter: '',

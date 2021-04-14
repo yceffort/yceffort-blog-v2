@@ -48,7 +48,7 @@ gray_image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
 plt.imshow(gray_image, cmap='gray')
 ```
 
-![waymo-gray](../images/01.png)
+![waymo-gray](./images/01.png)
 
 ```python
 # 특정 좌표의 grayscale

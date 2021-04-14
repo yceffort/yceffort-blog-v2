@@ -210,11 +210,11 @@ setInterval(replaceThing, 1000)
 
 ### Performance
 
-![GC-1](images/GC1-performance.png)
+![GC-1](./images/GC1-performance.png)
 
 이 메뉴는 코드에서 비정상적인 메모리 사용 패턴을 발견하는데 필수적으로 사용된다.
 
-![Memory](images/GC2-Memory.png)
+![Memory](./images/GC2-Memory.png)
 
 앞으로 자주 봐야하는 메뉴다. Memory 메뉴에서 스냅샷을 찍을 수 있고, 자바스크립트 코드의 메모리 사용량을 볼 수도 있다. 또한 시간에 따라 메모리 할당을 기록할 수도 있다. `summary`와 `comparison`을 사용하면 된다.
 
@@ -253,7 +253,7 @@ function grow() {
 
 `Performance` 메뉴를 통해 쉽게 탐지할 수 있다.
 
-![](images/GC3-example.png)
+![](./images/GC3-example.png)
 
 이 스크린샷에서 볼 수 있듯이, 메모리 누수가 있다는 것을 보여주는 요소가 두가지 있다. 초록선 (nodes)와 파란선 (JS Heap) 이다. 노드들이 꾸준히 증가하면서 감소하지 않는데, 이것이 가장 큰 징후다.
 
@@ -265,17 +265,17 @@ JS Heap 그래프도 역시 메모리 사용이 증가되고 있음을 보여준
 
 어디에서 메모리 누수가 생기는지 찾기 위해, 크롬 개발자 도구의 Memory 메뉴를 사용할 것이다. 이번 단계를 수행하기 위해, 위 단계에서 크롬 예제 페이지를 새로고침하고, `Take Heap Snapshot`을 수행해보자. 그리고, 버튼을 누른 다음에 좀 기다린 후에 두번 째 스냅샷을 생성한다.
 
-![](images/GC4-comparison.png)
+![](./images/GC4-comparison.png)
 
 이제 비교할 수 있는 방법이 두가지 있다. `Summary`를 선택 한 다음, `Objects Allocated between Snapshot 1 and Snapshot`를 선택하거나, `Summary`대신 `Comparison`을 선택하면 된다.
 
 여기에서는 쉽게 찾을 수 있다.
 
-![](images/GC5.png)
+![](./images/GC5.png)
 
 `(string)`을 살펴보면, `xxxxxxxxx....` 새로운 객체 들이 할당되어 있지만, 해제 되지 않아 많은 메모리를 잡아먹고 있음을 알 수 있다.
 
-![](images/GC6.png)
+![](./images/GC6.png)
 
 그리고 이 배열은 `window`객체의 `x` 변수로 참조되어 있다고 나온다. 이는 수집 되지 않은 루트 `(window)`에 큰 사이즈의 객체가 참조되어 있음을 알려주었다. 이렇게 메모리 누수와 그 위치를 발견했다.
 
@@ -285,7 +285,7 @@ JS Heap 그래프도 역시 메모리 사용이 증가되고 있음을 보여준
 
 ### Recording Heap allocations to find leaks
 
-![](images/GC7.png)
+![](./images/GC7.png)
 
 새로 고침 후에, create snapshot 대신 `Allocation instrumentation on Timeline` 으로 해보자. 기록이 진행되는 동안, 상단에 위 스크린샷 처럼 파란색 기둥 모양 그래프가 생기는 것을 볼 수 있다. 이것은 메모리 할당을 나타낸다. 매초마다 큰 할당이 이뤄지는 것을 볼 수 있다.
 
@@ -295,7 +295,7 @@ JS Heap 그래프도 역시 메모리 사용이 증가되고 있음을 보여준
 
 ### 또다른 유용한 기능
 
-![](images/GC8.png)
+![](./images/GC8.png)
 
 `Summary`대신 `allocation`을 선택하면, 함수와 관련된 메모리 할당을 보여준다. 화면에서 `grow`와 `createSomeNodes`함수가 있는것이 보일 것이다. 해당 함수를 클릭하면 해당 함수와 관련된 객체 목록을 하단에서 볼 수 있다. 여기에서는 이미 메모리 누수의 원인으로 밝혀진 `(string)` `HTMLDivElement` `Text` 등이 있는 것을 볼 수 있다.
 

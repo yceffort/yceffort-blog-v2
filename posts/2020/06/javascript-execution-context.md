@@ -185,7 +185,7 @@ function foo() {
 foo()
 ```
 
-![scope-chain](images/scope-chain.png)
+![scope-chain](./images/scope-chain.png)
 
 ### this
 
@@ -216,7 +216,7 @@ foo('hello')
 
 ### 1. 전역 객체 생성
 
-![EC1](images/EC1.png)
+![EC1](./images/EC1.png)
 
 위 스샷에서 볼 수 있는 것처럼, 전역 객체 (global object, 여기서는 window)가 생성된 것을 볼 수 있다. 그리고 이 객체에 있는 프로퍼티는 어디에서든 접근할 수 있다. 그리고 이 window에는 온갖 빌트인 객체, DOM, BOM 등이 설정되어 있는 것을 볼 수 있다.
 
@@ -244,7 +244,7 @@ ECStack = [globalContext -> {VO, SC, this}];
 2. 함수 선언을 대상으로 함수명이 value object의 프로퍼티로, 생성된 함수 객체가 값으로 설정된다. = **함수의 호이스팅**
 3. 변수 선언을 대상으로 변수명이 value object의 프로퍼티로, undefined가 값으로 설정된다. = **변수의 호이스팅**
 
-![EC2](images/EC2.png)
+![EC2](./images/EC2.png)
 
 위 스샷을 보자.
 
@@ -256,7 +256,7 @@ ECStack = [globalContext -> {VO, SC, this}];
 
 그 다음 눈여겨 봐야 할 것은 함수 선언 처리다. 생성된 함수 객체는 `[[Scopes]]` 프로퍼티를 갖게 된다. 이는 함수만이 소유하는 프로퍼티로, **함수 객체가 실행되는 환경**을 가리킨다.
 
-![EC3](images/EC3.png)
+![EC3](./images/EC3.png)
 
 여기에서 foo함수는 `[[Scopes]]`로 Global을 가르키고 있다. 근데 잠깐, 이거 어디서 본것 같은데, 싶었는데 여기서 0번의 `Global`은 스코프 체인의 0번에 있는 Global과 같다. 우리는 여기서 `[[Scopes]]`가 함수 객체가 실행되는 환경을 가지고 있다는 것을 알 수 있다.
 
@@ -351,35 +351,35 @@ y에 2를 할당하기 위해, 스코프 체인을 탐색하면서 검색한다.
 
 bar함수를 실행하기 시작하면, 새로운 실행 컨텍스트가 생성된다.여기서도 역시 마찬가지로 스코프 체인 생성 및 초기화, Variable Instantiation 실행, this value 결정이 순차적으로 실행된다.
 
-![1](images/EC/EC.001.jpeg)
-![2](images/EC/EC.002.jpeg)
-![3](images/EC/EC.003.jpeg)
-![4](images/EC/EC.004.jpeg)
-![5](images/EC/EC.005.jpeg)
-![6](images/EC/EC.006.jpeg)
-![7](images/EC/EC.007.jpeg)
-![8](images/EC/EC.008.jpeg)
-![9](images/EC/EC.009.jpeg)
-![10](images/EC/EC.010.jpeg)
-![11](images/EC/EC.011.jpeg)
-![12](images/EC/EC.012.jpeg)
-![13](images/EC/EC.013.jpeg)
-![14](images/EC/EC.014.jpeg)
-![15](images/EC/EC.015.jpeg)
-![16](images/EC/EC.016.jpeg)
-![17](images/EC/EC.017.jpeg)
-![18](images/EC/EC.018.jpeg)
-![19](images/EC/EC.019.jpeg)
-![20](images/EC/EC.020.jpeg)
-![21](images/EC/EC.021.jpeg)
-![22](images/EC/EC.022.jpeg)
-![23](images/EC/EC.023.jpeg)
-![24](images/EC/EC.024.jpeg)
-![25](images/EC/EC.025.jpeg)
-![26](images/EC/EC.026.jpeg)
-![27](images/EC/EC.027.jpeg)
-![28](images/EC/EC.028.jpeg)
-![29](images/EC/EC.029.jpeg)
-![30](images/EC/EC.030.jpeg)
-![31](images/EC/EC.031.jpeg)
-![32](images/EC/EC.032.jpeg)
+![1](./images/EC/EC.001.jpeg)
+![2](./images/EC/EC.002.jpeg)
+![3](./images/EC/EC.003.jpeg)
+![4](./images/EC/EC.004.jpeg)
+![5](./images/EC/EC.005.jpeg)
+![6](./images/EC/EC.006.jpeg)
+![7](./images/EC/EC.007.jpeg)
+![8](./images/EC/EC.008.jpeg)
+![9](./images/EC/EC.009.jpeg)
+![10](./images/EC/EC.010.jpeg)
+![11](./images/EC/EC.011.jpeg)
+![12](./images/EC/EC.012.jpeg)
+![13](./images/EC/EC.013.jpeg)
+![14](./images/EC/EC.014.jpeg)
+![15](./images/EC/EC.015.jpeg)
+![16](./images/EC/EC.016.jpeg)
+![17](./images/EC/EC.017.jpeg)
+![18](./images/EC/EC.018.jpeg)
+![19](./images/EC/EC.019.jpeg)
+![20](./images/EC/EC.020.jpeg)
+![21](./images/EC/EC.021.jpeg)
+![22](./images/EC/EC.022.jpeg)
+![23](./images/EC/EC.023.jpeg)
+![24](./images/EC/EC.024.jpeg)
+![25](./images/EC/EC.025.jpeg)
+![26](./images/EC/EC.026.jpeg)
+![27](./images/EC/EC.027.jpeg)
+![28](./images/EC/EC.028.jpeg)
+![29](./images/EC/EC.029.jpeg)
+![30](./images/EC/EC.030.jpeg)
+![31](./images/EC/EC.031.jpeg)
+![32](./images/EC/EC.032.jpeg)

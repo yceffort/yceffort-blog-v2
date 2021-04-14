@@ -14,7 +14,7 @@ To Blockchain Or Not To Blockchain
 
 [원문](https://www.forbes.com/sites/dantedisparte/2018/11/12/to-blockchain-or-not-to-blockchain/#72b2ff0273cb)
 
-![blockchain-or-not](../images/blockchain-or-not.jpeg)
+![blockchain-or-not](../images/blockchain-or-not.jpg)
 
 
 많은 사람들은 블록체인과 암호화에 대한 열정이 사라지고 있다고 주장하고 있다. 실제로, [Gartner의 과대 광고 주기](https://www.gartner.com/smarterwithgartner/5-trends-emerge-in-gartner-hype-cycle-for-emerging-technologies-2018/) 에 따르면, 블록체인은 초기 암호 화폐 투기꾼이 가격을 널뛰기 시켰지만, 현재는 가격이 안정되어 가며  환멸의 늪으로 빠져들고 있다. 만약 암호화폐의 블록체인 거품이 터졌다면, 이 세상을 바꾸는 기술의 약속은 여기서 어디로 갈까? 이 기술에 대한 우리의 생각과, 디지털 혁신이 필요로 하는 암묵적인 변화에 대한 우리의 생각을 정리할 때인가? 블록체인은 테슬라가 오기 전에 40년 동안만 잠복해 있을 수 있는 초기 전기 자동차 프로토타입의 길을 갈 것인가? 클라우드 기반 스프레드시트가 블록체인 것처럼 가장할 경우 기술 투자 가치에 대한 열의가 높아지는가? 많은 의문점들이 남아있지만, 한가지 확실한 것은, 완전히 블록체인을 이용하는 것은 기술과 관련이 없고 경영 사고와 가능한 기술의 발전과 더 관련이 있다는 것이다.

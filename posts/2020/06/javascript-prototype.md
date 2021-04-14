@@ -24,7 +24,7 @@ var obj = { a: 'hello' }
 console.dir(obj)
 ```
 
-![proto](images/proto1.png)
+![proto](./images/proto1.png)
 
 ## 속성 상속
 
@@ -86,7 +86,7 @@ function dummy() {}
 console.dir(dummy.prototype)
 ```
 
-![](images/proto2.png)
+![](./images/proto2.png)
 
 여기에 속성을 추가해보자.
 
@@ -96,7 +96,7 @@ dummy.prototype.foo = 'bar'
 console.dir(dummy.prototype)
 ```
 
-![](images/proto3.png)
+![](./images/proto3.png)
 
 foo가 `bar`값으로 추가된 것을 볼 수 있다.
 
@@ -108,7 +108,7 @@ d.hello = 'world'
 console.log(d)
 ```
 
-![](images/proto4.png)
+![](./images/proto4.png)
 
 1. d 의 속성에 접근할 때, 브라우저는 우선 d가 그 속성을 가지고 있는지 확인한다.
 2. 만약 d가 해당 속성을 가지고 있지 않다면, `d.__proto__` (`dummy.prototype`)이 그 속성을 가지고 있는지 확인한다.
@@ -215,7 +215,7 @@ var bar = P('Lee')
 console.dir(bar)
 ```
 
-![](images/proto5.png)
+![](./images/proto5.png)
 
 ### [[prototype]]
 
@@ -321,4 +321,4 @@ console.log(
 )
 ```
 
-![프로토타입 정리](images/proto.001.jpeg)
+![프로토타입 정리](./images/proto.001.jpeg)

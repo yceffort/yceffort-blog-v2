@@ -107,7 +107,7 @@ CSSOM이 생성되기 전까지, 브라우저는 처리되는 모든 컨텐츠�
 
 해당 렌더링 경로를 측정하는 좋은 방법은 `LightHouse`를 이용하는 것이다.
 
-![높은 우선순위를 가지고 로딩되는 리소스를 보여준다.](images/naver-critical-request.png)
+![높은 우선순위를 가지고 로딩되는 리소스를 보여준다.](./images/naver-critical-request.png)
 
 또는 [Navigation Timing API](https://developer.mozilla.org/ko/docs/Navigation_timing)를 활용하여 측정할 수도 있다.
 
@@ -161,7 +161,7 @@ interactive: 229ms, dcl: 230ms, complete: 956ms
 
 [예제 페이지](https://googlesamples.github.io/web-fundamentals/fundamentals/performance/critical-rendering-path/basic_dom_nostyle.html)를 통해 분석을 시작해보자.
 
-![example1.png](images/example.png)
+![example1.png](./images/example.png)
 
 `DOMContentLoaded`가 호출되는데 약 300ms 정도가 소요되었다. 그리고 이는 파란색 수직선으로 체크 되었다. 이미지 로딩은 이에 영향을 받지 않았다. 주요 렌더링 경로에는 HTML, CSS, 자바스크립트만 포함된다.
 
@@ -185,13 +185,13 @@ interactive: 229ms, dcl: 230ms, complete: 956ms
 </html>
 ```
 
-![example2.png](images/example2.png)
+![example2.png](./images/example2.png)
 
 `DOMContentLoaded`가 거의 `onload`와 동시에 호출된 것을 알 수 있다. 일반적인 HTML과는 다르게, CSSOM을 생성하기 위해 CSS 파일도 가져와야 한다. 또한 파서 차단 자바스크립트가 포함되어 있어 CSS 파일이 다운로드 될때까지 차단되어 있는 것을 볼 수 있다.
 
 [이번엔 `async` 키워드를 추가해보자.](https://googlesamples.github.io/web-fundamentals/fundamentals/performance/critical-rendering-path/measure_crp_async.html)
 
-![example3.png](images/example3.png)
+![example3.png](./images/example3.png)
 
 이번에는 HTML이 파싱된 이후에 `domContentLoaded`가 실행된 것을 볼 수 있다. 브라우저가 자바스크립트를 차단하지 않는다는 것을 알게 되었고, 다른 파서 차단 스크립트가 없으므로 CSSDOM 생성 또한 동시에 처리 가능하다.
 

@@ -159,6 +159,6 @@ io.on("connection", function(socket) {
 </script>
 ```
 
-![chat-example](images/chat-example.png)
+![chat-example](./images/chat-example.png)
 
 기본적인 채팅기능은 만들었지만, 실제 활용하기엔 조금 거리가 있다. 소켓서버와 채팅서버가 같이있고, 채팅방도 단 하나 뿐이다. 다음 예제에서는 koa와 함께 소켓서버를 따로 구축하고, 채팅 (frontend)과 분리해서 여러개의 채팅방을 만드는 예제를 해보려고 한다.

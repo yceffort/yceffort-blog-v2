@@ -17,3 +17,7 @@
 html {
   scroll-behavior: smooth;
 }
+
+a {
+  word-break: break-all;
+}

@@ -1,24 +1,10 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
     "module": "commonjs",
     "moduleResolution": "node",
     "target": "es2017",
     "strict": true,
-    "baseUrl": "src",
-    "outDir": "dist",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "sourceMap": true,
-    "noEmit": true,
-    "strictPropertyInitialization": false,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "lib": ["es2017", "dom", "esnext.array"],
-    "typeRoots": ["./typings", "./node_modules/@types"],
-    "paths": {
-      "#commons/*": ["common/*"]
-    }
-  },
-  "exclude": ["node_modules", "**/*spec.ts", "./src/**/*.tsx"],
-  "include": ["./src/**/*.ts", "./typings"]
+    "lib": ["es2017", "dom", "esnext.array"],    
+  }
 }

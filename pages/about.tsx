@@ -3,6 +3,7 @@ import React from 'react'
 import SiteConfig from '#src/config'
 import { PageSeo } from '#components/SEO'
 import SocialIcon from '#components/icons'
+import CustomLink from '#components/Link'
 
 export default function About() {
   return (
@@ -20,11 +21,11 @@ export default function About() {
         </div>
         <div className="items-start space-y-2 xl:grid xl:grid-cols-3 xl:gap-x-8 xl:space-y-0">
           <div className="flex flex-col items-center pt-8 space-x-2">
-            {/* <img
-              src={siteMetadata.image}
+            <img
+              src={SiteConfig.author.photo}
               alt="avatar"
               className="w-48 h-48 rounded-full"
-            /> */}
+            />
             <h3 className="pt-4 pb-2 text-2xl font-bold leading-8 tracking-tight">
               {SiteConfig.author.name}
             </h3>
@@ -41,16 +42,27 @@ export default function About() {
                 kind="github"
                 href={SiteConfig.author.contacts.github}
               />
-              {/* <SocialIcon kind="facebook" href={siteMetadata.facebook} />
-              <SocialIcon kind="youtube" href={siteMetadata.youtube} />
-              <SocialIcon kind="linkedin" href={siteMetadata.linkedin} />
-              <SocialIcon kind="twitter" href={siteMetadata.twitter} /> */}
             </div>
           </div>
           <div className="pt-8 pb-8 prose dark:prose-dark max-w-none xl:col-span-2">
-            <p>I am</p>
-            <p>Kim</p>
-            <p>yongchan</p>
+            <p>Hello, I am a front-end developer working in Korea.</p>
+            <p>
+              I&apos;m shy about introducing myself, so I&apos;ll replace this
+              section with the Beatles&apos; &quot;Yesterday.&quot;
+            </p>
+            <p>
+              Yesterday All my troubles seemed so far away Now it looks as
+              though they&apos;re here to stay Oh, I believe in yesterday
+              Suddenly I&apos;m not half the man I used to be There&apos;s a
+              shadow hanging over me Oh, yesterday came suddenly Why she had to
+              go I don&apos;t know, she wouldn&apos;t say I said something wrong
+              Now I long for yesterday
+            </p>
+            <p>
+              <CustomLink href="https://www.notion.so/yceffort/9fc4262c01744a63a849cdccdde5c85f">
+                Resume in Notion
+              </CustomLink>
+            </p>
           </div>
         </div>
       </div>

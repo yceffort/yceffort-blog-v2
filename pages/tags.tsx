@@ -1,7 +1,7 @@
 import { GetStaticProps } from 'next'
 import React from 'react'
 
-import { getAllTagsFromPosts } from '#utils/Markdown'
+import { getAllTagsFromPosts } from '#utils/posts'
 import { PageSeo } from '#components/SEO'
 import SiteConfig from '#src/config'
 import Tag from '#components/Tag'

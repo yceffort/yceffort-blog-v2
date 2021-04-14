@@ -15,7 +15,7 @@ How Blockchain Technology Will Impact the Digital Economy
 
 [원문](https://www.law.ox.ac.uk/business-law-blog/blog/2017/04/how-blockchain-technology-will-impact-digital-economy)
 
-<iframe width="640px" height="360px" src="https://www.youtube.com/embed/ToZG0Ij7UcQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<iframe width="640px" height="360px" src="https://www.youtube.com/embed/ToZG0Ij7UcQ" frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
 
 ## 미래의 플랫폼
 

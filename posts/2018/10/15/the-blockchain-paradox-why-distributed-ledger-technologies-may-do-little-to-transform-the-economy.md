@@ -20,7 +20,7 @@ template: post
 
 저 (Vili Lehdonvirta 교수 지칭) 는 최근에 "분산 원장 기술의 지배구조 문제"라는 제목으로 Alan Turing Institute (ATI)에서 강연을 했다. 제 강연의 시작점은 블록체인 기술이 금융 서비스나 정부와 같은 "디지털 기록 유지에 의존하는 산업들을 혁명화시킬 것"이라고 종종 주장했다. 이 강연에서 저는 기본적인 제도적 경제학을 적용하여 블록체인 기술이 실제로 경제 조직 측면에서 어떤 역할을 하는지, 그리고 이것이 어떤 문제를 야기하는지 조사했다. 이 에세이에서 나는 그 주장의 간략한 버전을 제시합니다. 또는 아래 비디오를 볼 수 있다.
 
-<iframe width="640px" height="360px" src="https://www.youtube.com/embed/eNrzE_UfkTw" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe> 
+<iframe width="640px" height="360px" src="https://www.youtube.com/embed/eNrzE_UfkTw" frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe> 
 
 첫째, 블록체인(blockchain)의 정확한 의미에 대해 상당한 혼란이 있다는 점을 유념할 필요가 있다. 사람들이 "블록체인"에 대해 이야기할 때, 그들은 종종 비트코인 블록체인, 2009년에 시작되어 비트코인 P2P 네트워크를 형성하는 약 5,000대의 컴퓨터에 의해 유지되고 있는 거래의 선두주자인 비트코인이라고 언급한다. blockchain이라는 용어는 동일한 기술의 다른 인스턴스나 포크를 가리키는 데 사용될 수도 있다. 최근 DLT(Distributed Ladger Technology)라는 명칭도 관련 기술에 대한 보다 일반적인 명칭으로 통용되고 있다.
 

@@ -47,7 +47,7 @@ Denaro의 뒤에 있는 실체를 확인할 수 없었고, 그 회사에 연락�
   height="503"
   style="border:none;overflow:hidden"
   scrolling="no"
-  frameborder="0"
+  frameBorder="0"
   allowTransparency="true"
   allow="encrypted-media"
 ></iframe>

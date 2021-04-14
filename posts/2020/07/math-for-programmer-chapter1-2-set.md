@@ -83,7 +83,6 @@ $$
 
 $$
 ( A \cup B )^c = \{ x | \lnot(x \in A \lor x \in B) \} = \{ x | (x \notin A) \land (x \notin B) \} = A^c \cap B^c
-\\
 ( A \cap B )^c = \{ x | \land (x \in A \land x \in B) \} = \{ x | (x \notin A) \lor (x \notin B) \} = A^c \cup B^c
 $$
 
@@ -91,9 +90,7 @@ $$
 
 $$
 B \cup A = \{ x | x \in B ) \lor (x \in A) \} = A \cup B
-\\
 B \cap A = \{ x | x \in B ) \land (x \in A) \} = A \cap B
-\\
 B-A = B \cap A^c \not = A \cap B^c = A-B
 $$
 
@@ -101,11 +98,8 @@ $$
 
 $$
 (A \cup B) \cup C = A \cup (B \cup C)
-\\
 (A \cap B) \cap C = A \cap (B \cap C)
-\\
 (A - B) - C = (A \cap B^c) - C = A \cap B^c \cap C^c
-\\
 A - (B - C) = A - (B \cap C^c) = A \cap (B \cap C^c)^c = A \cap (B^c \cup C)
 $$
 
@@ -113,6 +107,5 @@ $$
 
 $$
 A \cup (B \cap C) = (A \cup B) \cap (A \cup C)
-\\
 A \cap (B \cup C) = (A \cap B) \cup (A \cap C)
 $$

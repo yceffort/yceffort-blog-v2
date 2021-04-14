@@ -34,7 +34,7 @@ Welcome to the blockchain nation
 
 이 디지털 인프라 기술은 놀라울 정도로 인상적입니다. PKI(Public Key Infrastructure)및 eID 시스템은 고급 암호화 기술을 기반으로 하며 2단계 인증을 거치고 있습니다. 데이터는 분산되어 있지만 중복되어 있지 않고, X-Road덕분에 안전하게 공유됩니다. 아래 비디오에서 더 많은 것을 확인할 수 있습니다.
 
-<iframe src="https://www.youtube.com/embed/9PaHinkJlvA" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/9PaHinkJlvA" frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
 
 이러한 서비스 중 몇가지에 통합된 혁신 중 하나는 지우거나 다시 쓸 수 없는 분산 원장입니다. 이러한 종류의 원장 기술은 이제 '블록체인'이라고 알려져 있으며, 비트코인 및 이더리움과 같은 암호 통화과 중앙에서 별도의 권한 없이도 작동할 수 있게 하는 역할로도 유명합니다.
 

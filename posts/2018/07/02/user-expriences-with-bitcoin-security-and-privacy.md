@@ -30,7 +30,7 @@ The Other Side of the Coin: User Experiences with Bitcoin Security and Privacy
 
 또한 익명으로 남는 다는 것에 대한 오해가 생각보다 많은 사용자에게 나타나는 것도 발견되었다. 또한 사용자의 25%가 보안으로 취약한 '토르 위에서 비트코인을 사용'하는 것으로 나타났다. 참고([Bitcoin over Tor isn't a good idea](https://arxiv.org/abs/1410.6079)). 그리고 이미 사용자의 22.5%가 보안 침해로 인해 비트코인을 잃어버렸다고 이야기 했다. 이 중 절반 가량은 이 손실을 자신들의 잘못으로 여기고 있고, 대다수는 그 잃어버린 자산을 영원히 되찾지 못했다.
 
-<iframe width="640px" height="360px" src="https://www.youtube.com/embed/gd5NZvsyAfw" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<iframe width="640px" height="360px" src="https://www.youtube.com/embed/gd5NZvsyAfw" frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
 
 이 연구에서 이뤄진 조사
 

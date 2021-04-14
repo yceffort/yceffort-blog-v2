@@ -71,7 +71,7 @@ console.log(add10(2))
 
 `add`함수는, `x`를 인자로 받아서 새로운 내부 함수를 반환한다. 이 내부 함수는 `z`를 받아서 `x+y+z`를 반환한다. `add5`와 `add10`은 모두 클로저다. 이 두 함수의 결과는 어떻게 될까?
 
-첫번째 선언 `let add5 = add(5)`에서 일단 x가 5로 할당이 되었다. 그리고 두번째 `add5(2)`에서는 z가 2로 할당이 되었다. 그리고 y가 두군데 할당이 되어있으므로, 내부를 우선시하여 y는 100이다. 따라서 $$ x+y+z=5+100+2=107 $$이 된다. 마찬가지로, `add10`은 $$ x+y+z=10+100+2=112 $$가 된다.
+첫번째 선언 `let add5 = add(5)`에서 일단 x가 5로 할당이 되었다. 그리고 두번째 `add5(2)`에서는 z가 2로 할당이 되었다. 그리고 y가 두군데 할당이 되어있으므로, 내부를 우선시하여 y는 100이다. 따라서 $$x+y+z=5+100+2=107$$ 이 된다. 마찬가지로, `add10`은 $$x+y+z=10+100+2=112$$가 된다.
 
 본질적으로, 이 두개는 같은 함수의 본문을 정의하지만, 서로 다른 환경을 저장한다. 이는 클로저가 리턴된 후에도 외부 함수의 변수에 접근이 가능하다는 것을 보여주며, 단순히 값 형태로 전달되는 것이 아니라는 것을 의미한다.
 
@@ -131,25 +131,25 @@ counter.value()
 
 ### 루프에서의 클로저
 
-<iframe width="640px" height="360px" width="100%" height="600" src="//jsfiddle.net/yceffort/n23uLwak/embedded/js,html,result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+<iframe width="640px" height="360px" width="100%" height="600" src="//jsfiddle.net/yceffort/n23uLwak/embedded/js,html,result/dark/" allowFullScreen="allowFullScreen" frameBorder="0"></iframe>
 
 이 함수는 생각처럼 작동하지 않는다. 그 이유는 `onfcus`에 연결된 함수가 클로저이기 때문이다. 이 클로저는 `setupHelp()` 함수범위에서 캡쳐된 환경으로 구성된다. 루프에서 세개의 세개의 클로저가 만들어졌지만, 각 클로저는 값이 변하는 변수 `item.help`가 있는 단일 환경을 공유한다. 따라서 계속해서 마지막 변수를 가르키게 되는 것이다.
 
 첫번째 해결방안은 `showHelp()`를 감싸는 클로저를 만드는 것이다.
 
-<iframe width="640px" height="360px" width="100%" height="600" src="//jsfiddle.net/yceffort/tn5o29hv/embedded/js,html,result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+<iframe width="640px" height="360px" width="100%" height="600" src="//jsfiddle.net/yceffort/tn5o29hv/embedded/js,html,result/dark/" allowFullScreen="allowFullScreen" frameBorder="0"></iframe>
 
 `showHelp()`는 여전히 단일 환경에서 작동하지만, `makeHelpCallback()`는 매번 새로운 클로저를 만들어서 새로운 환경을 형성한다.
 
 아니면 즉시실행익명함수를 만들어서 for 구문내의 환경이 별로 즉시로 실행되게 하는 방법도 있을 수 있다.
 
-<iframe width="640px" height="360px" width="100%" height="600" src="//jsfiddle.net/yceffort/toc4mkbw/embedded/js,html,result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+<iframe width="640px" height="360px" width="100%" height="600" src="//jsfiddle.net/yceffort/toc4mkbw/embedded/js,html,result/dark/" allowFullScreen="allowFullScreen" frameBorder="0"></iframe>
 
 반드시 for 구문 내의 로직을 즉시실행함수로 감싸서 별도의 환경으로 구성되게 해야 한다.
 
 아니면 let을 사용하여 `item`변수의 범위자체를 for문 내로 제한할 수도 있다.
 
-<iframe width="640px" height="360px" width="100%" height="600" src="//jsfiddle.net/yceffort/7v0Lrswb/embedded/js,html,result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+<iframe width="640px" height="360px" width="100%" height="600" src="//jsfiddle.net/yceffort/7v0Lrswb/embedded/js,html,result/dark/" allowFullScreen="allowFullScreen" frameBorder="0"></iframe>
 
 ### 성능
 

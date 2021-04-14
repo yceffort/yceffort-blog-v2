@@ -34,7 +34,7 @@ Drivechain: Enabling Bitcoin Sidechains
 
 대신, 사이드체인은 모두 동일한 비트코인 토큰을 활용하는 alt-chain (대안체인)이다. 이들은 코인이 없이 시작한다. 이들은 비트코인 예금을 수락하고, 비트코인 이전을 수락하며, 비트코인 출금을 분배한다.
 
-<iframe width="640px" height="360px" src="https://www.youtube.com/embed/gUbGT70wy5k" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<iframe width="640px" height="360px" src="https://www.youtube.com/embed/gUbGT70wy5k" frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
 
 ![meme1](http://www.drivechain.info/media/meme1.png)
 ![meme2](http://www.drivechain.info/media/meme2.png)

@@ -78,7 +78,6 @@ function solution(n) {
 
 $$
 A = G \times a
-\\
 B = G \times b
 $$
 
@@ -86,7 +85,6 @@ A, B의 배수들을 구하면 다음과 같은 모양이 될 것이다.
 
 $$
 A : (G \times a) \times (1, 2, 3 ... )
-\\
 B : (G \times b) \times (1, 2, 3 ... )
 $$
 
@@ -94,7 +92,6 @@ $$
 
 $$
 A: (G \times a) \times b
-\\
 B: (G \times b) \times a
 $$
 

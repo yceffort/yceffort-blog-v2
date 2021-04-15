@@ -208,7 +208,7 @@ new ModuleFederationPlugin({
 
 의존성 중복이 존재하지 않는다. `shared` 옵션에 나와있듯, `remote`는 `host`의 의존성에 의존하게 된다. 만약 호스트에 해당 의존성이 존재하지 않는다면, 리모트는 알아서 다운로드 할 것이다.
 
-`vendor`나ㅣ 다른 모듈을 `shared`에 추가하는 것은 확장성에 그다지 좋지 못하다. `AutomaticModuleFederationPlugin`를 제공하여, 웹팩 코어 외부에 있는 코드들을 관리할 수 있도록 할 것이다.
+`vendor`나 다른 모듈을 `shared`에 추가하는 것은 확장성에 그다지 좋지 못하다. `AutomaticModuleFederationPlugin`를 제공하여, 웹팩 코어 외부에 있는 코드들을 관리할 수 있도록 할 것이다.
 
 ## Server Side Rendering
 

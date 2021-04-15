@@ -16,7 +16,7 @@ Gzip은 웹 압축에 있어서 일종의 디 팩토 같이 자리잡고 있다.
 
 ![gzip-vs-brotli](https://csswizardry.com/wp-content/uploads/2020/04/react-dom-brotli.png)
 
-그리고 이전에 말했듯이, IE에서는 brotli를 지원하지ㄷ 않지만, 현재 사이트의 93%가 IE외의 환경에서 서비스 되므로 대부분의 사용자에게 brotli를 이용하여 서비스 할 수 있다. 6%는 무시하라는 말처럼 들릴 수도 있지만(?) brotli를 받아줄 수 없는 브라우저의 경우 gzip으로 fallback 되게 할 수 있다. 이는 나중에 다룬다.
+그리고 이전에 말했듯이, IE에서는 brotli를 지원하지 않지만, 현재 사이트의 93%가 IE외의 환경에서 서비스 되므로 대부분의 사용자에게 brotli를 이용하여 서비스 할 수 있다. 6%는 무시하라는 말처럼 들릴 수도 있지만(?) brotli를 받아줄 수 없는 브라우저의 경우 gzip으로 fallback 되게 할 수 있다. 이는 나중에 다룬다.
 
 그런데 왜, 많은 사이트들이 brotli를 사용하지 않는 것일까? brotli로 전환하는 것은 얼마나 중요한 것일까?
 
@@ -99,7 +99,7 @@ gzip에 비해 brotli가 갖는 이점은 미미하다.
 brotli를 활성화 하는 것이 CDN 관리자 메뉴의 버튼 하나를 누르는 것 만큼 간단하다면 지금 바로 실행하는 것이 좋다. 최소한의 개선이라도 없는 것보단 낫고, fallback 제공도 잘 되어 있다.
 
 가능한 경우 정적 자산의 경우 가능한 가장 큰 압축 수준을 사용하며, 동적인 요소에 대해서는 중간 정도의 압축을 해주는 것이 좋다. 만약 nginx 를 사용중이라면, 현재 압축수준이 1로 (기본값으로) 되어 있는지 확인해보는 것이 좋다.
-
+ 
 brotli를 구현하기 위해 너무 애쓸 필요는 없다. 압축할 수 있는 모든 항목에 대해 gzip이 제공되고 있다면, 그것만으로도 충분할 수 있다.
 
 출처: https://csswizardry.com/2020/04/real-world-effectiveness-of-brotli/#smaller-doesnt-necessarily-mean-faster

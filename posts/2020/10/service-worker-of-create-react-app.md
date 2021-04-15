@@ -289,7 +289,7 @@ module.exports = function override(config, env) {
         swDest: 'service-worker.js',
       })
     }
-    ㄴ
+    
     return plugin
   })
   return config

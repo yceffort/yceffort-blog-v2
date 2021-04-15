@@ -28,7 +28,7 @@ Blockchain, Once Seen as a Corporate Cure-All, Suffers Slowdown
 ![betting-on-blockchain](../images/betting-on-blockchain.png)
 
 
-지금까지 IBM과 마이크로소프트는 전ㅊ체 블록체인 지출의 절반이상을 차지해왔다. 블록체인은 변조 방지 디지털 원장을 제공하기 위하여 고안되었다. 그러나 이 기술은 실제 상황에서 채택하기가 어려운 것으로 입증된 경우가 더 많다.
+지금까지 IBM과 마이크로소프트는 전체 블록체인 지출의 절반이상을 차지해왔다. 블록체인은 변조 방지 디지털 원장을 제공하기 위하여 고안되었다. 그러나 이 기술은 실제 상황에서 채택하기가 어려운 것으로 입증된 경우가 더 많다.
 
 ### 과대광고와 현실 사이
 

@@ -86,7 +86,7 @@ https://codesandbox.io/s/tab-communications-2-braodcast-channel-m50d6
 
 ![example2](./images/tab-communication-2.gif)
 
-다만 문제점은 [Broadcast Channel Api는 너무 힙한 나머지 사파리와 IE에서 쓸 수 없다는 점](https://caniuse.com/broadcastchannel)ㅣ다.
+다만 문제점은 [Broadcast Channel Api는 너무 힙한 나머지 사파리와 IE에서 쓸 수 없다는 점](https://caniuse.com/broadcastchannel)다.
 
 ## Service Worker
 

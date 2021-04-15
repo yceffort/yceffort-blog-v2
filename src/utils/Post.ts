@@ -1,7 +1,6 @@
 import { join } from 'path'
 import fs from 'fs'
 
-import qs from 'query-string'
 import memoize from 'memoizee'
 import frontMatter from 'front-matter'
 

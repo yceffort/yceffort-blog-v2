@@ -127,7 +127,7 @@ http 요청은 옵셔널 헤더인 [Referer](https://developer.mozilla.org/en-US
 
 - scheme를 보는 모든 정책 (`strict-origin` `no-referrer-when-downgrade` `strict-origin-when-cross-origin`)의 경우에, HTTP가 실제로 더 보안에 취약함에도 불구하고, HTTP origin에서 다른 HTTP origin으로 가는 것을 HTTPS origin에서 다른 HTTPS origin으로 가는 것과 동일하게 취급한다. (= HTTP와 HTTPS에 대해 차이를 두고 있지 않다.) 이러한 정책의 경우 중요한 것은, 보안 다운그레이드가 발생하는지 여부, 즉 암호화된 원본에서 암호화되지 않은 원본으로 데이터를 노출할 수 있는지 여부이다. HTTP에서 HTTP는 암호화가 없어서 다운그레이드 되지 않는다. 다만 HTTPS에서 HTTP는 다운그레이드가 나타난다. (암호화가 된 것에서 암호화가 안된 것으로 가므로)
 
-- 요청이 `same-origin`이라면, 이 뜻은 scheme (HTTS, HTTP)가 같다느 ㄴ뜻이다. 따라서 보안에서 다운그레이드가 이루어지지 않는다.
+- 요청이 `same-origin`이라면, 이 뜻은 scheme (HTTS, HTTP)가 같다는 뜻이다. 따라서 보안에서 다운그레이드가 이루어지지 않는다.
 
 ## 브라우저별 표준
 

@@ -134,7 +134,7 @@ class ClickCounter {
 ]
 ```
 
-여기서 우리는 리액트가 [\$\$typeof](https://overreacted.io/why-do-react-elements-have-typeof-property/)를 오브젝트애ㅔ 추가하여 각 리엑트 엘리먼트를 구별하는 것을 볼 수 있다. 여기에는 다시 `type` `key` `props`등 의 프로퍼티를 가지고 있다. 이 값들은 `React.createElement`에서 넘어온 값들이다. 리액트가 어떻게 `span` `button` 등의 하위 노드에서 텍스트를 어떻게 나타내는지 주목하자. 그리고 클릭 핸들러는 `button` 컴포넌트의 props로 구성되어 있다. 그리고 이 문서에서는 다루지 않는 ref와 같은 다른 필드들도 리엑트 엘리먼트에 존재한다.
+여기서 우리는 리액트가 [\$\$typeof](https://overreacted.io/why-do-react-elements-have-typeof-property/)를 오브젝트에 추가하여 각 리엑트 엘리먼트를 구별하는 것을 볼 수 있다. 여기에는 다시 `type` `key` `props`등 의 프로퍼티를 가지고 있다. 이 값들은 `React.createElement`에서 넘어온 값들이다. 리액트가 어떻게 `span` `button` 등의 하위 노드에서 텍스트를 어떻게 나타내는지 주목하자. 그리고 클릭 핸들러는 `button` 컴포넌트의 props로 구성되어 있다. 그리고 이 문서에서는 다루지 않는 ref와 같은 다른 필드들도 리엑트 엘리먼트에 존재한다.
 
 `ClickCounter`의 리액트 엘리먼트는 별다른 key나 props를 가지고 있지 않다.
 

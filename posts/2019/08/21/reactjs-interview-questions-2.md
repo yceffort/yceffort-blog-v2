@@ -439,7 +439,7 @@ Redux는 flux 디자인 패턴을 기반으로 한 자바스크립트 앱의 예
 
 Redux는 다음 세가지 기본 원칙을 가지고 있다.
 
-1. 신뢰할 수 있는 단일 출처: 애플리케이션의 state는 단일 store에 객체트리 형태로 저장되어 있다. 단일 state tree는 변화를 쉽게 추적ㄷ할 수 있게 해주며, 애플리케이션을 디버그하고 검사하는 것을 쉽게 만들어 준다.
+1. 신뢰할 수 있는 단일 출처: 애플리케이션의 state는 단일 store에 객체트리 형태로 저장되어 있다. 단일 state tree는 변화를 쉽게 추적할 수 있게 해주며, 애플리케이션을 디버그하고 검사하는 것을 쉽게 만들어 준다.
 2. state는 읽기 전용: state를 변경할 수 있는 방법은 단한가지로, 객체가 어떤 일이 일어났는지 묘사하는 액션을 보내는 것이다. 이는 views나 네트워크 콜백이 직접 state를 수정하지 않도록 한다.
 3. 변화는 순수 함수로만 이루어진다: 액션별로 state 트리가 어떻게 변화하는지 명세하기 위해, reducer를 사용해야 한다.
 
@@ -510,7 +510,7 @@ export default store
 
 두 라이브러리는 목적부터 완전히 다르지만, 약간의 비슷한점을 가지고있다.
 
-Redux는 애플리케이션 전반에서 state를 관리할 수 있게 도와주는 툴이다. 이는 보통 UI 아키텍쳐에서 ㅁ낳이 사용된다. Angular의 대체재라고 볼 수 있다. 반면 Rxjs는 반응형 프로그래밍 라이브러리다. RxJS는 자바스크립트에서 비동기 작업을 수행하기 위해 사용된다. Promise의 대체재라고 볼 수있다. Redux는 Store가 반응형이기 때문에 반응형 패러다임을 사용한다. Store는 액션을 어느정도 거리에서 관찰하다가, 스스로 변화한다. RxJS 또한 반응형 패러다임을 사용하는 반면, 아키텍쳐를 제공하지 않고 Observable 과 같은 블록을 제공한다.
+Redux는 애플리케이션 전반에서 state를 관리할 수 있게 도와주는 툴이다. 이는 보통 UI 아키텍쳐에서 많이 사용된다. Angular의 대체재라고 볼 수 있다. 반면 Rxjs는 반응형 프로그래밍 라이브러리다. RxJS는 자바스크립트에서 비동기 작업을 수행하기 위해 사용된다. Promise의 대체재라고 볼 수있다. Redux는 Store가 반응형이기 때문에 반응형 패러다임을 사용한다. Store는 액션을 어느정도 거리에서 관찰하다가, 스스로 변화한다. RxJS 또한 반응형 패러다임을 사용하는 반면, 아키텍쳐를 제공하지 않고 Observable 과 같은 블록을 제공한다.
 
 ### How to dispatch an action on load?
 
@@ -701,7 +701,7 @@ export default FilterLink
 
 `Component`는 애플리케이션의 일부분을 표시하는 함수 또는 클래스 컴포넌트를 의미한다.
 
-`Container`는 비공식적인 용어로, Redux Store와 연결된 컴포넌트를 지칭한다. Container 는 Redux 의 state update 와 action 을 구독하며, DOM element 를 렌더링하지 않는다. 이러한 rendering응ㄴ 하위 component 들에게 위임한다.
+`Container`는 비공식적인 용어로, Redux Store와 연결된 컴포넌트를 지칭한다. Container 는 Redux 의 state update 와 action 을 구독하며, DOM element 를 렌더링하지 않는다. 이러한 rendering은 하위 component 들에게 위임한다.
 
 ### What is the purpose of the constants in Redux?
 

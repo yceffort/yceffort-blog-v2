@@ -176,7 +176,7 @@ useEffect(() => {
 })
 ```
 
-`someRef.current` 는 mutable 하기 때문에, cleanup 함쇼ㅜ가 실행되는 순간에 null 이 될 가능성이 있다. 따라서 아래와 같이 고쳐줘야 한다.
+`someRef.current` 는 mutable 하기 때문에, cleanup 함수가 실행되는 순간에 null 이 될 가능성이 있다. 따라서 아래와 같이 고쳐줘야 한다.
 
 ```javascript
 useEffect(() => {

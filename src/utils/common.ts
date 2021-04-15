@@ -27,7 +27,5 @@ export function getThumbnailURL({
     { skipEmptyString: true, skipNull: true },
   )
 
-  console.log(queryString)
-
   return `${thumbnailHost}?${queryString}`
 }

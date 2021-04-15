@@ -4,13 +4,15 @@ date: 2019-08-07 06:39:20
 published: true
 tags:
   - infrastructure
-description: "## 로드밸런서 > 로드 밸런싱이란, 부하 분산을 위해서 가상 IP를 통해 여러 서버에 접속하도록 분배하는 기능을
+description:
+  '## 로드밸런서 > 로드 밸런싱이란, 부하 분산을 위해서 가상 IP를 통해 여러 서버에 접속하도록 분배하는 기능을
   말한다.  로드 밸런싱에서 사용하는 주요 기술은  - NAT(Network Address Translation): 사설 IP 주소를 공인
-  IP 주소로 바꾸는 데 사용하는 통신망의 주소 변조기이다. - DSR(Dynamic Source Rout..."
+  IP 주소로 바꾸는 데 사용하는 통신망의 주소 변조기이다. - DSR(Dynamic Source Rout...'
 category: infrastructure
 slug: /2019/08/07/haproxy/
 template: post
 ---
+
 ## 로드밸런서
 
 > 로드 밸런싱이란, 부하 분산을 위해서 가상 IP를 통해 여러 서버에 접속하도록 분배하는 기능을 말한다.

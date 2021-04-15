@@ -5,13 +5,15 @@ published: true
 tags:
   - pytorch
 mathjax: true
-description: 합성곱신경망(CNN - Convolutaional Neural Network, 이하 CNN)은 말그대로, 합성곱 연산을
+description:
+  합성곱신경망(CNN - Convolutaional Neural Network, 이하 CNN)은 말그대로, 합성곱 연산을
   사용하는 인공신경망의 한 종류다. Convolution을 활용하면 3차원 데이터의 공간적 정보를 유지한 상태로 다음 레이어로 보내는 것이
   가능하다. CN N역시 입력층, 중간층, 출력층으로 구성되어 있으며 각 층은 다시 노드로 이루어져 ...
 category: pytorch
 slug: /2019/01/29/pytorch-3-convolutional-neural-network/
 template: post
 ---
+
 합성곱신경망(CNN - Convolutaional Neural Network, 이하 CNN)은 말그대로, 합성곱 연산을 사용하는 인공신경망의 한 종류다. Convolution을 활용하면 3차원 데이터의 공간적 정보를 유지한 상태로 다음 레이어로 보내는 것이 가능하다.
 
 CN N역시 입력층, 중간층, 출력층으로 구성되어 있으며 각 층은 다시 노드로 이루어져 있으며, 층과 층사이에만 노드간 결합이 있다는 것도 다중 퍼셉트론과 동일하다. 마찬가지로, 지도학습 알고리즘 이기 때문에 설명변수와 목적변수가 들어 있다.
@@ -26,7 +28,7 @@ CN N역시 입력층, 중간층, 출력층으로 구성되어 있으며 각 층�
 
 첫번째 그림이 입력층이고, 가운데가 필터다. 가중치를 가진 필터를 입력데이터의 각 위치마다 적용하고, 각 노드의 값과 가중치의 곱셈합을 구하는 방식으로 특징값을 추출한다. 그리고 그 결과를 맵형태로 다음 레이어에 전달하는 것이다.
 
-### 2. 풀링층 
+### 2. 풀링층
 
 풀링층은 앞서 전달 받은 합성곱층의 데이터에서 일정영역마다 최댓값 (평균값을 구하는 경우도 있다) 을 남긴다. 이런 방법을 활용하여 중요한 특징만을 남기게 된다.
 
@@ -36,7 +38,7 @@ CN N역시 입력층, 중간층, 출력층으로 구성되어 있으며 각 층�
 
 ![zero-padding](http://xrds.acm.org/blog/wp-content/uploads/2016/06/Figure_3.png)
 
-학습과정에서 이 방식으로 순전파와 역전파를 반복하며, Convolutional 필터의 가중치를 최적화 하는 방식으로 모형을 학습하게 된다. 
+학습과정에서 이 방식으로 순전파와 역전파를 반복하며, Convolutional 필터의 가중치를 최적화 하는 방식으로 모형을 학습하게 된다.
 
 
 ![convolutional-layer](http://deeplearning.stanford.edu/wiki../../../images/6/6c/Convolution_schematic.gif)
@@ -88,9 +90,9 @@ mnist_label = mnist['target']
 
 train_size = 50000
 test_size = 500
-train_X, test_X, train_Y, test_Y = model_selection.train_test_split(mnist_data, 
-                                                                    mnist_label, 
-                                                                    train_size=train_size, 
+train_X, test_X, train_Y, test_Y = model_selection.train_test_split(mnist_data,
+                                                                    mnist_label,
+                                                                    train_size=train_size,
                                                                     test_size=test_size
                                                                    )
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -128,33 +130,33 @@ train_loader = DataLoader(train, batch_size=100, shuffle=True)
 
 ```python
 class Net(nn.Module):
-  
+
   def __init__(self):
-    
+
     super(Net, self).__init__()
 
     # 합성곱층
     # 입력채널 수(1), 출력채널수(6), 필터크기(5)
     self.conv1 = nn.Conv2d(1, 6, 5)
     self.conv2 = nn.Conv2d(6, 16, 5)
-    
+
     # 전결합층
     self.fc1 = nn.Linear(256, 64)
     self.fc2 = nn.Linear(64, 10)
-    
+
   def forward(self, x):
-    
+
     # 풀링층
     x = F.max_pool2d(F.relu(self.conv1(x)), 2)
     x = F.max_pool2d(F.relu(self.conv2(x)), 2)
-    
+
     x = x.view(-1, 256)
     x = F.relu(self.fc1(x))
     x = self.fc2(x)
-    
+
     return F.log_softmax(x)
-  
-  
+
+
 model = Net()
 model.cuda()
 ```
@@ -181,17 +183,17 @@ Convolution Layer의 출력 데이터 크기는 아래와 같이 산정한다.
 - stride 크기: S
 - 패딩사이즈: P
 
-$$ \text{OutputHeight} = \text{OH} = \frac{(H + 2P - FH)}{S} + 1  $$
+$$ \text{OutputHeight} = \text{OH} = \frac{(H + 2P - FH)}{S} + 1 $$
 
-$$ \text{OutputWeight} = \text{OW} = \frac{(HW+ 2P - FW)}{S} + 1  $$
+$$ \text{OutputWeight} = \text{OW} = \frac{(HW+ 2P - FW)}{S} + 1 $$
 
-주의 할 점은 여기에서 이 숫자들은 자연수가 되어야 한다는 것이다. 또한 Covolutional layer 다음에 pooling layer가 온다면 pooling 크기의 배수가 되어야 한다. 
+주의 할 점은 여기에서 이 숫자들은 자연수가 되어야 한다는 것이다. 또한 Covolutional layer 다음에 pooling layer가 온다면 pooling 크기의 배수가 되어야 한다.
 
 1번째 Convolutional Layer 부터 살펴보자. 입력크기가 1 (그레이스케일 이미지의 채널수는 1), 출력크기는 6, 필터크기는 5다. 2번째 레이어는 입력크기가 6 (첫번째에서 6의 크기로 출렸했으므로) , 출력크기가 16, 필터크기는 5다.
 
 출력크기 구하기
 
-$$ \text{OH} = \frac{28 + 2*1 - 5}{5} + 1  = 6 $$ 
+$$ \text{OH} = \frac{28 + 2\*1 - 5}{5} + 1 = 6 $$
 
 ```python
 
@@ -200,7 +202,7 @@ optimizer = optim.SGD(model.parameters(), lr=0.01)
 
 for epoch in range(1000):
   total_loss = 0
-  
+
   for train_x, train_y in train_loader:
     train_x, train_y = Variable(train_x), Variable(train_y)
     optimizer.zero_grad()
@@ -209,7 +211,7 @@ for epoch in range(1000):
     loss.backward()
     optimizer.step()
     total_loss += loss.data.item()
-    
+
   if (epoch+1) % 10 == 0:
     print(epoch+1, total_loss)
 
@@ -221,4 +223,4 @@ accuracy = sum(test_y.cpu().data.numpy() == result.cpu().numpy()) / len(test_y.c
 accuracy
 ```
 
-정확도가 98.8% 가 나왔다.  98.8로 손글씨를 판별해 내었다.
+정확도가 98.8% 가 나왔다. 98.8로 손글씨를 판별해 내었다.

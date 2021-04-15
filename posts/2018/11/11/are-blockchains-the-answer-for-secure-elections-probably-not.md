@@ -12,6 +12,7 @@ category: blockchain
 slug: /2018/11/11/are-blockchains-the-answer-for-secure-elections-probably-not/
 template: post
 ---
+
 Are Blockchains the Answer for Secure Elections? Probably Not
 
 [원문](https://www.scientificamerican.com/article/are-blockchains-the-answer-for-secure-elections-probably-not/)

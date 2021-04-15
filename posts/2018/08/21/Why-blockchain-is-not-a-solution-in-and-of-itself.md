@@ -11,6 +11,7 @@ category: blockchain
 slug: /2018/08/21/Why-blockchain-is-not-a-solution-in-and-of-itself/
 template: post
 ---
+
 Why blockchain is not a solution in and of itself
 
 [원문](https://www.blockchaintechnology-news.com/2018/07/11/blockchain-is-not-a-solution-in-and-of-itself/)

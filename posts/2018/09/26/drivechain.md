@@ -5,14 +5,15 @@ published: true
 tags:
   - blockchain
   - bitcoin
-description: "Drivechain: Enabling Bitcoin Sidechains
+description: 'Drivechain: Enabling Bitcoin Sidechains
   [원문](http://www.drivechain.info/)  비트코인 기능을 근본적으로 확장하여, 암호화폐에 새로운 기능을 추가할 수
   있도록 하는 제안인 DriveChain이 테스트넷에 배포되었다.  이는 지난 2015년 11월에 처음 고안된지 거의 3년만의 일이다. 그
-  이후, 이 ..."
+  이후, 이 ...'
 category: blockchain
 slug: /2018/09/26/drivechain/
 template: post
 ---
+
 Drivechain: Enabling Bitcoin Sidechains
 
 [원문](http://www.drivechain.info/)

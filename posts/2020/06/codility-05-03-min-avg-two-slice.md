@@ -5,13 +5,15 @@ tags:
   - javascript
 published: true
 date: 2020-06-23 05:25:19
-description: "## Min Avg Two Slice ### 문제  길이가 N인 비어있지 않은 배열 A가 주어진다. 한쌍의 숫자 P,
+description:
+  '## Min Avg Two Slice ### 문제  길이가 N인 비어있지 않은 배열 A가 주어진다. 한쌍의 숫자 P,
   Q의 범위는 `0 <= P < Q < N` 다. 주어진 P와 Q로 A배열을 slice한다. (최소 2개이상의 요소가 있어야 한다.) (P,
-  Q)는 `A[P] + A[P + 1] + ... + A[Q]`이며, (P, Q)의 평균은 `(A[P..."
+  Q)는 `A[P] + A[P + 1] + ... + A[Q]`이며, (P, Q)의 평균은 `(A[P...'
 category: algorithm
 slug: /2020/06/codility-05-03-min-avg-two-slice/
 template: post
 ---
+
 ## Min Avg Two Slice
 
 ### 문제
@@ -37,28 +39,27 @@ slice (1, 4), 평균은 (2 + 2 + 5 + 1) / 4 = 2.5.
 
 ```javascript
 function solution(A) {
-    let min = Number.MAX_SAFE_INTEGER
-    let minIndex = 0
-    for (let i=0; i < A.length - 1; i++) {
-        
-        let twoSum = (A[i] + A[i + 1]) / 2
-        
-        if (min > twoSum) {
-            min = twoSum
-            minIndex = i
-        }
-        
-        if (i + 2 <= A.length - 1) {
-            let threeSum = (A[i] + A[i + 1] + A[i + 2]) / 3
-            
-            if (min > threeSum) {
-                min = threeSum
-                minIndex = i
-            }
-        }
+  let min = Number.MAX_SAFE_INTEGER
+  let minIndex = 0
+  for (let i = 0; i < A.length - 1; i++) {
+    let twoSum = (A[i] + A[i + 1]) / 2
+
+    if (min > twoSum) {
+      min = twoSum
+      minIndex = i
     }
-    
-    return minIndex
+
+    if (i + 2 <= A.length - 1) {
+      let threeSum = (A[i] + A[i + 1] + A[i + 2]) / 3
+
+      if (min > threeSum) {
+        min = threeSum
+        minIndex = i
+      }
+    }
+  }
+
+  return minIndex
 }
 ```
 

@@ -5,13 +5,14 @@ published: true
 tags:
   - blockchain
   - bitcoin
-description: "Zerocash: Anonymous Distributed E-Cash from Bitcoin
+description: 'Zerocash: Anonymous Distributed E-Cash from Bitcoin
   [원문](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=6956581)  비트코인 자체는
-  익명이 아니기 때문에, 이를 익명화 시키는데 많은 노력을 기울이고 있다. (mix라는 표현을 쓰고 있는데, 여기서는 간단하게 ..."
+  익명이 아니기 때문에, 이를 익명화 시키는데 많은 노력을 기울이고 있다. (mix라는 표현을 쓰고 있는데, 여기서는 간단하게 ...'
 category: blockchain
 slug: /2018/06/26/Zerocash-Decentralized-Anonymous-Payments-from-Bitcoin/
 template: post
 ---
+
 Zerocash: Anonymous Distributed E-Cash from Bitcoin
 
 [원문](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=6956581)

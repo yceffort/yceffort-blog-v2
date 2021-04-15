@@ -4,13 +4,15 @@ date: 2019-01-27 09:32:01
 published: true
 tags:
   - pytorch
-description: "## 손글씨 분류하기 (MNIST) 머신러닝의 단골 주제다. 손글씨를 분류해보자. 이전 데이터와 다른 점이라고 한다면,
+description:
+  '## 손글씨 분류하기 (MNIST) 머신러닝의 단골 주제다. 손글씨를 분류해보자. 이전 데이터와 다른 점이라고 한다면,
   이전 데이터는 표 형식이었지만, 이제는 이미지 형식으로 구성되어 있다.  ```python import torch from
-  torch.autograd import Variable import torch.nn as nn import tor..."
+  torch.autograd import Variable import torch.nn as nn import tor...'
 category: pytorch
 slug: /2019/01/27/pytorch-2-multi-perceptron(2)/
 template: post
 ---
+
 ## 손글씨 분류하기 (MNIST)
 
 머신러닝의 단골 주제다. 손글씨를 분류해보자. 이전 데이터와 다른 점이라고 한다면, 이전 데이터는 표 형식이었지만, 이제는 이미지 형식으로 구성되어 있다.
@@ -73,6 +75,7 @@ pd.DataFrame(mnist_data)
 ```
 
 첫번째 이미지 출력
+
 ```python
 plt.imshow(mnist_data[0].reshape(28, 28), cmap=cm.gray_r)
 plt.show()
@@ -90,9 +93,9 @@ mnist_label
 ```python
 train_size = 50000
 test_size = 500
-train_X, test_X, train_Y, test_Y = model_selection.train_test_split(mnist_data, 
-                                                                    mnist_label, 
-                                                                    train_size=train_size, 
+train_X, test_X, train_Y, test_Y = model_selection.train_test_split(mnist_data,
+                                                                    mnist_label,
+                                                                    train_size=train_size,
                                                                     test_size=test_size
                                                                    )
 ```
@@ -115,7 +118,6 @@ print(train_Y.shape)
 
 gpu를 사용하기 위해선 위와 같이 변수 부터 `cuda`로 지정해주어야 한다.
 
-
 데이터셋을 만들고 100개 짜리 미니 배치로 만들자.
 
 ```python
@@ -137,8 +139,8 @@ class Net(nn.Module):
     self.fc4 = nn.Linear(256, 128)
     self.fc5 = nn.Linear(128, 128)
     self.fc6 = nn.Linear(128, 10)
-    
-    
+
+
   def forward(self, x):
     x = F.relu(self.fc1(x))
     x = F.relu(self.fc2(x))
@@ -148,7 +150,7 @@ class Net(nn.Module):
     x = F.dropout(x, training=self.training)
     x = self.fc6(x)
     return F.log_softmax(x)
-    
+
 model = Net()
 model.cuda()
 ```
@@ -171,26 +173,26 @@ criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=0.01)
 
 for epoch in range(1000):
-  
+
   total_loss = 0
-  
+
   for train_x, train_y in train_loader:
-    
+
     train_x, train_y = Variable(train_x), Variable(train_y)
-    
+
     optimizer.zero_grad()
-    
+
     output = model(train_x)
-    
-    
+
+
     loss = criterion(output, train_y)
-    
+
     loss.backward()
-    
+
     optimizer.step()
-    
+
     total_loss += loss.data.item()
-    
+
   if (epoch+1) % 100 == 0:
     print(epoch+1, total_loss)
 ```

@@ -5,13 +5,15 @@ tags:
   - react
 published: true
 date: 2019-12-30 09:16:10
-description: 주말에 집구석에 혼자 오래있을 일이 있어서, 생각난 김에 블로그를 개편했습니다. 이 전에는 hexo 기반으로 만들어진
+description:
+  주말에 집구석에 혼자 오래있을 일이 있어서, 생각난 김에 블로그를 개편했습니다. 이 전에는 hexo 기반으로 만들어진
   블로그를 작업했는데, hexo 생태계가 관리가 잘 안되고 있는 건지 플러그인이나 기능들이 제대로 동작을 안하더군요. wordpress ->
   ??? -> github pages -> hexo -> gatsby 까지 벌써 개편만 한 다섯번 쯤...
 category: diary
 slug: /2019/12/30/blog-renewal/
 template: post
 ---
+
 주말에 집구석에 혼자 오래있을 일이 있어서, 생각난 김에 블로그를 개편했습니다. 이 전에는 hexo 기반으로 만들어진 블로그를 작업했는데, hexo 생태계가 관리가 잘 안되고 있는 건지 플러그인이나 기능들이 제대로 동작을 안하더군요.
 
 wordpress -> ??? -> github pages -> hexo -> gatsby 까지 벌써 개편만 한 다섯번 쯤 한거 같네요. 이제 그만 하겠습니다.

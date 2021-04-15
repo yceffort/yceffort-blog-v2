@@ -1,5 +1,5 @@
 ---
-title: "분산된 데이터: 왜 블록체인은 의미가 없고, Trustless가 핵심인가?"
+title: '분산된 데이터: 왜 블록체인은 의미가 없고, Trustless가 핵심인가?'
 date: 2018-11-05 04:44:01
 published: true
 tags:
@@ -12,6 +12,7 @@ category: blockchain
 slug: /2018/11/04/decentralized-data-why-blockchain-is-meaningless-and-trustless-is-everything/
 template: post
 ---
+
 Decentralized Data: “Why Blockchain is meaningless and Trustless is everything”
 
 [원문](https://hackernoon.com/decentralized-data-why-blockchain-is-meaningless-and-trustless-is-everything-318fd14d3827)
@@ -60,13 +61,13 @@ Trustless의 개념은 블록체인 네트워크에서 가치를 창출하는 �
 
 프라이빗, 또는 연합된 블록체인은 보안상 위험하다. 왜냐하면 네트워크의 다른 엔티티나 해커가 이를 손상시킬 수 있기 때문이다.
 
-가치라는 범위에서 프라이빗이나 연합된 블록체인은 쓸모가 없다. 왜냐하면 당신이 검증한 모든 것은 신뢰하는 실체이기 때문이다. 
+가치라는 범위에서 프라이빗이나 연합된 블록체인은 쓸모가 없다. 왜냐하면 당신이 검증한 모든 것은 신뢰하는 실체이기 때문이다.
 
 Ethereum이나 AION과 같은 블록체인 프로젝트는 하이브리드 프라이빗 블록체인이라는 개념을 사용하여 네트워크를 확장하기 위해 노력하고 있다. 예를 들어 Ethereum이 Plasma를 출시한다면, 일반 Smart Contract를 사용하여 프라이빗 블록체인을 만들 수 있다. AION은 프라이빗 블록 체인에서 퍼블릭 블록 체인으로 분산된 상호 운용성을 연구하고 있지만, Plasma뿐만 아니라 현재 작업 중인 프로젝트이므로 향후 프라이빗 블록 체인에서는 의미가 있을 수 있지만 현재는 아니다.
 
 EOS와 같은 다른 프로젝트들은 새로운 합의 알고리즘을 통해 퍼블릭 블록체인의 규모를 조정하고 있으며, 동시에 프라이빗 블록 체인을 만드는 것이 아니라 퍼블릭 네트워크를 확장하기 위해 노력하고 있다.
 
-진짜 문제는 비재무적인 용도로 블록체인 기술을 사용하는 것이 엄청난 수요를 가지고 있지만, 기술은 채택할 준비가 되어 있지 않고, 동시에 모든 복잡한 세계를 다뤄야 하기 때문에 진정한 가치를 이해하기가 어렵다는 것이다. 
+진짜 문제는 비재무적인 용도로 블록체인 기술을 사용하는 것이 엄청난 수요를 가지고 있지만, 기술은 채택할 준비가 되어 있지 않고, 동시에 모든 복잡한 세계를 다뤄야 하기 때문에 진정한 가치를 이해하기가 어렵다는 것이다.
 
 ## 기다려야 한다, 그러나 왜?
 

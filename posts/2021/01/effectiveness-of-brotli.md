@@ -99,7 +99,7 @@ gzip에 비해 brotli가 갖는 이점은 미미하다.
 brotli를 활성화 하는 것이 CDN 관리자 메뉴의 버튼 하나를 누르는 것 만큼 간단하다면 지금 바로 실행하는 것이 좋다. 최소한의 개선이라도 없는 것보단 낫고, fallback 제공도 잘 되어 있다.
 
 가능한 경우 정적 자산의 경우 가능한 가장 큰 압축 수준을 사용하며, 동적인 요소에 대해서는 중간 정도의 압축을 해주는 것이 좋다. 만약 nginx 를 사용중이라면, 현재 압축수준이 1로 (기본값으로) 되어 있는지 확인해보는 것이 좋다.
- 
+
 brotli를 구현하기 위해 너무 애쓸 필요는 없다. 압축할 수 있는 모든 항목에 대해 gzip이 제공되고 있다면, 그것만으로도 충분할 수 있다.
 
 출처: https://csswizardry.com/2020/04/real-world-effectiveness-of-brotli/#smaller-doesnt-necessarily-mean-faster

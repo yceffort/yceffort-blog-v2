@@ -5,7 +5,8 @@ tags:
   - diary
 published: true
 date: 2020-01-11 10:44:09
-description: "## 블로그의 성장 2018년 5월 1일에 블로그를 시작한 이례로 헛소리를 지껄이는 블로그에서, 제법 이사람 저사람
+description:
+  "## 블로그의 성장 2018년 5월 1일에 블로그를 시작한 이례로 헛소리를 지껄이는 블로그에서, 제법 이사람 저사람
   찾아오는 블로그로
   성장했다.  ![history1](./images/history1.png)  ![history2](./images/history2.png)  \
   꾸준한 블로그 뻘 글과 회사에서 일하는 것 덕분에 github contributi..."
@@ -13,6 +14,7 @@ category: git
 slug: /2020/01/github-daily-contribution/
 template: post
 ---
+
 ## 블로그의 성장
 
 2018년 5월 1일에 블로그를 시작한 이례로 헛소리를 지껄이는 블로그에서, 제법 이사람 저사람 찾아오는 블로그로 성장했다.

@@ -5,13 +5,15 @@ tags:
   - javascript
 published: true
 date: 2020-06-23 12:25:19
-description: "## Max Product of Three ### 문제  길이 N인 배열 A가 주어졌을때, 임의로 세개의 숫자를 곱했을
+description:
+  '## Max Product of Three ### 문제  길이 N인 배열 A가 주어졌을때, 임의로 세개의 숫자를 곱했을
   때 가장 큰 값을 만들 수 있는 배열의 Index를 리턴해라.  ``` A[0] = -3 A[1] = 1 A[2] = 2 A[3] = -2
-  A[4] = 5 A[5] = 6  2, 4, 5번째를 곱하면 60을 만들수 있고 이것이 가장 큰 ..."
+  A[4] = 5 A[5] = 6  2, 4, 5번째를 곱하면 60을 만들수 있고 이것이 가장 큰 ...'
 category: algorithm
 slug: /2020/06/codility-06-02-max-product-of-three/
 template: post
 ---
+
 ## Max Product of Three
 
 ### 문제
@@ -33,28 +35,26 @@ A[5] = 6
 
 ```javascript
 function solution(A) {
-    
-    const sorted = A.sort((a, b) => a - b)
-    const size = sorted.length
-    
-    let biggest = 0
+  const sorted = A.sort((a, b) => a - b)
+  const size = sorted.length
 
-    biggest = sorted[size-1] * sorted[size-2] * sorted[size-3]
-    
-    if (sorted[0] < 0 && sorted[1] < 0 && sorted[size-1] > 0) {
-        
-        const possible = sorted[0] * sorted[1] * sorted[size-1]
-        
-        if (possible > biggest) {
-            biggest = possible
-        }
-    }    
-    
-    return biggest
+  let biggest = 0
+
+  biggest = sorted[size - 1] * sorted[size - 2] * sorted[size - 3]
+
+  if (sorted[0] < 0 && sorted[1] < 0 && sorted[size - 1] > 0) {
+    const possible = sorted[0] * sorted[1] * sorted[size - 1]
+
+    if (possible > biggest) {
+      biggest = possible
+    }
+  }
+
+  return biggest
 }
 ```
 
-하나 조심해야 할 것은, 두 개의 음수 * 한개의 양수 조합으로도 큰 수를 만들 수 있다는 것이다. 따라서 무조건 큰 값 세개를 곱해버리면 안된다. 따라서 가장 큰 수를 만들 수 있는 경우의 수는 아래와 같다.
+하나 조심해야 할 것은, 두 개의 음수 \* 한개의 양수 조합으로도 큰 수를 만들 수 있다는 것이다. 따라서 무조건 큰 값 세개를 곱해버리면 안된다. 따라서 가장 큰 수를 만들 수 있는 경우의 수는 아래와 같다.
 
 - 숫자가 큰 순서대로 세개를 곱하거나
 - 음수이하의 가장 작은 숫자 두개를 곱하고 가장 큰 양수를 곱하거나
@@ -75,7 +75,7 @@ const sorted = a.sort()
 console.log(sorted) // [-1, -10, -5, -7, -9]]
 ```
 
-숫자 비교 시에는 절대 compareFunction을 비우지말자 - 
+숫자 비교 시에는 절대 compareFunction을 비우지말자 -
 
 [출처](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Array/sort)
 

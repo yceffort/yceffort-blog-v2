@@ -4,32 +4,32 @@ date: 2019-10-14 06:17:00
 published: true
 tags:
   - typescript
-description: "> Creates a debounced function that delays invoking func until
+description: '> Creates a debounced function that delays invoking func until
   after wait milliseconds have elapsed since the last time the debounced
-  function was invoked. The debounced function comes with a cancel m..."
+  function was invoked. The debounced function comes with a cancel m...'
 category: typescript
 slug: /2019/10/14/debounce/
 template: post
 ---
+
 > Creates a debounced function that delays invoking func until after wait milliseconds have elapsed since the last time the debounced function was invoked. The debounced function comes with a cancel method to cancel delayed func invocations and a flush method to immediately invoke them. Provide options to indicate whether func should be invoked on the leading and/or trailing edge of the wait timeout. The func is invoked with the last arguments provided to the debounced function. Subsequent calls to the debounced function return the result of the last func invocation.
 
 [출처](https://lodash.com/docs/4.17.15#debounce)
 
-디바운스는 과다한 이벤트 로직이 실행되는 것을 방지하는 함수로, 호출이 반복되는 동안에는 반복해서 로직이 실행되는 것을 막고, 설정한 시간이 지나고 나서야 로직이 실행하게 하는 함수다. 
-
+디바운스는 과다한 이벤트 로직이 실행되는 것을 방지하는 함수로, 호출이 반복되는 동안에는 반복해서 로직이 실행되는 것을 막고, 설정한 시간이 지나고 나서야 로직이 실행하게 하는 함수다.
 
 ```typescript
 export function debounce<Params extends any[]>(
   func: (...args: Params) => any,
-  timeout: number
+  timeout: number,
 ): (...args: Params) => void {
-  let timer: NodeJS.Timeout;
+  let timer: NodeJS.Timeout
   return (...args: Params) => {
-    clearTimeout(timer);
+    clearTimeout(timer)
     timer = setTimeout(() => {
-      func(...args);
-    }, timeout);
-  };
+      func(...args)
+    }, timeout)
+  }
 }
 ```
 

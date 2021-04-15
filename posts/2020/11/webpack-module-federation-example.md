@@ -52,7 +52,7 @@ module.exports = {
   },
   plugins: [
     new ModuleFederationPlugin({
-      name: 'main',      
+      name: 'main',
       remotes: {
         app1: 'app1',
       },
@@ -67,7 +67,7 @@ module.exports = {
 
 [ModuleFederationPlugin](https://webpack.js.org/concepts/module-federation/)을 사용한 것을 볼 수 있다. 이 플러그인은 `ContainerPlugin`과 `ContainerReferencePlugin` 를 합친 개념이라고 보면 될 것 같다.
 
-여기는 단순히 expose 한 다른 federation을 가져다 쓰는 역할만 하기 때문에, `exposes`를 하기 않고 있다. 
+여기는 단순히 expose 한 다른 federation을 가져다 쓰는 역할만 하기 때문에, `exposes`를 하기 않고 있다.
 
 ## app1 설정
 
@@ -129,24 +129,22 @@ module.exports = {
 ```html
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Main App</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="root"></div>
     <script src="http://localhost:3002/remoteEntry.js"></script>
-</body>
-
+  </body>
 </html>
 ```
 
 아까 서빙하기로 작성해둔 `remoteEntry.js`를 땡겨오는 모습이다. 물론 더 빠르게 만들기 위해서는 async 등을 사용할 수 도 있다.
 
-`bootstrap.js` 
+`bootstrap.js`
 
 이름이 `bootstrap`인 이유는 공식 문서에서 그렇게 하고 있길래 그렇게 했다. 👀 뜻과도 연관이 있을듯.
 
@@ -172,7 +170,6 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 `React`의 `lazy`와 `suspense`를 활용하여 `app1`에서 expose한 `Counter`를 가져다 쓰고 있다.
 
-
 ## 결과
 
 카운터가 잘 나오고 있고
@@ -187,7 +184,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ## 좋은 점 내지는 기대하는 미래
 
-요즘 유행이라고 하는 [Micro Frontend](https://micro-frontends.org/)를 달성할 수 있는 좋은 방법 중 하나 인 것 같다. 하나의 앱이 덩치가 너무 커서, 싱글 폴트의 위험 내지는 개발환경에서 쓸 데 없이 다 불러와야 하는 문제 등등이 존재하는데, module federation이 그것을 훌륭하게 해결해 줄 수 있을 것 같다. (물론 `main`이 고장나버리면 답이 없겠지만) 
+요즘 유행이라고 하는 [Micro Frontend](https://micro-frontends.org/)를 달성할 수 있는 좋은 방법 중 하나 인 것 같다. 하나의 앱이 덩치가 너무 커서, 싱글 폴트의 위험 내지는 개발환경에서 쓸 데 없이 다 불러와야 하는 문제 등등이 존재하는데, module federation이 그것을 훌륭하게 해결해 줄 수 있을 것 같다. (물론 `main`이 고장나버리면 답이 없겠지만)
 
 ![vertical](https://micro-frontends.org/ressources/diagrams/organisational/verticals-headline.png)
 
@@ -202,7 +199,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 - https://github.com/webpack/webpack/blob/master/lib/container/ModuleFederationPlugin.js
 - https://github.com/module-federation/module-federation-examples
 
-를 그냥 참고 하면서 했다. 다른 여타 기능들 처럼 webpack document에서 옵션으로 들어갈 수 있는 object의 특징이나 값을 명시해주었으면 좋겠다. 
+를 그냥 참고 하면서 했다. 다른 여타 기능들 처럼 webpack document에서 옵션으로 들어갈 수 있는 object의 특징이나 값을 명시해주었으면 좋겠다.
 
 https://webpack.js.org/concepts/module-federation/#containerplugin-low-level
 

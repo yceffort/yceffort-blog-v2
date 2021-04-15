@@ -6,14 +6,15 @@ mathjax: true
 tags:
   - blockchain
   - bitcoin
-description: "퍼마코인: 데이터 보존을 위한 비트코인
+description: '퍼마코인: 데이터 보존을 위한 비트코인
   [원문](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=6956582)  비트코인은
   전세계에서 첫번째로 널리 사용하게 된 전자화폐다. 그러나 많은 관심을 끄는 부분 중 하나는 비트코인 채굴이 계산을 하는데 있어서 많은
-  물리적인 자원을 낭비한다는 것이다. 비트코인의 마이..."
+  물리적인 자원을 낭비한다는 것이다. 비트코인의 마이...'
 category: blockchain
 slug: /2018/06/25/permacoin-repurposing-bitcoin-work-for-data-preservation/
 template: post
 ---
+
 퍼마코인: 데이터 보존을 위한 비트코인
 
 [원문](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=6956582)

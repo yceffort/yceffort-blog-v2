@@ -12,6 +12,7 @@ category: blockchain
 slug: /2018/06/25/bigchain-database-whitepaper/
 template: post
 ---
+
 BigChain DB 백서
 
 [원문](https://www.bigchaindb.com/whitepaper/bigchaindb-whitepaper.pdf)
@@ -19,16 +20,15 @@ BigChain DB 백서
 
 BigChainDB는 2016년에 처음 소개된, 블록체인을 기반으로한 데이터베이스다. BigChainDB 기존 데이터 베이스에 탈중앙화, 불변성 등 블록체인의 성격이 녹아있는 DB라고 할 수 있다.
 
-
-특징\분류 | 일반적인 블록체인| 일반적인 분산형 DB | BigChainDB  
---|---|--
-탈중앙화|o| |o|  
-비잔티움 장애 허용|o| |o|  
-불변성|o| |o|  
-데이터 소유자가 컨트롤|o| |o|  
-높은 트랜잭션 속도||o|o|  
-낮은 지연||o|o|    
-인덱싱, 구조화된 데이터 등||o|o|    
+| 특징\분류                  | 일반적인 블록체인 | 일반적인 분산형 DB | BigChainDB |
+| -------------------------- | ----------------- | ------------------ | ---------- |
+| 탈중앙화                   | o                 |                    | o          |
+| 비잔티움 장애 허용         | o                 |                    | o          |
+| 불변성                     | o                 |                    | o          |
+| 데이터 소유자가 컨트롤     | o                 |                    | o          |
+| 높은 트랜잭션 속도         |                   | o                  | o          |
+| 낮은 지연                  |                   | o                  | o          |
+| 인덱싱, 구조화된 데이터 등 |                   | o                  | o          |
 
 ## BigChainDB의 장점.
 
@@ -50,13 +50,11 @@ BigChainDB는 모든 네트워킹과 합의에 [Tendermint](https://Tendermint.c
 
 BigChainDB는 이중지불을 막기 위해 모든 트랜잭션을 확인한다.
 
-
 ### 4) 높은 트랜잭션 속도
 
 BigChainDB는 초당 많은 거래를 처리할 수 있도록 설계 되어 있다. 이는 Tendermint를 기반으로 했기에 가능한 사실이다. Tendermint를 기반으로 한 [Cosmos whitepaer](https://cosmos.network/resources/whitepaper)에 따르면,
 
 > 5개 대륙에서 7개의 데이터센터를 바탕으로 64개의 노드를 클라우드로 구성한 결과, Tendermint Consensus는, 네트워크 지연이 1~2초 정도 있었음에도, 초당 수천개의 거래를 처리해 냈다.
-
 
 ### 5) 낮은 Latency 와 빠른
 
@@ -70,7 +68,6 @@ BigChainDB의 노드들은 로컬에 MongoDB 데이터베이스를 갖고 있기
 
 비트코인과 같은 일부 블록체인 네트워크는 누구나 네트워크에 붙을 수 있도록 허용해 두었다. 이는 익명의, 허위로 꾸며진 다수의 가짜 사용자가 네트워크에 붙어 공격할 수 있다는 것을 의미한다. (Sybil Attack) 비트코인은 이러한 공격을 확률적으로 굉장히 어렵게 만들었다. BigChainDB 내에서는 네트워크 참여자를 조직할 수 있으므로, 이러한 문제는 존재하지 않는다.
 
-
 ## BigChainDB의 활용범위
 
 1. supply chain
@@ -80,14 +77,13 @@ BigChainDB의 노드들은 로컬에 MongoDB 데이터베이스를 갖고 있기
 5. 데이터 거버넌스
 6. 불변성을 지닌 감사 추적
 
-
 ## BigChainDB는 어떻게 작동하는가?
 
 ### 1. BigChainDB 트랜잭션
 
-트랜잭션은 아래와 같은 JSON String 으로 구성되어 있다. 각각의 트랜잭션에는 키와 값과 더불어, 트랜잭션이 어떻게 생성되었는지, 트랜잭션이 유효하기 위해서는 어떤 것을 확인해야 하는지 등의 내용이 포함되어 있다.  
+트랜잭션은 아래와 같은 JSON String 으로 구성되어 있다. 각각의 트랜잭션에는 키와 값과 더불어, 트랜잭션이 어떻게 생성되었는지, 트랜잭션이 유효하기 위해서는 어떤 것을 확인해야 하는지 등의 내용이 포함되어 있다.
 
-~~~ json
+```json
 {
   "id": "3667c0e5cbf1fd3398e375dc24f47206cc52d53d771ac68ce14ddf0fde806a1c",
   "version": "2.0",
@@ -95,9 +91,7 @@ BigChainDB의 노드들은 로컬에 MongoDB 데이터베이스를 갖고 있기
     {
       "fulfillment": "pGSAIEGwaKW1LibaZXx7_NZ5-V0alDLvrguGLyLRkgmKWG73gUBJ2Wpnab0Y-4i-kSGFa_VxxYCcctpT8D6s4uTGOOF-hVR2VbbxS35NiDrwUJXYCHSH2IALYUUZ6529Qbe2g4G",
       "fulfills": null,
-      "owners_before": [
-        "5RRWzmZBKPM84o63dppAttCpXG3wqYqL5niwNS1XBFyY"
-      ]
+      "owners_before": ["5RRWzmZBKPM84o63dppAttCpXG3wqYqL5niwNS1XBFyY"]
     }
   ],
   "outputs": [
@@ -110,9 +104,7 @@ BigChainDB의 노드들은 로컬에 MongoDB 데이터베이스를 갖고 있기
         },
         "uri": "ni:///sha-256;d-_huQ-eG-QQD-GAJpvrSsy7lLJqyNhtUAs_own7aTY?fpt=ed25519-sha-256&cost=131072"
       },
-      "public_keys": [
-        "5RRWzmZBKPM84o63dppAttCpXG3wqYqL5niwNS1XBFyY"
-      ]
+      "public_keys": ["5RRWzmZBKPM84o63dppAttCpXG3wqYqL5niwNS1XBFyY"]
     }
   ],
   "operation": "CREATE",
@@ -123,14 +115,13 @@ BigChainDB의 노드들은 로컬에 MongoDB 데이터베이스를 갖고 있기
   },
   "metadata": null
 }
-~~~
+```
 
 ### 2. 트랜잭션을 네트워크로 전송
 
 트랜잭션이 만들어지면, 이를 HTTP Api를 활용하여 BigChainDB로 전송해야 한다. 이러한 요청은 하나이상의 노드에 전달되게 된다.
 
 ![BigChainDB-network](../images/bigchaindb-network.png)
-
 
 ### 3. 노드가 트랜잭션을 수신
 
@@ -140,4 +131,4 @@ BigChainDB는 WSGI/Gunicorn과 호환되는 파이썬 웹 프레임워크인 Fla
 
 Tendermint에서 트랜잭션을 수신과정에서 어떤일이 일어나는지 확인하기 위해서는, [Tendermint의 docs](http://Tendermint.readthedocs.io/projects/tools/en/master/using-tendermint.html#broadcast-api)를 참고할 필요가 있다.
 
-Tendermint가 거래가 유효한지 확인해기 위해서, BigChainDB에 여러가지요소를 `CheckTX`를 통해 질의를 하게 된다. `CheckTX`에는 BigChainDB에서 상속받아 표현한 다양한 변수가 포함되어 있다. Tendermint는 새로운 블록(일련의 트랜잭션이 포함되어 있음) 을생성하고, 모든 노드가 비잔티움 장애 허용 방식으로 다음 블록에 동의 하는지 확인한다. Tendermint에서  BigChainDB에 새로운 트랜잭션을 보내면, BigChainDB는 다시한번 트랜잭션의 유효성을 확인한다. 그리고 유효하다면, Commit 메시지가 Tendermint에서 온다면 그때 비로소 MongoDB에 작성하게 된다. 트랜잭션을 MongoDB에 저장하기 전에, BigChainDB는 asset.data와 metadata를 MongoDB의 다른 컬렉션에 따로 저장하고 이를 지운다. 이렇게 따로 저장함으로서, 사용자는 MongoDB 에서 text search를 할 수 있게 된다.
+Tendermint가 거래가 유효한지 확인해기 위해서, BigChainDB에 여러가지요소를 `CheckTX`를 통해 질의를 하게 된다. `CheckTX`에는 BigChainDB에서 상속받아 표현한 다양한 변수가 포함되어 있다. Tendermint는 새로운 블록(일련의 트랜잭션이 포함되어 있음) 을생성하고, 모든 노드가 비잔티움 장애 허용 방식으로 다음 블록에 동의 하는지 확인한다. Tendermint에서 BigChainDB에 새로운 트랜잭션을 보내면, BigChainDB는 다시한번 트랜잭션의 유효성을 확인한다. 그리고 유효하다면, Commit 메시지가 Tendermint에서 온다면 그때 비로소 MongoDB에 작성하게 된다. 트랜잭션을 MongoDB에 저장하기 전에, BigChainDB는 asset.data와 metadata를 MongoDB의 다른 컬렉션에 따로 저장하고 이를 지운다. 이렇게 따로 저장함으로서, 사용자는 MongoDB 에서 text search를 할 수 있게 된다.

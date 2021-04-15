@@ -11,6 +11,7 @@ category: blockchain
 slug: /2018/07/02/blockchain-platform-for-industrial-internet-of-things/
 template: post
 ---
+
 Blockchain Platform for Industrial Internet of Things
 
 [원문](https://file.scirp.org/pdf/JSEA_2016102814012798.pdf)
@@ -22,8 +23,7 @@ Blockchain Platform for Industrial Internet of Things
 제조업을 위해 다양한 분산 앱(Dapps)을 개발 할 수 있는 산업용 인터넷을 위한 블록체인 플랫폼(BPIIoT)를 제안한다.
 
 | ![BPIIoT](../images/BPIIoT.png) |
-| :-------------------------------------------------: |
-
+| :-----------------------------: |
 
 |a. Slock.it Dapp은 유저와 실제 물리적인 소유물을 소유하고 있는 주인 간에 스마트 컨트랙트를 할수 있게 해준다. 예를 들어 유저가 잠긴 문을 열수 있게 임차료를 지급하면, 자동으로 스마트 계약이 실행되어 문을 열수 있게 되는 것이다. b. BPIIoT는 기존 솔루션보다 훨씬 더 많은 기능을 제공한다. 이는 다양한 P2P 제조 응용프로그램을 개발할 수 있기 때문이다.
 
@@ -41,8 +41,8 @@ Blockchain Platform for Industrial Internet of Things
 등이 가능해진다.
 
 | ![blockchain-smart-contract-structure](../images/blockchain-smart-contract-structure.png) |
-| :-----------------------------------------------------------------------------------------------------------: |
-|                                       블록체인과 스마트 컨트랙트의 구조                                       |
+| :---------------------------------------------------------------------------------------: |
+|                             블록체인과 스마트 컨트랙트의 구조                             |
 
 #### 스마트 컨트랙트
 
@@ -52,15 +52,15 @@ Blockchain Platform for Industrial Internet of Things
 
 분산 응용 프로그램 (Dapp)은 스마트 컨트랙트를 사용하는 응용프로그램이다. Dapp은 스마트컨트랙트를 사용자에게 익숙한 인터페이스로 제공한다. 암호화폐는 Dapp의 일종이며, 블록체인 네트워크에서 실행된다.
 
-|         ![BPIIoT2](../images/BPIIoT2.png)          |
+|                   ![BPIIoT2](../images/BPIIoT2.png)                    |
 | :--------------------------------------------------------------------: |
 | a) CBM(Cloud Based Manufacturing) model, b) 산업용 IOT를 위한 블록체인 |
 
 CBM은 서비스를 이용하는 소비자가 제조 자원을 구성, 선택 및 활용할 수 있는 서비스 지향 제조 모델이다. CBM은 IaaS, PaaS, Haas, SaaS의 네가지 주요 클라우드 컴퓨팅 모델을 활용한다. BPIIoT는 스마트 컨트랙트가 포함되어 있는 블록체인 네트워크를 기반으로 한다. 이 플랫폼에서는 스마트 컨트랙트를 주문형 제조 서비스를 제공하기 위해, 서비스 소비자와 제조자원 간의 계약으로 활용된다. BPIIoT는 기존 레거시 장비를 클라우드 환경에 통합할 수 있으며, 분산 및 P2P 제조 응용프로그램을 개발 할 수 있다.
 
 | ![BPIIoT3](../images/BPIIoT3.png) |
-| :---------------------------------------------------: |
-|                     BPIIoT의 구조                     |
+| :-------------------------------: |
+|           BPIIoT의 구조           |
 
 IoT장치는 기존 시스템이 클라우드와 통신할 수 있을 뿐만 아니라, 블록체인의 작업도 실행 가능하게 한다. 이 IoT장치는 기기가 운영중인 데이터를 클라우드 내에서 서로 교환하고, 관련된 스마트 컨트랙트 트랜잭션을 보내며, 네트워크의 피어로부터 트랜잭션을 받을 수 있는 'Plug and Play'솔루션이다.
 

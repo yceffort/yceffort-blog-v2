@@ -6,13 +6,15 @@ tags:
   - python
 published: true
 date: 2020-06-19 04:34:32
-description: "## 연결리스트 연결리스트, Linked List 는 각 노드들이 한 줄로 연결되어 있는 방식으로 각 노드는 데이터와
+description:
+  '## 연결리스트 연결리스트, Linked List 는 각 노드들이 한 줄로 연결되어 있는 방식으로 각 노드는 데이터와
   포인터 (다음 노드의 정보)를 가지고 있다. 연결리스트는 일반적인 배열과 다르게 삽입과 삭제가 `O(1)`에 가능하다는 장점이 있다. 하지만
-  특정 n번 째 정보를 찾는 데에는 `O(n)`시간이 걸린다는 단점도 있다.  ![단일 연결 리스트..."
+  특정 n번 째 정보를 찾는 데에는 `O(n)`시간이 걸린다는 단점도 있다.  ![단일 연결 리스트...'
 category: algorithm
 slug: /2020/06/algorithm-linked-list/
 template: post
 ---
+
 ## 연결리스트
 
 연결리스트, Linked List 는 각 노드들이 한 줄로 연결되어 있는 방식으로 각 노드는 데이터와 포인터 (다음 노드의 정보)를 가지고 있다. 연결리스트는 일반적인 배열과 다르게 삽입과 삭제가 `O(1)`에 가능하다는 장점이 있다. 하지만 특정 n번 째 정보를 찾는 데에는 `O(n)`시간이 걸린다는 단점도 있다.
@@ -79,7 +81,7 @@ class LinkedList:
     while i < n:
       curr = curr.next
       i += 1
-    
+
     return curr
 
   def insertAfter(self, prev, new):
@@ -107,13 +109,13 @@ class LinkedList:
 
   def popAfter(self, prev):
     popData = prev.next.data
-    ## tail 을 제거하려고 할때 
-    if prev.next.next is None:      
+    ## tail 을 제거하려고 할때
+    if prev.next.next is None:
       self.tail = prev
       prev.next = None
     else:
       prev.next = prev.next.next
-    
+
     self.size -= 1
 
     return popData
@@ -125,9 +127,9 @@ class LinkedList:
     # head일 경우
     if n == 1:
       prev = self.head
-    else: 
+    else:
       prev = self.getAt(n - 1)
-    
+
     return self.popAfter(prev)
 
   def print(self):

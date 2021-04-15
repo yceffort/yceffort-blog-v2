@@ -4,18 +4,18 @@ date: 2018-10-06 10:37:36
 published: true
 tags:
   - blockchain
-description: "Blockchain Finance: Questions Regulators Ask
+description: 'Blockchain Finance: Questions Regulators Ask
   [원문](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3243817)   ## 1.
   Introduction  오늘날, 세계 금융 체계에는 많은 금융 중개자들이 존재하고 있다. 하지만, 왜 세계 금융 시스템이 그렇게 비효율적인
-  것..."
+  것...'
 category: blockchain
 slug: /2018/10/06/blockchain-finance-questions-regulators-ask/
 template: post
 ---
+
 Blockchain Finance: Questions Regulators Ask
 
 [원문](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3243817)
-
 
 ## 1. Introduction
 
@@ -60,7 +60,7 @@ Tapscott 및 Tapscott(2017년)은 블록체인 기술의 기본 5가지 기본 �
 나이지리아를 포함한 많은 국가의 금융 시장에 진입하여 금융 시스템의 블록 체인을 통해 회사와 정부를 설득하여 금융 사용자가 비용 절감, 대출 금리 저금리 및 지불 효율성이 높은 비즈니스 활동에 관련된 제 3자를 우회할 수 있도록 했다.
 
 금융 블록체인 기술의 다른 지지자들은 금융의 블록체인 기술이 사용자와 금융 제공자 모두에게 '신뢰가 필요한 환경'을 요구하지 않는 금융 시스템을 만들 수 있다고 주장한다. 금융의 블록체인 기술이 금융 중재 프로세스에 관련된 금융 기관을 제거할 수 있으므로 금융 프로세스에 관련된 금융 기관을 제거할 수 있다.
-
+
 금융 시장은 오늘날 신뢰가 필요한 환경이 금융 중재에 결정적이기 때문에 신뢰에 의존할 수 밖에 없게 된다. 주식, 채권, 대부분의 무역 거래와 투자는 신뢰에 의존한다. 기존 지불 시스템에 대한 신뢰를 침해할 수 있는 사건과 인간의 행동은 금융 시스템의 모든 상대방에게 공황을 일으킬 수 있으며, 대출 기관이 시장에서 자금을 인출하면 치명적인 영향을 미칠 수 있다. 대차대조표가 튼튼한 은행과 자본이 충분한 다른 은행은 주주와 예금자가 자본과 예금이 더 이상 은행에 안전하지 않다고 믿을만한 이유가 있는 경우 이 시스템이 붕괴 될 수 있다. 이것은 금융 시스템에 대한 신뢰의 중요성을 설명한다. 그러나 블록체인의 큰 이점 중 하나는 신뢰의 환경에 의존하지 않는다는 것이다. 이것은 금융에서 블록체인의 가장 큰 세일즈 지점이다.
 
 ## 4. 규제적 고민

@@ -1,21 +1,21 @@
 ---
-title: "블록체인: 데이터 보호를 방해하는가?"
+title: '블록체인: 데이터 보호를 방해하는가?'
 date: 2018-08-22 12:39:05
 published: true
 tags:
   - blockchain
-description: "Blockchain: Disrupting data protection?
+description: 'Blockchain: Disrupting data protection?
   [원문](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3093166)   비트코인,
   블록체인, 분산 원장 기술에 대한 이야기를 자주 들었을 것이다. 그리고 몇년 전 클라우드 컴퓨팅 처럼 비즈니스 운영방식을 변화시키는 파괴적인
-  기술이 될 ..."
+  기술이 될 ...'
 category: blockchain
 slug: /2018/08/22/blockchain-disrupting-data-protection/
 template: post
 ---
+
 Blockchain: Disrupting data protection?
 
 [원문](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3093166)
-
 
 비트코인, 블록체인, 분산 원장 기술에 대한 이야기를 자주 들었을 것이다. 그리고 몇년 전 클라우드 컴퓨팅 처럼 비즈니스 운영방식을 변화시키는 파괴적인 기술이 될 수 있는 방법도 있었다. 흥미롭게도 클라우드 컴퓨팅과 비슷하지만, 이 기술은 많은 기회를 창출하고 있으며, 데이터 보호에 본질적으로 비 우호적인 특정 기능을 가지고 있다.
 

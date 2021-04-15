@@ -1,18 +1,19 @@
 ---
-title: "Phantom: 프라이빗 스마트 컨트랙트 플랫폼"
+title: 'Phantom: 프라이빗 스마트 컨트랙트 플랫폼'
 date: 2018-10-02 03:25:00
 tags:
   - blockchain
   - smart-contract
 published: true
-description: "PHANTOM: Private Smart Contract Platform
+description: 'PHANTOM: Private Smart Contract Platform
   [원문](https://phantom.org/lightpaper.pdf)  ## 1. Introduction  사용자 개인 정보 보호에 대한
   지원을 제공하는 핵심 기능을 가진 네트워크를 설계하는 것은 익명성을 둘러싼 솔루션의 생태계를 구축하는 데 중요하다. 이더리움의 힘은
-  Ether..."
+  Ether...'
 category: blockchain
 slug: /2018/10/02/phantom-private-smart-contract-platform/
 template: post
 ---
+
 PHANTOM: Private Smart Contract Platform
 
 [원문](https://phantom.org/lightpaper.pdf)
@@ -24,7 +25,6 @@ PHANTOM: Private Smart Contract Platform
 이더리움은 현재 ERC20 프로토콜을 통해 토큰을 실행하여 네트워크 내에서 토큰을 만들 수 있다. 이러한 토큰은 크기, 기능성, 분산형 애플리케이션 내에서의 기능성에 고유할 수는 있지만, 이름만 봐도, 이러한 토큰은 모두 이더리움의 프레임워크 내에서 작동하며, 이를 통해 실행되는 트랜잭션에 대한 프라이버시가 결여 된다. 이러한 문제의 사실에도 불구하고 Ethereum 네트워크 내에서 거래할 수 있는 가능성과 그 인기로 인해 이러한 플랫폼은 운영할 수 있는 편안함을 부여 받았다. 그러나 확장성은 이더리움의 인프라에도 의존 할뿐만 아니라 이러한 토큰에도 확장성에 대한 부족이 있다.
 
 ARK에서 포크된 PHANTOM의 블록체인은 운영자에게 호환 가능한 생태계를 구축하는 데 필요한 도구를 제공하면서도, 부모 설계의 모든 프레임워크는 유지하지 않아도된다. 네트워크에 있는 것과 동일한 프레임워크 메커니즘을 수행하기 위해 토큰을 생성하는 대신, 스스로 만든 블록체인을 실행할 수 있는 능력이 있다. 이러한 블록체인은 상호운용성을 통해 이미 구축되었으며, ARK 스마트 브리지 기반의 PHANTOM과 ARK 기반 블록체인 간의 통신을 가능하게 한다. 이를 통해 기업은 자신의 네트워크 내에서 비공개적으로 통신할 수 있는 특정 애플리케이션을 만들 수 있을 뿐만 아니라 스마트 브리지 프로토콜을 사용하는 다른 블록 체인과도 통신할 수 있다. 예를 들어 블록체인 B에서 실행 중인 스마트 컨트랙트를 실행하되 블록체인 A에서 자산을 보유한다고 가정해 보자. 당신은 위해 지갑 안에 있는 스마트 브릿지를 통해 지시를 보낼 수 있다. 블록체인 B의 코드는 항상 스마트 브리지 트랜잭션을 검색하고 수신하며, 이 데이터를 수집하고 계약을 발행하는 기능을 트리거하지만, PHANTOM 기반 블록체인을 사용하면 데이터의 릴레이가 비공개 상태로 유지된다.
-
 
 ## 2. PHANTOM Experience
 
@@ -41,18 +41,15 @@ A hard fork is when a protocol changes its code for the purpose of scaling, impl
 The hard fork will be designed to eliminate any challenges the community is facing due to the centralization of the original company. By allowing a decentralized network to be formed we are creating a community driven ecosystem that is governed by the users. The Phantom Foundation will only be giving technical support to protocol and assisting the ecosystem in adopting the platform and utilizing the currency conversion engine for dedicated products. Users do not have to do anything with their ARK or CTR tokens. We are contacting exchanges to be able to either enable trading, withdrawals, or make an announcement on the status of the fork. Users who have tokens in private wallets will not have to perform any changes as well. Once the network's mainnet is launched we will publish a detailed guide on how to claim your ZINCS.
 
 We are first restoring balances on a previous block due to events that happened to the CTR Token. This will allow a restoration of those balances to continue to move the project forward. Based on the CTR balances from block 5363360 (April 1st) from the Ethereum blockchain those CTR Token balances from block 5363360 will be credited a 4:1 XNC/CTR ratio. There will be a snapshot of Ethereum’s CTR balances and ARK Balances on August 30th, 2018 at 00:00 UTC (Block determined soon). Those users will receive a 2:1 Balance of XNC to CTR and ARK holders will receive a 3:1 XNC to ARK balances as well. For purposes of understanding the supply of ZINC there will be approximately 1,007,554,954 XNC on our genesis block. 600,000,000 XNC are being distributed to CTR addresses, ~407,554,954 to ARK addresses.
- 
 
-
-4.	Consensus & Protocol
+4. Consensus & Protocol
 
 PHANTOM uses Ark[13] for the point of governance, consensus, interoperability, and scalability while running a two-tier system to enable the use of Private Smart Contracts with a private smart bridge. Unlike blockchains that rely on Proof of Stake where they need all coin holders to secure the network, PHANTOM will use Ark’s Delegated Proof of Stake model. The top 51 delegates whom are voted in by the network are responsible for up keeping the network. They will confirm blocks and receive ZINC rewards and transaction fees. For every 1 ZINC, it will equal one vote in the network for delegates, which effectively contributes their own ZINC quantity to that delegate. The voter will then also receive a portion of the validation that occurs in accordance to their balances contributed. This allows the benefit of a PoS with the governance of the delegates. By effectively putting this into action, it makes achieving a 51% attack much more difficult. In a standard proof of stake model if one user could purchase 51% of the coins they would be able to authorize invalid transactions. However, in the PHANTOM network even if one delegate manages to get 51% of ZINC supply he would only be one of the 51 delegates which can vote on a change to remove them to maintain the network. This allows a more decentralized ecosystem to take place. By governing the model this way any bad actors that are required to stake their coins in the network will lose their coins if malicious activity is detected. By having this provision, it creates a serious economic disincentive. By allowing 51 delegates we also give the system a broader reach for users to be able to participate within the network.
-
 
 Users running the Phantom Core node that wish to become a delegate within the network must first register their account with the PHANTOM protocol. To enable this function the user must deposit 200 ZINCS per delegate they wish to register. PHANTOM will use a 1 ZINC = 1 vote mechanism and the weight of that person’s wallet will determine the percentage split. For example, if a user votes for two separate delegates than there is an even 50% split weight between the two delegates. When the election cycle is completed the 51 nodes with the highest number of votes are eligible to produce blocks within the PHANTOM network.
 
 The network will be able to transact on custom fees which will be set by the delegates to determine a minimum fee required to produce a block. It will be the sole duty of the delegates to adjust fees in the same way that Bitcoin miners do currently [6]. Enabling Private Smart Contracts comes at a higher computational cost which will transcribe to a higher fee per size in bytes. The consistency of the network will allow for 8 second block times with a capability of 150 transactions per block. The inflation rate will be set to 5.5% with .25% decreasing every year until we reach a 3% inflation rate. The benefit of this is that other blockchains deploying using PHANTOM will have their own network which won't cloud or clog any of the interoperable blockchains. The block reward will be distributed based on the distribution schedule hard coded into the protocol. 90% goes to Delegates and 10% goes to the treasury pool where delegates can vote on budget allocation for the network. Additional features that are being implemented into the PHANTOM blockchain are the use of multi-signatures that will allow multiple private keys to enable a transaction and multi-payments to help batch transactions to help with reduced fees in the network such as for exchanges. These features are being forked from ARK 2.0 and will be implemented into PHANTOM on launch.
- 
+
 1. Private Smart Contracts
 
 Blockchain has led to the ability to create protocols that help the transfer of data and value through global consensus in a trustless ledger. The fact that it allows us to operate in a system that we believe is trustless we need to however trust all the nodes in the network. Privacy is a huge gap, so we have designed a protocol where we can reach consensus and transact privately to execute a series of predefined agreements in a smart contract.
@@ -66,8 +63,6 @@ To ensure that consensus is still met and that the network is decentralized node
 For example, we have tons of Blockchain Based Data Marketplaces now that have emerged to create a decentralized marketplace. However, the reason why they have not been successful is because once the information is sold and transferred it essentially becomes useless and can be resold time and time again as it is now public data. By utilizing PHANTOM, the protocol is designed to allow nodes to verify the existence and validity of these smart contracts that operate decentralized applications but transmit the transactional inputs and outputs in an encrypted fashion where only the peer to peer user can view it with a secret view key.
 
 Now imagine all of the companies running Decentralized Applications on identity based ideas such as Civic. The concept makes sense where we are utilizing an unforgeable ledger to identify individuals and the respective records that go along with it. However how that data is stored in the blockchain is public and takes away the privacy and security of the individuals identity. Running a PHANTOM protocol decentralized application would allow the data transacted through this smart contract to verify the identity remain encrypted so that it hides sensitive information but utilizes the blockchain to validate their identities.
- 
-
 
 5.2 How does a Node perform its duties?
 
@@ -84,21 +79,17 @@ in comparison to a standard proof-of-work blockchain. We have seen Enigma's secr
 contract that operates through their network [14] but these protocols are all off-chain and require the trust of a third-party system running your computations. PHANTOM, with the help of Smart Bridges, allows interoperability of private smart contracts while remaining on-chain and meeting optimal transaction output speed. This feature is already built into the protocol and as other Blockchains deploy as a standalone service they will have the PHANTOM privacy protocol built into it. Users who are using PHANTOM as a stand-alone blockchain will benefit of being able to use these private smart contracts within the network and all running on the blockchain without the data having to be integrated to a third-party protocol.
 
 As we move into the era where companies, governments, and even countries [8] are beginning to make the use of blockchains, we need to make sure we protect the integrity of private and sensitive data. For example, PHANTOM will allow a large institution to build a decentralized application through a smart contract and be able to plug sensitive data like internal numbers, social security numbers, and more without anyone being able to see this data except the intended parties while maintaining a distributed and decentralized platform. Using this as a commercial platform will allow other businesses to deploy a ready-made blockchain using ARK's technology and PHANTOM's privacy protocol and there is huge potential for credit, finance, health, and identity businesses to use this technology.
- 
 
-7.	Private Smart Bridge
+7. Private Smart Bridge
 
 Smart Bridge Technology is a means of connecting blockchains designed by Ark. In order to do this, a snippet of code needs to be embedded in the target blockchain, Ark calls this an Encoded Listener.[15] The encoded listener is very easy to deploy on any blockchain and the AFT is making themselves available to help implement it.
 
 Private Smart Bridge allows users to trigger events on compatible blockchains (those who have added the Encoded Listener to their core code or deployed a standalone PHANTOM blockchain). Using the ZINC token, you can send transactions and trigger actions on any blockchain but allow the PHANTOM protocol to relay those transactions privately. Because Ark can be bridged with any blockchain and if you factor in the use of privacy within this technology utilizing the PHANTOM protocol the use cases are endless. Let’s say you want to issue a record entry on the Factom (FCT) blockchain (Factom is a platform for data storage and record- keeping). Provided that the FCT blockchain is compatible with Smart Bridge, you would simply open your Ark wallet, navigate to the Smart Bridge tab, enter the correct information and instructions for the FCT blockchain, then click send and you’re done. The FCT blockchain will receive and process your transaction accordingly. Now we take that one step further and implement a second layer within the current protocol so that the actions happen on chain and are already pre-programmed in the listeners. This will essentially allow the cross-chain interoperability of blockchains with the use of submitting encrypted data so that the parties sending and receiving the data remain private.
 
 You may be wondering why you would even need a Smart Bridge as it seems as though it's just a “middle-man.” The point of the Smart Bridge is to be a hub for all your blockchain needs. If a Smart Bridge didn’t exist, the FCT entry we just walked through would require you to buy FCT tokens to complete. With a Smart Bridge, you only need to own the native token to make the transaction and you never need to leave the platform while being able to utilize this transaction privately. Imagine if all (or at least a substantial number) of blockchains were Smart Bridged together. The actions you could carry out via your wallet would be potentially endless. Whether you want to instantly convert ZINC to BTC or unlock your front door, or change your thermostat, Smart Bridges could allow you to connect to the Internet of Things (IOT) all from the wallet interface. Private Smart Bridges allows you to do everything mentioned above but keep the transactional portion of the data private. When companies and business launch a PHANTOM based blockchain in the future these listeners are already pre-coded in to make a network of interoperable blockchains all possible from inception. These blockchains will have the capability to use Private Smart Bridges to with a wide array of use case such as the ability to share sensitive data such as health care records from one blockchain to another, execute a series of data transfers for private institutional companies, enable the transfer of value and functions while maintaining anonymity, and more.
- 
-
 
 8.  Conclusion
 
 The PHANTOM blockchain project has been developed to bring privacy use cases to life by utilizing a community to drive the project. The decentralization of its protocol allows for the operators to control the destiny of the system. By giving power to the people we are also giving them an network to help grow the system to bring economic growth and awareness to the project. Having an interoperable blockchain opens doors for those who want to customize their project and use a privacy based module to interact with others in the ecosystem. PHANTOM gives the power back to the people.
-
 
 🚧 WIP 🚧

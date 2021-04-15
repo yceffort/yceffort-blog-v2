@@ -6,13 +6,15 @@ tags:
   - typescript
 published: true
 date: 2020-01-15 04:32:32
-description: "# 리액트에서 카운트 다운을 만들며 배운 것들 리액트에서 카운트 다운을 만든다고 가정해보자. 가장 먼저 생각나는대로,
+description:
+  '# 리액트에서 카운트 다운을 만들며 배운 것들 리액트에서 카운트 다운을 만든다고 가정해보자. 가장 먼저 생각나는대로,
   빠르게 구현한다면 아래와 같은 느낌이 될 것이다.  https://codepen.io/yceffort/pen/BayPyNe  하지만 이
-  코드는 한가지 문제를 가지고 있다.  ## setInterval, setTimeout  `setInte..."
+  코드는 한가지 문제를 가지고 있다.  ## setInterval, setTimeout  `setInte...'
 category: react
 slug: /2020/01/learning-from-react-count-down/
 template: post
 ---
+
 # 리액트에서 카운트 다운을 만들며 배운 것들
 
 리액트에서 카운트 다운을 만든다고 가정해보자. 가장 먼저 생각나는대로, 빠르게 구현한다면 아래와 같은 느낌이 될 것이다.
@@ -93,7 +95,7 @@ Nodejs는 이벤트를 처리하기 위해서 EventEmitter를 사용한다. 일�
 이것과 `requestAnimationFrame` 을 적절하게 이용한다면, 보다 나은 카운트다운 컴포넌트를 만들 수 있을 것이다.
 
 ```typescript
-import EventEmitter from "events"
+import EventEmitter from 'events'
 
 class Timer extends EventEmitter {
   // 최초 시작시간
@@ -133,14 +135,14 @@ class Timer extends EventEmitter {
     // progress의 차이가 처음에 받는 시간의 차이보다 크다면
     if (progress < this.duration) {
       // progress를 인자로 하는 progress 이벤트를 시작한다.
-      this.emit("progress", progress)
+      this.emit('progress', progress)
       // 그리고 이는 브라우저의 리페인팅 (== 카운트 다운 갱신)이 필요하므로,
       // requestAnimationFrame를 호출한다.
       this.timerId = requestAnimationFrame(this.step)
     } else {
       // 카운트 다운이 종료되었다면 stop을 호출하고 이벤트를 끝낸다.
       this.stop()
-      this.emit("finish")
+      this.emit('finish')
     }
   }
 }
@@ -154,12 +156,12 @@ useEffect(() => {
   const timer = new Timer(duration)
 
   // progress 이벤트를 정의한다. 받은 시간만큼, 현재 카운트 다운 시간에서 제외한다.
-  timer.on("progress", (elapsed: number) => {
+  timer.on('progress', (elapsed: number) => {
     setCountDown(duration - elapsed)
   })
 
   // finish 이벤트를 정의한다.
-  timer.on("finish", onFinished)
+  timer.on('finish', onFinished)
 
   timer.start()
 

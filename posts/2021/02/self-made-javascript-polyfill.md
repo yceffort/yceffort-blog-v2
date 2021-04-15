@@ -36,11 +36,12 @@ function at(n) {
 }
 
 for (let T of [Array, String]) {
-  Object.definedProperty(T.prototype, "at", { 
+  Object.definedProperty(T.prototype, 'at', {
     value: at,
     writable: true,
     enumerable: false,
-    configurable: true})
+    configurable: true,
+  })
 }
 ```
 
@@ -48,10 +49,10 @@ for (let T of [Array, String]) {
 
 ### this
 
-정적으로 결정되는 스코프와 다르게, `this`는 어떻게 호출되었는지에 따라서 달라진다. 메서드 this는, 메서드를 호출한 객체, 즉 `.` 연산자 앞에서 호출한 객체가 바인딩 된다. 
+정적으로 결정되는 스코프와 다르게, `this`는 어떻게 호출되었는지에 따라서 달라진다. 메서드 this는, 메서드를 호출한 객체, 즉 `.` 연산자 앞에서 호출한 객체가 바인딩 된다.
 
 ```javascript
-let arr = [1,2,3]
+let arr = [1, 2, 3]
 arr.at(1)
 ```
 
@@ -59,7 +60,7 @@ arr.at(1)
 
 ### prototype
 
-`prototype` 프로퍼티는 함수 객체만이 지닌 프로퍼티다. (그리고 `Array`, `String`은 함수다. 사실 당연 한 거아님?) 이는 생성자 함수가 생성할 인스턴스의 프로토타입을 가리킨다. 생성자 함수가 자신이 생성할 객체의 프로토타입을 할당해주기 위해 사용하는 것으로, 여기에 있는 메소드들은 향후 새롭게 생성되는 객체들의 `__proto__` 또는 `Object.getPrototypeOf`로 접근할 수 있다. 
+`prototype` 프로퍼티는 함수 객체만이 지닌 프로퍼티다. (그리고 `Array`, `String`은 함수다. 사실 당연 한 거아님?) 이는 생성자 함수가 생성할 인스턴스의 프로토타입을 가리킨다. 생성자 함수가 자신이 생성할 객체의 프로토타입을 할당해주기 위해 사용하는 것으로, 여기에 있는 메소드들은 향후 새롭게 생성되는 객체들의 `__proto__` 또는 `Object.getPrototypeOf`로 접근할 수 있다.
 
 > 모든 Array 인스턴스는 Array.prototype을 상속합니다. 다른 생성자와 마찬가지로, Array() 생성자의 프로토타입을 수정하면 모든 Array 인스턴스도 수정의 영향을 받습니다. 예를 들면, 새로운 메서드와 속성을 추가해 모든 Array를 확장할 수 있으므로, 폴리필에 쓰입니다.
 
@@ -84,7 +85,7 @@ Array.prototype === Object.getPrototypeOf([1, 2, 3]) // true
 
 숫자를 처리하는데 있어 나는 `parseInt`를 썼지만, 저 친구는 `Math.trunc`를 사용했다. 이는 그냥 소수점 이하 단위를 버리는 함수다. 굳이 굳이 비교하면 뭔차이가 있을까 하고 찾아봤는데
 
-https://www.samanthaming.com/tidbits/55-how-to-truncate-number/ 
+https://www.samanthaming.com/tidbits/55-how-to-truncate-number/
 
 > parseInt is mainly used for a string argument. So if you're dealing with numbers, it's way better to use Math.trunc().
 

@@ -4,13 +4,14 @@ date: 2019-04-01 06:35:16
 published: true
 tags:
   - python
-description: "## Image Representation & Classification ### Images as Grids of
+description: '## Image Representation & Classification ### Images as Grids of
   Pixels  ```python import numpy as np from skimage import io import
-  matplotlib.image as mpimg  import matplotlib.pyplot as plt import cv..."
+  matplotlib.image as mpimg  import matplotlib.pyplot as plt import cv...'
 category: python
 slug: /2019/04/01/computer-vision-1-image-representation/
 template: post
 ---
+
 ## Image Representation & Classification
 
 ### Images as Grids of Pixels

@@ -5,7 +5,8 @@ published: true
 tags:
   - browser
   - web
-description: "### 🚧작성중 🚧 [원문-How Browsers Work: Behind the scenes of modern
+description:
+  "### 🚧작성중 🚧 [원문-How Browsers Work: Behind the scenes of modern
   web
   browsers](https://www.html5rocks.com/en/tutorials/internals/howbrowserswork/)  \
   > 이 글을 요약/번역한 더 좋은 글이 [네이버 d2](https://d2.naver.com/..."
@@ -13,6 +14,7 @@ category: browser
 slug: /2019/08/12/how-browser-work/
 template: post
 ---
+
 ### 🚧작성중 🚧
 
 [원문-How Browsers Work: Behind the scenes of modern web browsers](https://www.html5rocks.com/en/tutorials/internals/howbrowserswork/)

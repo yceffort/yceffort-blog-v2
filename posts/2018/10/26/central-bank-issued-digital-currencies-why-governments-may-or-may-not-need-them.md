@@ -1,5 +1,5 @@
 ---
-title: "중앙은행 디지털화폐: 왜 정부는 디지털화폐를 발행하려고(하지 않으려고) 할까"
+title: '중앙은행 디지털화폐: 왜 정부는 디지털화폐를 발행하려고(하지 않으려고) 할까'
 published: true
 date: 2019-12-27 10:15:14
 tags:
@@ -13,6 +13,7 @@ category: blockchain
 slug: /2018/10/26/central-bank-issued-digital-currencies-why-governments-may-or-may-not-need-them/
 template: post
 ---
+
 Central Bank-Issued Digital Currencies: Why Governments May (or May Not) Need Them
 
 [원문](https://cointelegraph.com/news/central-bank-issued-digital-currencies-why-governments-may-or-may-not-need-them)

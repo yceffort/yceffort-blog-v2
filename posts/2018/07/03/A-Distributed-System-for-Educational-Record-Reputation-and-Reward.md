@@ -4,14 +4,15 @@ date: 2018-07-03 09:33:22
 published: true
 tags:
   - blockchain
-description: "The Blockchain and Kudos - A Distributed System for Educational
+description: 'The Blockchain and Kudos - A Distributed System for Educational
   Record, Reputation and Reward
   [원문](https://link.springer.com/chapter/10.1007/978-3-319-45153-4_48)  ### 1.
-  교육 목적에 활용하기 위하여, 먼저 블록체인 특성 ..."
+  교육 목적에 활용하기 위하여, 먼저 블록체인 특성 ...'
 category: blockchain
 slug: /2018/07/03/A-Distributed-System-for-Educational-Record-Reputation-and-Reward/
 template: post
 ---
+
 The Blockchain and Kudos - A Distributed System for Educational Record, Reputation and Reward
 
 [원문](https://link.springer.com/chapter/10.1007/978-3-319-45153-4_48)

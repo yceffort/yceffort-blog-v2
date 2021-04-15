@@ -1,10 +1,11 @@
 ---
-title: "Pytorch (3-1) - CNN: 곤충 이미지 분류하기"
+title: 'Pytorch (3-1) - CNN: 곤충 이미지 분류하기'
 date: 2019-01-30 09:32:01
 published: true
 tags:
   - pytorch
-description: pytorch에서 주는 곤충 이미지를 분류하는 작업을 해보려고 한다. 벌과 개미 이미지가 있는데, 각각의 이미지를 잠깐
+description:
+  pytorch에서 주는 곤충 이미지를 분류하는 작업을 해보려고 한다. 벌과 개미 이미지가 있는데, 각각의 이미지를 잠깐
   살펴보면 ![ant1](../images/ant1.jpg)
   ![ant2](../images/ant2.jpg) ![ant3](../images/ant3.jpg)
   ![ant4](../.....
@@ -12,6 +13,7 @@ category: pytorch
 slug: /2019/01/30/pytorch-3-convolutional-neural-network(2)/
 template: post
 ---
+
 pytorch에서 주는 곤충 이미지를 분류하는 작업을 해보려고 한다. 벌과 개미 이미지가 있는데, 각각의 이미지를 잠깐 살펴보면
 
 ![ant1](../images/ant1.jpg)
@@ -49,7 +51,7 @@ label = []
 
 for i, d in enumerate(dirs):
   files = os.listdir(train_path+d)
-  
+
   for f in files:
     img = Image.open(train_path + d + '/' + f, 'r')
     # 이미지를 128, 128로 일괄 리사이즈 한다.
@@ -62,9 +64,9 @@ for i, d in enumerate(dirs):
     r_resize_img = np.asarray(np.float32(r) / 255.0)
     b_resize_img = np.asarray(np.float32(g) / 255.0)
     g_resize_img = np.asarray(np.float32(b) / 255.0)
-    
+
     rgb_resize_img = np.asarray([r_resize_img, b_resize_img, g_resize_img])
-    # 이렇게 가공한 이미지를 추가한다. 
+    # 이렇게 가공한 이미지를 추가한다.
     data.append(rgb_resize_img)
     # 라벨 (ant: 0, bee: 1)
     label.append(i)
@@ -122,7 +124,6 @@ class Net(nn.Module):
 model = Net()
 ```
 
-
 ```python
 criterion = nn.CrossEntropyLoss()
 
@@ -148,4 +149,3 @@ accuracy
 ```
 
 정확도는 0.6이 나왔다. 랜덤으로 때려 맞춰도 50%인 것을 감안했을때, 썩 좋은 수치라고는 할 수 없다. 문제는 covolutional layer의 크기와 개수다. 이를 조금더 조정해야 한다. 조정해서 조금더 정확치를 높여보자.
-

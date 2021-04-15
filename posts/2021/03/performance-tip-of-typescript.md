@@ -414,7 +414,7 @@ tsc --showConfig -p tsconfig.json
 
 ### `traceResolution`
 
-`traceResolution`는 특정 파일이 왜 컴파일에 포함되어 있는지 추적해준다. 
+`traceResolution`는 특정 파일이 왜 컴파일에 포함되어 있는지 추적해준다.
 
 ```bash
 tsc --traceResolution > resolution.txt
@@ -437,7 +437,7 @@ tsc --traceResolution > resolution.txt
 
 ### Dependencies 업그레이드
 
-typescript 의 버전과 `@types`의 패키지 버전을 업그레이드 해보자. 
+typescript 의 버전과 `@types`의 패키지 버전을 업그레이드 해보자.
 
 ### 성능 추적
 
@@ -447,7 +447,7 @@ typescript 의 버전과 `@types`의 패키지 버전을 업그레이드 해보�
 tsc -p ./some/project/src/tsconfig.json --generateTrace tracing_output_folder
 ```
 
-1. `about://tracing` 
+1. `about://tracing`
 2. `load` 클릭
 3. 아웃풋 폴더 내의 `trace.*.json` 열기
 
@@ -455,4 +455,4 @@ tsc -p ./some/project/src/tsconfig.json --generateTrace tracing_output_folder
 
 ## (개인적인) 결론
 
-곧 엄청나게 큰 프로젝트에 타입스크립트를 도입을 앞두고 있어서, 잃어버린 타입스크립트에 대한 기억을 되찾고자 다시한번 공부해보았다. 설정 파일을 만드는 것은 잠깐이지만, 그것을 기반으로 성을 쌓는건 엄청나게 긴 시간이 든다. 기반을 잘못 다지게 되면 성을 아무리 쌓는들 무슨 소용이 있으랴. 🤪  부디 모두가 행복하게 타입스크립트를 well-form으로 적용할 수 있도록 기반을 다지고, 중간 중간 성능 이슈도 점검하면서 잘 만들어 갔으면 조헧다.
+곧 엄청나게 큰 프로젝트에 타입스크립트를 도입을 앞두고 있어서, 잃어버린 타입스크립트에 대한 기억을 되찾고자 다시한번 공부해보았다. 설정 파일을 만드는 것은 잠깐이지만, 그것을 기반으로 성을 쌓는건 엄청나게 긴 시간이 든다. 기반을 잘못 다지게 되면 성을 아무리 쌓는들 무슨 소용이 있으랴. 🤪 부디 모두가 행복하게 타입스크립트를 well-form으로 적용할 수 있도록 기반을 다지고, 중간 중간 성능 이슈도 점검하면서 잘 만들어 갔으면 조헧다.

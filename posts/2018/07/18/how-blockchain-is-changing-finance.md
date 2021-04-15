@@ -13,6 +13,7 @@ category: blockchain
 slug: /2018/07/18/how-blockchain-is-changing-finance/
 template: post
 ---
+
 How Blockchain is changing finance
 
 [원문](https://hbr.org/2017/03/how-blockchain-is-changing-finance)

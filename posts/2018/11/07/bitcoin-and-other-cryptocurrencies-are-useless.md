@@ -12,6 +12,7 @@ category: bitcoin
 slug: /2018/11/07/bitcoin-and-other-cryptocurrencies-are-useless/
 template: post
 ---
+
 Bitcoin and other cryptocurrencies are useless
 
 [원문](https://www.economist.com/leaders/2018/08/30/bitcoin-and-other-cryptocurrencies-are-useless)

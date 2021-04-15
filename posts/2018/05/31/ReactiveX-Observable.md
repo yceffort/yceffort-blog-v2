@@ -4,13 +4,15 @@ date: 2018-05-31 09:01:45
 published: true
 tags:
   - programming
-description: 보통 일반적인 프로그램의 경우에는, 하나씩 작성된 순서에 따라 로직이 실행되고, 완료되면 또다른 로직이 실행되는 등의
+description:
+  보통 일반적인 프로그램의 경우에는, 하나씩 작성된 순서에 따라 로직이 실행되고, 완료되면 또다른 로직이 실행되는 등의
   순서가 있음을 알수 있다. 그러나 이와 달리 ReactiveX는 "Observer"에 의해 임의의 순서에 따라 병렬적으로 실행되고 나중에
   결과나 나온다.  즉 메서드를 호출하는 것이 아니라, Observable안의 데이터를 조회하고, 변환...
 category: programming
 slug: /2018/05/31/ReactiveX-Observable/
 template: post
 ---
+
 보통 일반적인 프로그램의 경우에는, 하나씩 작성된 순서에 따라 로직이 실행되고, 완료되면 또다른 로직이 실행되는 등의 순서가 있음을 알수 있다.
 
 그러나 이와 달리 ReactiveX는 "Observer"에 의해 임의의 순서에 따라 병렬적으로 실행되고 나중에 결과나 나온다.
@@ -23,7 +25,6 @@ template: post
 2. Observable로 비동기 호출을 정의한다.
 3. Subscribe를 통해 옵저버를 Observable에 연결 시킨다.
 4. 메서드 호출로 결과가 리턴 될 때마다, 옵저버의 메서더는 리턴 값 또는 항목을 사용해서 연산을 한다.
-
 
 `onNext` Observable은 새로운 항목을 push 할 때 마다 이 메서드를 호출한다. 이 메서드는 Observable 이 배출하는 항목을 parameter 로 전달 받는다.
 

@@ -1,5 +1,5 @@
 ---
-title: "World Payments Report 2018: 분산 원장은 금융시장의 수요를 충족시키지 못하고 있다."
+title: 'World Payments Report 2018: 분산 원장은 금융시장의 수요를 충족시키지 못하고 있다.'
 date: 2018-10-22 09:48:42
 published: true
 tags:
@@ -12,6 +12,7 @@ category: blockchain
 slug: /2018/10/22/world-payments-report-2018-dlt-falls-short-of-meeting-financial-market-demands/
 template: post
 ---
+
 World Payments Report 2018: DLT Falls Short of Meeting Financial Market Demands
 
 [원문](https://cointelegraph.com/news/world-payments-report-2018-DLT-falls-short-of-meeting-financial-market-demands)

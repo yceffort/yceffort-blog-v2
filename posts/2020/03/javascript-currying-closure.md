@@ -4,14 +4,15 @@ tags:
   - javascript
 published: true
 date: 2020-03-05 06:03:40
-description: "## 커링 [이
+description: '## 커링 [이
   글](https://www.sitepoint.com/currying-in-functional-javascript/) 에 잘 정리 되어
   있습니다.  Currying은 여러 개의 인자를 가진 함수를 호출 할 경우, 파라미터의 수보다 적은 수의 파라미터를 인자로 받으면 누락된
-  파라미터를 인자로 받는 기법을 말한다.  즉 커링은 함수 하나가 n개..."
+  파라미터를 인자로 받는 기법을 말한다.  즉 커링은 함수 하나가 n개...'
 category: javascript
 slug: /2020/03/javascript-currying-closure/
 template: post
 ---
+
 ## 커링
 
 [이 글](https://www.sitepoint.com/currying-in-functional-javascript/) 에 잘 정리 되어 있습니다.
@@ -23,7 +24,7 @@ Currying은 여러 개의 인자를 가진 함수를 호출 할 경우, 파라�
 ```javascript
 function add(a) {
   console.log(`a of add: ${a}`)
-  return function(b) {
+  return function (b) {
     console.log(`a: ${a} / b: ${b}`)
     return a + b
   }
@@ -55,8 +56,8 @@ add1(3) // 4
 
 ```javascript
 function add(a) {
-  return function(b) {
-    return function(c) {
+  return function (b) {
+    return function (c) {
       return a + b + c
     }
   }
@@ -68,7 +69,7 @@ add(1)(2)(3) // 6
 위를 화살표 함수로 쓴다면 아래와 같다.
 
 ```javascript
-const add = a => b => c => a + b + c
+const add = (a) => (b) => (c) => a + b + c
 ```
 
 화살표 함수를 쓰니까 더 간결해졌다.

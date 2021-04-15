@@ -5,20 +5,22 @@ published: true
 tags:
   - javascript
 mathjax: true
-description: '## 클로저 ### 자바스크립트는 어떻게 변수의 유효 범위를 정하는가?  ```javascript function
+description:
+  '## 클로저 ### 자바스크립트는 어떻게 변수의 유효 범위를 정하는가?  ```javascript function
   hello() {   var name = "yceffort"   // 내부함수이며, 클로저다.   function showName()
   {     // 부모함수가 선언한 변수를 사용한다.     alert(`hello, ${name}`)   }...'
 category: javascript
 slug: /2019/05/09/javascript-closure/
 template: post
 ---
+
 ## 클로저
 
 ### 자바스크립트는 어떻게 변수의 유효 범위를 정하는가?
 
 ```javascript
 function hello() {
-  var name = "yceffort"
+  var name = 'yceffort'
   // 내부함수이며, 클로저다.
   function showName() {
     // 부모함수가 선언한 변수를 사용한다.
@@ -37,7 +39,7 @@ hello()
 
 ```javascript
 function hello() {
-  var name = "yceffort"
+  var name = 'yceffort'
   function showName() {
     alert(`hello, ${name}`)
   }
@@ -55,7 +57,7 @@ sayHello()
 ```javascript
 function add(x) {
   var y = 1
-  return function(z) {
+  return function (z) {
     y = 100
     return x + y + z
   }
@@ -83,8 +85,8 @@ console.log(add10(2))
 
 ```javascript
 function makeFontSize(size) {
-  return function() {
-    document.body.style.fontSize = size + "px"
+  return function () {
+    document.body.style.fontSize = size + 'px'
   }
 }
 
@@ -92,28 +94,28 @@ let size12 = makeFontSize(12)
 let size14 = makeFontSize(14)
 let size16 = makeFontSize(16)
 
-document.getElementById("size-12").onclick = size12
-document.getElementById("size-14").onclick = size14
-document.getElementById("size-16").onclick = size16
+document.getElementById('size-12').onclick = size12
+document.getElementById('size-14').onclick = size14
+document.getElementById('size-16').onclick = size16
 ```
 
 프라이빗 메소드를 흉내내는 것도 가능하다. 프라이빗 메소드는 코드에 제한적인 접근만 허용할 수 있고, 전역 네임스페이스를 관리하는 방법을 제공하여 불필요한 메소드가 공용 인터페이스를 혼란스럽게 만들지 않도록 할 수 있다.
 
 ```javascript
-let counter = (function() {
+let counter = (function () {
   let privateCounter = 0
   function change(val) {
     privateCounter += val
   }
 
   return {
-    increment: function() {
+    increment: function () {
       change(1)
     },
-    decrement: function() {
+    decrement: function () {
       change(-1)
     },
-    value: function() {
+    value: function () {
       return privateCounter
     },
   }
@@ -161,11 +163,11 @@ counter.value()
 function MyObject(name, message) {
   this.name = name.toString()
   this.message = message.toString()
-  this.getName = function() {
+  this.getName = function () {
     return this.name
   }
 
-  this.getMessage = function() {
+  this.getMessage = function () {
     return this.message
   }
 }
@@ -178,10 +180,10 @@ function MyObject(name, message) {
   this.name = name.toString()
   this.message = message.toString()
 }
-MyObject.prototype.getName = function() {
+MyObject.prototype.getName = function () {
   return this.name
 }
-MyObject.prototype.getMessage = function() {
+MyObject.prototype.getMessage = function () {
   return this.message
 }
 ```
@@ -191,11 +193,11 @@ function MyObject(name, message) {
   this.name = name.toString()
   this.message = message.toString()
 }
-;(function() {
-  this.getName = function() {
+;(function () {
+  this.getName = function () {
     return this.name
   }
-  this.getMessage = function() {
+  this.getMessage = function () {
     return this.message
   }
 }.call(MyObject.prototype))

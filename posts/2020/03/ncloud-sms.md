@@ -1,5 +1,5 @@
 ---
-title: "[Python] Send ncloud sms message"
+title: '[Python] Send ncloud sms message'
 tags:
   - python
 published: true
@@ -12,6 +12,7 @@ category: python
 slug: /2020/03/ncloud-sms/
 template: post
 ---
+
 네이버 클라우드 플랫폼의 서비스 중 하나인 https://www.ncloud.com/product/applicationService/sens 로 SMS를 발송하는 예제. ncloud서비스를 다 써본건 아니지만, `make_signature`는 전 서비스에 다 똑같이 쓸 수 있을 것 같은 기분이다.
 
 ```python

@@ -4,12 +4,12 @@ date: 2021-03-12 18:34:41
 tags:
   - javascript
 published: true
-description: "IE를 주깁시다"
+description: 'IE를 주깁시다'
 ---
 
-ES6에서 새롭게 나온 Proxy는 요즘 많은 프레임워크에서 (요즘이라기엔 많이 지났지만,) 주목하고 있는 기능인 것 같다. 
+ES6에서 새롭게 나온 Proxy는 요즘 많은 프레임워크에서 (요즘이라기엔 많이 지났지만,) 주목하고 있는 기능인 것 같다.
 
-[mobx에서도 proxy를 쓰고 있고](https://mobx.js.org/configuration.html) [2010 JSconf 에서도 관련 영상이 존재하고](https://www.youtube.com/watch?v=sClk6aB_CPk&ab_channel=JSConf) (무려 11년전,,) [vue.js](https://v3.vuejs.org/guide/reactivity.html#what-is-reactivity)에서도 reactivity 지원을 위해 Proxy를 사용하고 있다. 
+[mobx에서도 proxy를 쓰고 있고](https://mobx.js.org/configuration.html) [2010 JSconf 에서도 관련 영상이 존재하고](https://www.youtube.com/watch?v=sClk6aB_CPk&ab_channel=JSConf) (무려 11년전,,) [vue.js](https://v3.vuejs.org/guide/reactivity.html#what-is-reactivity)에서도 reactivity 지원을 위해 Proxy를 사용하고 있다.
 
 ## Proxy
 
@@ -27,7 +27,7 @@ const proxy = new Proxy(target, {}) // 핸들러가 없다
 proxy.test = 5 // 프록시에 값을 썼는데
 
 console.log(target.test) // 5 타겟에도 프로퍼티가 추가됐다.
-console.log(proxy.test)  // 5 프록시를 통해서도 읽을 수 있다.
+console.log(proxy.test) // 5 프록시를 통해서도 읽을 수 있다.
 
 console.log(proxy) // Proxy {test: 5}
 console.log(target) // {test: 5}
@@ -61,35 +61,35 @@ const arr = new Proxy([0, 1, 2, 3], {
       console.log(`${prop}은 존재하지 않습니다`)
       return 0
     }
-  }
+  },
 })
 
 console.log(arr[0]) // 1
 console.log(arr[1]) // 2
-console.log(arr[100])  // 0 
-// 100은 존재하지 않습니다 proxyConsoleLog.js:12 
+console.log(arr[100]) // 0
+// 100은 존재하지 않습니다 proxyConsoleLog.js:12
 ```
 
-프록시에서 정의한 trap이 get을 가로채서 작동하고 있음을 알 수 있다. 
+프록시에서 정의한 trap이 get을 가로채서 작동하고 있음을 알 수 있다.
 
 이번엔 `set`트랩을 만들어보자. 다른언어의 그것 처럼, 숫자만 추가할 수 있는 배열을 만들어보자.
 
 ```javascript
 const arr = new Proxy([], {
-  set(target, prop, value) {    
+  set(target, prop, value) {
     if (typeof value === 'number') {
       target[prop] = value
       return true
     } else {
       return false
     }
-  }
+  },
 })
 
 arr.push(1)
 arr.push(2)
 arr.push(3)
-arr.push('졸려') // VM503:1 Uncaught TypeError: 'set' on proxy: trap returned falsish for property '3'    
+arr.push('졸려') // VM503:1 Uncaught TypeError: 'set' on proxy: trap returned falsish for property '3'
 
 console.log([...arr]) // 1, 2, 3
 ```
@@ -98,34 +98,40 @@ console.log([...arr]) // 1, 2, 3
 
 ## Reflect
 
-[`Reflect`는 중간에서 가로챌 수 있는 작업에 대한 메소드를 제공한다.](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Reflect) `Reflect`는 생성자 함수가 아니므로, 인스턴스를 만들거나 `new`로 호출할 없다. 
+[`Reflect`는 중간에서 가로챌 수 있는 작업에 대한 메소드를 제공한다.](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Reflect) `Reflect`는 생성자 함수가 아니므로, 인스턴스를 만들거나 `new`로 호출할 없다.
 
-요약해서 말하자면, `Proxy` 생성을 단순화 한 빌트인 객체라고 보면 된다. 
+요약해서 말하자면, `Proxy` 생성을 단순화 한 빌트인 객체라고 보면 된다.
 
 ```javascript
-const user = new Proxy({name: "John"}, {
-  get(target, prop, receiver) {    
-    return target[prop]
+const user = new Proxy(
+  { name: 'John' },
+  {
+    get(target, prop, receiver) {
+      return target[prop]
+    },
+    set(target, prop, val, receiver) {
+      target[prop] = value
+      return true
+    },
   },
-  set(target, prop, val, receiver) {    
-    target[prop] = value
-    return true
-  }
-});
+)
 ```
 
 ```javascript
-const user = new Proxy({name: "John"}, {
-  get(target, prop, receiver) {    
-    return Reflect.get(target, prop, receiver) // target[prop] 를 대체 해주었다.
+const user = new Proxy(
+  { name: 'John' },
+  {
+    get(target, prop, receiver) {
+      return Reflect.get(target, prop, receiver) // target[prop] 를 대체 해주었다.
+    },
+    set(target, prop, val, receiver) {
+      return Reflect.set(target, prop, val, receiver) // target[prop] = value 를 대체해주고, true/false도 리턴해준다.
+    },
   },
-  set(target, prop, val, receiver) {    
-    return Reflect.set(target, prop, val, receiver) // target[prop] = value 를 대체해주고, true/false도 리턴해준다.
-  }
-});
+)
 
 console.log(user.name) // John
-user.name = "Pete" // pete
+user.name = 'Pete' // pete
 ```
 
 ## `Observable` 만들기
@@ -154,16 +160,18 @@ function observable(target) {
       const result = Reflect.set(...arguments)
       if (result) {
         // 각 handler에 현재 set arguments를 넘겨준다.
-        target[handlers].forEach(handler => handler({target, property, value, receiver}))
+        target[handlers].forEach((handler) =>
+          handler({ target, property, value, receiver }),
+        )
       }
       return result
-    }
+    },
   })
 }
 
 const user = observable({})
 
-user.observe(({property, value}) => {
+user.observe(({ property, value }) => {
   console.log(`'${property}' => '${value}'`)
 })
 
@@ -177,7 +185,7 @@ user.name = '삼전주가떡상기원' // 'name' => '삼전주가떡상기원'
 https://babeljs.io/docs/en/learn/#ecmascript-2015-features-proxies
 
 > Unsupported feature
-> 
+>
 > Due to the limitations of ES5, Proxies cannot be transpiled or polyfilled. See support in various JavaScript engines.
 
 [따라서 babel repl에서 시도해보아도, 별 소용이 없다..](https://babeljs.io/repl#?browsers=defaults%2C%20ie%2011%2C%20not%20ie_mob%2011&build=&builtIns=false&spec=false&loose=false&code_lz=MYewdgzgLgBAhgJwTAvDMBTA7jACgkADwE8AKAbQF0AaGAbwCgYYIMpSpEBzN2gBwJ9aANzgAbAK4YAlPWbMm8gJYAzGB2J8MINaMkZUKNAHIwEgLYAjDAmOzG8-ZwQ8o5ASD6VUMPVMWOCGwSCGAwUAj-jgC-MBhirPQB8kFQIWEq4qzJ0Yq50dIMQA&debug=false&forceAllTransforms=false&shippedProposals=false&circleciRepo=&evaluate=false&fileSize=false&timeTravel=false&sourceType=module&lineWrap=true&presets=env&prettier=false&targets=&version=7.13.10&externalPlugins=)
@@ -189,7 +197,7 @@ https://babeljs.io/docs/en/learn/#ecmascript-2015-features-proxies
 아쉽게도, 완벽하게 polyfill이 지원이 되지 않는다. 구글 크롬팀에서 만든 폴리필도 몇가지 밖에 동작하지 않는다.
 
 > Currently, the following traps are supported-
-> 
+>
 > - get
 > - set
 > - apply

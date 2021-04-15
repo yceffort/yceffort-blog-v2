@@ -4,14 +4,15 @@ date: 2018-07-23 11:51:43
 published: true
 tags:
   - blockchain
-description: "Blockchain and property
+description: 'Blockchain and property
   [원문](https://www.mitpressjournals.org/doi/abs/10.1162/inov_a_00270)  ## 블록체인은
   부동산 시장을 이치에 맞게 조정해준다.  현대 부동산 시장의 거래에는 마찰이 많이 존재한다. 부동산 인프라는 느리고 비싸며, 취약하다.
-  미국에서 판매되는 주택의 경우 거래 비..."
+  미국에서 판매되는 주택의 경우 거래 비...'
 category: blockchain
 slug: /2018/07/23/blokchain-and-property/
 template: post
 ---
+
 Blockchain and property
 
 [원문](https://www.mitpressjournals.org/doi/abs/10.1162/inov_a_00270)

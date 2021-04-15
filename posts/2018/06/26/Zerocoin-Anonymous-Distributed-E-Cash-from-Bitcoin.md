@@ -5,13 +5,14 @@ published: true
 mathjax: true
 tags:
   - bitcoin
-description: "Zerocoin: Anonymous Distributed E-Cash from Bitcoin
+description: 'Zerocoin: Anonymous Distributed E-Cash from Bitcoin
   [원문](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=6547123)  비트코인은 완전히
-  탈중앙화 되있고, 어떠한 중앙은행이나 인증기관도 필요로 하지 않는다. 비트코인은 보안성을 분산화된 구조와 두가지 가정에 의해..."
+  탈중앙화 되있고, 어떠한 중앙은행이나 인증기관도 필요로 하지 않는다. 비트코인은 보안성을 분산화된 구조와 두가지 가정에 의해...'
 category: bitcoin
 slug: /2018/06/26/Zerocoin-Anonymous-Distributed-E-Cash-from-Bitcoin/
 template: post
 ---
+
 Zerocoin: Anonymous Distributed E-Cash from Bitcoin
 
 [원문](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=6547123)

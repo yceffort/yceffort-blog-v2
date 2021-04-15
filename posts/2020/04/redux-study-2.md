@@ -6,14 +6,15 @@ tags:
   - react
 published: true
 date: 2020-04-28 07:33:32
-description: "## 리덕스의 탄생 배경
+description: '## 리덕스의 탄생 배경
   https://redux.js.org/introduction/motivation  **자바스크립트 싱글 페이지 애플리케이션에 대한 요구
   사항이 점점 복잡해 짐에 따라서, 우리의 코드는 그 어느 때 보다도 더 많이 상태관리에 대한 필요성을 느끼고 있다.** 여기서 말하는
-  상태에는 서버 응답, 캐시된 데이터 뿐만아니라 서버에 아직 요..."
+  상태에는 서버 응답, 캐시된 데이터 뿐만아니라 서버에 아직 요...'
 category: typescript
 slug: /2020/04/redux-study-2/
 template: post
 ---
+
 ## 리덕스의 탄생 배경
 
 https://redux.js.org/introduction/motivation
@@ -60,8 +61,8 @@ https://redux.js.org/introduction/core-concepts
 모든 변화가 액션으로 설명하도록 강요하는 것은, 앱에서 무슨일이 일어나고 있는지 명확하게 이해할 수 있도록 도와준다. 만약 무언가 변했다면, 그 이유를 알 수 있다. 액션은 마치 빵가루와 같다. (흔적을 남긴다는 뜻) 그것은 단지 상태와 액션을 argument로 남겨두고, 앱의 다음 상태를 리턴하는 것 뿐이다. 사이즈가 큰 앱의 경우 이러한 기능을 명세하기 어려울 수 있으므로, 상태 값을 작은 함수로 나누어서 작성해야 한다.
 
 ```javascript
-function visibilityFilter(state = "SHOW_ALL", action) {
-  if (action.type === "SET_VISIBILITY_FILTER") {
+function visibilityFilter(state = 'SHOW_ALL', action) {
+  if (action.type === 'SET_VISIBILITY_FILTER') {
     return action.filter
   } else {
     return state
@@ -70,13 +71,13 @@ function visibilityFilter(state = "SHOW_ALL", action) {
 
 function todos(state = [], action) {
   switch (action.type) {
-    case "ADD_TODO":
+    case 'ADD_TODO':
       return state.concat([{ text: action.text, completed: false }])
-    case "TOGGLE_TODO":
+    case 'TOGGLE_TODO':
       return state.map((todo, index) =>
         action.index === index
           ? { text: todo.text, completed: !todo.completed }
-          : todo
+          : todo,
       )
     default:
       return state
@@ -135,13 +136,13 @@ console.log(store.getState())
 
 ```javascript
 store.dispatch({
-  type: "COMPLETE_TODO",
+  type: 'COMPLETE_TODO',
   index: 1,
 })
 
 store.dispatch({
-  type: "SET_VISIBILITY_FILTER",
-  filter: "SHOW_COMPLETED",
+  type: 'SET_VISIBILITY_FILTER',
+  filter: 'SHOW_COMPLETED',
 })
 ```
 
@@ -152,9 +153,9 @@ store.dispatch({
 리듀서는 이전의 상태값과 액션을 받아다가, 다음 상태를 반환하는 단순한 함수다. 여기에서는 이전의 상태값이 아닌 새로운 상태 오브젝트를 리턴해야 한다. 단일 리듀서로 시작할 수 있으며, 앱이 커지면 상태트리의 일부를 관리하는 작은 리듀러들로 구성할 수 있다. 리듀서는 단순히 함수이기 때문에, 순서를 조절하거나, 추가 데이터를 넘기거나, 페이징같은 기능을 하기 위한 재사용한 리듀서를 만들 수도 있다.
 
 ```javascript
-function visibilityFilter(state = "SHOW_ALL", action) {
+function visibilityFilter(state = 'SHOW_ALL', action) {
   switch (action.type) {
-    case "SET_VISIBILITY_FILTER":
+    case 'SET_VISIBILITY_FILTER':
       return action.filter
     default:
       return state
@@ -163,7 +164,7 @@ function visibilityFilter(state = "SHOW_ALL", action) {
 
 function todos(state = [], action) {
   switch (action.type) {
-    case "ADD_TODO":
+    case 'ADD_TODO':
       return [
         ...state,
         {
@@ -171,7 +172,7 @@ function todos(state = [], action) {
           completed: false,
         },
       ]
-    case "COMPLETE_TODO":
+    case 'COMPLETE_TODO':
       return state.map((todo, index) => {
         if (index === action.index) {
           return Object.assign({}, todo, {
@@ -185,7 +186,7 @@ function todos(state = [], action) {
   }
 }
 
-import { combineReducers, createStore } from "redux"
+import { combineReducers, createStore } from 'redux'
 const reducer = combineReducers({ visibilityFilter, todos })
 const store = createStore(reducer)
 ```

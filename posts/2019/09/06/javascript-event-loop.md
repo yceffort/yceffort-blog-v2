@@ -4,13 +4,15 @@ date: 2019-12-27 10:15:14
 published: true
 tags:
   - javascript
-description: "## 자바스크립트는 단일 스레드 기반의 언어 자바스크립트는 '단일 스레드' 기반의 언어다. 즉, 스레드가 하나이기
+description:
+  "## 자바스크립트는 단일 스레드 기반의 언어 자바스크립트는 '단일 스레드' 기반의 언어다. 즉, 스레드가 하나이기
   때문에 동시에 하나의 작업만 처리할 수 있다. 그러나 자바스크립트가 사용되는 웹을 곰곰히 생각해보면 동시에 여러개의 작업을 처리하는 모습을
   볼 수 있다. 스레드가 하나인 자바스크립트는 동시성을 어떻게 처리할까? 먼저 브라우저 구동환경을 살펴보..."
 category: javascript
 slug: /2019/09/06/javascript-event-loop/
 template: post
 ---
+
 ## 자바스크립트는 단일 스레드 기반의 언어
 
 자바스크립트는 '단일 스레드' 기반의 언어다. 즉, 스레드가 하나이기 때문에 동시에 하나의 작업만 처리할 수 있다. 그러나 자바스크립트가 사용되는 웹을 곰곰히 생각해보면 동시에 여러개의 작업을 처리하는 모습을 볼 수 있다. 스레드가 하나인 자바스크립트는 동시성을 어떻게 처리할까? 먼저 브라우저 구동환경을 살펴보자.
@@ -32,14 +34,14 @@ function delay() {
 function hi3() {
   delay()
   hi2()
-  console.log("hi3!") // (3)
+  console.log('hi3!') // (3)
 }
 function hi2() {
   delay()
-  console.log("hi2!") // (2)
+  console.log('hi2!') // (2)
 }
 function hi1() {
-  console.log("hi1!") // (4)
+  console.log('hi1!') // (4)
 }
 
 setTimeout(hi1, 10) // (1)
@@ -62,21 +64,21 @@ setTimeout이 얼마나 일찍 끝났건 간에, 다른 작업들이 먼저 콜 
 ## 마이크로 태스크
 
 ```javascript
-console.log("script start")
+console.log('script start')
 
-setTimeout(function() {
-  console.log("setTimeout")
+setTimeout(function () {
+  console.log('setTimeout')
 }, 0)
 
 Promise.resolve()
-  .then(function() {
-    console.log("promise1")
+  .then(function () {
+    console.log('promise1')
   })
-  .then(function() {
-    console.log("promise2")
+  .then(function () {
+    console.log('promise2')
   })
 
-console.log("script end")
+console.log('script end')
 ```
 
 여기서 `Promise`가 setTimeout보다 먼저 실행되는데, 그 이유는 `Promise`가 마이크로 태스크에 등록되기 때문이다. 마이크로 태스크는 일반 태스크 보다 더 높은 우선순위를 갖으며, 태스크 큐에 대기중인 것이 있다고 하더라도 마이크로태스크에 있는 것이 우선해서 실행된다. 마이크로 태스크의 잡은 태스크 큐보다 우선하기 때문에, 시간이 오래 걸릴 경우 렌더링 엔진이 작동하지 못하고(일반 태스크에 있으므로) 렌더링이 느려지는 현상이 발생할 수도 있다.

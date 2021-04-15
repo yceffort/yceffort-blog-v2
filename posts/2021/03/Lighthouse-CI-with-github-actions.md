@@ -7,7 +7,7 @@ tags:
   - github actions
   - performance
 published: true
-description: "점수의 노예가 되버린 나"
+description: '점수의 노예가 되버린 나'
 ---
 
 Lighthouse는 웹사이트의 성능을 측정하는 유명한 도구중 하나다. 이 Lighthouse를 CI와 연동하여 수시로 웹사이트의 성능을 점검할 수 있도록 해보자.
@@ -23,22 +23,22 @@ Lighthouse는 웹사이트의 성능을 측정하는 유명한 도구중 하나�
 2. 루트 디렉토리에서 `lighthouserc.js`를 만들자. 여기가 [설정](https://github.com/GoogleChrome/lighthouse-ci/blob/v0.4.1/docs/configuration.md#configuration-file)이 들어가는 곳이다.
    ```javascript
    module.exports = {
-    ci: {
-      collect: {
-        /* Add configuration here */
-      },
-      upload: {
-        /* Add configuration here */
-      },
-    },
-   };
+     ci: {
+       collect: {
+         /* Add configuration here */
+       },
+       upload: {
+         /* Add configuration here */
+       },
+     },
+   }
    ```
 3. Lighthouse CI가 실행 될때마다, 서버가 구동되어 사이트가 시작되어야 한다. 이 서버가 작동하게되면, Lighthouse CI가 해당 서버를 토대로 웹사이트 성능을 추적할 것이다. 작업이 끝나면, 알아서 종료된다. 제대로 작동하기 위해서는 둘 중에 하나를 설정해둬야 한다.
    1. `staticDir`: `ci.collect`에 해당 속성과 함께 static 파일이 위치한 곳을 설정해 두면된다. 그러면 Lighthouse CI는 알아서 그 파일을 기준으로 서버를 실행해서 테스트를 하게 된다.
    2. `startServerCommand`: static한 사이트가 아니라면, `ci.collect`에 서버를 키는 명령어를 적어두면 된다. (`npm run start`) 그러면 Lighthouse CI는 알아서 해당 명령어를 실행해서 서버를 키고, 끝난 후에는 종료 시킬 것이다.
 4. `ci.collect.url`에 Lighthouse CI가 조사해야 할 주소를 적어두면 된다. 값은 배열로 설정해야 하며, 이말인 즉슨 여러개의 사이트를 적어둘 수 있다는 뜻이다. 기본값으로 해당 주소를 각 3번씩 조사한다.
 5. `ci.upload.target`에 `temporary-public-storage`로 설정해두자. Lighthouse CI가 조사한 결과 레포트를 해당 위치에 업로드 할 것이다. 이 결과는 최대 7일까지 유지되며 이후에는 자동으로 삭제된다. 자세한 내용은 [여기](https://github.com/GoogleChrome/lighthouse-ci/blob/main/docs/configuration.md#target)를 확인하자.
-6. `ci.collect.numberOfRuns`에 숫자를 넣어두면, 몇번을 실행할지 설정할 수 있다. 
+6. `ci.collect.numberOfRuns`에 숫자를 넣어두면, 몇번을 실행할지 설정할 수 있다.
 7. 설정이 끝났다면 실행하자. `lhci autorun` 정상적으로 설정해두었다면, 아래와 같이 결과가 나타날 것이다.
 
 ```javascript
@@ -53,7 +53,7 @@ module.exports = {
     upload: {
       startServerCommand: 'npm run start',
       target: 'temporary-public-storage',
-    }
+    },
   },
 }
 ```
@@ -91,7 +91,7 @@ Lighthouse CI는 다양한 CI 툴과 연계할 수 있다. [여기](https://gith
 Lighthouse CI 에서는 세가지 단계로 검사할 수 있다.
 
 - `off`: 무시
-- `warn`: 
+- `warn`:
 - `error`: 이 경우 0가 아닌 값으로 종료된다.
 
 ```javascript
@@ -102,15 +102,15 @@ module.exports = {
     },
     assert: {
       assertions: {
-        'categories:performance': ['warn', {minScore: 1}],
-        'categories:accessibility': ['error', {minScore: 1}]
-      }
+        'categories:performance': ['warn', { minScore: 1 }],
+        'categories:accessibility': ['error', { minScore: 1 }],
+      },
     },
     upload: {
       // ...
     },
   },
-};
+}
 ```
 
 ## github action과 연동하기
@@ -120,51 +120,51 @@ module.exports = {
 1. `.github/workflows`에 원하는 이름으로 파일을 만든다. 나는 `lightouse-ci.yaml`로 했다.
 2. 해당 파일 내용을 다음과 같이 꾸몄다.
    ```yaml
-    name: Build project and run Lighthouse CI
-    on: [push]
-    jobs:
-      lhci:
-        name: Lighthouse CI
-        runs-on: ubuntu-latest
-        steps:
-          - uses: actions/checkout@v1
-          - name: Use Node.js 12.x
-            uses: actions/setup-node@v1
-            with:
-              node-version: 12.x
-          - name: npm ci
-            run: |
-              npm ci
-          - name: run build
-            run: npm run build-nextjs
-          - name: run Lighthouse CI
-            run: |
-              npm install -g @lhci/cli@0.3.x
-              lhci autorun --upload.target=temporary-public-storage || echo "LHCI failed!"
+   name: Build project and run Lighthouse CI
+   on: [push]
+   jobs:
+     lhci:
+       name: Lighthouse CI
+       runs-on: ubuntu-latest
+       steps:
+         - uses: actions/checkout@v1
+         - name: Use Node.js 12.x
+           uses: actions/setup-node@v1
+           with:
+             node-version: 12.x
+         - name: npm ci
+           run: |
+             npm ci
+         - name: run build
+           run: npm run build-nextjs
+         - name: run Lighthouse CI
+           run: |
+             npm install -g @lhci/cli@0.3.x
+             lhci autorun --upload.target=temporary-public-storage || echo "LHCI failed!"
    ```
    1. nodejs 설치
-   2. npm ci 
+   2. npm ci
    3. 프로젝트 빌드
    4. lhci 설치 및 실행
 3. assert 를 추가
    ```javascript
-    module.exports = {
-      ci: {
-        collect: {
-          url: ['http://localhost:3000'],
-          collect: {
-            numberOfRuns: 5,
-          },
-        },
-        upload: {
-          startServerCommand: 'npm run start',
-          target: 'temporary-public-storage',
-        },
-        assert: {
-          preset: 'lighthouse:recommended',
-        },
-      },
-    }
+   module.exports = {
+     ci: {
+       collect: {
+         url: ['http://localhost:3000'],
+         collect: {
+           numberOfRuns: 5,
+         },
+       },
+       upload: {
+         startServerCommand: 'npm run start',
+         target: 'temporary-public-storage',
+       },
+       assert: {
+         preset: 'lighthouse:recommended',
+       },
+     },
+   }
    ```
 
 이제 코드를 푸쉬하면 아래와 같이 작동하는 것을 볼 수 있다.
@@ -177,7 +177,6 @@ https://github.com/yceffort/yceffort-blog-v2/pull/278
 
 추가로 [여기](https://github.com/apps/lighthouse-ci)를 방문해서 app을 설치하고 레파지토리에 `LHCI_GITHUB_APP_TOKEN`를 키값으로 값을 추가해준다면, PR에 메시지도 남겨준다. 물론, secret 추가 이후에는 아까 만들었던 github action yaml 도 변경해주어야 한다.
 
-
 ```yaml
 - name: run Lighthouse CI
   env:
@@ -189,7 +188,7 @@ https://github.com/yceffort/yceffort-blog-v2/pull/278
 
 ## 후기
 
-나름 블로그 최초 개설 시엔 신경을 썼었는데 시간이 지나고 이것저것 덕지덕지 붙으면서 점수가 점점 바닥으로 가고 있는 중이라는 것을 이제 알게 되었다. 🤪 
+나름 블로그 최초 개설 시엔 신경을 썼었는데 시간이 지나고 이것저것 덕지덕지 붙으면서 점수가 점점 바닥으로 가고 있는 중이라는 것을 이제 알게 되었다. 🤪
 
 여기서 개선은 모르겠고,,, 블로그 v3.0을 계획하고 있습니다. 블로그 v3.0 작업시에 lighthouse 점수를 수시로 확인하면서 작업을 해야겠다. 그리고 지금 내가 몸담고 있는 프로젝트에도 Lighthouse CI를 들이밀어 봐야겠다. 라이트하우스 함무바라 (점수보고) 디진다 퍼뜩 무봐라
 

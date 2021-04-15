@@ -1,5 +1,5 @@
 ---
-title: "비트코인 10주년 기념: 비트코인의 역사"
+title: '비트코인 10주년 기념: 비트코인의 역사'
 date: 2018-11-04 04:44:01
 published: true
 tags:
@@ -12,6 +12,7 @@ category: blockchain
 slug: /2018/11/03/history-of-bitcoin/
 template: post
 ---
+
 Bitcoin turns 10: An annotated timeline
 
 [원문](https://sg.finance.yahoo.com/news/history-bitcoins-first-decade-one-chart-003220581.html)
@@ -40,7 +41,7 @@ Bitcoin turns 10: An annotated timeline
 
 ## 2014년: 마운틴 Gox
 
-비트코인은 2014년 비트코인 거래소의 붕괴로 큰 타격을 받았다. 도쿄에 본사를 두고 있는 마운틴 Gox는 2014년 2월 85만 비트코인 상당의  대규모 해킹으로 인해 파산 신청을 했다.
+비트코인은 2014년 비트코인 거래소의 붕괴로 큰 타격을 받았다. 도쿄에 본사를 두고 있는 마운틴 Gox는 2014년 2월 85만 비트코인 상당의 대규모 해킹으로 인해 파산 신청을 했다.
 
 2013년에 비트코인 가격 거품에도 꺼지기 시작했다. 1천 달러 가까이에서 시작했지만, 비트코인은 2014년 300달러까지 떨어졌다.
 

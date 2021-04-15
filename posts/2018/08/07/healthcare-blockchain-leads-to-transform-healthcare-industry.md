@@ -5,18 +5,19 @@ published: true
 tags:
   - blockchain
   - healthcare
-description: "Healthcare Blockchain leads to Transform Healthcare Industry
+description: 'Healthcare Blockchain leads to Transform Healthcare Industry
   [원문](https://www.ijariit.com/manuscripts/v4i1/V4I1-1359.pdf)  ### 1. 병원간
-  네트워크   병원은 분산된 원장 네트워크를 사용하여 다른 병원과 연결할 수 있다. 정보와 데이터는 블록에 저장된다. ..."
+  네트워크   병원은 분산된 원장 네트워크를 사용하여 다른 병원과 연결할 수 있다. 정보와 데이터는 블록에 저장된다. ...'
 category: blockchain
 slug: /2018/08/07/healthcare-blockchain-leads-to-transform-healthcare-industry/
 template: post
 ---
+
 Healthcare Blockchain leads to Transform Healthcare Industry
 
 [원문](https://www.ijariit.com/manuscripts/v4i1/V4I1-1359.pdf)
 
-### 1. 병원간 네트워크 
+### 1. 병원간 네트워크
 
 병원은 분산된 원장 네트워크를 사용하여 다른 병원과 연결할 수 있다. 정보와 데이터는 블록에 저장된다. 요즘의 시나리오에 따르면, 병원 간의 건강기록과 운영은 서로 얽혀 있다. 블록체인을 통해 개별 사용자에 대한 레코드를 저장하는 전국적인 공통 플랫폼을 만들 수 있다. 블록체인은 서로 다른 당사자들 간의 정보 공유라는, 신뢰가 필요없고 협력적인 생태계를 제공할 것이다.
 
@@ -52,7 +53,7 @@ Healthcare Blockchain leads to Transform Healthcare Industry
 
 ## 헬스케어 블록체인의 구조
 
-UI, API, Business Logic, 신원 관리, 데이터, 블록체인 네트워크 를 포함하여 총 6개의 레벨로 아키텍쳐를 나눠볼 수 있다. 아래 그림에서 보듯, 상호 레이어간에는 느슨한 결합이 유지된다. 이 아키텍처는 다른 블록체인 네트워크에 적용할 수 있을 정도로 유연하게 되어야 한다. 이더리움, Hyperledger, Hydrachain, Multichain등 여러 프로토콜에 연결할 수 있다. 아키텍처는 모든 데이터 저장소에 연결할 수 있는 가능성을 가지고 있다. 네트워크 전체의 사용자 및 시스템은 키를 기반으로 인증을 하게 된다. 블록체인 네트워크는 나머지 API가 관리할 것이다. 
+UI, API, Business Logic, 신원 관리, 데이터, 블록체인 네트워크 를 포함하여 총 6개의 레벨로 아키텍쳐를 나눠볼 수 있다. 아래 그림에서 보듯, 상호 레이어간에는 느슨한 결합이 유지된다. 이 아키텍처는 다른 블록체인 네트워크에 적용할 수 있을 정도로 유연하게 되어야 한다. 이더리움, Hyperledger, Hydrachain, Multichain등 여러 프로토콜에 연결할 수 있다. 아키텍처는 모든 데이터 저장소에 연결할 수 있는 가능성을 가지고 있다. 네트워크 전체의 사용자 및 시스템은 키를 기반으로 인증을 하게 된다. 블록체인 네트워크는 나머지 API가 관리할 것이다.
 
 ![healthcare-blockchain-network-architecture](../images/healthcare-blockchain-network-architecture.png)
 

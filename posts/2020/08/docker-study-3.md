@@ -4,13 +4,15 @@ tags:
   - docker
 published: true
 date: 2020-08-09 03:48:47
-description: "## 도커 이미지 npm에서 다양한 도커 관련 패키지를 관리하듯, 도커는 기본적으로 [Docker
+description:
+  '## 도커 이미지 npm에서 다양한 도커 관련 패키지를 관리하듯, 도커는 기본적으로 [Docker
   Hub](https://hub.docker.com/)라는 중앙 이미지 저장소에서 다양한 이미지를 내려받을 수 있다. Docker Hub는
-  도커가 제공하고 있는 이미지 저장소로, 누구나 도커 계정을 가지고 있다면 쉽게 이미지를 공유할 수 있다.  `docker..."
+  도커가 제공하고 있는 이미지 저장소로, 누구나 도커 계정을 가지고 있다면 쉽게 이미지를 공유할 수 있다.  `docker...'
 category: docker
 slug: /2020/08/docker-study-3/
 template: post
 ---
+
 ## 도커 이미지
 
 npm에서 다양한 도커 관련 패키지를 관리하듯, 도커는 기본적으로 [Docker Hub](https://hub.docker.com/)라는 중앙 이미지 저장소에서 다양한 이미지를 내려받을 수 있다. Docker Hub는 도커가 제공하고 있는 이미지 저장소로, 누구나 도커 계정을 가지고 있다면 쉽게 이미지를 공유할 수 있다.
@@ -66,8 +68,8 @@ ubuntu@study:~$
 
 ```shell
 ubuntu@study:~$ docker images
-REPOSITORY              TAG                 IMAGE ID            CREATED              SIZE  
-commit_test             first               0ae047cd0bde        About a minute ago   197MB 
+REPOSITORY              TAG                 IMAGE ID            CREATED              SIZE
+commit_test             first               0ae047cd0bde        About a minute ago   197MB
 ubuntu@study:~$
 ```
 
@@ -84,9 +86,9 @@ sha256:c5d7289a7e1eaec8e34050d78e6006c181b0080743126c357308df8664916b3a
 
 ```shell
 ubuntu@study:~$ docker images
-REPOSITORY              TAG                 IMAGE ID            CREATED             SIZE  
-commit_test             second              c5d7289a7e1e        12 seconds ago      197MB 
-commit_test             first               0ae047cd0bde        2 minutes ago       197MB 
+REPOSITORY              TAG                 IMAGE ID            CREATED             SIZE
+commit_test             second              c5d7289a7e1e        12 seconds ago      197MB
+commit_test             first               0ae047cd0bde        2 minutes ago       197MB
 ```
 
 정상적으로 생성되어 있는 것을 볼 수 있다.
@@ -112,7 +114,6 @@ ubuntu@study:~$ docker inspect commit_test:first
 ```
 
 ```json
-
 [
   "sha256:f2fa9f4cf8fd0a521d40e34492b522cee3f35004047e617c75fadeb8bfd1e6b7",
   "sha256:48dc77435ad5c63ea60d91e6ad4828c70e7e61755f99982b0505abb8aaa00872",
@@ -135,7 +136,7 @@ ubuntu@study:~$ docker inspect commit_test:second
 ]
 ```
 
-뭔가 앞에서 부터 레이어가 하나씩 쌓여있는 것을 볼 수 있다. 이로 미루어보았을때, 이미지 커밋을 할때 변경된 사항만 새로운 레이어로 저장하고, 기존에 것은 별도의 레이어로 둔다는 것을 알 수 있다. 
+뭔가 앞에서 부터 레이어가 하나씩 쌓여있는 것을 볼 수 있다. 이로 미루어보았을때, 이미지 커밋을 할때 변경된 사항만 새로운 레이어로 저장하고, 기존에 것은 별도의 레이어로 둔다는 것을 알 수 있다.
 
 삭제를 하기 위해서는 `docker rmi`를 사용하면 된다.
 
@@ -164,9 +165,8 @@ ubuntu@study:~$ docker save -o ubuntu_14_04.tar ubuntu:14.04
 ```
 
 ```shell
-ubuntu@study:~$ docker load -i ubuntu_14_04.tar 
+ubuntu@study:~$ docker load -i ubuntu_14_04.tar
 Loaded image: ubuntu:14.04
 ```
 
 `save`, `load` 와 비슷한 `import` `export`가 있다. 차이는, `export`는 컨테이너의 파일 시스템을 tar로 추출하지만, 컨테이너 및 이미지에 대한 정보는 저장하지 않는다.
-

@@ -65,7 +65,7 @@ file:///.../node_modules/tui-calendar/dist/tui-calendar.js (16:4)
 
 해당 컴포넌트는 최초 시작시에 `window` 가 필요한데, 서버사이드 렌더링 시에는 `window`가 없는 환경이기 때문에 에러가 난다.
 
-아래 코드를 넣고, 최초 페이지 접근시에 새로고침을 하면 이 모듈이 실행되는 환경이 node 임을 알 수 있다. 
+아래 코드를 넣고, 최초 페이지 접근시에 새로고침을 하면 이 모듈이 실행되는 환경이 node 임을 알 수 있다.
 
 ```javascript
 console.log('node  >> ', globalThis === global) // true
@@ -88,7 +88,7 @@ export default function Index() {
   const cal = useRef()
 
   useEffect(() => {
-    console.log(cal.current) 
+    console.log(cal.current)
   }, [cal])
 
   return <Calendar ref={cal} />
@@ -107,9 +107,9 @@ retry: ƒ ()arguments: (...)caller: (...)length: 0name: "bound retry"__proto__: 
 왜 `useRef`는 정상적으로 동작하지 않는 것일까?
 
 > `useRef` returns a mutable ref object whose `.current` property is initialized to the passed argument (initialValue). The returned object will persist for the full lifetime of the component.
-> 
+>
 > ...
-> 
+>
 > This works because useRef() creates a plain JavaScript object. The only difference between useRef() and creating a {current: ...} object yourself is that useRef will give you the same ref object on every render.
 
 https://reactjs.org/docs/hooks-reference.html#useref
@@ -126,25 +126,27 @@ https://github.com/vercel/next.js/blob/f06c58911515d980e25c33874c5f18ade5ac99df/
 
 https://.reactjs.org/docs/react-api.html#reactforwardref
 
-`forwardRef`는 전달 받은 `ref`속성을 하부트리의 다른 컴포넌트로 전달 할 수 있는 리액트 컴포넌트를 생성한다. 
+`forwardRef`는 전달 받은 `ref`속성을 하부트리의 다른 컴포넌트로 전달 할 수 있는 리액트 컴포넌트를 생성한다.
 
 ```javascript
 // #components/TuiCalendarWrapper
-import React from "react";
-import Calendar from "@toast-ui/react-calendar";
+import React from 'react'
+import Calendar from '@toast-ui/react-calendar'
 
 export default (props) => (
   // 3. 넘겨받은 `forwardedRef`를 진짜 컴포넌트에 넘긴다.
   <Calendar {...props} ref={props.forwardedRef} />
-);
+)
 ```
 
 ```javascript
-const TuiCalendar = dynamic(() => import('#components/TuiCalendarWrapper'), { ssr: false });
+const TuiCalendar = dynamic(() => import('#components/TuiCalendarWrapper'), {
+  ssr: false,
+})
 // 2. forwardRef를 통해서 전달받은 ref를 하위 컴포넌트에 보낸다.
 const CalendarWithForwardedRef = React.forwardRef((props, ref) => (
   <TuiCalendar {...props} forwardedRef={ref} />
-));
+))
 
 export default function Index() {
   const ref = useRef()

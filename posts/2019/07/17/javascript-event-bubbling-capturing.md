@@ -12,6 +12,7 @@ category: javascript
 slug: /2019/07/17/javascript-event-bubbling-capturing/
 template: post
 ---
+
 ![image](https://miro.medium.com/max/1200/1*Et5UjVPGLfF1L43T7ErrxQ.png)
 
 ## Javascript Event Capturing

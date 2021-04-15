@@ -1,17 +1,19 @@
 ---
-title: "Pytorch (3-2) - CNN: Convolutional Neural Network "
+title: 'Pytorch (3-2) - CNN: Convolutional Neural Network '
 date: 2019-01-30 06:17:08
 published: true
 tags:
   - pytorch
 mathjax: true
-description: "앞서 CNN네트워크를 진행하면서 모르는 부분이 좀 있어서, 이론적인 측면을 좀더 강조해서 글을 써보려고 한다. ##
+description:
+  '앞서 CNN네트워크를 진행하면서 모르는 부분이 좀 있어서, 이론적인 측면을 좀더 강조해서 글을 써보려고 한다. ##
   구조  일단 중간층이 Convolutional Layer, Pooling Layer, Fully-connted Layer로 구성되어 있다.
-  그리고 마지막엔 Dropouut Layer를 넣는 경우도 있고, Softmax 함수로 마무리 한다. ..."
+  그리고 마지막엔 Dropouut Layer를 넣는 경우도 있고, Softmax 함수로 마무리 한다. ...'
 category: pytorch
 slug: /2019/01/30/pytorch-3-convolutional-neural-network(3)/
 template: post
 ---
+
 앞서 CNN네트워크를 진행하면서 모르는 부분이 좀 있어서, 이론적인 측면을 좀더 강조해서 글을 써보려고 한다.
 
 ## 구조

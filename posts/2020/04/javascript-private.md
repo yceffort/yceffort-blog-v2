@@ -5,13 +5,15 @@ tags:
   - javascript
 published: true
 date: 2020-05-08 11:33:36
-description: "이 글은 [은닉을 향한 자바스크립트의 여정](https://meetup.toast.com/posts/228)을 요약한
+description:
+  '이 글은 [은닉을 향한 자바스크립트의 여정](https://meetup.toast.com/posts/228)을 요약한
   글입니다. ## History  자바스크립트에서는 객체에 private 한 속성을 만들 수가 없었다. 그래서 보통 자바스크립트 개발자는
-  private한 것이다 라는 약속으로 `_` prefix를 붙여서 사용하고는 했었다.  ```javas..."
+  private한 것이다 라는 약속으로 `_` prefix를 붙여서 사용하고는 했었다.  ```javas...'
 category: typescript
 slug: /2020/04/javascript-private/
 template: post
 ---
+
 이 글은 [은닉을 향한 자바스크립트의 여정](https://meetup.toast.com/posts/228)을 요약한 글입니다.
 
 ## History
@@ -20,8 +22,8 @@ template: post
 
 ```javascript
 function Hello() {
-  this.publicProp = "public"
-  this._privateProp = "private"
+  this.publicProp = 'public'
+  this._privateProp = 'private'
 }
 ```
 
@@ -31,8 +33,8 @@ function Hello() {
 
 ```javascript
 function Hello() {
-  this.publicProp = "public"
-  const privateProp = "private"
+  this.publicProp = 'public'
+  const privateProp = 'private'
 
   _doWithPrivateProp = () => {
     // do something
@@ -44,8 +46,8 @@ function Hello() {
 
 ```javascript
 function Hello() {
-  const publicProp = "public"
-  const privateProp = "private"
+  const publicProp = 'public'
+  const privateProp = 'private'
 
   _doWithPrivateProp = () => {
     // ...
@@ -70,8 +72,8 @@ const privateMethodName = Symbol()
 const privatePropName = Symbol()
 
 class Hello {
-  [privatePropName] = "private"
-  publicProp = "public";
+  [privatePropName] = 'private'
+  publicProp = 'public';
 
   [privateMethodName]() {
     // ...
@@ -108,7 +110,7 @@ private 하기 때문에 접근 할 수 없다는 메시지가 뜬다.
 
 ```javascript
 class Hello {
-  #message = "hello"
+  #message = 'hello'
 
   getMessage() {
     return this.message // 안됨
@@ -120,7 +122,7 @@ class Hello {
 
 ```javascript
 class Hello {
-  #message = "hello"
+  #message = 'hello'
 
   getMessage() {
     return this.#message
@@ -141,7 +143,7 @@ hi.getHelloMessage() // Uncaught SyntaxError: Private field '#message' must be d
 
 ```javascript
 class Hello {
-  #message = "hello"
+  #message = 'hello'
 
   getMessage() {
     return this.#message
@@ -173,7 +175,7 @@ https://devblogs.microsoft.com/typescript/announcing-typescript-3-8-beta/#ecmasc
 
 여기에 좋은 내용이 정리되어 있다.
 
-- Private 필드는 `#`으로 시작된다. 
+- Private 필드는 `#`으로 시작된다.
 - 모든 private 필드는 속한 클래스에서 고유한 스코프를 가지고 있다.
 - `#`은 타입스크립트의 `public` `private`과 함게 사용할 수 없다.
 - Private 필드는 클래스 밖에서 접근하거나 알아챌 수 없다. (JS도 마찬가지)

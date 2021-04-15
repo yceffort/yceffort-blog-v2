@@ -4,7 +4,8 @@ date: 2019-01-28 11:14:46
 published: true
 tags:
   - pytorch
-description: 다층 퍼셉트론 마지막 예제로 이상 날씨 탐지를 진행해보자. 2011년 1월 1일 부터 2016년 12월 31일까지
+description:
+  다층 퍼셉트론 마지막 예제로 이상 날씨 탐지를 진행해보자. 2011년 1월 1일 부터 2016년 12월 31일까지
   서울시의 일 평균 기온데이터를 활용해 본다.
   [여기](https://data.kma.go.kr/stcs/grnd/grndTaList.do?pgmNo=70)에서 데이터를 받을 수
   있다.  ![seoul-temperature](../../../....
@@ -12,6 +13,7 @@ category: pytorch
 slug: /2019/01/28/pytorch-2-multi-perceptron(4)/
 template: post
 ---
+
 다층 퍼셉트론 마지막 예제로 이상 날씨 탐지를 진행해보자.
 
 2011년 1월 1일 부터 2016년 12월 31일까지 서울시의 일 평균 기온데이터를 활용해 본다. [여기](https://data.kma.go.kr/stcs/grnd/grndTaList.do?pgmNo=70)에서 데이터를 받을 수 있다.

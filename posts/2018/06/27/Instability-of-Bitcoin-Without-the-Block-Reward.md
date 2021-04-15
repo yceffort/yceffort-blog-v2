@@ -12,6 +12,7 @@ category: blockchain
 slug: /2018/06/27/Instability-of-Bitcoin-Without-the-Block-Reward/
 template: post
 ---
+
 On the Instability of Bitcoin Without the Block Reward
 
 [원문](http://www.cs.princeton.edu/~smattw/CKWN-CCS16.pdf)
@@ -21,8 +22,8 @@ On the Instability of Bitcoin Without the Block Reward
 채굴자는 두 가지 유형의 수입, 블록 발견 보상과 거래 수수료를 받게 된다. 블록 보상은 시스템 초기에 채굴자 보상의 대부분을 차지하지만, 블록보상이 점차 감소함에 따라, 채굴자의 수익은 거래 수수료로 전환 될 것으로 보인다. (4년에 한번 이 보상은 절반으로 감소한다.) 채굴자들이 각 블록에서 25개의 비트코인을 보상으로 받던지, 거래 수수료로 25개의 비트코인을 받던지는 블록체인의 보상에 별다른 영향이 없다는 것이 일반적인 생각이다.
 
 | ![two-possible-action](../images/two-possible-action.png) |
-| :---------------------------------------------------------------------------: |
-|             _블록 상태에 따른 채굴자가 취할 수 있는 두 가지 양상_             |
+| :-------------------------------------------------------: |
+|   _블록 상태에 따른 채굴자가 취할 수 있는 두 가지 양상_   |
 
 합리적이고 이기적인 채굴자를 가정해보자. 그리고 고정된 블록 보상이 다 떨어져, 기하급수적으로 분산된 보상 블록이 있는 블록체인이 존재한고 상상해보자. 여기서는 위 그림 처럼, 채굴자가 선택할 수 있는 두 가지 옵션이 있다.
 

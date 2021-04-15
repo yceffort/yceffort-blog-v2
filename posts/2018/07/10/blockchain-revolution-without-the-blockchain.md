@@ -11,6 +11,7 @@ category: cryptocurrency
 slug: /2018/07/10/blockchain-revolution-without-the-blockchain/
 template: post
 ---
+
 Blockchain Revolution Without the Blockchain
 
 [원문](https://www.bankofcanada.ca/wp-content/uploads/2018/03/san2018-5.pdf)

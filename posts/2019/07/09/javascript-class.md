@@ -4,14 +4,16 @@ date: 2019-07-10 01:01:24
 published: true
 tags:
   - javascript
-description: "# Class 클래스는 기본적으로 이렇게 생겼다.  ```javascript class Member
-  {   getName() {     return \"이름\";   } }  let obj = new Member();
-  console.log(obj.getName()); ```  ## 특징  ### 1. strict 모드에서 실행  딱히 `'use
-  strict'..."
+description:
+  '# Class 클래스는 기본적으로 이렇게 생겼다.  ```javascript class Member
+  {   getName() {     return "이름";   } }  let obj = new Member();
+  console.log(obj.getName()); ```  ## 특징  ### 1. strict 모드에서 실행  딱히 `''use
+  strict''...'
 category: javascript
 slug: /2019/07/09/javascript-class/
 template: post
 ---
+
 # Class
 
 클래스는 기본적으로 이렇게 생겼다.
@@ -19,12 +21,12 @@ template: post
 ```javascript
 class Member {
   getName() {
-    return "이름";
+    return '이름'
   }
 }
 
-let obj = new Member();
-console.log(obj.getName());
+let obj = new Member()
+console.log(obj.getName())
 ```
 
 ## 특징
@@ -38,11 +40,11 @@ console.log(obj.getName());
 ```javascript
 class Member {
   setName(name) {
-    this.name = name;
+    this.name = name
   }
 
   getName(name) {
-    this.name = name;
+    this.name = name
   }
 }
 ```
@@ -54,7 +56,7 @@ class Member {
 ```javascript
 class Member {
   setName(name) {
-    this.name = name;
+    this.name = name
   }
 }
 ```
@@ -62,9 +64,9 @@ class Member {
 위 코드와
 
 ```javascript
-Member.prototype.setName = function(namn) {
-  this.name = name;
-};
+Member.prototype.setName = function (namn) {
+  this.name = name
+}
 ```
 
 위 코드는 같다.
@@ -76,16 +78,16 @@ Member.prototype.setName = function(namn) {
 ```javascript
 class Member {
   constructor(name) {
-    this.name = name;
+    this.name = name
   }
 
   getName() {
-    return this.name;
+    return this.name
   }
 }
 
-let newMember = new Member("라이오넬 멧시");
-console.log(newMember.getName());
+let newMember = new Member('라이오넬 멧시')
+console.log(newMember.getName())
 ```
 
 만약 `constructor`에서 이상한 값을 반환하면 어떻게 될까?
@@ -103,17 +105,17 @@ constructor() {
 ```javascript
 class Member {
   constructor(name) {
-    return { name: "메켓트" };
+    return { name: '메켓트' }
   }
 
   getName() {
-    return this.name;
+    return this.name
   }
 }
 
-let newMember = new Member("라이오넬 멧시");
-console.log(newMember.name);
-console.log(newMember.getName);
+let newMember = new Member('라이오넬 멧시')
+console.log(newMember.name)
+console.log(newMember.getName)
 ```
 
 ```
@@ -127,12 +129,12 @@ name이 메켓트인 object를 반환하면서, newMember 클래스에는 name�
 
 ```javascript
 class Member {
-    set setName(name) {
-        this.name = name
-    }
+  set setName(name) {
+    this.name = name
+  }
 
-    get getName(name) {
-        return this.name
-    }
+  get getName(name) {
+    return this.name
+  }
 }
 ```

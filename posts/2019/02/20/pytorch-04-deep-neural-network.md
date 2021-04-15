@@ -13,6 +13,7 @@ category: pytorch
 slug: /2019/02/20/pytorch-04-deep-neural-network/
 template: post
 ---
+
 Pytorch - 04) Deep Neural Network
 
 ## Deep Neural Network
@@ -23,11 +24,11 @@ Pytorch - 04) Deep Neural Network
 
 그리고 이런 XOR 이 아니더라도, 선형이 아닌 형태의 데이터를 분류 할 수 없을 것이다.
 
-![deep-neural-network3](../images/deep-neural-network3.png) 
+![deep-neural-network3](../images/deep-neural-network3.png)
 
 이런형태의 데이터는 어떻게 classification 해야 될까? 라는 생가에서 시작된게, perceptron을 여러개 배치하는 것이다.
 
-![deep-neural-network4](../images/deep-neural-network4.png) 
+![deep-neural-network4](../images/deep-neural-network4.png)
 
 [Tensorflow playground](https://playground.tensorflow.org/#activation=sigmoid&batchSize=10&dataset=circle&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=4&seed=0.99755&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=false&ySquared=false&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false) 예제다.
 
@@ -37,7 +38,7 @@ input layer 와 output layer 사이에 4개의 perceptron을 배치했는데, �
 
 ![deep-neural-network2](../images/deep-neural-network2.png)
 
-$$x1, x2$$에 대한 입력값이 각각 있고, 이 입력 값에 대해서 서로다른 perceptron이 다른 weight을 바탕으로 각각 다른 구별을 하고, 이 두가지 값을 또다른 weight로 보는 작업들을 반복하여 작업을 수행한다. 
+$$x1, x2$$에 대한 입력값이 각각 있고, 이 입력 값에 대해서 서로다른 perceptron이 다른 weight을 바탕으로 각각 다른 구별을 하고, 이 두가지 값을 또다른 weight로 보는 작업들을 반복하여 작업을 수행한다.
 
 ### Feedforward
 
@@ -77,17 +78,17 @@ scatter_plot()
 
 ```python
 class Model(nn.Module):
-  
+
   def __init__(self, input_size, H1, output_size):
     super().__init__()
     self.linear1 = nn.Linear(input_size, H1)
     self.linear2 = nn.Linear(H1, output_size)
-    
+
   def forward(self, x):
     x = torch.sigmoid(self.linear1(x))
     x = torch.sigmoid(self.linear2(x))
     return x
-  
+
   def predict(self, x):
     return 1 if self.forward(x) >= 0.5 else 0
 ```
@@ -126,9 +127,9 @@ losses = []
 for i in range(epochs):
   y_pred = model.forward(x_data)
   loss = criterion(y_pred, y_data)
-  
+
   print("epochs:", i, "loss:", loss.item())
-  
+
   losses.append(loss.item())
   optimizer.zero_grad()
   loss.backward()

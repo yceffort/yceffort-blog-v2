@@ -12,6 +12,7 @@ category: blockchain
 slug: /2018/07/20/Smarter-City-Smart-Energy-Grid-based-on-Blockchain-Technology/
 template: post
 ---
+
 Smarter City: Smart Energy Grid based on Blockchain Technology
 
 [원문](https://www.researchgate.net/profile/Pieroni_Alessandra/publication/323463147_Smarter_City_Smart_Energy_Grid_based_on_Blockchain_Technology/links/5a990b8b0f7e9ba429777665/Smarter-City-Smart-Energy-Grid-based-on-Blockchain-Technology.pdf)
@@ -50,8 +51,7 @@ Smarter City: Smart Energy Grid based on Blockchain Technology
 
 또한 블록체인 기술을 사용하여 에너지를 거래할 수 있도록 앱을 개발할 수 있는데, 이는 아래와 같은 기능을 가지고 잇을 것이다.
 
-- 기능1) 활동모니터: 사용자는 자신의 장비의 에너지 소비와 같은 데이터를 실시간으로 볼 수 있다. 
+- 기능1) 활동모니터: 사용자는 자신의 장비의 에너지 소비와 같은 데이터를 실시간으로 볼 수 있다.
 - 기능2) 활동플랜트: 이 기능을 통해 마이크로 그리드 내에서 자체 시스템을 관리할 수 있으며, 기술 특성을 파악하고 동시에 결함을 감지할 수 있다.
 - 기능3) 블록체인: 거래 플랫폼에서 사용 가능한 에너지 공급업체 중 하나를 선택해 판매할 수 있다.
 - 기능4) 아카이브: 시스템에서 발생된 에너지를 판매하고 거래 관련 데이터를 모아서 볼 수 있다.
-

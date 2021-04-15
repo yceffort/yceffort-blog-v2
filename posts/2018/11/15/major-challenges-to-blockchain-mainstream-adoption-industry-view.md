@@ -11,6 +11,7 @@ category: blockchain
 slug: /2018/11/15/major-challenges-to-blockchain-mainstream-adoption-industry-view/
 template: post
 ---
+
 Major Challenges to Blockchain Mainstream Adoption: Industry View
 
 [원문](https://cointelegraph.com/news/major-challenges-to-blockchain-mainstream-adoption-industry-view)
@@ -82,4 +83,3 @@ Blockchain 기술의 채택을 위한 주요 과제는 무엇인가?
 > "Blockchain 기술의 주류 채택에 있어 가장 큰 난제가 무엇인지 판단하려고 할 때 '관심'이라는 요소가 떠오릅니다. 문화적 기준, 연령 인구 통계, 돈에 대한 일반적인 태도, 그리고 현재의 통화 시스템이 일반적인 가치의 저장고로 인식되는 방법 등 몇 가지 기술적 장애물이 존재합니다. 확실히, 전 세계 모든 국가에서 법적 고려 사항과 확장 가능한 솔루션이 현재 주류의 채택을 가로막는 과제를 결정할 때 중요한 요소로 작용 합니다."
 
 - Fastcoin team
-

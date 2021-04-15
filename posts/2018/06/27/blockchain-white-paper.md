@@ -4,13 +4,14 @@ date: 2018-06-27 10:37:44
 published: true
 tags:
   - blockchain
-description: "The future is Decentralized: Blockchain White Paper
+description: 'The future is Decentralized: Blockchain White Paper
   [원문출처](https://www.blockchain.com/about/index.html)  블록체인은 손상되거나, 오염된 시스템에
-  투명성을 부여하고 상용 프로세스에 검증가능성과 불변성을 가져올 수 있다. 취약한 인프라에 보안과 유연함을 제공하고, 자율성을 보장..."
+  투명성을 부여하고 상용 프로세스에 검증가능성과 불변성을 가져올 수 있다. 취약한 인프라에 보안과 유연함을 제공하고, 자율성을 보장...'
 category: blockchain
 slug: /2018/06/27/blockchain-white-paper/
 template: post
 ---
+
 The future is Decentralized: Blockchain White Paper
 
 [원문출처](https://www.blockchain.com/about/index.html)

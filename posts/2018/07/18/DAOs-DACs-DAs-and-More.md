@@ -12,6 +12,7 @@ category: blockchain
 slug: /2018/07/18/DAOs-DACs-DAs-and-More/
 template: post
 ---
+
 DAOs, DACs, DAs and More: An Incomplete Terminology Guide
 
 [원문](https://blog.ethereum.org/2014/05/06/daos-dacs-das-and-more-an-incomplete-terminology-guide/)

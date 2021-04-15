@@ -4,26 +4,28 @@ date: 2019-07-22 08:36:28
 published: true
 tags:
   - javascript
-description: "멍청이라 그런지 `reduce` 함수가 잘 이해 되지 않았다. ## Reduce  ```javascript const
+description:
+  '멍청이라 그런지 `reduce` 함수가 잘 이해 되지 않았다. ## Reduce  ```javascript const
   list = [1, 2, 3, 4, 5]; const initValue = 10; const totalSum =
-  list.reduce(   (accumulator, currentValue, currentIndex, array) => {  ..."
+  list.reduce(   (accumulator, currentValue, currentIndex, array) => {  ...'
 category: javascript
 slug: /2019/07/22/javascript-reduce/
 template: post
 ---
+
 멍청이라 그런지 `reduce` 함수가 잘 이해 되지 않았다.
 
 ## Reduce
 
 ```javascript
-const list = [1, 2, 3, 4, 5];
-const initValue = 10;
+const list = [1, 2, 3, 4, 5]
+const initValue = 10
 const totalSum = list.reduce(
   (accumulator, currentValue, currentIndex, array) => {
-    return accumulator + currentValue;
+    return accumulator + currentValue
   },
-  initValue
-);
+  initValue,
+)
 ```
 
 ```
@@ -47,11 +49,11 @@ const totalSum = list.reduce(
 ## 중첩 배열 펼치기
 
 ```javascript
-const complicatedList = [[0, 1], [2, 3], [4], [5, 6]];
+const complicatedList = [[0, 1], [2, 3], [4], [5, 6]]
 complicatedList.reduce(
   (accumulator, currentValue) => accumulator.concat(currentValue),
-  []
-);
+  [],
+)
 ```
 
 ```
@@ -61,21 +63,21 @@ complicatedList.reduce(
 이보다 더 괴랄한 array의 경우에도 재귀를 사용하여 가능하다.
 
 ```javascript
-const moreComplicatedList = [[0, 1], [[[2, 3]]], [[4, 5]], 6];
+const moreComplicatedList = [[0, 1], [[[2, 3]]], [[4, 5]], 6]
 
-const flatten = function(arr, result = []) {
+const flatten = function (arr, result = []) {
   for (let i = 0, length = arr.length; i < length; i++) {
-    const value = arr[i];
+    const value = arr[i]
     if (Array.isArray(value)) {
-      flatten(value, result);
+      flatten(value, result)
     } else {
-      result.push(value);
+      result.push(value)
     }
   }
-  return result;
-};
+  return result
+}
 
-flatten(moreComplicatedList);
+flatten(moreComplicatedList)
 ```
 
 ```

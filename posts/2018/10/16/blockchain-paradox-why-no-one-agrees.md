@@ -4,14 +4,15 @@ date: 2018-10-16 04:44:04
 published: true
 tags:
   - blockchain
-description: "Six myths about blockchain and Bitcoin: Debunking the
+description: 'Six myths about blockchain and Bitcoin: Debunking the
   effectiveness of the technology
   [원문](https://www.kaspersky.com/blog/bitcoin-blockchain-issues/18019/)  ##
-  비트코인에 대한 일반적인 사항  나는 비트코인 기술 자체가 혁명적이라고..."
+  비트코인에 대한 일반적인 사항  나는 비트코인 기술 자체가 혁명적이라고...'
 category: blockchain
 slug: /2018/10/16/blockchain-paradox-why-no-one-agrees/
 template: post
 ---
+
 Six myths about blockchain and Bitcoin: Debunking the effectiveness of the technology
 
 [원문](https://www.kaspersky.com/blog/bitcoin-blockchain-issues/18019/)
@@ -40,7 +41,7 @@ Six myths about blockchain and Bitcoin: Debunking the effectiveness of the techn
 
 ## 믿음 2: 블록체인은 영구적이다. 모든 것은 블록체인에 영원히 기록되어 있을 것이다.
 
-모든 비트코인 네트워크 클라이언트는 전체 트랜잭션 기록을 저장한다. 이 레코드는 이미 100GB에 달한다. 저렴한 노트북 또는 최첨단 스마트폰 스토리지의 전체 용량이다. 비트코인 네트워크에서 처리되는 트랜잭션이 많을수록 크기가 더욱 커진다. 
+모든 비트코인 네트워크 클라이언트는 전체 트랜잭션 기록을 저장한다. 이 레코드는 이미 100GB에 달한다. 저렴한 노트북 또는 최첨단 스마트폰 스토리지의 전체 용량이다. 비트코인 네트워크에서 처리되는 트랜잭션이 많을수록 크기가 더욱 커진다.
 
 ![blockchain-size](../images/blockchain-size.jpg)
 
@@ -56,7 +57,7 @@ Six myths about blockchain and Bitcoin: Debunking the effectiveness of the techn
 
 각 네트워크 노드가 동일한 작업을 수행하는 경우, 전체 네트워크의 대역폭은 한 네트워크 노드의 대역폭과 동일하다. 비트코인 네트워크는 초당 최대 7개의 트랜잭션을 처리할 수 있다. 그러나, 전 세계 수백만 명의 사용자를 대상으로 한다.
 
-그 외에도 비트코인 블록체인 거래는 10분마다 한 번만 기록된다. 결제 보안을 강화하기 위해 기록이 정기적으로 롤백되기 때문에 새 레코드가 나타날 때마다 50분을 더 기다리는 것이 일반적인 관례다. 이제 비트코인을 이용해서 스낵을 사는 것을 상상해보아라. 
+그 외에도 비트코인 블록체인 거래는 10분마다 한 번만 기록된다. 결제 보안을 강화하기 위해 기록이 정기적으로 롤백되기 때문에 새 레코드가 나타날 때마다 50분을 더 기다리는 것이 일반적인 관례다. 이제 비트코인을 이용해서 스낵을 사는 것을 상상해보아라.
 
 전 세계를 고려해 본다면, 비트코인이 지구상의 인구 수천 명당 한 명 꼴로 사용될 때 조차도 그것은 우스꽝스럽게 들린다. 트랜잭션 처리 속도를 고려할 때 활성 사용자 수를 크게 늘릴 수는 없다. 비교를 위해 비자는 초당 수천 건의 트랜잭션을 처리하고 필요한 경우 대역폭을 쉽게 늘릴 수 있다. 결국, 고전적인 은행 기술은 확장 가능하다.
 

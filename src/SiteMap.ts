@@ -1,6 +1,6 @@
-import { writeFile } from 'promise-fs'
+import { writeFile } from 'fs/promises'
 
-import { getAllPosts } from './utils/posts'
+import { getAllPosts } from './utils/Post'
 
 export async function createSiteMap() {
   const posts = await getAllPosts()

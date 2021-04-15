@@ -1,6 +1,5 @@
 import React from 'react'
 import { format } from 'date-fns'
-import qs from 'query-string'
 
 import { FrontMatter } from '#commons/types'
 import SectionContainer from '#components/SectionContainer'
@@ -9,6 +8,7 @@ import Tag from '#components/Tag'
 import CustomLink from '#components/Link'
 import PageTitle from '#components/PageTitle'
 import SiteConfig from '#src/config'
+import { getThumbnailURL } from '#utils/common'
 
 export default function PostLayout({
   children,
@@ -21,15 +21,13 @@ export default function PostLayout({
 }) {
   const { date, title, tags, description } = frontMatter
   const updatedAt = format(new Date(date), 'yyyy-MM-dd')
-  const thumbnailHost = `https://us-central1-yceffort.cloudfunctions.net/screenshot`
 
-  const queryString = qs.stringify({
-    tags: frontMatter.tags.map((tag) => tag.trim()).join(','),
+  const thumbnailUrl = getThumbnailURL({
+    tags: frontMatter.tags.map((tag) => tag.trim()),
     title: frontMatter.title,
-    url: `https://yceffort.kr/${slug}`,
-    slug: slug,
+    path: slug,
+    slug,
   })
-  const thumbnailUrl = `${thumbnailHost}?${queryString}`
 
   return (
     <SectionContainer>

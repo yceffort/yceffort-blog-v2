@@ -150,8 +150,6 @@ transaction정보는 너무 많아서 생략한다.
 }
 ```
 
-
-
 ```
 savurself11@bitcoin:~$ date -d @1436418994
 Thu Jul 9 05:16:34 UTC 2015

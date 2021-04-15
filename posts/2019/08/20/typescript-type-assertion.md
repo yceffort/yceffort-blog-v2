@@ -97,8 +97,7 @@ var ConstGlobalColorSet
 타입 단언은 두가지로 사용될 수 있다.
 
 ```typescript
-colorString as GlobalColors
-<GlobalColors>colorString
+;(colorString as GlobalColors) < GlobalColors > colorString
 ```
 
 `<Type>`은 리액트의 JSX 문법과 겹치는 느낌이 있어서 보통 `as type`을 더 많이 쓴다.

@@ -30,11 +30,9 @@ console.log(b) // 20
 console.log(rest) // [30, 40, 50]
 
 // 객체 리터럴 식에서 구조 분해 할당을 하기 위해서는, 객체 리터럴 형식과 마찬가지로 { }로 표기하면 된다.
-
 ;({ a, b } = { a: 10, b: 20 })
 console.log(a) // 10
 console.log(b) // 20
-
 ;({ a, b, ...rest } = { a: 10, b: 20, c: 30, d: 40 })
 console.log(a) // 10
 console.log(b) // 20

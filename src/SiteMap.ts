@@ -1,4 +1,4 @@
-import { writeFile } from 'fs/promises'
+import fs from 'fs'
 
 import { getAllPosts } from './utils/Post'
 
@@ -33,7 +33,9 @@ export async function createSiteMap() {
 </urlset>
     `
 
-  await writeFile('public/sitemap.xml', sitemap, { encoding: 'utf-8' })
+  await fs.promises.writeFile('public/sitemap.xml', sitemap, {
+    encoding: 'utf-8',
+  })
 }
 
 createSiteMap()

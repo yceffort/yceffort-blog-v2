@@ -4,13 +4,14 @@ date: 2018-06-28 07:57:52
 published: true
 tags:
   - bitcoin
-description: "Trends, Tips, Tolls: A Longitudinal Study of Bitcoin Transaction
+description: 'Trends, Tips, Tolls: A Longitudinal Study of Bitcoin Transaction
   Fees [원문](http://fc15.ifca.ai/preproceedings/bitcoin/paper_8.pdf)  거래 수수료는
-  암호화폐 시스템 일관성을 유지하는 분산 합의 메커지즘에 기여한 마이너에게 주는 보상으로, 점차적으로 블록에..."
+  암호화폐 시스템 일관성을 유지하는 분산 합의 메커지즘에 기여한 마이너에게 주는 보상으로, 점차적으로 블록에...'
 category: bitcoin
 slug: /2018/06/28/Trends-Tips-Tolls-A-Longitudinal-Study-of-Bitcoin-Transaction-Fees/
 template: post
 ---
+
 Trends, Tips, Tolls: A Longitudinal Study of Bitcoin Transaction Fees
 
 [원문](http://fc15.ifca.ai/preproceedings/bitcoin/paper_8.pdf)

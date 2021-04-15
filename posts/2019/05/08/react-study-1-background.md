@@ -5,13 +5,15 @@ published: true
 tags:
   - react
   - javascript
-description: "## 리액트 요약 기존에 많은 자바스크립트 기반 플게임워크들이 있었는데, 대부분의 프레임워크들은 MVC
+description:
+  '## 리액트 요약 기존에 많은 자바스크립트 기반 플게임워크들이 있었는데, 대부분의 프레임워크들은 MVC
   (Model-View-Controller), MVVM(Model-View-View Model), MVW(Model-View-Whatever)
-  아키텍쳐를 사용하여 개발되었다.  ![MVC](https://mdn.mozillademos.org/files/1..."
+  아키텍쳐를 사용하여 개발되었다.  ![MVC](https://mdn.mozillademos.org/files/1...'
 category: react
 slug: /2019/05/08/react-study-1-background/
 template: post
 ---
+
 ## 리액트 요약
 
 기존에 많은 자바스크립트 기반 플게임워크들이 있었는데, 대부분의 프레임워크들은 MVC (Model-View-Controller), MVVM(Model-View-View Model), MVW(Model-View-Whatever) 아키텍쳐를 사용하여 개발되었다.
@@ -30,7 +32,7 @@ template: post
 render () {...}
 ```
 
-이 함수는 컴포넌트가 어떻게 생겼는지 정의 한다. 여기에는 html 구문이 아니라, 뷰가 어떻게 생겼고 무슨 정보를 지니고 있는지에 대한 내용을 가지고 있다.  이 함수를 실행하면, 내부 컴포넌트들도 재귀적으로 실행해서,html 마크업을 만들고, 실제 페이지의 dom 요소에 주입하게 된다.
+이 함수는 컴포넌트가 어떻게 생겼는지 정의 한다. 여기에는 html 구문이 아니라, 뷰가 어떻게 생겼고 무슨 정보를 지니고 있는지에 대한 내용을 가지고 있다. 이 함수를 실행하면, 내부 컴포넌트들도 재귀적으로 실행해서,html 마크업을 만들고, 실제 페이지의 dom 요소에 주입하게 된다.
 
 ### Reconcilation
 

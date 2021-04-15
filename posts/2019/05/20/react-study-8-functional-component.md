@@ -5,22 +5,22 @@ published: true
 tags:
   - react
   - javascript
-description: "### 함수형 컴포넌트 ```javascript import React from 'react';  function
+description:
+  "### 함수형 컴포넌트 ```javascript import React from 'react';  function
   Hello(props) {     return (         <div>hello {props.name}</div>     ) }
   ```  함수형 컴포넌트는 컴포넌트에서 라이프사이클, state 등의 기능을 제거한 상태이므로 메모리 사용량이..."
 category: react
 slug: /2019/05/20/react-study-8-functional-component/
 template: post
 ---
+
 ### 함수형 컴포넌트
 
 ```javascript
-import React from 'react';
+import React from 'react'
 
 function Hello(props) {
-    return (
-        <div>hello {props.name}</div>
-    )
+  return <div>hello {props.name}</div>
 }
 ```
 

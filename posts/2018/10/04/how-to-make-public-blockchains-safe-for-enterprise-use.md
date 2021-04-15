@@ -11,11 +11,12 @@ category: blockchain
 slug: /2018/10/04/how-to-make-public-blockchains-safe-for-enterprise-use/
 template: post
 ---
+
 How to Make Public Blockchains Safe for Enterprise Use
 
 [원문](https://www.coindesk.com/how-to-make-public-blockchains-safe-for-enterprise-use/)
 
-프라이빗 블록체인의 세계는 많은 기업, 규제 기관 및 중앙 은행에게 책임 있고 중앙 집중식 주체가 있다는 편안함을 제공하지만, 이러한 허가 된 네트워크는 공공, 허가받지 않은 네트워크가 제공하는 혁신 또는 네트워크 효과와 결코 일치하지 않는다. 
+프라이빗 블록체인의 세계는 많은 기업, 규제 기관 및 중앙 은행에게 책임 있고 중앙 집중식 주체가 있다는 편안함을 제공하지만, 이러한 허가 된 네트워크는 공공, 허가받지 않은 네트워크가 제공하는 혁신 또는 네트워크 효과와 결코 일치하지 않는다.
 
 기업 상거래의 세계가 민간 네트워크에 의존하고 있다면, 그들은 결과적으로 금융기관을 소프트웨어 회사 및 호스팅 조직으로 대체하는 것이다. 그러나 이 두 세계를 하나로 모으고 공공 분산 된 네트워크에서 똑같이 구현하는 것은 가능하며 필수적이기 까지 하다.
 

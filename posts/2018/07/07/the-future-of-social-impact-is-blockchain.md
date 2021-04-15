@@ -12,6 +12,7 @@ category: blockchain
 slug: /2018/07/07/the-future-of-social-impact-is-blockchain/
 template: post
 ---
+
 The Future Of Social Impact Is...Blockchain
 
 [원문](https://www.forbes.com/sites/davidhessekiel/2018/04/03/the-future-of-social-impact-is-blockchain)
@@ -41,4 +42,3 @@ The Future Of Social Impact Is...Blockchain
 [출처](https://www.mercycorps.org/sites/default/files/Mercy-Corps-A-Revolution-in-Trust-Blockchain-May-2017_1.pdf)
 
 이 기술이 계속해서 발전하고, 사용사례가 시장에서 성공적으로 나타남으로써, 더 많은 기술이 제공될 것이다. 기부자와 수혜자의 기대가 점점더 직접적이고 투명한 모델로 이동하고 있기 때문에, 이 흥미로운 기술에 대한 최신의 정보를 유지하는 것에 소셜임팩트의 미래가 달려 있다.
-

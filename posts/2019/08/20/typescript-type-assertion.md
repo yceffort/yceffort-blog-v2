@@ -13,6 +13,7 @@ category: javascript
 slug: /2019/08/20/typescript-type-assertion/
 template: post
 ---
+
 ## 문제의 시작
 
 문제의 시작은 [여기](/2019/06/17/typescript-type-enum-partial-record/) 였다.
@@ -20,20 +21,20 @@ template: post
 내가 사용하는 코드는 아래와 같았다.
 
 ```typescript
-type GlobalColors = "Red" | "Blue" | "Green" | "Black";
+type GlobalColors = 'Red' | 'Blue' | 'Green' | 'Black'
 
 // 기본값으로 색상을 선언한다.
 const enum ConstGlobalColorSet {
-  Red = "11, 11, 11",
-  Blue = "22, 22, 22",
-  Green = "33, 33, 33",
-  Black = "44, 44, 44"
+  Red = '11, 11, 11',
+  Blue = '22, 22, 22',
+  Green = '33, 33, 33',
+  Black = '44, 44, 44',
 }
 
 // red, blue, green, black에 대해서는 글로벌하게 지정해둔 컬러를 사용하되,
 // 그밖의 string이 오면 그냥 그 string을 리턴한다
 function GetGlobalColor(colorString: GlobalColors | string) {
-  return GlobalColorSet[colorString] || colorString;
+  return GlobalColorSet[colorString] || colorString
 }
 ```
 
@@ -41,7 +42,7 @@ function GetGlobalColor(colorString: GlobalColors | string) {
 
 ```javascript
 // Element implicitly has an 'any' type because index expression is not of type 'number'.
-return GlobalColorSet[colorString] || colorString;
+return GlobalColorSet[colorString] || colorString
 ```
 
 파라미터로오는 `colorString` 이 enum의 키가 아닐 수도 있기 때문에 발생하는 에러 였다. 기존 lint 룰에서는 any를 accept했기 때문에 에러가 발생하지 않았던 것이다.
@@ -52,7 +53,7 @@ return GlobalColorSet[colorString] || colorString;
 
 ```typescript
 function GetGlobalColor(colorString: GlobalColors | string) {
-  return GlobalColorSet[colorString as GlobalColors] || colorString;
+  return GlobalColorSet[colorString as GlobalColors] || colorString
 }
 ```
 
@@ -64,23 +65,23 @@ function GetGlobalColor(colorString: GlobalColors | string) {
 
 ```typescript
 enum ConstGlobalColorSet {
-  Red = "11, 11, 11",
-  Blue = "22, 22, 22",
-  Green = "33, 33, 33",
-  Black = "44, 44, 44"
+  Red = '11, 11, 11',
+  Blue = '22, 22, 22',
+  Green = '33, 33, 33',
+  Black = '44, 44, 44',
 }
 ```
 
 위코드는 컴파일을 거치고 나면 다음과 같이 해석된다.
 
 ```javascript
-var ConstGlobalColorSet;
-(function(ConstGlobalColorSet) {
-  ConstGlobalColorSet["Red"] = "11, 11, 11";
-  ConstGlobalColorSet["Blue"] = "22, 22, 22";
-  ConstGlobalColorSet["Green"] = "33, 33, 33";
-  ConstGlobalColorSet["Black"] = "44, 44, 44";
-})(ConstGlobalColorSet || (ConstGlobalColorSet = {}));
+var ConstGlobalColorSet
+;(function (ConstGlobalColorSet) {
+  ConstGlobalColorSet['Red'] = '11, 11, 11'
+  ConstGlobalColorSet['Blue'] = '22, 22, 22'
+  ConstGlobalColorSet['Green'] = '33, 33, 33'
+  ConstGlobalColorSet['Black'] = '44, 44, 44'
+})(ConstGlobalColorSet || (ConstGlobalColorSet = {}))
 
 // {Red: "11, 11, 11", Blue: "22, 22, 22", Green: "33, 33, 33", Black: "44, 44, 44"}
 ```
@@ -96,8 +97,8 @@ var ConstGlobalColorSet;
 타입 단언은 두가지로 사용될 수 있다.
 
 ```typescript
-colorString as GlobalColors;
-<GlobalColors>colorString;
+colorString as GlobalColors
+<GlobalColors>colorString
 ```
 
 `<Type>`은 리액트의 JSX 문법과 겹치는 느낌이 있어서 보통 `as type`을 더 많이 쓴다.
@@ -108,54 +109,54 @@ colorString as GlobalColors;
 
 ```javascript
 function doSomething(x: number | string) {
-  if (typeof x === "string") {
+  if (typeof x === 'string') {
     // string 만 들어오게 처리 해줬기 때문에 에러가 날 수 없음
-    console.log(x.substr(1));
+    console.log(x.substr(1))
   }
-  x.substr(1); // 에러 날 수도 있음
+  x.substr(1) // 에러 날 수도 있음
 }
 
 class Foo {
-  foo = 123;
-  common = "123";
+  foo = 123
+  common = '123'
 }
 
 class Bar {
-  bar = 123;
-  common = "123";
+  bar = 123
+  common = '123'
 }
 
 function doStuff(arg) {
   if (arg instanceof Foo) {
-    console.log(arg.foo); // OK
-    console.log(arg.bar); // undefined
+    console.log(arg.foo) // OK
+    console.log(arg.bar) // undefined
   }
   if (arg instanceof Bar) {
-    console.log(arg.foo); // undefined
-    console.log(arg.bar); // OK
+    console.log(arg.foo) // undefined
+    console.log(arg.bar) // OK
   }
 
-  console.log(arg.common); // OK
-  console.log(arg.foo); // undefined?
-  console.log(arg.bar); // undefined?
+  console.log(arg.common) // OK
+  console.log(arg.foo) // undefined?
+  console.log(arg.bar) // undefined?
 }
 
-doStuff(new Foo());
-doStuff(new Bar());
+doStuff(new Foo())
+doStuff(new Bar())
 ```
 
 이를 타입스크립트에서 처리하려면 어떻게 해야할까?
 
 ```typescript
 interface A {
-  x: number;
+  x: number
 }
 interface B {
-  y: string;
+  y: string
 }
 
 function doStuff(q: A | B) {
-  if ("x" in q) {
+  if ('x' in q) {
     // q: A
   } else {
     // q: B
@@ -167,32 +168,32 @@ function doStuff(q: A | B) {
 
 ```typescript
 interface Foo {
-  foo: number;
-  common: string;
+  foo: number
+  common: string
 }
 
 interface Bar {
-  bar: number;
-  common: string;
+  bar: number
+  common: string
 }
 
 /**
  * arg를 Foo라고 타입 가드를 선언
  */
 function isFoo(arg: any): arg is Foo {
-  return arg.foo !== undefined;
+  return arg.foo !== undefined
 }
 
 function doStuff(arg: Foo | Bar) {
   if (isFoo(arg)) {
-    console.log(arg.foo); // OK
-    console.log(arg.bar); // Error!
+    console.log(arg.foo) // OK
+    console.log(arg.bar) // Error!
   } else {
-    console.log(arg.foo); // Error!
-    console.log(arg.bar); // OK
+    console.log(arg.foo) // Error!
+    console.log(arg.bar) // OK
   }
 }
 
-doStuff({ foo: 123, common: "123" });
-doStuff({ bar: 123, common: "123" });
+doStuff({ foo: 123, common: '123' })
+doStuff({ bar: 123, common: '123' })
 ```

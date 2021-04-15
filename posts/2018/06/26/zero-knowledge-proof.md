@@ -6,13 +6,15 @@ mathjax: true
 tags:
   - blockchain
   - algorithm
-description: Zero Knowledge Proof - 영지식증명 암호학에서, 영지식증명 (Zero-knowledge
+description:
+  Zero Knowledge Proof - 영지식증명 암호학에서, 영지식증명 (Zero-knowledge
   proof/protocol)은 증명인(페기)이 검증인(빅터)에게 x라는 지식을 증명할 때, 증명인이 알고 있는 x라는 지식 이외에는 어떠한
   것도 알려주지 않으면서 증명하는 것을 말한다.  어떠한 사실을 증명하기 위해, 증명자의 일부 비밀 정보에 대한 지...
 category: blockchain
 slug: /2018/06/26/zero-knowledge-proof/
 template: post
 ---
+
 Zero Knowledge Proof - 영지식증명
 
 암호학에서, 영지식증명 (Zero-knowledge proof/protocol)은 증명인(페기)이 검증인(빅터)에게 x라는 지식을 증명할 때, 증명인이 알고 있는 x라는 지식 이외에는 어떠한 것도 알려주지 않으면서 증명하는 것을 말한다.
@@ -20,7 +22,6 @@ Zero Knowledge Proof - 영지식증명
 어떠한 사실을 증명하기 위해, 증명자의 일부 비밀 정보에 대한 지식이 필요하다는 것이 검증되면, 검증자는 이러한 비밀 정보를 소유하지 않기 때문에, 검증자는 다른 사람들에게 이러한 사실을 다른 사람에게 증명할 수 없다는 것을 의미한다. 증명할 수 있는 사실은 증명인이 이러한 지식을 가지고 있어야만 한다. 그렇지 않으면 이러한 사실이 증명되지 않기 때문이다.
 
 아래 그림을 예로 들어 보자.
-
 
 ![ZKP1](../images/ZKP1.png)
 
@@ -43,7 +44,6 @@ Zero Knowledge Proof - 영지식증명
 이러한 기술을 블록체인에 사용하기도 한다.
 
 블록체인에 사용한다면, 발신자, 수신자 등 트랜잭션 관련 내용이 보이지 않더라도, 거래를 신뢰하는 수단으로 ZKP를 사용할 수 있다.
-
 
 [A Mind-Bending Cryptographic Trick Promises to Take Blockchains Mainstream](https://www.technologyreview.com/s/609448/a-mind-bending-cryptographic-trick-promises-to-take-blockchains-mainstream/)
 

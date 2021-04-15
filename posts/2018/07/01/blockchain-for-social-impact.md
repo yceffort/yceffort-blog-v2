@@ -12,6 +12,7 @@ category: blockchain
 slug: /2018/07/01/blockchain-for-social-impact/
 template: post
 ---
+
 Blockchain for Social Impact
 
 [원문](https://www.gsb.stanford.edu/sites/gsb/files/publication-pdf/study-blockchain-impact-moving-beyond-hype_0.pdf)
@@ -62,13 +63,13 @@ Blockchain for Social Impact
 
 블록체인은 여러 당사자간의 신뢰를 심어주고, 비용을 절감하며, 효율성을 높이고, 보안을 향상 시킬 수 있는 잠재력을 제공한다. 블록체인의 일반적인 과제는 지불, 송금, 기록 및 신원확인이다. 블록체인을 사용한다면 불가능한 솔루션에 해결책을 줄 수 있다.
 
- [The Deloitte Blockchain Framework](https://www2.deloitte.com/content/dam/Deloitte/in/Documents/industries/in-convergence-blockchain-fitment-noexp.pdf)는 블록체인이 가장 적합할 수 있는 네가지 전제 조건에 대한 지침을 적용한다.
+[The Deloitte Blockchain Framework](https://www2.deloitte.com/content/dam/Deloitte/in/Documents/industries/in-convergence-blockchain-fitment-noexp.pdf)는 블록체인이 가장 적합할 수 있는 네가지 전제 조건에 대한 지침을 적용한다.
 
- - 공유된 레파지토리에서 정보를 변경하는 트랜잭션을 생성하는 당사자가 여럿일 경우
- - 거래가 타당하다고 믿어야 하는 당사자가 필요한 경우
- - 중개인이 비효율적이거나 진실된 중재자로 신뢰받지 못하는경우
- - 보한 강화가 필요한 경우
+- 공유된 레파지토리에서 정보를 변경하는 트랜잭션을 생성하는 당사자가 여럿일 경우
+- 거래가 타당하다고 믿어야 하는 당사자가 필요한 경우
+- 중개인이 비효율적이거나 진실된 중재자로 신뢰받지 못하는경우
+- 보한 강화가 필요한 경우
 
- ![blockchain-framework](../images/blockchain-framework.png)
+![blockchain-framework](../images/blockchain-framework.png)
 
 사람들이 새로운 것을 하기 위해 신기술을 사용할때, 종종 과장광고가 증폭되는 경우가 있다. 애플리케이션에 사용할 기술을 먼저 찾는 것이 아니라, 당신이 해결하려고 하는 문제가 블록체인이 제공하는 가치와 맞는지 먼저 생각해보라. 블록체인이 어떻게 가치를 가장 잘 전달 할 수 있는지에 더 중점을 둔다면, 과장광고에서 벗어나 더욱 현실에 가까워 질 것이다.

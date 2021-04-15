@@ -12,6 +12,7 @@ category: blockchain
 slug: /2018/11/19/distributed-ledger-technology-blockchain/
 template: post
 ---
+
 Here’s the difference between blockchain and distributed ledger technology
 
 [원문](https://thenextweb.com/hardfork/2018/07/27/distributed-ledger-technology-blockchain/)

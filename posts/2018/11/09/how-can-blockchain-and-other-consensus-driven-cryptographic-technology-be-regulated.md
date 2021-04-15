@@ -5,24 +5,25 @@ published: true
 tags:
   - blockchain
   - smart-contract
-description: "How Can Blockchain and Other Consensus Driven Cryptographic
+description: 'How Can Blockchain and Other Consensus Driven Cryptographic
   Technology be Regulated?
   [원문](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3278403)  ## 기술은 시작점에
-  있다.  1988년 Tim May는 다음과 같이 언급한 적이 있..."
+  있다.  1988년 Tim May는 다음과 같이 언급한 적이 있...'
 category: blockchain
 slug: /2018/11/09/how-can-blockchain-and-other-consensus-driven-cryptographic-technology-be-regulated/
 template: post
 ---
+
 How Can Blockchain and Other Consensus Driven Cryptographic Technology be Regulated?
 
 [원문](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3278403)
 
 ## 기술은 시작점에 있다.
 
-1988년 Tim May는 다음과 같이 언급한 적이 있다. 
+1988년 Tim May는 다음과 같이 언급한 적이 있다.
 
 > "컴퓨터 기술은 개인과 그룹이 완전히 익명의 방식으로 서로 의사 소통하고 상호 작용할 수 있는 능력을 제공하기 직전입니다. 두 사람은 메시지를 교환하고 사업을 수행하며 다른 사람의 실제 이름 또는 법적 신원을 몰라도 전자 계약을 협상할 수 있습니다."
- 
+
 오늘날 블록체인과 분산 원장 기술 애플리케이션의 기초를 형성하는 암호화 적으로 안전한 컨센서스 기술(CCTech)을 기반으로 구축되고 있는 디지털 생태계의 현실이 되었다.
 
 CCTech (합의 알고리즘을 의미하고 있습니다.) 는 이전에 가능했던 것 보다 질적으로 다른 상업적 활동 영역을 가능하게 한다. 그것은 효율성 이득을 제공하는 새로운 형태의 상업 활동뿐만 아니라 새로운 유형의 상업 활동을 창출하는 기존의 상거래를 수행할 수 있는 새로운 방법을 가능하게 한다는 약속을 가지고 있다. 2009년 1월 3일(Bitcoin)에 만들어진 최초의 P2P형 전자화폐(Peer-to-Peer) 버전에 이어, 일부 서비스 또는 유틸리티에 대한 액세스를 제공하거나 보안으로 운영되는 "디지털 토큰"이 나타났다. (암호화폐)

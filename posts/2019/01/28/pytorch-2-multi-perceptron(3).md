@@ -12,6 +12,7 @@ category: pytorch
 slug: /2019/01/28/pytorch-2-multi-perceptron(3)/
 template: post
 ---
+
 뉴스 말뭉치를 다운로드 받아서 분석해보자. 말뭉치는 [여기](http://www.kristalinfo.com/download/hkib-20000-40075.tar.gz)에서 받을 수 있다. 과거 뉴스 데이터를 다운로드해서, 어떤 카테코리인지 분류하는 학습을 진행해보자.
 
 먼저 구글드라이브에 해당 파일을 업로드해서 진행했다. 물론 아래와 같은 코드로 colab docker에 업로드 할 수 있지만
@@ -91,13 +92,13 @@ for file in files:
     # 데이터가 담긴 파일만 처리
     if not file.endswith('.txt'):
         continue
-    
+
     # 각 텍스트 파일을 처리
     with open(data_path + 'HKIB-20000/' + file) as currfile:
         doc_cnt = 0
         docs = []
         curr_doc = None
-        
+
         # 기사 단위로 분할하여 리스트를 생성
         for curr_line in currfile:
             if curr_line.startswith('@DOCUMENT'):
@@ -107,35 +108,35 @@ for file in files:
                 doc_cnt = doc_cnt + 1
                 continue
             curr_doc = curr_doc + curr_line
-        
+
         # 각 기사를 대주제 별로 분류하여 기사별 파일로 정리
         for doc in docs:
             doc_lines = doc.split('\n')
             doc_no = doc_lines[1][9:]
-            
+
             # 주제 추출
             doc_cat03 = ''
             for line in doc_lines[:10]:
                 if line.startswith("#CAT'03:"):
                     doc_cat03 = line[10:]
                     break
-            
+
             # 추출한 주제 별로 디렉토리 정리
             for cat_prefix in cat_prefixes:
                 if doc_cat03.startswith(cat_prefix):
                     dir_index = cat_prefixes.index(cat_prefix)
                     break
-                    
+
             # 문서 정보를 제거하고 기사 본문만 남기기
             filtered_lines = []
             for line in doc_lines:
                 if not (line.startswith('#') or line.startswith('@')):
                     filtered_lines.append(line)
-                    
+
             # 주제별 디렉토리에 기사를 파일로 쓰기
             filename = 'hkib-' + doc_no + '.txt'
             filepath = data_path + 'HKIB-20000/' + cat_dirs[dir_index]
-            
+
             if not os.path.exists(filepath):
                 os.makedirs(filepath)
             f = open(filepath + '/' + filename, 'w')
@@ -158,26 +159,26 @@ tokenizer = Kkma()
 
 for i, d in enumerate(dirs):
   files = os.listdir(data_path+'HKIB-20000/'+d)
-  
+
   for file in files:
     f = open(data_path+'HKIB-20000/'+d+'/'+file, 'r', encoding='UTF-8')
     raw = f.read()
-    
+
     reg_raw = re.sub(r'[-\'@#:/◆▲0-9a-zA-Z<>!-"*\(\)]', '', raw)
     reg_raw = re.sub(r'[ ]+', ' ', reg_raw)
     reg_raw = reg_raw.replace('\n', ' ')
-    
+
     tokens = tokenizer.nouns(reg_raw)
-    
+
     for token in tokens:
       tmp1.append(token)
-      
+
     tmp2 = ' '.join(tmp1)
     x_ls.append(tmp2)
     tmp1 = []
 
     y_ls.append(i)
-    
+
     f.close()
 ```
 
@@ -194,7 +195,7 @@ x_cntarray = x_cntvecs.toarray()
 pd.DataFrame(x_cntarray)
 ```
 
-CounterVectyorizer를 통해서 단어 별로 쪼갰다. 그 결과 1001행 * 33572열 크기의 표가 생성되었다. 프린트를 해보면
+CounterVectyorizer를 통해서 단어 별로 쪼갰다. 그 결과 1001행 \* 33572열 크기의 표가 생성되었다. 프린트를 해보면
 
 ```python
 for k, v in sorted(cntvec.vocabulary_.items(), key=lambda x: x[1]):
@@ -220,7 +221,7 @@ for k, v in sorted(cntvec.vocabulary_.items(), key=lambda x: x[1]):
 
 이제 본격적으로 분석해보자.
 
-```python 
+```python
 train_X, test_X, train_Y, test_Y = model_selection.train_test_split(x_tfidf_array, y_array, test_size=0.2)
 import torch
 from torch.autograd import Variable
@@ -239,10 +240,9 @@ train = TensorDataset(train_X, train_Y)
 train_loader = DataLoader(train, batch_size=100, shuffle=True)
 ```
 
-이제 신경망을 구성해보자. 
+이제 신경망을 구성해보자.
 
 입력층에는 33572개의 단어가 있었고, 중간노드수는 256개, 128객 그리고 출력층은 2개 (두 개의 카테고리만 분석)로 구성해두었다.
-
 
 ```python
 # 신경망 구성
@@ -255,7 +255,7 @@ class Net(nn.Module):
         self.fc4 = nn.Linear(256, 128)
         self.fc5 = nn.Linear(128, 128)
         self.fc6 = nn.Linear(128, 2)
-        
+
     def forward(self, x):
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
@@ -264,7 +264,7 @@ class Net(nn.Module):
         x = F.relu(self.fc5(x))
         x = self.fc5(x)
         return F.log_softmax(x)
-    
+
 # 인스턴스 생성
 model = Net()
 ```
@@ -276,7 +276,7 @@ optimizer = optim.Adam(model.parameters(), lr=0.05)
 
 for epoch in range(20):
   total_loss = 0
-  
+
   for train_x, train_y in train_loader:
     train_x, train_y = Variable(train_x), Variable(train_y)
     optimizer.zero_grad()
@@ -285,7 +285,7 @@ for epoch in range(20):
     loss.backward()
     optimizer.step()
     total_loss += loss.data.item()
-    
+
   print(epoch + 1, total_loss)
 ```
 
@@ -301,4 +301,3 @@ accuracy
 ```
 
 92%의 정확성으로 구별해 내었다.
-

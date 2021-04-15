@@ -11,6 +11,7 @@ category: pytorch
 slug: /2019/02/17/ai-programming-python-nanodegree-complete/
 template: post
 ---
+
 AI Programming with Python Nanodegree를 끝냈습니다.
 
 ![complete](../images/certification.svg)

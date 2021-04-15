@@ -12,6 +12,7 @@ category: blockchain
 slug: /2018/10/17/blockchain-democracy-decentralisation-bitcoin-price-cryptocurrencies/
 template: post
 ---
+
 Blockchain isn't about democracy and decentralisation – it's about greed
 
 [원문](https://www.theguardian.com/technology/2018/oct/15/blockchain-democracy-decentralisation-bitcoin-price-cryptocurrencies)
@@ -32,7 +33,7 @@ Blockchain isn't about democracy and decentralisation – it's about greed
 
 > [benevolent dictator for life (자비로운 종신 독재자)](https://en.wikipedia.org/wiki/Benevolent_dictator_for_life)는 대게 소수의 오픈소스 개발자 리더에게 붙여지는 명칭으로, 보통 프로젝트의 창시자이자, 커뮤니티의 논쟁이나 토론에서 결정적인 말을 할 수 있는 사람을 의미합니다. 유명한 사람으로는 파이썬 개발자 귀도 반 루썸이 있습니다.
 
-마지막으로, 지하세계의 부는 북한보다 훨씬 더 집중되어 있다. 지니계수가 1.0이라는 것은 한 개인이 한 나라의 소득/연방의 100%를 통제한다는 것을 의미하는 반면, 북한은 0.86을 기록했고, 오히려 불평등한 미국은 0.41, 비트코인은 놀랍게도 0.88 이다. 
+마지막으로, 지하세계의 부는 북한보다 훨씬 더 집중되어 있다. 지니계수가 1.0이라는 것은 한 개인이 한 나라의 소득/연방의 100%를 통제한다는 것을 의미하는 반면, 북한은 0.86을 기록했고, 오히려 불평등한 미국은 0.41, 비트코인은 놀랍게도 0.88 이다.
 
 > 비트코인 지니계수에 대한 논의는 [여기](https://link.springer.com/chapter/10.1007/978-981-13-0755-3_15)인 것 같은데 논문이 유료네
 

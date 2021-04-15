@@ -4,13 +4,15 @@ date: 2018-06-20 08:05:01
 published: true
 tags:
   - bitcoin
-description: 비트코인 - 콜드월렛 오늘은 역사적인 날입니다. 국내 최대 가상화폐거래소인 빗썸 거래소가 해킹으로 350억원이 털렸습니다
+description:
+  비트코인 - 콜드월렛 오늘은 역사적인 날입니다. 국내 최대 가상화폐거래소인 빗썸 거래소가 해킹으로 350억원이 털렸습니다
   [관련기사](http://v.media.daum.net/v/20180620110342755). 기사를 보면 자신의 자산을 콜드 월렛으로
   옮겼다고 했는데요. 이 콜드월렛이 무엇인지 알아보겠습니다.  [원문](https://en.bitco...
 category: bitcoin
 slug: /2018/06/20/bitcoin-cold-wallet/
 template: post
 ---
+
 비트코인 - 콜드월렛
 
 오늘은 역사적인 날입니다. 국내 최대 가상화폐거래소인 빗썸 거래소가 해킹으로 350억원이 털렸습니다 [관련기사](http://v.media.daum.net/v/20180620110342755). 기사를 보면 자신의 자산을 콜드 월렛으로 옮겼다고 했는데요. 이 콜드월렛이 무엇인지 알아보겠습니다.
@@ -27,9 +29,11 @@ template: post
 - paper wallet.
 
 ![Ethereum-paper-wallet](https://blockgeeks.com/wp-content/uploads/2017/07/image4-2.png)
+
 - 피지컬 비트코인 [Physicial-bitcoin](https://en.bitcoin.it/wiki/Physical_bitcoin)
 
 ![Physical-bitcoin](https://insidebitcoins.com/wp-content/uploads/2014/11/TGBEXBitcoin.jpg)
+
 - 하드웨어 월렛을 이용한 오프라인 비트코인 [Hardware Bitcoin](https://en.bitcoin.it/wiki/Hardware_wallet)
 
 이와 같이 비밀/개인키를 다양한 매체에 백업하는 방법이 존재한다. 그러나 어쩄건, 이러한 방법들도 위험성이 존재한다.
@@ -43,6 +47,7 @@ template: post
 - 종이를 불태우거나, 찢거나 각 종 종이 자체의 손상
 
 프린트 할 경우
+
 - 누가 보거나, 훔쳐가거나
 - 레이저 프린트가 아닌경우 젖어서 번지거나
 - 신뢰할 수 없는 프린터로 인하여 프린팅 하는 과정에서 해킹당하거나

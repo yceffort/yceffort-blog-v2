@@ -13,19 +13,20 @@ category: typescript
 slug: /2020/04/koa-middleware-with-typescript/
 template: post
 ---
+
 ```typescript
 export async function MyMiddleware(
   ctx: Koa.Context,
-  next: (ctx: Koa.Context) => Promise<any>
+  next: (ctx: Koa.Context) => Promise<any>,
 ) {
-  console.log("first middleware started..")
+  console.log('first middleware started..')
 
   // ctx를 조작하여 인증등의 옵션을 처리할 수 있다.
   const {
     header: { auth },
   } = ctx
 
-  if (auth === "foo") {
+  if (auth === 'foo') {
     ctx.state.user = user
   } else {
     // 401
@@ -37,7 +38,7 @@ export async function MyMiddleware(
   // 다음 미들웨어로 넘어간다.
   await next(ctx)
 
-  console.log("first middleware finished..")
+  console.log('first middleware finished..')
 }
 ```
 

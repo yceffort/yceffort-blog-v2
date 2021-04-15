@@ -12,6 +12,7 @@ category: blockchain
 slug: /2018/10/27/cryptocurrency-51-percent-attacks/
 template: post
 ---
+
 Report: Cryptocurrency hackers earned 20M dollar with 51-percent attacks in 2018
 
 [원문](https://thenextweb.com/hardfork/2018/10/23/cryptocurrency-51-percent-attacks/)

@@ -5,13 +5,14 @@ published: true
 tags:
   - blockchain
   - bitcoin
-description: "The Other Side of the Coin: User Experiences with Bitcoin Security
+description: 'The Other Side of the Coin: User Experiences with Bitcoin Security
   and Privacy [원문](http://fc16.ifca.ai/preproceedings/33_Krombholz.pdf)  > 2016년
-  발표된 논문입니다. 그 때 당시 데이터 기준이라 작성하는 현재 (2018년) 과는 많은 차이가 ..."
+  발표된 논문입니다. 그 때 당시 데이터 기준이라 작성하는 현재 (2018년) 과는 많은 차이가 ...'
 category: blockchain
 slug: /2018/07/02/user-expriences-with-bitcoin-security-and-privacy/
 template: post
 ---
+
 The Other Side of the Coin: User Experiences with Bitcoin Security and Privacy
 
 [원문](http://fc16.ifca.ai/preproceedings/33_Krombholz.pdf)

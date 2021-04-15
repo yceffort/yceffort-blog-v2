@@ -12,6 +12,7 @@ category: blockchain
 slug: /2018/11/17/could-blockchain-solve-Irish-border-issue/
 template: post
 ---
+
 Could Blockchain solve Irish border issue?
 
 [원문](https://www.bbc.com/news/technology-45725572)

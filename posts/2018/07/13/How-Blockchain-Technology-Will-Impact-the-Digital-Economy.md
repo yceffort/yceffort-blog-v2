@@ -11,6 +11,7 @@ category: blockchain
 slug: /2018/07/13/How-Blockchain-Technology-Will-Impact-the-Digital-Economy/
 template: post
 ---
+
 How Blockchain Technology Will Impact the Digital Economy
 
 [원문](https://www.law.ox.ac.uk/business-law-blog/blog/2017/04/how-blockchain-technology-will-impact-digital-economy)

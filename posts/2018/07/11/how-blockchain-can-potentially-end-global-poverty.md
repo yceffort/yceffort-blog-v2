@@ -11,6 +11,7 @@ category: blockchain
 slug: /2018/07/11/how-blockchain-can-potentially-end-global-poverty/
 template: post
 ---
+
 how blockchain can potentially end global poverty
 
 [원문](https://thenextweb.com/contributors/2017/07/25/heres-blockchain-can-potentially-end-global-poverty/)

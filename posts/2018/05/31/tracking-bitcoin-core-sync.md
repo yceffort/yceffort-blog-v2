@@ -5,13 +5,15 @@ published: true
 tags:
   - programming
   - bitcoin
-description: bitcoin-core를 설치했다면 bitcoind daemon 에서는 모든  block 정보를 동기화 하게 된다. 이는
+description:
+  bitcoin-core를 설치했다면 bitcoind daemon 에서는 모든  block 정보를 동기화 하게 된다. 이는
   꽤나 많은 양이기 때문에, 동기화에 하루이틀 이상의 오랜 시간이 소요된다.  ![스크린샷 2016-04-20
   08.53.33](../images/bitcoin-sync-1.png)  지갑주소 공개합니다. 0...
 category: programming
 slug: /2018/05/31/tracking-bitcoin-core-sync/
 template: post
 ---
+
 bitcoin-core를 설치했다면 bitcoind daemon 에서는 모든  block 정보를 동기화 하게 된다.
 
 이는 꽤나 많은 양이기 때문에, 동기화에 하루이틀 이상의 오랜 시간이 소요된다.
@@ -32,7 +34,6 @@ getinfo 명령어는 bitcoin daemon 의 전반적인 상황을 볼 수 있고, 
 
 현재 약 408506개가 있는데, 절반정도 동기화되어 있는 걸 볼 수 있다.
 
-
 이는 약 11시간에 걸쳐서 동기화한 결과다.
 
 스펙은 아래와 같다.
@@ -47,7 +48,6 @@ CPU 사용량 ( 사용량이 많이 튀는 시간 대는 내가 환경설정을 
 
 ![스크린샷 2016-04-20 09.05.00](../images/bitcoin-sync-2.png)
 
- 
 용량
 
 30여만개의 정보들은 약 20기가를 차지한다. (core 포함)
@@ -61,14 +61,13 @@ CPU 사용량 ( 사용량이 많이 튀는 시간 대는 내가 환경설정을 
  /sys/fs/cgroup none 5.0M 0 5.0M 0%
  /run/lock none 3.7G 0 3.7G 0%
  /run/shm none 100M 0 100M 0% /run/user
- ```
+```
 
 음.. 아마 8시간이 더 있으면 동기화가 완료 될 것 같다.
 
 동기화가 완료되는 대로 다시 포스팅 해야지.
 
-----
-
+---
 
 8시간후
 
@@ -82,26 +81,26 @@ CPU 사용량 ( 사용량이 많이 튀는 시간 대는 내가 환경설정을 
 
 ```
  savurself11@bitcoin:~$ bitcoin-cli getinfo
- ```
+```
 
- ```json
- {
-   "version" : 90500,
-   "protocolversion" : 70002,
-   "walletversion" : 60000,
-   "balance" : 0.00000000,
-   "blocks" : 324389,
-   "timeoffset" : -1,
-   "connections" : 8,
-   "proxy" : "",
-   "difficulty" : 34661425923.97693634,
-   "testnet" : false,
-   "keypoololdest" : 1461075368,
-   "keypoolsize" : 101,
-   "paytxfee" : 0.00000000,
-   "relayfee" : 0.00001000,
-   "errors" : ""
- }
+```json
+{
+  "version": 90500,
+  "protocolversion": 70002,
+  "walletversion": 60000,
+  "balance": 0.0,
+  "blocks": 324389,
+  "timeoffset": -1,
+  "connections": 8,
+  "proxy": "",
+  "difficulty": 34661425923.97693634,
+  "testnet": false,
+  "keypoololdest": 1461075368,
+  "keypoolsize": 101,
+  "paytxfee": 0.0,
+  "relayfee": 0.00001,
+  "errors": ""
+}
 ```
 
 ```
@@ -118,8 +117,8 @@ savurself11@bitcoin:~$ bitcoin-cli getblockcount 324398 savurself11@bitcoin:~$
 
 어제 32만개라고 포스팅했는데, 간밤에 4만개 밖에 동기화 하지 못했다. ㅠㅠ
 
-
 bitcoin-cli 의 현재 sync 상황을 확인해보자.
+
 ```
 savurself11@bitcoin:~$ bitcoin-cli getblockcount
 364511
@@ -136,23 +135,28 @@ savurself11@bitcoin:~$ bitcoin-cli getblockhash 364511 000000000000000014136f884
 ```
 bitcoin-cli getblock "000000000000000014136f884dbf60e529a1cd296d3b321bcac22420c97be03d"
 ```
+
 transaction정보는 너무 많아서 생략한다.
 
 ```json
 {
-  "time" : 1436418994,
-  "nonce" : 2453655801,
-  "bits" : "1816418e",
-  "difficulty" : 49402014931.22746277,
-  "chainwork" : "0000000000000000000000000000000000000000000847c569a240f670fc6820", "previousblockhash" : "000000000000000006588b7d0aefa8045d5c6822e975b5d37558610f406880ac", "nextblockhash" : "0000000000000000015b001aca1ba32cfedc54fe3deae0f4b724b321e3b7b425"
+  "time": 1436418994,
+  "nonce": 2453655801,
+  "bits": "1816418e",
+  "difficulty": 49402014931.22746277,
+  "chainwork": "0000000000000000000000000000000000000000000847c569a240f670fc6820",
+  "previousblockhash": "000000000000000006588b7d0aefa8045d5c6822e975b5d37558610f406880ac",
+  "nextblockhash": "0000000000000000015b001aca1ba32cfedc54fe3deae0f4b724b321e3b7b425"
 }
 ```
- 
+
+
+
 ```
 savurself11@bitcoin:~$ date -d @1436418994
 Thu Jul 9 05:16:34 UTC 2015
 ```
- 
+
 2015년 7월 정보까지 따라왔다. 이 정도 추세면 내일 모레쯤이면 따라 잡을 수 있을 것 같기도하다.
 
 ---
@@ -171,6 +175,5 @@ Thu Jul 9 05:16:34 UTC 2015
 이제 내가 보낸 비트코인정보를 내 서버에서 볼 수 있게 되었다.
 
 내 30만원 ^^
-
 
 2018년 현재: 거래량이 많아진 지금은 더 오랜 시간이 소요될 것.

@@ -2,7 +2,7 @@
 title: 'useEffect와 메모리 누수'
 tags:
   - react
-  - javascript  
+  - javascript
 published: true
 date: 2021-02-25 22:46:17
 description: 'https://overreacted.io/a-complete-guide-to-useeffect/ 도 시간나면 읽어보세용'
@@ -11,22 +11,24 @@ description: 'https://overreacted.io/a-complete-guide-to-useeffect/ 도 시간�
 아래 코드는 일반적으로 `useEffect`를 활용해서 데이터를 가져오는 방식이다.
 
 ```javascript
-import React, { useEffect } from 'react';
+import React, { useEffect } from 'react'
 
 export default function App() {
-  const [todo, setTodo] = useState(null);
+  const [todo, setTodo] = useState(null)
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch('https://jsonplaceholder.typicode.com/todos/1');
-      const newData = await response.json();
-      setTodo(newData);
-    };
-    fetchData();
-  }, []);
+      const response = await fetch(
+        'https://jsonplaceholder.typicode.com/todos/1',
+      )
+      const newData = await response.json()
+      setTodo(newData)
+    }
+    fetchData()
+  }, [])
   if (data) {
-    return <div>{data.title}</div>;
+    return <div>{data.title}</div>
   } else {
-    return null;
+    return null
   }
 }
 ```
@@ -38,21 +40,23 @@ dependency에 아무것도 넣지 않음으로써, 딱 한번만 실행되게 �
 마찬가지로, `id`를 의존성 목록에 넣어서 처리하는 경우도 있을 수 있다.
 
 ```javascript
-import React, { useEffect } from 'react';
-export default function App( {id} ) {
-  const [todo, setTodo] = useState(null);
+import React, { useEffect } from 'react'
+export default function App({ id }) {
+  const [todo, setTodo] = useState(null)
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(`https://jsonplaceholder.typicode.com/todos/${id}`);
-      const newData = await response.json();
-      setTodo(newData);
-    };
-    fetchData();
-  }, [id]);
+      const response = await fetch(
+        `https://jsonplaceholder.typicode.com/todos/${id}`,
+      )
+      const newData = await response.json()
+      setTodo(newData)
+    }
+    fetchData()
+  }, [id])
   if (data) {
-    return <div>{data.title}</div>;
+    return <div>{data.title}</div>
   } else {
-    return null;
+    return null
   }
 }
 ```
@@ -63,19 +67,19 @@ export default function App( {id} ) {
 
 ```javascript
 useEffect(() => {
-  let isComponentMounted = true;
+  let isComponentMounted = true
   const fetchData = async () => {
-    const response = await fetch('https://jsonplaceholder.typicode.com/todos/1');
-    const newData = await response.json();
-    if(isComponentMounted) {
-      setTodo(newData);
+    const response = await fetch('https://jsonplaceholder.typicode.com/todos/1')
+    const newData = await response.json()
+    if (isComponentMounted) {
+      setTodo(newData)
     }
-  };
-  fetchData();
-  return () => {
-    isComponentMounted = false;
   }
-}, []);
+  fetchData()
+  return () => {
+    isComponentMounted = false
+  }
+}, [])
 ```
 
 unmount가 될 시에 요청이 늦게 와도 `setTodo`를 방지함으로써 문제를 해결할 수 있다. 그러나 물론 백그라운드에서는 여러개의 요청이 날라가고 있기 때문에 레이스 컨디션 문제가 발생할 수는 있다. 그래도 어쨌든, 마지막 요청의 결과만 UI에 표시된다.
@@ -84,26 +88,28 @@ unmount가 될 시에 요청이 늦게 와도 `setTodo`를 방지함으로써 �
 
 ```javascript
 useEffect(() => {
-  let abortController = new AbortController();
+  let abortController = new AbortController()
   const fetchData = async () => {
     try {
-      const response = await fetch('https://jsonplaceholder.typicode.com/todos/1', {
+      const response = await fetch(
+        'https://jsonplaceholder.typicode.com/todos/1',
+        {
           signal: abortController.signal,
-        });
-    const newData = await response.json();
-      setTodo(newData);
-    }
-    catch(error) {
-        if (error.name === 'AbortError') {
+        },
+      )
+      const newData = await response.json()
+      setTodo(newData)
+    } catch (error) {
+      if (error.name === 'AbortError') {
         // requset를 abort하는 과정에서 에러 발생
       }
     }
-  };
-  fetchData();
-  return () => {
-    abortController.abort();
   }
-}, []);
+  fetchData()
+  return () => {
+    abortController.abort()
+  }
+}, [])
 ```
 
 unmount가 되면 cleanup을 통해서 요청을 중단시켰다. 물론, `AbortController`를 사용하기 위해서는 polyfill도 필요할 것이다.

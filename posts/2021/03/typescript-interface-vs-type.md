@@ -146,8 +146,7 @@ interface NameInterface {
 
 https://github.com/microsoft/TypeScript/wiki/Performance#preferring-interfaces-over-intersections
 
-
-> Interfaces create a single flat object type that detects property conflicts, which are usually important to resolve! Intersections on the other hand just recursively merge properties, and in some cases produce never. 
+> Interfaces create a single flat object type that detects property conflicts, which are usually important to resolve! Intersections on the other hand just recursively merge properties, and in some cases produce never.
 
 여러 `type` 혹은 `interface`를 `&`하거나 `extends`할 때를 생각해보자. `interface`는 속성간 충돌을 해결하기 위해 단순한 객체 타입을 만든다. 왜냐하면 interface는 객체의 타입을 만들기 위한 것이고, 어차피 객체 만 오기 때문에 단순히 합치기만 하면 되기 때문이다. 그러나 타입의 경우, 재귀적으로 순회하면서 속성을 머지하는데, 이 경우에 일부 `never`가 나오면서 제대로 머지가 안될 수 있다. `interface`와는 다르게, `type`은 원시 타입이 올수도 있으므로, 충돌이 나서 제대로 머지가 안되는 경우에는 `never`가 떨어진다. 아래 예제를 살펴보자.
 
@@ -162,25 +161,25 @@ const t3: type3 = { a: 1, b: 2 } // Type 'number' is not assignable to type 'nev
 
 따라서 타입 간 속성을 머지 할 때는 주의를 필요로 한다. 어차피 객체에서만 쓰는 용도라면, `interface`를 쓰는 것이 훨씬 낫다.
 
-> Interfaces also display consistently better, whereas type aliases to intersections can't be displayed in part of other intersections. 
+> Interfaces also display consistently better, whereas type aliases to intersections can't be displayed in part of other intersections.
 
 그러나 위의 명제는 이제 더 이상 사실이 아니다. 이제 type의 경우에도 어디에서 에러가 났는지 잘 알려준다. (어째 문서 업데이트가 못따라가는 느낌이다)
 
 ```typescript
 type t1 = {
-    a: number
+  a: number
 }
 
 type t2 = t1 & {
-    b: string
+  b: string
 }
 
-const typeSample: t2 = {a: 1, b: 2} // error
+const typeSample: t2 = { a: 1, b: 2 } // error
 // before(3.x): Type 'number' is not assignable to type 'string'.
 // after(4.x): Type 'number' is not assignable to type 'string'.(2322) input.tsx(14, 5): The expected type comes from property 'b' which is declared here on type 't2'
 ```
 
-> Type relationships between interfaces are also cached, as opposed to intersection types as a whole. 
+> Type relationships between interfaces are also cached, as opposed to intersection types as a whole.
 
 `interface` 들을 합성할 경우 이는 캐시가 되지만, 타입의 경우에는 그렇지 못하다.
 
@@ -190,5 +189,4 @@ const typeSample: t2 = {a: 1, b: 2} // error
 
 ## 결론?
 
-무엇이 되었건 간에, 프로젝트 전반에서 `type`을 쓸지 `interface`를 쓸지 통일은 필요해보인다. 그러나 객체, 그리고 타입간의 합성등을 고려해 보았을 때 `interface`를 쓰는 것이 더 나을지 않을까 싶다. 
-
+무엇이 되었건 간에, 프로젝트 전반에서 `type`을 쓸지 `interface`를 쓸지 통일은 필요해보인다. 그러나 객체, 그리고 타입간의 합성등을 고려해 보았을 때 `interface`를 쓰는 것이 더 나을지 않을까 싶다.

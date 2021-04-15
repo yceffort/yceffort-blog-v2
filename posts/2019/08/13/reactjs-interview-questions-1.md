@@ -260,7 +260,6 @@ class Component extends React.Componenet {
 handleClick = () => {
   console.log('this is:', this)
 }
-
 ;<button onClick={this.handleClick}> Click me </button>
 ```
 

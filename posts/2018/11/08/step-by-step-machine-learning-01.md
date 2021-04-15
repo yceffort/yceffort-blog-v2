@@ -55,7 +55,6 @@ housing = load_housing_data()
 housing.head()
 ```
 
-
 ```python
 housing.info()
 ```
@@ -96,8 +95,6 @@ Name: ocean_proximity, dtype: int64
 ```python
 housing.describe()
 ```
-
-
 
 그래프로 보자
 

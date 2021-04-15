@@ -185,7 +185,7 @@ Regression에서는 MSE를, Classification에서는 Cros Entropy를, 여러 clas
 
 공식은 아래와 같다.
 
-$$ \text{Cross Entropy} = P(X) * -log(Q(x)) $$
+$$ \text{Cross Entropy} = P(X) \* -log(Q(x)) $$
 
 여기서 $$P(x)$$는 실제값을, $$Q(x)$$는 예상값이다.
 

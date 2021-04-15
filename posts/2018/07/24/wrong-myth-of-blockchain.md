@@ -11,10 +11,10 @@ category: blockchain
 slug: /2018/07/24/wrong-myth-of-blockchain/
 template: post
 ---
+
 11 Common Myths About Blockchain And Cryptocurrency You Shouldn't Believe
 
 [원문](https://www.forbes.com/sites/forbestechcouncil/2018/03/27/11-common-myths-about-blockchain-and-cryptocurrency-you-shouldnt-believe/#3e0e9deda33f)
-
 
 ### 1. 블록체인은 비트코인이다
 
@@ -54,8 +54,8 @@ template: post
 
 ### 10. 토큰과 코인은 같은 것이다.
 
-블록체인은 토큰과 ICO가 있다. 코인은 단순히 가치 저장소 역할을 하는 유틸리티다. 토큰은 좀더 복잡한 수준으로, 재산, 유동성, 소득, 부동산과 같은 복잡한 수준의 가치를 저장할 수 있다. 
+블록체인은 토큰과 ICO가 있다. 코인은 단순히 가치 저장소 역할을 하는 유틸리티다. 토큰은 좀더 복잡한 수준으로, 재산, 유동성, 소득, 부동산과 같은 복잡한 수준의 가치를 저장할 수 있다.
 
 ### 11. 암호화폐는 근본적으로 다른 화폐와 다르다.
 
-블록체인을 둘러싼 너무 많은 과대 광고가 있었고, 그 중심에는 암호화폐의 '암호'측면이 있었다. 통화의 근본적인 측면은 무엇인가? 그것은 측정 단위이며, 우리가 가치를 전달하는 방식이다. 이 새로운 암호화폐에 대한 가치의 중추가 되는 자산은 무엇일까? 
+블록체인을 둘러싼 너무 많은 과대 광고가 있었고, 그 중심에는 암호화폐의 '암호'측면이 있었다. 통화의 근본적인 측면은 무엇인가? 그것은 측정 단위이며, 우리가 가치를 전달하는 방식이다. 이 새로운 암호화폐에 대한 가치의 중추가 되는 자산은 무엇일까?

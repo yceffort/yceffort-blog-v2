@@ -1,5 +1,5 @@
 ---
-title: "폴크루그먼: 왜 내가 암호화폐에 비관적인가?"
+title: '폴크루그먼: 왜 내가 암호화폐에 비관적인가?'
 date: 2018-11-20 04:44:01
 published: true
 tags:
@@ -12,6 +12,7 @@ category: blockchain
 slug: /2018/11/20/transaction-costs-and-tethers-why-im-a-crypto-skeptic/
 template: post
 ---
+
 Transaction Costs and Tethers: Why I’m a Crypto Skeptic
 
 [원문](https://www.nytimes.com/2018/07/31/opinion/transaction-costs-and-tethers-why-im-a-crypto-skeptic.html)

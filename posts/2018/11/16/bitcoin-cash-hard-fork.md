@@ -12,6 +12,7 @@ category: blockchain
 slug: /2018/11/16/bitcoin-cash-hard-fork/
 template: post
 ---
+
 What you need to know about the controversial Bitcoin Cash hard fork
 
 [원문](https://thenextweb.com/hardfork/2018/11/15/bitcoin-cash-hard-fork/)
@@ -24,7 +25,7 @@ What you need to know about the controversial Bitcoin Cash hard fork
 
 비트코인캐시는 일년에 두 번 네트워크 업데이트를 받지만, 가장 최근의 것은 특히 분열적인 것으로 입증되고 있다. 근본적으로 다른 두 가지 네트워크 업데이트 제안 - 하나는 노드 소프트웨어 공급업체인 Bitcoin-ABC에 의해 개발되었고 다른 하나는 Craig Wright의 블록체인 리서치 회사인 nChain에 의해 개발되었다.
 
-ABC는 일련의 새로운 기능(Bitcoin Cash를 기반으로 애플리케이션을 구축하고 지불 범위 밖에서 최대한의 기능을 확장할 수 있는 기능)을 도입하려 하고,  nChain의 버전은 블록 크기를 32MB에서 최대 128MB로 확대하여 확장 성 및 거래 속도를 향상시키는 것을 목표로 한다.
+ABC는 일련의 새로운 기능(Bitcoin Cash를 기반으로 애플리케이션을 구축하고 지불 범위 밖에서 최대한의 기능을 확장할 수 있는 기능)을 도입하려 하고, nChain의 버전은 블록 크기를 32MB에서 최대 128MB로 확대하여 확장 성 및 거래 속도를 향상시키는 것을 목표로 한다.
 
 각 솔루션이 얼마나 잘 고려되었는지 여부는 누구에게 묻느냐에 따라 다르다. 그러나 여기에 문제가 있다: 두 가지 구현은 서로 양립할 수 없다.
 
@@ -50,7 +51,7 @@ Coinbase와 Binance와 같은 주요 거래소는 비트코인캐시 포크를 �
 
 그러나 새로운 '실제' 비트코인캐시로 어떤 구현이 나왔든 간에, 하드포크는 사회에 돌이킬 수 없는 피해를 입혔다. 이번 주에 가격이 급격히 하락한 것 외에도, [Wright](https://en.wikipedia.org/wiki/Craig_Steven_Wright)(호주의 개발자이자 사업가로, 자신을 사토시 나카모토라고 (...) 했다가 엄청 욕을 먹은 사람이다. 비트코인 캐시를 세우는데 공을 세우기도 했고, 초창기 많은 지지를 받기도 했지만 현재는 이와 같은 논란의 중심에 있다.) 와 Bitcoin.com의 사장 Roger 간의 불화는 전체 블록체인 공간을 더럽혔다.
 
-특히, 비트코인캐시는 유머 느낌으로 고안된 Dogecoin만큼도 쓰이지 못하고 있다는 것을 고려한다면, 이는 정말 부끄러운일이 아닐 수 없다. 
+특히, 비트코인캐시는 유머 느낌으로 고안된 Dogecoin만큼도 쓰이지 못하고 있다는 것을 고려한다면, 이는 정말 부끄러운일이 아닐 수 없다.
 
 참고: [하드포크 앞둔 비트코인캐시, 이것은 전쟁이다](https://www.coindeskkorea.com/%ED%95%98%EB%93%9C%ED%8F%AC%ED%81%AC-%EC%95%9E%EB%91%94-%EB%B9%84%ED%8A%B8%EC%BD%94%EC%9D%B8%EC%BA%90%EC%8B%9C-%EC%9D%B4%EA%B2%83%EC%9D%80-%EC%A0%84%EC%9F%81%EC%9D%B4%EB%8B%A4/)
 
@@ -83,8 +84,7 @@ Wright는 비트코인캐시 포크의 Bitcoin ABC 쪽을 트위터로 공격하
 - https://twitter.com/rogerkver/status/1063123138081370112?ref_src=twsrc%5Etfw
 - https://twitter.com/iamjosephyoung/status/1063122543165370370?ref_src=twsrc%5Etfw
 - https://twitter.com/iamjosephyoung/status/1063122543165370370?ref_src=twsrc%5Etfw
-- 
-중국 광산 하드웨어 제조업체인 Bitmain의 설립자와 가까운 소식통에 따르면 Wright의 51 % 공격의 심각한 위협이 발생할 경우 BTC 체인을 채굴하는 것으로 알려진 9만 개의 마이닝 유닛이 여전히 Bitcoin ABC로 전환 될 수 있다고 한다.
+- 중국 광산 하드웨어 제조업체인 Bitmain의 설립자와 가까운 소식통에 따르면 Wright의 51 % 공격의 심각한 위협이 발생할 경우 BTC 체인을 채굴하는 것으로 알려진 9만 개의 마이닝 유닛이 여전히 Bitcoin ABC로 전환 될 수 있다고 한다.
 
 분명히 Wright는 현재 산출하는 것으로 보이는 것보다 많은 해시 속도를 필요로 한다. 지금은 51%의 공격과 몇 달 동안의 ‘2014년 가격’에 대한 그의 발언이 단지 위협에 그칠 것으로 보인다.
 

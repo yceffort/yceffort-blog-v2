@@ -13,6 +13,7 @@ category: blockchain
 slug: /2018/09/13/bitcoin-is-eating-quebec/
 template: post
 ---
+
 Bitcoin is eating Quebec
 
 [원문](https://www.technologyreview.com/s/610786/bitcoin-is-eating-quebec/)

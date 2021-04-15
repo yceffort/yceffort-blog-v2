@@ -4,7 +4,8 @@ tags:
   - javascript
 published: true
 date: 2020-03-17 04:14:07
-description: 'regex를 활용해서 숫자에 , 를 찍어서 formatting을 해보자. ## 1. 첫번째
+description:
+  'regex를 활용해서 숫자에 , 를 찍어서 formatting을 해보자. ## 1. 첫번째
   시도  ```javascript function formatNumber(number) {   return
   number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") } ```  인터넷에 가장 많이 떠돌아
   다니는 해결책으로, ...'
@@ -12,20 +13,21 @@ category: javascript
 slug: /2020/03/regex-formatting-number/
 template: post
 ---
+
 regex를 활용해서 숫자에 , 를 찍어서 formatting을 해보자.
 
 ## 1. 첫번째 시도
 
 ```javascript
 function formatNumber(number) {
-  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
 ```
 
 인터넷에 가장 많이 떠돌아 다니는 해결책으로, 아쉽게도 소수점에 대한 대응이 되지 않는다.
 
 ```javascript
-"1111.1111111".toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+'1111.1111111'.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 // 1,111.1,111,111
 ```
 
@@ -33,19 +35,19 @@ function formatNumber(number) {
 
 ```javascript
 function formatNumber(number) {
-  return number.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+  return number.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
 }
 ```
 
 ```javascript
-"1111.1111111".toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+'1111.1111111'.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
 // 1,111.1111111
 ```
 
 이게 성공하는 줄 알고, test 도 넘어가길래 실제로 써보았더니 앱에서 오류가 나기 시작했다. ㅠ.ㅠ
 
 ```javascript
-"1111.1111111".toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+'1111.1111111'.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
 // SyntaxError: Invalid regular expression: invalid group specifier name
 ```
 
@@ -59,9 +61,9 @@ function formatNumber(number) {
 
 ```javascript
 function formatNumber(x) {
-  var parts = x.toString().split(".")
-  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-  return parts.join(".")
+  var parts = x.toString().split('.')
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  return parts.join('.')
 }
 ```
 

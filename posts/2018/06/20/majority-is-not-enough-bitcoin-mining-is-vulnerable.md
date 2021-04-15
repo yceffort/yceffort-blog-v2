@@ -12,6 +12,7 @@ category: bitcoin
 slug: /2018/06/20/majority-is-not-enough-bitcoin-mining-is-vulnerable/
 template: post
 ---
+
 다수로는 부족하다. 비트코인 마이닝의 취약점
 
 [원문](https://arxiv.org/pdf/1311.0243.pdf)

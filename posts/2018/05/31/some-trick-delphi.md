@@ -5,11 +5,12 @@ published: true
 tags:
   - programming
   - delphi
-description: "첫 직장에서 델파이로 개발했을 때 유용하게 사용하던 코드 모음."
+description: '첫 직장에서 델파이로 개발했을 때 유용하게 사용하던 코드 모음.'
 category: programming
 slug: /2018/05/31/some-trick-delphi/
 template: post
 ---
+
 정보: github page code highlight는 델파이를 지원하지 않는다.
 
 ## checksum
@@ -71,7 +72,6 @@ begin
   CloseHandle(FSnapshotHandle);
 end;
 ```
-
 
 ## 프로세스 죽이기
 
@@ -158,6 +158,7 @@ end;
 ```
 
 ## get md5
+
 ```pascal
 function GetCheckSum(FileName: string): string;
 var
@@ -210,6 +211,7 @@ begin
 ```
 
 ## 인터넷 연결상태 확인
+
 ```pascal
 function CheckInternetConnection(): Boolean;
 const

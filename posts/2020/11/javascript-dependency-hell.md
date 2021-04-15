@@ -60,15 +60,15 @@ NPM (Node Package Manager)는 세계에서 가장 큰 자바스크립트 패키�
       "loose-envify": "^1.1.0",
       "object-assign": "^4.1.1"
     }
-  },
+  }
 }
 ```
 
-`package-lock.json`은 프로젝트의 거대한 종속성 목록을 가지고 있다. 여기에는 버전, module의 위치 (URI), 정합성을 위한 해싱값과 패키지가 요구하는 모듈들이 나와있다. 
+`package-lock.json`은 프로젝트의 거대한 종속성 목록을 가지고 있다. 여기에는 버전, module의 위치 (URI), 정합성을 위한 해싱값과 패키지가 요구하는 모듈들이 나와있다.
 
 ## Gatsby.js의 의존성 살펴보지.
 
-Gatsby는 왜 1800개의 의존성을 갖게 되는 것일까? 답은 의존성의 의존성이다. 
+Gatsby는 왜 1800개의 의존성을 갖게 되는 것일까? 답은 의존성의 의존성이다.
 
 ```bash
 $ npm install --save gatsby
@@ -217,7 +217,7 @@ audited 1889 packages in 3.36s
 found 0 vulnerabilities
 ```
 
-[Deduplication](https://docs.npmjs.com/cli/dedupe)은 종속성 사이의 공통 패키지를 찾고, 이러한 패키지가 재사용될 수 있도록 하여 종속성 트리 구조를 단순화 시키는 작업이다. 
+[Deduplication](https://docs.npmjs.com/cli/dedupe)은 종속성 사이의 공통 패키지를 찾고, 이러한 패키지가 재사용될 수 있도록 하여 종속성 트리 구조를 단순화 시키는 작업이다.
 
 ## 의존성 한눈에 보기
 

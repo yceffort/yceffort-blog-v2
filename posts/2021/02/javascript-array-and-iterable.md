@@ -14,7 +14,7 @@ const a = {
   0: 0,
   1: 1,
   2: 2,
-  length: 3
+  length: 3,
 }
 
 a[0] // 0
@@ -41,7 +41,7 @@ const a = {
   0: 0,
   1: 1,
   2: 2,
-  length: 3
+  length: 3,
 }
 
 const b = [1, 2, 3]
@@ -50,23 +50,23 @@ typeof a // object
 typeof b // object
 
 Object.getPrototypeOf(a) === Object.prototype
-Object.getPrototypeOf(b) === Array.prototype  // true
+Object.getPrototypeOf(b) === Array.prototype // true
 ```
 
 객체와 배열은 기본적으로 다음과 같은 서로다른 특징이 있다.
 
-|                 	| Object       	| Array           	|   	|
-|-----------------	|--------------	|-----------------	|---	|
-| structure       	| key & value  	| index & element 	|   	|
-| reference       	| property key 	| index           	|   	|
-| order           	| X            	| O               	|   	|
-| length property 	| X            	| O               	|   	|
+|                 | Object       | Array           |     |
+| --------------- | ------------ | --------------- | --- |
+| structure       | key & value  | index & element |     |
+| reference       | property key | index           |     |
+| order           | X            | O               |     |
+| length property | X            | O               |     |
 
 가장 큰 차이로는, 순서와 `length` property 유무다.
 
 ### 희소배열
 
-자바스크립트의 배열은, 일반적인 밀집 배열이 아니다. 
+자바스크립트의 배열은, 일반적인 밀집 배열이 아니다.
 
 여기서 밀집 배열이란, 데이터 타입이 통일되어 있으며 서로 메모리 상에서 연속적으로 인접해 있는 배열을 의미한다. 밀집배열은 따라서 데이터에 접근하는게 효율적이고, 빠르다.
 
@@ -89,7 +89,7 @@ const a = {
   0: 0,
   1: 1,
   2: 2,
-  length: 3
+  length: 3,
 }
 
 const b = [1, 2, 3]
@@ -121,11 +121,11 @@ const fibonacci = function (max) {
 
           return {
             value: curr,
-            done: curr >= max
+            done: curr >= max,
           }
-        }
+        },
       }
-    }
+    },
   }
 }
 
@@ -162,32 +162,32 @@ console.log(iterator.next()) // { value: undefined, done: true}
 
 ```javascript
 const fibonacciFunc = function (max) {
-    let prev = 0
-    let curr = 1
-    
-    return {
-        [Symbol.iterator]() {
-            // 메소드 함수의 this는 메서드를 호출한 객체에 바인딩 된다. 
-            // 즉
-            /*
+  let prev = 0
+  let curr = 1
+
+  return {
+    [Symbol.iterator]() {
+      // 메소드 함수의 this는 메서드를 호출한 객체에 바인딩 된다.
+      // 즉
+      /*
             {
               next: [Function: next],
               [Symbol(Symbol.iterator)]: [Function: [Symbol.iterator]]
             }
             */
-            return this
-        },
-        next() {
-            last = prev + curr
-            prev = curr
-            curr = last
-            
-            return {
-                value: curr,
-                done: curr >= max
-            }
-        }
-    }
+      return this
+    },
+    next() {
+      last = prev + curr
+      prev = curr
+      curr = last
+
+      return {
+        value: curr,
+        done: curr >= max,
+      }
+    },
+  }
 }
 
 const fibonacci100 = fibonacciFunc(100)

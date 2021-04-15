@@ -27,7 +27,7 @@ description: '아니 그래서 IE 11 언제 없앨 건데요'
 - 객체 축약 (ES2015)
 - async await (ES2017)
 
-이 후에 나온 기능, 예를 들어 ES2020, ES2021에 나온 기능들은 브라우저의 70% 정도가 지원한다. 여전히 70%면 많은 수치이지만, 그 기능에 온전히 기대는 것은 안전하지 않다. 따라서 모던 자바스크립트를 타겟으로 한다면, 가장 널리 알려져 있으며 지원하는 브라우저가 많은 ES2017 정도가 적당해 보인다. 다른 말로 하자면,  ES2017이 오늘날의 가장 모던한 문법인 것이다.
+이 후에 나온 기능, 예를 들어 ES2020, ES2021에 나온 기능들은 브라우저의 70% 정도가 지원한다. 여전히 70%면 많은 수치이지만, 그 기능에 온전히 기대는 것은 안전하지 않다. 따라서 모던 자바스크립트를 타겟으로 한다면, 가장 널리 알려져 있으며 지원하는 브라우저가 많은 ES2017 정도가 적당해 보인다. 다른 말로 하자면, ES2017이 오늘날의 가장 모던한 문법인 것이다.
 
 > 물론 이 글은 2020년 12월 15일에 작성되어 있습니다. 시간이 흐르면 더 달라지겠죠?
 
@@ -90,7 +90,7 @@ CommonJS로 작성된 fallback에, `module`을 추가한다면 유사하게 lega
 ```javascript
 module.exports = {
   target: ['web', 'es2017'],
-};
+}
 ```
 
 또한 웹팩에서 모던 ES 모듈 환경을 타겟으로 한다면, 불필요한 wrapper 함수를 생략하여 번들 크기를 최적화하는 설정을 할 수 다.
@@ -104,7 +104,7 @@ module.exports = {
   experiments: {
     outputModule: true,
   },
-};
+}
 ```
 
 이외에도 웹팩을 활용하여 모던 자바스크리븥 문법을 활용하면서 동시에 레거시 브라우저도 지원할 수 있도록 도와주는 많은 도구들이 존재한다.
@@ -115,24 +115,25 @@ module.exports = {
 
 ```javascript
 // webpack.config.js
-const OptimizePlugin = require('optimize-plugin');
+const OptimizePlugin = require('optimize-plugin')
 
 module.exports = {
   // ...
   plugins: [new OptimizePlugin()],
-};
+}
 ```
 
 `Optimize Plugin`은 모던 코드와 레거시 코드를 따로 번들링 하는 기존 방식보다 더 빠르고 효율적이다. 또한 `Babel`처리도 가능하며, `Terser`를 활용하여 각각의 번들 크기를 줄일 수도 있다. 마지막으로, 레거시 번들에 필요한 폴리필을 따로 관리하기 때문에, 모던 브라우저에서 이를 로딩하지 않도록 도와준다.
 
 https://storage.googleapis.com/web-dev-assets/fast-publish-modern-javascript/transpile-before-after.webm
-  ## BabelEsmPlugin
 
-  웹팩 플러그인 중 하나인 [BabelEsmPlugin](https://github.com/prateekbh/babel-esm-plugin)는 `@babel/preset-env` 와 함께 사용할 수 있으며, 현재 가지고 있는 번들을 모던 브라우저에 서비스 할 수 있도록 트랜스파일링을 최소화 해준다. 이는 Next.js나 preact cli에서도 사용하는 가장 유명한 module/nomodule 솔루션이다.
+## BabelEsmPlugin
 
-  ```javascript
-  // webpack.config.js
-const BabelEsmPlugin = require('babel-esm-plugin');
+웹팩 플러그인 중 하나인 [BabelEsmPlugin](https://github.com/prateekbh/babel-esm-plugin)는 `@babel/preset-env` 와 함께 사용할 수 있으며, 현재 가지고 있는 번들을 모던 브라우저에 서비스 할 수 있도록 트랜스파일링을 최소화 해준다. 이는 Next.js나 preact cli에서도 사용하는 가장 유명한 module/nomodule 솔루션이다.
+
+```javascript
+// webpack.config.js
+const BabelEsmPlugin = require('babel-esm-plugin')
 
 module.exports = {
   //...
@@ -152,27 +153,27 @@ module.exports = {
     ],
   },
   plugins: [new BabelEsmPlugin()],
-};
+}
 ```
 
 `BabelEsmPlugin`는 애플리케이션에서 크게 분리된 두가지 빌드를 실행하기 때문에 다양한 웹팩 설정을 지원한다. 두 번 컴파일 하는 것은 대규모 애플리케이션에 약간의 추가 시간이 걸릴 수 있지만, 이는 BabelEsmPlugin이 기존의 웹팩 설정에 원활한 통합 등을 도와주며, 편의성도 제공한다.
 
 ## node_modules을 트랜스파일 하기 위한 babel-loader 설정
 
-위에서 언급한 두개의 플러그인 대신 `babel-loader`를 사용하고 있다면, npm 모듈을 모던 자바스크립트로 사용하기 위한 중요한 단계가 남아 있다. 두개의 개별적인 바벨 로더를 구성해서 정의한다면, node_modules에서 발견되는 최신 언어 스펙을 ES2017로 자동으로 컴파일 하는 동시에, 프로젝트에 구성된 babel 플러그인과 사전 설정으로 자신의 코드를 1차적으로 변환할 수 있다. 이는 module/nomodule 설정의 번들을 생성하지는 않지만, 오래된 브라우저 지원을 깨트리지 않고 모던 자바스크립트가 포함된 npm 패지키를 설치하고 사용하는 것을 가능하게 한다. 
+위에서 언급한 두개의 플러그인 대신 `babel-loader`를 사용하고 있다면, npm 모듈을 모던 자바스크립트로 사용하기 위한 중요한 단계가 남아 있다. 두개의 개별적인 바벨 로더를 구성해서 정의한다면, node_modules에서 발견되는 최신 언어 스펙을 ES2017로 자동으로 컴파일 하는 동시에, 프로젝트에 구성된 babel 플러그인과 사전 설정으로 자신의 코드를 1차적으로 변환할 수 있다. 이는 module/nomodule 설정의 번들을 생성하지는 않지만, 오래된 브라우저 지원을 깨트리지 않고 모던 자바스크립트가 포함된 npm 패지키를 설치하고 사용하는 것을 가능하게 한다.
 
 [webpack-plugin-modern-npm](https://www.npmjs.com/package/webpack-plugin-modern-npm) 을 사용하면, npm 디펜던시에 `exports`가 있는 코드들을 컴파일한다.
 
 ```javascript
 // webpack.config.js
-const ModernNpmPlugin = require('webpack-plugin-modern-npm');
+const ModernNpmPlugin = require('webpack-plugin-modern-npm')
 
 module.exports = {
   plugins: [
     // auto-transpile modern stuff found in node_modules
     new ModernNpmPlugin(),
   ],
-};
+}
 ```
 
 대신에 이 기능을 수동으로 설정할 수 도 있다.
@@ -192,9 +193,9 @@ module.exports = {
       {
         test: /\.js$/i,
         include(file) {
-          let dir = file.match(/^.*[/\\]node_modules[/\\](@.*?[/\\])?.*?[/\\]/);
+          let dir = file.match(/^.*[/\\]node_modules[/\\](@.*?[/\\])?.*?[/\\]/)
           try {
-            return dir && !!require(dir[0] + 'package.json').exports;
+            return dir && !!require(dir[0] + 'package.json').exports
           } catch (e) {}
         },
         use: {
@@ -208,10 +209,10 @@ module.exports = {
       },
     ],
   },
-};
+}
 ```
 
-이 방법을 사용할 때는 minifier가 이러한 모던 코드를 지원할 수 있도록 해야 한다. `Terser` `Uglify-es`에 `{ecma: 1027}`를 지정할 수 있는 옵션이 있으며, 경우에 따라 압축하거나 포맷하는 와중에 `ES2017`구문을 생성하기도 한다. 
+이 방법을 사용할 때는 minifier가 이러한 모던 코드를 지원할 수 있도록 해야 한다. `Terser` `Uglify-es`에 `{ecma: 1027}`를 지정할 수 있는 옵션이 있으며, 경우에 따라 압축하거나 포맷하는 와중에 `ES2017`구문을 생성하기도 한다.
 
 ## 추가적인 빌드 툴
 
@@ -222,6 +223,6 @@ module.exports = {
 
 ## 결론
 
-ES2017 이 요즘 흔히 말하는 모던 자바스크립트에 가장 근접한 스펙이며, npm, babel, rollup 등을 빌드 시스템에 사용하여 패키지와 문법을 모던 자바스크립트에서 동작할 수 있도록 설정할 수 있다. 
+ES2017 이 요즘 흔히 말하는 모던 자바스크립트에 가장 근접한 스펙이며, npm, babel, rollup 등을 빌드 시스템에 사용하여 패키지와 문법을 모던 자바스크립트에서 동작할 수 있도록 설정할 수 있다.
 
 출처: https://web.dev/publish-modern-javascript/

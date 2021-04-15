@@ -4,13 +4,15 @@ date: 2018-05-31 08:11:51
 tags:
   - algorithm
 published: true
-description: 두 개의 String이 있을때, 그 두개를 비교하는 작업은 어떻게 할 수 있을까? str.equalsOf(str2) 이런
+description:
+  두 개의 String이 있을때, 그 두개를 비교하는 작업은 어떻게 할 수 있을까? str.equalsOf(str2) 이런
   것이 아니라, 두 단어의 비슷한 정도를 말하는 것이다. 예를 들어보자.  사용자가 Toast라고 말을 했다. 그러면 구글 Voice는
   Toast라는 사용자 사운드에 가장 비슷한 단어 몇가지를 추천해준다.  ![구글보이스로 toast를 ...
 category: algorithm
 slug: /2018/05/31/Levenshtein-distance/
 template: post
 ---
+
 두 개의 String이 있을때, 그 두개를 비교하는 작업은 어떻게 할 수 있을까?
 str.equalsOf(str2) 이런 것이 아니라, 두 단어의 비슷한 정도를 말하는 것이다.
 

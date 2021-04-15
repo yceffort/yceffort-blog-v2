@@ -5,13 +5,15 @@ published: true
 tags:
   - browser
   - javascript
-description: '## 브라우저 히스토리 브라우저의 히스토리는 `window.history`안에 있다.  `History {length:
+description:
+  '## 브라우저 히스토리 브라우저의 히스토리는 `window.history`안에 있다.  `History {length:
   3, scrollRestoration: "auto", state: null}`  `length`만 가져올 수 있을 뿐, 실제 내부에 리스트는
   가져올 수가 없는데 이는 보안상의 문제 때문이다.  `window.history.back()` ...'
 category: browser
 slug: /2019/09/30/handle-browser-history/
 template: post
 ---
+
 ## 브라우저 히스토리
 
 브라우저의 히스토리는 `window.history`안에 있다.
@@ -35,7 +37,7 @@ template: post
 아래와 같이 한번 사용해보자.
 
 ```javascript
-history.pushState({ hello: "world" }, "title", "hello");
+history.pushState({ hello: 'world' }, 'title', 'hello')
 ```
 
 현재 있는 페이지 주소창에서 `hello`가 추가되었음을 알 수 있다. 그러나 브라우저는 이를 불러오지도 않고, 해당 주소의 존재여부도 파악하지 않는다. 그저 주소만 바뀐 것이다.
@@ -69,7 +71,6 @@ javascript object로, pushState로 새로운 히스토리를 만드는 것과 �
 - `pushState`로 생성한 URL은 현재 URL을 기준으로 한다. 반대로 window.location는 해쉬값을 지정할 경우에만 같은 document에 머물러 있다. (아무튼 URL로딩을 안함)
 - URL 변경이 필요 없다면, URL값을 안넣어서 변경을 안해주어도 된다. 반대로 해쉬값 지정의 경우에는 현재 해쉬값과 다른 경우에만 새로운 히스토리를 생성한다.
 - `state` 오브젝트로 데이터를 저장할 수 있다. 반면 해쉬는 해쉬값을 활용해야 한다.
-
 
 ### replaceState
 

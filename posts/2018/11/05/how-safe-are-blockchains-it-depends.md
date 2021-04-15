@@ -12,6 +12,7 @@ category: blockchain
 slug: /2018/11/05/how-safe-are-blockchains-it-depends/
 template: post
 ---
+
 How Safe Are Blockchains? It Depends.
 
 [원문](https://hbr.org/2017/03/how-safe-are-blockchains-it-depends)

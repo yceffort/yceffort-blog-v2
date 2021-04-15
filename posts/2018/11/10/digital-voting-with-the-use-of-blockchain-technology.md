@@ -5,13 +5,14 @@ published: true
 tags:
   - blockchain
   - smart-contract
-description: "Digital Voting with the use of Blockchain Technology
+description: 'Digital Voting with the use of Blockchain Technology
   [원문](https://www.economist.com/sites/default/files/plymouth.pdf)  ## 1.
-  Summary  이 보고서의 목적은 블록체인 기술을 사용하여 디지털 투표 문제를 해결하자는 우리의 제안을 요약하는 것이다. 현재 투표..."
+  Summary  이 보고서의 목적은 블록체인 기술을 사용하여 디지털 투표 문제를 해결하자는 우리의 제안을 요약하는 것이다. 현재 투표...'
 category: blockchain
 slug: /2018/11/10/digital-voting-with-the-use-of-blockchain-technology/
 template: post
 ---
+
 Digital Voting with the use of Blockchain Technology
 
 [원문](https://www.economist.com/sites/default/files/plymouth.pdf)
@@ -82,7 +83,7 @@ Blockchain 기술은 암호화폐 비트코인의 기본 아키텍처 설계에�
 
 설계의 일환으로 공용 및 개인 키를 기반으로하는 암호화 방법을 가지고 있으며 블록 체인 내에서 데이터가 분리되는 구조를 구현했다. 이 분리는 선거구 수준의 노드가 키 쌍을 생성하도록함으로써 달성되었다. 공개 키는 연결된 폴링 스테이션 노드에 배포된 다음 공개 키를 사용하여 해당 폴링 스테이션에 대한 투표를 암호화한다. 그런 다음 데이터는 블록 체인 내의 암호화된 형식으로 저장되어 전체 네트워크로 전파된다.
 
-각 선거구마다 공용 키가 다르기 때문에 블록 체인 내의 데이터 청크가 블록 체인 옆에 있는 데이터 청크와는 다르게 암호화된다. 우리는 이 방법을 투표 마감일 전에 어떤 한 사람이라도 투표 데이터를 해독할 수 없도록 막기로 결정했다. 만약 해커가 선거구 개인 키를 간신히 손에 쥐게 된다면, 그들은 블록체인의 특정 부분만 해독할 수 있을 것이고, 그래서 투표의 완전한 결과를 결코 알지 못할 것이다. 투표 마감일이 지나면, 선거구 노드 내의 소프트웨어는 블록체인 네트워크가 데이터를 해독할 수 있도록 개인 키를 발행하며, 이는 다시 표를 계산할 수 있음을 의미한다. 
+각 선거구마다 공용 키가 다르기 때문에 블록 체인 내의 데이터 청크가 블록 체인 옆에 있는 데이터 청크와는 다르게 암호화된다. 우리는 이 방법을 투표 마감일 전에 어떤 한 사람이라도 투표 데이터를 해독할 수 없도록 막기로 결정했다. 만약 해커가 선거구 개인 키를 간신히 손에 쥐게 된다면, 그들은 블록체인의 특정 부분만 해독할 수 있을 것이고, 그래서 투표의 완전한 결과를 결코 알지 못할 것이다. 투표 마감일이 지나면, 선거구 노드 내의 소프트웨어는 블록체인 네트워크가 데이터를 해독할 수 있도록 개인 키를 발행하며, 이는 다시 표를 계산할 수 있음을 의미한다.
 
 ![digital-voting-fig7.jpg](../images/digital-voting-fig7.jpg)
 

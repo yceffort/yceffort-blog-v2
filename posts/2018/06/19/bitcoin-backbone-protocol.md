@@ -4,13 +4,15 @@ date: 2018-06-19 02:05:34
 published: true
 tags:
   - bitcoin
-description: 비트코인 백본 프로토콜 [출처](https://eprint.iacr.org/2014/765.pdf)  비트코인은 분산
+description:
+  비트코인 백본 프로토콜 [출처](https://eprint.iacr.org/2014/765.pdf)  비트코인은 분산
   환경에서 공공원장 시스템을 유지 하기 위한 탈중앙화 시스템으로 나카시 사카모토에 의해 처음 소개 되었다. 원장은 miner라고 불리우는
   익명의 참여자들에 의해 유지되는데, 이들은 블록체인이라고 불리우는 분산 데이터 구조에서의 프로토콜을 실...
 category: bitcoin
 slug: /2018/06/19/bitcoin-backbone-protocol/
 template: post
 ---
+
 비트코인 백본 프로토콜
 
 [출처](https://eprint.iacr.org/2014/765.pdf)

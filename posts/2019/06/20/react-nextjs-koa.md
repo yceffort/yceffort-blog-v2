@@ -6,14 +6,15 @@ tags:
   - react
   - javascript
   - typescript
-description: "이 문서는 더 이상 업데이트 하지 않을 생각이다. 대신
+description: '이 문서는 더 이상 업데이트 하지 않을 생각이다. 대신
   https://github.com/yceffort/koa-nextjs-react-typescript-boilerplate 여기에서 계속 해서
   만들어 가고 있다. ## 사용한 오픈소스  ### React  자세한 설명은 생략 한다  ###
-  Nextjs  [NextJs](https://nextjs.org..."
+  Nextjs  [NextJs](https://nextjs.org...'
 category: react
 slug: /2019/06/20/react-nextjs-koa/
 template: post
 ---
+
 이 문서는 더 이상 업데이트 하지 않을 생각이다. 대신 https://github.com/yceffort/koa-nextjs-react-typescript-boilerplate 여기에서 계속 해서 만들어 가고 있다.
 
 ## 사용한 오픈소스
@@ -95,8 +96,8 @@ express를 만든 개발자들이 따로 떨어져 나와서 만든 web framewor
 애석하게도 `koa-proxies`의 typing이 존재하지 않는다. `./typings/koa-proxies`에 아래와 같이 추가하자.
 
 ```typescript
-declare module "koa-proxies" {
-  import { Middleware } from "koa"
+declare module 'koa-proxies' {
+  import { Middleware } from 'koa'
   namespace koaProxies {}
   function koaProxies(name: string, options?: any): Middleware
   export = koaProxies
@@ -110,22 +111,22 @@ declare module "koa-proxies" {
 별도의 설정은 넣지 않았다.
 
 ```javascript
-const withCSS = require("@zeit/next-css")
-const withStylus = require("@zeit/next-stylus")
-const withTypescript = require("@zeit/next-typescript")
+const withCSS = require('@zeit/next-css')
+const withStylus = require('@zeit/next-stylus')
+const withTypescript = require('@zeit/next-typescript')
 
 module.exports = withTypescript(
   withStylus(
     withCSS({
-      webpack: config => ({
+      webpack: (config) => ({
         ...config,
         plugins: [...(config.plugins || [])],
         node: {
-          fs: "empty",
+          fs: 'empty',
         },
       }),
-    })
-  )
+    }),
+  ),
 )
 ```
 
@@ -142,8 +143,8 @@ module.exports = withTypescript(
 nextjs의 유일한 제약은 pages 폴더다. pages에 렌더링 할 페이지를 만들어 둬야 한다.
 
 ```typescript
-import * as React from "react"
-import styled from "styled-components"
+import * as React from 'react'
+import styled from 'styled-components'
 
 const MainHeading = styled.div`
   font-size: 50px;
@@ -162,15 +163,15 @@ export default class IndexPage extends React.PureComponent {
 가장 중요한 서버 부분이다. koa를 사용한 이유는 `*/api/*`로 요청이 오는 호출에 대해서는 외부에 있을지도 모르는 api서버를 활용하기 위함이다. 이를 별도로 처리 하지 않는다면 CORS이슈가 있을수 있기 때문이다. 그래서 `koa`를 통해서 `nextjs`를 호출하는 방식으로 바꾸었다.
 
 ```typescript
-import * as next from "next"
-import * as Koa from "koa"
-import * as morgan from "koa-morgan"
-import * as Router from "koa-router"
-import * as proxy from "koa-proxies"
-import * as bodyparser from "koa-bodyparser"
-import * as mount from "koa-mount"
+import * as next from 'next'
+import * as Koa from 'koa'
+import * as morgan from 'koa-morgan'
+import * as Router from 'koa-router'
+import * as proxy from 'koa-proxies'
+import * as bodyparser from 'koa-bodyparser'
+import * as mount from 'koa-mount'
 
-const isDev = process.env.NODE_ENV !== "production"
+const isDev = process.env.NODE_ENV !== 'production'
 
 function renderNext(nextApp: next.Server, route: string) {
   return (ctx: Koa.Context) => {
@@ -193,30 +194,30 @@ async function main() {
   await nextApp.prepare()
   const handle = nextApp.getRequestHandler()
 
-  router.get("/", renderNext(nextApp, "/index"))
+  router.get('/', renderNext(nextApp, '/index'))
 
   app
-    .use(morgan("combined"))
+    .use(morgan('combined'))
     .use(bodyparser())
     .use(
-      proxy("/api", {
-        target: "https://jayg-api-request.test.com",
-        rewrite: (path: string) => path.replace(/^\/api/, ""),
+      proxy('/api', {
+        target: 'https://jayg-api-request.test.com',
+        rewrite: (path: string) => path.replace(/^\/api/, ''),
         changeOrigin: true,
-      })
+      }),
     )
     .use(
-      mount("/health", (ctx: Koa.Context) => {
+      mount('/health', (ctx: Koa.Context) => {
         handle(ctx.req, ctx.res)
         ctx.status = 200
-      })
+      }),
     )
     .use(router.routes())
     .use(
-      mount("/", (ctx: Koa.Context) => {
+      mount('/', (ctx: Koa.Context) => {
         handle(ctx.req, ctx.res)
         ctx.respond = false
-      })
+      }),
     )
     .listen(3000)
 }

@@ -4,13 +4,15 @@ date: 2019-07-18 07:03:36
 published: true
 tags:
   - javascript
-description: "## Javascript Primitive 기존에 자바스크립트는 6가지의 primitive가 있었다.  - Object
+description:
+  '## Javascript Primitive 기존에 자바스크립트는 6가지의 primitive가 있었다.  - Object
   - string - number - boolean - null - undefined  그러나 es6가 들어서면서 `symbol`이라는 7번째
-  primitive가 추가되었다.  ## Symbol  ```javascript const hel..."
+  primitive가 추가되었다.  ## Symbol  ```javascript const hel...'
 category: javascript
 slug: /2019/07/18/javascript-symbol/
 template: post
 ---
+
 ## Javascript Primitive
 
 기존에 자바스크립트는 6가지의 primitive가 있었다.
@@ -27,17 +29,17 @@ template: post
 ## Symbol
 
 ```javascript
-const helloSymbol = Symbol();
-const hiSymbol = Symbol();
+const helloSymbol = Symbol()
+const hiSymbol = Symbol()
 ```
 
 새로운 심볼 값을 생성했다. 이 심볼로 생성한 값은 변경할 수 없으므로 const에 할당에도 상관없다. 그리고 이렇게 생성된 심볼 값은 프로그램 내에서 유일함을 보장해 준다.
 
 ```javascript
-let obj = {};
-obj[helloSymbol] = "hello";
-obj[hiSymbol] = "hi";
-console.log(obj);
+let obj = {}
+obj[helloSymbol] = 'hello'
+obj[hiSymbol] = 'hi'
+console.log(obj)
 ```
 
 ```
@@ -47,8 +49,8 @@ console.log(obj);
 물론 문자열이나 숫자를 key로 사용할 수 있지만, symbol은 유일함을 보장해주기 때문에 이렇게 키값으로 사용할 수 있다.
 
 ```javascript
-const welcomeSymbol = Symbol("환영합니다");
-console.log(welcomeSymbol);
+const welcomeSymbol = Symbol('환영합니다')
+console.log(welcomeSymbol)
 ```
 
 ```
@@ -60,12 +62,12 @@ Symbol(환영합니다)
 ## 예제
 
 ```javascript
-const isBlocked = Symbol("is blocked element?");
+const isBlocked = Symbol('is blocked element?')
 
 if (element[isBlocked]) {
-  openElement(element);
+  openElement(element)
 } else {
-  element[isBlocked] = true;
+  element[isBlocked] = true
 }
 ```
 
@@ -76,22 +78,22 @@ if (element[isBlocked]) {
 그리고 심볼 키는 이러한 충돌을 방지하기 위해서 만들어 진 것이므로, 일반적인 javascript 객체 조사는 `Symbol`을 무시한다. 무슨 소리냐면...
 
 ```javascript
-let 메시 = {};
-메시["영문명"] = "Lionel Messi";
-메시["별명"] = "라이오넬 멧시";
-const Nationality = Symbol("선수의 국적");
-메시[Nationality] = "칠레";
+let 메시 = {}
+메시['영문명'] = 'Lionel Messi'
+메시['별명'] = '라이오넬 멧시'
+const Nationality = Symbol('선수의 국적')
+메시[Nationality] = '칠레'
 
 for (let i in 메시) {
-  console.log(i);
+  console.log(i)
 }
 
 for (let i of Object.keys(메시)) {
-  console.log(i);
+  console.log(i)
 }
 
 for (let i of Object.getOwnPropertyNames(메시)) {
-  console.log(i);
+  console.log(i)
 }
 ```
 
@@ -107,7 +109,7 @@ for (let i of Object.getOwnPropertyNames(메시)) {
 이처럼 심볼 `Nationality` 키는 일반적인 상황에서 모두 무시 되는 것을 볼 수 있다. 물론 이를 조회하는 방법도 있다.
 
 ```javascript
-Object.getOwnPropertySymbols(메시);
+Object.getOwnPropertySymbols(메시)
 ```
 
 ```
@@ -117,7 +119,7 @@ Object.getOwnPropertySymbols(메시);
 혹은 심볼을 포함해서 모든 키를 조회하고 싶다면
 
 ```javascript
-Reflect.ownKeys(메시);
+Reflect.ownKeys(메시)
 ```
 
 ```
@@ -136,9 +138,9 @@ Reflect.ownKeys(메시);
 
 ```javascript
 const newSymbol = Symbol(
-  "this symbol"
-)`symbol is ${newSymbol}`//Uncaught TypeError: Cannot convert a Symbol value to a string
-`symbol is ${String(newSymbol)} ${newSymbol.toString()}`;
+  'this symbol',
+)`symbol is ${newSymbol}` //Uncaught TypeError: Cannot convert a Symbol value to a string
+`symbol is ${String(newSymbol)} ${newSymbol.toString()}`
 // symbol is Symbol(this symbol) Symbol(this symbol)
 ```
 

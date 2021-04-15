@@ -5,13 +5,15 @@ published: true
 tags:
   - pytorch
 mathjax: true
-description: "## 퍼셉트론 알고리즘 퍼셉트론 알고리즘은 머신러닝 기법 중 지도학습 기법이자 분류 알고리즘에
+description:
+  "## 퍼셉트론 알고리즘 퍼셉트론 알고리즘은 머신러닝 기법 중 지도학습 기법이자 분류 알고리즘에
   속한다.  ![neuron-and-perceptron](https://appliedgo.net/media/perceptron/neuron.\
   png)  각각의 input에 입력값과 가중치를 곱한 값을 합한 다음, 바이어스 (=1)를 더한 값이 된다. 그 다음에는 활..."
 category: pytorch
 slug: /2019/01/27/pytorch-1-perceptron-neural-network/
 template: post
 ---
+
 ## 퍼셉트론 알고리즘
 
 퍼셉트론 알고리즘은 머신러닝 기법 중 지도학습 기법이자 분류 알고리즘에 속한다.

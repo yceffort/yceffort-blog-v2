@@ -4,13 +4,15 @@ date: 2019-06-24 06:01:35
 published: true
 tags:
   - javascript
-description: "## Intersection Observer Intersection Observer는 엘리먼트가 viewport에
+description:
+  '## Intersection Observer Intersection Observer는 엘리먼트가 viewport에
   노출되고 있는지 여부를 확인해주는 API다. 간단히 말해 브라우저의 어떤 요소가 화면에 노출되고 있는지 안되고 있는지를 확인해주는
-  라이브러리라고 생각하면 될 것 같다. 이 라이브러리가 없이 엘리먼트가 노출중인지 확인하려면 어떻게 해야할까? 이..."
+  라이브러리라고 생각하면 될 것 같다. 이 라이브러리가 없이 엘리먼트가 노출중인지 확인하려면 어떻게 해야할까? 이...'
 category: javascript
 slug: /2019/06/24/intersection-observer/
 template: post
 ---
+
 ## Intersection Observer
 
 Intersection Observer는 엘리먼트가 viewport에 노출되고 있는지 여부를 확인해주는 API다. 간단히 말해 브라우저의 어떤 요소가 화면에 노출되고 있는지 안되고 있는지를 확인해주는 라이브러리라고 생각하면 될 것 같다. 이 라이브러리가 없이 엘리먼트가 노출중인지 확인하려면 어떻게 해야할까? 이전까지 주로 사용되던 API는 [getBoundingClientRect](https://developer.mozilla.org/ko/docs/Web/API/Element/getBoundingClientRect)다. 이 메서드는 해당 엘리먼트의 크기와 viewport에서의 상대적인 위치를 알려준다.
@@ -42,8 +44,8 @@ function isInViewport(element) {
 
 ```javascript
 var options = {
-  root: document.querySelector("#scrollArea"),
-  rootMargin: "0px",
+  root: document.querySelector('#scrollArea'),
+  rootMargin: '0px',
   threshold: 1.0,
 }
 
@@ -63,7 +65,7 @@ var observer = new IntersectionObserver(callback, options)
 `observer`: callback을 호출한 `IntersectionObserver`
 
 ```javascript
-var target = document.querySelector("#listItem")
+var target = document.querySelector('#listItem')
 observer.observe(target)
 ```
 

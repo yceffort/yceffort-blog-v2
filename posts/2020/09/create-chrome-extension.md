@@ -86,11 +86,12 @@ document.ondblclick = function () {
   const selectedMessage = window.getSelection().toString()
 
   // 메시지를 보낸다.
-  chrome.runtime.sendMessage({ word: selectedMessage }, async function (
-    response,
-  ) {
-    console.log(response)
-  })
+  chrome.runtime.sendMessage(
+    { word: selectedMessage },
+    async function (response) {
+      console.log(response)
+    },
+  )
 }
 ```
 

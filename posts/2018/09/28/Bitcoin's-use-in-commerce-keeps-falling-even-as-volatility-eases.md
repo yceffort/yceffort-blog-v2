@@ -12,16 +12,16 @@ category: blockchain
 slug: /2018/09/28/Bitcoin's-use-in-commerce-keeps-falling-even-as-volatility-eases/
 template: post
 ---
+
 Bitcoin's Use in Commerce Keeps Falling Even as Volatility Eases
 
 [원문](https://www.bloomberg.com/news/articles/2018-08-01/bitcoin-s-use-in-commerce-keeps-falling-even-as-volatility-eases)
-
 
 요즘 누가 비트코인으로 상품과 서비스를 사고 파는가?
 
 지난 9월 4억 1,100만 달러를 정점으로 찍은 이후로, 가장 잘 알려진 암호 화폐 거래 서비스가 꾸준히 감소하여 지난 5월에 6천만 달러의 최저치를 기록 했다.
 
-Bitpay, Coinify, GoCoin과 같은 서비스가 6월에 약간 증가하여 6천9백만 달러로 증가했지만, 1년전 거래량인 2억 7천만달러와는 여전히 거리가 멀다. 
+Bitpay, Coinify, GoCoin과 같은 서비스가 6월에 약간 증가하여 6천9백만 달러로 증가했지만, 1년전 거래량인 2억 7천만달러와는 여전히 거리가 멀다.
 
 ![Amount of Bitcoin Received by Top Merchant Processors](../images/Amount of Bitcoin Received by Top Merchant Processors.png)
 
@@ -35,12 +35,12 @@ Bitpay, Coinify, GoCoin과 같은 서비스가 6월에 약간 증가하여 6천9
 
 지난 1월, 온라인 지불 플랫폼 Stripe는 비트코인 사용이 감소하고 가격 변동이 심화됨에 따라서 지원을 중단했다. 여행 서비스 제공업체인 Expedia와 같은 많은 회사들도 암호 화폐를 받아드리지 않는다.
 
-이는 일부 투자자들에게 문제가 되는 징조다. 이들은 암호화폐가 현실세계에서 사용되어야 한다는 믿음을 가지고 있고, 장기적이 가치를 투기적 도구가 되어야 한다고 생각한다. 
+이는 일부 투자자들에게 문제가 되는 징조다. 이들은 암호화폐가 현실세계에서 사용되어야 한다는 믿음을 가지고 있고, 장기적이 가치를 투기적 도구가 되어야 한다고 생각한다.
 
 비트코인을 이용하는 방식 또한 변하고 있다. 비트코인에서 거래 수수료는 비싸고 다양하기 때문이다. 지난 12월에는 54달러까지 치솟았지만, 오늘날은 1달러 미만으로 떨어졌다. 이들은 커피와 같은 작은 금액의 거래로 사용하지 않는대신, 해외 위치한 프리랜서와 같은 밴더들에게 지불하기 위해 가상화폐를 더 많이 사용한다. 이경우 비트코인을 활용하는 것이 기존 금융 서비스를 이용하는 것보다 저렴하고 빠를 수 있다.
 
 ![bitcoin-transaction-fee](../images/bitcoin-transaction-fee.png)
 
-BitPay관계자는, 지난 6개월 간 법률 회사, 호스팅, 회계사, 집주인, 소프트웨어 공급업체등 비트코인으로 지불하는 회사들이 늘고 있다는 것을 목격하고 있다고 밝혔다. 또한 Overstock.com Inc에서는, 올해 상반기에 비트코인 기반 구매량이 전년대비 2배 이상 증가했다고 밝혔다. 
+BitPay관계자는, 지난 6개월 간 법률 회사, 호스팅, 회계사, 집주인, 소프트웨어 공급업체등 비트코인으로 지불하는 회사들이 늘고 있다는 것을 목격하고 있다고 밝혔다. 또한 Overstock.com Inc에서는, 올해 상반기에 비트코인 기반 구매량이 전년대비 2배 이상 증가했다고 밝혔다.
 
 그러나 암호 금융 연구회사의 Mosaic에서는, 비트코인으로는 일상적인 거래를 하기 어려우며, 이는 돈의 특성에 부합하지 않는다고 덧붙였다.

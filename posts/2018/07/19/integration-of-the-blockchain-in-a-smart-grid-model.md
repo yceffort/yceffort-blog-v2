@@ -11,6 +11,7 @@ category: blockchain
 slug: /2018/07/19/integration-of-the-blockchain-in-a-smart-grid-model/
 template: post
 ---
+
 INTEGRATION OF THE BLOCKCHAIN IN A SMART GRID MODEL
 
 [원문](https://www.researchgate.net/publication/320518549_INTEGRATION_OF_THE_BLOCKCHAIN_IN_A_smart-grid_MODEL?enrichId=rgreq-9836cc88629c47c28cf25309f1ff653c-XXX&enrichSource=Y292ZXJQYWdlOzMyMDUxODU0OTtBUzo1NTE0NjQxOTgwNDE2MDBAMTUwODQ5MDcxODI1NQ%3D%3D&el=1_x_3&_esc=publicationCoverPdf)
@@ -25,20 +26,19 @@ INTEGRATION OF THE BLOCKCHAIN IN A SMART GRID MODEL
 
 블록체인은 비트 코인과 함께 등장한, 거래기록을 가지고 있는 일종의 거대한 원장이다. 이 기술은 중앙 통제 기관이 필요 없는 P2P 통화거래를 가능하게 한다. 블록체인은 현재 시스템의 신뢰부분을 나타내고 있는 '중앙'을 제거 하기 위해 데이터의 분산을 기반으로 한다. 비트코인은 이더리움과 같은 다른 유형의 블록체인을 낳았다. 그리고 이 사이에는 다양한 규칙을 수립할 수 있는 스마트 컨트랙트라는 특징을 가지고 있다. [최근 지역 에너지 생산을 촉진하기 위해서 에너지 블록체인이 만들어 졌다.](https://www.siemens.com/innovation/en/home/pictures-of-the-future/energy-and-efficiency/smart-grids-and-energy-storage-microgrid-in-brooklyn.html) P2P 에너지 트랜잭션은 기존 그리드 시스템에서 필요한 전기 수요를 줄일 수 있으며, 블록체인은 트랜잭션을 안전하고, 거래를 기록할 수 있다.
 
-### 현재 상황 
+### 현재 상황
 
 ![Primary-energy-consumption](../images/Primary-energy-consumption.png)
 
-오늘날 에너지 생산의 증가로 이어지는 전력 소비 증가를 관리하기위해, 재생 가능 에너지에 기초한 지역 에너지 생산의 이행을 필요로 하며, 인구 증가에 비례하는 CO2 배출을 유도한다. 또한 과도한 수요가 발생한다면 전력선은 그러한 과도한 전력 흐름을 지원하지 못하므로 전력선에도 직접적인 영향을 미치고 있다. 즉, 풀타임에 최고 소비량을 기록하고 아닐 때에는 소비량이 감소한다. 전력선에 부담을 덜기 위해서는 소비곡선을 부드럽게 만들어야 하며, 이를 위해 지역 사회내에서 자체적으로 전기 생산을 하는 것이 흥미로운 아이디어로 자리잡고 있다. 
+오늘날 에너지 생산의 증가로 이어지는 전력 소비 증가를 관리하기위해, 재생 가능 에너지에 기초한 지역 에너지 생산의 이행을 필요로 하며, 인구 증가에 비례하는 CO2 배출을 유도한다. 또한 과도한 수요가 발생한다면 전력선은 그러한 과도한 전력 흐름을 지원하지 못하므로 전력선에도 직접적인 영향을 미치고 있다. 즉, 풀타임에 최고 소비량을 기록하고 아닐 때에는 소비량이 감소한다. 전력선에 부담을 덜기 위해서는 소비곡선을 부드럽게 만들어야 하며, 이를 위해 지역 사회내에서 자체적으로 전기 생산을 하는 것이 흥미로운 아이디어로 자리잡고 있다.
 
 지역 에너지 생산을 촉진한다는 것은 기존 네트워크 내에서 재생 가능 에너지를 통합한다는 것을 의미한다. 그러나 이러한 통합은, 바람이나 태양과 같은 이러한 에너지가 간헐적으로 전기를 생성하기 때문에 관리가 필요하다. 때문에 안정적인 전력 시스템을 만들기 위해서는, 디지털 적으로 관리가 필수로 보인다.
 
 이 디지털 관리는 스마트 그리드 그 이상일 수도 있다. 이웃 간의 P2P 에너지 거래가 좋은 해결책이 있다. 그래서 대규모 스마트 그리드 프로젝트에서 블록체인을 통합하는 아이디어가 나오고 있다.
 
-|![bitcoin-diagram](../images/bitcoin-diagram.png)|
-|:-:|
-|비트코인의 간략한 개요|
-
+| ![bitcoin-diagram](../images/bitcoin-diagram.png) |
+| :-----------------------------------------------: |
+|              비트코인의 간략한 개요               |
 
 ## 블록체인을 적용한 스마트 그리드
 

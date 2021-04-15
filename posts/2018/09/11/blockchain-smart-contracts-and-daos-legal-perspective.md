@@ -12,6 +12,7 @@ category: blockchain
 slug: /2018/09/11/blockchain-smart-contracts-and-daos-legal-perspective/
 template: post
 ---
+
 Blockchain, Smart Contracts and DAOs from a Legal Perspective
 
 [원문](https://www.law.ox.ac.uk/business-law-blog/blog/2017/01/blockchain-smart-contracts-and-daos-legal-perspective)

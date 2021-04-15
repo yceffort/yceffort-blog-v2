@@ -11,18 +11,18 @@ description: '원래 알던건 두 세가지밖에 안됨'
 
 ## 요약
 
-|            method            	| Visible   	| Accessible 	|
-|------------------------------	|-----------	|------------	|
-| `.sr-only`                   	| X         	| O          	|
-| `aria-hidden="true"`         	| O         	| X          	|
-| `hidden=""`                  	| X         	| X          	|
-| `display: none`              	| X         	| X          	|
-| `visibility: hidden`         	| X (Space) 	| X          	|
-| `opacity: 0`                 	| X (Space) 	| Depends?   	|
-| `clip-path: circle(0)`       	| X (Space) 	| Depends?   	|
-| `transform: scale(0)`        	| X (Space) 	| O          	|
-| `width: 0`+`height: 0`       	| X         	| X          	|
-| `content-visibility: hidden` 	| X         	| X          	|
+| method                       | Visible   | Accessible |
+| ---------------------------- | --------- | ---------- |
+| `.sr-only`                   | X         | O          |
+| `aria-hidden="true"`         | O         | X          |
+| `hidden=""`                  | X         | X          |
+| `display: none`              | X         | X          |
+| `visibility: hidden`         | X (Space) | X          |
+| `opacity: 0`                 | X (Space) | Depends?   |
+| `clip-path: circle(0)`       | X (Space) | Depends?   |
+| `transform: scale(0)`        | X (Space) | O          |
+| `width: 0`+`height: 0`       | X         | X          |
+| `content-visibility: hidden` | X         | X          |
 
 ## `.sr-only`
 
@@ -60,7 +60,7 @@ description: '원래 알던건 두 세가지밖에 안됨'
 
 이 두가지 방법은 모두 렌더링트리와 접근성 트리에서 사라지게 한다. `hidden`은 별도의 CSS가 없이도 HTML을 통해서 완전히 마스킹할 수 있어서 편리한 점이 있다.
 
-## `visibility :hidden` 
+## `visibility :hidden`
 
 이 css 속성은 레이아웃에 영향을 미치지 않고 엘리먼트를 감춘다. 사라진 공간은 빈 공간으로 남으며, 리플로우가 일어나지 않는다. 접근성 관점에서 보았을 때는 위의 `display:none`과 동일하다.
 
@@ -78,7 +78,7 @@ description: '원래 알던건 두 세가지밖에 안됨'
 
 ## `content-visibility: hidden`
 
-[이 속성](https://developer.mozilla.org/en-US/docs/Web/CSS/content-visibility)은 크롬브라우저에서 특정 요소의 렌더링을 뷰포트내에 있기전까지는 가리는 방법으로 도입되었다. 이 속성은 `display: none`과 마찬가지로 접근성 트리에서 사라진다. 접근성차원에서 봤을 때는 그다지 좋은 기술은 아니므로 쓰지 않는 것이 좋다. 
+[이 속성](https://developer.mozilla.org/en-US/docs/Web/CSS/content-visibility)은 크롬브라우저에서 특정 요소의 렌더링을 뷰포트내에 있기전까지는 가리는 방법으로 도입되었다. 이 속성은 `display: none`과 마찬가지로 접근성 트리에서 사라진다. 접근성차원에서 봤을 때는 그다지 좋은 기술은 아니므로 쓰지 않는 것이 좋다.
 
 - https://web.dev/content-visibility/
 - https://wit.nts-corp.com/2020/09/11/6223

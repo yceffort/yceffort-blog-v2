@@ -4,13 +4,14 @@ date: 2018-10-13 05:40:35
 published: true
 tags:
   - blockchain
-description: "From Hype to Reality: A Taxonomy of Blockchain Applications
+description: 'From Hype to Reality: A Taxonomy of Blockchain Applications
   [원문](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3250648)  ##
-  Introduction  블록체인은 분산형 디지털 원장이며, 신뢰라는 문제를 특정 기관에서 알고리즘으로 전환하기 위한 고유한..."
+  Introduction  블록체인은 분산형 디지털 원장이며, 신뢰라는 문제를 특정 기관에서 알고리즘으로 전환하기 위한 고유한...'
 category: blockchain
 slug: /2018/10/12/a-taxonomy-of-blockchain-applications/
 template: post
 ---
+
 From Hype to Reality: A Taxonomy of Blockchain Applications
 
 [원문](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3250648)
@@ -62,13 +63,13 @@ From Hype to Reality: A Taxonomy of Blockchain Applications
 
 - T(Transaction)트랜잭션은 실행된 작업의 로그 교환을 의미한다.
 - C(Contents)콘텐츠는 문서, 메시지, 비디오 또는 음악 파일과 같은 디지털 자산이 교환되는 것을 의미한다.
- 
+
 일곱 번째 열은 암호화이며 블록 체인의 데이터가 암호화되는지 여부를 지정합니다.
 
 - U(Unencrypted) 암호화되지 않음은 블록체인의 데이터가 암호화되지 않음을 의미한다.
 - P(Partially-encrypted) 부분적으로 암호화된 블록체인을 나타냅니다.
 - T(Totally-encrypted)완전 암호화는 블록체인의 모든 데이터가 암호화되고 모든 작업에 대해 해독되어야 함을 의미한다.
- 
+
 여덟 번째 열은 히스토리 보존이며 전체 블록체인 또는 최근 업데이트만 호스트 간에 유지 및 배포되었는지 확인한다.
 
 - W(Whole retention)전체 보존은 유전자 블록으로 시작하는 전체 역사가 블록체인에 보관되어 노드 간에 분산된다는 것을 의미한다.

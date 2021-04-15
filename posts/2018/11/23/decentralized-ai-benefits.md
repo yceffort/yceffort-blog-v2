@@ -1,18 +1,19 @@
 ---
-title: "탈중앙화된 AI: 블록체인의 미래"
+title: '탈중앙화된 AI: 블록체인의 미래'
 date: 2018-11-23 12:44:01
 published: true
 tags:
   - blockchain
   - cryptocurrency
-description: "Decentralized AI: Blockchain’s bright future
+description: 'Decentralized AI: Blockchain’s bright future
   [원문](https://espeoblockchain.com/blog/decentralized-ai-benefits/)  블록체인과 인공지능은
   전 세계적으로 기술 혁신을 주도하고 있으며, 둘 다 우리의 개인 데이터뿐만 아니라 비즈니스의 미래에도 깊은 영향을 미친다. 두 기술이
-  ..."
+  ...'
 category: blockchain
 slug: /2018/11/23/decentralized-ai-benefits/
 template: post
 ---
+
 Decentralized AI: Blockchain’s bright future
 
 [원문](https://espeoblockchain.com/blog/decentralized-ai-benefits/)
@@ -27,7 +28,7 @@ PwC는 2030 년까지 AI가 세계 경제에 최대 15.7 조 달러를 추가할
 
 - 블록체인은 분산되어 있고 중앙통제 없이 데이터를 공유할 수 있다. 이는 블록 체인에서 트랜잭션을 중앙통제와 독립적으로 검증하고 처리할 수 있다.
 - 블록체인은 분산된 특성으로 인해 변화에 저항할 수 있으며 일관성이 있다. 공격에 취약한 중앙점이 없기 때문에 시스템에 대한 악의적인 공격에 대처할 수 있다.
-0 블록체인 기술에 의해 제공되는 정보는 모두 정확하다.
+  0 블록체인 기술에 의해 제공되는 정보는 모두 정확하다.
 
 ## AI 기술의 이점
 

@@ -9,22 +9,21 @@ category: javascript
 template: post
 ---
 
-
 ## 문제 1.
 
 ```javascript
 function foo() {
-  let a = b = 0;
-  a++;
-  return a;
+  let a = (b = 0)
+  a++
+  return a
 }
 
-foo();
+foo()
 
-typeof a; // ??
-typeof b; // ??
-
+typeof a // ??
+typeof b // ??
 ```
+
 ### 정답
 
 일단 `a`는 함수내에 선언된 `let`변수 이고, 전역 scope에 선언되지 않았기 때문에 당연히 undefined다.
@@ -33,21 +32,21 @@ typeof b; // ??
 
 ```javascript
 function foo() {
-  let a;
-  window.b = 0;
-  a = window.b;
-  a++;
-  return a;
+  let a
+  window.b = 0
+  a = window.b
+  a++
+  return a
 }
 ```
 
 ## 문제 2.
 
 ```javascript
-const clothes = ['jacket', 't-shirt'];
-clothes.length = 0;
+const clothes = ['jacket', 't-shirt']
+clothes.length = 0
 
-clothes[0]; // ??
+clothes[0] // ??
 ```
 
 ### 정답
@@ -67,13 +66,15 @@ http://www.ecma-international.org/ecma-262/6.0/#sec-properties-of-array-instance
 ## 문제 3
 
 ```javascript
-const length = 4;
-const numbers = [];
-for (var i = 0; i < length; i++);{ //잘보면 여기에 ; 가 들어가 있다.
-  numbers.push(i + 1);
+const length = 4
+const numbers = []
+for (var i = 0; i < length; i++);
+{
+  //잘보면 여기에 ; 가 들어가 있다.
+  numbers.push(i + 1)
 }
 
-numbers; // ??
+numbers // ??
 ```
 
 ### 정답
@@ -81,18 +82,19 @@ numbers; // ??
 `;`은 null statement다. null statement란 empty statment 이며, 이는 곧 아무것도 하지 않는 다는 것을 의미한다. 위 코드는 아래와 같다.
 
 ```javascript
-const length = 4;
-const numbers = [];
-var i;
+const length = 4
+const numbers = []
+var i
 for (i = 0; i < length; i++) {
   // 암것도 안한다.
 }
-{ 
+{
   // 그냥 스코프를 생성하는 블록일 뿐
-  numbers.push(i + 1);
+  numbers.push(i + 1)
 }
 
-numbers; [5]
+numbers
+;[5]
 ```
 
 ## 문제 4
@@ -100,10 +102,10 @@ numbers; [5]
 ```javascript
 function arrayFromValue(item) {
   return
-    [item];
+  ;[item]
 }
 
-arrayFromValue(10); // ???
+arrayFromValue(10) // ???
 ```
 
 ### 정답
@@ -113,12 +115,12 @@ arrayFromValue(10); // ???
 ## 문제 5
 
 ```javascript
-let i;
+let i
 for (i = 0; i < 3; i++) {
   const log = () => {
-    console.log(i);
+    console.log(i)
   }
-  setTimeout(log, 100);
+  setTimeout(log, 100)
 }
 ```
 
@@ -128,16 +130,16 @@ for (i = 0; i < 3; i++) {
 
 1. for문이 세번돌고, 매번 그때마다 `i`의 값을 확인하는 `log`함수가 생성된다. 그리고 그 `log`를 실행하는 `setTimeOut`이 태스크 큐 대기열에 들어가게 된다.
 2. for문이 끝나면, `i`는 3이 되어 있다.
-3. for문이 종료 된 뒤에 `setTimeOut`을 실행하려고 `i`를 참조하면, `i`는 3이 되어있다. 
+3. for문이 종료 된 뒤에 `setTimeOut`을 실행하려고 `i`를 참조하면, `i`는 3이 되어있다.
 
 따라서 정답은 3이 세번 나온다 이다.
 
 ```javascript
 for (let i = 0; i < 3; i++) {
-    const log = () => {
-        console.log(i);
-    }
-    setTimeout(log, 1000);
+  const log = () => {
+    console.log(i)
+  }
+  setTimeout(log, 1000)
 }
 ```
 
@@ -152,7 +154,7 @@ for (let i = 0; i < 3; i++) {
 정답은 `false`다 .
 
 ```javascript
-0.1 + 0.2; // 0.30000000000000004
+0.1 + 0.2 // 0.30000000000000004
 ```
 
 이에 대한 흥미로운 사이트가 있는데, 바로 https://0.30000000000000004.com/ 이다. ㅋㅋㅋㅋㅋㅋㅋㅋ
@@ -162,11 +164,11 @@ for (let i = 0; i < 3; i++) {
 ## 문제 7
 
 ```javascript
-myVar;   // ???
-myConst; // ???
+myVar // ???
+myConst // ???
 
-var myVar = 'value';
-const myConst = 3.14;
+var myVar = 'value'
+const myConst = 3.14
 ```
 
 ### 정답
@@ -174,8 +176,8 @@ const myConst = 3.14;
 https://yceffort.kr/2020/05/var-let-const-hoisting/ 에서도 다뤘듯이, `let`과 `const`는 TDZ에 들어가게 된다. 따라서 첫번째 줄에서는 undefined, 2번째 줄에서는 에러가 날 것이다.
 
 ```javascript
-var myVar; // TDZ에 들어가지않고, 호이스팅 된다.
-const myConst; // error TDZ에 들어갔으며, const의 경우에는 초기화가 되어야 한다. 따라서 
+var myVar // TDZ에 들어가지않고, 호이스팅 된다.
+const myConst // error TDZ에 들어갔으며, const의 경우에는 초기화가 되어야 한다. 따라서
 // 따라서 Identifier 'myConst' has already been declared 에러가 날 것이다.
 ```
 

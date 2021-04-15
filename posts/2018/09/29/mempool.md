@@ -5,13 +5,15 @@ published: true
 tags:
   - blockchain
   - bitcoin
-description: Mempool [원문](https://coinsutra.com/bitcoin-mempool/)  비트코인 트랜잭션이
+description:
+  Mempool [원문](https://coinsutra.com/bitcoin-mempool/)  비트코인 트랜잭션이
   네트워크로 전송되면, 사용 가능한 모든 비트코인 노드에서 먼저 확인하게 된다. 성공적으로 검증작업을 통과하면 'Mempool'에 들어가서
   마이너가, 그 블록을 선택하여 다음 블록영역에 들어갈 때까지 대기하게 된다. 따라서, Mempool은 ...
 category: blockchain
 slug: /2018/09/29/mempool/
 template: post
 ---
+
 Mempool
 
 [원문](https://coinsutra.com/bitcoin-mempool/)
@@ -26,4 +28,4 @@ Mempool
 
 > 현재 메모리 풀의 크기는 [여기](https://www.blockchain.com/charts/mempool-size)서 볼 수 있다.
 
-예를들어, 메모리 풀의 크기가 약 3MB인 경우, 트랜잭션이 확인되기 위해 평균 3블록이 소요된다는 것을 의미한다. 메모리풀 거래 중 일부는 'dust transactions' (아주 소량의 비트코인을 보내는 것)과 같이  확인되기까지 오랜 시간이 걸릴 것이라는 사실을 발신자가 알고 있는, 우선순위가 낮은 거래일 것이다.
+예를들어, 메모리 풀의 크기가 약 3MB인 경우, 트랜잭션이 확인되기 위해 평균 3블록이 소요된다는 것을 의미한다. 메모리풀 거래 중 일부는 'dust transactions' (아주 소량의 비트코인을 보내는 것)과 같이 확인되기까지 오랜 시간이 걸릴 것이라는 사실을 발신자가 알고 있는, 우선순위가 낮은 거래일 것이다.

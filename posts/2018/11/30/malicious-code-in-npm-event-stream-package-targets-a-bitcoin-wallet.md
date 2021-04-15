@@ -11,6 +11,7 @@ category: bitcoin
 slug: /2018/11/30/malicious-code-in-npm-event-stream-package-targets-a-bitcoin-wallet/
 template: post
 ---
+
 Malicious code in npm ‘event-stream’ package targets a bitcoin wallet and causes 8 million downloads in two months
 
 [원문](https://hub.packtpub.com/malicious-code-in-npm-event-stream-package-targets-a-bitcoin-wallet-and-causes-8-million-downloads-in-two-months/)

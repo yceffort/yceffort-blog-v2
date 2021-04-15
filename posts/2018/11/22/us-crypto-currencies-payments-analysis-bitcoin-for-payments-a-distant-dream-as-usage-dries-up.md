@@ -11,6 +11,7 @@ category: blockchain
 slug: /2018/11/22/us-crypto-currencies-payments-analysis-bitcoin-for-payments-a-distant-dream-as-usage-dries-up/
 template: post
 ---
+
 Bitcoin for payments a distant dream as usage dries up
 
 [원문](https://www.reuters.com/article/us-crypto-currencies-payments-analysis/bitcoin-for-payments-a-distant-dream-as-usage-dries-up-idUSKCN1NP1D8)
@@ -21,7 +22,7 @@ Bitcoin for payments a distant dream as usage dries up
 
 (비트코인 등 디지털 화폐가) 다른 형태의 돈이 되려면 안정성을 충족시켜야 할 것이다. 그러나 비트코인의 발목을 잡고 있는 것은 확장성이다. 즉, 기존의 돈이 처리하는 거래량을 처리할 수 있을지가 관건이다. 모든 비트코인 활동이 기록되고 검증되는 블록체인 기술은 주요 신용카드 회사가 할 수 있는 초당 거래의 일부만 처리할 수 있다. 그것은 디지털 화폐의 대량 사용을 어렵게 만든다.
 
-비트코인은 여전히 가격 변동을 견뎌내고 있다. 이번 주 30퍼센트의 급락이 나타나고 있다. 하지만 지난달 한 달 동안 암호 통화는 미국 주식보다 안정적이었다. 
+비트코인은 여전히 가격 변동을 견뎌내고 있다. 이번 주 30퍼센트의 급락이 나타나고 있다. 하지만 지난달 한 달 동안 암호 통화는 미국 주식보다 안정적이었다.
 
 ![bitcoin-volatility.png](../images/bitcoin-volatility.png)
 

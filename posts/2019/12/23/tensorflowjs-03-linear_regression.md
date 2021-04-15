@@ -7,13 +7,15 @@ tags:
   - ai
   - tensorflow
   - javascript
-description: "# Linear Regression 몇 번째 선형 회귀인지 알 수 없다.  ## 01. 2d data로
+description:
+  '# Linear Regression 몇 번째 선형 회귀인지 알 수 없다.  ## 01. 2d data로
   예측해보기  이번 튜토리얼에서는 자동차 세트를 표현한 숫자 데이터로 예측하는 모델을 훈련시켜 봅니다.  이 연습에서는 다양한 종류의 모델을
-  훈련하는 공통적인 단계를 보여주고, 이에 따라 작은 데이터 세트와 간단한 모델을 사용합니다. 1차적인 목표는 Te..."
+  훈련하는 공통적인 단계를 보여주고, 이에 따라 작은 데이터 세트와 간단한 모델을 사용합니다. 1차적인 목표는 Te...'
 category: machine-learning
 slug: /2019/12/23/tensorflowjs-03-linear_regression/
 template: post
 ---
+
 # Linear Regression
 
 몇 번째 선형 회귀인지 알 수 없다.
@@ -45,7 +47,7 @@ template: post
 ```
 
 ```javascript
-console.log("Hello TensorFlow")
+console.log('Hello TensorFlow')
 ```
 
 ## 03. 데이터를 읽어오고, 포맷팅하고, 시각화 하기
@@ -61,15 +63,15 @@ console.log("Hello TensorFlow")
  */
 async function getData() {
   const carsDataReq = await fetch(
-    "https://storage.googleapis.com/tfjs-tutorials/carsData.json"
+    'https://storage.googleapis.com/tfjs-tutorials/carsData.json',
   )
   const carsData = await carsDataReq.json()
   const cleaned = carsData
-    .map(car => ({
+    .map((car) => ({
       mpg: car.Miles_per_Gallon,
       horsepower: car.Horsepower,
     }))
-    .filter(car => car.mpg != null && car.horsepower != null)
+    .filter((car) => car.mpg != null && car.horsepower != null)
 
   return cleaned
 }
@@ -81,25 +83,25 @@ async function getData() {
 async function run() {
   // Load and plot the original input data that we are going to train on.
   const data = await getData()
-  const values = data.map(d => ({
+  const values = data.map((d) => ({
     x: d.horsepower,
     y: d.mpg,
   }))
 
   tfvis.render.scatterplot(
-    { name: "Horsepower v MPG" },
+    { name: 'Horsepower v MPG' },
     { values },
     {
-      xLabel: "Horsepower",
-      yLabel: "MPG",
+      xLabel: 'Horsepower',
+      yLabel: 'MPG',
       height: 300,
-    }
+    },
   )
 
   // More code will be added below
 }
 
-document.addEventListener("DOMContentLoaded", run)
+document.addEventListener('DOMContentLoaded', run)
 ```
 
 페이지를 새로고침하면, 오른쪽에서 아래와 같은 `scatterplot`이 나타날 것이다. 그 데이터는 아래와 같은 형태를 띄고 있을 것이다.
@@ -195,7 +197,7 @@ model.add(tf.layers.dense({ units: 1 }))
 ```javascript
 // Create the model
 const model = createModel()
-tfvis.show.modelSummary({ name: "Model Summary" }, model)
+tfvis.show.modelSummary({ name: 'Model Summary' }, model)
 ```
 
 위 코드를 통해서 모델을 만들고, 각 레이어별 summary를 볼 수 있다.
@@ -217,8 +219,8 @@ function convertToTensor(data) {
     tf.util.shuffle(data)
 
     // 2. 데이터를 tensor로 변환한다.
-    const inputs = data.map(d => d.horsepower)
-    const labels = data.map(d => d.mpg)
+    const inputs = data.map((d) => d.horsepower)
+    const labels = data.map((d) => d.mpg)
 
     const inputTensor = tf.tensor2d(inputs, [inputs.length, 1])
     const labelTensor = tf.tensor2d(labels, [labels.length, 1])
@@ -269,8 +271,8 @@ tf.util.shuffle(data)
 
 ```javascript
 // Step 2. Convert data to Tensor
-const inputs = data.map(d => d.horsepower)
-const labels = data.map(d => d.mpg)
+const inputs = data.map((d) => d.horsepower)
+const labels = data.map((d) => d.mpg)
 
 const inputTensor = tf.tensor2d(inputs, [inputs.length, 1])
 const labelTensor = tf.tensor2d(labels, [labels.length, 1])
@@ -322,7 +324,7 @@ async function trainModel(model, inputs, labels) {
   model.compile({
     optimizer: tf.train.adam(),
     loss: tf.losses.meanSquaredError,
-    metrics: ["mse"],
+    metrics: ['mse'],
   })
 
   const batchSize = 32
@@ -333,9 +335,9 @@ async function trainModel(model, inputs, labels) {
     epochs,
     shuffle: true,
     callbacks: tfvis.show.fitCallbacks(
-      { name: "Training Performance" },
-      ["loss", "mse"],
-      { height: 200, callbacks: ["onEpochEnd"] }
+      { name: 'Training Performance' },
+      ['loss', 'mse'],
+      { height: 200, callbacks: ['onEpochEnd'] },
     ),
   })
 }
@@ -348,7 +350,7 @@ async function trainModel(model, inputs, labels) {
 model.compile({
   optimizer: tf.train.adam(),
   loss: tf.losses.meanSquaredError,
-  metrics: ["mse"],
+  metrics: ['mse'],
 })
 ```
 
@@ -374,9 +376,9 @@ return await model.fit(inputs, labels, {
   batchSize,
   epochs,
   callbacks: tfvis.show.fitCallbacks(
-    { name: "Training Performance" },
-    ["loss", "mse"],
-    { height: 200, callbacks: ["onEpochEnd"] }
+    { name: 'Training Performance' },
+    ['loss', 'mse'],
+    { height: 200, callbacks: ['onEpochEnd'] },
   ),
 })
 ```
@@ -396,7 +398,7 @@ const { inputs, labels } = tensorData
 
 // Train the model
 await trainModel(model, inputs, labels)
-console.log("Done Training")
+console.log('Done Training')
 ```
 
 새로고침하면, 아래와 같이 뜰 것이다.
@@ -434,22 +436,22 @@ function testModel(model, inputData, normalizationData) {
     return { x: val, y: preds[i] }
   })
 
-  const originalPoints = inputData.map(d => ({
+  const originalPoints = inputData.map((d) => ({
     x: d.horsepower,
     y: d.mpg,
   }))
 
   tfvis.render.scatterplot(
-    { name: "Model Predictions vs Original Data" },
+    { name: 'Model Predictions vs Original Data' },
     {
       values: [originalPoints, predictedPoints],
-      series: ["original", "predicted"],
+      series: ['original', 'predicted'],
     },
     {
-      xLabel: "Horsepower",
-      yLabel: "MPG",
+      xLabel: 'Horsepower',
+      yLabel: 'MPG',
       height: 300,
-    }
+    },
   )
 }
 ```
@@ -528,7 +530,7 @@ testModel(model, data, tensorData)
 - 입출력 레이어 사이에 히든레이어를 몇개 더 추가해보자. 추가될 레이어는 예시로 아래와 같은 형태가 될 수도 있다.
 
 ```javascript
-model.add(tf.layers.dense({ units: 50, activation: "sigmoid" }))
+model.add(tf.layers.dense({ units: 50, activation: 'sigmoid' }))
 ```
 
 여기에서 중요한 것은, 히든레이어로 비선형 활성화 함수인 [sigmoid](https://developers.google.com/machine-learning/glossary/#sigmoid_function)를 활용했다는 사실이다. 활성화 함수에 더 알아보고 싶다면, [여기](https://developers.google.com/machine-learning/crash-course/introduction-to-neural-networks/anatomy)를 참조하자.

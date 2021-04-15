@@ -12,6 +12,7 @@ category: blockchain
 slug: /2018/11/02/bitcoins-white-paper-is-not-a-bible-stop-worshipping-it/
 template: post
 ---
+
 Bitcoin's White Paper Is Not a Bible – Stop Worshipping It
 
 [원문](https://www.coindesk.com/bitcoins-white-paper-is-not-a-bible-stop-worshipping-it/)

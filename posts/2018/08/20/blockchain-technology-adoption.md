@@ -4,42 +4,42 @@ date: 2018-08-20 12:00:00
 published: true
 tags:
   - blockchain
-description: "Blockchain Technology Adoption
+description: 'Blockchain Technology Adoption
   [원문](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3189051)  |
   ![bta1](../images/bta1.png) | | :-: | | 일반적인 Technology Adoption
-  Cycle |   | ![bta2](../...."
+  Cycle |   | ![bta2](../....'
 category: blockchain
 slug: /2018/08/20/blockchain-technology-adoption/
 template: post
 ---
+
 Blockchain Technology Adoption
 
 [원문](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3189051)
 
-| ![bta1](../images/bta1.png) |
-| :-: |
+|    ![bta1](../images/bta1.png)     |
+| :--------------------------------: |
 | 일반적인 Technology Adoption Cycle |
 
-
 | ![bta2](../images/bta2.png) |
-| :-: |
-| Google Trends: Blockchain |
+| :-------------------------: |
+|  Google Trends: Blockchain  |
 
 | ![bta3](../images/bta3.png) |
-| :-: |
-| Google Trends: Bitcoin |
+| :-------------------------: |
+|   Google Trends: Bitcoin    |
 
 | ![bta4](../images/bta4.png) |
-| :-: |
-| Blockchain: News Articles |
+| :-------------------------: |
+|  Blockchain: News Articles  |
 
 | ![bta5](../images/bta5.png) |
-| :-: |
-| Blockchain: Book Titles |
+| :-------------------------: |
+|   Blockchain: Book Titles   |
 
-전반적으로 웹검색, 잡지 기사, 책 제목을 기반 증거에서는 블록체인의 확산이 주로 처음 두 그룹 (혁신가, 얼리어답터) 내에 있음을 나타낸다. 이 두그룹 모두 블록체인이 두가지 이유로 높은 수준의 불확실성과 관련이 있음을 나타낸다. 
+전반적으로 웹검색, 잡지 기사, 책 제목을 기반 증거에서는 블록체인의 확산이 주로 처음 두 그룹 (혁신가, 얼리어답터) 내에 있음을 나타낸다. 이 두그룹 모두 블록체인이 두가지 이유로 높은 수준의 불확실성과 관련이 있음을 나타낸다.
 
-첫째, 블록체인은 아직 실험단계에 있다. 즉 기능이 완전히 개발되지 않았을 수도 있다. 이는 분산 동기화 문제 (비잔틴 장군의 문제)를 해결하기 위한 솔루션이 증가하고 있음이 나타낸다. 작업증명외에도 지분증명, 협력증명, 투표 시스템 드잉 있다. 
+첫째, 블록체인은 아직 실험단계에 있다. 즉 기능이 완전히 개발되지 않았을 수도 있다. 이는 분산 동기화 문제 (비잔틴 장군의 문제)를 해결하기 위한 솔루션이 증가하고 있음이 나타낸다. 작업증명외에도 지분증명, 협력증명, 투표 시스템 드잉 있다.
 
 둘째, 신기술을 기존 프로세스와 통합하는 방법에 대해 명확한 그림을 가지고 있지 않을 수 있으며, 더 중요한 것은 예상되는 이점이 분명하지 않을 수도 있다는 것이다. 보고서 대다수는 기술을 채용하는 사람들이 기술을 수익화 하기 보다는 블록체인을 더 잘 이해하려고 시도하는 것으로 났다. 킬러앱은 아직 출현하지 않은 것으로 보이며, 일부 애플리케이션은 블록체인이 문제를 찾는 해결책으로 남아 있다고 주장하기도 한다.
 

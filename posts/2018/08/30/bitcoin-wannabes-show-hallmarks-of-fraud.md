@@ -12,6 +12,7 @@ category: blockchain
 slug: /2018/08/30/bitcoin-wannabes-show-hallmarks-of-fraud/
 template: post
 ---
+
 Buyer Beware: Hundreds of Bitcoin Wannabes Show Hallmarks of Fraud
 
 [원문](https://www.wsj.com/articles/buyer-beware-hundreds-of-bitcoin-wannabes-show-hallmarks-of-fraud-1526573115)
@@ -47,7 +48,7 @@ Denaro의 뒤에 있는 실체를 확인할 수 없었고, 그 회사에 연락�
   height="503"
   style="border:none;overflow:hidden"
   scrolling="no"
-  frameBorder="0"
+  frameborder="0"
   allowTransparency="true"
   allow="encrypted-media"
 ></iframe>
@@ -97,11 +98,11 @@ Denaro ICO가 종료된 후, 해당 기업의 웹사이트는 불투명해졌고
 
 Denaro는 죽지않았다. 최근에는 Pluto Coin이라고 하는 비슷한 웹사이트와 동일한 백서가 있는 새로운 지불 시스템에 대한 제안이 등장했다. Denaro 팀원 중 절반이 이 코인에 재활용 되었는데, 여기에는 앞서 언급한 Boker도 있었다. 그의 이름은 Denver로 바뀌었다.
 
-| ![scam4](../images/scam4.png)                                                                       |
+| ![scam4](../images/scam4.png)                                                                                 |
 | :------------------------------------------------------------------------------------------------------------ |
 | Denaro에서 사용되었던 CFO 'JEREMY BOKER' [출처](https://web.archive.org/web/20180323075035/https://denaro.io) |
 
-| ![scam5](../images/scam5.png)                                                                                                                                                                                                 |
+| ![scam5](../images/scam5.png)                                                                                                                                                                                                           |
 | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Pluto Coin에서 사용되었던 CFO 'IVAN DENVER' [출처](https://web.archive.org/web/20180323075035/https://denaro.io) 현재 사이트 접속은 되지만, 팀원들 목록은 가린 상태며, waybackmachie으로 본 결과 그의 존재 흔적(?) 을 발견할 수 있었다. |
 

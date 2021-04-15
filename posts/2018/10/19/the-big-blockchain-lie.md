@@ -11,6 +11,7 @@ category: blockchain
 slug: /2018/10/19/the-big-blockchain-lie/
 template: post
 ---
+
 Blockchain’s Broken Promises
 
 [원문](https://www.project-syndicate.org/commentary/why-bitcoin-is-a-bubble-by-nouriel-roubini-2018-01)
@@ -48,4 +49,3 @@ Blockchain’s Broken Promises
 근본적인 블록체인 기술의 경우, 암호해독보다 더 많은 잠재력을 지녔음에도 불구하고 여전히 그것의 길을 가로막고 있는 거대한 장애물이 있다. 그 중 가장 중요한 것은 인터넷이 보편적으로 접근 가능하도록 만든 기본적인 공통 및 보편적 프로토콜이 없다는 것이다(TCP-IP, HTML 등). 보다 근본적으로 중간권력이 없는 분산형 거래를 약속하는 것은 검증되지 않은 유토피아적인 망상에 불과하다. 따라서 블록체인이 기대감을 부풀린 기술의 과대광고 주기의 정점에 근접한 것은 당연하다.
 
 그러므로 블록체인, 비트코인, 기타 암호화에 대해서는 잊어버리고, 금융 서비스 산업을 혁신하기 위해 고군분투하고 있는 실제 비즈니스 모델로 핀테크 기업에 투자를 시작하라. 너는 하룻밤 사이에 부자가 되지는 못할 것이다. 하지만 너는 더 현명한 투자를 할 것이다.
-

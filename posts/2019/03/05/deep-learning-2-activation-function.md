@@ -5,13 +5,15 @@ published: true
 tags:
   - pytorch
 mathjax: true
-description: "Deep Learning 02) Activation Function ## Activation Function  활성화
+description:
+  'Deep Learning 02) Activation Function ## Activation Function  활성화
   함수  ![02](../images/02.png)  활성화 함수는 가중치가 더해진 input
-  value를 어떻게 처리할 것인지 결정하는 함수다. 이러한 활성화 함수에는 몇가지 종류가 있다.  ### 1..."
+  value를 어떻게 처리할 것인지 결정하는 함수다. 이러한 활성화 함수에는 몇가지 종류가 있다.  ### 1...'
 category: pytorch
 slug: /2019/03/05/deep-learning-2-activation-function/
 template: post
 ---
+
 Deep Learning 02) Activation Function
 
 ## Activation Function
@@ -30,7 +32,7 @@ $$ 1 f x \geq 0 $$
 
 $$ 0 f x < 0 $$
 
-매우매우 간단한 형태의 함수다. 
+매우매우 간단한 형태의 함수다.
 
 ### 2. Sigmoid Function
 

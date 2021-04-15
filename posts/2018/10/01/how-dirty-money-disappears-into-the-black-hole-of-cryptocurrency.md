@@ -12,6 +12,7 @@ category: blockchain
 slug: /2018/10/01/how-dirty-money-disappears-into-the-black-hole-of-cryptocurrency/
 template: post
 ---
+
 How Dirty Money Disappears Into the Black Hole of Cryptocurrency
 
 [원문](https://www.wsj.com/articles/how-dirty-money-disappears-into-the-black-hole-of-cryptocurrency-1538149743)
@@ -39,4 +40,3 @@ WSJ에 따르면, 2년 동안 이러한 중개자를 통해 흘러 들어간 범
 비트코인을 비록한 암호 화폐는 수천대의 컴퓨터에서 유지관리되는 디지털 원장 역할을 하는 소프트웨어를 기반으로 한다. 대부분의 원장 또는 블록체인은 공개적으로 볼 수 있으며, 익명의 온라인 계정이나 지갑에서 다음 계정으로 코인의 움직임을 추적할 수 있다. 하지만 비트코인을 달러로 거래하면 그 익명성은 깨질 수 있다. 따라서 범죄자들은 디지털에서 범죄의 흔적을 지울 방법을 찾아야 한다.
 
 암호 화폐 자금 세탁 범위를 조사한 결과, 세탁된 거래 금액이 약 8,860만 달러 인 것으로 확인되었다. 범인으로 추정되는 많은 사람들이 알려지지 않았거나, 도망중이거나, 일부는 체포된 상태다.
-

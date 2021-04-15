@@ -4,13 +4,15 @@ date: 2019-02-14 07:56:22
 published: true
 tags:
   - python
-description: 구글 스프레드 시트를 파이썬에서 조작해보자. 내가 할일은 1. 스프레드시트를 읽고 2. 스프레드시트에 쓰는 두가지
+description:
+  구글 스프레드 시트를 파이썬에서 조작해보자. 내가 할일은 1. 스프레드시트를 읽고 2. 스프레드시트에 쓰는 두가지
   작업이다. ```python import pickle import os.path from googleapiclient.discovery
   import build from google_auth_oauthlib.flow import Installe...
 category: python
 slug: /2019/02/14/do-boring-stuff-with-python-1/
 template: post
 ---
+
 구글 스프레드 시트를 파이썬에서 조작해보자. 내가 할일은 1. 스프레드시트를 읽고 2. 스프레드시트에 쓰는 두가지 작업이다.
 
 ```python

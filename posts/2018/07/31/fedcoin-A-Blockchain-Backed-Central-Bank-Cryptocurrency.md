@@ -12,6 +12,7 @@ category: blockchain
 slug: /2018/07/31/fedcoin-A-Blockchain-Backed-Central-Bank-Cryptocurrency/
 template: post
 ---
+
 FedCoin - A Blockchain-Backed Central Bank Cryptocurrency
 
 [원문](https://law.yale.edu/system/files/area/center/global/document/411_final_paper_-_fedcoin.pdf)
@@ -26,7 +27,7 @@ FedCoin - A Blockchain-Backed Central Bank Cryptocurrency
 
 비트코인 마이닝은 초당 거래 7번을 처리하는 것이 최선이며, 이는 Visa에서 50,000개를 처리하는 것과는 대조적이다. 비트코인 블록 생성 속도에서는, 거래를 확인하는데 최소 10분이 소요되고 심지어 일부는 삭제 될 수 있다. (메인 체인에 연결되지 못 했을 경우 뒤로 밀릴 수 있다는 이야기) 전세계는 규모에 맞춰 돈을 처리하는 시스템이 필요하며 비트코인은 여전히 이것을 처리하는데 힘이 부족하다.
 
-현재 거래 확인 수수료는 마이너들에게 새로운 화폐를 주는 네트워크에 의해 보조금 형태로 지급이 때문에, 장기적으론 훨씬 더 비싸질 것이며, 화폐 공급이 제한되어 마이너들이 독점하는 시스템으로 변모할 것이다. 
+현재 거래 확인 수수료는 마이너들에게 새로운 화폐를 주는 네트워크에 의해 보조금 형태로 지급이 때문에, 장기적으론 훨씬 더 비싸질 것이며, 화폐 공급이 제한되어 마이너들이 독점하는 시스템으로 변모할 것이다.
 
 마지막으로, 2천1백만개의 고정 통화 공급은 심각한 위험을 초래한다. 현실적인 조치로, 2025년 부터 통화공급은 평탄해져서 금과 같은 형태로 변모하게 된다. 역사적으로 알 수 있듯이, 고정된 양의 화폐 공급은 결코 효과가 없다. 수요가 치솟으면 예기치 않는 디플레이션을 야기하며, 금융 위기 상황에서 돈 공급을 늘리는 탄력적인 통화정책을 수행할 수 없게 된다.
 
@@ -48,7 +49,7 @@ FedCoin - A Blockchain-Backed Central Bank Cryptocurrency
 
 비트코인을 사용하면 주소만 공개되며, 거래를 하는 당사자의 신원은 비공개로 남아 있다. 또한 주소를 수요에 따라 만들어 줄 수 있으므로 주소를 식별하는 법 집행 기관이 반드시 개인을 추적하라 수 있는 것은 아니다. 페드코인을 사용하는 경우, 모든 거래자가 중앙은행에 계좌를 가지고 있어야 완전한 익명성을 방지할 수 있다.
 
-페드코인은 중앙은행의 암호 통화로, 연방 준비제도 이사회의 대차대조표에 대한 보편적이고, 전자적인 책임이 될 것이다. 블록체인을 사용하기 위해 시스템의 탄력성을 유지하는 것이 필수적이다. **블록체인의 핵심은 데이터 구조이며, 분산원장일 필요는 없다.** 페드코인은 중앙 은행의 기관에 대한 기존의 신뢰를 의존하기 때문에 합의를 위해 블록체인을 필요로 하지 않는다. 
+페드코인은 중앙은행의 암호 통화로, 연방 준비제도 이사회의 대차대조표에 대한 보편적이고, 전자적인 책임이 될 것이다. 블록체인을 사용하기 위해 시스템의 탄력성을 유지하는 것이 필수적이다. **블록체인의 핵심은 데이터 구조이며, 분산원장일 필요는 없다.** 페드코인은 중앙 은행의 기관에 대한 기존의 신뢰를 의존하기 때문에 합의를 위해 블록체인을 필요로 하지 않는다.
 
 이러한 시스템은 블록체인을 유지하는 중앙은행, 원장 사본을 유지하는 공공기관 또는 민간 기관으로 구현될 수 있다. 여기서는 중앙은행이 통화공급을 통제하는 하이브리드 모델을 제안하고, 거래를 확인하고 이중 지출을 막기 위해 분산된 권한을 가진 노드에 의존한다. 이러한 노드는 상업 은행이 될 것이다. 이러한 시스템 하에서, 비트코인과 같은 암호화폐에 요구되는 값비싼 증명을 피하고, 대기 시간을 크게 줄일 수 있다. 따라서 페드코인은 높은 처리량을 제공하고 중앙은행의 통제하에 통화정책을 남겨두는 RSCoin을 기반으로 구축할 것이다.
 
@@ -63,8 +64,6 @@ FedCoin - A Blockchain-Backed Central Bank Cryptocurrency
 를 가져올 수 있다.
 
 ![fedcoin-structure](../images/fedcoin-structure.png)
-
-
 
 <!-- He queries that the input addresses are unspent and gets votes on their validity. That bundle of votes is then committed to the set of Nodes mapped to the shards of User ’s addresses, to get proof the transaction was saved in a low-level block.
 

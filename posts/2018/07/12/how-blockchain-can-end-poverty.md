@@ -12,6 +12,7 @@ category: blockchain
 slug: /2018/07/12/how-blockchain-can-end-poverty/
 template: post
 ---
+
 How Blockchain Can End Poverty
 
 [원문](https://www.wsj.com/articles/how-blockchain-can-end-poverty-1516925459)

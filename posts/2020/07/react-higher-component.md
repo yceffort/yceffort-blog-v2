@@ -5,13 +5,15 @@ tags:
   - react
 published: true
 date: 2020-07-04 04:06:10
-description: "[이 글](https://ko.reactjs.org/docs/higher-order-components.html)이
+description:
+  '[이 글](https://ko.reactjs.org/docs/higher-order-components.html)이
   한글로 번역이 안되있어서 대충 번역해봅니다. # Higher-Order Components  고차 컴포넌트 (이하 HOC)는 리액트에서
-  컴포넌트 로직을 재사용하기 위한 고오급 기술이다. HOC는 리액트 API의 일부분은 아니다. 이는 리액트..."
+  컴포넌트 로직을 재사용하기 위한 고오급 기술이다. HOC는 리액트 API의 일부분은 아니다. 이는 리액트...'
 category: javascript
 slug: /2020/07/react-higher-component/
 template: post
 ---
+
 [이 글](https://ko.reactjs.org/docs/higher-order-components.html)이 한글로 번역이 안되있어서 대충 번역해봅니다.
 
 # Higher-Order Components
@@ -21,12 +23,12 @@ template: post
 구체적으로, **HOC는 컴포넌트를 받아 새로운 컴포넌트를 반환하는 함수다**
 
 ```javascript
-const EnhancedComponent = higherOrderComponent(WrappedComponent);
+const EnhancedComponent = higherOrderComponent(WrappedComponent)
 ```
 
 컴포넌트의 props가 ui를 바꾼다면, HOC는 컴포넌트를 다른 컴포넌트로 바꿔버린다.
 
-이러한 HOC는 리액트 써드 파티 라이브러리에서 자주사용되는 패턴으로, Redux의 `connect`와 `Relay`의 `createFragmentContainer`에서 볼 수 있다. 
+이러한 HOC는 리액트 써드 파티 라이브러리에서 자주사용되는 패턴으로, Redux의 `connect`와 `Relay`의 `createFragmentContainer`에서 볼 수 있다.
 
 이 문서에서는 왜 HOC패턴이 유용한지, 그리고 어떻게 작성하는지 살펴본다.
 
@@ -39,29 +41,29 @@ const EnhancedComponent = higherOrderComponent(WrappedComponent);
 ```javascript
 class CommentList extends React.Component {
   constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
+    super(props)
+    this.handleChange = this.handleChange.bind(this)
     this.state = {
       // "DataSource" is some global data source
-      comments: DataSource.getComments()
-    };
+      comments: DataSource.getComments(),
+    }
   }
 
   componentDidMount() {
     // Subscribe to changes
-    DataSource.addChangeListener(this.handleChange);
+    DataSource.addChangeListener(this.handleChange)
   }
 
   componentWillUnmount() {
     // Clean up listener
-    DataSource.removeChangeListener(this.handleChange);
+    DataSource.removeChangeListener(this.handleChange)
   }
 
   handleChange() {
     // Update component state whenever the data source changes
     this.setState({
-      comments: DataSource.getComments()
-    });
+      comments: DataSource.getComments(),
+    })
   }
 
   render() {
@@ -71,7 +73,7 @@ class CommentList extends React.Component {
           <Comment comment={comment} key={comment.id} />
         ))}
       </div>
-    );
+    )
   }
 }
 ```
@@ -81,29 +83,29 @@ class CommentList extends React.Component {
 ```javascript
 class BlogPost extends React.Component {
   constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
+    super(props)
+    this.handleChange = this.handleChange.bind(this)
     this.state = {
-      blogPost: DataSource.getBlogPost(props.id)
-    };
+      blogPost: DataSource.getBlogPost(props.id),
+    }
   }
 
   componentDidMount() {
-    DataSource.addChangeListener(this.handleChange);
+    DataSource.addChangeListener(this.handleChange)
   }
 
   componentWillUnmount() {
-    DataSource.removeChangeListener(this.handleChange);
+    DataSource.removeChangeListener(this.handleChange)
   }
 
   handleChange() {
     this.setState({
-      blogPost: DataSource.getBlogPost(this.props.id)
-    });
+      blogPost: DataSource.getBlogPost(this.props.id),
+    })
   }
 
   render() {
-    return <TextBlock text={this.state.blogPost} />;
+    return <TextBlock text={this.state.blogPost} />
   }
 }
 ```
@@ -121,13 +123,13 @@ class BlogPost extends React.Component {
 ```javascript
 const CommentListWithSubscription = withSubscription(
   CommentList,
-  (DataSource) => DataSource.getComments()
-);
+  (DataSource) => DataSource.getComments(),
+)
 
 const BlogPostWithSubscription = withSubscription(
   BlogPost,
-  (DataSource, props) => DataSource.getBlogPost(props.id)
-);
+  (DataSource, props) => DataSource.getBlogPost(props.id),
+)
 ```
 
 첫번째 파라미터는 컴포넌트고, 두번째 파라미터는 데이터를 받아올 `DataSource`다.
@@ -140,34 +142,34 @@ function withSubscription(WrappedComponent, selectData) {
   // ...and returns another component...
   return class extends React.Component {
     constructor(props) {
-      super(props);
-      this.handleChange = this.handleChange.bind(this);
+      super(props)
+      this.handleChange = this.handleChange.bind(this)
       this.state = {
-        data: selectData(DataSource, props)
-      };
+        data: selectData(DataSource, props),
+      }
     }
 
     componentDidMount() {
       // ... that takes care of the subscription...
-      DataSource.addChangeListener(this.handleChange);
+      DataSource.addChangeListener(this.handleChange)
     }
 
     componentWillUnmount() {
-      DataSource.removeChangeListener(this.handleChange);
+      DataSource.removeChangeListener(this.handleChange)
     }
 
     handleChange() {
       this.setState({
-        data: selectData(DataSource, this.props)
-      });
+        data: selectData(DataSource, this.props),
+      })
     }
 
     render() {
       // ... and renders the wrapped component with the fresh data!
       // Notice that we pass through any additional props
-      return <WrappedComponent data={this.state.data} {...this.props} />;
+      return <WrappedComponent data={this.state.data} {...this.props} />
     }
-  };
+  }
 }
 ```
 
@@ -185,17 +187,17 @@ HOC 내부에서는 컴포넌트를 수정해서는 안된다.
 
 ```javascript
 function logProps(InputComponent) {
-  InputComponent.prototype.componentDidUpdate = function(prevProps) {
-    console.log('Current props: ', this.props);
-    console.log('Previous props: ', prevProps);
-  };
+  InputComponent.prototype.componentDidUpdate = function (prevProps) {
+    console.log('Current props: ', this.props)
+    console.log('Previous props: ', prevProps)
+  }
   // The fact that we're returning the original input is a hint that it has
   // been mutated.
-  return InputComponent;
+  return InputComponent
 }
 
 // EnhancedComponent will log whenever props are received
-const EnhancedComponent = logProps(InputComponent);
+const EnhancedComponent = logProps(InputComponent)
 ```
 
 위 코드에는 여러가지 문제가 있다. 그 중 하나는 `EnhancedComponent`로 부터 분리되어 `inputComponent`를 재사용할 수 없다는 것이다. 더 끔찍한 것은, 기존 컴포넌트의 `ComponentDidUpdate`도 엎어버린다는 것이다. 또한 이는 라이프 사이클 메소드가 없는 함수형 컴포넌트에서는 사용할 수가 없다.
@@ -208,12 +210,12 @@ const EnhancedComponent = logProps(InputComponent);
 function logProps(WrappedComponent) {
   return class extends React.Component {
     componentDidUpdate(prevProps) {
-      console.log('Current props: ', this.props);
-      console.log('Previous props: ', prevProps);
+      console.log('Current props: ', this.props)
+      console.log('Previous props: ', prevProps)
     }
     render() {
       // Wraps the input component in a container, without mutating it. Good!
-      return <WrappedComponent {...this.props} />;
+      return <WrappedComponent {...this.props} />
     }
   }
 }
@@ -221,7 +223,7 @@ function logProps(WrappedComponent) {
 
 이런식으로 작성한다면, 기능적으로도 완전히 동일하게 작동하며 잠재적인 충돌 이슈도 피할 수 있다.
 
-이전에 살짝 언급했지만, HOC는 컨테이너 컴포넌트 패턴으로도 불리운다. 컨테이너 컴포넌트란 고차원과 저차원의 관심사를 분리하여 역할을 맡기는 일종의 전략이다. 컨테이너는 state와 데이터 변화를 감지하는 역할을 하고, UI를 렌더링하는 컴포넌트에 이러한 데이터를 넘기는 역할을 한다. HOC는  컨테이너를 일종의 implmentation으로 사용한다. HOC를 일종의 파라미터화 된 컴포넌트 정의로 생각할 수도 있다.
+이전에 살짝 언급했지만, HOC는 컨테이너 컴포넌트 패턴으로도 불리운다. 컨테이너 컴포넌트란 고차원과 저차원의 관심사를 분리하여 역할을 맡기는 일종의 전략이다. 컨테이너는 state와 데이터 변화를 감지하는 역할을 하고, UI를 렌더링하는 컴포넌트에 이러한 데이터를 넘기는 역할을 한다. HOC는 컨테이너를 일종의 implmentation으로 사용한다. HOC를 일종의 파라미터화 된 컴포넌트 정의로 생각할 수도 있다.
 
 ## 규칙: HOC와 관련이 없는 prop을 Wrapped Component에 넘겨라
 
@@ -253,30 +255,30 @@ render() {
 모든 HOC가 다 똒같은 생김새를 가지고 있는 것은 아니다. argument가 컴포넌트 단 하나인 경우도 있다.
 
 ```javascript
-const NavbarWithRouter = withRouter(Navbar);
+const NavbarWithRouter = withRouter(Navbar)
 ```
 
 보통 HOC는 추가적인 arugment를 받는다. Relay를 예로 들면, 컴포넌트의 데이터 디펜던시를 명세한 config 오브젝트를 추가적으로 받는다.
 
 ```javascript
-const CommentWithRelay = Relay.createContainer(Comment, config);
+const CommentWithRelay = Relay.createContainer(Comment, config)
 ```
 
 그러나 일반적인 HOC는 이렇게 생겼다.
 
 ```javascript
 // React Redux's `connect`
-const ConnectedComment = connect(commentSelector, commentActions)(CommentList);
+const ConnectedComment = connect(commentSelector, commentActions)(CommentList)
 ```
 
 생김새가 달라서 당황스럽지만, 나누면 이렇게 구성되어 있다.
 
 ```javascript
 // connect is a function that returns another function
-const enhance = connect(commentListSelector, commentListActions);
+const enhance = connect(commentListSelector, commentListActions)
 // The returned function is a HOC, which returns a component that is connected
 // to the Redux store
-const ConnectedComment = enhance(CommentList);
+const ConnectedComment = enhance(CommentList)
 ```
 
 다시말해, `connect`는 HOC를 리턴하는 HOC인 것이다.
@@ -292,7 +294,7 @@ const EnhancedComponent = withRouter(connect(commentSelector)(WrappedComponent))
 const enhance = compose(
   // 여기는 모두 인자를 하나로 받는 HOC들이다.
   withRouter,
-  connect(commentSelector)
+  connect(commentSelector),
 )
 const EnhancedComponent = enhance(WrappedComponent)
 ```
@@ -305,16 +307,19 @@ HOC에 의해 생성된 컨테이너 컴포넌트는 React Developer Tool에서 
 
 ```javascript
 function withSubscription(WrappedComponent) {
-  class WithSubscription extends React.Component {/* ... */}
-  WithSubscription.displayName = `WithSubscription(${getDisplayName(WrappedComponent)})`;
-  return WithSubscription;
+  class WithSubscription extends React.Component {
+    /* ... */
+  }
+  WithSubscription.displayName = `WithSubscription(${getDisplayName(
+    WrappedComponent,
+  )})`
+  return WithSubscription
 }
 
 function getDisplayName(WrappedComponent) {
-  return WrappedComponent.displayName || WrappedComponent.name || 'Component';
+  return WrappedComponent.displayName || WrappedComponent.name || 'Component'
 }
 ```
-
 
 ## 주의사항
 
@@ -337,7 +342,7 @@ render() {
 
 단순히 성능만이 문제가 아니다. 컴포넌트를 새롭게 mount 한다는 것은 하위 컴포넌트들의 상태값이 모두 사라진 다는 것을 의미한다.
 
-이렇게 하지말고, HOC의 결과물을 컴포넌트 밖에서 적용하여 딱 한번만 만들도록 해야 한다.  그러면 렌더링 사이에서 일관성이 유지되는 것이고, 이는 개발자가 원하는 것이다.
+이렇게 하지말고, HOC의 결과물을 컴포넌트 밖에서 적용하여 딱 한번만 만들도록 해야 한다. 그러면 렌더링 사이에서 일관성이 유지되는 것이고, 이는 개발자가 원하는 것이다.
 
 HOC를 동적으로 사용해야 하는 매우 드문 경우에는, 컴포넌트의 라이프사이클 혹은 constructor 내부에서 수행해야 한다.
 
@@ -349,9 +354,11 @@ HOC를 동적으로 사용해야 하는 매우 드문 경우에는, 컴포넌트
 
 ```javascript
 // Define a static method
-WrappedComponent.staticMethod = function() {/*...*/}
+WrappedComponent.staticMethod = function () {
+  /*...*/
+}
 // Now apply a HOC
-const EnhancedComponent = enhance(WrappedComponent);
+const EnhancedComponent = enhance(WrappedComponent)
 
 // The enhanced component has no static method
 typeof EnhancedComponent.staticMethod === 'undefined' // true
@@ -361,21 +368,25 @@ typeof EnhancedComponent.staticMethod === 'undefined' // true
 
 ```javascript
 function enhance(WrappedComponent) {
-  class Enhance extends React.Component {/*...*/}
+  class Enhance extends React.Component {
+    /*...*/
+  }
   // Must know exactly which method(s) to copy :(
-  Enhance.staticMethod = WrappedComponent.staticMethod;
-  return Enhance;
+  Enhance.staticMethod = WrappedComponent.staticMethod
+  return Enhance
 }
 ```
 
 그러나 이런 기법을 사용하기 위해서는, 어떤 메소드가 정의되어있는지 정확히 알아야 한다. 이 때는 [hoist-non-react-statics](https://github.com/mridgway/hoist-non-react-statics)라이브러리를 사용하여 자동으로 복사하게 할 수 있다.
 
 ```javascript
-import hoistNonReactStatic from 'hoist-non-react-statics';
+import hoistNonReactStatic from 'hoist-non-react-statics'
 function enhance(WrappedComponent) {
-  class Enhance extends React.Component {/*...*/}
-  hoistNonReactStatic(Enhance, WrappedComponent);
-  return Enhance;
+  class Enhance extends React.Component {
+    /*...*/
+  }
+  hoistNonReactStatic(Enhance, WrappedComponent)
+  return Enhance
 }
 ```
 
@@ -383,16 +394,15 @@ function enhance(WrappedComponent) {
 
 ```javascript
 // Instead of...
-MyComponent.someFunction = someFunction;
-export default MyComponent;
+MyComponent.someFunction = someFunction
+export default MyComponent
 
 // ...export the method separately...
-export { someFunction };
+export { someFunction }
 
 // ...and in the consuming module, import both
-import MyComponent, { someFunction } from './MyComponent.js';
+import MyComponent, { someFunction } from './MyComponent.js'
 ```
-
 
 ### Ref 는 넘어가지 않는다.
 

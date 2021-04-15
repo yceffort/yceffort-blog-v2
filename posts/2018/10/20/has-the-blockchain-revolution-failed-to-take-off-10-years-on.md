@@ -11,6 +11,7 @@ category: blockchain
 slug: /2018/10/20/has-the-blockchain-revolution-failed-to-take-off-10-years-on/
 template: post
 ---
+
 Has the Blockchain Revolution Failed to Take Off 10 Years On?
 
 [원문](https://cointelegraph.com/news/has-the-blockchain-revolution-failed-to-take-off-10-years-on)
@@ -19,7 +20,7 @@ Has the Blockchain Revolution Failed to Take Off 10 Years On?
 
 일부는 비트코인이 블록체인으로 구축된 기술이기 때문에 블록체인의 주된 용도는 지불 시스템 또는 가치의 저장용이라고 주장할 것이다. 그러나 비트코인 혁명은 세계적이지는 못했다.
 
-블록체인(예: 분산형 거래 플랫폼)의 다른 용도는 새로운 통화, 스마트 계약, 분산형 스토리지, 신뢰성 검증 및 불변형 원장으로서 매력은 있었지만, 혁신적이지는 못했다. (have all been tasted, but not savoured.) 
+블록체인(예: 분산형 거래 플랫폼)의 다른 용도는 새로운 통화, 스마트 계약, 분산형 스토리지, 신뢰성 검증 및 불변형 원장으로서 매력은 있었지만, 혁신적이지는 못했다. (have all been tasted, but not savoured.)
 
 ## 뱅킹 혁명
 

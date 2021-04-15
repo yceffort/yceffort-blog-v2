@@ -6,21 +6,22 @@ tags:
   - pytorch
   - python
 mathjax: true
-description: "Pytorch - 07) Convolutional Neural Network (2) 이번에는 코드로
+description: 'Pytorch - 07) Convolutional Neural Network (2) 이번에는 코드로
   구현해보자.  ```python class LeNet(nn.Module):      def
   __init__(self):     super().__init__()     # 흑백이라 1채널, 20개 특징 추출, filter 크기,
-  stride 1     se..."
+  stride 1     se...'
 category: pytorch
 slug: /2019/02/21/pytorch-07-convolutional-neural-network(2)/
 template: post
 ---
+
 Pytorch - 07) Convolutional Neural Network (2)
 
 이번에는 코드로 구현해보자.
 
 ```python
 class LeNet(nn.Module):
-  
+
   def __init__(self):
     super().__init__()
     # 흑백이라 1채널, 20개 특징 추출, filter 크기, stride 1
@@ -45,11 +46,11 @@ class LeNet(nn.Module):
     return x
 ```
 
-먼저 첫번째 conv1애서는 1개의 필터, 20개의 특징을 추출 해 낼 것이다. 필터는 5x5 크기로, 이미지가 그리 크지 않으므로 stride는 1로 할것이다. 
+먼저 첫번째 conv1애서는 1개의 필터, 20개의 특징을 추출 해 낼 것이다. 필터는 5x5 크기로, 이미지가 그리 크지 않으므로 stride는 1로 할것이다.
 
 두번 conv2는 입력값이 20이고 (이전 conv의 ouput), 50개의 특징을 같은 크기와 stride로 찾는다.
 
-그리고 마지막에는 fully conncted layer를 linear로 취한다. 여기서 주목할 것은 첫번째 fc의 input 값이다. 필터의 크기가 5x5 이기 때문에, 5x5필터는 width 와 heigt를 각각 4씩 줄인다. 
+그리고 마지막에는 fully conncted layer를 linear로 취한다. 여기서 주목할 것은 첫번째 fc의 input 값이다. 필터의 크기가 5x5 이기 때문에, 5x5필터는 width 와 heigt를 각각 4씩 줄인다.
 
 - 1x1 필터: 원래크기 유지
 - 2x2 필터: 크기 1 감소
@@ -57,13 +58,13 @@ class LeNet(nn.Module):
 - 4x4 필터: 크기 3 감소
 - 5x5 필터: 크기 4 감소
 
-따라서 각 conv layer를 거칠 때마다 크기가 4씩 줄어들게 된다. 
+따라서 각 conv layer를 거칠 때마다 크기가 4씩 줄어들게 된다.
 
 그리고 max_pool2d를 2,2 크기로 사용할 것이므로 크기는 절반으로 줄어들게 된다. 요약하자면 다음과 같다.
 
 | input | conv1 | pool1 | conv2 | pool2 |
-|:-----:|:-----:|:-----:|:-----:|:-----:|
-| 28    | 24    | 12    | 8     | 4     |
+| :---: | :---: | :---: | :---: | :---: |
+|  28   |  24   |  12   |   8   |   4   |
 
 4x4 크기의 이미지가, 50개의 특징으로 나오게 되므로, fully connected 의 input은 $$4\times 4 \times 50$$이 된다. 그리고 이를 500개의 output 으로 만들 것이다. 그리고 과적합을 방지하기 위하여, dropout을 0.5비율로 적용했다. 마지막 fc에서는, 10개의 숫자를 판별해야 하므로 500, 10을 적용했다.
 
@@ -82,62 +83,62 @@ optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
 epochs = 12
 running_loss_history = []
 running_correct_history = []
-validation_running_loss_history = [] 
+validation_running_loss_history = []
 validation_running_correct_history = []
 
 for e in range(epochs):
-  
+
   running_loss = 0.0
   running_correct = 0.0
   validation_running_loss = 0.0
   validation_running_correct = 0.0
-  
-  for inputs, labels in training_loader:    
-     
+
+  for inputs, labels in training_loader:
+
     inputs = inputs.to(device)
     labels = labels.to(device)
     # inputs = inputs.view(inputs.shape[0], -1)
     outputs = model(inputs)
     loss = criterion(outputs, labels)
-    
+
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
-    
+
     _, preds = torch.max(outputs, 1)
-    
+
     running_correct += torch.sum(preds == labels.data)
     running_loss += loss.item()
-    
-    
-    
-  else:    
+
+
+
+  else:
     # 훈련팔 필요가 없으므로 메모리 절약
     with torch.no_grad():
-      
+
       for val_input, val_label in validation_loader:
-        
+
         val_input = val_input.to(device)
         val_label = val_label.to(device)
         # val_input = val_input.view(val_input.shape[0], -1)
         val_outputs = model(val_input)
         val_loss = criterion(val_outputs, val_label)
-        
+
         _, val_preds = torch.max(val_outputs, 1)
         validation_running_loss += val_loss.item()
-        validation_running_correct += torch.sum(val_preds == val_label.data) 
-    
-    
+        validation_running_correct += torch.sum(val_preds == val_label.data)
+
+
     epoch_loss = running_loss / len(training_loader)
     epoch_acc = running_correct.float() / len(training_loader)
     running_loss_history.append(epoch_loss)
     running_correct_history.append(epoch_acc)
-    
+
     val_epoch_loss = validation_running_loss / len(validation_loader)
     val_epoch_acc = validation_running_correct.float() / len(validation_loader)
     validation_running_loss_history.append(val_epoch_loss)
     validation_running_correct_history.append(val_epoch_acc)
-    
+
     print("===================================================")
     print("epoch: ", e + 1)
     print("training loss: {:.5f}, acc: {:5f}".format(epoch_loss, epoch_acc))

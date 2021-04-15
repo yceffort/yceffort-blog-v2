@@ -4,10 +4,10 @@ date: 2021-03-14 14:55:58
 tags:
   - javascript
 published: false
-description: "더이상 this에 대해서 묻지 마세요"
+description: '더이상 this에 대해서 묻지 마세요'
 ---
 
-`this`는 함수의 호출자를 의미하며, 자바스크립트에서의 `this`는  함수를 호출 할 때 마다, 함수가 어떻게 호출되었는지에 따라서 바인딩되는 객체가 결정된다. 정적 방식이 아닌, 호출하는 방식에 따라 동적으로 결정된다는 이유 때문에, 많은 사람들이 혼란을 겪고 있는 것 같다. 
+`this`는 함수의 호출자를 의미하며, 자바스크립트에서의 `this`는 함수를 호출 할 때 마다, 함수가 어떻게 호출되었는지에 따라서 바인딩되는 객체가 결정된다. 정적 방식이 아닌, 호출하는 방식에 따라 동적으로 결정된다는 이유 때문에, 많은 사람들이 혼란을 겪고 있는 것 같다.
 
 ## Table of Contents
 
@@ -16,20 +16,20 @@ description: "더이상 this에 대해서 묻지 마세요"
 ```javascript
 const outerThis = this
 
-const f = () =>  {
+const f = () => {
   console.log(this === outerThis) // true
 }
 ```
 
 ```javascript
-f.bind({foo: 'bar'})(); 
-f.call({foo: 'bar'});
-f.call({foo: 'bar'});
+f.bind({ foo: 'bar' })()
+f.call({ foo: 'bar' })
+f.call({ foo: 'bar' })
 // 화살표 함수에 임의로 this를 바인딩 하는 행위는 언제나 무시된다.
 ```
 
 ```javascript
-const obj = {f}
+const obj = { f }
 obj.f() // true: 부모객체인 obj가 무시되고 언제나 this는 outerThis다.
 ```
 
@@ -48,21 +48,21 @@ class Foo {
 ```javascript
 class Foo {
   bar = (() => {
-    const outerThis = this;
-    return () => {      
-      console.log(this === outerThis); // true
-    };
-  })();
+    const outerThis = this
+    return () => {
+      console.log(this === outerThis) // true
+    }
+  })()
 }
 
 // 위와 아래는 같다.
 
 class Foo {
   constructor() {
-    const outerThis = this;
+    const outerThis = this
     this.bar = () => {
-      console.log(this === outerThis); // true
-    };
+      console.log(this === outerThis) // true
+    }
   }
 }
 ```
@@ -71,9 +71,9 @@ class Foo {
 
 ```javascript
 class Foo {
-  constructor () {
+  constructor() {
     console.log(
-      this.constructor === Object.create(MyClass.prototype).constructor
+      this.constructor === Object.create(MyClass.prototype).constructor,
     )
   }
 }

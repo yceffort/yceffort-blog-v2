@@ -1,6 +1,5 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
 import React from 'react'
-import qs from 'query-string'
 import { MdxRemote } from 'next-mdx-remote/types'
 import hydrate from 'next-mdx-remote/hydrate'
 
@@ -8,7 +7,7 @@ import { Post } from '#commons/types'
 import { parseMarkdownToMDX } from '#utils/Markdown'
 import PostLayout from '#components/layouts/Post'
 import MDXComponents from '#components/MDXComponents'
-import { getAllPosts } from '#utils/posts'
+import { getAllPosts } from '#utils/Post'
 
 export default function PostPage({
   post,
@@ -16,7 +15,6 @@ export default function PostPage({
 }: {
   post: Post
   mdx: MdxRemote.Source
-  thumbnailUrl: string
 }) {
   return (
     <PostLayout frontMatter={post?.frontMatter} slug={post.fields.slug}>
@@ -46,37 +44,24 @@ export const getStaticPaths: GetStaticPaths = async () => {
     fallback: 'blocking',
   }
 }
+
+interface SlugInterface {
+  [key: string]: string | string[] | undefined
+  year: string
+  slugs: string[]
+}
+
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  let post: Post | undefined
-  let thumbnailUrl = ''
-  let mdx = null
+  const { year, slugs } = params as SlugInterface
 
-  if (params) {
-    const { year, slugs } = params
-    const slug = [year, ...(slugs as string[])].join('/')
-    const posts = await getAllPosts()
-    post = posts.find(({ fields: { slug: postSlug } }) => postSlug === slug)
-
-    if (post) {
-      const thumbnailHost = `https://us-central1-yceffort.cloudfunctions.net/screenshot`
-
-      const queryString = qs.stringify({
-        tags: post.frontMatter.tags.map((tag) => tag.trim()).join(','),
-        title: post.frontMatter.title,
-        url: `https://yceffort.kr/${post.fields.slug}`,
-        slug: post.fields.slug,
-      })
-
-      thumbnailUrl = `${thumbnailHost}?${queryString}`
-      mdx = await parseMarkdownToMDX(post.body, post.path)
-    }
-  }
+  const slug = [year, ...(slugs as string[])].join('/')
+  const posts = await getAllPosts()
+  const post = posts.find(({ fields: { slug: postSlug } }) => postSlug === slug)
 
   return {
     props: {
-      post: post ? { ...post, path: '' } : null,
-      thumbnailUrl: process.env.NODE_ENV === 'production' ? thumbnailUrl : '',
-      mdx,
+      post: post,
+      mdx: post && (await parseMarkdownToMDX(post.body, post.path)),
     },
   }
 }

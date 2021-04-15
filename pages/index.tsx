@@ -8,7 +8,7 @@ import SiteConfig from '#src/config'
 import CustomLink from '#components/Link'
 import Tag from '#components/Tag'
 import { DEFAULT_NUMBER_OF_POSTS } from '#commons/const'
-import { getAllPosts } from '#utils/posts'
+import { getAllPosts } from '#utils/Post'
 
 const MAX_DISPLAY = 5
 

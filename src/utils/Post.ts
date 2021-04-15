@@ -1,7 +1,8 @@
 import { join } from 'path'
+import fs from 'fs'
 
+import qs from 'query-string'
 import memoize from 'memoizee'
-import { statSync, readdirSync, readFile } from 'promise-fs'
 import frontMatter from 'front-matter'
 
 import { FrontMatter, Post, TagWithCount } from '../common/types'
@@ -9,6 +10,11 @@ import { FrontMatter, Post, TagWithCount } from '../common/types'
 const DIR_REPLACE_STRING = '/posts'
 
 const POST_PATH = `${process.cwd()}${DIR_REPLACE_STRING}`
+const {
+  promises: { readFile },
+  readdirSync,
+  statSync,
+} = fs
 
 export const getAllPosts: () => Promise<Array<Post>> = memoize(retreiveAllPosts)
 

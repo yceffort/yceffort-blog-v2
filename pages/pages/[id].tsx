@@ -2,7 +2,7 @@ import React from 'react'
 import { GetStaticPaths, GetStaticProps } from 'next'
 
 import { Post } from '#commons/types'
-import { getAllPosts } from '#utils/posts'
+import { getAllPosts } from '#utils/Post'
 import { DEFAULT_NUMBER_OF_POSTS } from '#commons/const'
 import SiteConfig from '#src/config'
 import { PageSeo } from '#components/SEO'

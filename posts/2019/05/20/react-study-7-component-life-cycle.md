@@ -28,7 +28,7 @@ DOM이 생성되고, 웹 브라우저 상에 나타나는 것을 mount라고 한
 2. constructor: 컴포넌트를 새로 만들 때 마다 호출되는 클래스 생성자 메서드
 3. `getDerivedStateFormProps`: `props`에 있는 값을 `state`와 동기화 시키는 메서드다.
 4. `render`: UI를 렌더링하는 메서드
-5. `componentDidMount`: 컴포넌트가 웹 브라우저 상에 나타난 후 호ㅓ출하는 메서드
+5. `componentDidMount`: 컴포넌트가 웹 브라우저 상에 나타난 후 호출하는 메서드
 
 ### update
 

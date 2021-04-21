@@ -5,7 +5,7 @@ import hydrate from 'next-mdx-remote/hydrate'
 import { Post } from '#commons/types'
 import PostLayout from '#components/layouts/Post'
 import MDXComponents from '#components/MDXComponents'
-import { getPostStaticPaths, getPostStaticProps } from '#utils/Post'
+import { getPostStaticPaths, getPostStaticProps } from '#utils/pages'
 
 export default function PostPage({
   post,

@@ -4,7 +4,6 @@ import fs from 'fs'
 import memoize from 'memoizee'
 import frontMatter from 'front-matter'
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { ParsedUrl } from 'query-string'
 import { ParsedUrlQuery } from 'node:querystring'
 
 import { FrontMatter, Post, TagWithCount } from '../common/types'

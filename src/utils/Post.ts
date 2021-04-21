@@ -7,8 +7,7 @@ import { GetStaticPaths, GetStaticProps } from 'next'
 import { ParsedUrlQuery } from 'node:querystring'
 
 import { FrontMatter, Post, TagWithCount } from '../common/types'
-
-import { parseMarkdownToMDX } from '#utils/Markdown'
+import { parseMarkdownToMDX } from '../utils/Markdown'
 
 const DIR_REPLACE_STRING = '/posts'
 

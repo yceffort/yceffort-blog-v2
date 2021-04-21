@@ -24,7 +24,7 @@ export async function createSiteMap() {
     ${posts
       .map(({ fields: { slug } }) => {
         return `<url>
-                    <loc>${`https://yceffort.kr/${slug}`}</loc>
+                    <loc>${`https://yceffort.kr/blogs/${slug}`}</loc>
                     <changefreq>daily</changefreq>
                     <priority>0.7</priority>
                 </url>`

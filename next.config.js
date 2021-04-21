@@ -20,6 +20,11 @@ module.exports = withPWA({
   async redirects() {
     return [
       {
+        source: '/contacts',
+        destination: '/about',
+        permanent: true,
+      },
+      {
         source: '/tag/:tag',
         destination: '/tag/:tag/pages/1',
         permanent: true,
@@ -47,6 +52,26 @@ module.exports = withPWA({
       {
         source: '/categories',
         destination: '/tags',
+        permanent: true,
+      },
+      {
+        source: '/2018/:month/:title/:day',
+        destination: '/blogs/2018/:month/:title/:day',
+        permanent: true,
+      },
+      {
+        source: '/2019/:month/:title/:day',
+        destination: '/blogs/2019/:month/:title/:day',
+        permanent: true,
+      },
+      {
+        source: '/2020/:month/:title',
+        destination: '/blogs/2020/:month/:title',
+        permanent: true,
+      },
+      {
+        source: '/2021/:month/:title',
+        destination: '/blogs/2021/:month/:title',
         permanent: true,
       },
     ]

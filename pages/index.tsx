@@ -42,10 +42,7 @@ export default function Home({ posts }: { posts: Array<Post> }) {
                       <dl>
                         <dt className="sr-only">Published on</dt>
                         <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
-                          <time dateTime={updatedAt}>
-                            {/* {updated} */}
-                            {updatedAt}
-                          </time>
+                          <time dateTime={updatedAt}>{updatedAt}</time>
                         </dd>
                       </dl>
                       <div className="space-y-5 xl:col-span-3">
@@ -53,7 +50,7 @@ export default function Home({ posts }: { posts: Array<Post> }) {
                           <div>
                             <h2 className="text-2xl font-bold leading-8 tracking-tight">
                               <CustomLink
-                                href={`/${slug}`}
+                                href={`/blogs/${slug}`}
                                 className="text-gray-900 dark:text-gray-100"
                               >
                                 {title}
@@ -71,7 +68,7 @@ export default function Home({ posts }: { posts: Array<Post> }) {
                         </div>
                         <div className="text-base font-medium leading-6">
                           <CustomLink
-                            href={`/${slug}`}
+                            href={`/blogs/${slug}`}
                             className="text-blue-500 hover:text-blue-600 dark:hover:text-blue-400"
                             aria-label={`Read "${title}"`}
                           >

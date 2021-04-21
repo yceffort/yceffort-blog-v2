@@ -46,10 +46,7 @@ export default function About() {
           </div>
           <div className="pt-8 pb-8 prose dark:prose-dark max-w-none xl:col-span-2">
             <p>Hello, I am a front-end developer working in Korea.</p>
-            <p>
-              I&apos;m shy about introducing myself, so I&apos;ll replace this
-              section with the Beatles&apos; &quot;Yesterday.&quot;
-            </p>
+
             <p>
               Yesterday All my troubles seemed so far away Now it looks as
               though they&apos;re here to stay Oh, I believe in yesterday

@@ -1,0 +1,16 @@
+name: yceffort-blog-v-2
+region: sgp
+services:
+- build_command: npm run build
+  environment_slug: node-js
+  github:
+    branch: main
+    deploy_on_push: true
+    repo: yceffort/yceffort-blog-v2
+  http_port: 3000
+  instance_count: 1
+  instance_size_slug: professional-s
+  name: yceffort-blog-v-2
+  routes:
+  - path: /
+  run_command: npm start

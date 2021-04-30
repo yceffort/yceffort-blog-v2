@@ -17,7 +17,7 @@ export default function PostPage({
   mdx: MdxRemote.Source
 }) {
   return (
-    <PostLayout frontMatter={post.frontMatter} slug={post.fields?.slug}>
+    <PostLayout frontMatter={post.frontMatter} slug={post.fields.slug}>
       {hydrate(mdx, {
         components: MDXComponents,
       })}

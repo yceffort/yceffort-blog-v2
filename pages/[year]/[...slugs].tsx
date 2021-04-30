@@ -17,7 +17,7 @@ export default function PostPage({
   mdx: MdxRemote.Source
 }) {
   return (
-    <PostLayout frontMatter={post?.frontMatter} slug={post.fields.slug}>
+    <PostLayout frontMatter={post.frontMatter} slug={post.fields?.slug}>
       {hydrate(mdx, {
         components: MDXComponents,
       })}
@@ -56,12 +56,18 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const slug = [year, ...(slugs as string[])].join('/')
   const posts = await getAllPosts()
-  const post = posts.find(({ fields: { slug: postSlug } }) => postSlug === slug)
+  const post = posts.find((p) => p?.fields?.slug === slug)
 
   return {
-    props: {
-      post: post,
-      mdx: post && (await parseMarkdownToMDX(post.body, post.path)),
-    },
+    ...(post
+      ? {
+          props: {
+            post,
+            mdx: await parseMarkdownToMDX(post.body, post.path),
+          },
+        }
+      : {
+          notFound: true,
+        }),
   }
 }

@@ -1,5 +1,3 @@
-import fs from 'fs'
-
 import renderToString from 'next-mdx-remote/render-to-string'
 import remarkMath from 'remark-math'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -16,6 +14,7 @@ import { MdxRemote } from 'next-mdx-remote/types'
 import visit from 'unist-util-visit'
 import { Node } from 'unist'
 
+import imageInfo from '../../public/imageInfo.json'
 import MDXComponents from '../components/MDXComponents'
 
 type TokenType =
@@ -43,23 +42,6 @@ const tokenClassNames: { [key in TokenType]: string } = {
   function: 'text-code-blue',
   boolean: 'text-code-red',
   comment: 'text-gray-400 italic',
-}
-
-export function getImageSize(path: string) {
-  const imageInfo: any = fs.readFileSync(
-    `${process.cwd()}/public/imageInfo.json`,
-    {
-      encoding: 'utf-8',
-    },
-  )
-
-  const result = JSON.parse(imageInfo)[path]
-
-  if (!result) {
-    console.log('cannot find', path)
-  }
-
-  return result
 }
 
 export async function parseMarkdownToMDX(
@@ -108,7 +90,7 @@ export async function parseMarkdownToMDX(
                     imageIndex,
                   )}`
 
-                  const imageSize = getImageSize(`public${imageURL}`)
+                  const imageSize = (imageInfo as any)[`public${imageURL}`]
 
                   imageNode.type = 'jsx'
                   imageNode.value = `<Image

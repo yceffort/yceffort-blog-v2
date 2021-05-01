@@ -1,4 +1,5 @@
-import sizeOf from 'image-size'
+import fs from 'fs'
+
 import renderToString from 'next-mdx-remote/render-to-string'
 import remarkMath from 'remark-math'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -44,11 +45,23 @@ const tokenClassNames: { [key in TokenType]: string } = {
   comment: 'text-gray-400 italic',
 }
 
+export function getImageSize(path: string) {
+  const imageInfo: any = fs.readFileSync(
+    `${process.cwd()}/public/imageInfo.json`,
+    {
+      encoding: 'utf-8',
+    },
+  )
+
+  return JSON.parse(imageInfo)[path]
+}
+
 export async function parseMarkdownToMDX(
   body: string,
   path: string,
 ): Promise<MdxRemote.Source> {
   const postPrefix = 'posts/'
+
   return renderToString(body, {
     components: MDXComponents,
     mdxOptions: {
@@ -84,22 +97,20 @@ export async function parseMarkdownToMDX(
                       : tempImgPath
 
                   const imageIndex = imageNode.url.indexOf('/') + 1
-                  const imagePath = `${process.cwd()}/public/${imgPath}/${imageNode.url.slice(
-                    imageIndex,
-                  )}`
 
                   const imageURL = `/${imgPath}/${imageNode.url.slice(
                     imageIndex,
                   )}`
 
-                  const dimensions = sizeOf(imagePath)
+                  const imageSize = getImageSize(`public${imageURL}`)
+                  console.log(imageSize)
 
                   imageNode.type = 'jsx'
                   imageNode.value = `<Image
                   alt={\`${imageNode.alt}\`}
                   src={\`${imageURL}\`}
-                  width={${dimensions.width}}
-                  height={${dimensions.height}}
+                  width={${imageSize.width}}
+                  height={${imageSize.height}}
                 />`
 
                   node.type = 'div'

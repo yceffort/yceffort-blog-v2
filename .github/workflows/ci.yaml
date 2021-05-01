@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [14.x]
 
     steps:
       - uses: actions/checkout@v2
@@ -22,4 +22,4 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run prettier
-      - run: npm run build-nextjs
+      - run: npm run build

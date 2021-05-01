@@ -53,7 +53,13 @@ export function getImageSize(path: string) {
     },
   )
 
-  return JSON.parse(imageInfo)[path]
+  const result = JSON.parse(imageInfo)[path]
+
+  if (!result) {
+    console.log('cannot find', path)
+  }
+
+  return result
 }
 
 export async function parseMarkdownToMDX(
@@ -103,7 +109,6 @@ export async function parseMarkdownToMDX(
                   )}`
 
                   const imageSize = getImageSize(`public${imageURL}`)
-                  console.log(imageSize)
 
                   imageNode.type = 'jsx'
                   imageNode.value = `<Image

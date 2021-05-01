@@ -5,8 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "sitemap": "ts-node --project ./tsconfig.node.json ./src/SiteMap.ts",
+    "images": "ts-node --project ./tsconfig.node.json ./src/imageInfo.ts",
     "build-nextjs": "next build",
-    "build": "npm run sitemap && npm run build-nextjs",
+    "build": "npm run sitemap && npm run images && npm run build-nextjs",
     "start": "next start",
     "lint": "eslint '**/*.{ts,tsx}'",
     "lint:fix": "npm run lint --fix",
@@ -41,6 +42,7 @@
     "dotenv": "^8.2.0",
     "firebase-admin": "^9.5.0",
     "front-matter": "^4.0.2",
+    "glob": "^7.1.6",
     "image-size": "^0.9.7",
     "isomorphic-fetch": "^3.0.0",
     "memoizee": "^0.4.14",

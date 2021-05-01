@@ -1,9 +1,23 @@
-import fs from 'fs'
+const fs = require('fs')
 
-import { getAllPosts } from './utils/Post'
+const frontMatter = require('front-matter')
+const glob = require('glob')
 
-export async function createSiteMap() {
-  const posts = await getAllPosts()
+async function createSiteMap() {
+  const rawPosts = glob.sync('./posts/**/*.md')
+  const slugs = rawPosts.reduce((prev, path) => {
+    const file = fs.readFileSync(path, { encoding: 'utf-8' })
+    const fm = frontMatter(file)
+
+    if (fm.attributes.published) {
+      const slug = path
+        .slice(path.indexOf('/posts') + '/posts'.length + 1)
+        .replace('.md', '')
+      return [...prev, slug]
+    } else {
+      return prev
+    }
+  }, [])
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" 
@@ -21,13 +35,9 @@ export async function createSiteMap() {
   <url>
     <loc>https://yceffort.kr/tags</loc>
   </url>
-    ${posts
-      .map(({ fields: { slug } }) => {
-        return `<url>
-                    <loc>${`https://yceffort.kr/${slug}`}</loc>
-                    <changefreq>daily</changefreq>
-                    <priority>0.7</priority>
-                </url>`
+    ${slugs
+      .map((slug) => {
+        return `<url><loc>${`https://yceffort.kr/${slug}`}</loc><changefreq>daily</changefreq><priority>0.7</priority></url>`
       })
       .join('\n')}
 </urlset>

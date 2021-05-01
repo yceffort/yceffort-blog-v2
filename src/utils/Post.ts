@@ -1,6 +1,6 @@
-import { join } from 'path'
 import fs from 'fs'
 
+import glob from 'glob'
 import memoize from 'memoizee'
 import frontMatter from 'front-matter'
 
@@ -9,36 +9,8 @@ import { FrontMatter, Post, TagWithCount } from '../common/types'
 const DIR_REPLACE_STRING = '/posts'
 
 const POST_PATH = `${process.cwd()}${DIR_REPLACE_STRING}`
-const {
-  promises: { readFile },
-  readdirSync,
-  statSync,
-} = fs
 
 export const getAllPosts: () => Promise<Array<Post>> = memoize(retreiveAllPosts)
-
-export async function getAllDraftPosts() {
-  const files = getFilesRecursively(POST_PATH).reverse()
-  const draftPosts: Array<string> = []
-
-  for await (const f of files) {
-    const file = await readFile(f, { encoding: 'utf8' })
-    const { attributes } = frontMatter(file)
-    const fm: FrontMatter = attributes as any
-    const { published } = fm
-
-    const slug = f
-      .slice(f.indexOf(DIR_REPLACE_STRING) + DIR_REPLACE_STRING.length + 1)
-      .replace('.md', '')
-
-    if (!published) {
-      draftPosts.push(slug)
-    }
-  }
-
-  console.table(draftPosts)
-  return draftPosts
-}
 
 export async function getAllTagsFromPosts(): Promise<Array<TagWithCount>> {
   const tags: string[] = (await getAllPosts()).reduce<string[]>(
@@ -59,34 +31,12 @@ export async function getAllTagsFromPosts(): Promise<Array<TagWithCount>> {
   return tagWithCount.sort((a, b) => b.count - a.count)
 }
 
-function getFilesRecursively(path: string) {
-  const getFiles = (path: string) =>
-    readdirSync(path)
-      .map((name) => join(path, name))
-      .filter((path: string) => statSync(path).isFile())
-
-  const isDirectory = (path: string) => statSync(path).isDirectory()
-
-  const getDirectories = (path: string) =>
-    readdirSync(path)
-      .map((name) => join(path, name))
-      .filter(isDirectory)
-
-  const dirs = getDirectories(path)
-
-  const files: string[] = dirs
-    .map((dir) => getFilesRecursively(dir))
-    .reduce((a, b) => a.concat(b), [])
-
-  return files.concat(getFiles(path)).filter((f) => f.endsWith('.md'))
-}
-
 export async function retreiveAllPosts(): Promise<Array<Post>> {
-  const files = getFilesRecursively(POST_PATH).reverse()
+  const files = glob.sync(`${POST_PATH}/**/*.md`).reverse()
   const posts: Array<Post> = []
 
   for await (const f of files) {
-    const file = await readFile(f, { encoding: 'utf8' })
+    const file = await fs.promises.readFile(f, { encoding: 'utf8' })
     const { attributes, body } = frontMatter(file)
     const fm: FrontMatter = attributes as any
     const { tags: fmTags, published, date } = fm

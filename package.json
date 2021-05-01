@@ -15,7 +15,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged -q"
+      "pre-commit": "lint-staged -q"  
     }
   },
   "lint-staged": {

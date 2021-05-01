@@ -29,5 +29,14 @@
     }
   },
   "exclude": ["dist", ".next", "out", "next.config.js"],
-  "include": ["next-env.d.ts", "typing/*.d.ts", "**/*.ts", "**/*.tsx", "*.ts", "src/SiteMap.js", "src/imageInfo.js", "src/utils/Markdown.js"]
+  "include": [
+    "next-env.d.ts",
+    "typing/*.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "*.ts",
+    "src/SiteMap.js",
+    "src/imageInfo.js",
+    "src/utils/Markdown.js"
+  ]
 }

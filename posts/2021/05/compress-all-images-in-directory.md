@@ -48,6 +48,7 @@ sudo apt-get install gifsicle
 ```bash
 find . -iname "*.gif" -exec gifsicle --batch -V -O2 {} \;
 ```
+
 ## GUI application
 
 일괄적으로 모든 파일을 수정하기 위해서는 위 명령어를 사용했지만, GUI application도 있어서 필요할 때 사용하면 좋을 것 같다.

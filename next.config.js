@@ -1,18 +1,11 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 const withPWA = require('next-pwa')
-const isProduction = process.env.NODE_ENV === 'production'
-
-isProduction && require('dotenv').config()
+const runtimeCaching = require('next-pwa/cache')
 
 module.exports = withPWA({
-  env: {
-    PROJECT_ID: process.env.PROJECT_ID,
-    PRIVATE_KEY: process.env.PRIVATE_KEY,
-    CLIENT_EMAIL: process.env.CLIENT_EMAIL,
-  },
   pwa: {
     dest: 'public',
     disable: process.env.NODE_ENV !== 'production',
+    runtimeCaching,
   },
   async redirects() {
     return [

@@ -13,6 +13,7 @@ import slug from 'remark-slug'
 import { MdxRemote } from 'next-mdx-remote/types'
 import visit from 'unist-util-visit'
 import { Node } from 'unist'
+import sizeOf from 'image-size'
 
 import imageInfo from '../../public/imageInfo.json'
 import MDXComponents from '../components/MDXComponents'
@@ -44,12 +45,29 @@ const tokenClassNames: { [key in TokenType]: string } = {
   comment: 'text-gray-400 italic',
 }
 
+const postPrefix = 'posts/'
+
+function getSizeOfImage(name: string) {
+  const path = `public${name}`
+  try {
+    if (process.env.NODE_ENV === 'production') {
+      return (imageInfo as any)[path]
+    } else {
+      return sizeOf(path)
+    }
+  } catch (e) {
+    console.error(`Error while get Size of image. path: ${name} error: ${e}`)
+    return {
+      height: undefined,
+      width: undefined,
+    }
+  }
+}
+
 export async function parseMarkdownToMDX(
   body: string,
   path: string,
 ): Promise<MdxRemote.Source> {
-  const postPrefix = 'posts/'
-
   return renderToString(body, {
     components: MDXComponents,
     mdxOptions: {
@@ -90,7 +108,7 @@ export async function parseMarkdownToMDX(
                     imageIndex,
                   )}`
 
-                  const imageSize = (imageInfo as any)[`public${imageURL}`]
+                  const imageSize = getSizeOfImage(imageURL)
 
                   imageNode.type = 'jsx'
                   imageNode.value = `<Image

@@ -56,7 +56,7 @@ class MyApp extends App {
         <DefaultSeo {...SEO} />
         <LayoutWrapper>
           <Component {...pageProps} />
-        </LayoutWrapper>{' '}
+        </LayoutWrapper>
       </ThemeProvider>
     )
   }

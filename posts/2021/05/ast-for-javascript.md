@@ -20,7 +20,7 @@ https://ko.wikipedia.org/wiki/%EC%B6%94%EC%83%81_%EA%B5%AC%EB%AC%B8_%ED%8A%B8%EB
 > 모든 예제는 https://astexplorer.net/ 여기에서 가져왔다
 
 ```javascript
-function square(n){
+function square(n) {
   return n * n
 }
 ```
@@ -42,10 +42,7 @@ function square(n){
       "column": 1
     }
   },
-  "range": [
-    0,
-    36
-  ],
+  "range": [0, 36],
   "errors": [],
   "comments": [],
   "sourceType": "module",
@@ -64,10 +61,7 @@ function square(n){
           "column": 1
         }
       },
-      "range": [
-        0,
-        36
-      ],
+      "range": [0, 36],
       "id": {
         "type": "Identifier",
         "start": 9,
@@ -83,10 +77,7 @@ function square(n){
           },
           "identifierName": "square"
         },
-        "range": [
-          9,
-          15
-        ],
+        "range": [9, 15],
         "name": "square",
         "_babelType": "Identifier"
       },
@@ -109,10 +100,7 @@ function square(n){
             },
             "identifierName": "n"
           },
-          "range": [
-            16,
-            17
-          ],
+          "range": [16, 17],
           "name": "n",
           "_babelType": "Identifier"
         }
@@ -131,10 +119,7 @@ function square(n){
             "column": 1
           }
         },
-        "range": [
-          18,
-          36
-        ],
+        "range": [18, 36],
         "body": [
           {
             "type": "ReturnStatement",
@@ -150,10 +135,7 @@ function square(n){
                 "column": 14
               }
             },
-            "range": [
-              22,
-              34
-            ],
+            "range": [22, 34],
             "argument": {
               "type": "BinaryExpression",
               "start": 29,
@@ -168,10 +150,7 @@ function square(n){
                   "column": 14
                 }
               },
-              "range": [
-                29,
-                34
-              ],
+              "range": [29, 34],
               "left": {
                 "type": "Identifier",
                 "start": 29,
@@ -187,10 +166,7 @@ function square(n){
                   },
                   "identifierName": "n"
                 },
-                "range": [
-                  29,
-                  30
-                ],
+                "range": [29, 30],
                 "name": "n",
                 "_babelType": "Identifier"
               },
@@ -210,10 +186,7 @@ function square(n){
                   },
                   "identifierName": "n"
                 },
-                "range": [
-                  33,
-                  34
-                ],
+                "range": [33, 34],
                 "name": "n",
                 "_babelType": "Identifier"
               },
@@ -238,7 +211,7 @@ function square(n){
 
 첫번째 단계, 렉시컬 분석 (Lexical analyzer aka scanner)는 코드의 문자들을 읽어서 정해진 룰에 따라서 이들을 토큰으로 만들어 합친다. 또한 여기에서 공백, 주석 등을 지우고 마지막으로는 이 전체 코드를 토큰들로 나눈다. 이 렉시컬 분석기가 소스 코드를 읽을 때, 코드를 글자단위로 읽는다. 그 과정에서 공백, operator symbol, special symbol 를 만나면 해당 단어가 끝난 것으로 간주한다.
 
-두번째 단계, 신택스 분석 (Syntax analyzer aka parser) 에서는 위에서 결과로 나온 토큰 목록을 트리 구조로 만들며, 구조적 혹은 언어적으로 문제가 있을 경우 에러를 내뱉는다. 트리를 만드는 과정에서, 일부 파서들은 불필요한 토큰 (중복된 괄호라든지)를 생략한다. 그리고 그 결과로 `Abstract Syntax Tree`를 만든다. 이는 코드와 100% 일치하지는 않지만, 코드를 다루기에는 충분하다. 
+두번째 단계, 신택스 분석 (Syntax analyzer aka parser) 에서는 위에서 결과로 나온 토큰 목록을 트리 구조로 만들며, 구조적 혹은 언어적으로 문제가 있을 경우 에러를 내뱉는다. 트리를 만드는 과정에서, 일부 파서들은 불필요한 토큰 (중복된 괄호라든지)를 생략한다. 그리고 그 결과로 `Abstract Syntax Tree`를 만든다. 이는 코드와 100% 일치하지는 않지만, 코드를 다루기에는 충분하다.
 
 다음은 AST를 배우고 싶을 때 참고 할만한 레포 목록이다.
 
@@ -254,133 +227,127 @@ function square(n){
 https://babeljs.io/ 바벨은 다들 아시다시피, 자바스크립트 컴파일러다. 바벨은 크게 3단계로 이루어진다. (parsing, transforming, generation) 바벨에 자바스크립트 코드를 넘기면, AST를 활용해서 코드를 새롭게 변환해서 만든다.
 
 ```javascript
-import * as parser from "@babel/parser";
-import generate from "@babel/generator";
+import * as parser from '@babel/parser'
+import generate from '@babel/generator'
 // string code
 const pureCode = `
   const welcome = 'hello world'
-`;
+`
 
 // ast
-const ast = parser.parse(pureCode);
+const ast = parser.parse(pureCode)
 
 // generate
-const finalCode = generate(ast);
+const finalCode = generate(ast)
 ```
 
 ```json
 {
-   "type":"File",
-   "start":0,
-   "end":33,
-   "loc":{
-      "start":{
-         "line":1,
-         "column":0
+  "type": "File",
+  "start": 0,
+  "end": 33,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 3,
+      "column": 0
+    }
+  },
+  "errors": [],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 33,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
       },
-      "end":{
-         "line":3,
-         "column":0
+      "end": {
+        "line": 3,
+        "column": 0
       }
-   },
-   "errors":[
-      
-   ],
-   "program":{
-      "type":"Program",
-      "start":0,
-      "end":33,
-      "loc":{
-         "start":{
-            "line":1,
-            "column":0
-         },
-         "end":{
-            "line":3,
-            "column":0
-         }
-      },
-      "sourceType":"script",
-      "interpreter":null,
-      "body":[
-         {
-            "type":"VariableDeclaration",
-            "start":3,
-            "end":32,
-            "loc":{
-               "start":{
-                  "line":2,
-                  "column":2
-               },
-               "end":{
-                  "line":2,
-                  "column":31
-               }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start": 3,
+        "end": 32,
+        "loc": {
+          "start": {
+            "line": 2,
+            "column": 2
+          },
+          "end": {
+            "line": 2,
+            "column": 31
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 9,
+            "end": 32,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 8
+              },
+              "end": {
+                "line": 2,
+                "column": 31
+              }
             },
-            "declarations":[
-               {
-                  "type":"VariableDeclarator",
-                  "start":9,
-                  "end":32,
-                  "loc":{
-                     "start":{
-                        "line":2,
-                        "column":8
-                     },
-                     "end":{
-                        "line":2,
-                        "column":31
-                     }
-                  },
-                  "id":{
-                     "type":"Identifier",
-                     "start":9,
-                     "end":16,
-                     "loc":{
-                        "start":{
-                           "line":2,
-                           "column":8
-                        },
-                        "end":{
-                           "line":2,
-                           "column":15
-                        },
-                        "identifierName":"welcome"
-                     },
-                     "name":"welcome"
-                  },
-                  "init":{
-                     "type":"StringLiteral",
-                     "start":19,
-                     "end":32,
-                     "loc":{
-                        "start":{
-                           "line":2,
-                           "column":18
-                        },
-                        "end":{
-                           "line":2,
-                           "column":31
-                        }
-                     },
-                     "extra":{
-                        "rawValue":"hello world",
-                        "raw":"'hello world'"
-                     },
-                     "value":"hello world"
-                  }
-               }
-            ],
-            "kind":"const"
-         }
-      ],
-      "directives":[
-         
-      ]
-   },
-   "comments":[
-      
-   ]
+            "id": {
+              "type": "Identifier",
+              "start": 9,
+              "end": 16,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 8
+                },
+                "end": {
+                  "line": 2,
+                  "column": 15
+                },
+                "identifierName": "welcome"
+              },
+              "name": "welcome"
+            },
+            "init": {
+              "type": "StringLiteral",
+              "start": 19,
+              "end": 32,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 18
+                },
+                "end": {
+                  "line": 2,
+                  "column": 31
+                }
+              },
+              "extra": {
+                "rawValue": "hello world",
+                "raw": "'hello world'"
+              },
+              "value": "hello world"
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": []
+  },
+  "comments": []
 }
 ```
 
@@ -395,7 +362,7 @@ load().then(function (response) {
 ```
 
 ```javascript
-load().then(response => response.data)
+load().then((response) => response.data)
 ```
 
 단순한 찾아 바꾸기가 아니기 때문에, 일반적인 코드 에디터에서는 이러한 리팩토링이 불가능할 것이다. 그리고 이것을 가능하게 하는 것이 `jscodeshift`다.
@@ -404,7 +371,6 @@ load().then(response => response.data)
 
 - https://github.com/reactjs/react-codemod
 - https://github.com/facebook/jscodeshift
-
 
 다음으로 알아보는 유즈케이스는 `Prettier`다. prettier는 자동으로 줄바꿈도 해주고, 공백도 제거해주며, 괄호도 다듬어 주는 도구다. 따라서 prettier는 기존의 코드를 받아서, 이를 다듬은 코드로 리턴한다는 것을 알 수 있다. 이러한 과정 또한 마찬가지로, AST를 거친다.
 
@@ -415,36 +381,36 @@ load().then(response => response.data)
 마지막으로 알아볼 유즈케이스느 [js2flowchart](https://github.com/Bogdan-Lyashenko/js-code-to-svg-flowchart) 다. 이 라이브러리는 코드를 기준으로 플로우차트를 그려주는 라이브러리다. 플로우차트로 코드를 설명/문서화 할 수 있으며, 시각적인 이해를 바탕으로 다른 코드를 학습할 수 있고, 나아가 유효한 JS 문법을 기준으로 플로우차트를 간단하게 만들어 볼 수도 있다.
 
 ```javascript
- /**
+/**
  * Binary search
  * @param {Array} list
  * @param {Number} element
  * @returns {number}
  */
 function indexSearch(list, element) {
-    let currentIndex,
-        currentElement,
-        minIndex = 0,
-        maxIndex = list.length - 1;
+  let currentIndex,
+    currentElement,
+    minIndex = 0,
+    maxIndex = list.length - 1
 
-    while (minIndex <= maxIndex) {
-        currentIndex = Math.floor((maxIndex + maxIndex) / 2);
-        currentElement = list[currentIndex];
+  while (minIndex <= maxIndex) {
+    currentIndex = Math.floor((maxIndex + maxIndex) / 2)
+    currentElement = list[currentIndex]
 
-        if (currentElement === element) {
-            return currentIndex;
-        }
-
-        if (currentElement < element) {
-            minIndex = currentIndex + 1;
-        }
-
-        if (currentElement > element) {
-            maxIndex = currentIndex - 1;
-        }
+    if (currentElement === element) {
+      return currentIndex
     }
 
-    return -1;
+    if (currentElement < element) {
+      minIndex = currentIndex + 1
+    }
+
+    if (currentElement > element) {
+      maxIndex = currentIndex - 1
+    }
+  }
+
+  return -1
 }
 ```
 
@@ -452,6 +418,4 @@ function indexSearch(list, element) {
 
 https://bogdan-lyashenko.github.io/js-code-to-svg-flowchart/docs/live-editor/index.html
 
-
 이 라이브러리는 어떻게 동작할까? 먼저 코드를 AST로 변환한다음, AST를 순회하며 Flowtree라고 하는 또다른 트리를 만든다. 여기에서는 중요하지 않은 토큰들을 생략하는 등의 과정을 거친다. 그 다음에, Flowtree를 순회하며 ShapesTree라는 것을 만든다. 여기에 각각 노드들은 각 노드의 타입, 위치, 트리사이의 관계등을 나타내고 있다. 마지막으로, 이를 기준으로 SVG 파일을 만들어 낸다.
-

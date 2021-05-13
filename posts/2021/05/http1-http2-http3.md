@@ -169,7 +169,7 @@ scheme:     https
 host:       example.com
 path:       /academy/images
 accept:     /image/jpeg
-user-agent: Mozilla/5.0 
+user-agent: Mozilla/5.0
 ```
 
 이 요청들에서 `method` `scheme` `host` `accept` `user-agent` 등 많은 값들이 있지만, `path`의 값만 다르다. HPACK은 따라서 다른 값인 `path`만 아래와 같이 보낸다.

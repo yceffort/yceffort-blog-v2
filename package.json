@@ -14,18 +14,6 @@
     "prettier": "prettier '**/*.{json,md,yaml}' --check",
     "prettier:fix": "prettier '**/*.{json,md,yaml}' --write"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged -q"
-    }
-  },
-  "lint-staged": {
-    "**/*.{js,ts,tsx}": [
-      "npm run prettier",
-      "npm run lint",
-      "git add"
-    ]
-  },
   "repository": "https://github.com/yceffort/yceffort-blog-v2",
   "author": "yceffort <yceffort@gmail.com>",
   "license": "MIT",
@@ -76,5 +64,20 @@
     "postcss": "^8.2.10",
     "typescript": "^4.2.3",
     "webpack": "^5.24.4"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged -q"
+    }
+  },
+  "lint-staged": {
+    "**/*.{md,json}": [
+      "prettier",
+      "git add"
+    ],
+    "**/*.{js,ts,tsx}": [
+      "eslint",
+      "git add"
+    ]
   }
 }

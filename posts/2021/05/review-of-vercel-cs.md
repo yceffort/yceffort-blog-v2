@@ -93,43 +93,40 @@ Page                                                                            
 
 ```yaml
 domains:
-- domain: yceffort.kr
-  type: PRIMARY
-  zone: yceffort.kr
+  - domain: yceffort.kr
+    type: PRIMARY
+    zone: yceffort.kr
 name: yceffort-blog-v-2
 region: sgp
 services:
-- build_command: npm run build
-  environment_slug: node-js
-  github:
-    branch: main
-    deploy_on_push: true
-    repo: yceffort/yceffort-blog-v2
-  http_port: 3000
-  instance_count: 1
-  instance_size_slug: professional-s
-  name: yceffort-blog-v-2
-  routes:
-  - path: /
-  run_command: npm start
+  - build_command: npm run build
+    environment_slug: node-js
+    github:
+      branch: main
+      deploy_on_push: true
+      repo: yceffort/yceffort-blog-v2
+    http_port: 3000
+    instance_count: 1
+    instance_size_slug: professional-s
+    name: yceffort-blog-v-2
+    routes:
+      - path: /
+    run_command: npm start
 ```
 
 그러다가 한 일주일이 흐른 뒤에 내가 원하던 답이 왔다.
 
-> There are quite a few images included in the new deployment that amounted to the increased size that caused the failure. What the engineers suggest is that you do the following Instead of gathering the sizes of images in getStaticProps which is causing these files to be included, you could move these to a pre-build script that outputs just the sizes to a JSON file and use this instead. 
+> There are quite a few images included in the new deployment that amounted to the increased size that caused the failure. What the engineers suggest is that you do the following Instead of gathering the sizes of images in getStaticProps which is causing these files to be included, you could move these to a pre-build script that outputs just the sizes to a JSON file and use this instead.
 
 https://github.com/yceffort/yceffort-blog-v2/blob/0fdc55ba753aaa5f41ecebb7e0b9215af67accdb/src/utils/Markdown.ts#L123-L135
 
 ```javascript
-const imageURL = `/${imgPath}/${imageNode.url.slice(
-  imageIndex,
-)}`
+const imageURL = `/${imgPath}/${imageNode.url.slice(imageIndex)}`
 
 const dimensions = sizeOf(imagePath)
 
-
-  imageNode.type = 'jsx'
-  imageNode.value = `<Image
+imageNode.type = 'jsx'
+imageNode.value = `<Image
   alt={\`${imageNode.alt}\`}
   src={\`${imageURL}\`}
   width={${dimensions.width}}
@@ -154,6 +151,6 @@ const dimensions = sizeOf(imagePath)
 
 ## 마치며
 
-어쨌거나, vercel의 잘못이었기 때문에 (내 잘못도 없는 건 아니지만) vercel 측에서는 지난달 요금을 모두 환불해주고, 나도 next의 팬으로서 digital ocean으로 넘어갔던 블로그를 다시 vercel로 돌려놓았다. 나의 부족한 영어실력 때문인지, 아니면 바빴던 vercel CS 팀의 문제인지는 모르겠지만 문제의 난이도에 비해 해결하는데 너무 오랜 시간이 걸렸다 (거의 3주 가량) 
+어쨌거나, vercel의 잘못이었기 때문에 (내 잘못도 없는 건 아니지만) vercel 측에서는 지난달 요금을 모두 환불해주고, 나도 next의 팬으로서 digital ocean으로 넘어갔던 블로그를 다시 vercel로 돌려놓았다. 나의 부족한 영어실력 때문인지, 아니면 바빴던 vercel CS 팀의 문제인지는 모르겠지만 문제의 난이도에 비해 해결하는데 너무 오랜 시간이 걸렸다 (거의 3주 가량)
 
 그래도, 외국에 있는 CS 팀과 이야기 해본건 좋은 경험이었다. 그리고 vercel의 [node-file-trace](https://github.com/vercel/nft)에 대해 알게된 것도 좋았다. 이제 여기가 어떻게 돌아가고 있는지 조금이나마 상상해볼 수 있었다. 더불어, digital ocean도 경험해볼 수 있어서 좋았다. 잘 쓸 것 같지는 않지만 =서도.

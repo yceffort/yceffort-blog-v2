@@ -4,7 +4,7 @@ tags:
   - javascript
   - typescript
 published: true
-date: 2021-05-02 20:18:24
+date: 2021-05-23 22:26:52
 description: 'Don’t give up and use suppressImplicitAnyIndexErrors 이 멋있어서 배껴봄'
 ---
 

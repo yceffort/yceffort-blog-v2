@@ -10,7 +10,7 @@
     "build": "npm run sitemap && npm run images && npm run build-nextjs",
     "start": "next start",
     "lint": "eslint '**/*.{ts,tsx}'",
-    "lint:fix": "npm run lint --fix",
+    "lint:fix": "npm run lint -- --fix",
     "prettier": "prettier '**/*.{json,md,yaml}' --check",
     "prettier:fix": "prettier '**/*.{json,md,yaml}' --write"
   },

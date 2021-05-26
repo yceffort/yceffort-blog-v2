@@ -35,7 +35,7 @@ export const SiteConfig = {
       facebook: '',
       telegram: '',
       twitter: '',
-      github: 'yceffort',
+      github: 'https://github.com/yceffort',
       rss: '',
       vkontakte: '',
       linkedin: '',

@@ -1,4 +1,3 @@
-// @flow strict
 const PAGINATION = {
   PREV_PAGE: '←',
   NEXT_PAGE: '→',

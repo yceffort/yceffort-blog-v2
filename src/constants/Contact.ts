@@ -1,16 +1,11 @@
-// @flow strict
 const getContactHref = (name: string, contact: string) => {
   let href
-
   switch (name) {
     case 'twitter':
       href = `https://www.twitter.com/${contact}`
       break
     case 'github':
       href = `https://github.com/${contact}`
-      break
-    case 'vkontakte':
-      href = `https://vk.com/${contact}`
       break
     case 'telegram':
       href = `https://t.me/${contact}`
@@ -32,9 +27,6 @@ const getContactHref = (name: string, contact: string) => {
       break
     case 'gitlab':
       href = `https://www.gitlab.com/${contact}`
-      break
-    case 'weibo':
-      href = `https://www.weibo.com/${contact}`
       break
     case 'codepen':
       href = `https://www.codepen.io/${contact}`

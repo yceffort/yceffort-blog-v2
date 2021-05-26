@@ -1,5 +1,3 @@
-// @flow strict
-
 import ICONS from '#constants/icons'
 
 const getIcon = (name: string) => {
@@ -11,9 +9,6 @@ const getIcon = (name: string) => {
       break
     case 'github':
       icon = ICONS.GITHUB
-      break
-    case 'vkontakte':
-      icon = ICONS.VKONTAKTE
       break
     case 'telegram':
       icon = ICONS.TELEGRAM
@@ -38,9 +33,6 @@ const getIcon = (name: string) => {
       break
     case 'gitlab':
       icon = ICONS.GITLAB
-      break
-    case 'weibo':
-      icon = ICONS.WEIBO
       break
     case 'codepen':
       icon = ICONS.CODEPEN

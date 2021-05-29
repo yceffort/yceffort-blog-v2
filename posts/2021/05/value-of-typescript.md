@@ -43,9 +43,9 @@ type objectShape = typeof object
 
 ```typescript
 type objectShape = {
-    a: number;
-    b: number;
-    c: number;
+  a: number
+  b: number
+  c: number
 }
 ```
 
@@ -56,16 +56,16 @@ const object = {
   a: 1,
   b: 2,
   c: 3,
-} as const 
+} as const
 
 type objectShape = typeof object
 ```
 
 ```typescript
 type objectShape = {
-    readonly a: 1;
-    readonly b: 2;
-    readonly c: 3;
+  readonly a: 1
+  readonly b: 2
+  readonly c: 3
 }
 ```
 
@@ -91,11 +91,11 @@ type keys = keyof objectShape
 type values = objectShape[keys]
 ```
 
-이번엔 제네릭으로 돌아가보자. 
+이번엔 제네릭으로 돌아가보자.
 
 ```typescript
-type values     = Shape[keyof objectShape]
-type ValueOf<T> = T    [keyof T]
+type values = Shape[keyof objectShape]
+type ValueOf<T> = T[keyof T]
 ```
 
 ```typescript

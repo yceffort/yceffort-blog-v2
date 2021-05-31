@@ -8,20 +8,6 @@ date: 2021-05-23 22:26:52
 description: 'Don’t give up and use suppressImplicitAnyIndexErrors 이 멋있어서 배껴봄'
 ---
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 타입스크립트를 배우고, 본격적으로 사용하면서 부딪히는 가장 최초의 어려움은 바로 이 에러가 아닐 까 싶다.
 
 ```bash
@@ -44,8 +30,6 @@ for (const [key, value] of Object.entries(obj)) {
 ```typescript
 entries(o: {}): [string, any][];
 ```
-
-
 
 ```typescript
 const test = { a: 'a', b: 'b', c: 'c' }

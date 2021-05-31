@@ -65,13 +65,5 @@
     "postcss": "^8.2.10",
     "typescript": "^4.2.3",
     "webpack": "^5.24.4"
-  },
-  "lint-staged": {
-    "**/*.{md,json}": [
-      "prettier"
-    ],
-    "**/*.{js,ts,tsx}": [
-      "eslint"
-    ]
   }
 }

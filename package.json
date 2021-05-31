@@ -12,8 +12,8 @@
     "lint": "eslint '**/*.{ts,tsx}'",
     "lint:fix": "npm run lint -- --fix",
     "prettier": "prettier '**/*.{json,md,yaml}' --check",
-    "prettier:fix": "prettier '**/*.{json,md,yaml}' --write",
-    "prepare": "husky install"
+    "prettier:fix": "prettier '**/*.{json,md,yaml}' --write",    
+    "pre-commit": "lint-staged"
   },
   "repository": "https://github.com/yceffort/yceffort-blog-v2",
   "author": "yceffort <yceffort@gmail.com>",

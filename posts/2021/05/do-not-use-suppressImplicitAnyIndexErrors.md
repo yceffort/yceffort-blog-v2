@@ -19,6 +19,9 @@ description: 'Don’t give up and use suppressImplicitAnyIndexErrors 이 멋있�
 
 
 
+
+
+
 타입스크립트를 배우고, 본격적으로 사용하면서 부딪히는 가장 최초의 어려움은 바로 이 에러가 아닐 까 싶다.
 
 ```bash

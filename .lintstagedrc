@@ -1,0 +1,8 @@
+{
+  "**/*.{md,json,rc}": [
+          "prettier"
+  ],
+  "**/*.{js,ts,tsx}": [
+        "eslint"
+  ]
+}

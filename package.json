@@ -68,12 +68,10 @@
   },
   "lint-staged": {
     "**/*.{md,json}": [
-      "prettier",
-      "git add"
+      "prettier"
     ],
     "**/*.{js,ts,tsx}": [
-      "eslint",
-      "git add"
+      "eslint"
     ]
   }
 }

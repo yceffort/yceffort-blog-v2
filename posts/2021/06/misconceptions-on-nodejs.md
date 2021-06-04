@@ -137,3 +137,11 @@ function writeToMyFile(data, callback) {
 `dns` 모듈 내에 있는 `dns.lookup()` 함수도 마찬가지로 libuv스레드 풀에서 실행된다. 이 함수를 사용하여 도메인 이름을 IP 주소로부터 확인하는 것은 플랫폼 종속적인 작업이며, 이작업은 100% 네트워크 IO가 아니기 때문이다.
 
 ## NodeJS는 CPU 집약적인 작업을 하는 애플리케이션에서 사용하면 안된다?
+
+정확히 말하면, 이는 과거까지는 사실이었지만 이제 [worker thread](https://www.google.com/search?q=worker_thread&oq=worker_thread&aqs=chrome..69i57j0i10i19i30j0i19i30l8.2621j1j1&sourceid=chrome&ie=UTF-8)가 도입되면서 가능해졌다. 따라서 CPU 집약적인 작업을 처리하는 프로덕션 애플리케이션에서 Node.js를 사용하기에 적합해졌다. 
+
+각 Nodejs의 워커 쓰레드는 자체 v8 런타임의 복사본, Event Loop, libuv 스레드풀을 가진다. 그러므로 CPU 집약적인 블로킹 작업을 하는 하나의 worker thread는 다른 worker thread에 영향을 주지 않게 된다.
+
+https://yceffort.kr/2021/04/nodejs-multithreading-worker-threads
+
+그러나 worker thread를 원활하게 지원하는 IDE는 현재 없는 것으로 보인다. 일부 IDE의 경우, 기본 main worker가 아닌 worker thread에 디버거를 연결하는 것을 지원하지 않는다. 그러나 현재 점차 많은 개발자들이 비디오 인코딩과 같은 CPU 집약적인 작업의 지원을 위해 worker thread 채택을 시작하기 때문에 점차 성숙할 것으로 보인다.

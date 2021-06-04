@@ -138,7 +138,7 @@ function writeToMyFile(data, callback) {
 
 ## NodeJS는 CPU 집약적인 작업을 하는 애플리케이션에서 사용하면 안된다?
 
-정확히 말하면, 이는 과거까지는 사실이었지만 이제 [worker thread](https://www.google.com/search?q=worker_thread&oq=worker_thread&aqs=chrome..69i57j0i10i19i30j0i19i30l8.2621j1j1&sourceid=chrome&ie=UTF-8)가 도입되면서 가능해졌다. 따라서 CPU 집약적인 작업을 처리하는 프로덕션 애플리케이션에서 Node.js를 사용하기에 적합해졌다. 
+정확히 말하면, 이는 과거까지는 사실이었지만 이제 [worker thread](https://www.google.com/search?q=worker_thread&oq=worker_thread&aqs=chrome..69i57j0i10i19i30j0i19i30l8.2621j1j1&sourceid=chrome&ie=UTF-8)가 도입되면서 가능해졌다. 따라서 CPU 집약적인 작업을 처리하는 프로덕션 애플리케이션에서 Node.js를 사용하기에 적합해졌다.
 
 각 Nodejs의 워커 쓰레드는 자체 v8 런타임의 복사본, Event Loop, libuv 스레드풀을 가진다. 그러므로 CPU 집약적인 블로킹 작업을 하는 하나의 worker thread는 다른 worker thread에 영향을 주지 않게 된다.
 

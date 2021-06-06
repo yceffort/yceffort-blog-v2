@@ -7,7 +7,7 @@ date: 2021-02-22 23:48:36
 description: '모든 것이라고 했지만 모든 것이 아닐 수도 있다'
 ---
 
-자바스크립트에서 함수는 ㅈㄴ 중요하다. 자바스크립트의 함수는 일급객체다. 함수를 정의함으로서 일련의 특정작업을 쉽게 처리할 수 있다.
+자바스크립트에서 함수는 중요하다. 자바스크립트의 함수는 일급객체다. 함수를 정의함으로서 일련의 특정작업을 쉽게 처리할 수 있다.
 
 > Functions are one of the fundamental building blocks in JavaScript. A function is a JavaScript procedure — a set of statements that performs a task or calculates a value. To use a function, you must define it somewhere in the scope from which you wish to call it.
 

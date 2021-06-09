@@ -1,7 +1,5 @@
-import renderToString from 'next-mdx-remote/render-to-string'
+import { serialize } from 'next-mdx-remote/serialize'
 import remarkMath from 'remark-math'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import rehypeKatex from 'rehype-katex'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -10,7 +8,7 @@ import toc from 'remark-toc'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import slug from 'remark-slug'
-import { MdxRemote } from 'next-mdx-remote/types'
+// import { MdxRemote } from 'next-mdx-remote/types'
 import visit from 'unist-util-visit'
 import { Node } from 'unist'
 import sizeOf from 'image-size'
@@ -64,12 +62,9 @@ function getSizeOfImage(name: string) {
   }
 }
 
-export async function parseMarkdownToMDX(
-  body: string,
-  path: string,
-): Promise<MdxRemote.Source> {
-  return renderToString(body, {
-    components: MDXComponents,
+export async function parseMarkdownToMDX(body: string, path: string) {
+  return serialize(body, {
+    // scope: MDXComponents,
     mdxOptions: {
       remarkPlugins: [
         toc,

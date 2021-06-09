@@ -8,13 +8,11 @@ import toc from 'remark-toc'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import slug from 'remark-slug'
-// import { MdxRemote } from 'next-mdx-remote/types'
 import visit from 'unist-util-visit'
 import { Node } from 'unist'
 import sizeOf from 'image-size'
 
 import imageInfo from '../../public/imageInfo.json'
-import MDXComponents from '../components/MDXComponents'
 
 type TokenType =
   | 'tag'

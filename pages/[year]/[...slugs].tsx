@@ -1,7 +1,9 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
 import React from 'react'
 import { MdxRemote } from 'next-mdx-remote/types'
-import hydrate from 'next-mdx-remote/hydrate'
+// import hydrate from 'next-mdx-remote/hydrate'
+
+import { MDXRemote } from 'next-mdx-remote'
 
 import { Post } from '#commons/types'
 import { parseMarkdownToMDX } from '#utils/Markdown'
@@ -18,9 +20,10 @@ export default function PostPage({
 }) {
   return (
     <PostLayout frontMatter={post.frontMatter} slug={post.fields.slug}>
-      {hydrate(mdx, {
+      {/* {hydrate(mdx, {
         components: MDXComponents,
-      })}
+      })} */}
+      <MDXRemote {...mdx} components={MDXComponents} />
     </PostLayout>
   )
 }
@@ -57,17 +60,18 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const slug = [year, ...(slugs as string[])].join('/')
   const posts = await getAllPosts()
   const post = posts.find((p) => p?.fields?.slug === slug)
+  if (post) {
+    console.log(post)
+    const source = await parseMarkdownToMDX(post.body, post.path)
 
+    return {
+      props: {
+        post,
+        mdx: source,
+      },
+    }
+  }
   return {
-    ...(post
-      ? {
-          props: {
-            post,
-            mdx: await parseMarkdownToMDX(post.body, post.path),
-          },
-        }
-      : {
-          notFound: true,
-        }),
+    notFound: true,
   }
 }

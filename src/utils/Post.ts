@@ -10,28 +10,7 @@ const DIR_REPLACE_STRING = '/posts'
 
 const POST_PATH = `${process.cwd()}${DIR_REPLACE_STRING}`
 
-export const getAllPosts: () => Promise<Array<Post>> = memoize(retreiveAllPosts)
-
-export async function getAllTagsFromPosts(): Promise<Array<TagWithCount>> {
-  const tags: string[] = (await getAllPosts()).reduce<string[]>(
-    (prev, curr) => {
-      curr.frontMatter.tags.forEach((tag: string) => {
-        prev.push(tag)
-      })
-      return prev
-    },
-    [],
-  )
-
-  const tagWithCount = [...new Set(tags)].map((tag) => ({
-    tag,
-    count: tags.filter((t) => t === tag).length,
-  }))
-
-  return tagWithCount.sort((a, b) => b.count - a.count)
-}
-
-export async function retreiveAllPosts(): Promise<Array<Post>> {
+async function retreiveAllPosts(): Promise<Array<Post>> {
   const files = glob.sync(`${POST_PATH}/**/*.md`).reverse()
   const posts: Array<Post> = []
 
@@ -66,4 +45,25 @@ export async function retreiveAllPosts(): Promise<Array<Post>> {
   }
 
   return posts.sort((a, b) => b.frontMatter.date - a.frontMatter.date)
+}
+
+export const getAllPosts: () => Promise<Array<Post>> = memoize(retreiveAllPosts)
+
+export async function getAllTagsFromPosts(): Promise<Array<TagWithCount>> {
+  const tags: string[] = (await getAllPosts()).reduce<string[]>(
+    (prev, curr) => {
+      curr.frontMatter.tags.forEach((tag: string) => {
+        prev.push(tag)
+      })
+      return prev
+    },
+    [],
+  )
+
+  const tagWithCount = [...new Set(tags)].map((tag) => ({
+    tag,
+    count: tags.filter((t) => t === tag).length,
+  }))
+
+  return tagWithCount.sort((a, b) => b.count - a.count)
 }

@@ -67,9 +67,9 @@ export async function parseMarkdownToMDX(body: string, path: string) {
     // scope: MDXComponents,
     mdxOptions: {
       remarkPlugins: [
+        remarkMath,
         toc,
         slug,
-        remarkMath,
         () => {
           return (tree: Node) => {
             visit(

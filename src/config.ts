@@ -1,3 +1,5 @@
+import getContactHref from '#constants/Contact'
+
 export const SiteConfig = {
   url: 'https://yceffort.kr',
   pathPrefix: '/',
@@ -35,7 +37,7 @@ export const SiteConfig = {
       facebook: '',
       telegram: '',
       twitter: '',
-      github: 'https://github.com/yceffort',
+      github: getContactHref('github', 'yceffort'),
       rss: '',
       linkedin: '',
       instagram: '',

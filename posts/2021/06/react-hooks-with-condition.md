@@ -3,7 +3,7 @@ title: 'React Hooks위에 조건문을 추가할 수 없는 이유'
 tags:
   - javascript
   - react
-published: true
+published: false
 date: 2021-06-10 18:21:19
 description: '처음 접했을 때 범할 수 있는 실수'
 ---
@@ -162,3 +162,38 @@ function Component() {
 ## 그래서 왜, 훅에 조건문을 달 수 없는가?
 
 만약에 이러한 훅 동작 외부에 조건문을 달면 어떻게 될까?
+
+```javascript
+function Component({doEffect}) {
+  const [first, setFirst] = useState(0);
+  if (doEffect) {
+    useEffect(/*...*/)
+  }
+  const [second, setSecond] = useState(0);
+}
+```
+
+만약 해당 컴포넌트의 `doEffect`가 `false`로 넘어왔다고 가정해보자. 
+
+```javascript
+function Component({ doEffect }) {
+  // {value: 0, next: {value: 0, next: null}}
+  const [first, setFirst] = useState(0);
+  if (doEffect) {
+    // {value: 0, next: null}
+    useEffect(/*...*/); // ⚠️ Wrong hook here
+  }
+  // null
+  const [second, setSecond] = useState(0); // ⚠️ No hook left!!
+}
+```
+
+`doEffect`의 값에 따라 링크드리스트의 연결이 끊어지면서 이후의 훅을 등록할 수가 없게 된다. 이를 수정하기 위해서는, `useEffect` 내부에서 조건문을 타야 한다.
+
+```javascript
+useEffect(() => {
+  if (doEffect) {
+    // Do your magic
+  }
+}, [doEffect]);
+```

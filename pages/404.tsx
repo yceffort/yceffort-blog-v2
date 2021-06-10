@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import CustomLink from '#components/Link'
 
 export default function FourZeroFour() {
+  if (1 + 1 === +'2') {
+    const [state, setState] = useState(false)
+  }
   return (
     <div className="flex flex-col items-start justify-start md:justify-center md:items-center md:flex-row md:space-x-6 md:mt-24">
       <div className="pt-6 pb-8 space-x-2 md:space-y-5">

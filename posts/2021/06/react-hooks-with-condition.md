@@ -11,12 +11,12 @@ description: '처음 접했을 때 범할 수 있는 실수'
 리액트를 처음 접해서 작업을 했을때, 아래와 같은 실수를 해본 경험이 있다.
 
 ```tsx
-import React, {useState} from 'react';
+import React, { useState } from 'react'
 
-export default function Hello({effect}: {effect: boolean}) {
+export default function Hello({ effect }: { effect: boolean }) {
   const [state, setState] = useState(false)
 
-  console.log("effect", effect)
+  console.log('effect', effect)
 
   if (effect) {
     const [newState, setNewState] = useState(false)
@@ -36,7 +36,6 @@ Error: newState is not defined
 
 > React Hook "useState" is called conditionally. React Hooks must be called in the exact same order in every component render.eslintreact-hooks/rules-of-hooks
 
-
 - https://reactjs.org/docs/hooks-rules.html#eslint-plugin
 - https://github.com/facebook/react/blob/aecb3b6d114e8fafddf6982133737198e8ea7cb3/packages/eslint-plugin-react-hooks/src/RulesOfHooks.js#L455-L465
 
@@ -53,8 +52,8 @@ Error: newState is not defined
 
 ```jsx
 function Component() {
-  const [first, setFirst] = useState("first");
-  const [second, setSecond] = useState("second");
+  const [first, setFirst] = useState('first')
+  const [second, setSecond] = useState('second')
   return <>안녕?</>
 }
 ```
@@ -76,13 +75,13 @@ function Component() {
 컴포넌트 초기화 단계에서, 리액트의 코드는 아래와 같다.
 
 ```javascript
-function render(Component) {  
+function render(Component) {
   // use* 함수가 호출될 때마다 변경되는 글로벌 변수 값
-  global.currentComponentHooks = null;  
+  global.currentComponentHooks = null
   // 가장 마지막으로 마운트된 훅을 추적
-  global.lastMountedHook = null;
+  global.lastMountedHook = null
 
-  const children = Component();
+  const children = Component()
   // [...]
 }
 ```
@@ -94,18 +93,18 @@ function useState(value) {
   const hook = {
     value: value,
     next: null,
-  };
-  if (global.currentComponentHooks === null) {    
+  }
+  if (global.currentComponentHooks === null) {
     // 글로벌 훅이 없다면 이 훅을 등록해버림
-    global.currentComponentHooks = hook;
+    global.currentComponentHooks = hook
   } else {
     // 그렇지 않다면, 글로벌훅의 마지막으로 등록된 훅의 다음에 등록
-    global.lastMountedHook.next = hook;
+    global.lastMountedHook.next = hook
   }
   // 글로벌 가장 마지막 훅을 현재 훅으로 교체
-  global.lastMountedHook = hook;
+  global.lastMountedHook = hook
   // [...]
-  return [value, updateState]; // 리턴
+  return [value, updateState] // 리턴
 }
 ```
 
@@ -114,11 +113,11 @@ function useState(value) {
 ```jsx
 function Component() {
   // null
-  const [first, setFirst] = useState("first");
+  const [first, setFirst] = useState('first')
   // {value 'first', next: null}
-  const [second, setSecond] = useState("second");
+  const [second, setSecond] = useState('second')
   // {value 'first', next: {value: 'second', next: null}}
-  return /*...*/;
+  return /*...*/
 }
 ```
 
@@ -130,8 +129,8 @@ function Component() {
 
 ```javascript
 function update(Component) {
-  global.currentHook = global.currentComponentHooks; // {value 'first', next: {value: 'second', next: null}}
-  const children = Component();
+  global.currentHook = global.currentComponentHooks // {value 'first', next: {value: 'second', next: null}}
+  const children = Component()
   // global.currentHook === null
 }
 ```
@@ -141,9 +140,9 @@ function update(Component) {
 ```javascript
 // 더이상 초기값이 필요하지 않다
 function useState(/*value*/) {
-  const hook = global.currentHook;
-  global.currentHook = hook.next; // 포인터를 다음 훅으로 이동시킨다
-  return [hook.value, updateState];
+  const hook = global.currentHook
+  global.currentHook = hook.next // 포인터를 다음 훅으로 이동시킨다
+  return [hook.value, updateState]
 }
 ```
 
@@ -152,10 +151,10 @@ function useState(/*value*/) {
 ```javascript
 function Component() {
   // {value 'updated', next: {value: 'second', next: null}}
-  const [first, setFirst] = useState("first"); // first === 'updated' our mutated state
+  const [first, setFirst] = useState('first') // first === 'updated' our mutated state
   // {value 'second', next: null}
-  const [second, setSecond] = useState("second"); // second === 'second' the unchanged initial state
-  return /*...*/;
+  const [second, setSecond] = useState('second') // second === 'second' the unchanged initial state
+  return /*...*/
 }
 ```
 
@@ -164,27 +163,27 @@ function Component() {
 만약에 이러한 훅 동작 외부에 조건문을 달면 어떻게 될까?
 
 ```javascript
-function Component({doEffect}) {
-  const [first, setFirst] = useState(0);
+function Component({ doEffect }) {
+  const [first, setFirst] = useState(0)
   if (doEffect) {
     useEffect(/*...*/)
   }
-  const [second, setSecond] = useState(0);
+  const [second, setSecond] = useState(0)
 }
 ```
 
-만약 해당 컴포넌트의 `doEffect`가 `false`로 넘어왔다고 가정해보자. 
+만약 해당 컴포넌트의 `doEffect`가 `false`로 넘어왔다고 가정해보자.
 
 ```javascript
 function Component({ doEffect }) {
   // {value: 0, next: {value: 0, next: null}}
-  const [first, setFirst] = useState(0);
+  const [first, setFirst] = useState(0)
   if (doEffect) {
     // {value: 0, next: null}
-    useEffect(/*...*/); // ⚠️ Wrong hook here
+    useEffect(/*...*/) // ⚠️ Wrong hook here
   }
   // null
-  const [second, setSecond] = useState(0); // ⚠️ No hook left!!
+  const [second, setSecond] = useState(0) // ⚠️ No hook left!!
 }
 ```
 
@@ -195,5 +194,5 @@ useEffect(() => {
   if (doEffect) {
     // Do your magic
   }
-}, [doEffect]);
+}, [doEffect])
 ```

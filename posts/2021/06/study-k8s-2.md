@@ -27,7 +27,7 @@ description: '무지성에서 시작하는 K8s 공부해보기 시리즈(2)'
 - 이 Apiserver를 사용할 수 있는 것이 kubectl
 - 가장 강력한 도구로, 무엇이든 할 수가 있음.
 
-KubeCtl은 minikube 뿐만 아니라 실제 프로덕션 K8s에서도 사용할 ㅜㅅ 있음.
+KubeCtl은 minikube 뿐만 아니라 실제 프로덕션 K8s에서도 사용할 수 있음.
 
 ## 설치 및 사용
 

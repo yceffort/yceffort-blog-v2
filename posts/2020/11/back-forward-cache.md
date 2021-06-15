@@ -127,7 +127,7 @@ onAllChangesSaved(() => {
 
 위에서 언급했던 것처럼, bfcache에 들어가기전에 모든 예약된 자바스크립트 태스크는 중단되고, cache에서 나올때 다시 시작된다. 만약 스케쥴된 자바스크립트 태스크가 단순히 DOM Api에 접근하거나, 현재 페이지와 별개로 작동하는 API라고 한다면, 페이지를 일시정지해서 bfcache로 들어가는 것이 크게 문제가 되지 않는다.
 
-만약 IndexedDB, Web Locks, WebSockets과 같이 다른 페이지에서도 접근하라 수 있는 데이터와 관련된 API 라고한다면, 다른 탭의 실행에도 영향을 미칠 수 있기 때문에 문제가 될 수 있다. 따라서 다음 시나리오 상에서는 대부분의 브라우저가 bfcache를 시도하지 않는다.
+만약 IndexedDB, Web Locks, WebSockets과 같이 다른 페이지에서도 접근할 수 있는 데이터와 관련된 API 라고한다면, 다른 탭의 실행에도 영향을 미칠 수 있기 때문에 문제가 될 수 있다. 따라서 다음 시나리오 상에서는 대부분의 브라우저가 bfcache를 시도하지 않는다.
 
 - 페이지에 끝나지 않은 indexedDB transaction이 있는 경우
 - fetch나 XMLHttpRequest가 진행 중인 경우

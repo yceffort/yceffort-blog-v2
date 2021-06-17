@@ -52,7 +52,6 @@
     "unist-util-visit": "^2.0.3"
   },
   "devDependencies": {
-    "@svgr/webpack": "^5.5.0",
     "@tailwindcss/jit": "^0.1.18",
     "@types/date-fns": "^2.6.0",
     "@types/memoizee": "^0.4.5",

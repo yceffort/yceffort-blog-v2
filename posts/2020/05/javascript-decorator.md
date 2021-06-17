@@ -136,18 +136,16 @@ function readOnly(isReadOnly: boolean) {
   }
 }
 
-const logger = (message: string) => (
-  target: Person,
-  propName: string,
-  description: PropertyDescriptor,
-) => {
-  const value = description.value
+const logger =
+  (message: string) =>
+  (target: Person, propName: string, description: PropertyDescriptor) => {
+    const value = description.value
 
-  description.value = function (...args: any) {
-    console.log('LOG >>>', message)
-    return value.apply(this, args)
+    description.value = function (...args: any) {
+      console.log('LOG >>>', message)
+      return value.apply(this, args)
+    }
   }
-}
 
 class Person {
   name: string

@@ -80,12 +80,10 @@ export function render(data, target) {
 'use strict'
 Object.defineProperty(__webpack_exports__, '__esModule', { value: true })
 /* harmony export (immutable) */ __webpack_exports__['render'] = render
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__comments_css__ = __webpack_require__(
-  1,
-)
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__comments_css_js___default = __webpack_require__.n(
-  __WEBPACK_IMPORTED_MODULE_0__comments_css__,
-)
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__comments_css__ =
+  __webpack_require__(1)
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__comments_css_js___default =
+  __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__comments_css__)
 
 function render(data, target) {
   console.log('Rendered!')

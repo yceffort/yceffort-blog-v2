@@ -35,13 +35,15 @@ export default withError
 ```javascript
 import * as React from 'react'
 
-const withError = (Component) => ({ error, ...rest }) => {
-  if (error) {
-    return <div>Something went wrong ...</div>
-  }
+const withError =
+  (Component) =>
+  ({ error, ...rest }) => {
+    if (error) {
+      return <div>Something went wrong ...</div>
+    }
 
-  return <Component {...rest} />
-}
+    return <Component {...rest} />
+  }
 
 export default withError
 ```
@@ -53,13 +55,15 @@ export default withError
 ```javascript
 import * as React from 'react'
 
-const withLoading = (Component) => ({ isLoading, ...rest }) => {
-  if (isLoading) {
-    return <div>Loading ...</div>
-  }
+const withLoading =
+  (Component) =>
+  ({ isLoading, ...rest }) => {
+    if (isLoading) {
+      return <div>Loading ...</div>
+    }
 
-  return <Component {...rest} />
-}
+    return <Component {...rest} />
+  }
 
 export default withLoading
 ```
@@ -231,24 +235,27 @@ HOC를 사용할 때는, 내부적으로 같은 prop 명을 사용하고 있는 
 HOC는 강력하지만, 때로는 너무 강력할 때가 있다. HOC는 부모로 부터 props를 받거나, 혹은 컴포넌트 내부에서 처리하는 방법으로 변수를 받을 수 있다. 아래 예제를 살펴보자.
 
 ```javascript
-const withLoading = ({ loadingText }) => (Component) => ({
-  isLoading,
-  ...rest
-}) => {
-  if (isLoading) {
-    return <div>{loadingText ? loadingText : 'Loading ...'}</div>
+const withLoading =
+  ({ loadingText }) =>
+  (Component) =>
+  ({ isLoading, ...rest }) => {
+    if (isLoading) {
+      return <div>{loadingText ? loadingText : 'Loading ...'}</div>
+    }
+
+    return <Component {...rest} />
   }
 
-  return <Component {...rest} />
-}
+const withError =
+  ({ errorText }) =>
+  (Component) =>
+  ({ error, ...rest }) => {
+    if (error) {
+      return <div>{errorText ? errorText : 'Something went wrong ...'}</div>
+    }
 
-const withError = ({ errorText }) => (Component) => ({ error, ...rest }) => {
-  if (error) {
-    return <div>{errorText ? errorText : 'Something went wrong ...'}</div>
+    return <Component {...rest} />
   }
-
-  return <Component {...rest} />
-}
 ```
 
 ```javascript

@@ -121,10 +121,10 @@ function App() {
 따라서 이 값을 안정시키기 위해서 memoization을, 정확히는 `useCallback`을 사용해야 한다.
 
 ```javascript
-const callApi = useCallback(() => (body ? fetch('/url', fetchOptions) : null), [
-  body,
-  fetchOptions,
-])
+const callApi = useCallback(
+  () => (body ? fetch('/url', fetchOptions) : null),
+  [body, fetchOptions],
+)
 ```
 
 그러나 `fetchOptions`역시 컴포넌트가 렌더링 될 때마다 새롭게 생성될 것이므로, `fetchOptions`도 memoization을 거쳐야 한다.

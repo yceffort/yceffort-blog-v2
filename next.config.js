@@ -41,9 +41,6 @@ module.exports = withPWA({
       },
     ]
   },
-  future: {
-    webpack5: true,
-  },
   webpack: (config) => {
     config.module.rules.push({
       test: /\.(png|jpe?g|gif|mp4)$/i,
@@ -56,11 +53,6 @@ module.exports = withPWA({
           },
         },
       ],
-    })
-
-    config.module.rules.push({
-      test: /\.svg$/,
-      use: ['@svgr/webpack'],
     })
 
     return config

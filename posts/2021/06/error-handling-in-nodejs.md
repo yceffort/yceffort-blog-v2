@@ -129,15 +129,15 @@ process.on('unhandledRejection', (err) => {
 
 ```javascript
 function processUsers() {
-    try {
-        const body = await client.get('http://example.com/users');
-        const users = body.users || [];
-        // do something with users
-    } catch (err) {
-       // handle error
-       // client.get에서 에러가 나든 users처리하다 에러가 나든 상관없다면 이렇게 해도된다.
-       // 그러나 이렇게 여러 경우의 수를 묶어버리면 에러에 대한 문제를 정확히 찾기 어렵다.
-    }
+  try {
+    const body = await client.get('http://example.com/users')
+    const users = body.users || []
+    // do something with users
+  } catch (err) {
+    // handle error
+    // client.get에서 에러가 나든 users처리하다 에러가 나든 상관없다면 이렇게 해도된다.
+    // 그러나 이렇게 여러 경우의 수를 묶어버리면 에러에 대한 문제를 정확히 찾기 어렵다.
+  }
 }
 ```
 
@@ -210,13 +210,13 @@ async function getUser(userId) {
 
 ```javascript
 function processUsers() {
-    try {
-        const body = await client.get('http://example.com/users');
-        const users = body.users || [];
-        // do something with users
-    } catch (err) {
-       // handle error
-    }
+  try {
+    const body = await client.get('http://example.com/users')
+    const users = body.users || []
+    // do something with users
+  } catch (err) {
+    // handle error
+  }
 }
 ```
 

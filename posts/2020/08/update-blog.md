@@ -53,7 +53,6 @@ description: 'React와 MobX에 대한 10분 설명'
 category: MobX
 template: post
 ---
-
 ```
 
 위의 내용이 frontmatter를 의미한다. 기존에는 frontmatter가 몇개 쓰이는 것 없이 깔끔했는데, 이 테마에는 제법 쓰이는 것이 많았다. 아래는 frontmatter에 대한 변경사항이다.

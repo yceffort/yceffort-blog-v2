@@ -319,15 +319,15 @@ app.get('*', (req, res) => {
     <div id="notion-app"></div>
     <script src="/vendors-2b1c131a5683b1af62d9.js" defer></script>
     <script src="/app-c87b8b1572429828e701.js" defer></script>
-  `);
+  `)
 
   // Send the initial state when it’s ready
-  const stateJson = await getStateAsJsonObject();
+  const stateJson = await getStateAsJsonObject()
   res.write(`
     <script>
       window.__INITIAL_STATE__ = JSON.parse(${stateString})
     </script>
-  `);
+  `)
 })
 ```
 

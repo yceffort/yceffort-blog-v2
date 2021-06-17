@@ -1,11 +1,11 @@
 import React from 'react'
 
-import Mail from './mail.svg'
-import Github from './github.svg'
-import Facebook from './facebook.svg'
-import Youtube from './youtube.svg'
-import Linkedin from './linkedin.svg'
-import Twitter from './twitter.svg'
+import MailIcon from '#components/icons/mail'
+import GithubIcon from '#components/icons/github'
+import FacebookIcon from '#components/icons/facebook'
+import YoutubeIcon from '#components/icons/youtube'
+import LinkedinIcon from '#components/icons/linkedin'
+import TwitterIcon from '#components/icons/twitter'
 
 type IconType =
   | 'mail'
@@ -15,13 +15,13 @@ type IconType =
   | 'linkedin'
   | 'twitter'
 
-const Components: { [key in IconType]: any } = {
-  mail: Mail,
-  github: Github,
-  facebook: Facebook,
-  youtube: Youtube,
-  linkedin: Linkedin,
-  twitter: Twitter,
+const Components: Record<IconType, React.FC> = {
+  mail: MailIcon,
+  github: GithubIcon,
+  facebook: FacebookIcon,
+  youtube: YoutubeIcon,
+  linkedin: LinkedinIcon,
+  twitter: TwitterIcon,
 }
 
 const SocialIcon = ({

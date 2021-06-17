@@ -15,7 +15,7 @@ type IconType =
   | 'linkedin'
   | 'twitter'
 
-const Components: Record<IconType, React.FC> = {
+const Components: Record<IconType, React.FC<{ className: string }>> = {
   mail: MailIcon,
   github: GithubIcon,
   facebook: FacebookIcon,

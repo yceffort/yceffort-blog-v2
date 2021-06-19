@@ -1,5 +1,3 @@
-import React from 'react'
-
 export default function TwitterIcon({ className }: { className: string }) {
   return (
     <svg

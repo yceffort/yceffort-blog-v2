@@ -1,4 +1,4 @@
-import React from 'react'
+import Image from 'next/image'
 
 import SiteConfig from '#src/config'
 import { PageSeo } from '#components/SEO'

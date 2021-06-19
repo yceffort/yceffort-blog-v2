@@ -1,5 +1,6 @@
-import React from 'react'
 import { format } from 'date-fns'
+import Image from 'next/image'
+import { PropsWithChildren } from 'react'
 
 import { FrontMatter } from '#commons/types'
 import SectionContainer from '#components/SectionContainer'
@@ -15,11 +16,10 @@ export default function PostLayout({
   children,
   frontMatter,
   slug,
-}: {
+}: PropsWithChildren<{
   slug: string
-  children: React.ReactNode
   frontMatter: FrontMatter
-}) {
+}>) {
   const { date, title, tags, description } = frontMatter
   const updatedAt = format(new Date(date), 'yyyy-MM-dd')
 

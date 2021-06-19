@@ -1,5 +1,3 @@
-import React from 'react'
-
 export default function YoutubeIcon({ className }: { className: string }) {
   return (
     <svg

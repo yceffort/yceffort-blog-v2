@@ -1,5 +1,3 @@
-import React from 'react'
-
 import CustomLink from '#components/Link'
 
 export default function Offline() {

@@ -1,4 +1,3 @@
-import React from 'react'
 import Link from 'next/link'
 
 const Tag = ({ text }: { text: string }) => {

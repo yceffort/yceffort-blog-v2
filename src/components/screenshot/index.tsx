@@ -1,5 +1,3 @@
-import React from 'react'
-
 import styles from './index.module.css'
 
 import SiteConfig from '#src/config'

@@ -1,5 +1,5 @@
-import React from 'react'
 import Image from 'next/image'
+import { ReactNode } from 'react'
 
 import Link from './Link'
 import SectionContainer from './SectionContainer'
@@ -9,7 +9,7 @@ import ThemeSwitch from './ThemeSwitch'
 
 import SiteConfig from '#src/config'
 
-const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
+const LayoutWrapper = ({ children }: { children: ReactNode }) => {
   return (
     <SectionContainer>
       <div className="flex flex-col justify-between h-screen">

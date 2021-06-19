@@ -9,6 +9,7 @@ import CustomLink from '#components/Link'
 import PageTitle from '#components/PageTitle'
 import SiteConfig from '#src/config'
 import { getThumbnailURL } from '#utils/common'
+import MathLoader from '#components/layouts/Post/math'
 
 export default function PostLayout({
   children,
@@ -40,6 +41,7 @@ export default function PostLayout({
         tags={tags}
         images={[thumbnailUrl]}
       />
+      <MathLoader />
       <article>
         <div className="xl:divide-y xl:divide-gray-200 xl:dark:divide-gray-700">
           <header className="pt-6 xl:pb-6">

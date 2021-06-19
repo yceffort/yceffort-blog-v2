@@ -1,6 +1,7 @@
 import styles from './index.module.css'
 
 import SiteConfig from '#src/config'
+
 export default function Screenshot({
   title,
   tags,

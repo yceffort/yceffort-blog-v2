@@ -1,5 +1,4 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
-import React from 'react'
 
 import { SiteConfig } from '#src/config'
 import { DEFAULT_NUMBER_OF_POSTS } from '#commons/const'

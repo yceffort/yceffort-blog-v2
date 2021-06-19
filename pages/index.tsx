@@ -1,4 +1,3 @@
-import React from 'react'
 import { GetStaticProps } from 'next'
 import { format } from 'date-fns'
 

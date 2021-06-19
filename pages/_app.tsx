@@ -1,6 +1,5 @@
 import 'src/tailwind.css'
 
-import React from 'react'
 import App from 'next/app'
 import Head from 'next/head'
 import Router from 'next/router'

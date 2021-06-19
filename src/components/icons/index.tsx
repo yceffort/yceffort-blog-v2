@@ -1,4 +1,4 @@
-import React from 'react'
+import { FC } from 'react'
 
 import MailIcon from '#components/icons/mail'
 import GithubIcon from '#components/icons/github'
@@ -15,7 +15,7 @@ type IconType =
   | 'linkedin'
   | 'twitter'
 
-const Components: Record<IconType, React.FC<{ className: string }>> = {
+const Components: Record<IconType, FC<{ className: string }>> = {
   mail: MailIcon,
   github: GithubIcon,
   facebook: FacebookIcon,

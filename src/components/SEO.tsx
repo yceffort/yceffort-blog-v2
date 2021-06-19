@@ -1,4 +1,3 @@
-import React from 'react'
 import { NextSeo, ArticleJsonLd } from 'next-seo'
 
 import SiteConfig from '#src/config'

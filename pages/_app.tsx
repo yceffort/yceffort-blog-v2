@@ -6,6 +6,9 @@ import Head from 'next/head'
 import Router from 'next/router'
 import { ThemeProvider } from 'next-themes'
 import { DefaultSeo } from 'next-seo'
+import Script from 'next/script'
+
+import config from '../src/config'
 
 import { SEO } from '#components/SEO'
 import LayoutWrapper from '#components/LayoutWrapper'
@@ -57,6 +60,49 @@ class MyApp extends App {
         <LayoutWrapper>
           <Component {...pageProps} />
         </LayoutWrapper>
+        {process.env.NODE_ENV === 'production' && (
+          <>
+            <Script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js" />
+            <Script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-analytics.js" />
+            <Script
+              dangerouslySetInnerHTML={{
+                __html: `
+            var firebaseConfig = {
+              apiKey: "AIzaSyDXDGGUots5JHk39kfGGV5ueRd09Ot3f50",
+              authDomain: "yceffort.firebaseapp.com",
+              databaseURL: "https://yceffort.firebaseio.com",
+              projectId: "yceffort",
+              storageBucket: "yceffort.appspot.com",
+              messagingSenderId: "754165146494",
+              appId: "1:754165146494:web:41d36183a76fb998f4892f",
+              measurementId: "G-PEKGCL9BKE"
+            };
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+            firebase.analytics();        
+          `,
+              }}
+            />
+            <Script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${config.googleAnalyticsId}`}
+            />
+            <Script
+              defer
+              dangerouslySetInnerHTML={{
+                __html: `
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+
+                    gtag('config', '${config.googleAnalyticsId}', {
+                      page_path: window.location.pathname,
+                    });
+                  `,
+              }}
+            />
+          </>
+        )}
       </ThemeProvider>
     )
   }

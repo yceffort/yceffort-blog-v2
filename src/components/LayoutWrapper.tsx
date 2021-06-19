@@ -7,6 +7,7 @@ import Footer from './Footer'
 import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
 
+import profile from '#public/profile.png'
 import SiteConfig from '#src/config'
 
 const LayoutWrapper = ({ children }: { children: ReactNode }) => {
@@ -19,10 +20,11 @@ const LayoutWrapper = ({ children }: { children: ReactNode }) => {
               <div className="flex items-center justify-between">
                 <div className="mr-3">
                   <Image
-                    src={SiteConfig.author.photo}
+                    src={profile}
                     alt="avatar"
                     width={40}
                     height={40}
+                    placeholder="blur"
                     className="w-10 h-10 rounded-full"
                   />
                 </div>

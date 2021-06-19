@@ -4,6 +4,7 @@ import SiteConfig from '#src/config'
 import { PageSeo } from '#components/SEO'
 import SocialIcon from '#components/icons'
 import CustomLink from '#components/Link'
+import profile from '#public/profile.png'
 
 export default function About() {
   return (
@@ -21,9 +22,12 @@ export default function About() {
         </div>
         <div className="items-start space-y-2 xl:grid xl:grid-cols-3 xl:gap-x-8 xl:space-y-0">
           <div className="flex flex-col items-center pt-8 space-x-2">
-            <img
-              src={SiteConfig.author.photo}
+            <Image
+              placeholder="blur"
+              src={profile}
               alt="avatar"
+              width="192px"
+              height="192px"
               className="w-48 h-48 rounded-full"
             />
             <h3 className="pt-4 pb-2 text-2xl font-bold leading-8 tracking-tight">

@@ -1,5 +1,6 @@
 import React from 'react'
 import Document, { Html, Head, Main, NextScript } from 'next/document'
+import Script from 'next/script'
 
 import config from '../src/config'
 
@@ -249,11 +250,11 @@ export default class MyDocument extends Document {
             href="/splash/apple-splash-1136-640.jpg"
             media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
           />
-          <script
+          <Script
             async
             src={`https://www.googletagmanager.com/gtag/js?id=${config.googleAnalyticsId}`}
           />
-          <script
+          <Script
             defer
             dangerouslySetInnerHTML={{
               __html: `
@@ -326,10 +327,10 @@ export default class MyDocument extends Document {
           <Main />
           <NextScript />
 
-          <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js" />
-          <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-analytics.js" />
+          <Script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js" />
+          <Script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-analytics.js" />
           {process.env.NODE_ENV === 'production' && (
-            <script
+            <Script
               dangerouslySetInnerHTML={{
                 __html: `
             var firebaseConfig = {
@@ -347,7 +348,7 @@ export default class MyDocument extends Document {
             firebase.analytics();        
           `,
               }}
-            ></script>
+            />
           )}
         </body>
       </Html>

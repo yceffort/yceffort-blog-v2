@@ -98,7 +98,7 @@ function Home() {
 }
 ```
 
-이 `<Script>`는 `strategy` 속성있고, 다음 갑승ㄹ 가질 수 있다.
+이 `<Script>`는 `strategy` 속성있고, 다음의 값을 가질 수 있다.
 
 - `beforeInteractive`: 페이지가 활성화되기전에 (번들된 자바스크립트가 실행되기전에) 스크립트를 가져오고 실행한다. 스크립트가 SSR된 html내부에 주입된다.
 - `afterInteractive`: 페이지가 활성화 된 이후 (번들된 자바스브립트가 모두 실행되고) 스크립트를 가져오고 실행한다. 스크립트를 hydration과정에서 주입하고, 이 후 즉시 실행된다.

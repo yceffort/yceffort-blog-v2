@@ -121,7 +121,6 @@ const users = [
   { id: 6, name: 'Clark Gregg', active: false },
 ]
 
-
 // good?
 const result1 = users.reduce((acc, curr) => {
   if (curr.active) {

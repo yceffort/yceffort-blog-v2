@@ -74,6 +74,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { tag = 'javascript', id = '1' } = params as PageInterface
   const pageNo = parseInt(id)
 
+  if (isNaN(pageNo)) {
+    return {
+      notFound: true,
+    }
+  }
+
   const postsWithTag = allPosts.filter((post) =>
     post.frontMatter.tags.find((t) => t === tag),
   )

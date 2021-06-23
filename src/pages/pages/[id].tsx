@@ -56,7 +56,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const allPosts = await getAllPosts()
   const pageNo = parseInt(id)
 
-  if (isNaN(pageNo)) {
+  if (
+    isNaN(pageNo) ||
+    pageNo > Math.ceil(allPosts.length / DEFAULT_NUMBER_OF_POSTS) ||
+    pageNo < 1
+  ) {
     return {
       notFound: true,
     }

@@ -74,15 +74,19 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { tag = 'javascript', id = '1' } = params as PageInterface
   const pageNo = parseInt(id)
 
-  if (isNaN(pageNo)) {
+  const postsWithTag = allPosts.filter((post) =>
+    post.frontMatter.tags.find((t) => t === tag),
+  )
+
+  if (
+    isNaN(pageNo) ||
+    pageNo > Math.ceil(postsWithTag.length / DEFAULT_NUMBER_OF_POSTS) ||
+    pageNo < 1
+  ) {
     return {
       notFound: true,
     }
   }
-
-  const postsWithTag = allPosts.filter((post) =>
-    post.frontMatter.tags.find((t) => t === tag),
-  )
 
   const startIndex = (pageNo - 1) * DEFAULT_NUMBER_OF_POSTS
   const endIndex = startIndex + DEFAULT_NUMBER_OF_POSTS

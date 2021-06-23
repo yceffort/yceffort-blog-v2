@@ -56,6 +56,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const allPosts = await getAllPosts()
   const pageNo = parseInt(id)
 
+  if (isNaN(pageNo)) {
+    return {
+      notFound: true,
+    }
+  }
+
   const startIndex = (pageNo - 1) * DEFAULT_NUMBER_OF_POSTS
   const endIndex = startIndex + DEFAULT_NUMBER_OF_POSTS
 

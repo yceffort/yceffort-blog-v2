@@ -44,7 +44,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const allTags = await getAllTagsFromPosts()
   const posts = await getAllPosts()
 
-  const paths: any[] = []
+  const paths: { params: { tag: string; id: string } }[] = []
   allTags.forEach(({ tag }) => {
     const tagsCount: number = posts.filter((post) =>
       post.frontMatter.tags.find((t) => t === tag),

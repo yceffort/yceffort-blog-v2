@@ -34,9 +34,5 @@
     "typing/*.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "*.ts",
-    "src/SiteMap.js",
-    "src/imageInfo.js",
-    "src/utils/Markdown.js"
   ]
 }

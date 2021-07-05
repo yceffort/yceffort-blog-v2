@@ -76,9 +76,9 @@ https://www.freecodecamp.org/news/node-module-exports-explained-with-javascript-
 
 ## npm package와 `node_modules` 디렉토리
 
-npm 패키지는 node.js 모듈및 json 파일, `README.md` 등을 포함하는 아카이브다. 공용 패키지는 `npmjs.com` 레지스트리 등에 업데이트 할 수 있으며, private 패키지는 private registry 또는 회사 소유의 레지스트리에 업로드 할 수 있다. Node.js 자체는 npm 패키지가 무엇인지 인식하지 않고, `node_modules` 디렉토리에 있는 디렉토리와 파일만 인식한다. 이러한 패키지를 추출하여 올바른 위치에 콘텐츠를 배치하는 것이 npm CLI의 몫이다. 
+npm 패키지는 node.js 모듈및 json 파일, `README.md` 등을 포함하는 아카이브다. 공용 패키지는 `npmjs.com` 레지스트리 등에 업데이트 할 수 있으며, private 패키지는 private registry 또는 회사 소유의 레지스트리에 업로드 할 수 있다. Node.js 자체는 npm 패키지가 무엇인지 인식하지 않고, `node_modules` 디렉토리에 있는 디렉토리와 파일만 인식한다. 이러한 패키지를 추출하여 올바른 위치에 콘텐츠를 배치하는 것이 npm CLI의 몫이다.
 
-Node.js 자체는 다른 플랫폼에서 제공하는 많은 기능이 없기 때문에, npm 패키지는 node.js 애플리케이션에 매우 중요하다고 볼 수 있다. 이는 npm 패키지 생태계가 성장할 수 있도록 장려된 의도적인 설계 철학이다. 
+Node.js 자체는 다른 플랫폼에서 제공하는 많은 기능이 없기 때문에, npm 패키지는 node.js 애플리케이션에 매우 중요하다고 볼 수 있다. 이는 npm 패키지 생태계가 성장할 수 있도록 장려된 의도적인 설계 철학이다.
 
 따라서 거의 모든 node.js 애플리케이션에 dependencies, 종속성이 있다. dependencies란 애플리케이션이 의존하고 있는 npm 패키지다. 이러한 dependency는 직접적인 의존성일 수도 있고, dependency가 의존하는 또다른 하위 dependency일 수도 있다. 이는 dependency의 계층 구조를 만들어 낸다.
 
@@ -92,7 +92,7 @@ node_modules/
       foo/ (1.0.0)
 ```
 
-여기서 한가지 발견할 수 있는 문제는 순환 의존성이다. `foo` 패키지가 만약에 `bar`에 의존하게 되면 무한히 순환하게 되는 중첩된 폴더구조가 생겨버린다. 또, 그렇지 않더라도, `foo` 모듈이 두번 설치되어 공간을 낭비하게 된다. npm은 이를 위해 패키지를 설치 할 때 패키지를 트리 위에 올려 중복을 제거한다. 
+여기서 한가지 발견할 수 있는 문제는 순환 의존성이다. `foo` 패키지가 만약에 `bar`에 의존하게 되면 무한히 순환하게 되는 중첩된 폴더구조가 생겨버린다. 또, 그렇지 않더라도, `foo` 모듈이 두번 설치되어 공간을 낭비하게 된다. npm은 이를 위해 패키지를 설치 할 때 패키지를 트리 위에 올려 중복을 제거한다.
 
 ```bash
 node_modules/

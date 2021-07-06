@@ -5,7 +5,7 @@ tags:
   - npm
 published: true
 date: 2021-07-06 19:34:21
-description: '계속 찍먹만 하는 중'
+description: '계속 찍먹만 해보는 중. 언젠가는 부먹할 날이 오길...........'
 ---
 
 매번 느끼는 거지만 자바스크립트 생태계는 진짜 쉴새 없이 변한다. 하루에도 수십 수백가지의 패키지가 만들어지고, 또 잘나가는 프로젝트는 오늘도 버전업과 기능 추가에 여념이 없다.
@@ -117,13 +117,13 @@ esbuild
 본격적으로 설정파일을 하나씩 파헤쳐보자.
 
 - [entryPoints](https://esbuild.github.io/api/#entry-points): 번들링 알고리즘이 들어가게 되는 애플리케이션의 entry 포인트다. 보시다시피 ts가 자동지원 되기 때문에 (다 지원되는 건 아니다.) 타입스크립트 파일을 넣어도 무방하다.
-- [outfile](https://esbuild.github.io/api/#outfile): 번들의 결과물이다. `entryPoints`와는 다르게, 딱 하나의 파일만 (문자열만) 가능한 것을 볼 수 있다. 단하나의 번들된, 그리고 minified된 파일이 나오게 된다. 
+- [outfile](https://esbuild.github.io/api/#outfile): 번들의 결과물이다. `entryPoints`와는 다르게, 딱 하나의 파일만 (문자열만) 가능한 것을 볼 수 있다. 단하나의 번들된, 그리고 minified된 파일이 나오게 된다.
 - [bundle](https://esbuild.github.io/api/#bundle): 번들링 여부
 - [minify](https://esbuild.github.io/api/#minify): minification (자바스크립트 파일 축소) 여부
 - [platform](https://esbuild.github.io/api/#platform): 번들링된 파일이 어느 환경에서 실행될지를 결정하게 된다.
 - [format](https://esbuild.github.io/api/#format): 생성된 파일의 형태를 나타낸다. `iife`, `cjs` `esm`이 가능하다.
 - [sourcemap](https://esbuild.github.io/api/#sourcemap): 디버깅을 용이하게 해주는 소스맵 제공 여부
-- [target](https://esbuild.github.io/api/#target): 어떤 플랫폼의 버전에서 사용할 수 있을지 명시한다. 가능한 옵션은 https://esbuild.github.io/content-types/#javascript 여기에 있다. 
+- [target](https://esbuild.github.io/api/#target): 어떤 플랫폼의 버전에서 사용할 수 있을지 명시한다. 가능한 옵션은 https://esbuild.github.io/content-types/#javascript 여기에 있다.
 
 위 설정대로 esbuild를 실행해보자.
 
@@ -172,22 +172,21 @@ function m(...r) {
 }
 
 function o(r) {
-  if (typeof r == "string" && isNaN(+r)) return r;
+  if (typeof r == 'string' && isNaN(+r)) return r
   let t = `${r}`,
-    e = /(^[+-]?\d+)(\d{3})/;
-  for (; e.test(t);) t = t.replace(e, "$1,$2");
+    e = /(^[+-]?\d+)(\d{3})/
+  for (; e.test(t); ) t = t.replace(e, '$1,$2')
   return t
 }
-export {
-  o as formatNumberWithComma, m as sum
-};
+export { o as formatNumberWithComma, m as sum }
 //# sourceMappingURL=index.js.map
 ```
 
-## 삽질하면서 깨달은 것들
+## 삽질하면서 깨달은 것들, 그리고 감상
 
 - target을 ES5로 할수 없다. 이는 공식 문서 https://esbuild.github.io/content-types/ 에도 나와있고, 찾아보니 제작자도 지원할 생각이 없는 것 같다. https://github.com/evanw/esbuild/issues/182#issuecomment-646297130 따라서 별도로 transpile 후에, 다시 esbuild를 해줘야 한다.
 - 타입스크립트를 지원하지만, d.ts를 emit 해주지 않는다. 이를 위해서는 별도로 `tsc`를 실행해서 타입을 만들어야 한다. 그래서 빌드시 별도로 `tsc`를 실행했다.
+
 ```json
 {
   "extends": "../../tsconfig.base.json",
@@ -205,6 +204,20 @@ export {
   "exclude": ["node_modules", "dist"]
 }
 ```
+
 - css module 번들링이 아직 완벽하지는 않은 것 같다. https://github.com/evanw/esbuild/issues/20 현재 제작자가 최선을 다해서(?) 작업중이라고 한다.
 - 그 밖에도 아직 작업중인 것들이 많다. 0.x 버전인데에는 이유가 있었다.
+- `npx npm@7`을 매번 해주는 것이 너무 귀찮았다 (...) 가끔 이 사실을 까먹고 workspace를 쓰면 당연히 안된다. default로 7을 쓰고 싶지만, 다른 프로젝트 때문에 쓰지 못해서 아쉬웠다. 물론, `nvm`을 써서 node@16을 쓰고, 여기의 기본 npm 버전에 의존하는 방법 (7.18.1)도 있었지만, 생각만큼 잘되지는 않았다.
+- 방금 예제는 정말 간단한 패키지라서 속도를 체감할 수는 없었지만, 큰 패키지를 대상으로 실험해본 결과 정말로 크게 속도차이가 나긴 했다.
+- `webpack` 환경에서도 사용할 수 있도록 [esbuild-loader](https://github.com/privatenumber/esbuild-loader)가 존재한다. 앞서 살펴본것처럼, minify, uglify도 esbuild가 해주기 때문에 terser를 대체할 수 있다.
+  - 벤치마킹 : https://github.com/privatenumber/minification-benchmarks
+- 제법 많은 플러그인들이 존재했다. https://github.com/esbuild/community-plugins
+- 개발자가 혼자서 고군 분투 중이었다. 정말 멋있었다. (존경)
+- esbuild로 SSR도 가능한 것처럼 보인다. https://github.com/egoist/maho 깊게 살펴보진 않았지만
+  - 차라리 vite를 사용해보는 걸 추천하고 싶다. https://vitejs.dev/guide/ssr.html 물론 여기도 experimental이다.
 
+웹팩은 이미 메이저버전이 5까지 나와있을 정도로 성숙한 프로젝트고, 또 많은 사람들이 널리 사용하고 있는 프로젝트다. (롤업과 parcel도 잊으면 안된다) 하지만 기존의 당연시 생각되는 것들을 깨는 새로운 것의 등장은 언제나 보는 사람으로 하여금 설레게 하는 것 같다. esbuild도 그런 프로젝트 중 하나로, 정식 버전 업데이트 까지 잘 만들어졌으면 좋겠다.
+
+아, workspace도 npm 생태계에 모노레포를 잘 녹여낸 것 같아서 좋았다. lerna보다는 쓰기 편한 것 같은 느낌?하지만, npm@7에서 workspace말고 그외에는 글쎄... 🤔
+
+https://blog.logrocket.com/whats-new-in-npm-v7/

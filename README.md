@@ -8,7 +8,7 @@ github repository of https://yceffort.kr
 
 - React
 - Typescript
-- tailwindcss + custom styles
+- tailwindcss
 - Nextjs
 - next-mdx-remote
 - vercel

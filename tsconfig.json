@@ -4,7 +4,7 @@
     "module": "esnext",
     "jsx": "preserve",
     "lib": ["dom", "es2017"],
-    "baseUrl": ".",
+    "baseUrl": "./",
     "moduleResolution": "node",
     "strict": true,
     "allowJs": true,
@@ -19,7 +19,6 @@
     "resolveJsonModule": true,
     "typeRoots": ["./typings", "./node_modules/@types"],
     "paths": {
-      "$pages/*": ["pages/*"],
       "#public/*": ["public/*"],
       "#commons/*": ["src/common/*"],
       "#components/*": ["src/components/*"],
@@ -29,5 +28,5 @@
     }
   },
   "exclude": ["dist", ".next", "out", "next.config.js"],
-  "include": ["next-env.d.ts", "typing/*.d.ts", "**/*.ts", "**/*.tsx"]
+  "include": ["next-env.d.ts", "typing/*.d.ts",  "**/*.ts*"]
 }

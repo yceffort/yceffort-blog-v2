@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "sitemap": "ts-node --project tsconfig.node.json ./src/utils/siteMap.ts",
-    "images": "node ./src/imageInfo.js",
+    "images": "ts-node --project tsconfig.node.json ./src/utils/imageInfo.ts",
     "build-nextjs": "next build",
     "build": "npm run sitemap && npm run images && npm run build-nextjs",
     "start": "next start",

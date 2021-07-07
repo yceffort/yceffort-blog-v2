@@ -28,5 +28,5 @@
     }
   },
   "exclude": ["dist", ".next", "out", "next.config.js"],
-  "include": ["next-env.d.ts", "typing/*.d.ts",  "**/*.ts*"]
+  "include": ["next-env.d.ts", "typing/*.d.ts", "**/*.ts*"]
 }

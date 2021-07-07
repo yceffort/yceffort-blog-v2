@@ -4,7 +4,7 @@
   "description": "yceffort-blog",
   "scripts": {
     "dev": "next dev",
-    "sitemap": "node ./src/siteMap.js",
+    "sitemap": "ts-node --project tsconfig.node.json ./src/utils/siteMap.ts",
     "images": "node ./src/imageInfo.js",
     "build-nextjs": "next build",
     "build": "npm run sitemap && npm run images && npm run build-nextjs",

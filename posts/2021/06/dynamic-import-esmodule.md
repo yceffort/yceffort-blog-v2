@@ -21,7 +21,7 @@ import { sum } from './test'
 sum(1, 2)
 ```
 
-대부분의 경우에는 위의 예제 처럼 상단에 필요한 모듈들을 static하게 import하는 것이 일반적이지만, 떄때로 이를 필요에 따라 조건부로 불러올 수도 있다. [dynamic import](https://caniuse.com/?search=dynamic%20import)라고 불리며, 이는 ES2020(ES11)에 포함된 기능이다.
+대부분의 경우에는 위의 예제 처럼 상단에 필요한 모듈들을 static하게 import하는 것이 일반적이지만, 때때로 이를 필요에 따라 조건부로 불러올 수도 있다. [dynamic import](https://caniuse.com/?search=dynamic%20import)라고 불리며, 이는 ES2020(ES11)에 포함된 기능이다.
 
 ```javascript
 const sum = await import('./test')

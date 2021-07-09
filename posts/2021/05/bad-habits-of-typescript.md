@@ -19,7 +19,7 @@ JSON.parse('{hello: world}')
 // (method) JSON.parse(text: string, reviver?: ((this: any, key: string, value: any) => any) | undefined): any
 ```
 
-`any`의 유혹은 강력하다. 그냥 뭐든지 넘겨주기 떄문이다.
+`any`의 유혹은 강력하다. 그냥 뭐든지 넘겨주기 때문이다.
 
 ```typescript
 function testNumber(num: number) {
@@ -85,7 +85,7 @@ if (!isUser(result)) {
 
 ## 객체와 배열 lookup
 
-타입스크립트는 배열을 참조할 때 별다른 처리를 하지 않기 떄문에, 에러가 날 수 있다.
+타입스크립트는 배열을 참조할 때 별다른 처리를 하지 않기 때문에, 에러가 날 수 있다.
 
 ```typescript
 const l = [1, 2, 3]

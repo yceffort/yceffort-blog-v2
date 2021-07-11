@@ -1,14 +1,10 @@
 ---
-title: Javascript Regex 숫자를 comma와 함께 Formatting 하기
+title: 'Javascript Regex 숫자를 comma와 함께 Formatting 하기'
 tags:
   - javascript
 published: true
 date: 2020-03-17 04:14:07
-description:
-  'regex를 활용해서 숫자에 , 를 찍어서 formatting을 해보자. ## 1. 첫번째
-  시도  ```javascript function formatNumber(number) {   return
-  number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") } ```  인터넷에 가장 많이 떠돌아
-  다니는 해결책으로, ...'
+description: 'regex를 활용해서 숫자를 보기좋게 formatting을 해보자.'
 category: javascript
 slug: /2020/03/regex-formatting-number/
 template: post

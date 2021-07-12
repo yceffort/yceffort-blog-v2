@@ -8,7 +8,7 @@ published: true
 date: 2020-07-21 04:18:21
 description: "[Make use of long-term
   caching](https://developers.google.com/web/fundamentals/performance/webpack/u\
-  se-long-term-caching)을 번역한 글입니다. ```toc from-heading: 2 to-heading: 3 ```  앱
+  se-long-term-caching)을 번역한 글입니다.  앱
   로딩 속도를 향상시킬 수 있는 방법 중 ..."
 category: javascript
 slug: /2020/07/make-use-of-long-term-caching/

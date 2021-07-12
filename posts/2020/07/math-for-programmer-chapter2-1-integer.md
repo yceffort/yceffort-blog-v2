@@ -6,8 +6,7 @@ tags:
 published: true
 mathjax: true
 date: 2020-07-23 06:39:54
-description:
-  '```toc from-heading: 2 to-heading: 3 ``` ## 개념  - 정수: 1, 2, 3과 같은
+description: '## 개념  - 정수: 1, 2, 3과 같은
   자연수, 없음을 나타내는 0, 그리고 자연수와 반대 부호인 수 (-1, -2, -3...) - 배수: 어떤 정수에 다른 정수를 곱하여
   만들어진 정수 (15는 3과 5의 배수) - 약수: 어떤 정수를 나머지 없이 나눌 수 있는 수 - 소수:...'
 category: programming

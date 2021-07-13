@@ -124,7 +124,7 @@ https://github.com/vercel/next.js/blob/f06c58911515d980e25c33874c5f18ade5ac99df/
 
 > `useImperativeHandle` customizes the instance value that is exposed to parent components when using `ref`. As always, imperative code using refs should be avoided in most cases. useImperativeHandle should be used with `forwardRef`:
 
-https://.reactjs.org/docs/react-api.html#reactforwardref
+https://reactjs.org/docs/react-api.html#reactforwardref
 
 `forwardRef`는 전달 받은 `ref`속성을 하부트리의 다른 컴포넌트로 전달 할 수 있는 리액트 컴포넌트를 생성한다.
 

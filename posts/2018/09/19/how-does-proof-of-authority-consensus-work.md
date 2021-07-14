@@ -4,10 +4,7 @@ date: 2018-09-19 03:45:40
 published: true
 tags:
   - blockchain
-description: How Does Proof of Authority Consensus Work?
-  [원문](https://blockonomi.com/proof-of-authority/)  권한증명(이하 PoA)는 지난 2017년 3월
-  이더리움 프로토콜을 기반으로 한 블록체인에 제안되었다. 이는 원래 [이더리움의 Ropsten 테스트 네트워크에 대한
-  스팸공격](https://...
+description: How Does Proof of Authority Consensus Work?  
 category: blockchain
 slug: /2018/09/19/how-does-proof-of-authority-consensus-work/
 template: post

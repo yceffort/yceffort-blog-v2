@@ -72,7 +72,7 @@ https://www.freecodecamp.org/news/node-module-exports-explained-with-javascript-
 
 `ioredis`는 `~`를 사용한다. 이는 버그 수정 (패치 버전 업데이트)만 가능하고, 마이너버전 업데이트도 허용하지 않는다는 것을 의미한다. 이는 패키지와의 강력한 연결이 요구될 때 사용할 수 있다.
 
-`pg`는 어떠한 기호도 사용하고 있지 않는다. 이 특정 패키지만 사용하라 수 있는데 이를 패키지 버전 고정이라고도 한다.
+`pg`는 어떠한 기호도 사용하고 있지 않는다. 이 특정 패키지만 사용할 수  있는데 이를 패키지 버전 고정이라고도 한다.
 
 ## npm package와 `node_modules` 디렉토리
 

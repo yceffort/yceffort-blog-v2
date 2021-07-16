@@ -4,7 +4,7 @@ date: 2018-09-19 03:45:40
 published: true
 tags:
   - blockchain
-description: How Does Proof of Authority Consensus Work?  
+description: How Does Proof of Authority Consensus Work?
 category: blockchain
 slug: /2018/09/19/how-does-proof-of-authority-consensus-work/
 template: post

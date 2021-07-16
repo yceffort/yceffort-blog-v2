@@ -12,13 +12,13 @@ nodejs 프로세스가 종료되는 상황으로는 여러가지가 있다. 에�
 
 다음은 프로세스 종료를 의도적으로 발생시킬 수 있는 몇가지 방법이다.
 
-| Operation                   | 예시                       |
-| --------------------------- | -------------------------- |
-| 수동 프로세스 종료          | `process.exit(1)`          |
-| Uncaught exception          | `throw new Error()`        |
-| Unhandled promise rejection | `Promise.reject()`         |
+| Operation                   | 예시                         |
+| --------------------------- | ---------------------------- |
+| 수동 프로세스 종료          | `process.exit(1)`            |
+| Uncaught exception          | `throw new Error()`          |
+| Unhandled promise rejection | `Promise.reject()`           |
 | error event 무시            | `EventEmitter#emit('error')` |
-| Unhandled Signals           | `$ kill <PROCESS_ID>`      |
+| Unhandled Signals           | `$ kill <PROCESS_ID>`        |
 
 이러한 오류 중 대부분은 `uncaught errors` `unhandled rejects`와 같이 실수로 발생되는 경우도 있지만, 이 들 중 일부는 프로세스를 직접 종료하기 위해 만들어 진 것이다.
 
@@ -90,7 +90,6 @@ Promise Rejection은 에러를 던지는 것과 유사하다. Promise에서 `rej
 
 ```javascript
 Promise.reject(new Error('oh no'))
-
 ;(async () => {
   throw new Error('oh no')
 })()
@@ -139,16 +138,16 @@ Error [ERR_UNHANDLED_ERROR]: Unhandled error. (undefined)
 
 운영 체제에 따라 서로다른 시그널이 정의될 수 있지만, 아래 목록은 일반적으로 범용이다.
 
-| 이름    | 숫자 | handleable | Node.js 동작 | 목적                                 |
-| ------- | ---- | ---------- | ------------ | ------------------------------------ |
-| SIGUP   | 1    | YES        | 종료         | 부모 터미널이 종료된 경우            |
+| 이름    | 숫자 | handleable | Node.js 동작 | 목적                                |
+| ------- | ---- | ---------- | ------------ | ----------------------------------- |
+| SIGUP   | 1    | YES        | 종료         | 부모 터미널이 종료된 경우           |
 | SIGINT  | 2    | YES        | 종료         | `Ctrl + C`로 터미널에 간섭하는 경우 |
-| SIGQUIT | 3    | YES        | 종료         | `Ctrl + D`로 터미널을 끝내려는 경우  |
-| SIGKILL | 9    | NO         | 종료         | 프로세스가 강제로 죽는 경우          |
-| SIGUSR1 | 10   | YES        | 디버거 시작  | 사용자 정의 시그널 1                 |
-| SIGUSR2 | 12   | YES        | 종료         | 사용자 정의 시그널 2                 |
-| SIGUSR1 | 10   | YES        | 종료         | 정상종료                             |
-| SIGUSR1 | 19   | NO         | 종료         | 프로세스가 강제로 멈추는 경우        |
+| SIGQUIT | 3    | YES        | 종료         | `Ctrl + D`로 터미널을 끝내려는 경우 |
+| SIGKILL | 9    | NO         | 종료         | 프로세스가 강제로 죽는 경우         |
+| SIGUSR1 | 10   | YES        | 디버거 시작  | 사용자 정의 시그널 1                |
+| SIGUSR2 | 12   | YES        | 종료         | 사용자 정의 시그널 2                |
+| SIGUSR1 | 10   | YES        | 종료         | 정상종료                            |
+| SIGUSR1 | 19   | NO         | 종료         | 프로세스가 강제로 멈추는 경우       |
 
 프로그램에서 이러한 시그널 처리를 구현할 수 있도록 한 경우, Handleable이 YES 다. NO로 표시되어 있는 경우 처리할 수 없다. Node.js 동작은 신호가 수신되었을 때 Node.js 프로그램의 기본작업을 나타낸다. 마지막 열은, 일반적으로 어떻게 사용되는지 알려준다.
 
@@ -156,19 +155,19 @@ Node.js에서 이러한 시그널을 수신하기 위해서는, 아래처럼 `pr
 
 ```javascript
 #!/usr/bin/env node
-console.log(`Process ID: ${process.pid}`);
-process.on('SIGHUP', () => console.log('Received: SIGHUP'));
-process.on('SIGINT', () => console.log('Received: SIGINT'));
-setTimeout(() => {}, 5 * 60 * 1000); // keep process alive
+console.log(`Process ID: ${process.pid}`)
+process.on('SIGHUP', () => console.log('Received: SIGHUP'))
+process.on('SIGINT', () => console.log('Received: SIGINT'))
+setTimeout(() => {}, 5 * 60 * 1000) // keep process alive
 ```
 
-이 프로그램을 터미널에서 실행하고, `Ctrl+C`를 해보면, 프로세스가 죽지 않는다. 그 대신, `SIGINT`시그널을 받는다. 다른 터미널 창으로 가서, 프로세스 ID 값을 기준으로 
+이 프로그램을 터미널에서 실행하고, `Ctrl+C`를 해보면, 프로세스가 죽지 않는다. 그 대신, `SIGINT`시그널을 받는다. 다른 터미널 창으로 가서, 프로세스 ID 값을 기준으로
 
 ```bash
 $ kill -s SIGHUP <PROCESS_ID>
 ```
 
-를 실행하면, 이는 한 프로그램이 다른 프로그램으로 신호를 보낼 수 있다는 것을 알 수 있다. 이전 터미널에서 실행중인 node.js 프로그램이 SIGHUP  신호를 수신하여 인쇄한다.
+를 실행하면, 이는 한 프로그램이 다른 프로그램으로 신호를 보낼 수 있다는 것을 알 수 있다. 이전 터미널에서 실행중인 node.js 프로그램이 SIGHUP 신호를 수신하여 인쇄한다.
 
 눈치챘을 수도 있지만, Node.js 는 다른 프로그램에도 명령을 전송할 수 있다.
 

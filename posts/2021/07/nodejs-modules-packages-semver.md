@@ -132,7 +132,7 @@ https://docs.npmjs.com/cli/v7/commands/npm-ci
 따라서 ci를 사용하기 위해서는,
 
 - `package-lock.json` `npm-shrinkwrap.json`가 반드시 존재해야 한다.(없다면 `npm install`)
-- `package-lock.json`의 종속성이 `package.json`과 일치하지 않는다면, 업데이트 되는 것이 아니고 에러가 난다. (이를 해결하려면 `npm instlal`)
+- `package-lock.json`의 종속성이 `package.json`과 일치하지 않는다면, 업데이트 되는 것이 아니고 에러가 난다. (이를 해결하려면 `npm install`)
 - `npm ci`는 전체 종속성을 설치할 때만 사용 `npm ci react`는 불가능
 - `node_modules`가 존재한다면 `npm ci`는 해당 폴더를 삭제
 - 절대로 `package.json`이나 `package-lock.json`을 수정하지 않는다.

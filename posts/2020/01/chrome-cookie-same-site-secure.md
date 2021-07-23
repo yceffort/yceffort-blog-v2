@@ -132,7 +132,7 @@ Lax 설정시 embedded된 음성 파일 요청시에는 쿠키가 들어가지 �
 
 ### 정리
 
-![설명](https://web.dev/samesite-cookies-explained/samesite-none-lax-strict.png)
+![설명](https://web-dev.imgix.net/image/tcFciHGuF3MxnTr1y5ue01OGLBn2/1MhNdg9exp0rKnHpwCWT.png?auto=format&w=1600)
 
 ## 그래서, 크롬은?
 

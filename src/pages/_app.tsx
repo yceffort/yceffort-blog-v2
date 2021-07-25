@@ -77,7 +77,7 @@ class MyApp extends App {
             };
             // Initialize Firebase
             firebase.initializeApp(firebaseConfig);
-            firebase.analytics();        
+            firebase.analytics();
           `,
               }}
             />
@@ -86,7 +86,6 @@ class MyApp extends App {
               src={`https://www.googletagmanager.com/gtag/js?id=${config.googleAnalyticsId}`}
             />
             <Script
-              defer
               dangerouslySetInnerHTML={{
                 __html: `
                     window.dataLayer = window.dataLayer || [];

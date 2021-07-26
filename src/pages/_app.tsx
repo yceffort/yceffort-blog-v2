@@ -66,20 +66,19 @@ class MyApp extends App {
               strategy="lazyOnload"
               dangerouslySetInnerHTML={{
                 __html: `
-            var firebaseConfig = {
-              apiKey: "AIzaSyDXDGGUots5JHk39kfGGV5ueRd09Ot3f50",
-              authDomain: "yceffort.firebaseapp.com",
-              databaseURL: "https://yceffort.firebaseio.com",
-              projectId: "yceffort",
-              storageBucket: "yceffort.appspot.com",
-              messagingSenderId: "754165146494",
-              appId: "1:754165146494:web:41d36183a76fb998f4892f",
-              measurementId: "G-PEKGCL9BKE"
-            };
-            // Initialize Firebase
-            firebase.initializeApp(firebaseConfig);
-            firebase.analytics();
-          `,
+                  var firebaseConfig = {
+                    apiKey: "AIzaSyDXDGGUots5JHk39kfGGV5ueRd09Ot3f50",
+                    authDomain: "yceffort.firebaseapp.com",
+                    databaseURL: "https://yceffort.firebaseio.com",
+                    projectId: "yceffort",
+                    storageBucket: "yceffort.appspot.com",
+                    messagingSenderId: "754165146494",
+                    appId: "1:754165146494:web:41d36183a76fb998f4892f",
+                    measurementId: "G-PEKGCL9BKE"
+                  };
+                  firebase.initializeApp(firebaseConfig);
+                  firebase.analytics();
+                `,
               }}
             />
             <Script

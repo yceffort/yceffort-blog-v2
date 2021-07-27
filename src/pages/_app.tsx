@@ -63,6 +63,7 @@ class MyApp extends App {
             <Script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js" />
             <Script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-analytics.js" />
             <Script
+              strategy="lazyOnload"
               dangerouslySetInnerHTML={{
                 __html: `
             var firebaseConfig = {

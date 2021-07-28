@@ -1,5 +1,5 @@
 ---
-title: '자바스크립트 의존성 관리자(npm, yarn, pnpm)보다 더 의존성 관리 잘하는 방법'
+title: '자바스크립트 의존성 관리자(npm, yarn, pnpm)에서 보다 더 의존성 관리 잘하는 방법'
 tags:
   - javascript
   - npm

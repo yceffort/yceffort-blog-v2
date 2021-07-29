@@ -76,7 +76,9 @@ class MyApp extends App {
                     appId: "1:754165146494:web:41d36183a76fb998f4892f",
                     measurementId: "G-PEKGCL9BKE"
                   };
-                  firebase.initializeApp(firebaseConfig);
+                  if ((firebase.apps || []).length === 0) {
+                    firebase.initializeApp(firebaseConfig);
+                  }
                   firebase.analytics();
                 `,
               }}

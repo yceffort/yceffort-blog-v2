@@ -4,10 +4,7 @@ date: 2018-06-01 07:57:05
 published: true
 tags:
   - golang
-description:
-  Golang에는 클래스가 없는 대신, 아래와 같은 구조체가 존재한다. ```go package main import
-  "fmt"  type work struct {  mission string  time int  boss string  salary int
-  }  func main() {  programming := work{"잡일", 5, "김악덕", 100...
+description: 'Golang에는 클래스가 없는 대신, 아래와 같은 구조체가 존재한다.'
 category: golang
 slug: /2018/06/01/golang-structure-embedding/
 template: post

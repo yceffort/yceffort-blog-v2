@@ -5,9 +5,7 @@ published: true
 tags:
   - blockchain
   - bitcoin
-description: 'Bitcoin turns 10: An annotated timeline
-  [원문](https://sg.finance.yahoo.com/news/history-bitcoins-first-decade-one-chart-003220581.html)  지난
-  수요일 (2018년 10월 31일) 은 비트코인 백서의 "Bitcoin: Peer-to-Peer Electr...'
+description: '비트코인의 10주년 역사 살펴보기'
 category: blockchain
 slug: /2018/11/03/history-of-bitcoin/
 template: post

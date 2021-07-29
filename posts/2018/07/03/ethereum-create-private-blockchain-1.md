@@ -4,10 +4,7 @@ date: 2018-07-03 07:51:20
 published: true
 tags:
   - ethereum
-description:
-  'Geth client 설치부터 사설 블록체인 시작까지 본 포스팅은 ubuntu 16.x 버전을 기준으로
-  작성되었습니다.  ### 1. 이더리움 설치  ``` sudo apt-get install software-properties-common
-  sudo add-apt-repository -y ppa:ethereum/ethereum sudo apt-get u...'
+description: '이더리움 프라이빗 블록체인 만들기(1)'
 category: ethereum
 slug: /2018/07/03/ethereum-create-private-blockchain-1/
 template: post

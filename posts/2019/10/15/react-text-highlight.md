@@ -7,11 +7,7 @@ tags:
   - typescript
   - algorithm
   - javascript
-description:
-  '## 요구사항 한 엘리먼트안에서 특정한 키워드를 다른 색싱으로 바꿔서 출력하는 것이다.  아래 예시를 살펴보자  ###
-  before  ```jsx <Text>카카오 페이지 카카오 스토리 카카오톡</Text> ```  ### after  ```jsx
-  <Text>   <Text color="blue">카카오 </Text>페이지   <Text color="bl...'
-category: react
+description: '리액트에서 텍스트 강조하는 방법'
 slug: /2019/10/15/react-text-highlight/
 template: post
 ---

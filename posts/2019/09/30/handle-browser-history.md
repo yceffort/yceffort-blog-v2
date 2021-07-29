@@ -5,10 +5,7 @@ published: true
 tags:
   - browser
   - javascript
-description:
-  '## 브라우저 히스토리 브라우저의 히스토리는 `window.history`안에 있다.  `History {length:
-  3, scrollRestoration: "auto", state: null}`  `length`만 가져올 수 있을 뿐, 실제 내부에 리스트는
-  가져올 수가 없는데 이는 보안상의 문제 때문이다.  `window.history.back()` ...'
+description: '브라우저 히스토리 조작하기'
 category: browser
 slug: /2019/09/30/handle-browser-history/
 template: post

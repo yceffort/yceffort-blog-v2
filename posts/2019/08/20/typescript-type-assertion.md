@@ -5,10 +5,7 @@ published: true
 tags:
   - javascript
   - react
-description: '## 문제의 시작 문제의 시작은
-  [여기](/2019/06/17/typescript-type-enum-partial-record/) 였다.  내가 사용하는 코드는 아래와
-  같았다.  ```typescript type GlobalColors = "Red" | "Blue" | "Green" |
-  "Black";  // 기본값으로 색상을 선언한다. const enu...'
+description: '타입스크립트의 타입 단언'
 category: javascript
 slug: /2019/08/20/typescript-type-assertion/
 template: post

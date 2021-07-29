@@ -4,11 +4,7 @@ date: 2018-07-04 12:00:48
 tags:
   - ethereum
 published: true
-description:
-  '[여기](/2018/07/03/ethereum-create-private-blockchain-1/)에서 이어집니다.
-  자바스크립트 기반의 콘솔입니다.  ### 1. 어카운트 확인하기  ``` > eth.accounts
-  ["0x44e74080949320292839b9a0df55e4459dd51434"] ```  아까 생성한 한계의 어카운트가
-  보입니다.  ##...'
+description: '이더리움 프라이빗 블록체인 만들기(2)'
 category: ethereum
 slug: /2018/07/03/ethereum-create-private-blockchain-2/
 template: post

@@ -6,10 +6,7 @@ tags:
   - browser
 published: true
 date: 2020-07-06 12:32:23
-description: '[The cost of JavaScript in
-  2019](https://v8.dev/blog/cost-of-javascript-2019)을 번역 요약한 글입니다. ```toc tight:
-  true, from-heading: 2 to-heading: 3 ```  <iframe
-  src="https://www.youtube.com/embed/X9eRLElSW...'
+description: '자바스크립트의 비용 2019ver'
 category: javascript
 slug: /2020/07/the-cost-of-javascript-2019/
 template: post
@@ -123,7 +120,7 @@ JSON 문자열은 딱 한번 수행되기 때문에, `JSON.parse` 접근은 자�
 
 ![`JSON.parse`가 훨씬 더 파싱하고, 컴파일하고, 실행하기 빠르다.](https://v8.dev/_img/cost-of-javascript-2019/json.svg)
 
-<iframe width="640px" height="360px" src="https://www.youtube.com/embed/ff4fgQxPaO0" frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
+https://www.youtube.com/embed/ff4fgQxPaO0
 
 ## 재 방문시 파싱과 컴파일은 어떻게 이루어 지는가?
 

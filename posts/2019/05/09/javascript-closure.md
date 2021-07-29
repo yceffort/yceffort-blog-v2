@@ -5,10 +5,7 @@ published: true
 tags:
   - javascript
 mathjax: true
-description:
-  '## 클로저 ### 자바스크립트는 어떻게 변수의 유효 범위를 정하는가?  ```javascript function
-  hello() {   var name = "yceffort"   // 내부함수이며, 클로저다.   function showName()
-  {     // 부모함수가 선언한 변수를 사용한다.     alert(`hello, ${name}`)   }...'
+description: '자바스크립트의 클로져'
 category: javascript
 slug: /2019/05/09/javascript-closure/
 template: post

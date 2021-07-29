@@ -5,10 +5,7 @@ tags:
   - javascript
 published: true
 date: 2020-04-15 05:46:43
-description: '```typescript export async function MyMiddleware(  ctx:
-  Koa.Context,   next: (ctx: Koa.Context) => Promise<any> )
-  {   console.log("first middleware started..")    // ctx를 조작하여 인증등의 옵션을 처리할 수
-  있다.   co...'
+description: 'koa 미들웨어 만들기'
 category: typescript
 slug: /2020/04/koa-middleware-with-typescript/
 template: post

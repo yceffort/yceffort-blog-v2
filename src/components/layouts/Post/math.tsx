@@ -25,6 +25,7 @@ export default function MathLoader() {
       <link
         rel="preload"
         href="https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/fonts/KaTeX_Size4-Regular.woff2"
+        as="font"
         type="font/woff2"
         crossOrigin="anonymous"
       />

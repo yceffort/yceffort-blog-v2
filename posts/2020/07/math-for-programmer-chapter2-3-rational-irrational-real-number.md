@@ -6,10 +6,7 @@ tags:
 published: true
 mathjax: true
 date: 2020-07-29 09:36:41
-description:
-  "## 유리수 유리수란, 나눗셈 또는 분수, 즉 '비율로 나타낼 수 있는 모든 수' 를 유리수라고 한다. 정수는 모두
-  자기자신과 1의 비율로 나타낼 수 있으므로 유리수다.  분수에서, 분모와 분자가 1외에 다른 공통된 약수를 가진다면, 그 약수로 동시에
-  나누어도 값은 변하지 않는데, 이를 `약분`이라고 하며, 더이상 나눌 수 없어 분모와 분자가 서로 소인 ..."
+description: '유리수, 무리수, 실수'
 category: programming
 slug: /2020/07/math-for-programmer-chapter2-3-rational-irrational-real-number/
 template: post

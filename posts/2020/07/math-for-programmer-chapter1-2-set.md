@@ -6,9 +6,7 @@ tags:
 published: true
 mathjax: true
 date: 2020-07-17 07:28:25
-description: "## 집합  개별적인 개체들의 모임을
-  집합이라고 하며, 집합을 이루는 개체를 원소라고 한다. 집합을 이루는 원소는 `{ }` 중괄호 로 나타내며, 원소나열법과 조건 제시법으로
-  표시한다. 순서는 상관없지만, 중복은 하지 않는다.  $$ A = \\{ 1, 5, 7, 3, 9 \\} $$ ..."
+description: '집합'
 category: programming
 slug: /2020/07/math-for-programmer-chapter1-2-set/
 template: post

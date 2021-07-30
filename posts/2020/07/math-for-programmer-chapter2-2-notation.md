@@ -6,7 +6,7 @@ tags:
 published: true
 mathjax: true
 date: 2020-07-24 06:34:51
-description: '우리가 흔히 사용하는 숫자 1234는 다음과 같이 표현할 수 있다'
+description: '기수법'
 category: programming
 slug: /2020/07/math-for-programmer-chapter2-2-notation/
 template: post

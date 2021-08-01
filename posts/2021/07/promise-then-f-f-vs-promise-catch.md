@@ -23,20 +23,20 @@ promise.then(onSuccess).catch(onFailure)
 
 ```javascript
 function onSuccess(value) {
-  console.log('Promise has been resolved with value: ', value)
+  console.log('Promise has been resolved with value:', value)
 }
 
 function onFailure(error) {
-  console.log('Promise has been rejected with error: ', error)
+  console.log('Promise has been rejected with error:', error)
 }
 ```
 
 먼저, `resolve`의 경우를 살펴보자.
 
 ```javascript
-Promise.resolve('Hi').then(onSuccess, onFailure) // Promise has been resolved with value:  Hi
+Promise.resolve('Hi').then(onSuccess, onFailure) // Promise has been resolved with value: Hi
 
-Promise.resolve('Hi').then(onSuccess).catch(onFailure) // Promise has been resolved with value:  Hi
+Promise.resolve('Hi').then(onSuccess).catch(onFailure) // Promise has been resolved with value: Hi
 ```
 
 특별한 것 없이 둘다 동일한 결과를 보인다.
@@ -44,9 +44,9 @@ Promise.resolve('Hi').then(onSuccess).catch(onFailure) // Promise has been resol
 이번엔 둘다 실패했을 때를 가졍해보자.
 
 ```javascript
-Promise.reject('Sorry').then(onSuccess, onFailure) // Promise has been rejected with error:  Sorry
+Promise.reject('Sorry').then(onSuccess, onFailure) // Promise has been rejected with error: Sorry
 
-Promise.reject('Sorry').then(onSuccess).catch(onFailure) // Promise has been rejected with error:  Sorry
+Promise.reject('Sorry').then(onSuccess).catch(onFailure) // Promise has been rejected with error: Sorry
 ```
 
 이번에도 동일하다.
@@ -55,19 +55,19 @@ Promise.reject('Sorry').then(onSuccess).catch(onFailure) // Promise has been rej
 
 ```javascript
 function onSuccessButRejected(value) {
-  console.log('Promise has been resolved with value: ', value)
+  console.log('Promise has been resolved with value:', value)
   return Promise.reject('Oops, Sorry')
 }
 
 Promise.resolve('Hi').then(onSuccessButRejected, onFailure)
-// Promise has been resolved with value:  Hi
-// Promise {<rejected>: "Oops, Sorry"}
+// Promise has been resolved with value: Hi
+// Promise {<rejected>:"Oops, Sorry"}
 // Uncaught (in promise) Oops, Sorry
 
 Promise.resolve('Hi').then(onSuccessButRejected).catch(onFailure)
-// Promise has been resolved with value:  Hi
-// Promise has been rejected with error:  Oops, Sorry
-// Promise {<fulfilled>: undefined}
+// Promise has been resolved with value: Hi
+// Promise has been rejected with error: Oops, Sorry
+// Promise {<fulfilled>:undefined}
 ```
 
 `catch`는, `then` 내부에서도 `reject`가 발생했을 때에도 호출된다.
@@ -78,8 +78,8 @@ Promise.resolve('Hi').then(onSuccessButRejected).catch(onFailure)
 
 ```javascript
 Promise.resolve('Hi').then(onSuccessButRejected).then(null, onFailure)
-// Promise has been resolved with value:  Hi
-// Promise has been rejected with error:  Oops, Sorry
+// Promise has been resolved with value: Hi
+// Promise has been rejected with error: Oops, Sorry
 ```
 
 ```javascript

@@ -218,7 +218,7 @@ setTimeout(() => {
 }, 1000)
 ```
 
-![...](https://t1.daumcdn.net/news/202105/25/maxim/20210525050708362gnmn.jpg)
+.....
 
 `export default function`와 `export default class`는 조금 특별하다.
 

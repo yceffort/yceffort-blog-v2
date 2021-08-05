@@ -8,8 +8,7 @@ admin.initializeApp()
 
 const db = admin.firestore()
 
-/*
-const takeScreenshot = async function (url) {
+async function putImage(title, buffer) {
   const CLOUDINARY_CLOUD = functions.config().env.config.CLOUDINARY_CLOUD
   const CLOUDINARY_KEY = functions.config().env.config.CLOUDINARY_KEY
   const CLOUDINARY_SECRET = functions.config().env.config.CLOUDINARY_SECRET
@@ -20,24 +19,6 @@ const takeScreenshot = async function (url) {
     api_secret: CLOUDINARY_SECRET,
   })
 
-  const chromiumPath = await chromium.executablePath
-
-  const browser = await chromium.puppeteer.launch({
-    executablePath: chromiumPath,
-    args: chromium.args,
-    defaultViewport: chromium.defaultViewport,
-    headless: chromium.headless,
-  })
-
-  const page = await browser.newPage()
-  await page.setViewport({ height: 630, width: 1200 })
-  await page.goto(url)
-  const buffer = await page.screenshot({ encoding: 'base64' })
-  await browser.close()
-  return `data:image/png;base64,${buffer}`
-}
-*/
-async function putImage(title, buffer) {
   const cloudinaryOptions = {
     public_id: `social-images/${title}`,
     unique_filename: false,
@@ -47,29 +28,24 @@ async function putImage(title, buffer) {
     cloudinaryOptions,
   )
 
+  console.log('upload success!', response)
+
   return response.url
 }
 
-async function takeScreenshot(url: string): Promise<string> {
+async function takeScreenshot(url) {
   const browser = await puppeteer.launch({ args: ['--no-sandbox'] })
 
   const page = await browser.newPage()
 
-  // Screenshot size
   await page.setViewport({ height: 630, width: 1200 })
 
-  // Go to your website
   await page.goto(url)
 
-  // Disable service workers
   await page._client.send('ServiceWorker.enable')
   await page._client.send('ServiceWorker.stopAllWorkers')
 
-  // Wait for a particular components to be loaded
-  // await page.waitForFunction('document.querySelector("deckgo-deck  > *")')
-
-  // Take the screenshot
-  const imageBuffer: string = await page.screenshot()
+  const imageBuffer = await page.screenshot({ encoding: 'base64' })
 
   await browser.close()
 

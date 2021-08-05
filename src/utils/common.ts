@@ -12,9 +12,9 @@ export function getThumbnailURL({
   slug: string
 }): string {
   const thumbnailHost =
-    process.env.NODE_ENV === 'production'
+    (process.env.NODE_ENV === 'production'
       ? `https://asia-northeast3-yceffort.cloudfunctions.net`
-      : 'http://localhost:5000/yceffort/asia-northeast3' + '/screenshot'
+      : 'http://localhost:5000/yceffort/asia-northeast3') + '/screenshot'
 
   const queryString = qs.stringify(
     {

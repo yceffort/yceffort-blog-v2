@@ -1,6 +1,6 @@
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
-const chromium = require('chrome-aws-lambda')
+const puppeteer = require('puppeteer')
 const cloudinary = require('cloudinary')
 const queryString = require('query-string')
 
@@ -8,6 +8,7 @@ admin.initializeApp()
 
 const db = admin.firestore()
 
+/*
 const takeScreenshot = async function (url) {
   const CLOUDINARY_CLOUD = functions.config().env.config.CLOUDINARY_CLOUD
   const CLOUDINARY_KEY = functions.config().env.config.CLOUDINARY_KEY
@@ -35,8 +36,8 @@ const takeScreenshot = async function (url) {
   await browser.close()
   return `data:image/png;base64,${buffer}`
 }
-
-const putImage = async function (title, buffer) {
+*/
+async function putImage(title, buffer) {
   const cloudinaryOptions = {
     public_id: `social-images/${title}`,
     unique_filename: false,
@@ -49,34 +50,65 @@ const putImage = async function (title, buffer) {
   return response.url
 }
 
-exports.screenshot = functions.https.onRequest(async (req, res) => {
-  const query = {}
-  Object.keys(req.query).forEach(
-    (key) => (query[key.replace(/amp;/, '')] = req.query[key]),
-  )
+async function takeScreenshot(url: string): Promise<string> {
+  const browser = await puppeteer.launch({ args: ['--no-sandbox'] })
 
-  const title = encodeURI(query.slug)
-  const firebaseTitle = title.replace(/\//gi, '-')
-  const screenshotRef = db.collection('screenshot')
+  const page = await browser.newPage()
 
-  const exist = await screenshotRef.doc(firebaseTitle).get()
+  // Screenshot size
+  await page.setViewport({ height: 630, width: 1200 })
 
-  if (exist.exists) {
-    return res.redirect(exist.data().url)
-  }
+  // Go to your website
+  await page.goto(url)
 
-  try {
-    const postUrl = `http://yceffort.kr/generate-screenshot?${queryString.stringify(
-      query,
-    )}`
-    const screenshot = await takeScreenshot(postUrl)
-    const uploadedImage = await putImage(title, screenshot)
-    screenshotRef.doc(firebaseTitle).set({
-      url: uploadedImage,
-    })
-    res.redirect(uploadedImage)
-  } catch (e) {
-    console.error(e)
-    res.json({ error: JSON.stringify(e) })
-  }
-})
+  // Disable service workers
+  await page._client.send('ServiceWorker.enable')
+  await page._client.send('ServiceWorker.stopAllWorkers')
+
+  // Wait for a particular components to be loaded
+  // await page.waitForFunction('document.querySelector("deckgo-deck  > *")')
+
+  // Take the screenshot
+  const imageBuffer: string = await page.screenshot()
+
+  await browser.close()
+
+  return `data:image/png;base64,${imageBuffer}`
+}
+
+exports.screenshot = functions
+  .runWith({
+    timeoutSeconds: 120,
+    memory: '1GB',
+  })
+  .https.onRequest(async (req, res) => {
+    const query = {}
+    Object.keys(req.query).forEach(
+      (key) => (query[key.replace(/amp;/, '')] = req.query[key]),
+    )
+
+    const title = encodeURI(query.slug)
+    const firebaseTitle = title.replace(/\//gi, '-')
+    const screenshotRef = db.collection('screenshot')
+
+    const exist = await screenshotRef.doc(firebaseTitle).get()
+
+    if (exist.exists) {
+      return res.redirect(exist.data().url)
+    }
+
+    try {
+      const postUrl = `http://yceffort.kr/generate-screenshot?${queryString.stringify(
+        query,
+      )}`
+      const screenshot = await takeScreenshot(postUrl)
+      const uploadedImage = await putImage(title, screenshot)
+      screenshotRef.doc(firebaseTitle).set({
+        url: uploadedImage,
+      })
+      res.redirect(uploadedImage)
+    } catch (e) {
+      console.error(e)
+      res.json({ error: JSON.stringify(e) })
+    }
+  })

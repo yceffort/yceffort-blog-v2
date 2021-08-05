@@ -11,11 +11,10 @@ export function getThumbnailURL({
   path?: string
   slug: string
 }): string {
-  // if (process.env.NODE_ENV !== 'production') {
-  //   return ''
-  // }
-
-  const thumbnailHost = `https://us-central1-yceffort.cloudfunctions.net/screenshot`
+  const thumbnailHost =
+    process.env.NODE_ENV === 'production'
+      ? `https://us-central1-yceffort.cloudfunctions.net`
+      : 'http://localhost:5000/yceffort/us-central1' + '/screenshot'
 
   const queryString = qs.stringify(
     {

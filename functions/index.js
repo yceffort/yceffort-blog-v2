@@ -53,6 +53,7 @@ async function takeScreenshot(url) {
 }
 
 exports.screenshot = functions
+  .region('asia-northeast3')
   .runWith({
     timeoutSeconds: 120,
     memory: '1GB',

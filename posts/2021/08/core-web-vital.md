@@ -70,18 +70,18 @@ Chrome User Experience Report에서 제공하는 데이터는, 사이트의 성�
 이 라이브러리를 사용하면 각 지표를 측정하는 것이 단일 함수를 호출하는 것 만큼 간단하다.
 
 ```javascript
-import {getCLS, getFID, getLCP} from 'web-vitals';
+import { getCLS, getFID, getLCP } from 'web-vitals'
 
 function sendToAnalytics(metric) {
-  const body = JSON.stringify(metric);
+  const body = JSON.stringify(metric)
   // Use `navigator.sendBeacon()` if available, falling back to `fetch()`.
-  (navigator.sendBeacon && navigator.sendBeacon('/analytics', body)) ||
-      fetch('/analytics', {body, method: 'POST', keepalive: true});
+  ;(navigator.sendBeacon && navigator.sendBeacon('/analytics', body)) ||
+    fetch('/analytics', { body, method: 'POST', keepalive: true })
 }
 
-getCLS(sendToAnalytics);
-getFID(sendToAnalytics);
-getLCP(sendToAnalytics);
+getCLS(sendToAnalytics)
+getFID(sendToAnalytics)
+getLCP(sendToAnalytics)
 ```
 
 이 라이브러리를 사용하여 핵심 웹 바이탈 데이터를 측정하고, 분석 엔드 포인트로 보내도록 사이트를 구성한 다음, 해당 데이터를 집계하고 보고하여 페이지가 적절한 지표를 달성하고 있는지 확인하면 된다.
@@ -90,9 +90,9 @@ getLCP(sendToAnalytics);
 
 이 익스텐션은, 자체 사이트 및 경쟁 업체 사이트의 웹 성능을 파악하는데 도움을 줄 수 있다.
 
-|                                                                                                        | LCP | FID | CLS |
-| [web-vitals](https://github.com/GoogleChrome/web-vitals)|  ✔  |  ✔  |  ✔  |
-| [web vitals Extension](https://github.com/GoogleChrome/web-vitals-extension) |  ✔  |  ✔  |  ✔  |
+| | LCP | FID | CLS |
+| [web-vitals](https://github.com/GoogleChrome/web-vitals)| ✔ | ✔ | ✔ |
+| [web vitals Extension](https://github.com/GoogleChrome/web-vitals-extension) | ✔ | ✔ | ✔ |
 
 ![web-vitals-extension](./images/yceffort-web-vitals-extension)
 
@@ -103,9 +103,9 @@ getLCP(sendToAnalytics);
 ```javascript
 new PerformanceObserver((entryList) => {
   for (const entry of entryList.getEntries()) {
-    console.log('LCP candidate:', entry.startTime, entry);
+    console.log('LCP candidate:', entry.startTime, entry)
   }
-}).observe({type: 'largest-contentful-paint', buffered: true});
+}).observe({ type: 'largest-contentful-paint', buffered: true })
 ```
 
 `FID`
@@ -113,67 +113,68 @@ new PerformanceObserver((entryList) => {
 ```javascript
 new PerformanceObserver((entryList) => {
   for (const entry of entryList.getEntries()) {
-    const delay = entry.processingStart - entry.startTime;
-    console.log('FID candidate:', delay, entry);
+    const delay = entry.processingStart - entry.startTime
+    console.log('FID candidate:', delay, entry)
   }
-}).observe({type: 'first-input', buffered: true});
+}).observe({ type: 'first-input', buffered: true })
 ```
 
 `CLS`
 
 ```javascript
-let clsValue = 0;
-let clsEntries = [];
+let clsValue = 0
+let clsEntries = []
 
-let sessionValue = 0;
-let sessionEntries = [];
+let sessionValue = 0
+let sessionEntries = []
 
 new PerformanceObserver((entryList) => {
   for (const entry of entryList.getEntries()) {
     // Only count layout shifts without recent user input.
     if (!entry.hadRecentInput) {
-      const firstSessionEntry = sessionEntries[0];
-      const lastSessionEntry = sessionEntries[sessionEntries.length - 1];
+      const firstSessionEntry = sessionEntries[0]
+      const lastSessionEntry = sessionEntries[sessionEntries.length - 1]
 
       // If the entry occurred less than 1 second after the previous entry and
       // less than 5 seconds after the first entry in the session, include the
       // entry in the current session. Otherwise, start a new session.
-      if (sessionValue &&
-          entry.startTime - lastSessionEntry.startTime < 1000 &&
-          entry.startTime - firstSessionEntry.startTime < 5000) {
-        sessionValue += entry.value;
-        sessionEntries.push(entry);
+      if (
+        sessionValue &&
+        entry.startTime - lastSessionEntry.startTime < 1000 &&
+        entry.startTime - firstSessionEntry.startTime < 5000
+      ) {
+        sessionValue += entry.value
+        sessionEntries.push(entry)
       } else {
-        sessionValue = entry.value;
-        sessionEntries = [entry];
+        sessionValue = entry.value
+        sessionEntries = [entry]
       }
 
       // If the current session value is larger than the current CLS value,
       // update CLS and the entries contributing to it.
       if (sessionValue > clsValue) {
-        clsValue = sessionValue;
-        clsEntries = sessionEntries;
+        clsValue = sessionValue
+        clsEntries = sessionEntries
 
         // Log the updated value (and its entries) to the console.
         console.log('CLS:', clsValue, clsEntries)
       }
     }
   }
-}).observe({type: 'layout-shift', buffered: true});
+}).observe({ type: 'layout-shift', buffered: true })
 ```
 
 #### 핵심 웹 바이탈을 측정할 수 있는 개발단계의 도구들
 
 모든 핵심 웹 바이탈은 실제 배포가 되어 측정되는 현장 기준이지만, 이 중에는 개발단계에서 측정할 수 있는 방법이 있다. 이 방법을 활용한다면, 개발중에 기능의 성능을 미리 테스트할 수 있다. 또한 성능저하가 발생하기 전에 미리 파악할 수 있도록 도와준다.
 
-
-|                                                                                                        | LCP | FID | CLS |
-| [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools) |  ✔  |  ✘ [TBT](https://web.dev/tbt/) 활용 |  ✔  |
-| [Lighthouse](https://developers.google.com/web/tools/lighthouse) |  ✔  |  ✘ [TBT](https://web.dev/tbt/) 활용 |  ✔  |
+| | LCP | FID | CLS |
+| [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools) | ✔ | ✘ [TBT](https://web.dev/tbt/) 활용 | ✔ |
+| [Lighthouse](https://developers.google.com/web/tools/lighthouse) | ✔ | ✘ [TBT](https://web.dev/tbt/) 활용 | ✔ |
 
 이러한 도구는 훌륭하지만, 실제 성능 측정을 대체할 수 있는 것은 아니다.
 
-사이트의 성능은 사용자 디바이스의 기능, 네트워크 상태, 디바이스에서 실행 중인 다른 프로세스, 페이지와 상호작용하는 방식에 따라 크게 달라질 수 있다. 실제로 이 핵심 웹 바이탈 지표는 사용자의 인터랙션에 따라서 점수가 달라질 수가 있다. 
+사이트의 성능은 사용자 디바이스의 기능, 네트워크 상태, 디바이스에서 실행 중인 다른 프로세스, 페이지와 상호작용하는 방식에 따라 크게 달라질 수 있다. 실제로 이 핵심 웹 바이탈 지표는 사용자의 인터랙션에 따라서 점수가 달라질 수가 있다.
 
 ### 점수를 높이기 위한 좋은 방법
 
@@ -191,4 +192,3 @@ new PerformanceObserver((entryList) => {
 - First Contentful Paint (FCP): https://web.dev/fcp/
 - Total Blocking Time (TBT) https://web.dev/tbt/
 - Time to Interactive (TTI): https://web.dev/tti/
-

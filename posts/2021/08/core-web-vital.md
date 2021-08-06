@@ -9,7 +9,7 @@ date: 2021-08-06 20:32:31
 description: '조만간 웹사이트 하나씩 분석해 보겠습니다'
 ---
 
-사용자 경험의 질을 향상시키는 것은, 어떤 사이트이든지 장기적으로 성공하는데 있어서 중요한 열쇠다. 비즈니스 오너, 마케터, 개발자건 상관없이, Web Vital (이하 웹 바이탈)은 사이트의 경험을 정량화 하고, 개선할 수 있는 기회를 찾아볼 수 있도록 지원해준다.
+사용자 경험의 질을 향상시키는 것은 모든 사이트가 장기적으로 성공하는데 위한 중요한 열쇠다. 비즈니스 오너, 마케터, 개발자건 상관없이, Web Vital (이하 웹 바이탈)은 사이트의 경험을 정량화 하고, 개선할 수 있는 기회를 찾아볼 수 있도록 지원해준다.
 
 ## 개요
 
@@ -31,7 +31,11 @@ Core web vital (이하 핵심 웹 바이탈)은 모든 웹페이지에 적용되
 
 그리고 이 세가지는 아래의 지표에 기반한다.
 
-![core-web-vital](https://web-dev.imgix.net/image/tcFciHGuF3MxnTr1y5ue01OGLBn2/iHYrrXKe4QRcb2uu8eV8.svg)
+![LCP](https://web-dev.imgix.net/image/tcFciHGuF3MxnTr1y5ue01OGLBn2/ZZU8Z7TMKXmzZT2mCjJU.svg)
+
+![FID](https://web-dev.imgix.net/image/tcFciHGuF3MxnTr1y5ue01OGLBn2/iHYrrXKe4QRcb2uu8eV8.svg)
+
+![CLS](https://web-dev.imgix.net/image/tcFciHGuF3MxnTr1y5ue01OGLBn2/dgpDFckbHwwOKdIGDa3N.svg)
 
 - [Largest Contentful Paint (LCP)](https://web.dev/lcp/): 로딩의 성능을 측정한다. 사용자에게 좋은 경험을 제공하기 위해서는, 적어도 2.5초 이내로 첫페이지 로딩이 이루어져야 한다.
 - [First Input Delay (FID)](https://web.dev/fid/): 상호작용성을 측정한다. 좋은 사용자 환경을 제공하기 위해서는, 페이지의 FID가 100ms 미만이어야 한다.
@@ -90,11 +94,12 @@ getLCP(sendToAnalytics)
 
 이 익스텐션은, 자체 사이트 및 경쟁 업체 사이트의 웹 성능을 파악하는데 도움을 줄 수 있다.
 
-| | LCP | FID | CLS |
-| [web-vitals](https://github.com/GoogleChrome/web-vitals)| ✔ | ✔ | ✔ |
-| [web vitals Extension](https://github.com/GoogleChrome/web-vitals-extension) | ✔ | ✔ | ✔ |
+|                                                                              | LCP | FID | CLS |
+| :--------------------------------------------------------------------------: | :-: | :-: | :-: |
+|           [web-vitals](https://github.com/GoogleChrome/web-vitals)           |  ✔  |  ✔  |  ✔  |
+| [web vitals Extension](https://github.com/GoogleChrome/web-vitals-extension) |  ✔  |  ✔  |  ✔  |
 
-![web-vitals-extension](./images/yceffort-web-vitals-extension)
+![web-vitals-extension](./images/yceffort-web-vitals-extension.png)
 
 또는 기본 웹 api를 활용하여 직접 지표를 측정할 수 있다.
 
@@ -168,9 +173,10 @@ new PerformanceObserver((entryList) => {
 
 모든 핵심 웹 바이탈은 실제 배포가 되어 측정되는 현장 기준이지만, 이 중에는 개발단계에서 측정할 수 있는 방법이 있다. 이 방법을 활용한다면, 개발중에 기능의 성능을 미리 테스트할 수 있다. 또한 성능저하가 발생하기 전에 미리 파악할 수 있도록 도와준다.
 
-| | LCP | FID | CLS |
-| [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools) | ✔ | ✘ [TBT](https://web.dev/tbt/) 활용 | ✔ |
-| [Lighthouse](https://developers.google.com/web/tools/lighthouse) | ✔ | ✘ [TBT](https://web.dev/tbt/) 활용 | ✔ |
+|                                                                            | LCP |                FID                 | CLS |
+| :------------------------------------------------------------------------: | :-: | :--------------------------------: | :-: |
+| [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools) |  ✔  | ✘ [TBT](https://web.dev/tbt/) 활용 |  ✔  |
+|      [Lighthouse](https://developers.google.com/web/tools/lighthouse)      |  ✔  | ✘ [TBT](https://web.dev/tbt/) 활용 |  ✔  |
 
 이러한 도구는 훌륭하지만, 실제 성능 측정을 대체할 수 있는 것은 아니다.
 

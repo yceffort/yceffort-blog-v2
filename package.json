@@ -28,7 +28,6 @@
     "@tailwindcss/forms": "^0.3.2",
     "@tailwindcss/typography": "^0.4.0",
     "date-fns": "^2.22.1",
-    "firebase-admin": "^9.5.0",
     "front-matter": "^4.0.2",
     "glob": "^7.1.6",
     "image-size": "^0.9.7",

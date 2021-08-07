@@ -126,7 +126,7 @@ https://blog.webpagetest.org/posts/benchmarking-javascript-memory-usage/
 |          |    데스크톱     |      모바일      |
 | :------- | :-------------: | :--------------: |
 | 좋음     |    `< 4.8mb`    |    `<4.7 mb`     |
-| 개선필요 | `4.8mb<>19.4mb` | `4.7mb<> 18.6mb` |
+| 개선필요 | `4.8mb <> 19.4mb` | `4.7mb <> 18.6mb` |
 | 나쁨     |    `>19.4mb`    |    `>18.6mb`     |
 
 ## 메모리와 다른 성능 지표간의 관계

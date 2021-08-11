@@ -102,48 +102,48 @@ inner promise3 resolved
 
 ```javascript
 const startHrTime = () => {
-    if (typeof window !== 'undefined') return performance.now();
-    return process.hrtime();
+  if (typeof window !== 'undefined') return performance.now()
+  return process.hrtime()
 }
 
 const getHrTimeDiff = (start) => {
-    if (typeof window !== 'undefined') return performance.now() - start;
-    const [ts, tns] = (process.hrtime(start));
-    return ts * 1e3 + tns / 1e6;
+  if (typeof window !== 'undefined') return performance.now() - start
+  const [ts, tns] = process.hrtime(start)
+  return ts * 1e3 + tns / 1e6
 }
 
 console.log('start')
-const start1 = startHrTime();
+const start1 = startHrTime()
 const outerTimer = setTimeout(() => {
-    const start2 = startHrTime();
-    console.log(`timer1: ${getHrTimeDiff(start1)}`)
+  const start2 = startHrTime()
+  console.log(`timer1: ${getHrTimeDiff(start1)}`)
+  setTimeout(() => {
+    const start3 = startHrTime()
+    console.log(`timer2: ${getHrTimeDiff(start2)}`)
     setTimeout(() => {
-        const start3 = startHrTime();
-        console.log(`timer2: ${getHrTimeDiff(start2)}`)
+      const start4 = startHrTime()
+      console.log(`timer3: ${getHrTimeDiff(start3)}`)
+      setTimeout(() => {
+        const start5 = startHrTime()
+        console.log(`timer4: ${getHrTimeDiff(start4)}`)
         setTimeout(() => {
-            const start4 = startHrTime();
-            console.log(`timer3: ${getHrTimeDiff(start3)}`)
+          const start6 = startHrTime()
+          console.log(`timer5: ${getHrTimeDiff(start5)}`)
+          setTimeout(() => {
+            const start7 = startHrTime()
+            console.log(`timer6: ${getHrTimeDiff(start6)}`)
             setTimeout(() => {
-                const start5 = startHrTime();
-                console.log(`timer4: ${getHrTimeDiff(start4)}`)
-                setTimeout(() => {
-                    const start6 = startHrTime();
-                    console.log(`timer5: ${getHrTimeDiff(start5)}`)
-                    setTimeout(() => {
-                        const start7 = startHrTime();
-                        console.log(`timer6: ${getHrTimeDiff(start6)}`)
-                        setTimeout(() => {
-                            const start8 = startHrTime();
-                            console.log(`timer7: ${getHrTimeDiff(start7)}`)
-                            setTimeout(() => {
-                                console.log(`timer8: ${getHrTimeDiff(start8)}`)
-                            })
-                        })
-                    })
-                })
+              const start8 = startHrTime()
+              console.log(`timer7: ${getHrTimeDiff(start7)}`)
+              setTimeout(() => {
+                console.log(`timer8: ${getHrTimeDiff(start8)}`)
+              })
             })
+          })
         })
+      })
     })
+  })
 })
 ```
 
@@ -179,7 +179,7 @@ timer8: 1.4655
 timer1: 1.5999999940395355
 timer2: 1.399999976158142
 timer3: 1.5
-timer4: 1.4000000059604645 
+timer4: 1.4000000059604645
 timer5: 5.300000011920929 # 4번째 타이머 부터 4ms 이후에 실행됨
 timer6: 5.199999988079071
 timer7: 4.9000000059604645
@@ -215,7 +215,7 @@ timer8: 5
 살펴본 결과 아래 몇가지 사실을 알 수 있었다.
 
 - 0으로 설ㅈ어하더라도, Nodejs 타이머는 최소 1ms이후에 실행된다.
-- 크롬과 파이어폭스는 처음 4개의 타이머가 1ms 언저리에 실행되었지만,  그 후에는 4ms 이후에 실행되었따.
+- 크롬과 파이어폭스는 처음 4개의 타이머가 1ms 언저리에 실행되었지만, 그 후에는 4ms 이후에 실행되었따.
 - 사파리는 크롬/파이어폭스와 비슷하지만, 6번째 타이머부터 4ms 이후에 실행된다.
 
 브라우저에서오는 4ms 의 시간차이는 어디서 만들어진걸까? 이는 앞서 언급했던 [HTML5 스펙](https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#timers)에 기재되어 있다.
@@ -232,17 +232,19 @@ NodeJs와 크롬 모두 중첩되지 않은 경우라 할지라도 모든 타이
 
 ```javascript
 function Timeout(callback, after, args, isRepeat, isRefed) {
-  after *= 1; // Coalesce to number or NaN
+  after *= 1 // Coalesce to number or NaN
   if (!(after >= 1 && after <= TIMEOUT_MAX)) {
     if (after > TIMEOUT_MAX) {
-      process.emitWarning(`${after} does not fit into` +
-                          ' a 32-bit signed integer.' +
-                          '\nTimeout duration was set to 1.',
-                          'TimeoutOverflowWarning');
+      process.emitWarning(
+        `${after} does not fit into` +
+          ' a 32-bit signed integer.' +
+          '\nTimeout duration was set to 1.',
+        'TimeoutOverflowWarning',
+      )
     }
-    after = 1; // Schedule on next tick, follows browser behavior
+    after = 1 // Schedule on next tick, follows browser behavior
   }
-  
+
   // ....redacted
 }
 ```
@@ -289,7 +291,6 @@ DOMTimer::DOMTimer(ExecutionContext* context, PassOwnPtrWillBeRawPtr<ScheduledAc
 6. Check Handler: `setImmediate`가 실행
 7. Close callback: 클로즈 핸들러 실행
 
-
 `setImmediate()`
 
 ```javascript
@@ -320,79 +321,87 @@ End
 Queued using process.nextTick
 ```
 
-마찬가지로 callback을 인수로 받지만, `next tick` 큐라고 하는 별도의 큐에 추가한다. 이  `process.nextTick()`로 넘겨받은 callback은 현재 phase가 넘어간 이후에 실행된다. 즉, 이벤트 루프의 각 단계가 넘어갈 때마다 실행된다. 
+마찬가지로 callback을 인수로 받지만, `next tick` 큐라고 하는 별도의 큐에 추가한다. 이 `process.nextTick()`로 넘겨받은 callback은 현재 phase가 넘어간 이후에 실행된다. 즉, 이벤트 루프의 각 단계가 넘어갈 때마다 실행된다.
 
 따라서, 차이점을 정리하자면
 
 1. `setTimeout`은 Check handler과정에서 실행되지만, `process.nextTick`은 이벤트 루프의 각 단계 사이에서 실행된다.
 2. 1번에 의거하여, `process.nextTick`의 우선순위가 더 높다. (= 먼저 실행된다.)
+
    ```javascript
    setImmediate(() => console.log('I run immediately'))
 
    process.nextTick(() => console.log('But I run before that'))
    ```
-  ```bash
-   But I run before that
-   I run immediately
-  ```
+
+```bash
+ But I run before that
+ I run immediately
+```
+
 3. 만약 특정 단계에서 `process.nextTick()`이 호출되면, 이벤트루프를 계속하기전에 모든 콜백이 전달된다. `process.nextTick`이 재귀적으로 호출되면, 이벤트루프가 차단되고 `I/O Starvation`이 생성된다. 아래 예제 코드를 실행해보면, `setImmediate`나 `setTimeout`이 실행되지 않고 `process.nextTick`만 계속 도는 것을 알 수 있다.
    ```javascript
    let count = 0
+   ```
 
-  const cb = () => {
-      console.log(`Processing nextTick cb ${++count}`)
-      process.nextTick(cb)
-  }
+const cb = () => {
+console.log(`Processing nextTick cb ${++count}`)
+process.nextTick(cb)
+}
 
-  setImmediate(() => console.log('setImmediate is called'))
-  setTimeout(() => console.log('setTimeout executed'), 100)
+setImmediate(() => console.log('setImmediate is called'))
+setTimeout(() => console.log('setTimeout executed'), 100)
 
-  process.nextTick(cb)
+process.nextTick(cb)
 
-  console.log('Start')
-  ```
-  ```bash
-    Start
-    Processing nextTick cb 1
-    Processing nextTick cb 2
-    Processing nextTick cb 3
-    Processing nextTick cb 4
-    Processing nextTick cb 5
-    Processing nextTick cb 6
-    Processing nextTick cb 7
-    Processing nextTick cb 8
-    Processing nextTick cb 9
-    Processing nextTick cb 10
-    # 무한히 안끝나고 nextTick만 계속 돈다
-  ```
+console.log('Start')
+
+````
+```bash
+  Start
+  Processing nextTick cb 1
+  Processing nextTick cb 2
+  Processing nextTick cb 3
+  Processing nextTick cb 4
+  Processing nextTick cb 5
+  Processing nextTick cb 6
+  Processing nextTick cb 7
+  Processing nextTick cb 8
+  Processing nextTick cb 9
+  Processing nextTick cb 10
+  # 무한히 안끝나고 nextTick만 계속 돈다
+````
+
 4. `process.nextTick`과는 다르게, 재귀적으로 `setImmediate`를 호출하면 이벤트루프를 블로킹하지 않는다. 모든 재귀 호출은 다음 이벤트 루프에서 실행된다. 아래 코드를 보면, `setImmediate`가 재귀적으로 호출되지만 이벤트 루프를 블로킹하지 않아 간간히 `setTimeout`이 호출되는 것을 알 수 있다.
    ```javascript
    let count = 0
+   ```
 
-  const cb = () => {
-      console.log(`Processing setImmediate cb ${++count}`)
-      setImmediate(cb)
-  }
+const cb = () => {
+console.log(`Processing setImmediate cb ${++count}`)
+setImmediate(cb)
+}
 
-  setImmediate(cb)
-  setTimeout(() => console.log('setTimeout executed'), 100)
+setImmediate(cb)
+setTimeout(() => console.log('setTimeout executed'), 100)
 
-  console.log('Start')
-  ```
-  ```bash
-  Start
-  Processing setImmediate cb 1
-  Processing setImmediate cb 2
-  Processing setImmediate cb 3
-  Processing setImmediate cb 4
-  ...
-  Processing setImmediate cb 503
-  Processing setImmediate cb 504
-  setTimeout executed
-  Processing setImmediate cb 505
-  Processing setImmediate cb 506
-  ...
-  ```
+console.log('Start')
+
+````
+```bash
+Start
+Processing setImmediate cb 1
+Processing setImmediate cb 2
+Processing setImmediate cb 3
+Processing setImmediate cb 4
+...
+Processing setImmediate cb 503
+Processing setImmediate cb 504
+setTimeout executed
+Processing setImmediate cb 505
+Processing setImmediate cb 506
+...
+````
 
 그럼 각각 언제 써야할까? 문서에 따르면 왠만하면 `setImmediate()`를 사용하라고 되어 있다.
 
@@ -402,16 +411,15 @@ Queued using process.nextTick
 
 ```javascript
 function readFile(fileName, callback) {
+  if (typeof fileName !== 'string') {
+    return callback(new TypeError('file name should be string'))
+  }
 
-    if (typeof fileName !== 'string') {
-        return callback(new TypeError('file name should be string'))
-    }
+  fs.readFile(fileName, (err, data) => {
+    if (err) return callback(err)
 
-    fs.readFile(fileName, (err, data) => {
-        if (err) return callback(err)
-
-        return callback(null, data)
-    })
+    return callback(null, data)
+  })
 }
 ```
 
@@ -419,19 +427,18 @@ function readFile(fileName, callback) {
 
 ```javascript
 function readFile(fileName, callback) {
+  if (typeof fileName !== 'string') {
+    return process.nextTick(
+      callback,
+      new TypeError('file name should be string'),
+    )
+  }
 
-    if (typeof fileName !== 'string') {
-        return process.nextTick(
-            callback, 
-            new TypeError('file name should be string')
-        )
-    }
+  fs.readFile(fileName, (err, data) => {
+    if (err) return callback(err)
 
-    fs.readFile(fileName, (err, data) => {
-        if (err) return callback(err)
-
-        return callback(null, data)
-    })
+    return callback(null, data)
+  })
 }
 ```
 

@@ -34,7 +34,7 @@ export default function About() {
               {SiteConfig.author.name}
             </h3>
             <div className="text-gray-500 dark:text-gray-400">
-              Frontend Engineer
+              Fullstack Engineer
             </div>
             <div className="text-gray-500 dark:text-gray-400">Seoul, Korea</div>
             <div className="flex pt-6 space-x-3">
@@ -49,11 +49,7 @@ export default function About() {
             </div>
           </div>
           <div className="pt-8 pb-8 prose dark:prose-dark max-w-none xl:col-span-2">
-            <p>Hello, I am a front-end developer working in Korea.</p>
-            <p>
-              It&apos;s very embarrassing to introduce myself. Please visit my
-              notion for detailed resume.
-            </p>
+            <p>Hello, I am a full stack engineer working in Korea.</p>
             <p>
               Yesterday All my troubles seemed so far away Now it looks as
               though they&apos;re here to stay Oh, I believe in yesterday
@@ -63,8 +59,12 @@ export default function About() {
               Now I long for yesterday
             </p>
             <p>
+              Yesterday love was such an easy game to play. Now I need a place
+              to hide away. Oh, I believe in yesterday.
+            </p>
+            <p>
               <CustomLink href="https://www.notion.so/yceffort/9fc4262c01744a63a849cdccdde5c85f">
-                Resume in Notion
+                Detailed Resume (Notion)
               </CustomLink>
             </p>
           </div>

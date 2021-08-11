@@ -16,7 +16,7 @@
     "pre-commit": "lint-staged"
   },
   "repository": "https://github.com/yceffort/yceffort-blog-v2",
-  "author": "yceffort <yceffort@gmail.com>",
+  "author": "yceffort <root@yceffort.kr>",
   "license": "MIT",
   "keywords": [
     "react",

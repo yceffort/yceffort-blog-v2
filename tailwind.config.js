@@ -52,6 +52,7 @@ module.exports = {
               fontWeight: '700',
               letterSpacing: theme('letterSpacing.tight'),
               color: theme('colors.gray.900'),
+              wordBreak: 'break-word',
             },
             h3: {
               fontWeight: '600',

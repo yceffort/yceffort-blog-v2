@@ -4,6 +4,7 @@ tags:
   - web
   - javascript
   - browser
+  - nodejs
 published: true
 date: 2021-08-10 22:22:37
 description: '인생은 돌고 도는 이벤트 루프'

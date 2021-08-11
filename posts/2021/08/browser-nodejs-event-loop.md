@@ -345,8 +345,8 @@ Queued using process.nextTick
    let count = 0
 
    const cb = () => {
-      console.log(`Processing nextTick cb ${++count}`)
-      process.nextTick(cb)
+     console.log(`Processing nextTick cb ${++count}`)
+     process.nextTick(cb)
    }
 
    setImmediate(() => console.log('setImmediate is called'))
@@ -372,13 +372,14 @@ Queued using process.nextTick
    # 무한히 안끝나고 nextTick만 계속 돈다
    ```
 
-1. `process.nextTick`과는 다르게, 재귀적으로 `setImmediate`를 호출하면 이벤트루프를 블로킹하지 않는다. 모든 재귀 호출은 다음 이벤트 루프에서 실행된다. 아래 코드를 보면, `setImmediate`가 재귀적으로 호출되지만 이벤트 루프를 블로킹하지 않아 간간히 `setTimeout`이 호출되는 것을 알 수 있다.
+4. `process.nextTick`과는 다르게, 재귀적으로 `setImmediate`를 호출하면 이벤트루프를 블로킹하지 않는다. 모든 재귀 호출은 다음 이벤트 루프에서 실행된다. 아래 코드를 보면, `setImmediate`가 재귀적으로 호출되지만 이벤트 루프를 블로킹하지 않아 간간히 `setTimeout`이 호출되는 것을 알 수 있다.
+
    ```javascript
    let count = 0
 
    const cb = () => {
-      console.log(`Processing setImmediate cb ${++count}`)
-      setImmediate(cb)
+     console.log(`Processing setImmediate cb ${++count}`)
+     setImmediate(cb)
    }
 
    setImmediate(cb)

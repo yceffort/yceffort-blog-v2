@@ -334,74 +334,73 @@ Queued using process.nextTick
    process.nextTick(() => console.log('But I run before that'))
    ```
 
-```bash
- But I run before that
- I run immediately
-```
+   ```bash
+   But I run before that
+   I run immediately
+   ```
 
 3. 만약 특정 단계에서 `process.nextTick()`이 호출되면, 이벤트루프를 계속하기전에 모든 콜백이 전달된다. `process.nextTick`이 재귀적으로 호출되면, 이벤트루프가 차단되고 `I/O Starvation`이 생성된다. 아래 예제 코드를 실행해보면, `setImmediate`나 `setTimeout`이 실행되지 않고 `process.nextTick`만 계속 도는 것을 알 수 있다.
+
    ```javascript
    let count = 0
+
+   const cb = () => {
+      console.log(`Processing nextTick cb ${++count}`)
+      process.nextTick(cb)
+   }
+
+   setImmediate(() => console.log('setImmediate is called'))
+   setTimeout(() => console.log('setTimeout executed'), 100)
+
+   process.nextTick(cb)
+
+   console.log('Start')
    ```
 
-const cb = () => {
-console.log(`Processing nextTick cb ${++count}`)
-process.nextTick(cb)
-}
+   ```bash
+   Start
+   Processing nextTick cb 1
+   Processing nextTick cb 2
+   Processing nextTick cb 3
+   Processing nextTick cb 4
+   Processing nextTick cb 5
+   Processing nextTick cb 6
+   Processing nextTick cb 7
+   Processing nextTick cb 8
+   Processing nextTick cb 9
+   Processing nextTick cb 10
+   # 무한히 안끝나고 nextTick만 계속 돈다
+   ```
 
-setImmediate(() => console.log('setImmediate is called'))
-setTimeout(() => console.log('setTimeout executed'), 100)
-
-process.nextTick(cb)
-
-console.log('Start')
-
-````
-```bash
-  Start
-  Processing nextTick cb 1
-  Processing nextTick cb 2
-  Processing nextTick cb 3
-  Processing nextTick cb 4
-  Processing nextTick cb 5
-  Processing nextTick cb 6
-  Processing nextTick cb 7
-  Processing nextTick cb 8
-  Processing nextTick cb 9
-  Processing nextTick cb 10
-  # 무한히 안끝나고 nextTick만 계속 돈다
-````
-
-4. `process.nextTick`과는 다르게, 재귀적으로 `setImmediate`를 호출하면 이벤트루프를 블로킹하지 않는다. 모든 재귀 호출은 다음 이벤트 루프에서 실행된다. 아래 코드를 보면, `setImmediate`가 재귀적으로 호출되지만 이벤트 루프를 블로킹하지 않아 간간히 `setTimeout`이 호출되는 것을 알 수 있다.
+1. `process.nextTick`과는 다르게, 재귀적으로 `setImmediate`를 호출하면 이벤트루프를 블로킹하지 않는다. 모든 재귀 호출은 다음 이벤트 루프에서 실행된다. 아래 코드를 보면, `setImmediate`가 재귀적으로 호출되지만 이벤트 루프를 블로킹하지 않아 간간히 `setTimeout`이 호출되는 것을 알 수 있다.
    ```javascript
    let count = 0
+
+   const cb = () => {
+      console.log(`Processing setImmediate cb ${++count}`)
+      setImmediate(cb)
+   }
+
+   setImmediate(cb)
+   setTimeout(() => console.log('setTimeout executed'), 100)
+
+   console.log('Start')
    ```
 
-const cb = () => {
-console.log(`Processing setImmediate cb ${++count}`)
-setImmediate(cb)
-}
-
-setImmediate(cb)
-setTimeout(() => console.log('setTimeout executed'), 100)
-
-console.log('Start')
-
-````
-```bash
-Start
-Processing setImmediate cb 1
-Processing setImmediate cb 2
-Processing setImmediate cb 3
-Processing setImmediate cb 4
-...
-Processing setImmediate cb 503
-Processing setImmediate cb 504
-setTimeout executed
-Processing setImmediate cb 505
-Processing setImmediate cb 506
-...
-````
+   ```bash
+   Start
+   Processing setImmediate cb 1
+   Processing setImmediate cb 2
+   Processing setImmediate cb 3
+   Processing setImmediate cb 4
+   ...
+   Processing setImmediate cb 503
+   Processing setImmediate cb 504
+   setTimeout executed
+   Processing setImmediate cb 505
+   Processing setImmediate cb 506
+   ...
+   ```
 
 그럼 각각 언제 써야할까? 문서에 따르면 왠만하면 `setImmediate()`를 사용하라고 되어 있다.
 

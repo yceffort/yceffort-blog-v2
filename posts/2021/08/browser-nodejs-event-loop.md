@@ -42,7 +42,7 @@ description: '인생은 돌고 도는 이벤트 루프'
 
 브라우저와 Nodejs에 눈에 띄는 차이점은 **마이크로 태스크와 매크로 태스크의 우선순위를 어떻게 정하느냐** 이다. Nodejs 11 이상에서는 브라우저의 동작과 일치하지만, 이전 버전은 상당히 다르다. 자, 아래 면접 질문으로 나올 것 만 같은 아래 코드르 보자.
 
-> nodejs 11이전 버전에서 무슨일이 있는지 살펴보려면 https://blog.insiderattack.net/new-changes-to-timers-and-microtasks-from-node-v11-0-0-and-above-68d112743eb3
+> Nodejs 11이전 버전에서 무슨일이 있는지 살펴보려면 https://blog.insiderattack.net/new-changes-to-timers-and-microtasks-from-node-v11-0-0-and-above-68d112743eb3
 
 ```javascript
 Promise.resolve().then(() => console.log('promise1 resolved'))
@@ -78,7 +78,7 @@ set timeout1
 set timeout2
 ```
 
-nodejs 11 미만
+Nodejs 11 미만
 
 ```bash
 promise1 resolved
@@ -99,7 +99,7 @@ inner promise3 resolved
 
 ### 내부 타이머 동작의 차이
 
-타이머 동작은 nodejs, 브라우저 간 뿐만아니라 브라우저 벤더간, 버전마다 다르다. 여기서 가장 주목할만한 두가지는 timeout이 0일때와, timeout이 중첩되어 있을 때다. 이 러한 두가지 동작의 차이를 알기 위해 nodejs v10.19.0, v11.0.0, chrome, firefox, safari에서 아래의 코드를 실행해보자. 이 코드는 timeout이 0 인 중첩타이머 8개를 스케쥴링하고, 각 콜백이 스케쥴링 된이후 실행되기까지의 걸린 시간을 계산한다.
+타이머 동작은 Nodejs, 브라우저 간 뿐만아니라 브라우저 벤더간, 버전마다 다르다. 여기서 가장 주목할만한 두가지는 timeout이 0일때와, timeout이 중첩되어 있을 때다. 이 러한 두가지 동작의 차이를 알기 위해 Nodejs v10.19.0, v11.0.0, chrome, firefox, safari에서 아래의 코드를 실행해보자. 이 코드는 timeout이 0 인 중첩타이머 8개를 스케쥴링하고, 각 콜백이 스케쥴링 된이후 실행되기까지의 걸린 시간을 계산한다.
 
 ```javascript
 const startHrTime = () => {
@@ -278,7 +278,7 @@ DOMTimer::DOMTimer(ExecutionContext* context, PassOwnPtrWillBeRawPtr<ScheduledAc
 
 `process.nextTick`은 NodeJS에만 있는 api이며 브라우저에는 이와 비슷한 동작을 하는 api는 없다. `nextTick`이 nodejs의 libuv 이벤트 루프의 일부는 아니지만, `nextTick`은 이벤트 루프 동안 nodejs가 C++과 JS 경계를 넘어가는 과정에서 실행된다. 그래서, 어떤 측면에서는 이벤트 루프와 관련있다고 볼 수도 있다.
 
-`setImmediate`또한 nodejs 전용 api다. [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Window/setImmediate)과 [caniuse.com](https://caniuse.com/?search=setImmediate)에 따르면, 놀랍게도 IE10, 11, 그리고 초기 엣지 버전에서 사용이 가능한 api다. 그외에 다른 브라우저 에서는 사용이 불가능하다.
+`setImmediate`또한 Nodejs 전용 api다. [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Window/setImmediate)과 [caniuse.com](https://caniuse.com/?search=setImmediate)에 따르면, 놀랍게도 IE10, 11, 그리고 초기 엣지 버전에서 사용이 가능한 api다. 그외에 다른 브라우저 에서는 사용이 불가능하다.
 
 둘의 차이를 알기 위해서는, 이벤트 루프의 과정에 대해 알필요가 있다.
 

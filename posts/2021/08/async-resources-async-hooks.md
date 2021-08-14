@@ -24,3 +24,66 @@ description: '비동기로 불타는 금요일'
 - https://itnext.io/a-pragmatic-overview-of-async-hooks-api-in-node-js-e514b31460e9
 
 ## 비동기 리소스의 생명주기
+
+비동기 리소스는 비동기 작업의 일부로 생성된다. 비동기 리소스는 비동기 작업을 추적하는데 사용되는 객체에 불과하다. 따라서 작업이 완료되면 자연스럽게 실행되는 콜백과 연결된다. 비동기 리소스가 이 용도에 맞게 작동되면, 다른 객체와 마찬가지로 가비지 컬렉팅되어 사라진다.
+
+가장 간단한 예제로 `setTimeout`을 들 수 있다. `setTimeout`은 비동기 리소스인 `Timeout`을 리턴하는데, 이는 타이머를 함수의 리턴 값으로 추적하기 위해 사용된다. nodejs repl에서 `setTimeout`을 호출해보자.
+
+```bash
+> setTimeout(()=>{}, 1000)
+Timeout {
+  _called: false,
+  _idleTimeout: 1000,
+  _idlePrev: 
+   TimersList {
+     _idleNext: [Circular],
+     _idlePrev: [Circular],
+     _unrefed: false,
+     msecs: 1000,
+     _timer: Timer { domain: [Domain], _list: [Circular] } },
+  _idleNext: 
+   TimersList {
+     _idleNext: [Circular],
+     _idlePrev: [Circular],
+     _unrefed: false,
+     msecs: 1000,
+     _timer: Timer { domain: [Domain], _list: [Circular] } },
+  _idleStart: 11908,
+  _onTimeout: [Function],
+  _timerArgs: undefined,
+  _repeat: null,
+  _destroyed: false,
+  domain: 
+   Domain {
+     domain: null,
+     _events: 
+      { removeListener: [Function: updateExceptionCapture],
+        newListener: [Function: updateExceptionCapture],
+        error: [Function: debugDomainError] },
+     _eventsCount: 3,
+     _maxListeners: undefined,
+     members: [] },
+  [Symbol(unrefed)]: false,
+  [Symbol(asyncId)]: 112,
+  [Symbol(triggerId)]: 6 }
+```
+
+이 `Timeout` 객체에는 다음과 같은 정보가 담겨있다.
+
+- `timeout` 값인 `_idleTimeout`
+- Timer callback `_onTimeout`
+- `timer`와 `interval`인지 를 구분하는 값인 `_repeat`
+- 현재 `timeout`이 활성화 중인지 여부를 나타내는 `_destroyed`
+-  ....
+
+일반적인 비동기 리소스의 생명주기는 다음과 같다.
+
+1. 생성됨
+2. 콜백이 실행됨
+3. 없어짐
+
+`async_hook`을 사용하면, 콜백 함수를 붙일 수 있는 `hooks`을 제공하여, 위 생명주기의 여러 단계를 살펴볼 수 있다. `hook`에는 `init` `before` `after` `destroy`와 같은 네가지 타입이 있다. 이 단계는 위 생명주기에서 다음 과 같은 순서로 실행된다.
+
+1. 생성됨 `init()`
+2. `before()` 콜백이 실행됨 `after()`
+3. 없어짐 `destroyed()`

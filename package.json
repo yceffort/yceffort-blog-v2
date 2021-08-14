@@ -65,5 +65,15 @@
     "ts-node": "^10.2.0",
     "typescript": "^4.3.5",
     "webpack": "^5.49.0"
+  },
+  "lint-staged": {
+    "**/*.{ts,tsx}": [
+      "eslint",
+      "git add"
+    ],
+    "**/*.{json,yaml,md}": [
+      "prettier",
+      "git add"
+    ]
   }
 }

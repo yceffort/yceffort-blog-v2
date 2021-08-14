@@ -128,6 +128,8 @@ app.post("/user", (req, res) => {
 - `http`를 통해 업스트림 서비스에 알림
 - 메시지 로깅
 
+![diagram](./images/async-hooks-diagram.png)
+
 위 네가지 작업이 4개의 비동기 리소스를 생성한다고 가정해보자.
 
 - `DB Operation` 작업은 `HTTP Client Request`와 `Logging` 보다는 오래 걸리지 않을 것이다. 왜냐면 `storeInDb` 함수가 `notifyUpstream`과 `logger.log`의 작업이 완료 될 때 까지 기다리지 않기 떄문이다.

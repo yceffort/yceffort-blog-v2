@@ -138,7 +138,7 @@ app.post("/user", (req, res) => {
 
 이제 비동기 리소스의 라이프 사이클을 이론적으로 몇가지 살펴보았으므로, 몇가지 실제 사례를 살펴보자. 이 데모에서는 async_hooks가 사용된 몇가지 코드 예제를 사용할 것이다. 
 
-### 타이머 설정하기
+### `setTimeout`
 
 ```javascript
 const { logger } = require("./setup");
@@ -165,3 +165,85 @@ timer callback
 - Timer 콜백이 실행되고, `timer callback`이 로깅 되었다.
 - Timer 콜백이 실행된 이후에, `after` async hook이 실행되었다.
 - `Timeout` 리소스가 사라지기 직전에 `destroy` async hook이 실행되었다.
+
+### nested `setTimeout`
+
+```javascript
+const { logger } = require("./setup");
+logger.clearLog();
+
+setTimeout(() => {
+  logger.write("outer timer callback");
+  setTimeout(() => {
+    logger.write("inner timer callback");
+  }, 1000);
+}, 1000);
+
+```
+
+```bash
+    (asyncId: 2) INIT (Timeout) (triggerAsyncId=1) (resource=Timeout)
+    (asyncId: 2) BEFORE
+outer timer callback
+        (asyncId: 3) INIT (Timeout) (triggerAsyncId=2) (resource=Timeout)
+    (asyncId: 2) AFTER
+    (asyncId: 2) DESTROY
+        (asyncId: 3) BEFORE
+inner timer callback
+        (asyncId: 3) AFTER
+        (asyncId: 3) DESTROY
+```
+
+이 예제에서는, 바깥 쪽 Timeout 리소스가 트리거 되면, 또다른 Timeout 리소스를 트리거 한다. 내부 타이머의 Timeout리소스가 `triggerAsyncId` 2를 가지고 있고, 이는 외부 Timeout 리소스의 `asyncId`임을 할 수 있다. 이로 미루어보아 내부 타이머가 외부 타이머의 트리거로 실행되었음을 알 수 있다.
+
+그러나, 사실은 외부 Timer리소스가 내부 Timer 리소스보다 먼저 없어졌다고 보는 것이 맞다. 그 이유는 외부 타이버가 내부 타이머의 실행을 기다리거나, 콜백일 실행되는 것을 기다리지 않기 떄문이다.
+
+### clear `setTimeout`
+
+```javascript
+const { logger } = require("./setup");
+logger.clearLog();
+
+clearTimeout(setTimeout(() => {
+  logger.write("timer callback");
+}, 1000));
+```
+
+```bash
+    (asyncId: 2) INIT (Timeout) (triggerAsyncId=1) (resource=Timeout)
+    (asyncId: 2) DESTROY
+```
+
+이 예제에서는, `BEFORE` 나 `AFTER`의 존재를 확인할 수는 없다. 왜냐하면 타이머가 즉시 제거 되었으며, 콜백 역시 `clearTimeout`의 호출로 인해 실행될 기회를 잃어버렸기 때문이다. 따라서, `before` `after` hook은 실행되지 않았다.
+
+### `setInterval`
+
+```javascript
+const { logger } = require("./setup");
+logger.clearLog();
+
+let count = 0;
+let interval = null;
+interval = setInterval(() => {
+  logger.write(`callback executed`);
+  if (++count >= 3) {
+    clearInterval(interval);
+  }
+}, 1000);
+```
+
+```bash
+    (asyncId: 2) INIT (Timeout) (triggerAsyncId=1) (resource=Timeout)
+    (asyncId: 2) BEFORE
+callback executed
+    (asyncId: 2) AFTER
+    (asyncId: 2) BEFORE
+callback executed
+    (asyncId: 2) AFTER
+    (asyncId: 2) BEFORE
+callback executed
+    (asyncId: 2) AFTER
+    (asyncId: 2) DESTROY
+```
+
+`setTimeout`과 유사하게, `Timeout` 비동기 리소스

@@ -21,6 +21,11 @@ module.exports = withPWA({
         permanent: true,
       },
       {
+        source: '/tags/:tag/pages/((?!\\d).*)',
+        destination: '/tags/:tag/pages/1',
+        permanent: true,
+      },
+      {
         source: '/tags/:tag',
         destination: '/tags/:tag/pages/1',
         permanent: true,

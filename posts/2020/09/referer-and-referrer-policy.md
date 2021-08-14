@@ -81,7 +81,7 @@ http 요청은 옵셔널 헤더인 [Referer](https://developer.mozilla.org/en-US
 
 아래 예제를 보자.
 
-![example1](https://webdev.imgix.net/referrer-best-practices/referrer-basics.jpg)
+![example1](https://web-dev.imgix.net/image/admin/cXgqJfmD5OPdzqXl9RNt.jpg)
 
 `Referer` 헤더에 해당 정보를 요청한 사이트의 전체 주소가 담겨져 있다.
 
@@ -96,7 +96,7 @@ http 요청은 옵셔널 헤더인 [Referer](https://developer.mozilla.org/en-US
 
 그러나, query와 path를 포함한 전체 주소를 `Referer`를 통해서 다른 origin에 보내는 것은, 보안 상에서 문제가 될 수 있다. 아래의 예를 살펴보자.
 
-![example2](https://webdev.imgix.net/referrer-best-practices/referrer-urls.jpg)
+![example2](https://web-dev.imgix.net/image/admin/oTUtfrwaGYYjlOJ6KRs6.jpg?auto=format&w=1600)
 
 1번과 5번 예제에서 볼 수 있다시피 이 사이트에 온 사람이 누구인지 식별할 수도 있게 되어 버린다. 6번의 경우에는 극단적이지만 끔찍한 예제이다. 💀
 

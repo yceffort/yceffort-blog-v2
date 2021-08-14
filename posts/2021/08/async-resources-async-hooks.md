@@ -130,4 +130,38 @@ app.post("/user", (req, res) => {
 
 위 네가지 작업이 4개의 비동기 리소스를 생성한다고 가정해보자.
 
-1.
+- `DB Operation` 작업은 `HTTP Client Request`와 `Logging` 보다는 오래 걸리지 않을 것이다. 왜냐면 `storeInDb` 함수가 `notifyUpstream`과 `logger.log`의 작업이 완료 될 때 까지 기다리지 않기 떄문이다.
+- `Logging`도 마찬가지로 비동기 작업인데, 비동기 리소스를 만들기 때문이다. 다만 이 리소스는 다른 것에 비해 생명주기가 짧다.
+- `Incoming HTTP Request`는 가장 마지막에 없어지는 리소스가 될 것이다. `notifyUpstream`가 완료되고 응답이 완전히 전송된 후에만 완료되기 때문이다.
+
+## 타이머를 쓰는 실제 예제
+
+이제 비동기 리소스의 라이프 사이클을 이론적으로 몇가지 살펴보았으므로, 몇가지 실제 사례를 살펴보자. 이 데모에서는 async_hooks가 사용된 몇가지 코드 예제를 사용할 것이다. 
+
+### 타이머 설정하기
+
+```javascript
+const { logger } = require("./setup");
+logger.clearLog();
+
+setTimeout(() => {
+  logger.write("timer callback");
+}, 1000);
+```
+
+```bash
+    (asyncId: 2) INIT (Timeout) (triggerAsyncId=1) (resource=Timeout)
+    (asyncId: 2) BEFORE
+timer callback
+    (asyncId: 2) AFTER
+    (asyncId: 2) DESTROY
+
+```
+
+이 결과에 따르면
+
+- 비동기 리소스 `Timeout`은 `setTimeout`이 호출되었을 떄 초기화 되었다.
+- `1000ms`가 만료되기 전에, `before` async hook이 타이머 콜백이 실행되기 직전에 실행되었다.
+- Timer 콜백이 실행되고, `timer callback`이 로깅 되었다.
+- Timer 콜백이 실행된 이후에, `after` async hook이 실행되었다.
+- `Timeout` 리소스가 사라지기 직전에 `destroy` async hook이 실행되었다.

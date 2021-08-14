@@ -32,40 +32,19 @@ description: '비동기로 불타는 금요일'
 ```bash
 > setTimeout(()=>{}, 1000)
 Timeout {
-  _called: false,
   _idleTimeout: 1000,
-  _idlePrev: 
-   TimersList {
-     _idleNext: [Circular],
-     _idlePrev: [Circular],
-     _unrefed: false,
-     msecs: 1000,
-     _timer: Timer { domain: [Domain], _list: [Circular] } },
-  _idleNext: 
-   TimersList {
-     _idleNext: [Circular],
-     _idlePrev: [Circular],
-     _unrefed: false,
-     msecs: 1000,
-     _timer: Timer { domain: [Domain], _list: [Circular] } },
-  _idleStart: 11908,
-  _onTimeout: [Function],
+  _idlePrev: [TimersList],
+  _idleNext: [TimersList],
+  _idleStart: 6720,
+  _onTimeout: [Function (anonymous)],
   _timerArgs: undefined,
   _repeat: null,
   _destroyed: false,
-  domain: 
-   Domain {
-     domain: null,
-     _events: 
-      { removeListener: [Function: updateExceptionCapture],
-        newListener: [Function: updateExceptionCapture],
-        error: [Function: debugDomainError] },
-     _eventsCount: 3,
-     _maxListeners: undefined,
-     members: [] },
-  [Symbol(unrefed)]: false,
-  [Symbol(asyncId)]: 112,
-  [Symbol(triggerId)]: 6 }
+  [Symbol(refed)]: true,
+  [Symbol(kHasPrimitive)]: false,
+  [Symbol(asyncId)]: 26,
+  [Symbol(triggerId)]: 5
+}
 ```
 
 이 `Timeout` 객체에는 다음과 같은 정보가 담겨있다.
@@ -74,7 +53,7 @@ Timeout {
 - Timer callback `_onTimeout`
 - `timer`와 `interval`인지 를 구분하는 값인 `_repeat`
 - 현재 `timeout`이 활성화 중인지 여부를 나타내는 `_destroyed`
--  ....
+- ....
 
 일반적인 비동기 리소스의 생명주기는 다음과 같다.
 
@@ -87,3 +66,59 @@ Timeout {
 1. 생성됨 `init()`
 2. `before()` 콜백이 실행됨 `after()`
 3. 없어짐 `destroyed()`
+
+비동기 리소스가 얼마나 지속 되느냐에 따라 비동기 리소스 콜백은 0번에서 여러번까지도 실행될 수 있다. 따라서 특정 비동기 리소스의 hook이 여러번 실행되거나, 혹은 실행이 아예 안될 수도 있다. 위 예제에서 `setTimeout`는 한번씩 호출되지만, `setInterval`을 사용하면 `init`뒤에 여러번 반복해서 실행될 수 있다.
+
+예를 들어, `setTimeout`과 `setInterval`은 모두 `Timeout`이라고 불리는 비동기 리소스를 만든다. 하지만 아래와 같은 차이가 있다.
+
+```bash
+> setInterval(()=>{}, 1000)
+Timeout {
+  _idleTimeout: 1000,
+  _idlePrev: [TimersList],
+  _idleNext: [TimersList],
+  _idleStart: 23081,
+  _onTimeout: [Function (anonymous)],
+  _timerArgs: undefined,
+  _repeat: 1000,
+  _destroyed: false,
+  [Symbol(refed)]: true,
+  [Symbol(kHasPrimitive)]: false,
+  [Symbol(asyncId)]: 138,
+  [Symbol(triggerId)]: 5
+}
+```
+
+`_repeat` 속성에 숫자값 1000이 들어가 있어서 걔쏙해서 반복될 것임을 알 수 있다.
+
+`Promise`의 경우에는 조금 다른데, 여기엔 `promiseResolve`라는 훅이 있어 `resolved`나 `rejected` 직후에 실행된다. 아래 순서를 보자.
+
+1. 생성됨 `init()`
+2. Promise가 resolve되거나 reject됨 `promiseResolve()`
+3. `before()` 콜백이 실행됨 `after()`
+4. 없어짐 `destroy()`
+
+## 실제 애플리케이션에서의 비동기 리소스
+
+실제 우리가 사용하는 애플리케이션에서는, 비동기 리소스는 그 생명주기 동안 많은 async hooks을 트리거 할 수 있다. 아래 http request 핸들러를 살펴보자.
+
+```javascript
+app.post("/user", (req, res) => {
+  db(req.body, (err, stored) => {
+    if (err) {
+      return res.sendStatus(500)
+    }
+
+    notifyUpstream(stored, (err) =. {
+      if (err) {
+        return res.sendStatus(500)
+      }
+      res.sendStatus(201)
+    })
+
+    logger.log('stored in database')
+  })
+})
+```
+
+이 http request handler가 하는 작업은 아래와 같다.

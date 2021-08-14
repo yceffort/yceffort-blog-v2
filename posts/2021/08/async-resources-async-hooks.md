@@ -136,17 +136,17 @@ app.post("/user", (req, res) => {
 
 ## 타이머를 쓰는 실제 예제
 
-이제 비동기 리소스의 라이프 사이클을 이론적으로 몇가지 살펴보았으므로, 몇가지 실제 사례를 살펴보자. 이 데모에서는 async_hooks가 사용된 몇가지 코드 예제를 사용할 것이다. 
+이제 비동기 리소스의 라이프 사이클을 이론적으로 몇가지 살펴보았으므로, 몇가지 실제 사례를 살펴보자. 이 데모에서는 async_hooks가 사용된 몇가지 코드 예제를 사용할 것이다.
 
 ### `setTimeout`
 
 ```javascript
-const { logger } = require("./setup");
-logger.clearLog();
+const { logger } = require('./setup')
+logger.clearLog()
 
 setTimeout(() => {
-  logger.write("timer callback");
-}, 1000);
+  logger.write('timer callback')
+}, 1000)
 ```
 
 ```bash
@@ -169,16 +169,15 @@ timer callback
 ### nested `setTimeout`
 
 ```javascript
-const { logger } = require("./setup");
-logger.clearLog();
+const { logger } = require('./setup')
+logger.clearLog()
 
 setTimeout(() => {
-  logger.write("outer timer callback");
+  logger.write('outer timer callback')
   setTimeout(() => {
-    logger.write("inner timer callback");
-  }, 1000);
-}, 1000);
-
+    logger.write('inner timer callback')
+  }, 1000)
+}, 1000)
 ```
 
 ```bash
@@ -201,12 +200,14 @@ inner timer callback
 ### clear `setTimeout`
 
 ```javascript
-const { logger } = require("./setup");
-logger.clearLog();
+const { logger } = require('./setup')
+logger.clearLog()
 
-clearTimeout(setTimeout(() => {
-  logger.write("timer callback");
-}, 1000));
+clearTimeout(
+  setTimeout(() => {
+    logger.write('timer callback')
+  }, 1000),
+)
 ```
 
 ```bash
@@ -219,17 +220,17 @@ clearTimeout(setTimeout(() => {
 ### `setInterval`
 
 ```javascript
-const { logger } = require("./setup");
-logger.clearLog();
+const { logger } = require('./setup')
+logger.clearLog()
 
-let count = 0;
-let interval = null;
+let count = 0
+let interval = null
 interval = setInterval(() => {
-  logger.write(`callback executed`);
+  logger.write(`callback executed`)
   if (++count >= 3) {
-    clearInterval(interval);
+    clearInterval(interval)
   }
-}, 1000);
+}, 1000)
 ```
 
 ```bash
@@ -246,4 +247,175 @@ callback executed
     (asyncId: 2) DESTROY
 ```
 
-`setTimeout`과 유사하게, `Timeout` 비동기 리소스
+`setTimeout`과 유사하게, `Timeout` 비동기 리소스를 생성한다. 그러나 `Timeout`는 `setInterval`로 만들어졌기 때문에 여기에서는 지속적인 비동기 리소스로 볼 수 있다. 지속적인 비동기 리소스의 경우 `before` `after`가 반복해서 호출될 수 있다. 이 예제에서는 3번 정도 호출하도록 되어있으므로, `before` `after`도 각각 3번씩 호출된다. `clearInterval`를 하게 된다면, `destroy`가 초훌되고 종료된다.
+
+## Custom 비동기 리소스를 활용한 실질 적인 예제
+
+지금까지는 NodeJS의 비동기 리소스인 `Timeout` 객체에 대해서만 다뤘다. `async_hooks` 모듈은 자바스크립트 내장 API인 `AsyncResource` 클래스를 사용하여 사용자가 직접 비동기 리소스를 만들어 쓸 수 있도록 도와준다.
+
+### 자동으로 사라지는 Custom 비동기 리소스
+
+```javascript
+const { logger } = require('./setup')
+const { AsyncResource, executionAsyncId } = require('async_hooks')
+logger.clearLog()
+
+class DBQuery extends AsyncResource {
+  constructor(query) {
+    super('DBQUERY', {
+      triggerAsyncId: executionAsyncId(),
+      requireManualDestroy: false, // This defaults to false even if not provided
+    })
+    this.query = query
+  }
+
+  executeQuery(callback) {
+    this.runInAsyncScope(callback, null)
+  }
+}
+
+const dbquery = new DBQuery()
+dbquery.executeQuery(() => {
+  logger.write('query executed!')
+})
+
+setTimeout(() => {
+  // wait until the DBQuery instance is garbage collected...
+}, 9999999)
+```
+
+- `requireManualDestroy`를 false로 지정해두었다. 리소스에 대한 `destroy` hook이 있다면, 리소스가 가비지 콜렉팅 될때 해당 hook이 자동으로 실행되어야 한다. 이 작업은 nodejs내부에서 직접 수행된다. 그리고 이 작업은 v8내부에 있는 리소스 객체인 **Weak Callback**이라고 하는 destroy hook에 등록되어 실행된다.
+- 이 코드의 실행이 끝나면, 애플리케이션이 계속 살아 있게 하는 코드가 실행된다. 그 이유에 대해서는 나중에 설명한다.
+
+이 코드를 NodeJS Cli 플래그인 `--trace-gc`와 함께 실행하면, 카비지 콜렉션 로그도 함께 볼 수 있다.
+
+```bash
+$ ode --trace-gc custom-async-resource-auto-destroy.js
+[4848:0x60e5a70]       36 ms: Scavenge 2.5 (3.0) -> 2.1 (4.0) MB, 0.8 / 0.0 ms  (average mu = 1.000, current mu = 1.000) allocation failure
+[4848:0x60e5a70]       53 ms: Scavenge 2.6 (4.5) -> 2.4 (5.3) MB, 1.1 / 0.0 ms  (average mu = 1.000, current mu = 1.000) task
+[4848:0x60e5a70]     8163 ms: Mark-sweep (reduce) 2.4 (7.3) -> 1.8 (7.3) MB, 0.9 / 0.0 ms  (+ 1.4 ms in 9 steps since start of marking, biggest step 0.3 ms, walltime since start of marking 3 ms) (average mu = 1.000, current mu = 1.000) finalize incremental marking via task GC in old space requested
+[4848:0x60e5a70]     8768 ms: Mark-sweep (reduce) 1.8 (4.3) -> 1.8 (4.8) MB, 2.4 / 0.0 ms  (+ 1.8 ms in 9 steps since start of marking, biggest step 0.4 ms, walltime since start of marking 4 ms) (average mu = 0.993, current mu = 0.993) finalize incremental marking via task GC in old space requested
+```
+
+```bash
+    (asyncId: 2) INIT (DBQUERY) (triggerAsyncId=1) (resource=DBQuery)
+    (asyncId: 2) BEFORE
+query executed!
+    (asyncId: 2) AFTER
+    (asyncId: 3) INIT (Timeout) (triggerAsyncId=1) (resource=Timeout)
+    (asyncId: 2) DESTROY
+```
+
+해당 리소스는 `destroy` 훅이 실행된 순간 [Mark-Sweep](https://v8.dev/blog/trash-talk#major-gc)이 트리거 되어 즉시 가비지 콜렉팅 되었다.
+
+`setTimeout` 콜백은 `dbquery`객체를 사용하지 않으므로, `setTimeout`이 실행된 이후에는 `dbquery`에 대한 참조가 없어 가비지 콜렉팅이 수행된다.
+
+만약 마지막에 타이머가 없다면, 애플리케이션은 즉시 종료되어 가비지 콜렉팅이 수행될 시간조차 없어질 것이다. 따라서, `destroy` 훅은 실행되지 않는다.
+
+이번에는, `setTimeout`안에서 `dbquery`를 참조하는 코드를 작성해보자.
+
+```javascript
+const { logger } = require('./setup')
+const { AsyncResource, executionAsyncId } = require('async_hooks')
+logger.clearLog()
+
+class DBQuery extends AsyncResource {
+  constructor(query) {
+    super('DBQUERY', {
+      triggerAsyncId: executionAsyncId(),
+      requireManualDestroy: false, // This defaults to false even if not provided
+    })
+    this.query = query
+  }
+
+  executeQuery(callback) {
+    this.runInAsyncScope(callback, null)
+  }
+}
+
+const dbquery = new DBQuery()
+dbquery.executeQuery(() => {
+  logger.write('query executed!')
+})
+
+setTimeout(() => {
+  // Keep a reference to dbquery so that it won't be garbage collected
+  console.log(dbquery.asyncId())
+}, 9999999)
+```
+
+```bash
+$ node --trace-gc custom-async-resource-auto-destroy-nogc.js
+[10609:0x483c100]       31 ms: Scavenge 2.4 (3.0) -> 2.0 (4.0) MB, 0.7 / 0.0 ms  (average mu = 1.000, current mu = 1.000) allocation failure
+[10609:0x483c100]       47 ms: Scavenge 2.6 (4.3) -> 2.4 (5.0) MB, 1.0 / 0.0 ms  (average mu = 1.000, current mu = 1.000) task
+[10609:0x483c100]     8153 ms: Mark-sweep (reduce) 2.4 (7.0) -> 1.8 (7.0) MB, 0.9 / 0.0 ms  (+ 1.4 ms in 7 steps since start of marking, biggest step 0.4 ms, walltime since start of marking 3 ms) (average mu = 1.000, current mu = 1.000) finalize incremental marking via task GC in old space requested
+[10609:0x483c100]     8758 ms: Mark-sweep (reduce) 1.8 (4.0) -> 1.8 (4.5) MB, 2.8 / 0.0 ms  (+ 1.6 ms in 8 steps since start of marking, biggest step 0.4 ms, walltime since start of marking 5 ms) (average mu = 0.993, current mu = 0.993) finalize incremental marking via task GC in old space requested
+```
+
+```bash
+    (asyncId: 2) INIT (DBQUERY) (triggerAsyncId=1) (resource=DBQuery)
+    (asyncId: 2) BEFORE
+query executed!
+    (asyncId: 2) AFTER
+    (asyncId: 3) INIT (Timeout) (triggerAsyncId=1) (resource=Timeout)
+```
+
+가비지 콜렉션이 실행중이라 할지라도,리소스가 가비지 콜렉팅 되지 않았기 때문에 `destroy` 훅이 실행되지 않는 다는 것을 알 수 있다. 그 이유는 `setTimeout`안에 `dbquery` 객체의 참조가 유지되어 있어 `dequery`가 가비지 콜렉팅 되지 않도록 하고 있기 때문이다.
+
+### 수동으로 destroy 되는 비동기 리소스
+
+`requireManualDestroy`가 `true`가 되면 `destroy` 훅이 자동으로 실행되지 않고, 비동기 리소스에서 `emitDestroy()`를 호출해서 수동으로 제거해야 한다.
+
+```javascript
+const { logger } = require('./setup')
+const { AsyncResource, executionAsyncId } = require('async_hooks')
+logger.clearLog()
+
+class DBQuery extends AsyncResource {
+  constructor(query) {
+    super('DBQUERY', {
+      triggerAsyncId: executionAsyncId(),
+      requireManualDestroy: true,
+    })
+    this.query = query
+  }
+
+  executeQuery(callback) {
+    this.runInAsyncScope(callback, null)
+  }
+
+  destroy() {
+    this.emitDestroy()
+  }
+}
+
+const dbquery = new DBQuery()
+dbquery.executeQuery(() => {
+  logger.write('query executed!')
+})
+dbquery.destroy()
+
+// Wait until the resource is manually destroyed
+setTimeout(() => {}, 9999999)
+```
+
+```bash
+$ node --trace-gc custom-async-resource-manual-destroy.js
+[12212:0x48c00f0]       30 ms: Scavenge 2.4 (3.0) -> 2.0 (4.0) MB, 0.8 / 0.0 ms  (average mu = 1.000, current mu = 1.000) allocation failure
+[12212:0x48c00f0]       48 ms: Scavenge 2.6 (4.3) -> 2.4 (5.3) MB, 0.9 / 0.0 ms  (average mu = 1.000, current mu = 1.000) task
+```
+
+```bash
+    (asyncId: 2) INIT (DBQUERY) (triggerAsyncId=1) (resource=DBQuery)
+    (asyncId: 2) BEFORE
+query executed!
+    (asyncId: 2) AFTER
+    (asyncId: 3) INIT (Timeout) (triggerAsyncId=1) (resource=Timeout)
+    (asyncId: 2) DESTROY
+```
+
+보이는 것처럼, `destroy` 훅은 `emitDestroy()`가 호출된 직후에 바로 실행되어졌다. 만약 `dbquery.destroy()`를 주석처리 하거나 없앤다면, `destroy` 훅은 객체가 가비지 콜렉팅 되어도 실행되지 않을 것이다.
+
+## 마치며
+
+이 외에도 HTTP request, 파일 시스템 접근, 암호화 작업과 같은 다른 유형의 비동기 작업이 있을 수 있다. 더 많은 예제를 [여기](https://github.com/deepal/async-hooks-demo)에서 살펴보자.

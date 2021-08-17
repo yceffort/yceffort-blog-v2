@@ -152,7 +152,7 @@ function processPendingAnalyticsEvents(deadline) {
     ga('send', 'event', evt.category, evt.action, evt.label, evt.value)
   }
 
-  // 해야할 작업이 있따면 다시 예약
+  // 해야할 작업이 있다면 다시 예약
   if (eventsToSend.length > 0) schedulePendingEvents()
 }
 ```

@@ -171,7 +171,7 @@ function processPendingAnalyticsEvents(deadline) {
 
 idle callback에서 DOM 조작을 트리거하지 않는 또다른 이유는, DOM 에 걸리는 시간을 예측할 수 없기 때문에, 브라우저에서 제공한 deadline을 쉽게 넘길 수 있기 때문이다.
 
-따라서 가장 좋은 방법은 브라우저가 스스로 스케쥴링할 수 있는 `requestAnimationFrame` 콜백 내부에서 DOM 조작을 하는 것이다. 하나 주의해야할 것은, 만약 가상돔 라이브러리를 사용한다면 `requestIdleCallback`를 사용할 경우 실제 DOM 조작은 idle callback이 아닌 다음 `requestAnimationFrame` 에서 일어날 수도 있다는 것이다.
+따라서 가장 좋은 방법은 브라우저가 스스로 스케쥴링할 수 있는 `requestAnimationFrame` 콜백 내부에서 DOM 조작을 하는 것이다. 하나 주의해야할 것은, 만약 가상돔 라이브러리를 사용한다면 `requestIdleCallback`에서 변경작업을 수행하지만, idle callback이 아닌 다음 `requestAnimationFrame`에서 DOM 변경작업을 적용한다.
 
 ```javascript
 function processPendingElements(deadline) {
@@ -216,3 +216,9 @@ function appendDocumentFragment() {
   documentFragment = null
 }
 ```
+
+## 더 읽어보기
+
+- https://developers.google.com/web/updates/2015/08/using-requestidlecallback
+- https://engineering.linecorp.com/ko/blog/line-securities-frontend-4/
+- https://www.w3.org/TR/requestidlecallback/

@@ -132,7 +132,7 @@ app.post("/user", (req, res) => {
 
 위 네가지 작업이 4개의 비동기 리소스를 생성한다고 가정해보자.
 
-- `DB Operation` 작업은 `HTTP Client Request`와 `Logging` 보다는 오래 걸리지 않을 것이다. 왜냐면 `storeInDb` 함수가 `notifyUpstream`과 `logger.log`의 작업이 완료 될 때 까지 기다리지 않기 떄문이다.
+- `DB Operation` 작업은 `HTTP Client Request`와 `Logging` 보다는 오래 걸리지 않을 것이다. 왜냐면 `storeInDb` 함수가 `notifyUpstream`과 `logger.log`의 작업이 완료 될 때 까지 기다리지 않기 때문이다.
 - `Logging`도 마찬가지로 비동기 작업인데, 비동기 리소스를 만들기 때문이다. 다만 이 리소스는 다른 것에 비해 생명주기가 짧다.
 - `Incoming HTTP Request`는 가장 마지막에 없어지는 리소스가 될 것이다. `notifyUpstream`가 완료되고 응답이 완전히 전송된 후에만 완료되기 때문이다.
 
@@ -162,7 +162,7 @@ timer callback
 
 이 결과에 따르면
 
-- 비동기 리소스 `Timeout`은 `setTimeout`이 호출되었을 떄 초기화 되었다.
+- 비동기 리소스 `Timeout`은 `setTimeout`이 호출되었을 때 초기화 되었다.
 - `1000ms`가 만료되기 전에, `before` async hook이 타이머 콜백이 실행되기 직전에 실행되었다.
 - Timer 콜백이 실행되고, `timer callback`이 로깅 되었다.
 - Timer 콜백이 실행된 이후에, `after` async hook이 실행되었다.
@@ -197,7 +197,7 @@ inner timer callback
 
 이 예제에서는, 바깥 쪽 Timeout 리소스가 트리거 되면, 또다른 Timeout 리소스를 트리거 한다. 내부 타이머의 Timeout리소스가 `triggerAsyncId` 2를 가지고 있고, 이는 외부 Timeout 리소스의 `asyncId`임을 할 수 있다. 이로 미루어보아 내부 타이머가 외부 타이머의 트리거로 실행되었음을 알 수 있다.
 
-그러나, 사실은 외부 Timer리소스가 내부 Timer 리소스보다 먼저 없어졌다고 보는 것이 맞다. 그 이유는 외부 타이버가 내부 타이머의 실행을 기다리거나, 콜백일 실행되는 것을 기다리지 않기 떄문이다.
+그러나, 사실은 외부 Timer리소스가 내부 Timer 리소스보다 먼저 없어졌다고 보는 것이 맞다. 그 이유는 외부 타이버가 내부 타이머의 실행을 기다리거나, 콜백일 실행되는 것을 기다리지 않기 때문이다.
 
 ### clear `setTimeout`
 

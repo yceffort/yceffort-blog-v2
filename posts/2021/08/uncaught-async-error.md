@@ -100,12 +100,14 @@ Uncaught (in promise) Error: err 3
 `forEach`
 
 ```javascript
-try{
-	await Promise.all([1,2,3].forEach(async (index) => {
-		throw new Error(`err ${index}`)
-	}));
-}catch(e) {
-	console.log(e); // undefined is not iterable (cannot read property Symbol(Symbol.iterator))
+try {
+  await Promise.all(
+    [1, 2, 3].forEach(async (index) => {
+      throw new Error(`err ${index}`)
+    }),
+  )
+} catch (e) {
+  console.log(e) // undefined is not iterable (cannot read property Symbol(Symbol.iterator))
 }
 ```
 
@@ -126,13 +128,15 @@ try {
 어떤일이 일어나는지 정확히 알기 위해, `console.log`를 추가해 보자.
 
 ```javascript
-try{
-	await Promise.all([1,2,3].forEach(async (index) => {
-    console.log('forEach', index)
-		throw new Error(`err ${index}`)
-	}));
-}catch(e) {
-	console.log(e); // undefined is not iterable (cannot read property Symbol(Symbol.iterator))
+try {
+  await Promise.all(
+    [1, 2, 3].forEach(async (index) => {
+      console.log('forEach', index)
+      throw new Error(`err ${index}`)
+    }),
+  )
+} catch (e) {
+  console.log(e) // undefined is not iterable (cannot read property Symbol(Symbol.iterator))
 }
 ```
 
@@ -145,19 +149,20 @@ TypeError: undefined is not iterable (cannot read property Symbol(Symbol.iterato
     at <anonymous>:2:16
 ```
 
-
 `forEach`는 `break`가 없다. 즉 중간에 도망갈 수 없는 loop 구문이다. 따라서 exception 유무와 상관없이 다 돌게 된다. 그러므로 `Promise.all`을 사용해야 하는 상황에서는 일반적으로 `forEach`대신 `map`을 쓴다.
 
 - https://262.ecma-international.org/6.0/#sec-array.prototype.foreach
 
 ```javascript
-try{
-	await Promise.all([1,2,3].map(async (index) => {
-    console.log('forEach', index)
-		throw new Error(`err ${index}`)
-	}));
-}catch(e) {
-	console.log(e); // undefined is not iterable (cannot read property Symbol(Symbol.iterator))
+try {
+  await Promise.all(
+    [1, 2, 3].map(async (index) => {
+      console.log('forEach', index)
+      throw new Error(`err ${index}`)
+    }),
+  )
+} catch (e) {
+  console.log(e) // undefined is not iterable (cannot read property Symbol(Symbol.iterator))
 }
 ```
 
@@ -170,21 +175,30 @@ try{
 아래 코드에서는 에러가 잡히지 않지만
 
 ```javascript
-Promise.resolve().then(/*onSuccess*/() => {
-	throw new Error("err"); // uncaught
-}, /*onError*/(e) => {
-	console.log(e)
-});
+Promise.resolve().then(
+  /*onSuccess*/ () => {
+    throw new Error('err') // uncaught
+  },
+  /*onError*/ (e) => {
+    console.log(e)
+  },
+)
 ```
 
 별도로 이렇게 `catch` 문이 빠져 있다면 잡을 수 있게 된다.
 
 ```javascript
-Promise.resolve().then(/*onSuccess*/() => {
-	throw new Error("err");
-}).catch(/*onError*/(e) => {
-	console.log(e); // caught
-})
+Promise.resolve()
+  .then(
+    /*onSuccess*/ () => {
+      throw new Error('err')
+    },
+  )
+  .catch(
+    /*onError*/ (e) => {
+      console.log(e) // caught
+    },
+  )
 ```
 
 ## Early Init
@@ -192,21 +206,24 @@ Promise.resolve().then(/*onSuccess*/() => {
 잡히지 않는 예외의 또다른 케잇스는 promise와 await을 분리하여 병렬로 실행하는 것이다. `await`은 `async` 함수의 실행만을 중지해서 실행하므로, 이경우 병렬화가 일어나버리게 된다. 아래 예제를 살펴보자.
 
 ```javascript
-const wait = (ms) => new Promise((res) => setTimeout(res, ms));
+const wait = (ms) => new Promise((res) => setTimeout(res, ms))
 
-(async () => {
-	try{
-		const p1 = wait(3000).then(() => {throw new Error("err")}); // uncaught
-		await wait(2000).then(() => {throw new Error("err2")}); // caught
-		await p1;
-	}catch(e) {
-		console.log(e);
-	}
-})();
+;(async () => {
+  try {
+    const p1 = wait(3000).then(() => {
+      throw new Error('err')
+    }) // uncaught
+    await wait(2000).then(() => {
+      throw new Error('err2')
+    }) // caught
+    await p1
+  } catch (e) {
+    console.log(e)
+  }
+})()
 ```
 
 이 경우에는 두 개의 `await`을 모두 기다리지 않는다. 하나에서 error가 나버리면, `try...catch`로 해당 에러를 잡아버리고, 그 다음으로 넘어가버리게 된다. 따라서 나머지 하나의 에러는 잡히지 않게 된다.
-
 
 ```bash
 Error: err2
@@ -216,17 +233,21 @@ Uncaught (in promise) Error: err
 이 경우에도, 마찬가지로 `Promise.all`을 통해서 문제를 해결할 수 있다.
 
 ```javascript
-(async () => {
-	try{
-    const p1 = wait(3000).then(() => {throw new Error("err")}); 
-await Promise.all([
-	wait(2000).then(() => {throw new Error("err2")}), // p1
-	p1
-]);
-}catch(e) {
-		console.log(e);
-	}
-})();
+;(async () => {
+  try {
+    const p1 = wait(3000).then(() => {
+      throw new Error('err')
+    })
+    await Promise.all([
+      wait(2000).then(() => {
+        throw new Error('err2')
+      }), // p1
+      p1,
+    ])
+  } catch (e) {
+    console.log(e)
+  }
+})()
 ```
 
 ## 이벤트 리스너
@@ -234,14 +255,14 @@ await Promise.all([
 이벤트 리스너와 같이 콜백에서도 종종 unhandled exception이 발생하곤 한다. 이 경우에는 동기나 비동기나 별다른 차이가 없다. 따라서 적절하게 `try...catch`를 사용하면 된다.
 
 ```javascript
-document.querySelector("button").addEventListener("click", async () => {
-	throw new Error("err"); // uncaught
-});
+document.querySelector('button').addEventListener('click', async () => {
+  throw new Error('err') // uncaught
+})
 ```
 
 ```javascript
-document.querySelector("button").addEventListener("click", () => {
-	throw new Error("err"); // uncaught
+document.querySelector('button').addEventListener('click', () => {
+  throw new Error('err') // uncaught
 })
 ```
 
@@ -251,22 +272,22 @@ Promise Constructor 내부에서 동기로 에러가 발생하면 다음과 같�
 
 ```javascript
 new Promise(() => {
-	throw new Error("err");
+  throw new Error('err')
 }).catch((e) => {
-	console.log(e); // caught
-});
+  console.log(e) // caught
+})
 ```
 
 그러나, 여기에서도 비동기로 에러가 발생할 경우에는 잡히지 않게 된다.
 
 ```javascript
 new Promise(() => {
-	setTimeout(() => {
-  	throw new Error("err"); // uncaught
-  }, 0);
+  setTimeout(() => {
+    throw new Error('err') // uncaught
+  }, 0)
 }).catch((e) => {
-	console.log(e);
-});
+  console.log(e)
+})
 ```
 
 여기에서는 `resolve`와 `reject`를 적절하게 사용해주는 것이 좋다.
@@ -275,33 +296,38 @@ new Promise(() => {
 
 ```javascript
 new Promise((res, rej) => {
-	setTimeout(() => { // 1
-			connection.query("SELECT ...", (err, results) => { // 2
-				if (err) {
-					rej(err);
-				}else {
-					const r = transformResult(results); // 3
-					res(r);
-				}
-			});
-  }, 1000);
-});
+  setTimeout(() => {
+    // 1
+    connection.query('SELECT ...', (err, results) => {
+      // 2
+      if (err) {
+        rej(err)
+      } else {
+        const r = transformResult(results) // 3
+        res(r)
+      }
+    })
+  }, 1000)
+})
 ```
 
-대신, 
+대신,
 
 ```javascript
 new Promise((res, rej) => {
-	setTimeout(res, 1000); // 1 비동기로 넘긴다
-}).then(() => {
-	connection.query("SELECT ...", (err, results) => { // 2 넘긴 다음에 쿼리 실행
-		if (err) {
-			rej(err);
-		}else {
-			res(results);
-		}
-	});
-}).then((results) => transformResult(results)); // 3 해당 쿼리에 대한 적절한 `then`처리
+  setTimeout(res, 1000) // 1 비동기로 넘긴다
+})
+  .then(() => {
+    connection.query('SELECT ...', (err, results) => {
+      // 2 넘긴 다음에 쿼리 실행
+      if (err) {
+        rej(err)
+      } else {
+        res(results)
+      }
+    })
+  })
+  .then((results) => transformResult(results)) // 3 해당 쿼리에 대한 적절한 `then`처리
 ```
 
 이렇게 되면 모든 오류가 체인으로 전파되어 `.catch`나 `await`이 적절하게 처리할 수 있게 된다.

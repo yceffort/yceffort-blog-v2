@@ -4,7 +4,7 @@ tags:
   - javascript
 published: true
 date: 2021-08-23 13:21:41
-description: 'async 하나면 되던 것도 안된다니까요?'
+description: 'async가 있으면 함수 실행이 뒤로 넘어간다니까요?'
 ---
 
 ## Async IIFE
@@ -61,7 +61,7 @@ try {
 })()
 ```
 
-요것은 https://yceffort.kr/2021/02/run-await-return-return-await 이것과 좀 비슷한 느낌이다.
+요것은 https://yceffort.kr/2021/02/run-await-return-return-await 이것과 좀 비슷하다.
 
 ## Async forEach
 
@@ -152,6 +152,25 @@ TypeError: undefined is not iterable (cannot read property Symbol(Symbol.iterato
 `forEach`는 `break`가 없다. 즉 중간에 도망갈 수 없는 loop 구문이다. 따라서 exception 유무와 상관없이 다 돌게 된다. 그러므로 `Promise.all`을 사용해야 하는 상황에서는 일반적으로 `forEach`대신 `map`을 쓴다.
 
 - https://262.ecma-international.org/6.0/#sec-array.prototype.foreach
+
+> There is no way to stop or break a forEach() loop other than by throwing an exception. If you need such behavior, the forEach() method is the wrong tool.
+
+> `return false`를 쓰면 forEach를 나올 수 있다는 포스팅도 종종 보이는데, 사실 이건 엄밀히 말하면 그렇게 보이는 것 뿐이다.
+
+```javascript
+function hello() {
+  ;[1, 2, 3].forEach((index) => {
+    console.log(`${index} 도는 중`)
+    return false
+  })
+}
+```
+
+```bash
+1 도는 중
+2 도는 중
+3 도는 중
+```
 
 ```javascript
 try {

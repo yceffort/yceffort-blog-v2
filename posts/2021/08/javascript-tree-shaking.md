@@ -128,3 +128,30 @@ console.log(fruits) // (4) ["apple", "orange", "pear", "kiwi"]
 후자의 예제의 경우, 여기에서 지정된 파일은 부수효과가 없는 것으로 가정한다. `package.json`에 추가하고 싶지 않으면, [`module.rules`를 활용하여 설정할 수 있다.](https://github.com/webpack/webpack/issues/6065#issuecomment-351060570)
 
 ### 필요한 것반 import 하기
+
+`Babel`의 설정을 es6로 유지하도록 변경했지만, 모듈에서 필요한 함수만 가져오도록 수정해야 한다.
+
+```javascript
+import { simpleSort } from "../../utils/utils";
+```
+
+이 구문은, `../../utils/utils`에서 `simpleSort`만 가져오도록 지정한다. 전체 유틸리티 모듈이 아닌, 하나의 함수만 가져오므로 기존의 `utils.simpleSort`를 모두 `simpleSort`로 수정해야 한다. 
+
+이제 번들 크기를 다시 확인해보자.
+
+
+```bash
+                 Asset        Size  Chunks             Chunk Names
+js/vendors.a3722bf0.js    37.1 KiB       0  [emitted]  vendors
+   js/main.951b863a.js    20.8 KiB       1  [emitted]  main
+```
+
+```bash
+                 Asset        Size  Chunks             Chunk Names
+js/vendors.b007c500.js    36.9 KiB       0  [emitted]  vendors
+   js/main.2b536ea2.js    8.45 KiB       1  [emitted]  main
+```
+
+두개 번들 크기 모두 줄었지만, 여기서 가장 큰 해택을 본 것은 `main` 쪽이다. 실제로 사용하지 않는 부분을 제거하여 약 60%의 코드를 날려버릴 수 있었다. 이렇게 하면 스크립트가 다운로드 하는데 걸리는 시간 뿐만 아니라 처리하는데 걸리는 시간도 줄일 수 있다.
+
+### 무엇을 해야할지 감이 오지 않을 때

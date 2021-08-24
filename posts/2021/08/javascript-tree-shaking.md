@@ -132,13 +132,12 @@ console.log(fruits) // (4) ["apple", "orange", "pear", "kiwi"]
 `Babel`의 설정을 es6로 유지하도록 변경했지만, 모듈에서 필요한 함수만 가져오도록 수정해야 한다.
 
 ```javascript
-import { simpleSort } from "../../utils/utils";
+import { simpleSort } from '../../utils/utils'
 ```
 
-이 구문은, `../../utils/utils`에서 `simpleSort`만 가져오도록 지정한다. 전체 유틸리티 모듈이 아닌, 하나의 함수만 가져오므로 기존의 `utils.simpleSort`를 모두 `simpleSort`로 수정해야 한다. 
+이 구문은, `../../utils/utils`에서 `simpleSort`만 가져오도록 지정한다. 전체 유틸리티 모듈이 아닌, 하나의 함수만 가져오므로 기존의 `utils.simpleSort`를 모두 `simpleSort`로 수정해야 한다.
 
 이제 번들 크기를 다시 확인해보자.
-
 
 ```bash
                  Asset        Size  Chunks             Chunk Names

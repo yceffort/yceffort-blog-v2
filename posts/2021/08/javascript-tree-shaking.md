@@ -67,7 +67,7 @@ import * as utils from '../../utils/utils'
 
 ### 바벨이 es6 모듈을 commonjs module로 변환하지 않도록 하기
 
-Babel은 대부분의 웹 애플리케이션이 필요로 하는 필수 도구다. 그러나 아쉽게도, 트리쉐이킹과 같은 간단한 작업도 이 babel 때문에 어려워 지는 경우가 발생한다. 만약 [babel-preset-env](https://developers.google.com/web/fundamentals/performance/optimizing-javascript/tree-shaking#:~:text=If%20you%27re%20using-,babel-preset-env,-%2C%20one%20thing%20it)를 사용한다면, 이 모듈이 es6를 자동으로 commonjs 변환해준다. 즉, `import`를 `require`로 바꿔주기도 한다. 이는 훌륭한 기능이지만, 트리 쉐이킹 관점에서는 그렇지 못하다.
+Babel은 대부분의 웹 애플리케이션이 필요로 하는 필수 도구다. 그러나 아쉽게도, 트리쉐이킹과 같은 간단한 작업도 이 babel 때문에 어려워 지는 경우가 발생한다. 만약 [babel-preset-env](https://babeljs.io/docs/plugins/preset-env/)를 사용한다면, 이 모듈이 es6를 자동으로 commonjs 변환해준다. 즉, `import`를 `require`로 바꿔주기도 한다. 이는 훌륭한 기능이지만, 트리 쉐이킹 관점에서는 그렇지 못하다.
 
 트리쉐이킹 관점에서 commonjs의 문제점은 웹팩이 어떤 모듈이 사용중인지 아닌지를 판단하여 제거하기가 어렵다는 것이다. 이를 위해 `.babelrc`에서 `commonjs`로 변환하지 못하도록 설정을 추가해 줘야 한다.
 
@@ -154,3 +154,23 @@ js/vendors.b007c500.js    36.9 KiB       0  [emitted]  vendors
 두개 번들 크기 모두 줄었지만, 여기서 가장 큰 해택을 본 것은 `main` 쪽이다. 실제로 사용하지 않는 부분을 제거하여 약 60%의 코드를 날려버릴 수 있었다. 이렇게 하면 스크립트가 다운로드 하는데 걸리는 시간 뿐만 아니라 처리하는데 걸리는 시간도 줄일 수 있다.
 
 ### 무엇을 해야할지 감이 오지 않을 때
+
+대부분의 경우 이정도 수정을 거치면 최신버전의 웹팩에서 트리쉐이킹이 동작하지만, 그럼에도 불구하고 제대로 동작하지 않는 경우가 있다. 예를 들어 [Lodash](https://lodash.com/)와 같은 경우가 있다. Lodash의 설계적인 특성상, [Lodash-es](https://www.npmjs.com/package/lodash-es)%20install%20the-,lodash-es,-package%20in%20lieu)를 설치해서 사용해야 한다.
+
+https://yceffort.kr/2020/07/how-commonjs-is-making-your-bundles-larger
+
+```javascript
+// This still pulls in all of lodash even if everything is configured right.
+import { sortBy } from 'lodash'
+
+// This will only pull in the sortBy routine.
+import sortBy from 'lodash-es/sortBy'
+```
+
+`import` 구문을 일관되게 유지하고 싶다면, [babel-plugin-lodash](https://www.npmjs.com/package/babel-plugin-lodash)를 설치하여 사용하면 된다.
+
+그럼에도 불구하고 트리 쉐이킹의 적용을 받지 않는 라이브러리가 있다면, es6 구문을 활용하여 메서드를 내보내는지 여부를 확인해야 한다. CommonJS 방식인 `module.exports`를 사용하는 경우 웹팩에서 트리쉐이킹이 불가능하다. 그럼에도, [webpack-common-shake](https://github.com/indutny/webpack-common-shake)와 같은 라이브러리를 사용하면 가능할 수도 있지만, [일부 케이스의 경우 트리쉐이킹이 완벽하게 되지 않는다.](https://github.com/indutny/webpack-common-shake#limitations) 그러므로 안정적인 트리 쉐이킹을 위해서는 es6 모듈을 사용하는 것이 좋다.
+
+## 마치며
+
+트리 쉐이킹에서 어떤일이 발생할지는 애플리케이션과 애플리케이션의 의존성, 아키텍쳐에 달려있다. 지금 바로 해보자. 번들에서 사용하지 않는 코드를 삭제한다면 최적화를 일궈낼 수 있다. 물론, 트레 쉐이킹을 하더라도 이득이 없을 수도 없다. 그러나 프로덕션 빌드에서 이러한 최적화를 활용하도록 빌드 시스템을 구성하고, 애플리케이션에서 필요한 것만 선택적으로 가져오면 애플리케이션을 최소한의 크기로 유지할 수 있다. 이는 성능 측면에서, 그리고 사용자 측면에서 모두 좋다.

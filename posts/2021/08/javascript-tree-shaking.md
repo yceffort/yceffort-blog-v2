@@ -17,11 +17,11 @@ description: '트리쉐이킹은 직접 해드세요 제발'
 
 그리고 자바스크립트는 처리하는데 많은 비용이 드는 리소스다. 다운로드 후 비교적 가벼운 디코딩 시간만 소요되는 이미지와는 다르게, 자바스크립트는 파싱도 해야하고, 컴파일도 해야하고, 그리고 마지막으로 실행도 되어야 한다. 즉, 다른 리소스에 비해 자바스크립트는 _비싼_ 리소스다. [자바스크립트 엔진의 효율성을 개선하기 위한 작업](https://v8.dev/blog/background-compilation)이 지속적으로 이뤄지고 있지만 자바스크립트의 성능 향상 작업은 어디까지나 개발자의 몫이다.
 
-이를 위해 자바스크립트의 성능을 향상시키는 다양한 기술들이 있다. [Code Splitting](https://developers.google.com/web/fundamentals/performance/optimizing-javascript/tree-shaking#:~:text=improve%20JavaScript%20performance.-,Code%20splitting,-%2C%20is%20one%20such)과 같이 애플리케이션 자바스크립트를 청크로 분할하고, 이러한 청크를 필요한 애플리케이션 경로에만 제공하여 성능을 향상시킬수도 있다. 이 기술도 제법 괜찮지만, 자바스크립트가 많이 사용되는 애플리케이션의 일반적인 문제, 사용하지 않는 코드가 포함될 수도 있다. 이 문제를 해결하기 위한 것이 바로 트리쉐이킹이다.
+이를 위해 자바스크립트의 성능을 향상시키는 다양한 기술들이 있다. [Code Splitting](https://webpack.js.org/guides/code-splitting/)과 같이 애플리케이션 자바스크립트를 청크로 분할하고, 이러한 청크를 필요한 애플리케이션 경로에만 제공하여 성능을 향상시킬수도 있다. 이 기술도 제법 괜찮지만, 자바스크립트가 많이 사용되는 애플리케이션의 일반적인 문제, 사용하지 않는 코드가 포함될 수도 있다. 이 문제를 해결하기 위한 것이 바로 트리쉐이킹이다.
 
 ## Tree shaking?
 
-[Tree shaking](https://en.wikipedia.org/wiki/Tree_shaking)은 사용되지 않는 코드를 제거하는 기법을 의미한다. 이 용어는 [Rollup](https://github.com/rollup/rollup#tree-shaking) 덕분에 유명세를 타긴했지만, 사용되지 않는 코드를 제거한다는 개념은 원래도 존재하고 있었다. 그리고 이 개념은 [Webpack](https://developers.google.com/web/fundamentals/performance/optimizing-javascript/tree-shaking#:~:text=found%20purchase%20in-,webpack,-%2C%20which%20is%20demonstrated)에서도 소개되었다.
+[Tree shaking](https://en.wikipedia.org/wiki/Tree_shaking)은 사용되지 않는 코드를 제거하는 기법을 의미한다. 이 용어는 [Rollup](https://github.com/rollup/rollup#tree-shaking) 덕분에 유명세를 타긴했지만, 사용되지 않는 코드를 제거한다는 개념은 원래도 존재하고 있었다. 그리고 이 개념은 [Webpack](https://webpack.js.org/guides/tree-shaking/)에서도 소개되었다.
 
 트리쉐이킹이라는 용어는 애플리케이션을 일종의 나무와 같은 구조로 보는 대에서 유래되었다. 트리의 각 노드는 앱에 고유한 기능을 제공하는 종속성을 나타낸다. 최신 애플리케이션에서는, 다음과 같은 `import`를 활용하여 이러한 디펜던시 (종속성)을 가져온다.
 

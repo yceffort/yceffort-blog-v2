@@ -287,7 +287,7 @@ document.querySelector('button').addEventListener('click', () => {
 
 ## Promise Constructor
 
-Promise Constructor 내부에서 동기로 에러가 발생하면 다음과 같이 잘 잡을 수 있따.
+Promise Constructor 내부에서 동기로 에러가 발생하면 다음과 같이 잘 잡을 수 있다.
 
 ```javascript
 new Promise(() => {

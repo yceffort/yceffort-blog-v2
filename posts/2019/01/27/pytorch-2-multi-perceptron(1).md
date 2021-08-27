@@ -7,7 +7,7 @@ published: true
 description:
   전에는 신경망에서 중간층을 하나로만 했지만, 이 중간층을 여러개로 늘린 것을 심층신경망 (deep neural
   network) 라고 한다. 벌써 부터 뭔가 있어보인다. 이는 딥러닝에서 주요 매커니즘이다. 신경망과 심층 신경망 모두 퍼셉트론을 여러개
-  조합해서 구성한 것으로, 다층 퍼셉트론 (multilayer perceptron, MLP)라고 한다. 어쩄거...
+  조합해서 구성한 것으로, 다층 퍼셉트론 (multilayer perceptron, MLP)라고 한다. 어쨌거...
 category: pytorch
 slug: /2019/01/27/pytorch-2-multi-perceptron(1)/
 template: post
@@ -15,7 +15,7 @@ template: post
 
 전에는 신경망에서 중간층을 하나로만 했지만, 이 중간층을 여러개로 늘린 것을 심층신경망 (deep neural network) 라고 한다. 벌써 부터 뭔가 있어보인다. 이는 딥러닝에서 주요 매커니즘이다. 신경망과 심층 신경망 모두 퍼셉트론을 여러개 조합해서 구성한 것으로, 다층 퍼셉트론 (multilayer perceptron, MLP)라고 한다.
 
-어쩄거나, 입력층, 중간층, 출력층으로 구성되어 있는 것은 똑같다. 다만 차이점은 중간층이 여러개라는 것 뿐이다.
+어쨌거나, 입력층, 중간층, 출력층으로 구성되어 있는 것은 똑같다. 다만 차이점은 중간층이 여러개라는 것 뿐이다.
 
 ![multi-layer-perceptron](http://pubs.sciepub.com/ajmm/3/3/1/bigimage/fig5.png)
 

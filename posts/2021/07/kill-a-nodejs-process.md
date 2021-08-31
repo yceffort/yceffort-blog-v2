@@ -175,7 +175,7 @@ $ kill -s SIGHUP <PROCESS_ID>
 $ node -e "process.kill(<PROCESS_ID>, 'SIGHUP')"
 ```
 
-이는 첫번쨰 프로그램에 `SIGHUP`를 표시하게 한다. 만약, 해당 프로세스를 종료 시키고 싶다면 아래 명령어를 통해서 `SIGKILL` 시그널을 보내면 된다.
+이는 첫번째 프로그램에 `SIGHUP`를 표시하게 한다. 만약, 해당 프로세스를 종료 시키고 싶다면 아래 명령어를 통해서 `SIGKILL` 시그널을 보내면 된다.
 
 ```bash
 $ kill -9 <PROCESS_ID>

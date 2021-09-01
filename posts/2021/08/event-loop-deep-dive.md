@@ -4,7 +4,7 @@ tags:
   - nodejs
   - javascript
   - event-loop
-published: true
+published: false
 date: 2021-08-31 21:38:06
 description: '이벤트 루프는 4개의 큐, 그리고 2개의 중간 큐가 있습니다.'
 ---

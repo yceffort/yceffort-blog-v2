@@ -66,3 +66,7 @@ console.log(Math.floor(result2)) // 2
 - 사용해야할 임의의 비트/바이트 수가 브라우저 별로 일치 하지 않음
 - 무작위 결과값은 항상 일관되게 다시 생성하기 어려우므로, 이는 본질적으로 비결정적이고 불규칙함
 - 빌트인 시드가 변조될 수 있으므로 무결성 측면에서 부적합
+
+이러한 문제들 때문에, [월드와이드웹 컨소시움](https://www.w3.org/)은 [Web Crypto API](https://www.w3.org/TR/WebCryptoAPI/)를 만들어 공개하였다. 이 기능은 [대부분의 브라우저에서 사용할 수 있다.](https://caniuse.com/cryptography)
+
+## Web Crypto API

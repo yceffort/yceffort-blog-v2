@@ -1,11 +1,11 @@
 ---
-title: '자바스크립트에서 랜덤한 숫제 생성하기'
+title: '자바스크립트에서 안전하게 난수 생성하는 방법'
 tags:
   - javascript
   - nodejs
 published: true
 date: 2021-09-01 21:19:35
-description: ''
+description: 'Math.random()도 잘못 사용하는 경우가 더러 있음'
 ---
 
 ## Table of Contents
@@ -70,3 +70,65 @@ console.log(Math.floor(result2)) // 2
 이러한 문제들 때문에, [월드와이드웹 컨소시움](https://www.w3.org/)은 [Web Crypto API](https://www.w3.org/TR/WebCryptoAPI/)를 만들어 공개하였다. 이 기능은 [대부분의 브라우저에서 사용할 수 있다.](https://caniuse.com/cryptography)
 
 ## Web Crypto API
+
+`Web Crypto API`는 `window.crypto`를 통해 엑세스할 수 있는 다양한 암호화 관련 메소드와 함수를 제공한다. 브라우저에서는, `crypto.getRandomValues(Int32Array)`를 사용하여 암호학적인 난수를 생성할 수 있다.
+
+```javascript
+var array = new Uint32Array(10);
+window.crypto.getRandomValues(array);
+
+console.log("나의 행운의 숫자들:");
+for (var i = 0; i < array.length; i++) {
+    console.log(array[i]);
+}
+// 나의 행운의 숫자들:
+// 4213312451
+// 4055435872
+// 1248983520
+// 2190329984
+// 3226059214
+// 1665817179
+// 745131913
+// 3947493810
+// 218658595
+// 2076931579
+```
+
+Nodejs에서는 표준 web crypto api가 제공된다. `require('crypto').randomBytes(size)`를 사용하면, node에 있는 native 암호화 모듈을 사용하여 난수를 생성할 수 있다.
+
+```javascript
+const randomBytes = require('crypto').randomBytes(2)
+const number = parseInt(randomBytes.toString("hex"), 16)
+
+console.log(number) // 40358
+```
+
+Web Crypto API에 사용되는 의사 난수 생성 알고리즘 (psuedo-random number generator algorithm, PRNG)는 브라우저에 따라서 다를 수 있다. 
+
+## Web Crypto API 활용하기
+
+`Crypto.getRandomValues()` 메소드는 암호학적으로 강력한 난수를 리턴한다. 대부분의 웹 브라우저에서 사용할 수 있으며, 구현 방식에 따라 차이가 있을 수 있지만 엔트로피가 충분한 시드를 사용해야 한다. 이는 성능과 보안에 부정적인 영향을 미치지 않기 위함이다.
+
+`getRandomValues()`는 crypto 인터페이스 중 유일하게 안전하지 않는 컨텍스트에서 사용할 수 있는 메소드다. 따라서 여기서 얻은 암호화 키는 안전한 결과가 아닐 수도 있으므로, 암호화 키를 생성할 때 이 메소드를 사용하지 않는 것이 좋다. 이 경우에는, `generateKey()` 메소드를 사용하는 것이 좋다.
+
+### 문법
+
+`Web Cryptography API`는 바이트 시퀀스를 나타내는 입력으로 `ArrayBuffer`, `TypedArray`를 인수로 받는다.
+
+```javascript
+cryptoObj.getRandomValues(typedArray);
+```
+
+`typedArray`는 정수 기반의 `TypedArray`객체다. 이 외에도 `Int8Array`, `Uint8Array`, `Int16Array`, `Uint16Array`,  `Int32Array`, `Uint32Array`가 될 수 있다. 이 배열이 이제 랜덤한 난수로 채워지게 된다.
+
+## 난수 생성하기
+
+보안 목적으로 필요한 모든 임의의 값 (공격자에게 공격 받을 수 있는 가능성이 있는 모든 값)는 암호학적으로 안전한 의사 난수 생성기 ([Cryptographically Secure Pseudo-Random Number Generator, CSPRNG](https://en.wikipedia.org/wiki/Cryptographically-secure_pseudorandom_number_generator))를 사용하여 생성해야 한다.
+
+이를 활용할 수 있는 분야로는 토큰 확인 또는 리셋, 복권 번호, API 키, 암호 생성, 암호화 키 등이 있다.
+
+가장 안전하게 생성할 수 있는 방법은 무엇일까? 가장 좋은 방법은 보안상으로 잘 설계 되어 있는 라이브러리를 활용하는 것이다. Nodejs를 기준으로 살펴보면, 
+
+- [random-number-csprng](https://www.npmjs.com/package/random-number-csprng)
+- API Key, 토큰에는 [uuid](https://www.npmjs.com/package/uuid), `uuid.v4`
+

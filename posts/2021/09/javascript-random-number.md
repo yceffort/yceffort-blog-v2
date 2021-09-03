@@ -74,12 +74,12 @@ console.log(Math.floor(result2)) // 2
 `Web Crypto API`는 `window.crypto`를 통해 엑세스할 수 있는 다양한 암호화 관련 메소드와 함수를 제공한다. 브라우저에서는, `crypto.getRandomValues(Int32Array)`를 사용하여 암호학적인 난수를 생성할 수 있다.
 
 ```javascript
-var array = new Uint32Array(10);
-window.crypto.getRandomValues(array);
+var array = new Uint32Array(10)
+window.crypto.getRandomValues(array)
 
-console.log("나의 행운의 숫자들:");
+console.log('나의 행운의 숫자들:')
 for (var i = 0; i < array.length; i++) {
-    console.log(array[i]);
+  console.log(array[i])
 }
 // 나의 행운의 숫자들:
 // 4213312451
@@ -98,12 +98,12 @@ Nodejs에서는 표준 web crypto api가 제공된다. `require('crypto').random
 
 ```javascript
 const randomBytes = require('crypto').randomBytes(2)
-const number = parseInt(randomBytes.toString("hex"), 16)
+const number = parseInt(randomBytes.toString('hex'), 16)
 
 console.log(number) // 40358
 ```
 
-Web Crypto API에 사용되는 의사 난수 생성 알고리즘 (psuedo-random number generator algorithm, PRNG)는 브라우저에 따라서 다를 수 있다. 
+Web Crypto API에 사용되는 의사 난수 생성 알고리즘 (psuedo-random number generator algorithm, PRNG)는 브라우저에 따라서 다를 수 있다.
 
 ## Web Crypto API 활용하기
 
@@ -116,10 +116,10 @@ Web Crypto API에 사용되는 의사 난수 생성 알고리즘 (psuedo-random 
 `Web Cryptography API`는 바이트 시퀀스를 나타내는 입력으로 `ArrayBuffer`, `TypedArray`를 인수로 받는다.
 
 ```javascript
-cryptoObj.getRandomValues(typedArray);
+cryptoObj.getRandomValues(typedArray)
 ```
 
-`typedArray`는 정수 기반의 `TypedArray`객체다. 이 외에도 `Int8Array`, `Uint8Array`, `Int16Array`, `Uint16Array`,  `Int32Array`, `Uint32Array`가 될 수 있다. 이 배열이 이제 랜덤한 난수로 채워지게 된다.
+`typedArray`는 정수 기반의 `TypedArray`객체다. 이 외에도 `Int8Array`, `Uint8Array`, `Int16Array`, `Uint16Array`, `Int32Array`, `Uint32Array`가 될 수 있다. 이 배열이 이제 랜덤한 난수로 채워지게 된다.
 
 ## 난수 생성하기
 
@@ -127,8 +127,7 @@ cryptoObj.getRandomValues(typedArray);
 
 이를 활용할 수 있는 분야로는 토큰 확인 또는 리셋, 복권 번호, API 키, 암호 생성, 암호화 키 등이 있다.
 
-가장 안전하게 생성할 수 있는 방법은 무엇일까? 가장 좋은 방법은 보안상으로 잘 설계 되어 있는 라이브러리를 활용하는 것이다. Nodejs를 기준으로 살펴보면, 
+가장 안전하게 생성할 수 있는 방법은 무엇일까? 가장 좋은 방법은 보안상으로 잘 설계 되어 있는 라이브러리를 활용하는 것이다. Nodejs를 기준으로 살펴보면,
 
 - [random-number-csprng](https://www.npmjs.com/package/random-number-csprng)
 - API Key, 토큰에는 [uuid](https://www.npmjs.com/package/uuid), `uuid.v4`
-

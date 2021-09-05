@@ -18,7 +18,7 @@ description: 'Math.random()도 잘못 사용하는 경우가 더러 있음'
 
 `Math.random()`에서는 0이상 1미만의 부동 소수점 난수를 리턴한다. $$0 \geq x \lt 1$$
 
-이 메소드를 사용하여 특정 범위의 랜덤한 숫자를 생성하는 다양한 방법이 있지만, 사실 `Math.random()`은 실제로 랜덤한 숫자롤 생성한다고 보기 어렵다. 이는 [유사 난수](https://ko.wikipedia.org/wiki/%EC%9C%A0%EC%82%AC%EB%82%9C%EC%88%98) 이기 떄문이다. 알려진 것 처럼, [컴퓨터로 유사 난수가 아닌 진짜 난수를 생성하는 것은 어렵다.](https://en.wikipedia.org/wiki/Random_number_generation#Computational_methods)
+이 메소드를 사용하여 특정 범위의 랜덤한 숫자를 생성하는 다양한 방법이 있지만, 사실 `Math.random()`은 실제로 랜덤한 숫자롤 생성한다고 보기 어렵다. 이는 [유사 난수](https://ko.wikipedia.org/wiki/%EC%9C%A0%EC%82%AC%EB%82%9C%EC%88%98) 이기 때문이다. 알려진 것 처럼, [컴퓨터로 유사 난수가 아닌 진짜 난수를 생성하는 것은 어렵다.](https://en.wikipedia.org/wiki/Random_number_generation#Computational_methods)
 
 일반적으로, `Math.random()`으로 생성한 유사 난수는 대부분의 경우 충분한 답이 될 수 있지만, 암호학적으로 안전한 난수를 생성할 필요도 존재한다. 즉, 패턴을 통해서 쉽게 추측할 수 없거나, 시간이 지나도 반복되지 않는 진짜 난수가 필요하다는 것이다.
 

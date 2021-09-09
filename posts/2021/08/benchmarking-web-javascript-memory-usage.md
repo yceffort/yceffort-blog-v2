@@ -146,13 +146,6 @@ https://blog.webpagetest.org/posts/benchmarking-javascript-memory-usage/
 
 자바스브립트를 많이 전송한다면, 결과적으로 많은 메모리를 사용하게 될 것이다. 또한 TBT(Total Blocking Time)이 길어지면, 많은 양의 자바스크립트 관련 메모리를 사용할 가능성이 높다.
 
-<!-- ## 어디서 부터 생긴걸까?
-
-다음으로는, 메모리가 무엇으로 구성되어 있는지 살펴보자.
-
-메모리 분석에서는, 메모리가 first party content, cross-origin contents 또는 글로벌 메모리 풀과 관련있는지 확인하는데 사용할 수 있는 속성이 있다.
-
-모든 cross-origin memory는 `cross-origin-aggregated` 스코프가 있다. 이 스코프가 지정되지 않은 메모리 할당은, 공유/글로벌 메모리다. 마지막으로 `cross-origin-aggregated` 스코프외의 바이트는 first party 메모리다.  -->
 
 ![JS+DOM 관련 메모리 사용량](https://res.cloudinary.com/psaulitis/image/upload/f_auto,q_auto,w_1800/js_mem_usage_attribution.png)
 

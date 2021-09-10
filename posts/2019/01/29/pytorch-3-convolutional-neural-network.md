@@ -102,7 +102,7 @@ device
 이제 달라진다. 기존에는 1차원 배열로 변환해서 `flatten` 구별했지만, 이제는 2차원 배열로 만들어서 작업을 한다.
 
 ```python
-# 1차원 배열을 28 * 28 이차원 배열로 만듬
+# 1차원 배열을 28 * 28 이차원 배열로 만듦
 train_X = train_X.reshape((len(train_X), 1, 28, 28))
 test_X = test_X.reshape((len(test_X), 1, 28, 28))
 

@@ -195,7 +195,7 @@ export function unregister() {
 
 `create-react-app`으로 리액트 어플리케이션을 만들면, 아래와 같은 구조를 띄고 있을 것이다.
 
-````
+```
 ├── README.md
 ├── node_modules
 ├── package.json
@@ -213,8 +213,7 @@ export function unregister() {
     ├── index.js
     ├── logo.svg
     └── serviceWorker.js
-    ```
-````
+```
 
 `serviceWorker.js`가 `src` 밑에 존재한다. 이 파일은 디폴트로 생성된다. 이 단계에서는 서비스워커는 등록되지 않았으므로, 서비스 워커를 사용하기 위해서는 이를 등록해야 한다.
 

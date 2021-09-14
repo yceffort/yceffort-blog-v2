@@ -146,7 +146,6 @@ https://blog.webpagetest.org/posts/benchmarking-javascript-memory-usage/
 
 자바스브립트를 많이 전송한다면, 결과적으로 많은 메모리를 사용하게 될 것이다. 또한 TBT(Total Blocking Time)이 길어지면, 많은 양의 자바스크립트 관련 메모리를 사용할 가능성이 높다.
 
-
 ![JS+DOM 관련 메모리 사용량](https://res.cloudinary.com/psaulitis/image/upload/f_auto,q_auto,w_1800/js_mem_usage_attribution.png)
 
 ## 프레임워크 별 메모리 사용량은 어떨까?

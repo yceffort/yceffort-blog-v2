@@ -137,7 +137,7 @@ function memoizeAsync(fn, getKey) {
     const key = getKey(...args)
 
     if (memo.hasOwnProperty(key)) {
-      callback(key)
+      callback(memo[key])
       return
     }
 

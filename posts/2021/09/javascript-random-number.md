@@ -131,9 +131,3 @@ cryptoObj.getRandomValues(typedArray)
 
 - [random-number-csprng](https://www.npmjs.com/package/random-number-csprng)
 - API Key, 토큰에는 [uuid](https://www.npmjs.com/package/uuid), `uuid.v4`
-
-## 조심해야 할 것
-
-### lookbehind 문법은 사파리와 익스플로러에서 쓸 수 없다
-
-[여기](https://yceffort.kr/2020/03/regex-formatting-number)에서도 한번 언급했던 문제. `x(?<=y)` `x(?<!y)`와 같은 lookbehind문법은 [사파리와 익스플로러에서는 지원하지 않으므로](https://yceffort.kr/2020/03/regex-formatting-number), 다른 방법으로 처리해야한다.

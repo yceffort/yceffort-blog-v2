@@ -358,3 +358,32 @@ console.log(regex.test('01-01-190'))
 6. `{2}` 첫번째 표현과 정확히 2개 일치하는 경우
 7. `\d{2}`: 정확히 두개의 숫자
 8. `(\d{2})?`: 두개의 숫자. 그러나 옵셔널 이므로, 년도는 2개나 4개가 가능해진다.
+
+
+## 조심해야 할 것
+
+### lookbehind 문법은 사파리와 익스플로러에서 쓸 수 없다
+
+[여기](https://yceffort.kr/2020/03/regex-formatting-number)에서도 한번 언급했던 문제. `x(?<=y)` `x(?<!y)`와 같은 lookbehind문법은 [사파리와 익스플로러에서는 지원하지 않으므로](https://yceffort.kr/2020/03/regex-formatting-number), 다른 방법으로 처리해야한다.
+
+### Catastrophic Backtracking
+
+정규식에는 두가지 알고리즘이 존재한다.
+
+- Deterministic Finite Automaton (DFA): 문자열의 문자를 한번만 확인한다.
+- Nondeterministic Finite Automaton (NFA): 최적의 일치를 찾을 때 까지 여러번 확인한다.
+
+여기에서 자바스크립트는 NFA 알고리즘을 사용하고 있는데, NFA의 동작으로 인해 Catastrophic Backtracking 가 일어날 수 있다.
+
+무슨말인지 잘 모르겠으니 아래 정규식을 살펴보자.
+
+```javascript
+/(g|i+)+t/
+```
+
+매우 간단한 정규식이지만, 매우 무거운 정규식이기도 하다.
+
+- `(g|i+)`: 주어진 문자얄이 `g`로 시작하는지, 또는 `i`가 하나이상 있는지 확인한다.
+- `+`: 이전 그룹이 한개이상 존재하는지 확인한다.
+- `t`: 문자열은 `t`로 끝나야 한다.
+

@@ -22,7 +22,7 @@ description: '아직도 정규식이랑 안친함'
 문법 : `new RegExp(patter[, flags])
 
 ```javascript
-var regexConst = new RegExp('abc');
+var regexConst = new RegExp('abc')
 ```
 
 ### 정규식 리터럴
@@ -30,7 +30,7 @@ var regexConst = new RegExp('abc');
 문법: `/pattern/flags`
 
 ```javascript
-var regexLiteral = /abc/;
+var regexLiteral = /abc/
 ```
 
 - `flags`는 옵셔널한 값인데, 이후에 다룬다.
@@ -47,24 +47,24 @@ var regexLiteral = /abc/;
 
 ### ReExp.prototype.test()
 
-이 메서드는 정규식과 일치하는 항목이 있는지 여부를 테스트하는데 사용된다. 
+이 메서드는 정규식과 일치하는 항목이 있는지 여부를 테스트하는데 사용된다.
 
 ```javascript
-var regex = /hello/;
-var str = 'hello world';
-var result = regex.test(str);
-console.log(result); // true
+var regex = /hello/
+var str = 'hello world'
+var result = regex.test(str)
+console.log(result) // true
 ```
 
 ### RegExp.prototype.exec()
 
-이 메소드는, 일치하는 모든 그룹을 배열로 리턴한다. 
+이 메소드는, 일치하는 모든 그룹을 배열로 리턴한다.
 
 ```javascript
-var regex = /hello/;
-var str = 'hello world';
-var result = regex.exec(str);
-console.log(result);
+var regex = /hello/
+var str = 'hello world'
+var result = regex.exec(str)
+console.log(result)
 // [ 'hello', index: 0, input: 'hello world', groups: undefined ]
 // 'hello' -> 패턴에 일치하는 것
 // index: -> 시작 index
@@ -76,8 +76,8 @@ console.log(result);
 리터럴 텍스트와, 테스트 문자열이 일치하는지 확인하는 가장 간단한 패턴이다.
 
 ```javascript
-var regex = /hello/;
-console.log(regex.test('hello world'));
+var regex = /hello/
+console.log(regex.test('hello world'))
 // true
 ```
 
@@ -94,24 +94,24 @@ console.log(regex.test('hello world'));
 - `g`: 글로벌 검색
 - `i`: 대소문자 구별을 안함
 
-플래그와 단일 정규식을 결합할 수 있다. 
+플래그와 단일 정규식을 결합할 수 있다.
 
 정규식 리터럴 - `/pattern/flogs`
 
 ```javascript
-var regexGlobal = /abc/g;
-console.log(regexGlobal.test('abc abc')); // true
-var regexInsensitive = /abc/i;
-console.log(regexInsensitive.test('Abc')); // true
+var regexGlobal = /abc/g
+console.log(regexGlobal.test('abc abc')) // true
+var regexInsensitive = /abc/i
+console.log(regexInsensitive.test('Abc')) // true
 ```
 
 정규식 생성자 - `new RegExp('pattern', 'flags')`
 
 ```javascript
-var regexGlobal = new RegExp('abc','g')
-console.log(regexGlobal.test('abc abc')); // true
-var regexInsensitive = new RegExp('abc','i')
-console.log(regexInsensitive.test('Abc')); // true
+var regexGlobal = new RegExp('abc', 'g')
+console.log(regexGlobal.test('abc abc')) // true
+var regexInsensitive = new RegExp('abc', 'i')
+console.log(regexInsensitive.test('Abc')) // true
 ```
 
 ### 문자열 그룹
@@ -121,12 +121,12 @@ console.log(regexInsensitive.test('Abc')); // true
 특정한 위치에 서로 다른 문자를 일치시키는 방법으로, 괄호안에 있는 문자의 문자열에 있는 모든 단일 문자를 확인한다.
 
 ```javascript
-var regex = /[bt]ear/;
-console.log(regex.test('tear'));
+var regex = /[bt]ear/
+console.log(regex.test('tear'))
 // returns true
-console.log(regex.test('bear'));
+console.log(regex.test('bear'))
 // return true
-console.log(regex.test('fear'));
+console.log(regex.test('fear'))
 // return false
 ```
 
@@ -135,12 +135,12 @@ console.log(regex.test('fear'));
 괄호안에 있는 것과 일치하지 않는 것만 확인한다.
 
 ```javascript
-var regex = /[^bt]ear/;
-console.log(regex.test('tear'));
+var regex = /[^bt]ear/
+console.log(regex.test('tear'))
 // returns false
-console.log(regex.test('bear'));
+console.log(regex.test('bear'))
 // return false
-console.log(regex.test('fear'));
+console.log(regex.test('fear'))
 // return true
 ```
 
@@ -149,10 +149,10 @@ console.log(regex.test('fear'));
 모든 알파벳을 특정 위치에서 일치시키고 싶다면, 모든 문자를 쓰는 대신 이처럼 범위를 쓰면 된다. `[a-h]`는 a~h를 의미한다. `[0-9]`를 사용하여 숫자를 찾거나, `[A-Z]`를 사용하여 대문자만 찾을 수도 있다.
 
 ```javascript
-var regex = /[a-z]ear/;
-console.log(regex.test('fear'));
+var regex = /[a-z]ear/
+console.log(regex.test('fear'))
 // returns true
-console.log(regex.test('tear'));
+console.log(regex.test('tear'))
 // returns true
 ```
 
@@ -177,124 +177,124 @@ Quantifiers는 정규식에서 특별한 의미를 갖는 기호를 의미한다
 - `+`: 이전 식과 1회 이상 일치
 
   ```javascript
-  var regex = /\d+/;
-  console.log(regex.test('8'));
+  var regex = /\d+/
+  console.log(regex.test('8'))
   // true
-  console.log(regex.test('88899'));
+  console.log(regex.test('88899'))
   // true
-  console.log(regex.test('8888845'));
+  console.log(regex.test('8888845'))
   // true
   ```
 
 - `*`: 이전 식을 0회 이상ㅇ리치
 
   ```javascript
-  var regex = /go*d/;
-  console.log(regex.test('gd'));
+  var regex = /go*d/
+  console.log(regex.test('gd'))
   // true
-  console.log(regex.test('god'));
+  console.log(regex.test('god'))
   // true
-  console.log(regex.test('good'));
+  console.log(regex.test('good'))
   // true
-  console.log(regex.test('goood'));
+  console.log(regex.test('goood'))
   // true
   ```
 
 - `?`: 이전식을 0, 1번 일치
 
   ```javascript
-  var regex = /goo?d/;
-  console.log(regex.test('god'));
+  var regex = /goo?d/
+  console.log(regex.test('god'))
   // true
-  console.log(regex.test('good'));
+  console.log(regex.test('good'))
   // true
-  console.log(regex.test('goood'));
+  console.log(regex.test('goood'))
   // false
   ```
 
 - `^`: 문자열의 시작과 일치. 문자열 뒤에 오는 정규식은 테스트 문자열의 시작에 있어야 한다. 즉, `^`은 문자열의 시작과 일치해야 한다.
 
   ```javascript
-  var regex = /^g/;
-  console.log(regex.test('good'));
+  var regex = /^g/
+  console.log(regex.test('good'))
   // true
-  console.log(regex.test('bad'));
+  console.log(regex.test('bad'))
   // false
-  console.log(regex.test('tag'));
+  console.log(regex.test('tag'))
   // false
   ```
 
-- `$`: 문자열의 끝, 즉 문자열 앞에 와야하는 정규식과 일치한다. 
-  
+- `$`: 문자열의 끝, 즉 문자열 앞에 와야하는 정규식과 일치한다.
+
   ```javascript
-  var regex = /.com$/;
-  console.log(regex.test('test@testmail.com'));
+  var regex = /.com$/
+  console.log(regex.test('test@testmail.com'))
   // true
-  console.log(regex.test('test@testmail'));
+  console.log(regex.test('test@testmail'))
   // false
   ```
 
 - `{N}`: 이전 정규식과 N번 일치
 
   ```javascript
-  var regex = /go{2}d/;
-  console.log(regex.test('good'));
+  var regex = /go{2}d/
+  console.log(regex.test('good'))
   // true
-  console.log(regex.test('god'));
+  console.log(regex.test('god'))
   // false
   ```
 
 - `{N,}`: 최소 N번 이상 이전 정규식과 일치
 
   ```javascript
-  var regex = /go{2,}d/;
-  console.log(regex.test('good'));
+  var regex = /go{2,}d/
+  console.log(regex.test('good'))
   // true
-  console.log(regex.test('goood'));
+  console.log(regex.test('goood'))
   // true
-  console.log(regex.test('gooood'));
+  console.log(regex.test('gooood'))
   // true
   ```
 
 - `{N,M}`: 최소 N번 이상 M번 미만으로 정규식과 일치
 
   ```javascript
-  var regex = /go{1,2}d/;
-  console.log(regex.test('god'));
+  var regex = /go{1,2}d/
+  console.log(regex.test('god'))
   // true
-  console.log(regex.test('good'));
+  console.log(regex.test('good'))
   // true
-  console.log(regex.test('goood'));
+  console.log(regex.test('goood'))
   // false
   ```
 
 - `X|Y`: `X` 또는 `Y`와 일치
 
   ```javascript
-  var regex = /(green|red) apple/;
-  console.log(regex.test('green apple'));
+  var regex = /(green|red) apple/
+  console.log(regex.test('green apple'))
   // true
-  console.log(regex.test('red apple'));
+  console.log(regex.test('red apple'))
   // true
-  console.log(regex.test('blue apple'));
+  console.log(regex.test('blue apple'))
   // false
   ```
 
   ```javascript
-  var regex = /a+b/;  // This won't work
-  var regex = /a\+b/; // This will work
-  console.log(regex.test('a+b')); // true
+  var regex = /a+b/ // This won't work
+  var regex = /a\+b/ // This will work
+  console.log(regex.test('a+b')) // true
   ```
 
-#### 고오급 
+#### 고오급
 
 - `(x)`: `x`와 일치하고, 이 일치항목을 기억한다. 이를 캡쳐 그룹이라고 한다. 정규식 내 하위 식을 만드는 데에도 사용된다.
 
   ```javascript
-  var regex = /(foo)bar\1/;
-  console.log(regex.test('foobarfoo'));
+  var regex = /(foo)bar\1/
+  console.log(regex.test('foobarfoo'))
   // true
-  console.log(regex.test('foobar'));
+  console.log(regex.test('foobar'))
   // false
   ```
 
@@ -303,20 +303,20 @@ Quantifiers는 정규식에서 특별한 의미를 갖는 기호를 의미한다
 - `(?:x)`: x와 일치하는 것을 찾고, 그리고 이를 기억하지 않는다. 이는 논 캡쳐 그룹이라고 한다. `\1`는 작동하지않지만, `\1`과 일치하게 된다.
 
   ```javascript
-  var regex = /(?:foo)bar\1/;
-  console.log(regex.test('foobarfoo'));
+  var regex = /(?:foo)bar\1/
+  console.log(regex.test('foobarfoo'))
   // false
-  console.log(regex.test('foobar'));
+  console.log(regex.test('foobar'))
   // false
-  console.log(regex.test('foobar\1'));
+  console.log(regex.test('foobar\1'))
   // true
   ```
 
 - `x(?=y)`: x가 y뒤에 올 경우 일치시킨다. 이를 positive look ahead라고 도 한다.
 
   ```javascript
-  var regex = /Red(?=Apple)/;
-  console.log(regex.test('RedApple'));
+  var regex = /Red(?=Apple)/
+  console.log(regex.test('RedApple'))
   // Apple앞에있는 Red만 일치
   // true
   ```
@@ -326,25 +326,25 @@ Quantifiers는 정규식에서 특별한 의미를 갖는 기호를 의미한다
 ### 숫자 10개와 일치하는 정규식
 
 ```javascript
-var regex = /^\d{10}$/;
-console.log(regex.test('9995484545'));
+var regex = /^\d{10}$/
+console.log(regex.test('9995484545'))
 ```
 
 위 정규식을 하나씩 파해쳐 보자.
 
-1. 일치 항목이 전체 문자열에 걸쳐서 있어야 한다면 (= 전체 문자열과 같아야 한다면) `^`, `$`를 사용하면 된다. 
+1. 일치 항목이 전체 문자열에 걸쳐서 있어야 한다면 (= 전체 문자열과 같아야 한다면) `^`, `$`를 사용하면 된다.
 2. `\d`는 숫자만 허용한다
 3. `{10}`은 이전 표현식을 10번 일치하는 것을 의미하므로, 여기서는 숫자 10개 일치를 의미한다.
 
 ### 날짜 `DD-MM-YYYY`또는 `DD-MM-YY`
 
 ```javascript
-var regex = /^(\d{1,2}-){2}\d{2}(\d{2})?$/;
-console.log(regex.test('01-01-1990'));
+var regex = /^(\d{1,2}-){2}\d{2}(\d{2})?$/
+console.log(regex.test('01-01-1990'))
 // true
-console.log(regex.test('01-01-90'));
+console.log(regex.test('01-01-90'))
 // true
-console.log(regex.test('01-01-190'));
+console.log(regex.test('01-01-190'))
 // false
 ```
 

@@ -359,7 +359,6 @@ console.log(regex.test('01-01-190'))
 7. `\d{2}`: 정확히 두개의 숫자
 8. `(\d{2})?`: 두개의 숫자. 그러나 옵셔널 이므로, 년도는 2개나 4개가 가능해진다.
 
-
 ## 조심해야 할 것
 
 ### lookbehind 문법은 사파리와 익스플로러에서 쓸 수 없다
@@ -378,7 +377,7 @@ console.log(regex.test('01-01-190'))
 무슨말인지 잘 모르겠으니 아래 정규식을 살펴보자.
 
 ```javascript
-/(g|i+)+t/
+;/(g|i+)+t/
 ```
 
 매우 간단한 정규식이지만, 매우 무거운 정규식이기도 하다.
@@ -396,12 +395,13 @@ gggt
 gigiggt
 igggt
 ```
+
 가 될 것이다.
 
 이 정규식이 얼마나 오래 걸리는지 확인해보자.
 
 ```javascript
-const regexp = /(g|i+)+t/;
+const regexp = /(g|i+)+t/
 console.time('Regexp')
 'giiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiit'.search(regexp)
 console.timeEnd('Regexp')
@@ -411,13 +411,12 @@ console.timeEnd('Regexp')
 제법 빠르게 잘 찾는 것을 볼 수 있다. 그런데, 여기에서 이제 마지막 `t`를 `v`로 바꾸면,,,
 
 ```javascript
-const regexp = /(g|i+)+t/;
+const regexp = /(g|i+)+t/
 console.time('Regexp')
 'giiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiv'.search(regexp)
 console.timeEnd('Regexp')
 // Regexp: 16.360ms
 ```
-
 
 엄청나게 오래걸리는 것을 볼 수 있다.
 
@@ -434,9 +433,9 @@ console.timeEnd('Regexp')
 https://snyk.io/test/npm/moment/2.15.2
 
 ```javascript
-var moment = require('moment');
-moment.locale("be");
-moment().format("D                               MMN MMMM");
+var moment = require('moment')
+moment.locale('be')
+moment().format('D                               MMN MMMM')
 ```
 
 위 예제에서는, 날짜 형식은 40자인데 공백만 31개가 있다. 이로 인해 역추적이 발생해 실행시간이 엄청나게 오래걸리게 된다. (moment가 느린 요인 중 하나는 정규식을 사용한다는 것이다.)
@@ -468,11 +467,10 @@ moment().format("D                               MMN MMMM");
 NodeJS의 디폴트 정규식은 `ReDos` 공격에 취약하므로, 구글에서 만든 [re2](https://github.com/uhop/node-re2)와 같은 별도의 엔진을 사용하는 것이 좋다. 이 엔진은 `ReDos`를 방어할 수도 있으며, 기존 정규식 엔진과 사용도 거의 동릴하다.
 
 ```javascript
-var RE2 = require('re2');
-var re = new RE2(/(g|i+)+t/);
-var result = 'giiiiiiiiiiiiiiiiiiit'.search(re);
-console.log(result); //false
+var RE2 = require('re2')
+var re = new RE2(/(g|i+)+t/)
+var result = 'giiiiiiiiiiiiiiiiiiit'.search(re)
+console.log(result) //false
 ```
 
 `false`가 나오는 이유는, Catastrophic Backtracking로 부터 안전하지 않기 때문이다.
-

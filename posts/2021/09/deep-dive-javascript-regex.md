@@ -4,7 +4,7 @@ tags:
   - javascript
 published: true
 date: 2021-09-14 00:05:25
-description: '아직도 정규식이랑 안친함'
+description: '아직도 정규식이랑 안 친함. 오늘부터 1일....'
 ---
 
 ## Table of Contents
@@ -386,4 +386,93 @@ console.log(regex.test('01-01-190'))
 - `(g|i+)`: 주어진 문자얄이 `g`로 시작하는지, 또는 `i`가 하나이상 있는지 확인한다.
 - `+`: 이전 그룹이 한개이상 존재하는지 확인한다.
 - `t`: 문자열은 `t`로 끝나야 한다.
+
+이제 다음 정규식에 맞는 글자들은..
+
+```
+git
+giit
+gggt
+gigiggt
+igggt
+```
+가 될 것이다.
+
+이 정규식이 얼마나 오래 걸리는지 확인해보자.
+
+```javascript
+const regexp = /(g|i+)+t/;
+console.time('Regexp')
+'giiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiit'.search(regexp)
+console.timeEnd('Regexp')
+// Regexp: 0.210ms
+```
+
+제법 빠르게 잘 찾는 것을 볼 수 있다. 그런데, 여기에서 이제 마지막 `t`를 `v`로 바꾸면,,,
+
+```javascript
+const regexp = /(g|i+)+t/;
+console.time('Regexp')
+'giiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiv'.search(regexp)
+console.timeEnd('Regexp')
+// Regexp: 16.360ms
+```
+
+
+엄청나게 오래걸리는 것을 볼 수 있다.
+
+자바스크립트 정규식 엔진은, 첫번쨰로 성공했던 유효성 검사에서 일련의 문자를 한번 확인한뒤, 다시 이후 검사를 계속한다. `(g|i+)` 만약 특정 위치에서 실패하면, 이전 위치로 다시 돌아가서 또다른 글자를 찾는다.
+
+만약 이 뒤로 돌아가서 글자를 찾는 과정, 즉 역추적이 너무 복잡해지면 알고리즘은 더 많은 컴퓨팅 파워를 보시하게 되고, 이로 인해 Catastrophic Backtracking가 발생하게 된다.
+
+### Nodejs환경에서의 ReDos
+
+[ReDos](https://en.wikipedia.org/wiki/ReDoS)는 앞서 언급했던 Catastrophic Backtracking를 활용하여 nodejs 서버를 공격할 수 있다. 자바스크립트는 싱글 쓰레드 이기 때문에, `ReDos` 공격은 요청이 완료 될 때 까지 서버가 중단되도록 할 수 있다.
+
+일례로, 2.15.2이하 버전의 Moment.js 에서는 ReDos 취약성이 존재한다.
+
+https://snyk.io/test/npm/moment/2.15.2
+
+```javascript
+var moment = require('moment');
+moment.locale("be");
+moment().format("D                               MMN MMMM");
+```
+
+위 예제에서는, 날짜 형식은 40자인데 공백만 31개가 있다. 이로 인해 역추적이 발생해 실행시간이 엄청나게 오래걸리게 된다. (moment가 느린 요인 중 하나는 정규식을 사용한다는 것이다.)
+
+이러한 문제가 발생한 것은, moment에서 `+` 연산자를 너무 과도하게 사용했다는 것이다. `/D[oD]?(\[[^\[\]]*\]|\s+)+MMMM?/`
+
+## 안전한 정규식 작성하는 방법
+
+### 1. 가능한 간단하게 작성하기
+
+두 개이상의 `*`, `+`, `}`가 가까 이 있는 경우에 Catastrophic Backtracking 이슈가 발생할 수 있다. 따라서 정규식을 단순화 해서 위와 같은 패턴을 피해야 한다.
+
+### 2. validation 라이브러리 사용
+
+- https://github.com/validatorjs/validator.js
+- https://express-validator.github.io/docs/
+
+와 같은 라이브러리로 정규식을 한번 검토하고 나갈 필요가 있다.
+
+### 3. 정규식 analyzer 사용
+
+- https://github.com/davisjam/safe-regex
+- https://www.cs.bham.ac.uk/~hxt/research/rxxr2/
+
+를 사용하여, 안전한 정규식인지 한번 확인할 필요가 있다.
+
+### 4. Nodejs의 디폴트 정규식 엔진을 사용하지 말 것.
+
+NodeJS의 디폴트 정규식은 `ReDos` 공격에 취약하므로, 구글에서 만든 [re2](https://github.com/uhop/node-re2)와 같은 별도의 엔진을 사용하는 것이 좋다. 이 엔진은 `ReDos`를 방어할 수도 있으며, 기존 정규식 엔진과 사용도 거의 동릴하다.
+
+```javascript
+var RE2 = require('re2');
+var re = new RE2(/(g|i+)+t/);
+var result = 'giiiiiiiiiiiiiiiiiiit'.search(re);
+console.log(result); //false
+```
+
+`false`가 나오는 이유는, Catastrophic Backtracking로 부터 안전하지 않기 때문이다.
 

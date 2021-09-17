@@ -4,12 +4,12 @@ previously, https://github.com/yceffort/yceffort-blog
 
 github repository of https://yceffort.kr
 
-## Tech
+## Dependencies
 
-- React
-- Typescript
+- React@^17.0.2
+- Typescript@^4.4.2
 - tailwindcss
-- Nextjs
+- Nextjs@^11.1.0
 - next-mdx-remote
 - vercel
 

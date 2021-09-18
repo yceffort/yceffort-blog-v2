@@ -19,7 +19,7 @@ description: '아직도 정규식이랑 안 친함. 오늘부터 1일....'
 
 ### 정규식 생성자
 
-문법 : `new RegExp(pattern[, flags])
+문법 : `new RegExp(pattern[, flags])`
 
 ```javascript
 var regexConst = new RegExp('abc')

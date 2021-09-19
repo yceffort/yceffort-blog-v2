@@ -1,13 +1,15 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document'
 
+import Meta from '#components/Meta'
+
 export default class MyDocument extends Document {
   render() {
     return (
       <Html lang="ko">
         <Head>
-          <meta httpEquiv="x-ua-compatible" content="ie=edge" />
-          <meta property="og:type" content="blog" />
-          <meta property="og:locale" content="ko_KR" />
+          <Meta httpEquiv="x-ua-compatible" content="ie=edge" />
+          <Meta property="og:type" content="blog" />
+          <Meta property="og:locale" content="ko_KR" />
 
           <link
             rel="apple-touch-icon"
@@ -80,30 +82,31 @@ export default class MyDocument extends Document {
           />
           <link rel="manifest" href="/manifest.json" />
 
-          <meta name="msapplication-TileColor" content="#00b7ff" />
-          <meta name="application-name" content="yceffort" />
-          <meta name="apple-mobile-web-app-capable" content="yes" />
-          <meta
+          <Meta name="msapplication-TileColor" content="#00b7ff" />
+          <Meta name="application-name" content="yceffort" />
+          <Meta name="apple-mobile-web-app-capable" content="yes" />
+          <Meta
             name="apple-mobile-web-app-status-bar-style"
             content="default"
           />
-          <meta name="apple-mobile-web-app-title" content="yceffort's blog" />
-          <meta name="description" content="yceffort's blog" />
-          <meta name="format-detection" content="telephone=no" />
-          <meta name="mobile-web-app-capable" content="yes" />
-          <meta name="msapplication-TileColor" content="#00b7ff" />
-          <meta name="msapplication-tap-highlight" content="no" />
-          <meta
+          <Meta name="apple-mobile-web-app-title" content="yceffort's blog" />
+          <Meta name="description" content="yceffort's blog" />
+          <Meta name="format-detection" content="telephone=no" />
+          <Meta name="mobile-web-app-capable" content="yes" />
+          <Meta name="msapplication-TileColor" content="#00b7ff" />
+          <Meta name="msapplication-tap-highlight" content="no" />
+          <Meta
             name="msapplication-TileImage"
             content="/favicon/ms-icon-144x144.png"
           />
 
-          <meta
+          <Meta
             name="theme-color"
             content="#ffffff"
             media="(prefers-color-scheme: light)"
           />
-          <meta
+
+          <Meta
             name="theme-color"
             content="#121826"
             media="(prefers-color-scheme: dark)"

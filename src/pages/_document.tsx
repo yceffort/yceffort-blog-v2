@@ -97,7 +97,17 @@ export default class MyDocument extends Document {
             name="msapplication-TileImage"
             content="/favicon/ms-icon-144x144.png"
           />
-          <meta name="theme-color" content="#00b7ff" />
+
+          <meta
+            name="theme-color"
+            content="#ffffff"
+            media="(prefers-color-scheme: light)"
+          />
+          <meta
+            name="theme-color"
+            content="#121826"
+            media="(prefers-color-scheme: dark)"
+          />
 
           <link rel="apple-touch-icon" href="touch-icon-iphone.png" />
           <link

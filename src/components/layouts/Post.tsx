@@ -9,7 +9,7 @@ import Tag from '#components/Tag'
 import CustomLink from '#components/Link'
 import PageTitle from '#components/PageTitle'
 import SiteConfig from '#src/config'
-import { getThumbnailURL } from '#utils/common'
+import { getThumbnailURL } from '#utils/Common'
 import MathLoader from '#components/layouts/Post/math'
 import profile from '#public/profile.png'
 

@@ -78,7 +78,7 @@ footer {
 
 ![safari15-themecolor](./images/safari15-themecolor.jpeg)
 
-사파리 14, 15에서 내 블로그의 색이 다르게 나오는 것을 볼 수 있는데, 이는 아래 코드처럼 내가 강제로 색을 설정해두었기 떄문이다.
+사파리 14, 15에서 내 블로그의 색이 다르게 나오는 것을 볼 수 있는데, 이는 아래 코드처럼 내가 강제로 색을 설정해두었기 때문이다.
 
 ```html
 <meta name="theme-color" content="#00b7ff" />

@@ -74,9 +74,9 @@ footer {
 
 탭 모음 배경색은 더이상 흰색 또는 회색으로 고정되어 있지 않고, 현재 페이지의 색 구성표에 맞게 조정된다. 이렇게 하면 화면에 좀더 몰입도를 가져올 수 있다. 기본적으로는 헤더나 바디의 배경색을 사용하여 사파리에서 자동으로 선택되지만, 문서헤더에 메타 태그를 사용하여 설정할 수도 있다.
 
-![safari14-themecolor](./images/safari14-themecolor.png)
+![safari14-theme-color](./images/safari14-themecolor.png)
 
-![safari15-themecolor](./images/safari15-themecolor.jpeg)
+![safari15-theme-color](./images/safari15-themecolor.jpeg)
 
 사파리 14, 15에서 내 블로그의 색이 다르게 나오는 것을 볼 수 있는데, 이는 아래 코드처럼 내가 강제로 색을 설정해두었기 때문이다.
 

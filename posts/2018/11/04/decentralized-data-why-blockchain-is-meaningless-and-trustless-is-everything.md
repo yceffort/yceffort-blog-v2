@@ -4,7 +4,7 @@ date: 2018-11-05 04:44:01
 published: true
 tags:
   - blockchain
-description: "Decentralized Data: Why Blockchain is meaningless and Trustless"
+description: 'Decentralized Data: Why Blockchain is meaningless and Trustless'
 category: blockchain
 slug: /2018/11/04/decentralized-data-why-blockchain-is-meaningless-and-trustless-is-everything/
 template: post

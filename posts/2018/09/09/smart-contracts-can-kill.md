@@ -5,7 +5,7 @@ published: true
 tags:
   - blockchain
   - smart-contract
-description: "Law School Professor: Smart Contracts Can Kill"
+description: 'Law School Professor: Smart Contracts Can Kill'
 category: blockchain
 slug: /2018/09/09/smart-contracts-can-kill/
 template: post

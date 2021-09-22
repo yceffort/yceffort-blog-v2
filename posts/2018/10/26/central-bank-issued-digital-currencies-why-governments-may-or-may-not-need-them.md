@@ -128,7 +128,7 @@ ECB 임원은 "분산된 원장들과 같은 중앙은행의 디지털 통화를
 
 게다가, 캐나다 은행 보고서는 거래 수수료와 금융 포함의 부족을 CBDC의 다른 잠재적 이익으로 언급했지만, 익명성은 "중앙은행 디지털 통화에 적합하지 않다"고 강조했다. 이 신문은 캐나다 은행이 CBDC를 시행할 것인지 여부를 결정하기 위해서는 더 많은 연구가 필요하다고 결론지었다.
 
-2018년 7월, 캐나다 은행은 또 다른 연구를 발표했다. 이 책에서 중앙은행의 자금 관리 및 은행 부서에서 일하는 담당자는 CBDC가 “이자를 부담할 수 있는 가능성을 포함해 잠재적인 이점을 확보하고 있다”며 “CBDC 도입의 복지 이득은 캐나다의 경우 최대 0.64퍼센트까지 추정된다”고 주장했다.
+2018년 7월, 캐나다 은행은 또 다른 연구를 발표했다. 이 책에서 중앙은행의 자금 관리 및 은행 부서에서 일하는 담당자는 CBDC가 "이자를 부담할 수 있는 가능성을 포함해 잠재적인 이점을 확보하고 있다"며 "CBDC 도입의 복지 이득은 캐나다의 경우 최대 0.64퍼센트까지 추정된다"고 주장했다.
 
 ## 이란: CDBC 대신 Ban crypto
 
@@ -152,7 +152,7 @@ ECB 임원은 "분산된 원장들과 같은 중앙은행의 디지털 통화를
 
 "중앙은행이 비은행 국민들에게 디지털 통화를 발행하려는 이유가 무엇인가? 은행에 대해 불안한 느낌이 있다면 은행을 운영하면 된다. 그러나 CDBC가 있다면 모든 사람들이 예금을 가지고 중앙 은행에 들어갈 것이고, 사람들이 중앙 은행에 예금을 두면, 누가 신용을 연장할 것인가? "
 
-> “Why would the central bank want to [issue digital currency to the non-bank public]? If there’s any sense of nervousness about the banks, you will have a bank run; everybody is going to go into the central bank [with their deposits][...] And, if people placed their deposits with central banks, who’s going to extend credit?”
+> "Why would the central bank want to [issue digital currency to the non-bank public]? If there’s any sense of nervousness about the banks, you will have a bank run; everybody is going to go into the central bank [with their deposits][...] And, if people placed their deposits with central banks, who’s going to extend credit?"
 
 ## 스웨덴: 현금없는 사회를 위해 필요할지도
 

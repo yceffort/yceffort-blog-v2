@@ -27,7 +27,7 @@ What Determines The Price Of Bitcoin?
 
 그러나 이 방법은 Bitcoin 커뮤니티로부터 상당한 비판을 받았다. 트위터에서 Blockstream의 수석 전략 책임자인 Samson Mow는 Fundstrat의 예측이 논란의 여지가 있는 경제 이론에 의존한다고 주장했다.
 
-<div class="jekyll-twitter-plugin"><blockquote class="twitter-tweet"><p lang="en" dir="ltr">I generally like your work <a href="https://twitter.com/fundstrat?ref_src=twsrc%5Etfw">@fundstrat</a>, but hashrate growth doesn’t “support” <a href="https://twitter.com/search?q=%24BTC&amp;src=ctag&amp;ref_src=twsrc%5Etfw">$BTC</a> price. You’re essentially making an argument for the labor theory of value -&gt; meaning people will pay x for a hole you dug just because you spent time digging. <a href="https://t.co/caYbaS8MJy">https://t.co/caYbaS8MJy</a></p>&mdash; Samson Mow (@Excellion) <a href="https://twitter.com/Excellion/status/995178042443141120?ref_src=twsrc%5Etfw">May 12, 2018</a></blockquote>
+<div class="jekyll-twitter-plugin"><blockquote class="twitter-tweet"><p lang="en" dir="ltr">I generally like your work <a href="https://twitter.com/fundstrat?ref_src=twsrc%5Etfw">@fundstrat</a>, but hashrate growth doesn’t "support" <a href="https://twitter.com/search?q=%24BTC&amp;src=ctag&amp;ref_src=twsrc%5Etfw">$BTC</a> price. You’re essentially making an argument for the labor theory of value -&gt; meaning people will pay x for a hole you dug just because you spent time digging. <a href="https://t.co/caYbaS8MJy">https://t.co/caYbaS8MJy</a></p>&mdash; Samson Mow (@Excellion) <a href="https://twitter.com/Excellion/status/995178042443141120?ref_src=twsrc%5Etfw">May 12, 2018</a></blockquote>
 <script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 </div>
 

@@ -146,7 +146,7 @@ exports.getToday = function getToday() {
 위 세가지 단점은 이 옵션을 사용하는데 있어 머뭇거리게 만드는 요소다. 그러나 적절하게만 사용된다면, 비용을 줄이는데 도움을 줄 수 있다.
 
 > 몇개의 모듈이 이렇게 지연 실행 될 수 있을까? Chrome Dev Tools에서 이에 대한 해답을 찾을 수 있다.
-> 자바스크립트가 무거운 페이지를 연다음, Ctrl+Shift+P (Windows) ⌘⇧P (macOS), 을 누르고 “start coverage” 를 치고 엔터를 누르자.
+> 자바스크립트가 무거운 페이지를 연다음, Ctrl+Shift+P (Windows) ⌘⇧P (macOS), 을 누르고 "start coverage" 를 치고 엔터를 누르자.
 > 페이지가 새로고침되면서, 최초 렌더링시에 얼마나 많은 코드가 실행되었는지 보여준다.
 > 노션의 경우 39%가 `vendor`, 61%가 `app` 번들에서 페이지 렌더링 이후에 사용되지 않는다.
 > ![](https://3perf.com/static/7aed4a03203dae92b7f153801229ff8d/28bdc/coverage.png)

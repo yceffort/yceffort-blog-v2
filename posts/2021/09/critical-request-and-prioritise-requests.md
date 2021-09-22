@@ -113,3 +113,114 @@ description: '서순을 정확히하는게 중요하지'
 > https://addyosmani.com/blog/script-priorities/
 
 ## 3. Critical Request란 무엇인가?
+
+Critical Request란 초기 뷰포트에 표시되어야 하는 리소스를 의미한다.
+
+여기에 포함되는 리소스들은 [Core Web Vital](/2021/08/core-web-vital)의 Largest Contentful Paint, First Contentful Paint에 영향을 미친다.
+
+여기에 포함될 수 있는 리소스들은 아래와 같다.
+
+- HTML
+- CSS
+- webfont
+- images
+- logo
+
+이러한 애셋들은 (자바스크립트는 없다) 최초 뷰포트를 보여주는데 필수적인 요소들이기 때문에, 가장 먼저 로딩되어야 한다. 이러한 페이지를 위해서는 아래와 같은 항목을 챙기는 것을 추천한다.
+
+- 최초 페이지 로딩시에 보여주어야 하는 요소들에 대한 성능 측정 (above-the-fold)
+- 최초 HTTP 요청은 위 요소들이어야 함
+- Critical Request는 리다이렉트 되어선 안됨
+- Critical Request는 최적화되고, 압축되어야 하며, 캐싱 및 올바른 HTTP 헤더와 함께 제공되어야 함.
+
+## 4. Lighthouse, Critical Request 체이닝을 피해야 한다.
+
+구글의 라이트하우스는 Critical Request가 체이닝 되어 여러 요청이 호출되는 것을 막도록 권장하고 있다. 
+
+![critical-requests-chaining](./images/critical-requests-chaining.png)
+
+가장 흔히 저지르는 critical request chaining은 바로 스타일 시트에서 폰트를 불러올 때 발생한다.
+
+```css
+@font-face {
+  font-family: 'Calibre';
+  font-weight: 400;
+  font-display: swap;
+  src: url('/Calibre-Regular.woff2') format('woff2'), url('/Calibre-Regular.woff')
+      format('woff');
+}
+
+.carousel-bg {
+  background-image: url('/images/main-masthead-bg.png');
+}
+```
+
+이러한 요청의 체이닝의 수를 줄이면 LCP의 속도가 빨라지고, 사용자의 웹사이트 경험이 향상된다.이러한 체이닝 수를 줄이기 위해서 아래와 같은 항목을 점검하자.
+
+- 요청의 수를 줄이기
+- 리소스를 압축하거나 최소화 하여 크기를 줄이기
+- 중요하지 않은 스크립트에 `async`
+- HTML에 인라인 `@font-face` 선언을 고려
+- css `background-image`나 `@import`를 최소화
+- `preload`를 사용하여 중요한 리소스를 빨리 가져오기
+- [bundlephobia](https://bundlephobia.com/)를 사용하여 더 작은 대체 라이브러리를 찾아보기
+
+## 5. 요청 우선순위를 제어하기
+
+요청 우선순위는 [preload](https://developer.mozilla.org/en-US/docs/Web/HTML/Link_types/preload)의 영향을 받을 수 있다. `Preloaded` 리소스는 높은 우선순위를 보여 받고, 페이지가 로딩될 때 빠르게 불러와진다.
+
+```html
+<link
+            rel="preconnect"
+            href="https://fonts.gstatic.com"
+            crossOrigin="anonymous"
+          />
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+          />
+```
+
+![chrome-font-priority](./images/chrome-font-priority.png)
+
+`Preload`를 사용하면, Critical Request를 최적화 할 수 있지만 너무 많이 사용해서는 안된다. 너무 많은 리소스에 붙이게 되면, 당연하게도 [페이지의 성능이 저하된다.](https://andydavies.me/blog/2019/02/12/preloading-fonts-and-the-puzzle-of-priorities/)
+
+Preloading은 LCP와 CLS(Cumulative Layout Shift)에 영향을 미칠 수 있는데, 일부는 부정적인 영향을 미칠 수 있다. 사용하기 전에 충분히 실험해봐야 한다.
+
+## 6. 이미지 레이지 로딩
+
+기본적으로 브라우저는 사용자가 이미지를 실제로 보는 것과 상관없이 HTML에 있는 모든 이미지를 로드한다. 레이지 로딩을 사용하면 사용자가 이미지에 스크롤을 가까이 할 때만 이미지를 불러오도록 지정할 수 있다. 사용자가 스크롤 하지 않으면 해당 이미지를 브라우저는 불러오지 않는다.
+
+이 접근방식을 사용하면 전반적인 렌더링 속도를 개선하고, 불필요한 데이터 전송을 피할 수 있다. 레이지로딩은 LCP를 개선하는데 매우 효과적이다.
+
+과거 라이브러리나 스크립트를 사용하여 구현했지만, 요즘 브라우저에는 이 기능이 내장되어 있다.
+
+> 물론 지원 가능 여부는 확인해 봐야 한다. https://caniuse.com/loading-lazy-attr
+
+## 7. font-display
+
+[통계에 따르면, 전체 69% 사이트가 웹 폰트를 사용하고 있다.](http://httparchive.org/interesting.php#fonts) 그리고 불행하게도, 이 경우 대부분 수준 이하의 성능을 제공하고 있다. 대부분의 유저들이 폰트가 나타나다가 사라지거나 한다거나, font-weight이 바뀌거나 하는 경험을 해본적이 있다. 이러한 변화는 이제 CLS에 부정적인 영향을 끼치게 된다.
+
+`<link rel= “preload”/>`에서 소개했던 것 처럼, 폰트도 우선순위를 제어하면 렌더링 속도에 큰 영향을 미칠 수 있다. 따라서 대부분의 경우에는 폰트의 요청 우선순위를 결정해야 한다. 
+
+CSS font-display를 사용하면 렌더링 속도 향상에 영향을 미칠 수 있다. 이 속성을 사용하면 폰트를 요청하고 로딩되는 동안, 폰트가 표시되는 방식을 제어할 수 있다.
+
+> https://yceffort.kr/2021/06/ways-to-faster-web-fonts 를 참고!
+
+## Critical Request 체크리스트
+
+위에서 살펴본 것들을 바탕으로, 사이트에 중요한 에셋을 선택하고 그에 따른 우선순위를 지정할 수 있다. 우선 순위와 속도를 높이기 위해서 아래의 체크리스트를 한번더 확인해보자.
+
+- 크롬 개발자 도구에서 우선순위를 확인해보기
+- 가능한 경우 필요한 요청 수를 줄이기
+- 사용자가 완전히 렌더링된 페이지를 보기 전에 해야하는 것들을 정리하기
+- `<link rel="preload" />`를 하여 중요 요청의 우선순위를 수정하기
+- 다음 페이지에서 사용될 가능성이 있는 에셋에 대해 [link prefetching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Link_prefetching_FAQ)을 사용하기
+- [Link Preload HTTP 헤더](https://www.w3.org/TR/preload/)를 사용하여 HTML이 완전히 전송되기전에 사전에 로드될 리소스를 선언하기
+- 이미지의 사이즈가 올바른지 확인하기
+- 로고나 아이콘에 인라인 svg를 사용하기
+- AVIF, Webp와 같은 좋은 이미지 포맷 사용하기
+- `font-display: swap`을 사용하여 초기렌더링에 텍스트를 표시하기
+- `WOFF2` 와 같은 압축된 폰트 형식 사용하기
+- `chrome://net-internals/#events`를 사용하여 크롬 네트워크 이벤트 살펴보기
+- *가장 빠른 요청은 요청하지 않는 것*

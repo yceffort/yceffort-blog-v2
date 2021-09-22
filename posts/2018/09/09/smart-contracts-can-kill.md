@@ -5,9 +5,7 @@ published: true
 tags:
   - blockchain
   - smart-contract
-description: "Law School Professor: "Smart Contracts Can Kill"
-  [원문](https://btcmanager.com/law-school-professor-smart-contracts-can-kill/)   \
-  브루클린의 로스쿨에서는 [어떻게 블록체인이 사람의 책임을 증가시키는가](https://www.law.ox.ac.uk/busines..."
+description: "Law School Professor: Smart Contracts Can Kill"
 category: blockchain
 slug: /2018/09/09/smart-contracts-can-kill/
 template: post

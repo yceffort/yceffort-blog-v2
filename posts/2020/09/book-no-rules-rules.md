@@ -16,7 +16,7 @@ https://read.amazon.com/kp/card?asin=B081Y3R657&preview=inline&linkCode=kpe&ref_
 넷플릭스의 조직 문화하면 가장 먼저 떠오르는 것은, 아마도 gizmodo에서 쓴 기사일 것이다. [Working at Netflix Sounds Like Hell
 ](https://gizmodo.com/working-at-netflix-sounds-like-hell-1830020977)
 
-> The profile’s sources described the “Netflix way” as a structure founded on brutal honesty, ritual humiliation, insider lingo, and constant fear. It’s a mix of elements that a lot of people in corporate culture might recognize but according to many employees, it’s been a chaotic process that is difficult to scale as the company carries out its plans of world domination.
+> The profile’s sources described the "Netflix way" as a structure founded on brutal honesty, ritual humiliation, insider lingo, and constant fear. It’s a mix of elements that a lot of people in corporate culture might recognize but according to many employees, it’s been a chaotic process that is difficult to scale as the company carries out its plans of world domination.
 
 이른바 `Keeper Test`를 통과하지 못한 직원들은 가차 없이 해고 한다는 것이고, 이러한 테스트로 인해 많은 직원들이 스트레스를 받는 다는 것이었다. 뭐, 미국이야 우리나라에 비해 쉬운 해고를 할 수 있으니 이런일이야 가능하겠지만서도, 넷플릭스가 성과에 대해 굉장히 깐깐한 문화를 가졌구나 라고 만 생각했다. 그런 회사의 CEO가 쓴 책이 바로 이 책이다. 이 책은 넷플릭스의 기업, 조직, 인사 문화를 담고 있다.
 

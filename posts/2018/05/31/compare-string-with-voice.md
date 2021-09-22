@@ -8,7 +8,7 @@ tags:
 description:
   앞선 [포스팅](https://yceffort.github.io/notes/Levenshtein-distance) 을
   통해서 두 String을 문자열 기반으로 분석하였을때. 유사도를 어떻게 측정하는지 알아보았다. 그러나 음성인식으로 String을 비교 했을
-  때,  다음과 같은 문제에 직면하였다.  “Eggs”를 말했을때, Android Voice API는...
+  때,  다음과 같은 문제에 직면하였다.  "Eggs"를 말했을때, Android Voice API는...
 category: programming
 slug: /2018/05/31/compare-string-with-voice/
 template: post
@@ -18,7 +18,7 @@ template: post
 
 그러나 음성인식으로 String을 비교 했을 때,  다음과 같은 문제에 직면하였다.
 
-“Eggs”를 말했을때, Android Voice API는 “X” 를 반환하는 것이 아닌가?
+"Eggs"를 말했을때, Android Voice API는 "X" 를 반환하는 것이 아닌가?
 
 String의 물리적인 비교를 해보았을때, 두 비교값은 앞선 나의 방식으로 한다면 당연히 0 일 것이다.
 
@@ -84,8 +84,8 @@ The correct value can be found as follows:
     최종결과: d410
 
 ```java
-System.out.println(soundex(“dellfhai”));
-System.out.println(soundex(“delphi”));
+System.out.println(soundex("dellfhai"));
+System.out.println(soundex("delphi"));
 ```
 
 를 하게 되면, 동일하게 d410이 나온다. 싱기방기.

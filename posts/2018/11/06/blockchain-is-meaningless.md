@@ -26,7 +26,7 @@ template: post
 
 비트코인은 공개적으로 설계되어 누구든 가입할 수 있도록 설계되었으며, 블록체인은 중앙 감시가 없는 상황에서 정직하게 사람들을 유지해야 할 필요성에서 탄생했다. 이 설계는 도난에 대한 비용을 지불하지 않도록 효율성을 희생시켰다. 왜냐하면 원장을 다시 작성하는 데는 계산력이 너무 많이 필요하기 때문에 잠재적인 거꾸로 거래를 작성하는 비용이 많이 들기 때문이다. 이 효과를 얻기 위해 비트코인 블록 체인은 모든 트랜잭션을 처음부터 현재까지 기록하는 디지털 원장으로 구성한다. 원장의 복사본은 중앙에 저장되지 않고 대신 ‘노드’라고 불리는 슈퍼유저에 의해 보관된다. 이 노드들 중 일부는 ‘마이너’라고 불리우며 일괄 처리를 하고, 각 블록을 이전 블록과 암호화적으로 연결하는 ‘블록’의 원장에 추가한다. 놀랍게도, 이 시스템은 핵심 비트코인 개발팀의 관리 책임과 결합되어 거의 10년 동안 기능해왔다.
 
-2009년 야생에서 데뷔한 비트코인은 “블록체인 기술의 첫번째 구현”이라고 IBM은 말했다. 하지만 오늘날 ‘블록체인’이라는 라벨이 붙은 기술 디자인은 비트코인의 블록체인과 거의 유사하지 않다.
+2009년 야생에서 데뷔한 비트코인은 "블록체인 기술의 첫번째 구현"이라고 IBM은 말했다. 하지만 오늘날 ‘블록체인’이라는 라벨이 붙은 기술 디자인은 비트코인의 블록체인과 거의 유사하지 않다.
 
 ## 서로 다른 정의
 
@@ -46,9 +46,9 @@ IBM의 정의에 따르면, "블록체인 기술은 모든 당사자가 특정 �
 
 에스토니아의 기술 공급업체 가드타임은 ‘해시 링크 타임스탬핑’에서 ‘블록체인 기술’로 브랜드를 변경했다. 이는 ‘블록체인’에 합의된 정의가 없기 때문에 반드시 사실이 아닐 수는 없다.
 
-“비트코인을 생각하기 훨씬 전부터 우리는 이 주제에 대해 오랫동안 연구해오고 있습니다.” 가드타임의 CEO 마이크 골트가 이메일을 통해 말했다. “비트코인에는 새로운 암호화폐 없습니다. 그 뒤에 있는 천재성은 다른 암호 화폐 블록을 가져와서, 암호 프로토콜을 만들어 사람들에게 이용하도록 유도하는 것이었습니다.”
+"비트코인을 생각하기 훨씬 전부터 우리는 이 주제에 대해 오랫동안 연구해오고 있습니다." 가드타임의 CEO 마이크 골트가 이메일을 통해 말했다. "비트코인에는 새로운 암호화폐 없습니다. 그 뒤에 있는 천재성은 다른 암호 화폐 블록을 가져와서, 암호 프로토콜을 만들어 사람들에게 이용하도록 유도하는 것이었습니다."
 
-블록체인은 “암호적으로 연결된 데이터 레코드를 포함하는 부속 데이터 전용 구조”라고 그는 말했다. “다수 분산 당사자들이 사전 합의된 규칙에 따라 합의를 도출할 때 데이터 기록이 데이터 구조에 추가됩니다.”
+블록체인은 "암호적으로 연결된 데이터 레코드를 포함하는 부속 데이터 전용 구조"라고 그는 말했다. "다수 분산 당사자들이 사전 합의된 규칙에 따라 합의를 도출할 때 데이터 기록이 데이터 구조에 추가됩니다."
 
 ## 프라이빗 블록체인
 
@@ -68,7 +68,7 @@ IBM의 정의에 따르면, "블록체인 기술은 모든 당사자가 특정 �
 
 그녀가 언급한 걱정되는 정의는 애리조나주에 의해 개발된 것이다. 애리조나의 전자거래법은 블록체인에 대한 거래를 포함한다는 것을 명확히 하기 위해 2017년에 개정되었다. 이를 통해, 입법부는 '블록체인 기술'이란 정의를 작성했는데, "분산형, 공유 및 복제된 원장을 사용하는 것으로, 퍼블릭 또는 프라이빗, 허가된(Permission) 또는 허가되지 않은(Permissionless) 토큰에 의해 구동될 수 있다. 원장의 데이터는 암호화로 보호되며, 영구적이고 감사할 수 없으며, 검열받지 않은 진실(uncensored truth)을 제공한다"
 
-> The definition that concerns Walch the most is the one developed by the state of Arizona. Arizona’s Electronic Transactions Act was amended in 2017 to clarify that it covers transactions done on a blockchain. In doing so, the legislature wrote a definition: “‘Blockchain technology’ means distributed ledger technology that uses a distributed, decentralized, shared and replicated ledger, which may be public or private, permissioned or permissionless, or driven by tokenized crypto economics or tokenless. The data on the ledger is protected with cryptography, is immutable and auditable and provides an uncensored truth.”
+> The definition that concerns Walch the most is the one developed by the state of Arizona. Arizona’s Electronic Transactions Act was amended in 2017 to clarify that it covers transactions done on a blockchain. In doing so, the legislature wrote a definition: "‘Blockchain technology’ means distributed ledger technology that uses a distributed, decentralized, shared and replicated ledger, which may be public or private, permissioned or permissionless, or driven by tokenized crypto economics or tokenless. The data on the ledger is protected with cryptography, is immutable and auditable and provides an uncensored truth."
 
 특히 그는 'immutable'과 'uncensored truth'라는 표현에 대해 우려를 표하고 있다. 이말인 즉, 마이너, 개발자, 그리고 독재자를 포함할 수 있는 네트워크를 유지하는 사람들이 원하는한 검열 받지 않을 수 있는, 그리고 변경이 어려울 수 있다는 것을 내포하기 때문이다. 코인 사이언스의 설립자인 기디언 그린스펀은 비트코인 블록체인 재작성 비용이 국가 의욕에 상당한 영향을 미친다고 썼다. 블록체인 변경으로 널리 알려진 많은 사례가 있다. 비트코인은 소프트웨어의 "integer overflow" 오류로 인해 920억 비트코인이 생성되었고 전체 네트워크에 920억 비트코인이 다시 생성되었다. 2016년 대규모 해킹으로 이더리움이 터졌다. 게다가, 5월에 발효되고 사용자들이 자신의 데이터를 통제해야 한다고 주장하는 유럽의 일반 데이터 보호 규정(GDPR) 때문에 개발자들은 이제 블록체인에서 데이터를 삭제하는 방법을 모색하고 있다.
 
@@ -80,9 +80,9 @@ IBM의 정의에 따르면, "블록체인 기술은 모든 당사자가 특정 �
 
 브리티시 컬럼비아 대학의 보관 과학 부교수이자 블록 체인 연구 클러스터의 책임자인 Victoria Lemieux는 국제 표준기구의 블록 체인 용어 표준을 개발하기 위한 [노력을 주도](https://www.iso.org/committee/6266604.html)하고 있다.
 
-“일반적으로 거래가 블록으로 모이고 암호 기법를 사용하여 체인에 블록을 고정하며, 변조 방지 기능을 갖추고 불변의 레코드를 생성하도록 설계된 경우 시스템은 블록 체인으로 보기에 적합하다. “그러나 일반적인 사용에서, 블록체인은 트랜잭션이 블록으로 구성되지 않더라도 광범위한 범위에서 분산원장도 블록체인으로 볼 수 있다.”
+"일반적으로 거래가 블록으로 모이고 암호 기법를 사용하여 체인에 블록을 고정하며, 변조 방지 기능을 갖추고 불변의 레코드를 생성하도록 설계된 경우 시스템은 블록 체인으로 보기에 적합하다. "그러나 일반적인 사용에서, 블록체인은 트랜잭션이 블록으로 구성되지 않더라도 광범위한 범위에서 분산원장도 블록체인으로 볼 수 있다."
 
-그녀의 팀은 “다른 공동체가 블록체인에 대한 자신만의 아이디어를 형성했고, 일부는 오픈소스, 공유, 자율성을 둘러싼 매우 강력한 정치적, 사회적 견해를 가지고 있다”는 사실을 포함하여 몇 가지 도전 과제에 부딪혔다.
+그녀의 팀은 "다른 공동체가 블록체인에 대한 자신만의 아이디어를 형성했고, 일부는 오픈소스, 공유, 자율성을 둘러싼 매우 강력한 정치적, 사회적 견해를 가지고 있다"는 사실을 포함하여 몇 가지 도전 과제에 부딪혔다.
 
 또 다른 과제는 "이러한 관할권이 조치를 취하지 않고 있으며 법적 절차나 기술의 적용을 복잡하게 만들 수 있다"는 법적 정의의 확산이다"라고 그녀는 말했다.
 

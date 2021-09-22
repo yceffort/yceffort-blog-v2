@@ -18,7 +18,7 @@ Malicious code in npm ‘event-stream’ package targets a bitcoin wallet and ca
 
 지난주 캘리포니아 주 CSUF 대학의 컴퓨터 사이언스 전공인 Ayrton Sparling는, 인기있는 npm 패키지인 [event-stream](https://github.com/dominictarr/event-stream)에 스트림이라는 악의적인 패키지가 포함되어 있다고 발표했다. 그는 EventStream의 repository 에 이 문제를 [공개했다.](https://github.com/dominictarr/event-stream/issues/116)
 
-event stream npm 패키지는 원래 [Dominic Tarr](https://github.com/dominictarr)라는 개발자가 제작하여 유지 관리했다. 그러나 이 인기있는 패키지는 오랫동안 업데이트되지 않았다. 토머스 헌터의 포스팅에 따르면, “event stream의 소유권은 악의적인 사용자인 [right9ctrl](https://github.com/right9ctrl)에게 이관되었다. 악의적인 사용자는 패키지에 일련의 의미있는 기여를함으로써 원본 저자의 신뢰를 얻을 수 있었다.
+event stream npm 패키지는 원래 [Dominic Tarr](https://github.com/dominictarr)라는 개발자가 제작하여 유지 관리했다. 그러나 이 인기있는 패키지는 오랫동안 업데이트되지 않았다. 토머스 헌터의 포스팅에 따르면, "event stream의 소유권은 악의적인 사용자인 [right9ctrl](https://github.com/right9ctrl)에게 이관되었다. 악의적인 사용자는 패키지에 일련의 의미있는 기여를함으로써 원본 저자의 신뢰를 얻을 수 있었다.
 
 악의적인 소유자는 flatmap stream이라는 악의적인 라이브러리를 이벤트 스트림 패키지에 종속성으로 추가했다. 이로 인해 모든 사용자가 이벤트 스트림 패키지 (3.3.6 버전 사용)를 다운로드하고 해당 기능을 호출했다. 악의적인 라이브러리의 다운로드는 2018년 9 월에 포함된 이후 약 8 백만 건의 다운로드가 이뤄졌다.
 

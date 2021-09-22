@@ -52,7 +52,7 @@ addTwo(2) // 계산된 값을 그대로 돌려드립니다.
 
 리액트 메모이제이션에서는 주목해야 할 부분이 있다. https://ko.reactjs.org/docs/hooks-faq.html#how-to-memoize-calculations
 
-> The useMemo Hook lets you cache calculations between multiple renders by “remembering” the previous computation:
+> The useMemo Hook lets you cache calculations between multiple renders by "remembering" the previous computation:
 
 바로 이전의 값만 메모이제이션 한다는 것이다.
 

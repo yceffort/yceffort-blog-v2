@@ -262,11 +262,11 @@ const InlineSourcePlugin = require('html-webpack-inline-source-plugin')
 module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
-      // Inline all files which names start with “runtime~” and end with “.js”.
+      // Inline all files which names start with "runtime~" and end with ".js".
       // That’s the default naming of runtime chunks
       inlineSource: 'runtime~.+\\.js',
     }),
-    // This plugin enables the “inlineSource” option
+    // This plugin enables the "inlineSource" option
     new InlineSourcePlugin(),
   ],
 }

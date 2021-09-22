@@ -4,8 +4,8 @@ date: 2018-11-05 04:44:01
 published: true
 tags:
   - blockchain
-description: "Decentralized Data: “Why Blockchain is meaningless and Trustless
-  is everything”
+description: "Decentralized Data: "Why Blockchain is meaningless and Trustless
+  is everything"
   [원문](https://hackernoon.com/decentralized-data-why-blockchain-is-meaningless-\
   and-trustless-is-everything-318fd14d3827) ..."
 category: blockchain
@@ -13,7 +13,7 @@ slug: /2018/11/04/decentralized-data-why-blockchain-is-meaningless-and-trustless
 template: post
 ---
 
-Decentralized Data: “Why Blockchain is meaningless and Trustless is everything”
+Decentralized Data: "Why Blockchain is meaningless and Trustless is everything"
 
 [원문](https://hackernoon.com/decentralized-data-why-blockchain-is-meaningless-and-trustless-is-everything-318fd14d3827)
 

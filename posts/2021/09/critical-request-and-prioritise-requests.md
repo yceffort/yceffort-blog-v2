@@ -71,7 +71,7 @@ description: '서순을 정확히하는게 중요하지'
 - 로딩 우선순위 (네트워크, 블링크 엔진): Lowest/Low
 - 실행 우선순위: 높음, parser에 영향을 미침
 - 어디서 쓸까
-  - 사용할 때 주의 해야 한다. 요즘 들어 중요하지 않은 스크립트를 로딩 할 때 많이 사용하고 있지만, 로딩 우선순위만 낮을 뿐 실행 우선순위는 높다는 것을 기억해야 한다. ((https://calendar.perfplanet.com/2016/prefer-defer-over-async/) )
+  - 사용할 때 주의 해야 한다. 요즘 들어 중요하지 않은 스크립트를 로딩 할 때 많이 사용하고 있지만, 로딩 우선순위만 낮을 뿐 실행 우선순위는 높다는 것을 기억해야 한다. https://calendar.perfplanet.com/2016/prefer-defer-over-async
 
 #### `<script defer />`
 

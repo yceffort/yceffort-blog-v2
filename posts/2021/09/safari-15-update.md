@@ -20,7 +20,7 @@ description: '죽인다 사파리'
 
 ## 버튼 기본 색상 및 radius 변경
 
-먼저 버튼의 기본 색상과 raidus가 변경되었다.
+먼저 버튼의 기본 색상과 radius가 변경되었다.
 
 ![safari14-button](./images/safari14-button.png)
 

@@ -71,7 +71,7 @@ window.addEventListener('pagehide', function (event) {
 
 ### 절대로 `unload` 이벤트를 사용하지 말 것
 
-모든 브라우저에서 bfcache로 최적화하는데 가장 중요한 것은 절대절대로 `unload`이벤트를 임의로 사용해서는 안된다는 것이다. 이 `unload`이벤트는 bfcache 이전에 발생하고, 인터넷의 많은 페이지가 `unload`이벤트가 발행 후에는 페이지가 더이상 존재하지 않는다는 (합리적인) 가정하에 동작하기 때문에, `unload`의 이벤트는 문제를 야기 할 수 있다. 많은 개발자들이 `unload` 이벤트가 더이상 사용자가 페이지 네비게이션을 하지 않을 때 발생한다고 믿고 있는데, 이는 사실이 아니다.
+모든 브라우저에서 bfcache로 최적화하는데 가장 중요한 것은 절대절대로 `unload`이벤트를 임의로 사용해서는 안된다는 것이다. 이 `unload`이벤트는 bfcache 이전에 발생하고, 인터넷의 많은 페이지가 `unload`이벤트가 발행 후에는 페이지가 더 이상 존재하지 않는다는 (합리적인) 가정하에 동작하기 때문에, `unload`의 이벤트는 문제를 야기 할 수 있다. 많은 개발자들이 `unload` 이벤트가 더 이상 사용자가 페이지 네비게이션을 하지 않을 때 발생한다고 믿고 있는데, 이는 사실이 아니다.
 
 > Many developers treat the unload event as a guaranteed callback and use it as an end-of-session signal to save state and send analytics data, but doing this is extremely unreliable, especially on mobile! The unload event does not fire in many typical unload situations, including closing a tab from the tab switcher on mobile or closing the browser app from the app switcher.
 
@@ -109,7 +109,7 @@ onPageHasUnsavedChanges(() => {
   window.addEventListener('beforeunload', beforeUnloadListener)
 })
 
-// 더이상 사용이 필요 없으면 바로 지운다.
+// 더 이상 사용이 필요 없으면 바로 지운다.
 onAllChangesSaved(() => {
   window.removeEventListener('beforeunload', beforeUnloadListener)
 })

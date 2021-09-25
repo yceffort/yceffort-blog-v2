@@ -37,7 +37,7 @@ Datetime을 다루는 것은 분명 쉬운 일은 아니다. 한참 vanilla 자�
 
 https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
 
-기본적으로 momentjs는 232kb, (gzip시 66kb) 이며, webpack으로 locale을 제거할 경우 사이즈는 68kb (gzip시 23kb) 까지 떨어진다. 그리고 더이상의 tree shaking은 불가능하다. js-joda가 제법 크긴 하지만 기간과 타임존까지 기본으로 제공하는 라이브러리라는 것을 알아둬야 한다. 그리고 나머지 라이브러리들은 트리쉐이킹이 가능하다.
+기본적으로 momentjs는 232kb, (gzip시 66kb) 이며, webpack으로 locale을 제거할 경우 사이즈는 68kb (gzip시 23kb) 까지 떨어진다. 그리고 더 이상의 tree shaking은 불가능하다. js-joda가 제법 크긴 하지만 기간과 타임존까지 기본으로 제공하는 라이브러리라는 것을 알아둬야 한다. 그리고 나머지 라이브러리들은 트리쉐이킹이 가능하다.
 
 ## 3.mutable이다.
 

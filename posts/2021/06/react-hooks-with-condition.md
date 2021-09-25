@@ -138,7 +138,7 @@ function update(Component) {
 이 말인 즉슨, `useState` 함수의 내부도 반드시 바껴야 한다는 것을 의미한다.
 
 ```javascript
-// 더이상 초기값이 필요하지 않다
+// 더 이상 초기값이 필요하지 않다
 function useState(/*value*/) {
   const hook = global.currentHook
   global.currentHook = hook.next // 포인터를 다음 훅으로 이동시킨다

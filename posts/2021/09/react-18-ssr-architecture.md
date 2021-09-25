@@ -7,8 +7,9 @@ tags:
   - web
 published: true
 date: 2021-09-25 17:24:06
-description: '따라가는 것만 해도 바쁜 인생'
+description: '따라가는 것만 해도 바쁜 인생 부지런하게 쫓아가자'
 ---
+
 ## Table of Contents
 
 ## Overview
@@ -182,7 +183,7 @@ SSR은 일종의 매직 트릭과도 같다. 그렇다고 해서 애플리케이
 
 "hydration" 자체에도 비슷한 문제가 있다. 현재 리액트는 한번에 모든 트리에 hydration을 진행한다. 즉 일단 hydration을 시작하면 (컴포넌트 함수를 호출하면) 트리 전체에 이 작업을 완료 할 때 까지 멈출 수 없다. 따라서 모든 컴포넌트가 hydration을 할 때 까지 기다려야만 컴포넌트와 상호작용할 수 있다.
 
-예를 들어, 댓글 위젯에 많은 렌더링 로직이 포함되어 있다고 가정해보자. 일반적인 컴퓨터에서는 빠르게 동작할 수 있지만, 보급형 모바일 기기에서는 이러한 로직을 실행하는 것이 결코 저렴한 작업이 아니며, 화면을 몇 초 동안 얼어붙어있게 할 수도 있다.  물론, 이상적인 상황에서는 이러한 로직이 클라이언트에 담겨 있어서는 안된다. (Server Components가 도움이 될 수도 있다.) 그러나 일부 로직에서는 이벤트 핸들러가 무엇을 해야 하는지 결정해야 하며, 상호작용이 일어나는 것이 필수적이기 때문에 이러한 상황을 피하는 것은 어렵다. 따라서 일단 hydration이 일어나면 전체 트리에 이 작업이 끝나기전까지는 다른 콘텐츠를 사용할 수 없다. 사용자가 이 페이지에서 완전히 벗어나고 싶어하는 경우 (다른 페이지로 가고 싶어 하는 경우)에도, 불행하게도 hydration 작업 때문에 바빠서 사용자가 원하지 않는 콘텐츠를 현재 페이지에서 계속해서 가지고 있어야 한다. (로딩이 끝나기도 전에 다른 페이지로 가고 싶지만 hydration 작업 중이라 현재 로딩을 멈추지 못한다는 뜻)
+예를 들어, 댓글 위젯에 많은 렌더링 로직이 포함되어 있다고 가정해보자. 일반적인 컴퓨터에서는 빠르게 동작할 수 있지만, 보급형 모바일 기기에서는 이러한 로직을 실행하는 것이 결코 저렴한 작업이 아니며, 화면을 몇 초 동안 얼어붙어있게 할 수도 있다. 물론, 이상적인 상황에서는 이러한 로직이 클라이언트에 담겨 있어서는 안된다. (Server Components가 도움이 될 수도 있다.) 그러나 일부 로직에서는 이벤트 핸들러가 무엇을 해야 하는지 결정해야 하며, 상호작용이 일어나는 것이 필수적이기 때문에 이러한 상황을 피하는 것은 어렵다. 따라서 일단 hydration이 일어나면 전체 트리에 이 작업이 끝나기전까지는 다른 콘텐츠를 사용할 수 없다. 사용자가 이 페이지에서 완전히 벗어나고 싶어하는 경우 (다른 페이지로 가고 싶어 하는 경우)에도, 불행하게도 hydration 작업 때문에 바빠서 사용자가 원하지 않는 콘텐츠를 현재 페이지에서 계속해서 가지고 있어야 한다. (로딩이 끝나기도 전에 다른 페이지로 가고 싶지만 hydration 작업 중이라 현재 로딩을 멈추지 못한다는 뜻)
 
 ## 이 문제를 해결하는 방법
 
@@ -217,7 +218,7 @@ SSR은 일종의 매직 트릭과도 같다. 그렇다고 해서 애플리케이
   <nav>
     <!--NavBar -->
     <a href="/">Home</a>
-   </nav>
+  </nav>
   <aside>
     <!-- Sidebar -->
     <a href="/profile">Profile</a>
@@ -270,7 +271,7 @@ SSR은 일종의 매직 트릭과도 같다. 그렇다고 해서 애플리케이
   <nav>
     <!--NavBar -->
     <a href="/">Home</a>
-   </nav>
+  </nav>
   <aside>
     <!-- Sidebar -->
     <a href="/profile">Profile</a>
@@ -281,7 +282,7 @@ SSR은 일종의 매직 트릭과도 같다. 그렇다고 해서 애플리케이
   </article>
   <section id="comments-spinner">
     <!-- Spinner -->
-    <img width=400 src="spinner.gif" alt="Loading..." />
+    <img width="400" src="spinner.gif" alt="Loading..." />
   </section>
 </main>
 ```
@@ -296,9 +297,9 @@ SSR은 일종의 매직 트릭과도 같다. 그렇다고 해서 애플리케이
 </div>
 <script>
   // This implementation is slightly simplified
-  document.getElementById('sections-spinner').replaceChildren(
-    document.getElementById('comments')
-  );
+  document
+    .getElementById('sections-spinner')
+    .replaceChildren(document.getElementById('comments'))
 </script>
 ```
 
@@ -321,13 +322,13 @@ SSR은 일종의 매직 트릭과도 같다. 그렇다고 해서 애플리케이
 `React.lazy`로 코드를 분할하여 메인 번들에서 댓글 코드를 아래처럼 분리할 수 있다.
 
 ```jsx
-import { lazy } from 'react';
+import { lazy } from 'react'
 
-const Comments = lazy(() => import('./Comments.js'));
+const Comments = lazy(() => import('./Comments.js'))
 
 // ...
 
-<Suspense fallback={<Spinner />}>
+;<Suspense fallback={<Spinner />}>
   <Comments />
 </Suspense>
 ```
@@ -370,7 +371,7 @@ const Comments = lazy(() => import('./Comments.js'));
 
 ### 모든 컴포넌트가 hydrate 되기전에 페이지와의 상호작용
 
-앞서 언급한 것 외에도 한가지더 개선점이 존재한다. 이제 더이상 `hydration`작업이 브라우저가 다른 작업을 하는 것을 막지 않는다. 
+앞서 언급한 것 외에도 한가지더 개선점이 존재한다. 이제 더이상 `hydration`작업이 브라우저가 다른 작업을 하는 것을 막지 않는다.
 
 예를 들어, 댓글 컴포넌트가 hydrate 하는 동안 사용자가 사이드바를 클릭한다고 가정해보자.
 
@@ -395,7 +396,7 @@ const Comments = lazy(() => import('./Comments.js'));
 </Layout>
 ```
 
-이제 두 컴포넌트 모두 navbar와 post를  포함하는 초기 HTML 렌더링 작업이후에 서버에서 스트리밍 될 수 있다. 하지만 이 작업은 hydration에도 영향을 미칠 수 있다. 두 컴포넌트 모두 HTML은 로딩되었지만, 코드는 로딩되지 않았다고 가정해보자.
+이제 두 컴포넌트 모두 navbar와 post를 포함하는 초기 HTML 렌더링 작업이후에 서버에서 스트리밍 될 수 있다. 하지만 이 작업은 hydration에도 영향을 미칠 수 있다. 두 컴포넌트 모두 HTML은 로딩되었지만, 코드는 로딩되지 않았다고 가정해보자.
 
 ![step1](https://camo.githubusercontent.com/9eab3bed0a55170fde2aa2f8ac197bc06bbe157b6ee9446c7e0749409b8ed978/68747470733a2f2f717569702e636f6d2f626c6f622f5963474141416b314234322f78744c50785f754a55596c6c6746474f616e504763413f613d4e617972396c63744f6b4b46565753344e374e6d625335776a39524473344f63714f674b7336765a43737361)
 
@@ -442,13 +443,13 @@ hydration이 끝나면, 클릭이벤트를 다시 dispatch하여 컴포넌트가
 
 위 예시처럼 한다면, 초기 HTML은 `<Navbar>` 만을 포함하지만, 나머지는 사용자가 상호작용한 부분을 우선시하여 관련 코드가 로딩되는 직시 스트리밍하여 컴포넌트에서 hydration 할 것이다.
 
-> 어떻게 애플리케이션이 전체적으로 hydration 되지 않았는데 동작할 수 있는걸까? 리액트는 개별 컴포넌트에 개별적으로 hydration 하는 것이 아닌 `<Suspense>` 바운더리에 대해 hydration을 발생시킨다. `<Suspense>`는 당장 나타나지 않는 컨텐츠에 사용되므로, 코드는 이 자식 컨텐츠가 즉시 이용할 수 없는 상태에 대해 탄력적으로 대처할 수 있다. 리액트는 항상 부모 컴포넌트를 우선순위로 hydration 하므로, 컴포넌트는 항상 props set을 가지고 있을 수 있다. 리액트는 이벤트가 발생될 때 이벤트 지점에서 전체 상위 트리에 hydration이 진행될 때 까지 이를 보류 시켜 둔다. 마지막으로 상위 항목이 그럼에도 hydration이 되지 않는다면, 리액트는 이를 숨기고 코드가 로드 될 때 까지 `fallback`으로 화면을 바꿔 둔다. 이렇게 하면 트리가 일관되게 유지된다. 
+> 어떻게 애플리케이션이 전체적으로 hydration 되지 않았는데 동작할 수 있는걸까? 리액트는 개별 컴포넌트에 개별적으로 hydration 하는 것이 아닌 `<Suspense>` 바운더리에 대해 hydration을 발생시킨다. `<Suspense>`는 당장 나타나지 않는 컨텐츠에 사용되므로, 코드는 이 자식 컨텐츠가 즉시 이용할 수 없는 상태에 대해 탄력적으로 대처할 수 있다. 리액트는 항상 부모 컴포넌트를 우선순위로 hydration 하므로, 컴포넌트는 항상 props set을 가지고 있을 수 있다. 리액트는 이벤트가 발생될 때 이벤트 지점에서 전체 상위 트리에 hydration이 진행될 때 까지 이를 보류 시켜 둔다. 마지막으로 상위 항목이 그럼에도 hydration이 되지 않는다면, 리액트는 이를 숨기고 코드가 로드 될 때 까지 `fallback`으로 화면을 바꿔 둔다. 이렇게 하면 트리가 일관되게 유지된다.
 
 ## 데모
 
-https://codesandbox.io/s/festive-star-9hfqt?file=/src/App.js 
+https://codesandbox.io/s/festive-star-9hfqt?file=/src/App.js
 
-위 데모코드는 `server/delays.js`에서 인위적으로 지연시켜서 확인할 수 있다. 
+위 데모코드는 `server/delays.js`에서 인위적으로 지연시켜서 확인할 수 있다.
 
 - `API_DELAY`: 댓글을 가져오는 시간을 오래 걸리게 하여 HTML의 나머지 부분을 초기에 전송하는 것을 보여준다.
 - `JS_BUNDLE_DELAY`: script 태그가 로딩되는 것을 지연하여 댓글 HTML이 나중에 삽입되는 것을 볼 수 있다.

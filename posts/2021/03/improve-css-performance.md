@@ -26,7 +26,7 @@ CSS의 존재 자체 만으로도, CSS가 파싱되기 전까지 브라우저는
 
 ![js-blocking-html-parsing](https://web-now-rbviiass9-calibreapp.vercel.app/_next/image?url=%2Fimages%2Fblog%2Fcss-performance%2Fparser-blocking-script.png&w=1920&q=75)
 
-스크릡트가 페이지의 스타일에 영향을 줄 수 있기 때문에, 만약 브라우저가 CSS 관련 작업을 진행중이라면, 이 작업이 완료될 때 까지 기다렸다가 스크립트를 실행할 것이다. 스크립트가 실행되기 전까지 문서 파싱을 할 수 없기 때문에, CSS는 더이상 렌더링을 차단하는 요소로 작용하지 않는다. (하단 그림 참조) 문서의 외부 스타일시트 및 스크립트 순서에 따라서 때로는 HTML 파싱도 중지할 수 있다.
+스크릡트가 페이지의 스타일에 영향을 줄 수 있기 때문에, 만약 브라우저가 CSS 관련 작업을 진행중이라면, 이 작업이 완료될 때 까지 기다렸다가 스크립트를 실행할 것이다. 스크립트가 실행되기 전까지 문서 파싱을 할 수 없기 때문에, CSS는 더 이상 렌더링을 차단하는 요소로 작용하지 않는다. (하단 그림 참조) 문서의 외부 스타일시트 및 스크립트 순서에 따라서 때로는 HTML 파싱도 중지할 수 있다.
 
 ![css-can-block-html-parsing](https://web-now-rbviiass9-calibreapp.vercel.app/_next/image?url=%2Fimages%2Fblog%2Fcss-performance%2Fparser-blocking-css.png&w=1920&q=75)
 

@@ -101,7 +101,7 @@ https://yceffort.kr/2020/03/nextjs-02-data-fetching#3-getstaticpaths
 - /[year]/[month]/[day]/index.tsx
 ```
 
-이렇게 하면 세번째 path가 `day`로 동일해지기 때문에, 더이상 에러가 나지 않는다. 다만 `index.tsx`에서 `day`가 아니라 `title`이라는 사실을 염두해두고 개발에 해야한다.
+이렇게 하면 세번째 path가 `day`로 동일해지기 때문에, 더 이상 에러가 나지 않는다. 다만 `index.tsx`에서 `day`가 아니라 `title`이라는 사실을 염두해두고 개발에 해야한다.
 
 ### 2. 마크다운 파서
 

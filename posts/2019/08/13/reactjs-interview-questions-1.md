@@ -52,7 +52,7 @@ class App extends React.Component {
 
 ### What is the difference between Element and Component?
 
-`element`는 DOM노드나 컴포넌트 단에서 화면에 보여주고 싶은 요소를 그리는 하나의 오브젝트를 의미한다. `element`는 `element`의 props에서 포함될 수 있다. 리액트에서 `element`를 만드는건 많은 비용이 들지 않는다. 한번 만들고 나면, 더이상 변경이 불가능하다.
+`element`는 DOM노드나 컴포넌트 단에서 화면에 보여주고 싶은 요소를 그리는 하나의 오브젝트를 의미한다. `element`는 `element`의 props에서 포함될 수 있다. 리액트에서 `element`를 만드는건 많은 비용이 들지 않는다. 한번 만들고 나면, 더 이상 변경이 불가능하다.
 
 리액트에서 `element`를 만드는 예시는 아래와 같다.
 
@@ -565,7 +565,7 @@ React lifecycle에는 세 개의 phase가 있다.
 
 1. `mounting`: 컴포넌트가 browser DOM에 마운트 될 준비가 된 상태다. 이 phase에는 `constructor()` `getDerivedStateFromProps()` `render()` `componentDidMount()`가 있다
 2. `updating`: 이 단계에서는, 컴포넌트가 두가지 방법으로 업데이트 된다. 새로운 `props`를 보내거나, `setState()` `forceUpdate()`를 통해서 state를 업데이트 하는 방법이 있다. 이 단계에서는, `getDerivedStateFromProps()` `shouldComponentUpdate()` `render()` `getSnapshotBeforeUpdate()` `componentDidUpdate()` 가 포함된다.
-3. `unmounting`: 이단계에서는, browser DOM이 더 이 더이상 필요 없어지거나 unmount된다. 여기에는 `componentWillUnmount()`가 포함된다.
+3. `unmounting`: 이단계에서는, browser DOM이 더 이 더 이상 필요 없어지거나 unmount된다. 여기에는 `componentWillUnmount()`가 포함된다.
 
 DOM에서의 변경을 적용할 때, 내부에서 어떤 과정을 거치는지 알아볼 필요가 있다. 각 단계는 아래와 같다.
 

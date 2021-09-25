@@ -127,7 +127,7 @@ https://prettier.io/docs/en/options.html
 
 경험적으로 봤을 때, 그리고 많은 아티클을 참고 했을 때 이룰은 `error` 로 두고, 필요할 때만 `eslint-disable-line` 을 해두는 것이 좋다.
 
-이 논쟁에 대한 많은 글들이 있기 때문에,, 더이상 설명하는 것은 생략..
+이 논쟁에 대한 많은 글들이 있기 때문에,, 더 이상 설명하는 것은 생략..
 
 - https://reactjs.org/docs/hooks-faq.html#is-it-safe-to-omit-functions-from-the-list-of-dependencies
 - https://github.com/facebook/react/issues/14920

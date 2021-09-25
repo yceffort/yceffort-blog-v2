@@ -44,7 +44,7 @@ DOM이 생성되고, 웹 브라우저 상에 나타나는 것을 mount라고 한
 1. `props`변경 / 부모 컴포넌트가 리렌더링
 2. `getDerivedStateFromProps`: `props`에 있는 값을 `state`와 동기화 시키는 메서드다.
 3. `state`가 변경
-4. `shouldComponentUpdate`: 컴포넌트가 리렌더링 해야하는지 결정하는 메서드다. 여기에서 `false`가 리턴되면 아래 메서드들을 더이상 호출 하지 않는다.
+4. `shouldComponentUpdate`: 컴포넌트가 리렌더링 해야하는지 결정하는 메서드다. 여기에서 `false`가 리턴되면 아래 메서드들을 더 이상 호출 하지 않는다.
 5. `forceUpdate` 호출
 6. `render`
 7. `getSnapshotBeforeUpdate`: `Component` 변화를 DOM에 반영하기 전에 호출하는 메서드

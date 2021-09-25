@@ -32,7 +32,7 @@ template: post
 
 `onCompleted` 마지막 `onNext`가 호출된 뒤에 호출된다.
 
-더이상 구독을 하지 않으려면 `unSubscirbe`를 호출한다.
+더 이상 구독을 하지 않으려면 `unSubscirbe`를 호출한다.
 
 Observable이 연속된 항목을 push하는 방법에는 두가지가 있는데 바로 hot과 cold다. hot은 생성되자마자 push하고, cold는 옵저버가 구독할때까지 배출하지 않는다.
 

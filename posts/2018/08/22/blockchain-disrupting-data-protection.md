@@ -35,7 +35,7 @@ Blockchain: Disrupting data protection?
 
 ## 불변성?
 
-불변성은 블록체인과 분산원장의 가장 핵심적인 특징이다. 블록 내부의 데이터를 변경하거나 제거하면, 블록 내부의 모든 데이터가 더이상 신뢰할 수 없게 된다. 기록 관리 관점에서는 훌륭한 특징이지만, 개인 데이터의 수집에 대한 법적 근거가 더이상 유효하지 않아 제거해야 하거나, 데이터가 GDPR 하에서 지울 권리를 행사하게 되면 문제가 발생한다.
+불변성은 블록체인과 분산원장의 가장 핵심적인 특징이다. 블록 내부의 데이터를 변경하거나 제거하면, 블록 내부의 모든 데이터가 더 이상 신뢰할 수 없게 된다. 기록 관리 관점에서는 훌륭한 특징이지만, 개인 데이터의 수집에 대한 법적 근거가 더 이상 유효하지 않아 제거해야 하거나, 데이터가 GDPR 하에서 지울 권리를 행사하게 되면 문제가 발생한다.
 
 Immutable? Immutability is perhaps the best core feature of blockchain and DLT. Altering or removing data inside a block would simply render all the data inside the block no longer trustworthy. While from a record management point of view it is a great feature, it creates issues when the legal basis for the original collection of personal data is no longer valid and the data needs to be removed, or when a data subject exercises the right to erasure under the GDPR in the future.
 

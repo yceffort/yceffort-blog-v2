@@ -80,7 +80,7 @@ while ((events = demultiplexer.watch(watchedList))) {
     // 이곳에 도달했다는 것은, 읽기 작업이 완료되었다는 것이므로 차단되지 않고 데이터를 반환한다.
     data = event.resource.read()
     if (data === RESOURCE_CLOSED) {
-      // 리소스가 닫히면, 더이상 감시하지 않는다.
+      // 리소스가 닫히면, 더 이상 감시하지 않는다.
       demultiplexer.unwatch(event.resource)
     } else {
       // 데이터를 받으면, 그냥 처리한다.

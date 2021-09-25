@@ -64,7 +64,7 @@ The Bitcoin Lightning Network
 
 ![4](https://i0.wp.com/cointelegraph.com/storage/uploads/view/5316aec3310e3495050fc6d1764422f6.png?w=640&ssl=1)
 
-마짐막으로 서로 더이상 거래를 하기를 원하지 않는다면, 마지막 거래의 결과에 따라 소유권을 나눠 갖게 된다. 그리고 이는 블록체인에 기록된다.
+마짐막으로 서로 더 이상 거래를 하기를 원하지 않는다면, 마지막 거래의 결과에 따라 소유권을 나눠 갖게 된다. 그리고 이는 블록체인에 기록된다.
 
 ![5](https://i0.wp.com/cointelegraph.com/storage/uploads/view/aeb65370d31a21ddd8b68b259ba5555b.png?w=640&ssl=1)
 

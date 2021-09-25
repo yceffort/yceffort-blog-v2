@@ -131,7 +131,7 @@ module.exports = {
   exports.push([module.i, '.comment {\r\n  color: black;\r\n}', ''])
 ```
 
-minifier는 코드가 문자열이기 때문에 더이상 최소화 할 수 없다. 이를 최소화 하기 위해서는, 아래와 같이 옵션을 추가하면 된다.
+minifier는 코드가 문자열이기 때문에 더 이상 최소화 할 수 없다. 이를 최소화 하기 위해서는, 아래와 같이 옵션을 추가하면 된다.
 
 ```javascript
 // webpack.config.js

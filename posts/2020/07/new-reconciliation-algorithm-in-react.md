@@ -21,7 +21,7 @@ template: post
 
 React는 사용자 인터페이스를 구축하기 위한 자바스크립트 라이브러리다. 이것의 중심에는 컴포넌트의 상태 변화를 추적하고, 업데이트된 상태를 화면에 반영하는 메커니즘(Change Detection)이 존재한다. 리액트에서는 이것을 Reconciliation(이하 재조정)이라고 한다. `setState`메소드를 호출하여 `state`또는 `prop`값이 변화하였는지 확인하고, UI의 컴포넌트를 다시 렌더링 한다.
 
-[리액트는 이 메커니즘에 대한 좋은 설명을 제공한다.](https://reactjs.org/docs/reconciliation.html): 리액트 엘리먼트의 역할, 라이프 사이클 메소드, `render`메소드, 컴포넌트의 자식을 비교 하는 알고리즘 등. render 메소드로 부터 반환되는 불변의 리액트 엘리먼트 트리는 가상 DOM으로 알려져 있다. 이 용어는 초기에 리액트를 설명하는데 많은 도움이 되었지만, 한편으로 많은 혼란을 야기 시켰고 이제 더이상 공식 문서에서 사용되지 않는다. 여기에서는 우리는 가상 DOM 대신 리액트 엘리먼트 트리라고 부르겠다.
+[리액트는 이 메커니즘에 대한 좋은 설명을 제공한다.](https://reactjs.org/docs/reconciliation.html): 리액트 엘리먼트의 역할, 라이프 사이클 메소드, `render`메소드, 컴포넌트의 자식을 비교 하는 알고리즘 등. render 메소드로 부터 반환되는 불변의 리액트 엘리먼트 트리는 가상 DOM으로 알려져 있다. 이 용어는 초기에 리액트를 설명하는데 많은 도움이 되었지만, 한편으로 많은 혼란을 야기 시켰고 이제 더 이상 공식 문서에서 사용되지 않는다. 여기에서는 우리는 가상 DOM 대신 리액트 엘리먼트 트리라고 부르겠다.
 
 리액트 엘리먼트 트리외에도, 프레임워크에는 state를 유지하기 위해 다양한 인스턴스를 사용한다. (컴포넌트, DOM 노드 등) 리액트 버전 16부터는, 내부 인스턴스 트리와 이를 관리하는 알고리즘을 코드명 `Fiber`로 새롭게 구현했다. Fiber 아키텍쳐가 제공하는 이점에 대한 자세한 내용은 [여기](https://indepth.dev/the-how-and-why-on-reacts-usage-of-linked-list-in-fiber-to-walk-the-components-tree/)를 참조하면 된다.
 
@@ -156,7 +156,7 @@ class ClickCounter {
 
 **다시 말해 Fiber는 해야할 작업, 해야할 작업의 단위를 나타내는 데이터 구조라고 볼 수 있다. Fiber 아키텍쳐는 또한 작업을 추적, 스케쥴, 중지, 취소하는 편리한 방법을 제공한다.**
 
-리액트 엘리먼트가 처음으로 Fiber 노드로 변환되면, 리액트는 요소의 데이터를 사용하여 [createFiberFromTypeAndProps](https://github.com/facebook/react/blob/769b1f270e1251d9dbdce0fcbd9e92e502d059b8/packages/react-reconciler/src/ReactFiber.js#L414) 함수를 호출하여 Fiber를 생성한다. 리액트는 Fiber노드를 재사용하고 단지 해당 리액트 엘리먼트의 데이터를 사용하여 필요한 속성을 업데이트 한다. 또한 리액트는 `key` prop을 기반으로한 계층 구조에서 노드를 이동하거나, 해당 리액트 노드의 렌더에서 더이상 반환하는 경우 삭제를 할 수도 있다.
+리액트 엘리먼트가 처음으로 Fiber 노드로 변환되면, 리액트는 요소의 데이터를 사용하여 [createFiberFromTypeAndProps](https://github.com/facebook/react/blob/769b1f270e1251d9dbdce0fcbd9e92e502d059b8/packages/react-reconciler/src/ReactFiber.js#L414) 함수를 호출하여 Fiber를 생성한다. 리액트는 Fiber노드를 재사용하고 단지 해당 리액트 엘리먼트의 데이터를 사용하여 필요한 속성을 업데이트 한다. 또한 리액트는 `key` prop을 기반으로한 계층 구조에서 노드를 이동하거나, 해당 리액트 노드의 렌더에서 더 이상 반환하는 경우 삭제를 할 수도 있다.
 
 > [ChildReconciler](https://github.com/facebook/react/blob/95a313ec0b957f71798a69d8e83408f40e76765b/packages/react-reconciler/src/ReactChildFiber.js#L239)를 확인하면 리액트의 성능및 모든 작업 목록을 확인할 수 있다.
 

@@ -12,7 +12,7 @@ description: '저는 사실 Immutability에 안 좋은 추억이 있습니다'
 
 ## 불변성
 
-Immutability(이하 불변성)이란, 초기에 할당 한 이후에 더이상 상태가 변하지 않는 객체를 의미한다. 프로젝트 내의 모든 객체에 이 불변성을 적용하면, 가독성 향상, 코드에 대한 이해도 증가, 스레드의 안정성 등을 확보할 수 있다.
+Immutability(이하 불변성)이란, 초기에 할당 한 이후에 더 이상 상태가 변하지 않는 객체를 의미한다. 프로젝트 내의 모든 객체에 이 불변성을 적용하면, 가독성 향상, 코드에 대한 이해도 증가, 스레드의 안정성 등을 확보할 수 있다.
 
 ## 불변성을 논하기에 앞서
 
@@ -205,7 +205,7 @@ const immutableAppendGroupsToUser = (
   groupIds: ReadonlyArray<string>,
   user: ReadonlyUser,
 ): ReadonlyUser => {
-  // 더이상 `user.groupIds`를 직접 수정하지 않는다.
+  // 더 이상 `user.groupIds`를 직접 수정하지 않는다.
   const newGroupIds = Array.from(new Set([...user.groupIds, ...groupIds]))
 
   // 함수가 완전히 새로운 객체를 리턴한다.

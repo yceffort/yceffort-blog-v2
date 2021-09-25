@@ -31,7 +31,7 @@ The fair cost of Bitcoin proof of work
 
 | ![estimated-hash-rates-and-associated energy-consumption](../images/estimated-hash-rates-and-associated energy-consumption.png) |
 | :------------------------------------------------------------------------------------------------------------------------------ |
-| 하드웨어별 비트코인 마이닝에 걸리는 해시레이트와 에너지 소비량. 현재는 더 이상 CPU와 GPU는 사용되지 않는다.                      |
+| 하드웨어별 비트코인 마이닝에 걸리는 해시레이트와 에너지 소비량. 현재는 더 이상 CPU와 GPU는 사용되지 않는다.                     |
 
 ## 작업 증명의 비용
 

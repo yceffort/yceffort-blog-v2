@@ -103,7 +103,7 @@ const number = parseInt(randomBytes.toString('hex'), 16)
 console.log(number) // 40358
 ```
 
-Web Crypto API에 사용되는 의사 난수 생성 알고리즘 (psuedo-random number generator algorithm, PRNG)는 브라우저에 따라서 다를 수 있다.
+Web Crypto API에 사용되는 의사 난수 생성 알고리즘 (pseudo-random number generator algorithm, PRNG)는 브라우저에 따라서 다를 수 있다.
 
 ## Web Crypto API 활용하기
 

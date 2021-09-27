@@ -6,7 +6,7 @@ tags:
   - web
 published: true
 date: 2021-09-25 17:24:06
-description: '따라가는 것만 해도 바쁜 인생 부지런하게 쫓아가자'
+description: '따라가는 것만 해도 바쁜 인생'
 ---
 
 ## Table of Contents

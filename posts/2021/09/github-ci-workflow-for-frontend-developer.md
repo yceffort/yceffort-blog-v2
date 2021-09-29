@@ -15,11 +15,13 @@ description: '사랑해요 Github'
 
 ## 좋은 Github CI workflow는 무엇일까
 
-- cost saving: github actions은 [빌드 시간 만큼 비용을 청구](https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions)하므로 빌드 시간을 최소한으로 낮춰야 한다.
-- efficient: workflow는 가능한 빨리 수행 되어서 성공 또는 실패 여부를 확인할 수 있어야 한다.
-- well-architected: 각 모든 step에는 모두 목적이 있으며, 쓸데 없는 step이 없어야 한다.
+- 최소한의 비용으로 실행해야 한다: github actions은 [빌드 시간 만큼 비용을 청구](https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions)하므로 빌드 시간을 최소한으로 낮춰야 한다.
+- 효율적으로 동작해야 한다: workflow는 가능한 빨리 수행 되어서 성공 또는 실패 여부를 확인할 수 있어야 한다.
+- 잘 설계되어 있어야 한다: 각 모든 step에는 모두 목적이 있으며, 쓸데 없는 step이 없어야 한다.
 
 ## Workflow 가 해야 하는 일
+
+workflow에서 처리할 수 있는 일들에는 많지만, 일반적인 프론트엔드 프로젝트를 상상해본다면 아래와 같은 작업들을 처리할 것이다.
 
 - lint
 - formatting
@@ -28,7 +30,7 @@ description: '사랑해요 Github'
 - build
 - e2e test (다양한 브라우저 지원)
 
-물론 여유가 있다면 이러한 작업을 별도의 workflow에서 실행하는 것이 가장 간단한 방법이다. 그러나 한 작업이 실패한다면, 다른 작업은 진행할 필요가 없음에도 (모든 테스트가 통과하는게 의미 있기 때문에) 다른 작업을 중단하는 것은 불가능하다.
+물론 여유가 있다면 이러한 작업을 별도의 workflow에서 실행하는 것이 가장 간단한 방법이다. 그러나 모든 작업을 별개로 두었을 경우 한 작업이 실패한다면, 다른 작업은 진행할 필요가 없음에도 (모든 워크플로우가 통과하는게 의미 있기 때문에) 다른 작업을 중단하는 것은 불가능하다.
 
 정리하자면, 이러한 방식의 워크플로우는 병렬로 실행되기 때문에 서로 상호 작용할 방법이 없다. 즉, 다른 워크 플로우의 실패를 다른 워크플로우의 중단으로 트리거할 수 없다.
 
@@ -132,7 +134,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12]
+        node-version: [14, 16]
     steps:
       - name: Checkout Commit
         uses: actions/checkout@v2

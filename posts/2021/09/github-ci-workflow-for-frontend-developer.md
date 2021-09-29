@@ -1,5 +1,5 @@
 ---
-title: '프론트엔드 프로젝트를 위한 github action workflow'
+title: '프론트엔드 프로젝트를 위한 github CI workflow'
 tags:
   - frontend
   - github
@@ -11,7 +11,7 @@ description: '사랑해요 Github'
 
 ## Introduction
 
-프론트엔드 엔지니어로 일을 하다 보면, 당연히 많은 오픈소스와 다양한 도구에 도움을 받고 의존하게 된다. VS Code 를 비롯해서 여러가지가 있지만, 최근에 내가 가장 도움을 많이 받은 도구 중 하나는 Github Action 이다. 이 글에서는 내 개인 프로젝트와 직장에서 아용해 온 github action 을 정리하고, 이러한 Workflow ci 워크플로우를 활용하여 프론트엔드 팀의 CI/CD 파이프라인에 도움을 주는 방법을 살펴보자.
+프론트엔드 엔지니어로 일을 하다 보면, 당연히 많은 오픈소스와 다양한 도구에 도움을 받고 의존하게 된다. VS Code 를 비롯해서 여러가지가 있지만, 최근에 내가 가장 도움을 많이 받은 도구 중 하나는 Github Action 이다. github action을 기반으로 github workflow를 만들고 활용하여 프론트엔드 팀의 CI/CD 파이프라인에 도움을 주는 방법을 살펴보자.
 
 ## 좋은 Github CI workflow는 무엇일까
 
@@ -26,7 +26,7 @@ description: '사랑해요 Github'
 - type checking
 - unit test
 - build
-- e2e test (다양한 브라우저)
+- e2e test (다양한 브라우저 지원)
 
 물론 여유가 있다면 이러한 작업을 별도의 workflow에서 실행하는 것이 가장 간단한 방법이다. 그러나 한 작업이 실패한다면, 다른 작업은 진행할 필요가 없음에도 (모든 테스트가 통과하는게 의미 있기 때문에) 다른 작업을 중단하는 것은 불가능하다.
 
@@ -159,7 +159,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [12]
+        node: [14, 16]
     needs: install-cache
     steps:
       - name: Checkout Commit

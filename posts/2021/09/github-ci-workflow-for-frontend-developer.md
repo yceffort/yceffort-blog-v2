@@ -3,7 +3,7 @@ title: '프론트엔드 프로젝트를 위한 github action workflow'
 tags:
   - frontend
   - github
-  - "CI/CD"
+  - 'CI/CD'
 published: true
 date: 2021-09-28 21:21:56
 description: '사랑해요 Github'
@@ -30,7 +30,7 @@ description: '사랑해요 Github'
 
 물론 여유가 있다면 이러한 작업을 별도의 workflow에서 실행하는 것이 가장 간단한 방법이다. 그러나 한 작업이 실패한다면, 다른 작업은 진행할 필요가 없음에도 (모든 테스트가 통과하는게 의미 있기 때문에) 다른 작업을 중단하는 것은 불가능하다.
 
-정리하자면, 이러한 방식의 워크플로우는 병렬로 실행되기 때문에 서로 상호 작용할 방법이 없다. 즉, 다른 워크 플로우의 실패를 다른 워크플로우의 중단으로 트리거할 수 없다. 
+정리하자면, 이러한 방식의 워크플로우는 병렬로 실행되기 때문에 서로 상호 작용할 방법이 없다. 즉, 다른 워크 플로우의 실패를 다른 워크플로우의 중단으로 트리거할 수 없다.
 
 따라서 좋은 방법은 모든 워크플로우를 하나로 결합하는 것이다. 독립적인 워크플로우 였던 모든 태스를 하나의 워크 플로우로 통합한다면 이러한 문제를 해결할 수 있다.
 
@@ -184,9 +184,9 @@ jobs:
           tsc -p tsconfig.json --noEmit
 ```
 
-여기에서 artifacts를 사용하면 더 향상시킬 수 있다. 
+여기에서 artifacts를 사용하면 더 향상시킬 수 있다.
 
-예를 들어, 파이어폭스와 크롬에서 각각 e2e 테스트를 하는 작업이 있다고 가정해보자. 이 경우 빌드를 두번하게 되어  github action에 과금 부담이 증가할 수 있으므로 두번 이상 빌드하지 않는 것이 좋다. 이를 해결하기 위해서는 e2e 테스트를 실행하기전에 빌드 작업을 수행한다음, 이 빌드 결과물을 가지고 두군데에서 공유해서 사용하는 것이다.
+예를 들어, 파이어폭스와 크롬에서 각각 e2e 테스트를 하는 작업이 있다고 가정해보자. 이 경우 빌드를 두번하게 되어 github action에 과금 부담이 증가할 수 있으므로 두번 이상 빌드하지 않는 것이 좋다. 이를 해결하기 위해서는 e2e 테스트를 실행하기전에 빌드 작업을 수행한다음, 이 빌드 결과물을 가지고 두군데에서 공유해서 사용하는 것이다.
 
 이를 위해 사용하는 것이 `actions/upload-artifact` 와 `actions/download-artifact` 다.
 
@@ -208,7 +208,7 @@ jobs:
       # 이전 스텝에서 만든 빌드 결과물을 업로드
       - name: Upload build artifacts
         uses: actions/upload-artifact@v2
-        with:          
+        with:
           # 빌드 결과물에 이름을 부여
           name: build-output
           # 업로드할 결과물 path
@@ -272,7 +272,7 @@ on:
 
 concurrency:
   # 그룹을 pr의 head_ref로 정의
-  group: ${{ github.head_ref }}  
+  group: ${{ github.head_ref }}
   # 해당 pr에서 새로운 워크플로우가 실행될 경우, 이전에 워크플로우가 있다면 이전 워크플로우를 취소하도록 한다.
   cancel-in-progress: true
 
@@ -284,4 +284,3 @@ jobs:
 워크플로우 레벨에서 이 작업을 수행하면, 새로운 변경사항을 커밋하여 새로운 워크플로우가 실행 될 때 이전 워크플로우를 취소 시킬 수 있으므로 시간과 비용을 절약할 수 있다.
 
 > 더 많은 `concurrency` 예제 살펴보기: https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#concurrency
-

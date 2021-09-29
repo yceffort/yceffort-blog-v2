@@ -2,8 +2,8 @@
 title: '프론트엔드 프로젝트를 위한 github action workflow'
 tags:
   - frontend
-  - javascript
   - github
+  - "CI/CD"
 published: true
 date: 2021-09-28 21:21:56
 description: '사랑해요 Github'

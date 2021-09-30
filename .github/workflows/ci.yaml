@@ -1,4 +1,4 @@
-name: CI
+name: build
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - 'main'
 
 jobs:
-  ci:
+  build:
     runs-on: ubuntu-latest
 
     strategy:

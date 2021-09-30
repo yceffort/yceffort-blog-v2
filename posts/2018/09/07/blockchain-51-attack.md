@@ -4,7 +4,6 @@ date: 2018-09-07 04:14:32
 published: true
 tags:
   - blockchain
-  - cryotocurrency
 description: Blockchain's Once-Feared 51% Attack Is Now Becoming Regular
   [원문](https://www.coindesk.com/blockchains-feared-51-attack-now-becoming-regular/)  Monacoin,
   bitcoin gold, zencash, verge, 그리고 litecoin cas...

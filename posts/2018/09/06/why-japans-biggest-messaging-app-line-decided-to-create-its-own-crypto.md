@@ -4,7 +4,6 @@ date: 2018-09-06 06:14:32
 published: true
 tags:
   - blockchain
-  - cryotocurrency
 description: Why Japan’s Biggest Messaging App Line Decided to Create Its Own
   Crypto
   [원문](https://cointelegraph.com/news/why-japans-biggest-messaging-app-line-decided-to-create-its-own-crypto)  지난

@@ -20,8 +20,6 @@ bitcoin-core를 설치했다면 bitcoind daemon 에서는 모든  block 정보�
 
 ![스크린샷 2016-04-20 08.53.33](../images/bitcoin-sync-1.png)
 
-지갑주소 공개합니다. 0.00001 BTC있는데 가져가쉴??
-
 현재 Sync상황을 알기 위해선, 일단 내 bitcoin-core가 얼마나 동기화 는지 확인 해야 한다.
 
 ```

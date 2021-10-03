@@ -12,6 +12,7 @@ import SiteConfig from '#src/config'
 import { getThumbnailURL } from '#utils/common'
 import MathLoader from '#components/layouts/Post/math'
 import profile from '#public/profile.png'
+import FloatingActionButton from '#components/layouts/Post/Fab'
 
 export default function PostLayout({
   children,
@@ -30,6 +31,8 @@ export default function PostLayout({
     path: slug,
     slug,
   })
+
+  const link = `https://github.com/yceffort/yceffort-blog-v2/issues/new?labels=%F0%9F%92%AC%20Discussion&title=[Discussion] issue on ${title}&assignees=yceffort&body=${SiteConfig.url}/${slug}`
 
   return (
     <SectionContainer>
@@ -92,12 +95,9 @@ export default function PostLayout({
                 {children}
               </div>
               <div className="pt-6 pb-6 text-sm text-gray-700 dark:text-gray-300">
-                <CustomLink
-                  href={`https://github.com/yceffort/yceffort-blog-v2/issues/new?labels=%F0%9F%92%AC%20Discussion&title=[Discussion]&assignees=yceffort&body=${SiteConfig.url}/${slug}`}
-                >
-                  {'Issue on GitHub'}
-                </CustomLink>
+                <CustomLink href={link}>{'Issue on GitHub'}</CustomLink>
               </div>
+              <FloatingActionButton link={link} />
             </div>
             <footer>
               <div className="text-sm font-medium leading-5 divide-gray-200 xl:divide-y dark:divide-gray-700 xl:col-start-1 xl:row-start-2">

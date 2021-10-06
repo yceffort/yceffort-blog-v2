@@ -4,7 +4,7 @@ tags:
   - javascript
 published: true
 date: 2021-10-06 22:01:12
-description: '설치할 땐 즐겁지만, 어느 순간 부메랑으로...'
+description: '설치와 업데이트 시에는 신중에 신중을.'
 ---
 
 ## Table of Contents

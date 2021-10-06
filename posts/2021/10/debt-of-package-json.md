@@ -8,6 +8,7 @@ description: '설치할 땐 즐겁지만, 어느 순간 부메랑으로...'
 ---
 
 ## Table of Contents
+
 ## Introduction
 
 npm은 자바스크립트 개발자에게 있어 한 줄기 빛 같은 도구다. 자바스크립트 프로젝트를 시작한다고 하면, 열에 아홉은 `npm init` 명령어와 함께 시작한다. 그렇게 생성된 `package.json`에 필요한 npm 패키지를 하나 둘 씩 설치해 나가다 보면 어느새 프로젝트가 완성되어 있다. `don't reinvent the wheel again` 이라는 개발의 오랜 격언 처럼, 개발자가 필요로 하는 자바스크립트 패키지들 대부분은 npm에 존재하고 그리고 손쉽게 설치한다. 그러나 설치는 쉽게 하지만, 쉽게 설치되는 만큼 그 안에 개발 부채가 쌓이고 있다는 사실은 다들 간과하고 있는 것 같다. 점점 커져가고 있는 `package.json`에서는 무슨 일이 일어날 수 있을까? 그리고 이를 방지하기 위해서는 어떻게 해야할까?
@@ -102,30 +103,30 @@ jest 버전이 24.x에서 26으로 업그레이드 된 것을 볼 수 있다. ma
 위 `package.json`을 살펴보자. react 버전은 16.8.6으로 고정되어 있고, `@testing-library/react-hooks`를 설치하려고 시도하고 있다. 그러나 [`@testing-library/react-hooks`는 `peerDependencies`로 `react@>=16.9`를 요구하기 때문](https://github.com/testing-library/react-hooks-testing-library/blob/565c9f80ff969c3b9f20d8b2efdc033996d9ec27/package.json#L78)에 아래와 같이 npm@7 환경에서는 설치가 되지 않는다.
 
 ```
-➜  playground npm install   
+➜  playground npm install
 npm ERR! code ERESOLVE
 npm ERR! ERESOLVE could not resolve
-npm ERR! 
+npm ERR!
 npm ERR! While resolving: @testing-library/react-hooks@7.0.2
 npm ERR! Found: react@16.8.6
 npm ERR! node_modules/react
 npm ERR!   react@"16.8.6" from the root project
-npm ERR! 
+npm ERR!
 npm ERR! Could not resolve dependency:
 npm ERR! peer react@">=16.9.0" from @testing-library/react-hooks@7.0.2
 npm ERR! node_modules/@testing-library/react-hooks
 npm ERR!   dev @testing-library/react-hooks@"^7.0.2" from the root project
-npm ERR! 
+npm ERR!
 npm ERR! Conflicting peer dependency: react@17.0.2
 npm ERR! node_modules/react
 npm ERR!   peer react@">=16.9.0" from @testing-library/react-hooks@7.0.2
 npm ERR!   node_modules/@testing-library/react-hooks
 npm ERR!     dev @testing-library/react-hooks@"^7.0.2" from the root project
-npm ERR! 
+npm ERR!
 npm ERR! Fix the upstream dependency conflict, or retry
 npm ERR! this command with --force, or --legacy-peer-deps
 npm ERR! to accept an incorrect (and potentially broken) dependency resolution.
-npm ERR! 
+npm ERR!
 npm ERR! See /Users/yceffort/.npm/eresolve-report.txt for a full report.
 
 npm ERR! A complete log of this run can be found in:
@@ -164,12 +165,11 @@ npm@6 환경에서 `peerDependencies`가 단순히 경고 문구만 내뱉고, �
 
 그리고 이 패키지를 운영하고 있는 주체가 누구인지도 확인해보고, 메인스트림 브랜치 기준으로 마지막 commit, PR, issue closed 등을 확인해보는 것도 필요하다. 최근까지 패키지가 '살아있다'는 증거를 찾았는가? 그렇다면 설치해도 좋다. 그렇지 않다면 장기적인 관점으로 봤을 때 설치를 재고해봐야 한다.
 
-
 ## 4. 핵심 라이브러리는 직접 구현하자
 
 npm에서 제공되는 다양한 오픈소스 패키지를 활용하여 프로젝트를 꾸미는 것도 좋지만, 프로젝트의 핵심이 되는 코어 기능들은 외부 패키지에 의존하는 것 보다는 자체적으로 만들어서 제공하는 것이 장기적으로 안정적으로 서비스를 운영하는데 도움이된다. 우리가 사용하고 있는 npm 패키지들은 모두 오픈소스임을 명시해야 한다. 오픈 소스이기에 (라이센스만 준수한다면) 무료로 쉽게 이용할 수 있지만, 반대로 언제든지 오픈소스 프로젝트가 중단될 가능성도 존재한다.
 
-> Babel is used by millions, so why are we running out of money? 
+> Babel is used by millions, so why are we running out of money?
 
 > ... So, our ask is to help fund our work, via Open Collective and GitHub Sponsors. Though individual contributions do matter (and we deeply appreciate them), we are really looking for more companies to step up and become corporate sponsors, alongside our current sponsors like AMP, Airbnb, Salesforce, GitPod, and others. If it would be better for your company to sustain us in other ways, we are also open to hearing any ideas. Reach out to us directly or by email at team@babeljs.io.
 

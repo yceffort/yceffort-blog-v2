@@ -3,7 +3,7 @@ title: '프론트엔드 프로젝트를 위한 github CI workflow'
 tags:
   - frontend
   - github
-  - 'CI/CD'
+  - 'CI,CD'
 published: true
 date: 2021-09-28 21:21:56
 description: '사랑해요 Github'

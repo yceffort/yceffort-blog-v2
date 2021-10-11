@@ -58,7 +58,6 @@ description: ''
 - 테스트에 집중해라. 중요하지 않은 정보는 외부 헬퍼나 훅을 이용해라
 - 팩토리 기법을 사용하여 긴 구조를 만들어라. - 의미있는 정보만 넘겨서 오버라이딩 해라.
 
-
 ## BASIC
 
 BASIC 이라는 약자를 바탕으로, 한글자씩 살펴보자. 각 글자는 테스트 코드를 만들 때 고려해야하는 원칙을 나타낸다. 그리고, 이 BASIC 원칙을 적용하여 길고 번거로운 테스트 코드가 아닌 간결하고 아름다운 테스트 코드를 짜는 방법을 알아볼 것이다.
@@ -317,14 +316,14 @@ Pattern: Independent
 ---
 
 ```javascript
-transferRequest.howMuch = 110; // 
+transferRequest.howMuch = 110 //
 ```
 
 ```javascript
-const amountMoreThanTheUserCredit = 110;
-transferRequest.howMuch = amountMoreThanTheUserCredit;
+const amountMoreThanTheUserCredit = 110
+transferRequest.howMuch = amountMoreThanTheUserCredit
 // 또는
-transferRequest = {credit:50, howMuch: 100}
+transferRequest = { credit: 50, howMuch: 100 }
 ```
 
 Pattern: Copy only what is necessary
@@ -340,8 +339,10 @@ const databaseRepositoryMock = sinon.stub(dbRepository, ‘save’);
 
 ```javascript
 // Assert - 송금이 이루어지지 않았는지 확인
-const senderTransfersHistory = transferServiceUnderTest.getTransfers(transferRequest.sender.name);
-expect(senderTransfersHistory).not.toContain(transferRequest);
+const senderTransfersHistory = transferServiceUnderTest.getTransfers(
+  transferRequest.sender.name,
+)
+expect(senderTransfersHistory).not.toContain(transferRequest)
 ```
 
 Pattern: Black box
@@ -351,21 +352,21 @@ Pattern: Black box
 ---
 
 ```javascript
-expect(transferResponse.currency).toBe(‘dollar’); 
- expect(transferResponse.id).not.toBeNull(); 
- expect(transferResponse.date.getDay()).toBe(new Date().getDay()); 
- ```
+expect(transferResponse.currency).toBe(‘dollar’);
+ expect(transferResponse.id).not.toBeNull();
+ expect(transferResponse.date.getDay()).toBe(new Date().getDay());
+```
 
- 이런 테스트 코드는 삭제하는 것이 좋다.
+이런 테스트 코드는 삭제하는 것이 좋다.
 
- Pattern: Single door
+Pattern: Single door
 
 이 테스트를 만든 개발자는 전체 송금 흐름에서 모든 버그를 잡기를 원하는 것 같다. 그러나 이는 잘못되었다. 테스트는 짧고 한가지에 집중해서 이루어 져야 한다. 단일 테스트에서 많은 결과를 가지고 긴 흐름을 가져 갈경우 테스트 전체의 가독성을 떨어뜨린다. 테스트가 실패했을 때, 무시해도 될 세부적인 내용일지, 혹은 시스템 전체가 다운되서 그런건지 알수가 없다. 근본적인 원인을 찾기가 어려워 진다는 것이다. 테스트 코드를 만들때에는, 몇가지 아주 세부적인 사항은 희생하는 것이 좋다.
 
 ---
 
 ```javascript
-expect(serviceUnderTest.numberOfDeclined).toBe(1);
+expect(serviceUnderTest.numberOfDeclined).toBe(1)
 ```
 
 삭제하는 것이 좋다. 우리는 구현이 어떻게 되었는지는 관심갖지 않아도 된다. 결과물이 괜찮다면, 구현도 괜찮은 것으로 간주한다.
@@ -378,13 +379,13 @@ Pattern: black box
 
 ```javascript
 // 사용자 송금 이력 가져오기
-const allUserTransfers = serviceUnderTest.getTransfers(transferRequest.sender.name); 
-expect(allUserTransfers).not.toBeNull(); // ❌ Overlapping 
+const allUserTransfers = serviceUnderTest.getTransfers(transferRequest.sender.name);
+expect(allUserTransfers).not.toBeNull(); // ❌ Overlapping
 expect(allUserTransfers).toBeType(‘array’); // ❌ Overlapping
 ```
 
 ```javascript
- expect(senderTransfersHistory).not.toContain(transferRequest);
+expect(senderTransfersHistory).not.toContain(transferRequest)
 ```
 
 Pattern: Single-door
@@ -404,41 +405,43 @@ allUserTransfers.forEach((transferToCheck) => {
 ```
 
 ```javascript
-expect(senderTransfersHistory).not.toContain(transferRequest);
+expect(senderTransfersHistory).not.toContain(transferRequest)
 ```
 
 Pattern: Annotative
 
-이 테스트에서는 거절된 송금이 시스템에 저장되지 않는지, 그리고 검색 가능한지 확인하려고 한다. 따라서 거절된 송금이 시스템에 저장되지 않는지를 확인하기 위해 모든 사용자의 송금을 순환하면서 확인한다. 필수적인 코드이지만, 너무 복잡하다. 테스트에 루프, 조건문, 상속, 트라이 캐치 등 모든 프로그래밍 요소가 들어가 있을 경우 복잡성이 커질 수 있다. 선언적인 코드로 테스트를 단순하게 유지하는 것이 중요하다. 위 변경된 스타일은 세부 구현 사항을 이해할 필요 없이 즉시 읽고 이해 하면 된다. 선언적인 코드를 고수해야 한다. 
+이 테스트에서는 거절된 송금이 시스템에 저장되지 않는지, 그리고 검색 가능한지 확인하려고 한다. 따라서 거절된 송금이 시스템에 저장되지 않는지를 확인하기 위해 모든 사용자의 송금을 순환하면서 확인한다. 필수적인 코드이지만, 너무 복잡하다. 테스트에 루프, 조건문, 상속, 트라이 캐치 등 모든 프로그래밍 요소가 들어가 있을 경우 복잡성이 커질 수 있다. 선언적인 코드로 테스트를 단순하게 유지하는 것이 중요하다. 위 변경된 스타일은 세부 구현 사항을 이해할 필요 없이 즉시 읽고 이해 하면 된다. 선언적인 코드를 고수해야 한다.
 
 ### 결과물
 
 ```javascript
+test('크레딧이 없을 경우, 거절된 송금은 송금자의 송금 히스토리에 남아서는 안된다.', () => {
+  // Arrange
+  const transferRequest = testHelpers.factorMoneyTransfer({
+    sender: { credit: 50 },
+    transferAmount: 100,
+  })
+  const transferServiceUnderTest = new TransferService({
+    creditPolicy: 'NoCredit',
+  })
 
-test("크레딧이 없을 경우, 거절된 송금은 송금자의 송금 히스토리에 남아서는 안된다.", () => {
-    // Arrange
-    const transferRequest = testHelpers.factorMoneyTransfer({
-      sender: { credit: 50 },
-      transferAmount: 100,
-    });
-    const transferServiceUnderTest = new TransferService({ creditPolicy: "NoCredit" });
+  // Act
+  transferServiceUnderTest.transfer(transferRequest)
 
-    // Act
-    transferServiceUnderTest.transfer(transferRequest);
-
-    // Assert
-    const senderTransfersHistory = transferServiceUnderTest.getTransfers(transferRequest.sender.name);
-    expect(senderTransfersHistory).not.toContain(transferRequest);
-  });
-  ```
-
+  // Assert
+  const senderTransfersHistory = transferServiceUnderTest.getTransfers(
+    transferRequest.sender.name,
+  )
+  expect(senderTransfersHistory).not.toContain(transferRequest)
+})
+```
 
 ## 결론
 
 아름다운 테스트란 최소한의 노력으로 적절한 자신감을 얻는 것이다. TDD의 아버지인 Kent Beck도 이렇게 얘기 했다.
 
 > I get paid for code that works, not for tests, so my philosophy is to test as little as possible to reach a given level of confidence
-> 
+>
 > 우리는 테스트가 아닌 프로덕션 코드로 돈을 벌기 때문에, 주어진 신뢰에 도달하기 위해 가능한 한 적게 테스트 하는 것이 제 철학입니다.
 
 테스트 커버리지를 넓히는 것 만큼, 테스트에 쓰이는 노력을 줄이는 것도 중요하다.

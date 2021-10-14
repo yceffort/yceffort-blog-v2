@@ -5,7 +5,7 @@ tags:
   - programming
 published: true
 date: 2021-10-03 12:57:23
-description: 'HTML 프로그래밍 언어 논쟁은 불필요합니다.'
+description: '더이상 HTML 논란은,, 네이버,,,'
 ---
 
 ## Table of Contents

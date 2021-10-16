@@ -130,7 +130,7 @@ const buffer = Buffer.alloc(7)
 buffer.write('yceffort')
 buffer.write('babo yceffort')
 
-buffer.toString() 
+buffer.toString()
 // 'babo yc', 7로 생성했기 때문에 이후 데이터는 잘린다.
 ```
 
@@ -139,7 +139,7 @@ buffer.toString()
 ```javascript
 const wrongEmojiBuffer = Buffer.alloc(1)
 wrongEmojiBuffer.write('🥸')
-wrongEmojiBuffer.toString() 
+wrongEmojiBuffer.toString()
 // \x00'
 ```
 
@@ -148,34 +148,34 @@ utf-8 인코딩은 최대 4바이트의 문자를 지원한다. 버퍼 크기는
 ```javascript
 const emojiBuffer = Buffer.alloc(4)
 emojiBuffer.write('🥸')
-emojiBuffer.toString() 
+emojiBuffer.toString()
 // '🥸'
 ```
 
 버퍼를 쓰는 또다른 방법은 버퍼의 특정위치에 바이트를 추가하는, 즉 배열에 요소를 넣는것 과 같은 방법을 사용하는 것이다. 1바이트를 초과하는 데이터는 버퍼의 각 위치에서 분해해서 설정해야 한다.
 
 ```javascript
-const buff = Buffer.alloc(5);
+const buff = Buffer.alloc(5)
 
-buff[0] = 0x68; // 0x68 is the letter "h"
-buff[1] = 0x65; // 0x65 is the letter "e"
-buff[2] = 0x6c; // 0x6c is the letter "l"
-buff[3] = 0x6c; // 0x6c is the letter "l"
-buff[4] = 0x6f; // 0x6f is the letter "o"
+buff[0] = 0x68 // 0x68 is the letter "h"
+buff[1] = 0x65 // 0x65 is the letter "e"
+buff[2] = 0x6c // 0x6c is the letter "l"
+buff[3] = 0x6c // 0x6c is the letter "l"
+buff[4] = 0x6f // 0x6f is the letter "o"
 
-console.log(buff.toString());
+console.log(buff.toString())
 // hello
 
 // 2바이트 이상의 글자를 한 버퍼에 넣는 다면 실패한다.
-buff[0] = 0xc2a9; 
+buff[0] = 0xc2a9
 
-console.log(buff.toString());
+console.log(buff.toString())
 // --> '�ello'
 
-buff[0] = 0xc2;
-buff[1] = 0xa9;
+buff[0] = 0xc2
+buff[1] = 0xa9
 
-console.log(buff.toString());
+console.log(buff.toString())
 // ©llo
 ```
 
@@ -217,11 +217,11 @@ console.log(copyBuffer.toString())
 
 자바스크립트에서는, 메모리를 `ArrayBuffer` 클래스를 사용하여 할당 할 수 있다. 이 `ArrayBuffer` 객체를 직접 조작하는 경우는 거의 없다. 대신 이 `ArrayBuffer`를 참조하는 "view" 객체 집합을 사용한다. 이 객체 집합으로는 다음과 같은 것들이 있다.
 
-- `Int8Array` 
-- `Uint8Array` 
-- `Uint8ClampedArray` 
-- `Int16Array` 
-- `Uint16Array` 
+- `Int8Array`
+- `Uint8Array`
+- `Uint8ClampedArray`
+- `Int16Array`
+- `Uint16Array`
 - `Int32Array`
 
 > https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray#typedarray_objects

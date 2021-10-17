@@ -5,7 +5,7 @@ tags:
   - nodejs
 published: true
 date: 2021-10-15 23:48:00
-description: 'nodejs도 본격적으로 해보고 싶네여'
+description: 'nodejs로 백엔드도 다채롭게 대규모로 해보고 싶네여'
 ---
 
 ## Table of Contents

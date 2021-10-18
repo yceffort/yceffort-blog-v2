@@ -5,7 +5,7 @@ tags:
   - nodejs
 published: true
 date: 2021-10-15 23:48:00
-description: 'nodejs로 백엔드도 다채롭게 대규모로 해보고 싶네여'
+description: 'nodejs로 백엔드하는 회사 찾습니다'
 ---
 
 ## Table of Contents

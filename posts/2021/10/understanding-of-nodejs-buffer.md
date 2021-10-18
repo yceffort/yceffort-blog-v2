@@ -20,7 +20,7 @@ Nodejs는 버퍼클래스를 전역 스코프에 expose 하므로 `import`나 `r
 
 nodejs의 버퍼를 먼저 살펴보자.
 
-```javascript
+```
 <Buffer 79 63 65 66 66 6f 72 74>
 ```
 

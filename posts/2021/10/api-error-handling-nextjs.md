@@ -1,5 +1,5 @@
 ---
-title: 'nextjs에서 api에러 핸들링하기'
+title: '클라이언트 서버 모두에서 nextjs에서 api에러 핸들링하기'
 tags:
   - javascript
   - typescript
@@ -8,6 +8,8 @@ published: true
 date: 2021-10-22 18:30:22
 description: '결국 여기까지 와버렸'
 ---
+
+## Table of Contents
 
 nextjs로 동작하는 일반적인 애플리케이션을 상상하자면, 아래와 같은 요소를 가정하고 개발할 수 있을 것이다.
 
@@ -230,9 +232,7 @@ export default class ErrorBoundary extends React.Component<
   }
 
   private resetState = () => {
-    if (this.state.error) {
-      this.setState(errorBoundaryState)
-    }
+    this.setState(errorBoundaryState)
   }
 
   private setError = (error: Error) => {
@@ -292,3 +292,11 @@ export default class ErrorBoundary extends React.Component<
 ```
 
 이제 클라이언트와 서버사이드 모두에서 우리가 공통으로 정의한 에러에 대해 처리를 할 수 있게되었다.
+
+## 3. 더 해볼 수 있는 것들
+
+공통으로 정의된 에러페이지에, 메시지만 다르게 띄우고 싶으면 어떻게 해야할까? 사전에 정의된 에러를 쿼리메시지로 보내서 해당 에러에 대한 적절한 메시지로 띄우거나 하는 방법이 있을 것이다. 그리고 이렇게 정의된 에러, 혹은 정의되지 않은 에러가 발생했을 경우 단순히 `console.log` 방식의 에러가 아닌 적절한 logger를 도입하는 것도 존재할 것이다. 물론, 클라이언트와 서버에서의 에러 수집 정책 내지는 방법론이 다를 것이므로 이에 대한 고민도 필요할 것이다.
+
+## 4. 마치며
+
+SSR은 성능적인 이점을 가져다 주는 것도 존재하지만, 개발자에게 클라이언트와 서버 모두를 고민해야하는 숙제도 같이 안겨 준다. 이런 숙제, 나쁘지 만은 않을지도?

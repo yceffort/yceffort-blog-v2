@@ -22,12 +22,16 @@ nextjs로 동작하는 일반적인 애플리케이션을 상상하자면, 아�
 ### error.ts
 
 ```typescript
+export function isInstanceOfAPIError(object: unknown): object is ApiError {
+  return object instanceof ApiError && 'code' in ApiError
+}
+
 export class ApiError extends Error {
   name: string;
 
   message: string;
 
-  constructor(private readonly code: number) {
+  constructor(readonly code: number) {
     super();
   }
 }
@@ -39,13 +43,13 @@ export class ForbiddenError extends ApiError {
 }
 
 export class AuthError extends ApiError {
-  nmae = 'AuthError';
+  name = 'AuthError';
 
   message = '인증되지 않은 사용자입니다.';
 }
 ```
 
-
+일단 자바스크립트의 기본 Error Class를 확장해서 우리가 사용할 커스텀 에러를 만들었다.
 
 ### api.ts
 
@@ -53,9 +57,13 @@ export class AuthError extends ApiError {
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { AuthError, ForbiddenError } from './error';
 
+// axios는 400 이상의 status 가 오면 다 에러를 리턴한다.
+// 이를 커스텀 할 수 있도록 하여 개발자가 정의한 에러일 때만 에러를 던질 수 있도록 인수를 받는다.
 export interface RequestConfig extends AxiosRequestConfig {
   suppressStatusCode?: number[];
 }
+
+
 
 function AxiosAuthInterceptor<T>(response: AxiosResponse<T>): AxiosResponse {
   const status = response.status;

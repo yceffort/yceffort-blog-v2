@@ -19,6 +19,34 @@ nextjs로 동작하는 일반적인 애플리케이션을 상상하자면, 아�
 
 먼저 api 호출시 발생할 수 있는 에러에 대해 정의해야 한다. 가장 일반적인 에러는 인증 에러가 있을 것이다. api 호출시 정상적인 응답 (200) 이 아닌, 에러 응답이 왔을 때 에러를 throw 하는 코드를 짜보자.
 
+### error.ts
+
+```typescript
+export class ApiError extends Error {
+  name: string;
+
+  message: string;
+
+  constructor(private readonly code: number) {
+    super();
+  }
+}
+
+export class ForbiddenError extends ApiError {
+  name = 'ForbiddenError';
+
+  message = '인증처리에 실패했습니다.';
+}
+
+export class AuthError extends ApiError {
+  nmae = 'AuthError';
+
+  message = '인증되지 않은 사용자입니다.';
+}
+```
+
+
+
 ### api.ts
 
 ```typescript
@@ -62,5 +90,5 @@ export default async function withAxios(requestConfig: RequestConfig) {
 }
 ```
 
-### error.ts
+
 

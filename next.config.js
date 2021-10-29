@@ -7,7 +7,6 @@ module.exports = withPWA({
     disable: process.env.NODE_ENV !== 'production',
     runtimeCaching,
   },
-  experimental: { esmExternals: true },
   async redirects() {
     return [
       {

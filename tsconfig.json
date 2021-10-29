@@ -25,7 +25,8 @@
       "#constants/*": ["src/constants/*"],
       "#utils/*": ["src/utils/*"],
       "#src/*": ["src/*"]
-    }
+    },
+    "incremental": true
   },
   "exclude": ["dist", ".next", "out", "next.config.js"],
   "include": ["next-env.d.ts", "typing/*.d.ts", "**/*.ts*"]

@@ -41,8 +41,7 @@ function getAbsoluteURL(req?: IncomingMessage) {
     ? req.headers['x-forwarded-host'] || req.headers['host']
     : window.location.host
 
-  // 로컬로 부터 요청이 온것이라면..
-  // 물론 이것도 완전히 안전하지는 못하다. 프로덕션 주소에 local이 들어가있다면,,,
+  // 주소에 local이라는 문자열이 들어가 있다면,
   // 또는 별도의 환경변수를 주입하고 있다면 그것을 사용해도된다.
   // process.env.RECT_APP_PROFILES === 'local'
   if ((host || '').toString().indexOf('local') > -1) {

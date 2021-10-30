@@ -31,7 +31,7 @@ async function getUser(id: number) {
 absolute url, origin이 고정되어 있는 경우라면 괜찮겠지만 그렇지 않다면 이렇게 처리하는건 안전하지 못하다. 따라서 우리는 absolute URL을 추론해야 한다. 추론할 수 있는 가장 좋은 방법은, `ctx.req` 즉 [IncomingMessage](https://nodejs.org/api/http.html#class-httpincomingmessage)를 사용하는 것이다. 여기에는 요청과 관련한 정보가 포함되어 있는데, 이 요청이 날라온 곳이 absolute url이라고 가정하고 코딩하는 것이다.
 
 ```typescript
-import {IncomingMessage} from 'http'
+import { IncomingMessage } from 'http'
 
 function getAbsoluteURL(req?: IncomingMessage) {
   // 로컬은 http, 프로덕션은 https 라는 가정
@@ -63,15 +63,13 @@ function getAbsoluteURL(req?: IncomingMessage) {
 
 ```typescript
 type FetchUser = {
-    req?: IncomingMessage
+  req?: IncomingMessage
 }
 
 async function getUser(id: number, options?: FetchUser) {
   const absoluteURL = getAbsoluteURL(options?.req).origin
   const response = await fetch(
-    options?.req
-      ? absoluteURL
-      : '' + `/api/user/${id}`,
+    options?.req ? absoluteURL : '' + `/api/user/${id}`,
   )
   const result = await response.json()
   return result
@@ -80,17 +78,15 @@ async function getUser(id: number, options?: FetchUser) {
 
 ```typescript
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-
-  const {req} = ctx
+  const { req } = ctx
   const userId = ctx.query?.userId
 
-  const user = await getUser(userId, {req})
+  const user = await getUser(userId, { req })
   return {
     props: {
-      user
-    }
+      user,
+    },
   }
-  
 }
 ```
 
@@ -98,6 +94,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
 ## 또다른 방법
 
-아무래도 하드 코딩이 들어가 있기 때문에,  absolute url을 알아낼 수 있는 또다른 방법은 실행시에 환경변수로 주입하고, 이를 가져오는 것이다. 이 방법을 쓰고 있는 것이 [VERCEL](https://vercel.com/docs/concepts/projects/environment-variables)이다. `NEXT_PUBLIC_VERCEL_URL`를 사용하면 이 빌드가 실행되는 곳의 주소를 알아낼 수 있다.
+아무래도 하드 코딩이 들어가 있기 때문에, absolute url을 알아낼 수 있는 또다른 방법은 실행시에 환경변수로 주입하고, 이를 가져오는 것이다. 이 방법을 쓰고 있는 것이 [VERCEL](https://vercel.com/docs/concepts/projects/environment-variables)이다. `NEXT_PUBLIC_VERCEL_URL`를 사용하면 이 빌드가 실행되는 곳의 주소를 알아낼 수 있다.
 
 물론 이는 데브옵스, 인프라에서 이러한 정보를 제공할 수 있는 환경 구축이 선행되어야 한다.

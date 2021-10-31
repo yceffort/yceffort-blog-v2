@@ -19,6 +19,7 @@ nextjs에서 fetch api를 사용하다가 깨닫는 점 하나는, (당연하지
 ```typescript
 async function getUser(id: number) {
   const response = await fetch(
+    // 서버라면 강제로 우리가 알고 있는 absolute url을 주입
     typeof window === 'undefined'
       ? 'https://yceffort.kr'
       : '' + `/api/user/${id}`,
@@ -62,11 +63,11 @@ function getAbsoluteURL(req?: IncomingMessage) {
 그리고 이제 fetch 함수는 `getAbsoluteURL`를 사용해야 한다.
 
 ```typescript
-type FetchUser = {
+type FetchOptions = {
   req?: IncomingMessage
 }
 
-async function getUser(id: number, options?: FetchUser) {
+async function getUser(id: number, options?: FetchOptions) {
   const absoluteURL = getAbsoluteURL(options?.req).origin
   const response = await fetch(
     options?.req ? absoluteURL : '' + `/api/user/${id}`,

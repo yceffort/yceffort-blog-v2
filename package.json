@@ -1,13 +1,13 @@
 {
-  "version": "0.0.1",
+  "version": "1.0.0",
   "name": "yceffort-blog",
   "description": "yceffort-blog",
   "scripts": {
     "dev": "next dev",
     "sitemap": "ts-node --project tsconfig.node.json ./src/utils/siteMap.ts",
     "images": "ts-node --project tsconfig.node.json ./src/utils/imageInfo.ts",
-    "build-nextjs": "next build",
-    "build": "npm run sitemap && npm run images && npm run build-nextjs",
+    "build-next": "next build",
+    "build": "npm run sitemap && npm run images && npm run build-next",
     "start": "next start",
     "lint": "eslint '**/*.{ts,tsx}'",
     "lint:fix": "npm run lint -- --fix",

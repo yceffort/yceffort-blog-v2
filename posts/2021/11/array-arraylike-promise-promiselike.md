@@ -81,7 +81,7 @@ interface Array<T> {
 
 그렇다면 이번에는 `Promise`를 살펴보자.
 
-### `Promise<T>`
+### `Promise<T>` (lib.2018.promise.d.ts)
 
 ```typescript
 interface Promise<T> {
@@ -95,5 +95,100 @@ interface Promise<T> {
 }
 ```
 
-### `ArrayLike<T>` 
+### `Promise<T>` (lib.es5.d.ts)
 
+```typescript
+interface Promise<T> {
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+}
+```
+
+### `PromiseLike<T>` 
+
+```typescript
+interface PromiseLike<T> {
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): PromiseLike<TResult1 | TResult2>;
+}
+```
+
+`Promise<T>`에는 `finally`만 있고, `PromiseLike<T>`에는 `then` 밖에 없다. 🤔 이 둘의 차이를 먼저 알 필요가 있다.
+
+### `then` vs `finally`
+
+- `finally`: promise가 처리되면 충족되거나 (resolve) 거부되거나 (reject) 상관없이 실행하는 콜백함수다. Promise의 성공적으로 수행되었는지, 거절되었는지에 관계없이 Promise가 처리된 후에 무조건 한번은 실행되는 코드다.
+- `then`: 은 우리가 잘 아는 것처럼 Promise를 리턴하고 두개의 콜백함수를 받는다. 하나는 충족되었을 때 (`resolve`) 그리고 거부되었을 때 (`reject`)를 위한 콜백 함수다.
+
+```javascript
+p.then(onFulfilled, onRejected);
+
+p.then(function(value) {
+  // 이행
+}, function(reason) {
+  // 거부
+});
+```
+
+그리고 또한가지는 `finally`는 Promise 체이닝에서 결과를 받을 수 없다는 것이다. 
+
+```javascript
+const result = new Promise((resolve, reject) => resolve(10))
+  .then(x => {
+    console.log(x); // 10
+    return x + 1;
+  })
+  .finally(x => {
+    console.log(x); // undefined
+    return x + 2;
+  });
+// then에서 리턴했던 11을 resolve 한다.
+result // Promise {<fulfilled>: 11}
+```
+
+또다른 차이는 에러핸들링과 Promise chaining이다. 만약 promise chaining에서 에러처리를 미루고 다른 어딘가에서 처리하고 싶다면, `finally`를 사용하면 된다.
+
+```javascript
+new Promise((resolve, reject) => reject(0))
+  .catch(x => {
+    console.log(x); // 0
+    throw x;
+  })
+  .then(x => {
+    console.log(x); // Will not run
+  })
+  .finally(() => {
+    console.log('clean up'); // 'clean up'
+  });
+// Uncaught (in promise) 0
+// try catch 로 잡으면 잡힌다!
+```
+
+끝으로 `finally`는 es2018에서 나온 메소드 이기 때문에 `lib.es2018.promise.d.ts`에 존재한다. https://2ality.com/2017/07/promise-prototype-finally.html
+
+아무튼 다시 돌아가서, catch가 없는 `PromiseLike`는 왜 존재하는 것일까? 🤔 Promise가 정식 스펙이 되기 전, Promise를 구현하기 위한 다양한 라이브러리가 존재했다.
+
+- https://promisesaplus.com/
+- http://bluebirdjs.com/docs/getting-started.html
+
+이들은 표준이전에 태어나 `catch` 구문없이 promise를 처리하고 있었고, 타입스크립트는 
+이를 지원하기 위해서 `PromiseLike`를 만든 것이었다.
+
+따라서 `Promise` 뿐만 아니라 좀더 광의의 `Promise` (표준 이전에 만들어진 라이브러리로 만들어진 `Promise`)를 처리하기 위해서 `PromiseLike` 타입을 추가하게 된 것이다.

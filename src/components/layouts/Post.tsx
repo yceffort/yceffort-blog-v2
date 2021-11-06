@@ -12,7 +12,6 @@ import SiteConfig from '#src/config'
 import { getThumbnailURL } from '#utils/common'
 import MathLoader from '#components/layouts/Post/math'
 import profile from '#public/profile.png'
-import FloatingActionButton from '#components/layouts/Post/Fab'
 
 export default function PostLayout({
   children,
@@ -97,7 +96,6 @@ export default function PostLayout({
               <div className="pt-6 pb-6 text-sm text-gray-700 dark:text-gray-300">
                 <CustomLink href={link}>{'Issue on GitHub'}</CustomLink>
               </div>
-              <FloatingActionButton link={link} />
             </div>
             <footer>
               <div className="text-sm font-medium leading-5 divide-gray-200 xl:divide-y dark:divide-gray-700 xl:col-start-1 xl:row-start-2">

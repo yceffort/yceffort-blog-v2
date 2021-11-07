@@ -7,6 +7,7 @@ module.exports = withPWA({
     disable: process.env.NODE_ENV !== 'production',
     runtimeCaching,
   },
+  swcMinify: true,
   async redirects() {
     return [
       {

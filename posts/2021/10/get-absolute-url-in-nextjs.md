@@ -98,4 +98,4 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
 아무래도 하드 코딩이 들어가 있기 때문에, absolute url을 알아낼 수 있는 또다른 방법은 실행시에 환경변수로 주입하고, 이를 가져오는 것이다. 이 방법을 쓰고 있는 것이 [VERCEL](https://vercel.com/docs/concepts/projects/environment-variables)이다. `NEXT_PUBLIC_VERCEL_URL`를 사용하면 이 빌드가 실행되는 곳의 주소를 알아낼 수 있다.
 
-물론 이는 데브옵스, 인프라에서 이러한 정보를 제공할 수 있는 환경 구축이 선행되어야 한다.
+물론 이는 devpos나 개발 환경에서 이러한 정보를 제공할 수 있는 환경 구축이 선행되어야 한다.

@@ -1,5 +1,5 @@
 ---
-title: '자바스크립트 코드가 가져야할 책임감'
+title: '자바스크립트 코드가 가져야할 책임감 (1)'
 tags:
   - javascript
   - web

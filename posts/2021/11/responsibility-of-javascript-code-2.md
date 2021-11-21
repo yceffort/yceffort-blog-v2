@@ -30,7 +30,7 @@ description: '알지만 왠지 선뜻 내키지 않는 최적화, 이유가 무�
 1. 애플리케이션 로직과 프로젝트에 설치하는 패키지를 모두 ES6로 작성하거나 활용해야 한다. CommonJS를 트리쉐이킹하는 것은 현실적으로 불가능하다.
 2. 번들러가 빌드시에 ES6 모듈을 다른 모듈 형식으로 변환해서는 안된다. babel에서 이러한 상황이 발생하는 경우, es6코드가 commonjs로 변환하지 않도록 [@babel/preset-env 설정](https://babeljs.io/docs/en/babel-preset-env)을 반드시 [modules: false](https://babeljs.io/docs/en/babel-preset-env#modules) 로 해야 한다.
 
-트리쉐이킹의 효과는 애플리케이션 개발 환경마다 조금씩 차이가 있을 수 있다. 또한 import하는 module이 [side effect](https://en.wikipedia.org/wiki/Side_effect_(computer_science))를 도입하느냐에 따라 달라지기도 하는데, 이는 사용하지 않는 `exports`를 제거하는 번들러에 영향을 미칠 수 있다.
+트리쉐이킹의 효과는 애플리케이션 개발 환경마다 조금씩 차이가 있을 수 있다. 또한 import하는 module이 [side effect](<https://en.wikipedia.org/wiki/Side_effect_(computer_science)>)를 도입하느냐에 따라 달라지기도 하는데, 이는 사용하지 않는 `exports`를 제거하는 번들러에 영향을 미칠 수 있다.
 
 ### 코드 스플릿
 

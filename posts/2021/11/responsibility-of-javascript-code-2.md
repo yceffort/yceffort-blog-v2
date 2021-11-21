@@ -12,7 +12,7 @@ description: ''
 
 오늘날 웹 환경은 우리가 생각하는 것 보다 더 빠르게 성장할 것을 요구하고 있다. 이러한 압박으로 부터 자유롭기 위해, 우리는 가능한 생산적인 수단을 사용해야 한다. 이 말을 다르게 풀어보자면, 웹 애플리케이션을 구축할 때 오버헤드를 만들거나, 성능과 접근성을 저해할 수 있는 패턴을 반복적으로 사용할 가능성도 거친다.
 
-웹 개발은 오늘날 많은 뉴비 개발자들이 뛰어들고 있는 가장 '쉽게 보이는' 개발이지만, 사실 그렇게 쉬운 영역은 아니다. (물론 진입장벽을 치기 위해서 하는 말은 아니다) 다들 쉽게 웹 개발을 시작하지만, 다들 하다보면 첫 개발부터 무언가 완벽하지 않다는 것을 깨닫게 된다. 물론 처음부터 완벽할 필요는 없다. 우리는 그 이후에 개선을 해나갈 수 있으며, 여기서 하고자 하는 말은 그 '개선'에 관한 것이다. 완벽은 아직 멀었다.
+웹 개발은 오늘날 많은 뉴비 개발자들이 뛰어들고 있는 가장 '쉬워 보이는' 개발이지만, 사실 그렇게 쉬운 영역은 아니다. (물론 진입장벽을 치기 위해서 하는 말은 아니다) 다들 쉽게 웹 개발을 시작하지만, 다들 하다보면 첫 개발부터 무언가 완벽하지 않다는 것을 깨닫게 된다. 물론 처음부터 완벽할 필요는 없다. 우리는 그 이후에 개선을 해나갈 수 있으며, 여기서 하고자 하는 말은 그 '개선'에 관한 것이다. 완벽은 아직 멀었다.
 
 ## 최적화 목록 점검하기
 
@@ -30,7 +30,7 @@ description: ''
 1. 애플리케이션 로직과 프로젝트에 설치하는 패키지를 모두 ES6로 작성하거나 활용해야 한다. CommonJS를 트리쉐이킹하는 것은 현실적으로 불가능하다.
 2. 번들러가 빌드시에 ES6 모듈을 다른 모듈 형식으로 변환해서는 안된다. babel에서 이러한 상황이 발생하는 경우, es6코드가 commonjs로 변환하지 않도록 [@babel/preset-env 설정](https://babeljs.io/docs/en/babel-preset-env)을 반드시 [modules: false](https://babeljs.io/docs/en/babel-preset-env#modules) 로 해야 한다.
 
-트리쉐이킹의 효과는 애플리케이션 개발 환경마다 조금씩 차이가 있을 수 있다. 또한 import하는 module이 [side effect](<https://en.wikipedia.org/wiki/Side_effect_(computer_science)>)를 도입하느냐에 따라 달라지기도 하는데, 이는 사용하지 않는 `exports`를 제거하는 번들러에 영향을 미칠 수 있다.
+트리쉐이킹의 효과는 애플리케이션 개발 환경마다 조금씩 차이가 있을 수 있다. 또한 import하는 module이 [side effect](https://en.wikipedia.org/wiki/Side_effect_(computer_science))를 도입하느냐에 따라 달라지기도 하는데, 이는 사용하지 않는 `exports`를 제거하는 번들러에 영향을 미칠 수 있다.
 
 ### 코드 스플릿
 
@@ -53,11 +53,11 @@ https://developers.google.com/web/fundamentals/performance/optimizing-javascript
 
 예를 한가지 들어보자. 만약 사이트에서 public CDN에서 lodash를 불러온다고 가정해보자. 그리고 내 프로젝트 개발을 하기 위해 로컬에서 lodash를 설치했다. 그러나 lodash를 external로 표시하지 않을 경우, 프로덕션 번들링에 lodash가 또 들어가버리게 될 것이다.
 
-써드파티 의존성을 자체적으로 호스팅해야할지 확인이 없다면 [dns-prefetch](https://css-tricks.com/prefetching-preloading-prebrowsing/#dns-prefetching), [preconnect](https://css-tricks.com/prefetching-preloading-prebrowsing/#preconnect)m [preload](https://www.smashingmagazine.com/2016/02/preload-what-is-it-good-for/)을 도입해보는 것을 검토해보자. 이렇게하면 [사이트가 인터랙션이 가능해지는 시간](https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive)을 낮출수도 있고, 만약 사이트의 콘텐츠를 렌더링하는게 중요하다면 [Speed Index](https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive)에도 좋은 영향을 미칠 수 있다.
+써드파티 의존성을 자체적으로 호스팅해야할지 확인이 없다면 [dns-prefetch](https://css-tricks.com/prefetching-preloading-prebrowsing/#dns-prefetching), [preconnect](https://css-tricks.com/prefetching-preloading-prebrowsing/#preconnect) [preload](https://www.smashingmagazine.com/2016/02/preload-what-is-it-good-for/)을 도입해보는 것을 검토해보자. 이렇게하면 [사이트가 인터랙션이 가능해지는 시간](https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive)을 낮출수도 있고, 만약 사이트의 콘텐츠를 렌더링하는게 중요하다면 [Speed Index](https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive)에도 좋은 영향을 미칠 수 있다.
 
 ### 오버헤드를 줄이기 위한 또다른 방법
 
-자바스크립트 생태계는 마치 엄청나게 큰 시장과도 같고, 개발자로서 우리는 오픈소스가 제공하는 다양한 코드에 때로는 경외심을 느끼기도 한다. 프레임워크와 라이브러리를 활용해 애플리케이셔늘 확장하는데 들어가는 시간과 노력을 줄이고, 모든 작업을 신속하게 마무리할 수도 있따.
+자바스크립트 생태계는 마치 엄청나게 큰 시장과도 같고, 개발자로서 우리는 오픈소스가 제공하는 다양한 코드에 때로는 경외심을 느끼기도 한다. 프레임워크와 라이브러리를 활용해 애플리케이셔늘 확장하는데 들어가는 시간과 노력을 줄이고, 모든 작업을 신속하게 마무리할 수도 있다.
 
 개인적으로는 프로젝트에서 프레임워크와 라이브러리의 사용을 최소화 하는 것을 선호하지만, 솔직히 이를 사용하는 것은 아주 큰 유혹으로 느껴지기도 한다. 하지만 우리는 패키지를 설치함에 있어 항상 비판적인 자세를 유지할 필요가 있다.
 

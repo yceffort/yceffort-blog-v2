@@ -5,7 +5,7 @@ tags:
   - web
 published: true
 date: 2021-11-20 20:12:01
-description: ''
+description: '알지만 왠지 선뜻 내키지 않는 최적화, 이유가 무엇일까 🤔'
 ---
 
 ## Introduction

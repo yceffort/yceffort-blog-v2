@@ -30,7 +30,7 @@ description: ''
 1. 애플리케이션 로직과 프로젝트에 설치하는 패키지를 모두 ES6로 작성하거나 활용해야 한다. CommonJS를 트리쉐이킹하는 것은 현실적으로 불가능하다.
 2. 번들러가 빌드시에 ES6 모듈을 다른 모듈 형식으로 변환해서는 안된다. babel에서 이러한 상황이 발생하는 경우, es6코드가 commonjs로 변환하지 않도록 [@babel/preset-env 설정](https://babeljs.io/docs/en/babel-preset-env)을 반드시 [modules: false](https://babeljs.io/docs/en/babel-preset-env#modules) 로 해야 한다.
 
-트리쉐이킹의 효과는 애플리케이션 개발 환경마다 조금씩 차이가 있을 수 있다. 또한 import하는 module이 [side effect](https://en.wikipedia.org/wiki/Side_effect_(computer_science))를 도입하느냐에 따라 달라지기도 하는데, 이는 사용하지 않는 `exports`를 제거하는 번들러에 영향을 미칠 수 있다.
+트리쉐이킹의 효과는 애플리케이션 개발 환경마다 조금씩 차이가 있을 수 있다. 또한 import하는 module이 [side effect](<https://en.wikipedia.org/wiki/Side_effect_(computer_science)>)를 도입하느냐에 따라 달라지기도 하는데, 이는 사용하지 않는 `exports`를 제거하는 번들러에 영향을 미칠 수 있다.
 
 ### 코드 스플릿
 
@@ -59,13 +59,13 @@ https://developers.google.com/web/fundamentals/performance/optimizing-javascript
 
 자바스크립트 생태계는 마치 엄청나게 큰 시장과도 같고, 개발자로서 우리는 오픈소스가 제공하는 다양한 코드에 때로는 경외심을 느끼기도 한다. 프레임워크와 라이브러리를 활용해 애플리케이셔늘 확장하는데 들어가는 시간과 노력을 줄이고, 모든 작업을 신속하게 마무리할 수도 있따.
 
-개인적으로는 프로젝트에서 프레임워크와 라이브러리의 사용을 최소화 하는 것을 선호하지만, 솔직히 이를 사용하는 것은 아주 큰 유혹으로 느껴지기도 한다. 하지만 우리는 패키지를 설치함에 있어 항상 비판적인 자세를 유지할 필요가 있다. 
+개인적으로는 프로젝트에서 프레임워크와 라이브러리의 사용을 최소화 하는 것을 선호하지만, 솔직히 이를 사용하는 것은 아주 큰 유혹으로 느껴지기도 한다. 하지만 우리는 패키지를 설치함에 있어 항상 비판적인 자세를 유지할 필요가 있다.
 
 리액트는 아주 정말로 유명하지만 서도, [Preact](https://preactjs.com/)는 리액트보다 더 작고, 대부분의 API를 공유하고 있으며, 리액트 애드온 등으로 호환성도 유지할 수 있다. [Luxon](https://moment.github.io/luxon/#/)과 [date-fns](https://date-fns.org/)는 [moment.js](https://momentjs.com/)의 효과적인 대안이다.
 
 - https://yceffort.kr/2020/12/why-moment-has-been-deprecated
 
-lodash와 같은 라이브러리는 정말로 유용한 많은 메소드를 제공하지만, 사실 이는 ES6문법을 활용하면 쉽게 대체할 수 있다. 
+lodash와 같은 라이브러리는 정말로 유용한 많은 메소드를 제공하지만, 사실 이는 ES6문법을 활용하면 쉽게 대체할 수 있다.
 
 - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_chunk
 
@@ -78,7 +78,7 @@ lodash와 같은 라이브러리는 정말로 유용한 많은 메소드를 제�
 1. 이전 브라우저에서 작동하는데 필요한 모든 도구, 폴리필을 포함하고 있다. 대부분의 애플리케이션이 현재 이런 상태일 것이다.
 2. 모던 브라우저를 타겟으로 한 또다른 번들링을 만들어, 폴리필, 트랜스파일링 등을 모두 제거한다. 이 번들은 대부분의 애플리케이션이 제공하고 있지 않다.
 
-이를 달성하기 위해서는 어떻게 해야할까? 
+이를 달성하기 위해서는 어떻게 해야할까?
 
 [가장 단순한 패턴](https://v8.dev/features/modules#browser)은 바로 이것이다.
 
@@ -89,29 +89,28 @@ lodash와 같은 라이브러리는 정말로 유용한 많은 메소드를 제�
 /js/app.js
 ```
 
-그러나 이 패턴을 사용하면, IE11, Edge 15 ~ 18 에서는 두 번들링을 모두 다운로드 한다는 문제가 있다. 
+그러나 이 패턴을 사용하면, IE11, Edge 15 ~ 18 에서는 두 번들링을 모두 다운로드 한다는 문제가 있다.
 
 https://gist.github.com/jakub-g/5fc11af85a061ca29cc84892f1059fec
 
 ```javascript
-var scriptEl = document.createElement("script");
+var scriptEl = document.createElement('script')
 
-if ("noModule" in scriptEl) {
+if ('noModule' in scriptEl) {
   // 모던 스크립트
-  scriptEl.src = "/js/app.mjs";
-  scriptEl.type = "module";
+  scriptEl.src = '/js/app.mjs'
+  scriptEl.type = 'module'
 } else {
   // 레거시 스크립트
-  scriptEl.src = "/js/app.js";
-  scriptEl.defer = true; // 순서가 중요하다면 defer를 false로
+  scriptEl.src = '/js/app.js'
+  scriptEl.defer = true // 순서가 중요하다면 defer를 false로
 }
 
 // Inject!
-document.body.appendChild(scriptEl);
+document.body.appendChild(scriptEl)
 ```
 
 https://caniuse.com/mdn-html_elements_script_nomodule
-
 
 ## 가능한 트랜스파일은 적게!
 
@@ -122,67 +121,72 @@ https://twitter.com/_developit/status/1110229993999777793
 바벨을 그만 쓰자는 이야기는 아니다. 바벨은 절대로 없어서는 안된다. 하지만, 바벨은 내가 모르는 사이에 더 많은 것들을 하므로 이를 자세히 알아보는 것이 좋다. 이러한 작은 습관은 바벨이 만드는 코드에 긍정적인 영향을 미칠 수 있다.
 
 ```javascript
-function logger(message, level = "log") {
-  console[level](message);
+function logger(message, level = 'log') {
+  console[level](message)
 }
 ```
 
 여기서 주의해야할 것은 기본값이 `log`인 함수다. 이 함수를 트랜스파일링 하면 어떻게 될까?
 
 ```javascript
-"use strict";
+'use strict'
 
 function logger(message) {
-  var level = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "log";
-  console[level](message);
+  var level =
+    arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'log'
+  console[level](message)
 }
 ```
 
 > https://babeljs.io/repl#?browsers=%3E%200.25%25%2C%20not%20dead&build=&builtIns=false&corejs=3.6&spec=false&loose=false&code_lz=GYVwdgxgLglg9mABAGzgczQUwE4AoC2mAzkQIZYA0KmAbpsogLyIBEqaLAlIgN4BQiRBARE4yTAG1xdZAF0CxMlk4BuPgF8gA&debug=false&forceAllTransforms=false&shippedProposals=false&circleciRepo=&evaluate=false&fileSize=false&timeTravel=false&sourceType=module&lineWrap=true&presets=env%2Creact%2Cstage-2&prettier=false&targets=&version=7.16.4&externalPlugins=&assumptions=%7B%7D
 
-분명 편리한 기본값 지정을 위해서 저렇게 코드를 썼건만, 몇바이트였던 코드가 바벨을 거치면서 프로덕션 코드에서는 훨씬 더 커졌다. 
+분명 편리한 기본값 지정을 위해서 저렇게 코드를 썼건만, 몇바이트였던 코드가 바벨을 거치면서 프로덕션 코드에서는 훨씬 더 커졌다.
 
 ```javascript
 function logger(...args) {
-  const [level, message] = args;
+  const [level, message] = args
 
-  console[level](message);
+  console[level](message)
 }
 ```
 
 ```javascript
-"use strict";
+'use strict'
 
 function logger() {
-  for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-    args[_key] = arguments[_key];
+  for (
+    var _len = arguments.length, args = new Array(_len), _key = 0;
+    _key < _len;
+    _key++
+  ) {
+    args[_key] = arguments[_key]
   }
 
   var level = args[0],
-      message = args[1];
-  console[level](message);
+    message = args[1]
+  console[level](message)
 }
 ```
 
 > https://babeljs.io/repl#?browsers=%3E%200.25%25%2C%20not%20dead&build=&builtIns=false&corejs=3.6&spec=false&loose=false&code_lz=GYVwdgxgLglg9mABAGzgczQUwE4AoB0hAhtmgM4CUiA3gFCKIQJlSIDaymAbpsgDSIAtpjJkiWALqIAvIhLkA3LXqNmcTh268JuYaPGYKSgL5A&debug=false&forceAllTransforms=false&shippedProposals=false&circleciRepo=&evaluate=false&fileSize=false&timeTravel=false&sourceType=module&lineWrap=true&presets=env%2Creact%2Cstage-2&prettier=false&targets=&version=7.16.4&externalPlugins=&assumptions=%7B%7D
 
-`...args`는 분명 편리하지만, `babel`은 함수의 인수가 몇개가 올지 추론할 수 없기 때문에 위와 같이 트랜스파일링 해버렸다. 
+`...args`는 분명 편리하지만, `babel`은 함수의 인수가 몇개가 올지 추론할 수 없기 때문에 위와 같이 트랜스파일링 해버렸다.
 
 위와 같은 상황을 방지하기 위해서는, 아래와 같이 `||`을 사용하는 것이 좋다.
 
 ```javascript
 function logger(message, level) {
-  console[level || "log"](message);
+  console[level || 'log'](message)
 }
 ```
 
 결과가 같다.
 
 ```javascript
-"use strict";
+'use strict'
 
 function logger(message, level) {
-  console[level || "log"](message);
+  console[level || 'log'](message)
 }
 ```
 

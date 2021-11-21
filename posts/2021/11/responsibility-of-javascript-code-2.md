@@ -59,4 +59,144 @@ https://developers.google.com/web/fundamentals/performance/optimizing-javascript
 
 자바스크립트 생태계는 마치 엄청나게 큰 시장과도 같고, 개발자로서 우리는 오픈소스가 제공하는 다양한 코드에 때로는 경외심을 느끼기도 한다. 프레임워크와 라이브러리를 활용해 애플리케이셔늘 확장하는데 들어가는 시간과 노력을 줄이고, 모든 작업을 신속하게 마무리할 수도 있따.
 
-개인적으로는 프로젝트에서 프레임워크와 라이브러리의 사용을 최소화 하는 것을 선호하지만, 솔직히 이를 사용하는 것은 아주 큰 유혹으로 느껴지기도 한다.
+개인적으로는 프로젝트에서 프레임워크와 라이브러리의 사용을 최소화 하는 것을 선호하지만, 솔직히 이를 사용하는 것은 아주 큰 유혹으로 느껴지기도 한다. 하지만 우리는 패키지를 설치함에 있어 항상 비판적인 자세를 유지할 필요가 있다. 
+
+리액트는 아주 정말로 유명하지만 서도, [Preact](https://preactjs.com/)는 리액트보다 더 작고, 대부분의 API를 공유하고 있으며, 리액트 애드온 등으로 호환성도 유지할 수 있다. [Luxon](https://moment.github.io/luxon/#/)과 [date-fns](https://date-fns.org/)는 [moment.js](https://momentjs.com/)의 효과적인 대안이다.
+
+- https://yceffort.kr/2020/12/why-moment-has-been-deprecated
+
+lodash와 같은 라이브러리는 정말로 유용한 많은 메소드를 제공하지만, 사실 이는 ES6문법을 활용하면 쉽게 대체할 수 있다. 
+
+- https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_chunk
+
+선호하는 도구가 무엇이든 간에, 우리가 생각해봐야 할 것은 동일하다. 더 작은 대안이 있는가? 혹은 자체적으로 구현이 가능한가?
+
+## 브라우저별로 다른 스크립트 제공하기
+
+요즘 대부분의 애플리케이션은 [ES6를 지원하지 않는 브라우저](https://caniuse.com/es6)에서 사용할 수 있는 코드로 변환하기 위해 babel을 사용하고 있을 가능성이 높다. 반대로 생각해보자. es6를 지원하는 브라우저가 더 많은데, 여전히 es6를 지원하지 않는 브라우저를 위해서 트랜스파일링이 된 번들링을 계속해서 제공해야 할까? 두개의 다른 빌드를 제공하면 되지 않을까?
+
+1. 이전 브라우저에서 작동하는데 필요한 모든 도구, 폴리필을 포함하고 있다. 대부분의 애플리케이션이 현재 이런 상태일 것이다.
+2. 모던 브라우저를 타겟으로 한 또다른 번들링을 만들어, 폴리필, 트랜스파일링 등을 모두 제거한다. 이 번들은 대부분의 애플리케이션이 제공하고 있지 않다.
+
+이를 달성하기 위해서는 어떻게 해야할까? 
+
+[가장 단순한 패턴](https://v8.dev/features/modules#browser)은 바로 이것이다.
+
+```html
+<!-- Modern browsers load this file: -->
+/js/app.mjs
+<!-- Legacy browsers load this file: -->
+/js/app.js
+```
+
+그러나 이 패턴을 사용하면, IE11, Edge 15 ~ 18 에서는 두 번들링을 모두 다운로드 한다는 문제가 있다. 
+
+https://gist.github.com/jakub-g/5fc11af85a061ca29cc84892f1059fec
+
+```javascript
+var scriptEl = document.createElement("script");
+
+if ("noModule" in scriptEl) {
+  // 모던 스크립트
+  scriptEl.src = "/js/app.mjs";
+  scriptEl.type = "module";
+} else {
+  // 레거시 스크립트
+  scriptEl.src = "/js/app.js";
+  scriptEl.defer = true; // 순서가 중요하다면 defer를 false로
+}
+
+// Inject!
+document.body.appendChild(scriptEl);
+```
+
+https://caniuse.com/mdn-html_elements_script_nomodule
+
+
+## 가능한 트랜스파일은 적게!
+
+> transpile less!
+
+https://twitter.com/_developit/status/1110229993999777793
+
+바벨을 그만 쓰자는 이야기는 아니다. 바벨은 절대로 없어서는 안된다. 하지만, 바벨은 내가 모르는 사이에 더 많은 것들을 하므로 이를 자세히 알아보는 것이 좋다. 이러한 작은 습관은 바벨이 만드는 코드에 긍정적인 영향을 미칠 수 있다.
+
+```javascript
+function logger(message, level = "log") {
+  console[level](message);
+}
+```
+
+여기서 주의해야할 것은 기본값이 `log`인 함수다. 이 함수를 트랜스파일링 하면 어떻게 될까?
+
+```javascript
+"use strict";
+
+function logger(message) {
+  var level = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "log";
+  console[level](message);
+}
+```
+
+> https://babeljs.io/repl#?browsers=%3E%200.25%25%2C%20not%20dead&build=&builtIns=false&corejs=3.6&spec=false&loose=false&code_lz=GYVwdgxgLglg9mABAGzgczQUwE4AoC2mAzkQIZYA0KmAbpsogLyIBEqaLAlIgN4BQiRBARE4yTAG1xdZAF0CxMlk4BuPgF8gA&debug=false&forceAllTransforms=false&shippedProposals=false&circleciRepo=&evaluate=false&fileSize=false&timeTravel=false&sourceType=module&lineWrap=true&presets=env%2Creact%2Cstage-2&prettier=false&targets=&version=7.16.4&externalPlugins=&assumptions=%7B%7D
+
+분명 편리한 기본값 지정을 위해서 저렇게 코드를 썼건만, 몇바이트였던 코드가 바벨을 거치면서 프로덕션 코드에서는 훨씬 더 커졌다. 
+
+```javascript
+function logger(...args) {
+  const [level, message] = args;
+
+  console[level](message);
+}
+```
+
+```javascript
+"use strict";
+
+function logger() {
+  for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+    args[_key] = arguments[_key];
+  }
+
+  var level = args[0],
+      message = args[1];
+  console[level](message);
+}
+```
+
+> https://babeljs.io/repl#?browsers=%3E%200.25%25%2C%20not%20dead&build=&builtIns=false&corejs=3.6&spec=false&loose=false&code_lz=GYVwdgxgLglg9mABAGzgczQUwE4AoB0hAhtmgM4CUiA3gFCKIQJlSIDaymAbpsgDSIAtpjJkiWALqIAvIhLkA3LXqNmcTh268JuYaPGYKSgL5A&debug=false&forceAllTransforms=false&shippedProposals=false&circleciRepo=&evaluate=false&fileSize=false&timeTravel=false&sourceType=module&lineWrap=true&presets=env%2Creact%2Cstage-2&prettier=false&targets=&version=7.16.4&externalPlugins=&assumptions=%7B%7D
+
+`...args`는 분명 편리하지만, `babel`은 함수의 인수가 몇개가 올지 추론할 수 없기 때문에 위와 같이 트랜스파일링 해버렸다. 
+
+위와 같은 상황을 방지하기 위해서는, 아래와 같이 `||`을 사용하는 것이 좋다.
+
+```javascript
+function logger(message, level) {
+  console[level || "log"](message);
+}
+```
+
+결과가 같다.
+
+```javascript
+"use strict";
+
+function logger(message, level) {
+  console[level || "log"](message);
+}
+```
+
+물론 이처럼 주의해야 할 것이 기본 파라미터만은 아니다. 화살표 함수나 전개 연산자들도 트랜스파일 하면 꽤나 복잡해진다.
+
+이러한 기능을 모두 사용하지 않으려면, 다음과 같은 방법으로 영향도를 줄일수도 있다.
+
+1. 라이브러리 작성자라면, [@babel/plugin-transform-runtime](https://babeljs.io/docs/en/babel-plugin-transform-runtime)와 함께 [@babel/runtime](https://babeljs.io/docs/en/babel-runtime)을 사용하여 바벨이 코드에 추가하는 helper함수를 제거할 수 있다.
+2. 앱의 폴리필을 위해서는, [@babel/preset-env `useBuiltIns:"usage"`](https://babeljs.io/docs/en/babel-preset-env#usebuiltins)을 [@babel/polyfill](https://babeljs.io/docs/en/babel-polyfill)과 함께 선택적으로 사용할 수 있다.
+
+개인적인 의견이지만, 모던 브라우저용으로 생성된 번들링을 트랜스파일링 하지 않는 것이 최선의 방법이라고 생각한다. 물론 이는 `jsx`나 널리 사용되지 않는 기능들 같이 무조건 어떤 브라우저든 상관없이 변환해야 하는 경우에는 불가능할 수도 있다. 그렇다면 이 앞선 도구가 꼭 필요한 것인지 되물어볼 필요가 있다. 만약 바벨이 코드 툴체인의 일부가 무조건 되어야 한다면, 바벨이 하고 있는 것들을 잘 살펴보고 개선할 필요가 있다.
+
+## 성능향상은 레이스가 아니다
+
+가능한 빨리 무언가를 얻으려고 하는 것은 떄로는 사용자 경험의 고통으로 이어질 수도 있다. 물론 웹 개발 커뮤니티가 경쟁이라는 미명아래 더 빨리 반복하는 것에 집착하고 있기 때문에 조금은 속도를 늦출 필요가 있다고 생각한다. 그렇게 함으로써, 경쟁사만큼 빠른 이터레이션은 거치지 못할 지언정, 애플리케이션 경험은 더욱 향상될 수 있다.
+
+코드 베이스에 성능 향상을 적용 하기전에, 이 모든 것이 하루 밤 사이에 되지 않는 것도 또한 알아둬야 한다. 웹 개발도 하나의 직업이다. 진정으로 영향력 있는 개발을 하기 위해서는 끊임 없이 고민하고 오랜시간 동안 헌신 할 때 비로소 이뤄진다. 꾸준히 향상에 집중해보자. 측정과 테스트를 반복하다보면 사이트의 사용자 경험이 향상되어 시간이 지남에 따라 조금씩 빨라질 것이다.

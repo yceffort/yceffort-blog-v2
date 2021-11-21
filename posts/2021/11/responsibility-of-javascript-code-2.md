@@ -32,4 +32,31 @@ description: ''
 
 트리쉐이킹의 효과는 애플리케이션 개발 환경마다 조금씩 차이가 있을 수 있다. 또한 import하는 module이 [side effect](https://en.wikipedia.org/wiki/Side_effect_(computer_science))를 도입하느냐에 따라 달라지기도 하는데, 이는 사용하지 않는 `exports`를 제거하는 번들러에 영향을 미칠 수 있다.
 
+### 코드 스플릿
 
+아마도 어떤 형식으로든 코드스플릿을 쓰고 있을 가능성이 높지만, 어떻게 동작되고 있는지 다시 한번 살펴볼 필요가 있다. 코드 스플릿 방법에 관계 없이, 코드 스플릿에 대해서 다음과 같은 질문에 대해 답할 수 있어야 한다.
+
+https://developers.google.com/web/fundamentals/performance/optimizing-javascript/code-splitting/
+
+1. 코드 [entry point](https://webpack.js.org/concepts/entry-points/) 간에 중복 코드를 제거 하고 있는지?
+2. [dymaic import()]()를 사용하여 레이지 로딩을 하고 있는지?
+
+중복 코드를 줄이는 것은 성능에 매우 필수적이므로 꼭 해야 한다. 레이지 로딩은 첫 페이지의 초기 자바스크립트 용량을 줄임으로써 성능을 향상 시킨다. 또한 [Bundle Buddy](https://github.com/samccone/bundle-buddy)와 같은 도구를 사용하면 문제가 있는지 확인할 수도 있다.
+
+레이지 로딩을 어디서 부터 손봐야할지 살펴보는 것은 다소 어려울 수도 있다. 기존 프로젝트에서 레이지 로딩을 적용할 곳을 찾을 때에는, 먼저 클릭이나 키보드 이벤트 등 코드 베이스 전반에 걸쳐 사용자 인터랙션 포인트가 발생하는 곳을 찾는 것이 좋다. 사용자 상호작용으로 실행 되는 코드들은 `dynamic import`를 사용하기에 적합한 후보다.
+
+데이터 사용량이 큰 문제가 아니라면 [rel=prefetch](https://www.w3.org/TR/resource-hints/#prefetch) 리소스 힌트를 사용하여 낮은 우선순위로 스크립트를 로드할 수도 있다. 설령 [이 리소스 힌트를 지원하지 않는 브라우저](https://caniuse.com/link-rel-prefetch)라 하더라도 어차피 마크업 상에서 무시되기 때문에 크게 신경쓰지 않아도 된다.
+
+### 써드 파티 코드 분석
+
+웹 애플리케이션을 구성할 때, 가능한 사이트의 의존적인 리소스는 자체적으로 호스팅하는 것이 좋다. 어떤 이유로든지 제3자로부터 리소스를 가져와야 할 경우, [번들러 구성에서 이를 externals로 표시](https://webpack.js.org/configuration/externals/)하는 것이 좋다.그렇지 않으면 웹 사이트 방문자가 로컬에 있는 코드와 똑같은 코드를 써드파티로 부터 다운로드 할 수도 있다.
+
+예를 한가지 들어보자. 만약 사이트에서 public CDN에서 lodash를 불러온다고 가정해보자. 그리고 내 프로젝트 개발을 하기 위해 로컬에서 lodash를 설치했다. 그러나 lodash를 external로 표시하지 않을 경우, 프로덕션 번들링에 lodash가 또 들어가버리게 될 것이다.
+
+써드파티 의존성을 자체적으로 호스팅해야할지 확인이 없다면 [dns-prefetch](https://css-tricks.com/prefetching-preloading-prebrowsing/#dns-prefetching), [preconnect](https://css-tricks.com/prefetching-preloading-prebrowsing/#preconnect)m [preload](https://www.smashingmagazine.com/2016/02/preload-what-is-it-good-for/)을 도입해보는 것을 검토해보자. 이렇게하면 [사이트가 인터랙션이 가능해지는 시간](https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive)을 낮출수도 있고, 만약 사이트의 콘텐츠를 렌더링하는게 중요하다면 [Speed Index](https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive)에도 좋은 영향을 미칠 수 있다.
+
+### 오버헤드를 줄이기 위한 또다른 방법
+
+자바스크립트 생태계는 마치 엄청나게 큰 시장과도 같고, 개발자로서 우리는 오픈소스가 제공하는 다양한 코드에 때로는 경외심을 느끼기도 한다. 프레임워크와 라이브러리를 활용해 애플리케이셔늘 확장하는데 들어가는 시간과 노력을 줄이고, 모든 작업을 신속하게 마무리할 수도 있따.
+
+개인적으로는 프로젝트에서 프레임워크와 라이브러리의 사용을 최소화 하는 것을 선호하지만, 솔직히 이를 사용하는 것은 아주 큰 유혹으로 느껴지기도 한다.

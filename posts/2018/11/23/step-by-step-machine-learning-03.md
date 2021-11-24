@@ -1,15 +1,12 @@
 ---
-title: Step by Step machine learning - 03
+title: Step by Step machine learning - 3
 date: 2018-11-24 04:44:01
 published: true
 tags:
   - machine-learning
   - scikit-learn
 mathjax: true
-description:
-  'Classification 2 ## ROC 커브  ROC 커브는 Binary Classification에서 가장 잘
-  사용하는 검증기다. 왼쪽 위로 그래프가 상승해 있을 수록 (우하단 면적이 넓을 수록) 좋은 분류기라고 할 수 있다.  ```py # ROC
-  커브는 binary classifiers에서 잘 사용하는 검증기다. # 왼쪽 위로 그래프로 올라갈 수...'
+description: 'step by step machine learning 3'
 category: machine-learning
 slug: /2018/11/23/step-by-step-machine-learning-03/
 template: post

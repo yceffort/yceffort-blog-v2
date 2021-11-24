@@ -1,14 +1,11 @@
 ---
-title: Step by Step machine learning - 01
+title: Step by Step machine learning - 1
 date: 2018-11-09 04:44:01
 published: true
 tags:
   - machine-learning
   - scikit-learn
-description:
-  'California Housing 데이터를 바탕으로 scikt-learn을 활용한 머신러닝 예제. ## 1. 기본적인
-  데이터 로딩  프록시 환경이라, 프록시를 핸들러에 추가하였습니다.  ```python import os import tarfile from
-  six.moves import urllib import numpy as np import panda...'
+description: 'step by step machine learning 1'
 category: machine-learning
 slug: /2018/11/08/step-by-step-machine-learning-01/
 template: post

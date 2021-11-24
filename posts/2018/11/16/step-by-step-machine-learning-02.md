@@ -1,14 +1,12 @@
 ---
-title: Step by Step machine learning - 02
+title: Step by Step machine learning - 2
 date: 2018-11-17 04:44:01
 published: true
 tags:
   - machine-learning
   - scikit-learn
 mathjax: true
-description: '## Classification [MNIST](http://yann.lecun.com/exdb/mnist/)는 각
-  숫자를 손으로 쓴 이미지를 모아놓은 데이터 셋입니다. 이 데이터 셋을 학습시켜서, 이 손글씨가 과연 숫자 몇을 의미하는지 판별 할 수 있도록
-  학습시켜 보겠습니다.  ### 1. 데이터 불러오기  원래대로 라면, sklearn에서 데이터를 잘 ...'
+description: 'step by step machine learning 2'
 category: machine-learning
 slug: /2018/11/16/step-by-step-machine-learning-02/
 template: post

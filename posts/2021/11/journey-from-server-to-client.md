@@ -4,6 +4,7 @@ tags:
   - javascript
   - web
   - server
+  - browser
 published: true
 date: 2021-11-23 23:12:01
 description: '네트워크도 공부해야하는데'

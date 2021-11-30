@@ -27,7 +27,7 @@ http 응답은 HTML 텍스트에서 이미지에 이르기까지 모든 것이 �
 
 ### 2. Pre-parsing 및 scanning
 
-인코딩을 확인하게 되면, 추가 리소스에 대한 왕복 딜레이를 최소화 하기 위해, 콘텐츠를 스캔하기 위한 initial pre-parsing을 시작하게 된다. 이 pre-parser는 완전한 파서로 보기는 어렵다. 왜냐하면 HTML이 얼마나 중첩되어 있는지, 그리고 부모-자식 관계는 무엇인지 확인하지 못하기 때문이다. 하지만 특정 HTML 태그의 속성 등을 파악할 수는 있다. 예를 들어 HTML 콘텐츠 어딘가에 
+인코딩을 확인하게 되면, 추가 리소스에 대한 왕복 딜레이를 최소화 하기 위해, 콘텐츠를 스캔하기 위한 initial pre-parsing을 시작하게 된다. 이 pre-parser는 완전한 파서로 보기는 어렵다. 왜냐하면 HTML이 얼마나 중첩되어 있는지, 그리고 부모-자식 관계는 무엇인지 확인하지 못하기 때문이다. 하지만 특정 HTML 태그의 속성 등을 파악할 수는 있다. 예를 들어 HTML 콘텐츠 어딘가에
 
 ```html
 <img src="https://somewhere.example.com/images/dog.png" alt=">
@@ -36,7 +36,6 @@ http 응답은 HTML 텍스트에서 이미지에 이르기까지 모든 것이 �
 가 있다고 가정하자.
 
 이 pre-parser는 이 `src`의 값을 확인하고 이 리소스 값을 리소스 요청 대기열에 집어 넣어준다. 이렇게 함으로써 이미지를 최대한 빨리 요청할 수 있고, 이미지가 도착하는데 까지 걸리는 시간을 최소화 할 수 있다. 이외에도 [preload](https://developer.mozilla.org/en-US/docs/Web/HTML/Preloading_content)나 [pre-fetch 지시자](https://developer.mozilla.org/en-US/docs/Web/HTTP/Link_prefetching_FAQ)와 같은 것들을 확인하여 대기열에 집어 넣어줄 수 있다.
-
 
 #### Tokenization
 
@@ -58,7 +57,7 @@ http 응답은 HTML 텍스트에서 이미지에 이르기까지 모든 것이 �
 
 ### 3. 파싱 및 트리 구조화
 
-브라우저는 웹 페이지 내부(메모리)에 표현할 무언가가 필요한데, 이를 정의하는 것이 [DOM 표준](https://dom.spec.whatwg.org/)이며, 이 스펙에서 어떻게 어떤 형태로 표현해야하는지 정의한다. 여기서 파서가 할 일은, 이전에 tokenizer가 만든 토큰을 가져와서 적절한 방식으로 만든 다음, Document Object Model(DOM) 객체에 삽입하는 것이다. DOM은 우리가 알다시피 트리 데이터 구조로 생성되므로, 이 프로세스를 [트리 구조화](https://en.wikipedia.org/wiki/Tree_(data_structure)) 라고도 한다. 
+브라우저는 웹 페이지 내부(메모리)에 표현할 무언가가 필요한데, 이를 정의하는 것이 [DOM 표준](https://dom.spec.whatwg.org/)이며, 이 스펙에서 어떻게 어떤 형태로 표현해야하는지 정의한다. 여기서 파서가 할 일은, 이전에 tokenizer가 만든 토큰을 가져와서 적절한 방식으로 만든 다음, Document Object Model(DOM) 객체에 삽입하는 것이다. DOM은 우리가 알다시피 트리 데이터 구조로 생성되므로, 이 프로세스를 [트리 구조화](<https://en.wikipedia.org/wiki/Tree_(data_structure)>) 라고도 한다.
 
 > 놀랍게도 IE는 역사적으로 봤을 때 이를 트리구조로 사용한 적이 별로 없다. https://blogs.windows.com/msedgedev/2017/04/19/modernizing-dom-tree-microsoft-edge/
 
@@ -67,13 +66,15 @@ http 응답은 HTML 텍스트에서 이미지에 이르기까지 모든 것이 �
 HTML 파싱은 그 구조가 꽤 복잡하다. 그 이유는 앞서 언급한 것 처럼, 레거시 HTML 콘텐츠를 오늘날의 브라우저와 호환 가능하도록 구조를 유지하는 선에서 지원해야 하기 때문이다. 예를 들어, 대다수의 HTML 태그에는 끝 태그 문자 `/>`가 존재한다. 따라서 브라우저는 자동으로 해당 태그와 일치하는 태그를 닫을 수 있다. 아래 예시를 살펴보자.
 
 ```html
-<p>sincerely<p>The authors</p>
+<p>sincerely</p>
+<p>The authors</p>
 ```
 
 파서는 위와 같은 ~~개같은~~ 구조를 암시적으로 종료 태그로 작성하는 규칙을 가지고 있다. 파서는 위 코드를 아래와 같이 변환한다.
 
 ```html
-<p>sincerely</p><p>The authors</p>
+<p>sincerely</p>
+<p>The authors</p>
 ```
 
 이러한 규칙 덕분에, 자동으로 두 `<p/>` 태그가 형제 형태로 자리잡을 수 있게 되었다. parser의 규칙 중에서, HTML 테이블은 아마도 적절한 표 구조를 가질 수 있도록 보장하기 위한 가장 복잡한 규칙일 것이다.

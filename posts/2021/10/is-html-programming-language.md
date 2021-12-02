@@ -12,6 +12,8 @@ description: '더이상 HTML 논란은,, 네이버,,,'
 
 ## meme?
 
+먼저 인터넷에 떠돌고 있는(?) HTML 프로그래밍 언어 관련 짤을 보고 가자.
+
 ![meme1](https://i.redd.it/m41loixjno811.jpg)
 
 ![meme2](https://i.kym-cdn.com/photos/images/original/001/382/372/e8b.jpg)

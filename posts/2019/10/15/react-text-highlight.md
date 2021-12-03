@@ -59,27 +59,28 @@ splitResult.split('카카오') //  ["", ""]
 
 암튼 첫 번째 결과물은 이렇다.
 
-```typescript
+```tsx
 const [initial, ...rest] = text.split(highlight)
-<Text>
+return (
+  <Text>
     {rest.reduce(
-        (partialResult, current) =>
-        [
-            ...partialResult,
-            <Text
-            key={highlight + current}
-            color={highlightColor}
-            inlineBlock
-            size={fontSize}
-            whiteSpace="pre"
-            >
-            {highlight}
-            </Text>,
-            current,
-        ],
-        [initial],
+      (partialResult, current) => [
+        ...partialResult,
+        <Text
+          key={highlight + current}
+          color={highlightColor}
+          inlineBlock
+          size={fontSize}
+          whiteSpace="pre"
+        >
+          {highlight}
+        </Text>,
+        current,
+      ],
+      [initial],
     )}
-</Text>
+  </Text>
+)
 ```
 
 [reduce](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce) 를 활용해서, 처리했다.
@@ -88,28 +89,30 @@ const [initial, ...rest] = text.split(highlight)
 
 ## 결과
 
-```typescript
+```tsx
 const initial = text.split(highlight)
-<Text>
+return (
+  <Text>
     {initial.map((normal, i) =>
-    i > 0 ? (
+      i > 0 ? (
         <>
-        <Text
+          <Text
             key={highlight + i.toString()}
             color={highlightColor}
             inlineBlock
             size={fontSize}
             whiteSpace="pre"
-        >
+          >
             {highlight}
-        </Text>
-        {normal}
+          </Text>
+          {normal}
         </>
-    ) : (
+      ) : (
         <>{normal}</>
-    ),
+      ),
     )}
-</Text>
+  </Text>
+)
 ```
 
 `i > 0` 을 처리한 이유는, 어차피 첫번째 엘리먼트는 무조건 하이라이트가 안되는 텍스트가 오기 때문이다! 첫단어가 일치하는 단어라면 ""가 올 것이고, 일치 하지 않는 단어라면 그 단어 그대로 올라오기 때문에 첫번째 단어는 별도처리를 하지 않아도 된다.

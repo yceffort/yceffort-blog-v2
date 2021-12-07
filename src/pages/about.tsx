@@ -1,6 +1,6 @@
 import Image from 'next/image'
 
-import SiteConfig from '#src/config'
+import { SiteConfig } from '#src/config'
 import { PageSeo } from '#components/SEO'
 import SocialIcon from '#components/icons'
 import CustomLink from '#components/Link'

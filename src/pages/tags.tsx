@@ -2,7 +2,7 @@ import { GetStaticProps } from 'next'
 
 import { getAllTagsFromPosts } from '#utils/Post'
 import { PageSeo } from '#components/SEO'
-import SiteConfig from '#src/config'
+import { SiteConfig } from '#src/config'
 import Tag from '#components/Tag'
 import CustomLink from '#components/Link'
 import { TagWithCount } from '#commons/types'

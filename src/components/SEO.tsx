@@ -1,6 +1,6 @@
 import { NextSeo, ArticleJsonLd } from 'next-seo'
 
-import SiteConfig from '#src/config'
+import { SiteConfig } from '#src/config'
 // import SiteConfig from '@/data/SiteConfig'
 
 export const SEO = {

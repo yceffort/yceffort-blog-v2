@@ -3,7 +3,7 @@ import { format } from 'date-fns'
 
 import { Post } from '#commons/types'
 import { PageSeo } from '#components/SEO'
-import SiteConfig from '#src/config'
+import { SiteConfig } from '#src/config'
 import CustomLink from '#components/Link'
 import Tag from '#components/Tag'
 import { DEFAULT_NUMBER_OF_POSTS } from '#commons/const'

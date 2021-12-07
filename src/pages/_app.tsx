@@ -7,7 +7,7 @@ import { ThemeProvider } from 'next-themes'
 import { DefaultSeo } from 'next-seo'
 import Script from 'next/script'
 
-import config from '#src/config'
+import { SiteConfig as config } from '#src/config'
 import { SEO } from '#components/SEO'
 import LayoutWrapper from '#components/LayoutWrapper'
 

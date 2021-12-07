@@ -1,7 +1,7 @@
 import Link from './Link'
 
 import SocialIcon from '#components/icons'
-import SiteConfig from '#src/config'
+import { SiteConfig } from '#src/config'
 
 export default function Footer() {
   return (

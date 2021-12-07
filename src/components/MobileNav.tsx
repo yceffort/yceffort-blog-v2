@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import Link from './Link'
 
-import SiteConfig from '#src/config'
+import { SiteConfig } from '#src/config'
 
 const MobileNav = () => {
   const [navShow, setNavShow] = useState(false)

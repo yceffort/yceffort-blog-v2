@@ -8,7 +8,7 @@ import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
 
 import profile from '#public/profile.png'
-import SiteConfig from '#src/config'
+import { SiteConfig } from '#src/config'
 
 const LayoutWrapper = ({ children }: { children: ReactNode }) => {
   return (

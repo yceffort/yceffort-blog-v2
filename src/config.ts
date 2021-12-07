@@ -1,6 +1,6 @@
 import getContactHref from '#constants/Contact'
 
-const SiteConfig = {
+export const SiteConfig = {
   url: 'https://yceffort.kr',
   pathPrefix: '/',
   title: 'yceffort',
@@ -45,5 +45,3 @@ const SiteConfig = {
     },
   },
 }
-
-export default SiteConfig

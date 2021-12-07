@@ -9,7 +9,7 @@ import Tag from '#components/Tag'
 import CustomLink from '#components/Link'
 import PageTitle from '#components/PageTitle'
 import SiteConfig from '#src/config'
-import { getThumbnailURL } from '#utils/common'
+import { getThumbnailUrl } from '#utils/common'
 import MathLoader from '#components/layouts/Post/math'
 import profile from '#public/profile.png'
 
@@ -24,7 +24,7 @@ export default function PostLayout({
   const { date, title, tags, description } = frontMatter
   const updatedAt = format(new Date(date), 'yyyy-MM-dd')
 
-  const thumbnailUrl = getThumbnailURL({
+  const thumbnailUrl = getThumbnailUrl({
     tags: frontMatter.tags.map((tag) => tag.trim()),
     title: frontMatter.title,
     path: slug,
@@ -94,7 +94,7 @@ export default function PostLayout({
                 {children}
               </div>
               <div className="pt-6 pb-6 text-sm text-gray-700 dark:text-gray-300">
-                <CustomLink href={link}>{'Issue on GitHub'}</CustomLink>
+                <CustomLink href={link}>Issue on GitHub</CustomLink>
               </div>
             </div>
             <footer>

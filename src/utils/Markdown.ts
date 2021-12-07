@@ -52,7 +52,7 @@ function getSizeOfImage(name: string) {
       return sizeOf(path)
     }
   } catch (e) {
-    console.error(`Error while get Size of image. path: ${name} error: ${e}`)
+    console.error(`Error while get Size of image. path: ${name} error: ${e}`) // eslint-disable-line no-console
     return {
       height: undefined,
       width: undefined,
@@ -60,7 +60,7 @@ function getSizeOfImage(name: string) {
   }
 }
 
-export async function parseMarkdownToMDX(body: string, path: string) {
+export async function parseMarkdownToMdx(body: string, path: string) {
   return serialize(body, {
     // scope: MDXComponents,
     mdxOptions: {
@@ -97,16 +97,16 @@ export async function parseMarkdownToMDX(body: string, path: string) {
 
                   const imageIndex = imageNode.url.indexOf('/') + 1
 
-                  const imageURL = `/${imgPath}/${imageNode.url.slice(
+                  const imageUrl = `/${imgPath}/${imageNode.url.slice(
                     imageIndex,
                   )}`
 
-                  const imageSize = getSizeOfImage(imageURL)
+                  const imageSize = getSizeOfImage(imageUrl)
 
                   imageNode.type = 'jsx'
                   imageNode.value = `<Image
                   alt={\`${imageNode.alt}\`}
-                  src={\`${imageURL}\`}
+                  src={\`${imageUrl}\`}
                   width={${imageSize.width}}
                   height={${imageSize.height}}
                 />`

@@ -1,6 +1,6 @@
 import qs from 'query-string'
 
-export function getThumbnailURL({
+export function getThumbnailUrl({
   tags,
   title,
   path = '',

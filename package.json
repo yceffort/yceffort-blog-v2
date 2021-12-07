@@ -13,6 +13,8 @@
     "lint:fix": "npm run lint -- --fix",
     "prettier": "prettier '**/*.{json,md,yaml}' --check",
     "prettier:fix": "prettier '**/*.{json,md,yaml}' --write",
+    "lint:style": "stylelint './**/*.{js,ts,tsx}'",
+    "lint:style:fix": "stylelint './**/*.{js,ts,tsx}' --fix",
     "pre-commit": "lint-staged"
   },
   "repository": "https://github.com/yceffort/yceffort-blog-v2",
@@ -53,13 +55,13 @@
   },
   "devDependencies": {
     "@tailwindcss/jit": "^0.1.18",
+    "@titicaca/eslint-config-triple": "^3.0.0",
     "@types/date-fns": "^2.6.0",
     "@types/memoizee": "^0.4.5",
     "@types/node": "^14.17.12",
     "@types/react": "^17.0.19",
     "autoprefixer": "^10.3.3",
     "eslint-config-next": "^11.1.0",
-    "eslint-config-yceffort": "2.0.0",
     "husky": "^7.0.2",
     "lint-staged": "^11.1.2",
     "postcss": "^8.3.6",

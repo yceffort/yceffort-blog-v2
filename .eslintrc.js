@@ -1,12 +1,17 @@
-const { extendedRules } = require('./naming-convention')
+const createConfig = require('@titicaca/eslint-config-triple/create-config')
+
+const { extends: extendConfigs, overrides } = createConfig({ type: 'frontend', project: './tsconfig.json' })
 
 module.exports = {
   extends: [
-    'eslint-config-yceffort/typescript',
+    ...extendConfigs,
     'plugin:@next/next/recommended',
   ],
+  overrides,
   rules: {
-    '@typescript-eslint/naming-convention': extendedRules,
     'react/react-in-jsx-scope': 'off',
+  },
+  parserOptions: {
+    requireConfigFile: false,
   },
 }

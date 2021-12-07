@@ -63,6 +63,7 @@ class MyApp extends App {
             <Script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js" />
             <Script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-analytics.js" />
             <Script
+              id="firebase"
               strategy="lazyOnload"
               dangerouslySetInnerHTML={{
                 __html: `
@@ -88,6 +89,7 @@ class MyApp extends App {
               src={`https://www.googletagmanager.com/gtag/js?id=${config.googleAnalyticsId}`}
             />
             <Script
+              id="gtag"
               dangerouslySetInnerHTML={{
                 __html: `
                     window.dataLayer = window.dataLayer || [];

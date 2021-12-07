@@ -23,4 +23,4 @@ jobs:
       - run: npm run images
       - run: npm run lint
       - run: npm run prettier
-      - run: npm run style
+      - run: npm run lint:style

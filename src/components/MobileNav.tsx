@@ -58,7 +58,7 @@ const MobileNav = () => {
           aria-label="toggle modal"
           className="fixed w-full h-full cursor-auto focus:outline-none"
           onClick={onToggleNav}
-        ></button>
+        />
         <nav className="fixed h-full mt-8">
           {SiteConfig.menu.map((link) => (
             <div key={link.path} className="px-12 py-4">

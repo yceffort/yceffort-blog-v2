@@ -15,7 +15,7 @@ export default function Home({ posts }: { posts: Array<Post> }) {
   return (
     <>
       <PageSeo
-        title={'Home'}
+        title="Home"
         description={SiteConfig.subtitle}
         url={SiteConfig.url}
       />

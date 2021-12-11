@@ -2,7 +2,7 @@
 title: ''
 tags:
   - javascript
-  - web  
+  - web
   - browser
 published: false
 date: 2021-12-08 19:45:17
@@ -29,17 +29,17 @@ AST를 생성하는 과정은 자바스크립트에서 비교적 간단한 임�
 
 이제 바이트 코드를 획득했으니 실행할 준비가 되었다. 오늘날 자바스크립트 엔진은 파싱 중에 생성한 코드를 가장 먼저 인터프리터라는 가상 머신에 제공한다. 인터프리터는 소프트웨어에 구현된 CPU와 약간 비슷하다. 각 바이트 코드 명령어를 한번에 하나씩 살펴보고, 실제 기계 명령어를 실행한다음, 다음에 수행해야 하는 작업을 결정한다.
 
-자바스크립트라 불리는 이 프로그래밍 언어의 구조와 동작은 [ECMA-262](https://tc39.github.io/ecma262) 문서에 공식적으로 정의 되어 있다. 프로그래밍 언어 디자이너 들은 구조 부분을 "syntax"라고 부르고, 행동/작업 (behavior)을 "semantics"이라고 한다. 이 "semantics" 의 거의 대부분은 의사 코드를 사용하여 작성된 알고리즘에 의해 정의 된다. 예를 들어, `>>`, [signed right shift operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators#%3E%3E_(Sign-propagating_right_shift))를 구현하는 컴파일러 엔지니어라고 가정해보자. 여기에서 정의된 [스펙](https://tc39.github.io/ecma262/#sec-signed-right-shift-operator-runtime-semantics-evaluation)을 따르면 아래와 같이 구현하게 된다.
+자바스크립트라 불리는 이 프로그래밍 언어의 구조와 동작은 [ECMA-262](https://tc39.github.io/ecma262) 문서에 공식적으로 정의 되어 있다. 프로그래밍 언어 디자이너 들은 구조 부분을 "syntax"라고 부르고, 행동/작업 (behavior)을 "semantics"이라고 한다. 이 "semantics" 의 거의 대부분은 의사 코드를 사용하여 작성된 알고리즘에 의해 정의 된다. 예를 들어, `>>`, [signed right shift operator](<https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators#%3E%3E_(Sign-propagating_right_shift)>)를 구현하는 컴파일러 엔지니어라고 가정해보자. 여기에서 정의된 [스펙](https://tc39.github.io/ecma262/#sec-signed-right-shift-operator-runtime-semantics-evaluation)을 따르면 아래와 같이 구현하게 된다.
 
 ShiftExpression : ShiftExpression >> AdditiveExpression
 
-1. Let *lref* be the result of evaluating ShiftExpression.
-2. Let *lval* be ? [GetValue](https://tc39.github.io/ecma262/#sec-getvalue)(*lref*).
-3. Let *rref* be the result of evaluating AdditiveExpression.
-4. Let *rval* be ? [GetValue](https://tc39.github.io/ecma262/#sec-getvalue)(*rref*).
-5. Let *lnum* be ? [ToInt32](https://tc39.github.io/ecma262/#sec-toint32)(*lval*).
-6. Let *rnum* be ? [ToUint32](https://tc39.github.io/ecma262/#sec-touint32)(*rval*).
-7. Let shiftCount be the result of masking out all but the least significant 5 bits of *rnum*, that is, compute *rnum* & 0x1F.
-8. Return the result of performing a sign-extending right shift of *lnum* by shiftCount bits. The most significant bit is propagated. The result is a signed 32-bit integer.
+1. Let _lref_ be the result of evaluating ShiftExpression.
+2. Let _lval_ be ? [GetValue](https://tc39.github.io/ecma262/#sec-getvalue)(_lref_).
+3. Let _rref_ be the result of evaluating AdditiveExpression.
+4. Let _rval_ be ? [GetValue](https://tc39.github.io/ecma262/#sec-getvalue)(_rref_).
+5. Let _lnum_ be ? [ToInt32](https://tc39.github.io/ecma262/#sec-toint32)(_lval_).
+6. Let _rnum_ be ? [ToUint32](https://tc39.github.io/ecma262/#sec-touint32)(_rval_).
+7. Let shiftCount be the result of masking out all but the least significant 5 bits of _rnum_, that is, compute _rnum_ & 0x1F.
+8. Return the result of performing a sign-extending right shift of _lnum_ by shiftCount bits. The most significant bit is propagated. The result is a signed 32-bit integer.
 
-처음 여섯 단계를 먼저 보면, 피연산자 (`>>`의 양쪽 값)을 32비트 정소로 변환한 다음, 실제 시프트 연산을 수행했다. 
+처음 여섯 단계를 먼저 보면, 피연산자 (`>>`의 양쪽 값)을 32비트 정소로 변환한 다음, 실제 시프트 연산을 수행했다.

@@ -43,3 +43,15 @@ ShiftExpression : ShiftExpression >> AdditiveExpression
 8. Return the result of performing a sign-extending right shift of _lnum_ by shiftCount bits. The most significant bit is propagated. The result is a signed 32-bit integer.
 
 처음 여섯 단계를 먼저 보면, 피연산자 (`>>`의 양쪽 값)을 32비트 정소로 변환한 다음, 실제 시프트 연산을 수행했다.
+
+그런데, 우리가 이 스펙 곧이 곧대로 알고리즘을 구현한다면, 결과적으로 매우 느린 인터프리터를 만들게 될 것이다. 자바스크립트 객체에서 속성 값을 가져오는 가주 간단한 작업을 상상해보자.
+
+자바스크립트의 객체는 개념적으로 일종의 `dict`(사전)과 같다. 객체는 또한 프로토타입 객체도 가질 수 있다.
+
+![js-object](https://i0.wp.com/alistapart.com/wp-content/uploads/2018/11/fig2.png?w=960&ssl=1)
+
+그래서, 만약 객체에 주어진 문자열 키에 대한 엔트리가 없다면 우리는 프로토타입에서 그 키를 찾아야 한다. 이 작업은 원하는 키를 찾거나, 프로토타입의 체인 끝까지 갈 때까지 반복된다.
+
+따라서 객체에서 특정 값을 찾으려고 할 때마다 수행해야 하는 작업이 많아질 수도 있다.
+
+이러한 동적 속성 조회 속도를 높이기위해, 자바스크립트 엔진에 사용되는 전략을 인라인 캐싱이라고 한다. 인라인 캐싱은 1980년도에 스몰토크 언어용으로 처음개발되었다. 기본적인 아이디어는, 이전 키 조회 작업 결과를 바이트코드 명령어에 직접 저장하는 것이다.

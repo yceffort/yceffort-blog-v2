@@ -202,17 +202,16 @@ setInterval(() => {
 
 ```javascript
 setInterval(() => {
-  const mu = process.memoryUsage();
+  const mu = process.memoryUsage()
   // # bytes / KB / MB / GB
-  const gbNow = mu[field] / 1024 / 1024 / 1024;
-  const gbRounded = Math.round(gbNow * 100) / 100;
+  const gbNow = mu[field] / 1024 / 1024 / 1024
+  const gbRounded = Math.round(gbNow * 100) / 100
 
-  const elapsedTimeInSecs = (Date.now() - start) / 1000;
-  const timeRounded = Math.round(elapsedTimeInSecs * 100) / 100;
+  const elapsedTimeInSecs = (Date.now() - start) / 1000
+  const timeRounded = Math.round(elapsedTimeInSecs * 100) / 100
 
-  fs.appendFile(LOG_FILE, timeRounded + "," + gbRounded + os.EOL, () => {}); // fire-and-forget
-}, TIME_INTERVAL_IN_MSEC);
+  fs.appendFile(LOG_FILE, timeRounded + ',' + gbRounded + os.EOL, () => {}) // fire-and-forget
+}, TIME_INTERVAL_IN_MSEC)
 ```
 
 이는 운영용 코드로는 쓸 수 없지만, 적어도 로컬 에서 메모리 누수를 디버깅하는 방법을 보여주었다.실제 구현에서는 서버 디스크 공간이 부족하지 않도록 하는 설정, 비주얼, 알림, 로그 rotate 등이 필요하다.
-

@@ -227,10 +227,10 @@ pm2 start index.js --max-memory-restart 8G
 또다른 도구로는 [node-memwatch](https://github.com/lloyd/node-memwatch)가 있다. 이 라이브러리는 메모리 누수가 발생하면 특정 코드를 실행시킬 수 있다.
 
 ```javascript
-const memwatch = require("memwatch");
+const memwatch = require('memwatch')
 
-memwatch.on("leak", function (info) {
+memwatch.on('leak', function (info) {
   // event emitted
-  console.log(info.reason);
-});
+  console.log(info.reason)
+})
 ```

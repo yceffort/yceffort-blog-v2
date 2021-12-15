@@ -5,7 +5,7 @@ tags:
   - nodejs
 published: true
 date: 2021-12-13 19:21:45
-description: ''
+description: '어디서 새고 있을까 내 메모리는'
 ---
 
 ## V8 가비지 콜렉션
@@ -16,7 +16,7 @@ description: ''
 
 ![generation](https://v8.dev/_img/trash-talk/02.svg)
 
-이 `generation` 가설의 기본 원리는 대부분의 객체가 older로 넘어가기전에 죽는다 (가비지 콜렉팅 당한다)는 것이다.V8 가비지 컬렉터는 이러한 기본적인 가정을 기반으로 설계 되어 있으며, 여기에서 살아남은 객체만 승격하게 된다. 객체는 살아남으면서 다음 영역으로 복사되고, 그리고 결국엔 `old generation`이 되는 것이다.
+이 `generation` 가설의 기본 원리는 대부분의 객체가 older로 넘어가기 전에 죽는다. (가비지 콜렉팅 당한다)는 것이다. V8 가비지 컬렉터는 이러한 기본적인 가정을 기반으로 설계 되어 있으며, 여기에서 살아남은 객체만 승격하게 된다. 객체는 살아남으면서 다음 영역으로 복사되고, 그리고 결국엔 `old generation`이 되는 것이다.
 
 node에서 메모리가 소비되는 영역은 크게 세군데로 볼 수 있다.
 
@@ -69,7 +69,7 @@ setInterval(() => {
 }, TIME_INTERVAL_IN_MSEC)
 ```
 
-위 코드는 40ms 간격으로 10메가바이트를 계속 할당하므로, 가비지 콜렉팅에 필요한 시간이 남아있는 객체들을 `old generation`으로 빠르게 승격시킬 수 있다. `process.memoryUsage`는 현재 힙 사용률에 대한지표를 수집할 수 있는 도구다. 힙 할당량이 커지면, `heapUsed` 필드에서 현재 힙 사이즈를 추적한다.
+위 코드는 40ms 간격으로 10메가바이트를 계속 할당하므로, 가비지 콜렉팅에 필요한 시간이 남아있는 객체들을 `old generation`으로 빠르게 승격시킬 수 있다. `process.memoryUsage`는 현재 힙 사용률에 대한 지표를 수집할 수 있는 도구다. 힙 할당량이 커지면, `heapUsed` 필드에서 현재 힙 사이즈를 추적한다.
 
 결과는 실행환경에 따라 다르다. 16gb 메모리가 있는 내 맥에서는 다음과 같은 결과가 나왔다.
 
@@ -215,3 +215,22 @@ setInterval(() => {
 ```
 
 이는 운영용 코드로는 쓸 수 없지만, 적어도 로컬 에서 메모리 누수를 디버깅하는 방법을 보여주었다.실제 구현에서는 서버 디스크 공간이 부족하지 않도록 하는 설정, 비주얼, 알림, 로그 rotate 등이 필요하다.
+
+## 프로덕션 코드에서 메모리 누수 추적하기
+
+위 코드를 프로덕션에서 쓰는 것은 무리 일 것이다. 프로덕션에서는 [PM2와 같은 데몬 프로세스](https://pm2.keymetrics.io/docs/usage/restart-strategies/)를 활용하여 추적할 수 있을 것이다.
+
+```bash
+pm2 start index.js --max-memory-restart 8G
+```
+
+또다른 도구로는 [node-memwatch](https://github.com/lloyd/node-memwatch)가 있다. 이 라이브러리는 메모리 누수가 발생하면 특정 코드를 실행시킬 수 있다.
+
+```javascript
+const memwatch = require("memwatch");
+
+memwatch.on("leak", function (info) {
+  // event emitted
+  console.log(info.reason);
+});
+```

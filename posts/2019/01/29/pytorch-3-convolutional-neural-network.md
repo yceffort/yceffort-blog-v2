@@ -40,7 +40,6 @@ CN N역시 입력층, 중간층, 출력층으로 구성되어 있으며 각 층�
 
 학습과정에서 이 방식으로 순전파와 역전파를 반복하며, Convolutional 필터의 가중치를 최적화 하는 방식으로 모형을 학습하게 된다.
 
-
 ![convolutional-layer](http://deeplearning.stanford.edu/wiki../../../images/6/6c/Convolution_schematic.gif)
 
 https://cs231n.github.io/assets/conv-demo/index.html

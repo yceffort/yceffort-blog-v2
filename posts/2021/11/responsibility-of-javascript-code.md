@@ -80,7 +80,7 @@ class SignUpForm extends Component {
 1. `<form>`을 사용하지 않는 다면 그것은 form이라고 부를 수 없다. `<div role="form">`이라는 기법도 있지만, form을 작성하기 위해서는 적절한 동작과 메서드를 가진 `<form/>`을 쓰는 것이 좋다. `<form/>`의 `action`은 해당 컴포넌트가 서버사이드에서 렌더링된 경우라도, 자바스크립트 없이도 해당 작업을 수행할 수 있도록 보장할 수 있기 때문이다.
 2. `<label>`이 없다면 접근성 이점을 누릴 수 없다.
 3. form을 제출하기전에 클라이언트에서 무언가를 하기 원한다면, `<button/>` 의 `onClick`이 아닌 `<form/>`의 `onSubmit`을 활용해야 한다.
-4. 이메일 유효성 검사에 특별한 기능이 필요한게 아니라면, IE 10 부터 광범위하게 지원하는 HTML5의 폼 validation의 활용하는 것이 여러모로 좋다. `<input type="email">`은 [많은 브라우저에서 지원하고 있으므로](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/email), `required` 속성과 함꼐 활용한다면 된다. 다만 스크린리더를 고려한다면 [몇가지 주의사항](https://www.tpgi.com/required-attribute-requirements/)이 있다.
+4. 이메일 유효성 검사에 특별한 기능이 필요한게 아니라면, IE 10 부터 광범위하게 지원하는 HTML5의 폼 validation의 활용하는 것이 여러모로 좋다. `<input type="email">`은 [많은 브라우저에서 지원하고 있으므로](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/email), `required` 속성과 함께 활용한다면 된다. 다만 스크린리더를 고려한다면 [몇가지 주의사항](https://www.tpgi.com/required-attribute-requirements/)이 있다.
 5. 이 컴포넌트는 라이프 사이클 메소드에 의존적이지 않다. 따라서 stateless한 컴포넌트로 리팩토링할 수 있다. 이는 일반적인 리액트 컴포넌트보다 훨씬더 적은 자바스크립트를 사용한다.
 
 따라서 이를 리팩토링한다면,

@@ -24,20 +24,7 @@ const tokenClassNames = {
 const postPrefix = 'posts/'
 
 function getSizeOfImage(name) {
-  const path = `public${name}`
-  try {
-    // if (process.env.NODE_ENV === 'production') {
-    //   return imageInfo[path]
-    // } else {
-    return sizeOf(path)
-    // }
-  } catch (e) {
-    console.error(`Error while get Size of image. path: ${name} error: ${e}`) // eslint-disable-line no-console
-    return {
-      height: undefined,
-      width: undefined,
-    }
-  }
+  return sizeOf(`public${name}`)
 }
 
 export async function parseMarkdownToMdx(body, path) {

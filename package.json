@@ -7,7 +7,7 @@
     "sitemap": "ts-node --project tsconfig.node.json ./src/utils/siteMap.ts",
     "images": "ts-node --project tsconfig.node.json ./src/utils/imageInfo.ts",
     "build-next": "next build",
-    "build": "npm run sitemap && npm run images && npm run build-next",
+    "build": "npm run sitemap && npm run build-next",
     "start": "next start",
     "lint": "eslint '**/*.{ts,tsx}'",
     "lint:fix": "npm run lint -- --fix",

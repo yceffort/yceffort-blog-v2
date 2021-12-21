@@ -47,3 +47,104 @@ https://github.com/vercel/next.js/discussions/18072
 ```javascript
 window.history.replaceState(window.history.state,'',window.location.pathname + '?' + `whatever=u_want`)
 ```
+
+## getServerSideProps와 _app.getInitialProps와의 관계
+
+`getServerSideProps`는 무조건 서버에서 실행되는 코드로, 서버사이드 렌더링 시에 필요한 데이터를 미리 필요한 데이터를 불러올 때 쓰인다. `_app.getInitialProps`는 최초에 앱이 렌덜이되거나, 클라이언트 라우팅이 일어나는 순간에 실행된다. https://nextjs.org/docs/advanced-features/custom-app
+
+- Persisting layout between page changes
+- Keeping state when navigating pages
+- Custom error handling using componentDidCatch
+- Inject additional data into pages
+- Add global CSS
+
+그런데, `getServerSideProps` 가 수행되면, `_app.getInitialProps`가 실행된다는 사실을 알게되었다.
+
+### app
+
+```javascript
+import App from 'next/app'
+import '../styles/globals.css'
+
+function MyApp({ Component, pageProps }) {
+  return <Component {...pageProps} />
+}
+
+
+MyApp.getInitialProps = async (appContext) => {
+  const appProps = await App.getInitialProps(appContext);
+
+  console.log('getInitailProps!')
+
+  return { ...appProps }
+}
+
+export default MyApp
+```
+
+### index
+
+```javascript
+import { useRouter } from 'next/dist/client/router';
+
+export default function Home() {
+  const router = useRouter()
+
+  function handleClick() {
+    router.replace(router.asPath)
+  }
+
+  return (
+    <button onClick={handleClick}>Replace!</button>
+  );
+}
+
+export function getServerSideProps() {
+  console.log('getServerSideProps')
+  return {
+    props: {}, // will be passed to the page component as props
+  } 
+}
+```
+
+버튼을 누르면
+
+```
+getInitailProps!
+getServerSideProps
+getInitailProps!
+getServerSideProps
+getInitailProps!
+getServerSideProps
+```
+
+`getInitialProps`가 실행되는 것을 알 수 있다. 이는 의도한 동작인 걸까? 그냥 나는 `getServerSideProps`만 재 호출하고 싶은 건데, (새로고침 등을 이유로) `getInitialProps`까지 호출해야 할까? 사실 지금 생각해보니 이것도 어떻게 보면 당연한 것 같기도하다. 🤔 의도야 어쩄든 라우팅이 일어나는 행위고, 라우팅에는 `getServerSideProps`가 수반되어야 하니까...?
+
+아무튼, 이 상황을 막고 싶다면 아래와 같은 조건문을 추가해주면 된다.
+
+
+```javascript
+import App from 'next/app';
+import '../styles/globals.css';
+
+function MyApp({ Component, pageProps }) {
+  return <Component {...pageProps} />;
+}
+
+MyApp.getInitialProps = async (appContext) => {
+  const appProps = await App.getInitialProps(appContext);
+  const {
+    ctx: { req },
+  } = appContext;
+
+  if (req?.url.startsWith('/_next')) {
+    // serverSideProps로 호출된 경우 URL이 /_next로 시작함.
+    // EX: /_next/data/development/index.json
+  }
+
+  return { ...appProps };
+};
+
+export default MyApp;
+```
+

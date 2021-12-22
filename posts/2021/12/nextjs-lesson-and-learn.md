@@ -45,10 +45,14 @@ https://github.com/vercel/next.js/discussions/18072
 해결책은 `window.history.replaceState`를 사용하는 것이다. history에 replaceState를 하는 것은 리액트의 상태를 건드는게 아니고 리액트와 별개인 페이지의 히스토리를 건드는 것이 기 때문에 리렌더링이 발생하지 않을 것이다.
 
 ```javascript
-window.history.replaceState(window.history.state,'',window.location.pathname + '?' + `whatever=u_want`)
+window.history.replaceState(
+  window.history.state,
+  '',
+  window.location.pathname + '?' + `whatever=u_want`,
+)
 ```
 
-## getServerSideProps와 _app.getInitialProps와의 관계
+## getServerSideProps와 \_app.getInitialProps와의 관계
 
 `getServerSideProps`는 무조건 서버에서 실행되는 코드로, 서버사이드 렌더링 시에 필요한 데이터를 미리 필요한 데이터를 불러올 때 쓰인다. `_app.getInitialProps`는 최초에 앱이 렌덜이되거나, 클라이언트 라우팅이 일어나는 순간에 실행된다. https://nextjs.org/docs/advanced-features/custom-app
 
@@ -70,9 +74,8 @@ function MyApp({ Component, pageProps }) {
   return <Component {...pageProps} />
 }
 
-
 MyApp.getInitialProps = async (appContext) => {
-  const appProps = await App.getInitialProps(appContext);
+  const appProps = await App.getInitialProps(appContext)
 
   console.log('getInitailProps!')
 
@@ -85,7 +88,7 @@ export default MyApp
 ### index
 
 ```javascript
-import { useRouter } from 'next/dist/client/router';
+import { useRouter } from 'next/dist/client/router'
 
 export default function Home() {
   const router = useRouter()
@@ -94,16 +97,14 @@ export default function Home() {
     router.replace(router.asPath)
   }
 
-  return (
-    <button onClick={handleClick}>Replace!</button>
-  );
+  return <button onClick={handleClick}>Replace!</button>
 }
 
 export function getServerSideProps() {
   console.log('getServerSideProps')
   return {
     props: {}, // will be passed to the page component as props
-  } 
+  }
 }
 ```
 
@@ -122,29 +123,27 @@ getServerSideProps
 
 아무튼, 이 상황을 막고 싶다면 아래와 같은 조건문을 추가해주면 된다.
 
-
 ```javascript
-import App from 'next/app';
-import '../styles/globals.css';
+import App from 'next/app'
+import '../styles/globals.css'
 
 function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />;
+  return <Component {...pageProps} />
 }
 
 MyApp.getInitialProps = async (appContext) => {
-  const appProps = await App.getInitialProps(appContext);
+  const appProps = await App.getInitialProps(appContext)
   const {
     ctx: { req },
-  } = appContext;
+  } = appContext
 
   if (req?.url.startsWith('/_next')) {
     // serverSideProps로 호출된 경우 URL이 /_next로 시작함.
     // EX: /_next/data/development/index.json
   }
 
-  return { ...appProps };
-};
+  return { ...appProps }
+}
 
-export default MyApp;
+export default MyApp
 ```
-

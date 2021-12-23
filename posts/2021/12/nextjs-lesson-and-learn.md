@@ -8,6 +8,10 @@ date: 2021-12-20 16:55:17
 description: '아 집에 가고 싶다'
 ---
 
+## Table of Contents
+
+## Introduction
+
 nextjs를 본격적으로 쓴 것은 2~3년 전부터이지만, 이 정도로 대규모 프로젝트에 써본 것은 처음이었다. 이전까지는 nextjs에 대해 어느정도 알고 있다고 자부했었지만, 본격적으로 쓰고 보니 굉장히 모르는 사실들이 많았다는 것을 꺠달았다. 다시는 시행착오를 겪지 않기 위해 nextjs를 쓰면서 배운 것들을 몇가지 정리해두려고 한다.
 
 ## shallow routing은 page 리렌더링을 야기한다.
@@ -147,3 +151,8 @@ MyApp.getInitialProps = async (appContext) => {
 
 export default MyApp
 ```
+
+## getInitialProps에서 사용자의 데이터를 다뤄도 될까?
+
+앱에 사용자가 최초 접근 시, 그러니까 `getIntialProps` 가 서버에서 실행될 때 사용자와 관련된 정보를 불러오고 그것을 애플리케이션 전체 라이프사이클에서 persistent하게 사용하고 싶었다. 그러니까, 대략 이런 코드였다.
+

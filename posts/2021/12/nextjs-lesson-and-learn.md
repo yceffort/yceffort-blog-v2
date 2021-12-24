@@ -156,3 +156,33 @@ export default MyApp
 
 앱에 사용자가 최초 접근 시, 그러니까 `getIntialProps` 가 서버에서 실행될 때 사용자와 관련된 정보를 불러오고 그것을 애플리케이션 전체 라이프사이클에서 persistent하게 사용하고 싶었다. 그러니까, 대략 이런 코드였다.
 
+```jsx
+import App from 'next/app';
+import '../styles/globals.css';
+
+function MyApp({ Component, pageProps }) {
+  return <Component {...pageProps} />;
+}
+
+MyApp.getInitialProps = async (appContext) => {
+  const appProps = await App.getInitialProps(appContext);
+  const {
+    ctx: { req },
+  } = appContext;
+
+  // 서버사이드라면
+  if (req) {
+    // req에 있는 쿠키든 뭐든 활용해서 유저정보를 가져옴.
+    const user = await fetch userInfo({req})
+
+    // 서버사이드에서는 유저정보를 내려준다.
+    return { ...appProps, user}
+  }
+
+  return { ...appProps };
+};
+
+export default MyApp;
+```
+
+결론적으로, 이런 코드는 해서는 안됐었다.

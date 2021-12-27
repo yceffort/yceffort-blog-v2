@@ -29,10 +29,5 @@
     "incremental": true
   },
   "exclude": ["dist", ".next", "out", "next.config.js"],
-  "include": [
-    "next-env.d.ts",
-    "typing/*.d.ts",
-    "**/*.ts*",
-    "src/utils/Markdown.js"
-  ]
+  "include": ["next-env.d.ts", "typing/*.d.ts", "**/*.ts*"]
 }

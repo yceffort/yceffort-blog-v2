@@ -185,21 +185,20 @@ MyApp.getInitialProps = async (appContext) => {
 export default MyApp;
 ```
 
-결론적으로, 이런 코드는 해서는 안됬었다. 그 이유를 이제 살펴보자. 
+결론적으로, 이런 코드는 해서는 안됬었다. 그 이유를 이제 살펴보자.
 
 `fetchUserInfo`는 물론 빠른 비동기 함수겠지만, 어쩄거나 그 속도에는 차이가 있을 수 밖에 없다. 만약 이 API의 응답속도가 조금씩 다르다면 어떻게 될까? -->
 
-
 ## 환경변수 쓰기 전에 잘 점검하기
 
-| Method              | Set at | Available in Next.js client side rendered code (browser) | Available in Next.js server side rendered code | Available in Node.js | Notes |
-|---------------------|--------|----------------------------------------------------------|------------------------------------------------|----------------------|-------|
-| .env                |   both     |                                                          |                      ✔️                          |        `process.env`를 구조분해할당하거나               |   `process.env`를 구조분해할당하거나 동적으로 접근할 수 없음.    |
-| NEXT_PUBLIC_ .env   |   buildtime     |    ✔️                                                       |               ✔️                                 |                      |    `process.env`를 구조분해할당하거나 동적으로 접근할 수 없음.   |
-| env next.config.js  |   buildtime     |    ✔️                                                      |                  ✔️                              |                      |     `process.env`를 구조분해할당하거나 동적으로 접근할 수 없음.  |
-| publicRuntimeConfig |   runtime     |     ✔️                                                     |                 ✔️                               |                      |  `SSR`을 사용하는 페이지에 필요     |
-| serverRuntimeConfig |   runtime     |                                                          |                   ✔️                             |                      |       |
-| process.env         |   runtime     |                                                          |                                                |     ✔️                 |       |
+| Method              | Set at    | Available in Next.js client side rendered code (browser) | Available in Next.js server side rendered code | Available in Node.js               | Notes                                                       |
+| ------------------- | --------- | -------------------------------------------------------- | ---------------------------------------------- | ---------------------------------- | ----------------------------------------------------------- |
+| .env                | both      |                                                          | ✔️                                             | `process.env`를 구조분해할당하거나 | `process.env`를 구조분해할당하거나 동적으로 접근할 수 없음. |
+| NEXT*PUBLIC* .env   | buildtime | ✔️                                                       | ✔️                                             |                                    | `process.env`를 구조분해할당하거나 동적으로 접근할 수 없음. |
+| env next.config.js  | buildtime | ✔️                                                       | ✔️                                             |                                    | `process.env`를 구조분해할당하거나 동적으로 접근할 수 없음. |
+| publicRuntimeConfig | runtime   | ✔️                                                       | ✔️                                             |                                    | `SSR`을 사용하는 페이지에 필요                              |
+| serverRuntimeConfig | runtime   |                                                          | ✔️                                             |                                    |                                                             |
+| process.env         | runtime   |                                                          |                                                | ✔️                                 |                                                             |
 
 환경 변수에 대한 설정도 잘 확인해야 한다. https://nextjs.org/docs/api-reference/next.config.js/runtime-configuration
 
@@ -207,7 +206,7 @@ export default MyApp;
 
 ## SWC?
 
-SWC가 러스트로 작성되어 타입스크립트나 자바스크립트를 굉장히 빠르게 컴파일한다는 사실 때문에 많은 주목을 받고 있었는데, 이번에 nextjs 12에 swc가 도입되면서 많은 관심을 끌고 있는 것 같았다. 실제로 도입을 해볼까 하고 고민을 했었는데, 결론적으로 도입하지는 않았다. 
+SWC가 러스트로 작성되어 타입스크립트나 자바스크립트를 굉장히 빠르게 컴파일한다는 사실 때문에 많은 주목을 받고 있었는데, 이번에 nextjs 12에 swc가 도입되면서 많은 관심을 끌고 있는 것 같았다. 실제로 도입을 해볼까 하고 고민을 했었는데, 결론적으로 도입하지는 않았다.
 
 본격적으로 적용하기에 앞서, 일단 돌아가고 있는 코드 베이스로도 안되는 문제가 많았고, 여러 다른 개발자로 부터도 이런저런 이슈가 많다는 이야기를 들어서 선뜻 적용하기 망설이고 있었다. (이 블로그는 적용되어 있다.)
 

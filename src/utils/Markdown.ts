@@ -45,19 +45,7 @@ const postPrefix = 'posts/'
 
 function getSizeOfImage(name: string) {
   const path = `public${name}`
-  try {
-    if (process.env.NODE_ENV === 'production') {
-      return (imageInfo as any)[path]
-    } else {
-      return sizeOf(path)
-    }
-  } catch (e) {
-    console.error(`Error while get Size of image. path: ${name} error: ${e}`) // eslint-disable-line no-console
-    return {
-      height: undefined,
-      width: undefined,
-    }
-  }
+  return sizeOf(path)
 }
 
 export async function parseMarkdownToMdx(body: string, path: string) {

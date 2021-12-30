@@ -12,8 +12,6 @@ import visit from 'unist-util-visit'
 import { Node } from 'unist'
 import sizeOf from 'image-size'
 
-import imageInfo from '../../public/imageInfo.json'
-
 type TokenType =
   | 'tag'
   | 'attr-name'

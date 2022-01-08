@@ -2,7 +2,6 @@
 title: 2019년 회고
 date: 2019-12-14 06:25:46
 tags:
-
   - diary
   - TIL
   - retrospective

@@ -1,5 +1,5 @@
 ---
-title: 'nextjs를 적용하면서 알게된 몇가지 사실들'
+title: 'nextjs를 적용하면서 알게 된 사실들'
 tags:
   - javascript
   - nextjs

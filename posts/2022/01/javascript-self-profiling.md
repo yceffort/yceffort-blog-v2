@@ -37,3 +37,18 @@ description: '해봤지만 해보지 않았습니다'
 시간이 지남에 따라서 애플리케이션에서 실행되는 함수 스택의 다이어그램을 한번 상상해보자. 샘플링 프로파일러는 현재 실행중인 스택을 일정한 간격 (이 그림에서는 빨간색 세로줄)에 따라 검사하고 다음과 같이 보고할 것이다.
 
 ![sampling-profiler-in-function](https://calendar.perfplanet.com/images/2021/nic/sampled-profiler-stacks.svg)
+
+일반적으로 우리가 아는 프로파일링의 경우, (앞서 말한 전자의 경우) 정확히 언제 모든 함수가 호출되어서 시작하고, 끝나는지 알 수 있도록 애플리케이션을 추적하는데 중점을 둔다. 그러나 이러한 측정방법은 많은 오버헤드가 있고 측정 중인 애플리케이션의 속도를 늦출 수 있는 위험성이 있다. 물론 그러한 무리수 덕택에(?) 함수에서 소비되는 상대적으로 정확한 시간을 측정할 수 있다. 이러한 프로파일링은 방문자의 애플리케이션 속도를 떨어뜨리기 때문에 실제로는 거의 사용되지 않는다. 그러나 샘플링 프로파일러는 이러한 성능에 대한 영향이 훨씬 작으므로 실무에서 더 많이 쓰인다.
+
+> https://www.igvita.com/slides/2012/structural-and-sampling-javascript-profiling-in-chrome.pdf
+
+## 샘플링 프로파일링의 다운사이드
+
+물론 이러한 방법이 장점만 있는 것은 아니다. 오버헤드를 줄이는 데에는 유용할 수 있지만, 캡처된 데이터가 잘못되는 경우도 발생할 수 있다.
+
+예를 들어, 콜 스택에서 샘플 8개가 10ms 간격으로 추출되는 상황을 가정해보자.
+
+![sampling-profiler-in-function](https://calendar.perfplanet.com/images/2021/nic/sampled-profiler-stacks.svg)
+
+
+

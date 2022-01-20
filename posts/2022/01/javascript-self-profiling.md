@@ -50,5 +50,4 @@ description: '해봤지만 해보지 않았습니다'
 
 ![sampling-profiler-in-function](https://calendar.perfplanet.com/images/2021/nic/sampled-profiler-stacks.svg)
 
-
-
+프로파일러가 알 수 있는 것은 이것이 최선이기 때문에, 샘플링된 프로파일러가 해당 스택을 빨간 세로선 기준으로 검사하는 경우 스택에서 보낸 시간을 다음과 같이 보고할 것이다.

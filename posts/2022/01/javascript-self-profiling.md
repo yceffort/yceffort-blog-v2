@@ -37,5 +37,3 @@ description: '해봤지만 해보지 않았습니다'
 시간이 지남에 따라서 애플리케이션에서 실행되는 함수 스택의 다이어그램을 한번 상상해보자. 샘플링 프로파일러는 현재 실행중인 스택을 일정한 간격 (이 그림에서는 빨간색 세로줄)에 따라 검사하고 다음과 같이 보고할 것이다.
 
 ![sampling-profiler-in-function](https://calendar.perfplanet.com/images/2021/nic/sampled-profiler-stacks.svg)
-
-

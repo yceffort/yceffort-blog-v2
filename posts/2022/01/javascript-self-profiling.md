@@ -88,3 +88,88 @@ description: '해봤지만 해보지 않았습니다'
 ## API
 
 ### Document Policy
+
+Javascript Self-Profiling API를 호출하려면, HTML 페이지에 `js-profiling`이라고 하는 [문서 정책](https://w3c.github.io/webappsec-permissions-policy/document-policy.html)이 있어야 한다. 일반적으로 `Document-Policy`라고 하는 HTTP 응답헤더 또는 `<iframe policy="">`를 통해 구현할 수 있다.
+
+```
+Document-Policy: js-profiling
+```
+
+이 옵션이 되면, 써드파티 스크립트를 포함해서 모든 자바스크립트가 프로파일링을 시작할 수 있다.
+
+### API
+
+JS Self-Profiling API는 [Profiler](https://wicg.github.io/js-self-profiling/#the-profiler-interface) 객체를 new로 선언하여 사용할 수 있다.
+
+샘플 프로파일러 객체가 만들어지면, 나중에 언제든 `.stop()`을 호출하여 프로파일링을 멈추고 추적 내역을 받을 수 있다.
+
+```javascript
+// Profiler를 지원하는지 확인
+if (typeof window.Profiler === "function")
+{
+  var profiler = new Profiler({ sampleInterval: 10, maxBufferSize: 10000 });
+  profiler.stop().then(function(trace) {
+    sendProfile(trace);
+  });
+}
+```
+
+```javascript
+if (typeof window.Profiler === "function")
+{
+  const profiler = new Profiler({ sampleInterval: 10, maxBufferSize: 10000 });
+  var trace = await profiler.stop();
+  sendProfile(trace);
+}  
+```
+
+여기에 두가지 옵션을 확인할 수 있다.
+
+- `sampleInterval`: 애플리케이션에서 필요로하는 샘플 간격 (밀리 초)다. 시작한 뒤부터, `profiler.sampleInterval`로 접근 가능하다.
+- `maxBufferSize`: 샘플 수로 측정할 수 있는, 원하는 샘플 버퍼의 크기다.
+
+시작하자마자 바로 시작되는 것은 아니고, 프로파일러를 위한 준비를 브라우저에서 해야 하므로, 약간의 지연이 걸린다. 일반적으로, 데스크톱과 모바일에서 새 프로파일이 시작되는데 보통 1~2ms가 걸리는 것으로 보인다.
+
+### Sample Interval
+
+`sampleInterval`는 브라우저가 자바스크립트의 호출 스택 샘플을 가져오는 빈도를 결정한다. 측정 오버헤드가 없는 한에서, 가능한 정확히 데이터를 제공할 수 있는 좁은 구간을 선택하는 것이 좋다.
+
+스펙 문서에서는, 사용자가 0 이상의 값을 지정해야 한다고 되어 있으며, user agent를 통해서 이러한 샘플링 속도를 선택할 수 있다.
+
+실제로 Chrome 96이상에서 지원하는 최소 샘플링간경은 다음과 같다.
+
+- 윈도우: 16ms
+- 맥, 리눅스, 안드로이드: 10ms
+  
+이 말인 즉슨, 아무리 1이나 0을 선택해도 운영체제에 따라 만 최소 10ms내지 16ms만 가능하다는 것이다. `.sampleInterval`을 활용하면 언제든 현재 샘플링 레이트를 확인할 수 있다.
+
+```javascript
+const profiler = new Profiler({ sampleInterval: 1, maxBufferSize: 10000 });
+console.log(profiler.sampleInterval);
+```
+
+이와는 별개로, 크롬에서는 실제 샘플링 간격이 최소 값의 다음 배수로 올라간다. 예를 들어, 안드로이드에서 91~99ms를 지정한다면 100ms가 실제로는 부여된다.
+
+### Buffer
+
+또 다르게 추적에 사용할 수 있는 값은 `maxBufferSize` 다. 이 값은 프로파일러가 자체적으로 중단하기 전에 수집할 수 있는 최대 샘플 크기를 의미한다.
+
+예를 들어, `sampleInterval: 100`, `maxBufferSize: 10`를 지정하는 경우 100ms간 10개의 샘플을 얻을 수 있게 되는 것이다. 만약 이 버퍼가 다 차게 되면, `samplebufferfull` 이벤트가 발생하게 되고 더이상 샘플을 수집하지 않게 된다.
+
+```javascript
+if (typeof window.Profiler === "function")
+{
+  const profiler = new Profiler({ sampleInterval: 10, maxBufferSize: 10000 });
+
+  function collectAndSendProfile() {
+    if (profiler.stopped) return;
+
+    sendProfile(await profiler.stop());
+  }
+
+  profiler.addEventListener('samplebufferfull', collectAndSendProfile);
+
+  // do work, or listen for some other event, then:
+  // collectAndSendProfile();
+}
+```

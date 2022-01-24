@@ -272,10 +272,15 @@ const observer = new PerformanceObserver(function (list) {
 
 `Profiler.stop()`의 Promise 콜백에서 리턴되는 trace 객체는 [여기](https://github.com/WICG/js-self-profiling/blob/main/README.md#appendix-profile-format)에 설명되어 있으며, 주요 내용은 아래와 같다.
 
-- `frames`
-- `resources`
-- `samples`
-- `stacks`
+- `frames`: 프레임의 배열, 즉 스택의 일부 일 수 있응 개별함수들을 포함한다.
+  - `innerHTML`과 같은 DOM 함수도 볼 수 있으며, 여기에는 심지어 `Profiler` 자체도 포함될 수 있다.
+  - 만약 이름이 없는 경우, `<script>` 이거나 외부 자바스크립트 파일의 루트에서 실행될 자바스크립트일 가능성이 높다.
+- `resources`: trace에 프레임이 있는 함수가 포함된 모든 리소스의 배열이 포함된다.
+  - 페이지 그 자체가 배열의 첫번째 인 경우가 많으며, 다른 외부 자바스크립트 파일 또는 페이지가 뒤이어 나타난다.
+- `samples`: 실제 프로파일러 샘플이며, 발생한 시점에 해당하는 타임스탬프가 있고, `stackId`가 해당 시간된 스택을 가리킨다.
+  - 만약 `stackId`가 없다면 해당 시간에는 아무것도 실행되지 않은 것이다.
+- `stacks`: 스택위에서 실행중인 프레임의 배열이 포함되어 있다.
+  - 각 스택은 `parentId`를 가질 수 있는데, 이를 호출한 함수에 대해 트리의 다음 노드에 매핑된다.
 
 ```json
 {
@@ -305,3 +310,55 @@ const observer = new PerformanceObserver(function (list) {
   ]
 }
 ```
+
+시간이 지남에 따라 무엇이 실행되었는지 확인하기 위해 샘플 배열을 살펴보자.
+
+```json
+"samples": [
+  ...
+  { "stackId": 3, "timestamp": 228.59999990463257 }, // app.js:A()->B()
+  ...
+]
+```
+
+만약 샘플이 `stackId`를 가지고 있지 않다면, 아무것도 실행되지 않은 것이다.
+
+만약 포함된 경우, `stacks`에서 해당 아이디를 참조할 수 있다.
+
+```json
+"stacks": [
+  ...
+  2: { "frameId": 3 }, // A()
+  3: { "frameId": 4, "parentId": 2 } // A()->B()
+]
+```
+
+`stackId` 3은 `frameId` 4 임을 알 수 있는데, 이는 `parentId` 2를 가진다.
+
+`parentId`를 재귀적으로 체이닝 하다보면, 전체 스택을 볼 수 있다. 이 경우, 이 스택에는 두개의 프레임만 존재한다.
+
+```
+frameId:4
+frameId:3
+```
+
+이 `frameId`로, `frames`을 살펴보면
+
+```json
+"frames": [
+...
+  3: { "column": 10, "line": 10, "name": "A", "resourceId": 1 } // A() in app.js
+  4: { "column": 20, "line": 20, "name": "B", "resourceId": 1 } // B() in app.js
+],
+```
+
+따라서 위의 `228.59999990463257`에 있는 샘플 스택은 다음과 같다.
+
+```
+B()
+A()
+```
+
+이 말은, `A()`가 `B()`를 호출했다는 것이다.
+
+## Beaconing

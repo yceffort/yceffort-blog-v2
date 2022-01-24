@@ -255,3 +255,53 @@ const observer = new PerformanceObserver(function (list) {
   })
 }).observe({ type: 'event', buffered: true })
 ```
+
+### 페이지 로드
+
+만약 페이지 로드 프로세스 전체를 프로파일링 하려면, 문서의 `<head>`에 다른 스크립트보다 먼저 인라인 스크립트를 삽입하여 프로파일러를 시작하는 것이 좋다.
+
+그렇게 하면 추적을 처리하고 전송하기 전에 미리 페이지의 `onload` 이벤트와 딜레이를 기다릴 수 있다.
+
+또한 `pageHide` 나 `visibilitychange` 이벤트에 리스너를 달아서 페이지가 완전히 로드되기전에 페이지를 떠나는지 확인하는 후 프로파일링을 전송할 수 있다.
+
+> `unload` 이벤트에서는 약간의 문제가 있다.
+
+긴 작업이나 EventTiming 이벤트와 같이 페이지 로드 프로세스에서 지표나 이벤트를 측정하는 경우, 이벤트가 어떻게 실행되었는지 이해하기 위해 샘플 프로파일러를 사용하면 유용할 수 있다.
+
+## 프로파일 살펴보기
+
+`Profiler.stop()`의 Promise 콜백에서 리턴되는 trace 객체는 [여기](https://github.com/WICG/js-self-profiling/blob/main/README.md#appendix-profile-format)에 설명되어 있으며, 주요 내용은 아래와 같다.
+
+- `frames`
+- `resources`
+- `samples`
+- `stacks`
+
+```json
+{
+  "frames": [
+    { "name": "Profiler" }, // the Profiler itself
+    { "column": 0, "line": 100, "name": "", "resourceId": 0 }, // un-named function in root HTML page
+    { "name": "set innerHTML" }, // DOM function
+    { "column": 10, "line": 10, "name": "A", "resourceId": 1 } // A() in app.js
+    { "column": 20, "line": 20, "name": "B", "resourceId": 1 } // B() in app.js
+  ],
+  "resources": [
+    "https://example.com/page",
+    "https://example.com/app.js",
+  ],
+  "samples": [
+      { "stackId": 0, "timestamp": 161.99500000476837 }, // Profiler
+      { "stackId": 2, "timestamp": 182.43499994277954 }, // app.js:A()
+      { "timestamp": 197.43499994277954 }, // nothing running
+      { "timestamp": 213.32999992370605 }, // nothing running
+      { "stackId": 3, "timestamp": 228.59999990463257 }, // app.js:A()->B()
+  ],
+  "stacks": [
+    { "frameId": 0 }, // Profiler
+    { "frameId": 2 }, // set innerHTML
+    { "frameId": 3 }, // A()
+    { "frameId": 4, "parentId": 2 } // A()->B()
+  ]
+}
+```

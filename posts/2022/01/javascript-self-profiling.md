@@ -207,12 +207,12 @@ https://caniuse.com/mdn-api_profiler
 
 ```javascript
 function loadExpensiveThirdParty() {
-  const profiler = new Profiler({ sampleInterval: 10, maxBufferSize: 1000 });
+  const profiler = new Profiler({ sampleInterval: 10, maxBufferSize: 1000 })
 
   loadThirdParty(async function onThirdPartyComplete() {
-      var trace = await profiler.stop();
-      sendProfile(trace);
-  });
+    var trace = await profiler.stop()
+    sendProfile(trace)
+  })
 }
 ```
 
@@ -230,23 +230,28 @@ function loadExpensiveThirdParty() {
 만약, 인터랙션이 프로파일러를 시작할 때 까지 기다린다면 앞서 언급한 것 처럼 1~2m정도의 시간이 소요된다.
 
 ```javascript
-let profiler = new Profiler({ sampleInterval: interval, maxBufferSize: 10000 });
+let profiler = new Profiler({ sampleInterval: interval, maxBufferSize: 10000 })
 
-const observer = new PerformanceObserver(function(list) {
-    const perfEntries = list.getEntries().forEach(entry => {
-        if (profiler && !profiler.stopped && entry.name === 'click') {
-            profiler.stop().then(function(trace) {
-                const filteredSamples = trace.samples.filter(function(sample) {
-                    return sample.timestamp >= entry.startTime && sample.timestamp <= entry.processingEnd;
-                });
+const observer = new PerformanceObserver(function (list) {
+  const perfEntries = list.getEntries().forEach((entry) => {
+    if (profiler && !profiler.stopped && entry.name === 'click') {
+      profiler.stop().then(function (trace) {
+        const filteredSamples = trace.samples.filter(function (sample) {
+          return (
+            sample.timestamp >= entry.startTime &&
+            sample.timestamp <= entry.processingEnd
+          )
+        })
 
-                // do something with the filteredSamples and the event
+        // do something with the filteredSamples and the event
 
-                // start a new profiler
-                profiler = new Profiler({ sampleInterval: interval, maxBufferSize: 10000 });
-            });
-        }
-    });
-})
-.observe({type: 'event', buffered: true});
+        // start a new profiler
+        profiler = new Profiler({
+          sampleInterval: interval,
+          maxBufferSize: 10000,
+        })
+      })
+    }
+  })
+}).observe({ type: 'event', buffered: true })
 ```

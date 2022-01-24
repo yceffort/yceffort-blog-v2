@@ -9,6 +9,10 @@ date: 2022-01-20 21:54:46
 description: '해봤지만 해보지 않았습니다'
 ---
 
+## Table of Contents
+
+## Introduction
+
 자바스크립트를 프로파일링 할 수 있는 api가 있다. https://wicg.github.io/js-self-profiling/ 이 api를 활용하면 실제 고객의 디바이스에서 자바스크립트 웹 애플리케이션의 성능 프로파일을 가져올 수 있다. 즉, 브라우저 개발자 도구에서 로컬 머신 (컴퓨터)로 애플리케이션을 프로파일링 하는 수준 이상을 해볼 수 있다. 애플리케이션을 프로파일링하는 것을 성능을 파악할 수 있는 좋은 방법이다. 프로파일을 활용해서 시간이 지남에 따라 실행되는 항목 (스택)을 확인하고 코드에서 성능에 문제가 되는 핫스팟을 식별할 수 있도록 도와준다.
 
 브라우저에서 개발자 도구를 사용해 봤다면, 자바스크립트 프로파일리에 익숙할 수 있다. 예를 들어, 크롬 브라우저의 개발자도구에서 성능탭을 보면 프로파일을 기록할 수 있다. 이 프로파일은 시간이 지남에 따라 애플리케이션에서 실행 중인 내용을 보여준다.
@@ -105,22 +109,20 @@ JS Self-Profiling API는 [Profiler](https://wicg.github.io/js-self-profiling/#th
 
 ```javascript
 // Profiler를 지원하는지 확인
-if (typeof window.Profiler === "function")
-{
-  var profiler = new Profiler({ sampleInterval: 10, maxBufferSize: 10000 });
-  profiler.stop().then(function(trace) {
-    sendProfile(trace);
-  });
+if (typeof window.Profiler === 'function') {
+  var profiler = new Profiler({ sampleInterval: 10, maxBufferSize: 10000 })
+  profiler.stop().then(function (trace) {
+    sendProfile(trace)
+  })
 }
 ```
 
 ```javascript
-if (typeof window.Profiler === "function")
-{
-  const profiler = new Profiler({ sampleInterval: 10, maxBufferSize: 10000 });
-  var trace = await profiler.stop();
-  sendProfile(trace);
-}  
+if (typeof window.Profiler === 'function') {
+  const profiler = new Profiler({ sampleInterval: 10, maxBufferSize: 10000 })
+  var trace = await profiler.stop()
+  sendProfile(trace)
+}
 ```
 
 여기에 두가지 옵션을 확인할 수 있다.
@@ -140,12 +142,12 @@ if (typeof window.Profiler === "function")
 
 - 윈도우: 16ms
 - 맥, 리눅스, 안드로이드: 10ms
-  
+
 이 말인 즉슨, 아무리 1이나 0을 선택해도 운영체제에 따라 만 최소 10ms내지 16ms만 가능하다는 것이다. `.sampleInterval`을 활용하면 언제든 현재 샘플링 레이트를 확인할 수 있다.
 
 ```javascript
-const profiler = new Profiler({ sampleInterval: 1, maxBufferSize: 10000 });
-console.log(profiler.sampleInterval);
+const profiler = new Profiler({ sampleInterval: 1, maxBufferSize: 10000 })
+console.log(profiler.sampleInterval)
 ```
 
 이와는 별개로, 크롬에서는 실제 샘플링 간격이 최소 값의 다음 배수로 올라간다. 예를 들어, 안드로이드에서 91~99ms를 지정한다면 100ms가 실제로는 부여된다.
@@ -157,19 +159,94 @@ console.log(profiler.sampleInterval);
 예를 들어, `sampleInterval: 100`, `maxBufferSize: 10`를 지정하는 경우 100ms간 10개의 샘플을 얻을 수 있게 되는 것이다. 만약 이 버퍼가 다 차게 되면, `samplebufferfull` 이벤트가 발생하게 되고 더이상 샘플을 수집하지 않게 된다.
 
 ```javascript
-if (typeof window.Profiler === "function")
-{
-  const profiler = new Profiler({ sampleInterval: 10, maxBufferSize: 10000 });
+if (typeof window.Profiler === 'function') {
+  const profiler = new Profiler({ sampleInterval: 10, maxBufferSize: 10000 })
 
   function collectAndSendProfile() {
-    if (profiler.stopped) return;
+    if (profiler.stopped) return
 
-    sendProfile(await profiler.stop());
+    sendProfile(await profiler.stop())
   }
 
-  profiler.addEventListener('samplebufferfull', collectAndSendProfile);
+  profiler.addEventListener('samplebufferfull', collectAndSendProfile)
 
   // do work, or listen for some other event, then:
   // collectAndSendProfile();
 }
+```
+
+## 누구를 프로파일 할까
+
+모든 방문자에 대해 샘플 프로파일러를 활성화 하면 될까? 아마도 그건 무리일 것이다. 물론 오버헤드는 무시할 만큼 작아보일 수도 있지만, 모든 방문객에게 이 데이터를 추출하고 수집하는데 부담을 주는 것은 좋지 못하다.
+
+이상적으로는, 샘플 프로파일러도 표본으로 (sample) 추출하는 것이 좋다.
+
+예를 들어 방문자의 10%, 1%, 0.1%에 대해 이 기능을 키는 것을 고려할 수 있다. 모든 사용자에게 키지 말아야할 이유는 다름과 같다.
+
+- 최소 수준인 것을 감안하더라도, 샘플링을 활성화 하는 것은 비용이 발생하므로 모든 방문자를 지연 시키는 것은 좋지 못하다.
+- 샘플링 프로파일러 추적에 의해 발생하는 데이터의 양은 상당하기 때문에, 이 데이터를 모두 서버에서 처리한다면 좋지 못하다.
+- 현재 기준으로 이 api를 지원하는 브라우저는 크롬 뿐이므로 브라우저 편향적인 데이터를 수집하게 된다.
+
+위와 같은 요소를 고려해봤을 때, 특정 페이지 로드 샘플 혹은 특정 방문자 샘플에 대해 프로파일러를 하는 것이 이상적이다.
+
+https://caniuse.com/mdn-api_profiler
+
+## 언제 프로파일 할까
+
+언제 프로파일이 시작되어야 할까? 여기에는 특정 이벤트, 사용자 인러택션, 전체 페이지 로드 그 자체 등 여러가지 세션 중에 프로파일링을 활용할 수 있는 다양한 방법이 있다.
+
+### 특정 작업
+
+애플리케이션은 방문자를 위해 규칙적으로 실행되는 몇가지 복잡한 작업을 가지고 있을 것이다.
+
+이러한 작업을 기준으로 측정한다면, 코드가 실제로 어떻게 흘러가고 수행되는지 모를 때 유용할 수 있다. 이는 호출하는데 얼마나 많은 비용이 드는지 모르는 써드파티 스크립트를 호출 할 때 유용하다.
+
+이러한 작업을 위해서는, Profiler를 단순히 작업의 시작과 끝에 작동과 중지를 하면 된다.
+
+캡쳐한 이 데이터는 프로파일링하는 코드를 알 수 있을 뿐만 아니라, 작업이 다른 코드와 경쟁적으로 일어나고 있는지도 파악할 수 있다.
+
+```javascript
+function loadExpensiveThirdParty() {
+  const profiler = new Profiler({ sampleInterval: 10, maxBufferSize: 1000 });
+
+  loadThirdParty(async function onThirdPartyComplete() {
+      var trace = await profiler.stop();
+      sendProfile(trace);
+  });
+}
+```
+
+### 유저 인터랙션
+
+유저 인터랙션은 [First Input Delay](https://web.dev/fid/)와 같은 메트릭이 중요할 때 사용하는 것이 좋다.
+
+사용자 인터랙션을 측정하기 위해, 프로파일러를 시작하는 타이밍과 관련하여 몇가지 방법을 생각해 볼 수 있다.
+
+- 일단 한개는 항상 실행시킨다. 그리고 사용자가 인터랙션을 한다면, 이벤트 전후의 짧은 시간으로 이벤트를 잘라낸다.
+  - 만약 `EventTiming`을 사용하고 활성화된 Profiler가 있다면, 이벤트의 `startTime`에서 `processingEnd`까지 측정하여 이벤트 실행전, 중, 결과로 실행된 내용을 파악할 수 있다.
+- 마우스가 이동하거나 clickable한 대상으로 이동하기 시작하면 프로파일러 켜기
+- 사용자가 인터랙션을 수행할 것으로 예상되는 이벤트 (마우스 다운)과 같은 이벤트가 발생하면 프로파일러 켜기
+
+만약, 인터랙션이 프로파일러를 시작할 때 까지 기다린다면 앞서 언급한 것 처럼 1~2m정도의 시간이 소요된다.
+
+```javascript
+let profiler = new Profiler({ sampleInterval: interval, maxBufferSize: 10000 });
+
+const observer = new PerformanceObserver(function(list) {
+    const perfEntries = list.getEntries().forEach(entry => {
+        if (profiler && !profiler.stopped && entry.name === 'click') {
+            profiler.stop().then(function(trace) {
+                const filteredSamples = trace.samples.filter(function(sample) {
+                    return sample.timestamp >= entry.startTime && sample.timestamp <= entry.processingEnd;
+                });
+
+                // do something with the filteredSamples and the event
+
+                // start a new profiler
+                profiler = new Profiler({ sampleInterval: interval, maxBufferSize: 10000 });
+            });
+        }
+    });
+})
+.observe({type: 'event', buffered: true});
 ```

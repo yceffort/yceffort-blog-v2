@@ -31,7 +31,7 @@ async function retreiveAllPosts(): Promise<Array<Post>> {
         frontMatter: {
           ...fm,
           tags,
-          date: new Date(date).getTime() - 9 * 60 * 60 * 1000, // 한국시간
+          date: new Date(date).getTime(),
         },
         body,
         fields: {

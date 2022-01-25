@@ -3,7 +3,7 @@ export interface FrontMatter {
   category: string
   tags: string[]
   published: boolean
-  date: number
+  date: string
   description: string
   template: string
   path: string

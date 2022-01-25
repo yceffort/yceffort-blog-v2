@@ -31,7 +31,7 @@ async function retreiveAllPosts(): Promise<Array<Post>> {
         frontMatter: {
           ...fm,
           tags,
-          date: new Date(date).getTime(),
+          date: new Date(date).toISOString().substring(0, 19),
         },
         body,
         fields: {
@@ -44,7 +44,15 @@ async function retreiveAllPosts(): Promise<Array<Post>> {
     }
   }
 
-  return posts.sort((a, b) => b.frontMatter.date - a.frontMatter.date)
+  return posts.sort((a, b) => {
+    if (a.frontMatter.date < b.frontMatter.date) {
+      return 1
+    }
+    if (a.frontMatter.date > b.frontMatter.date) {
+      return -1
+    }
+    return 0
+  })
 }
 
 export const getAllPosts: () => Promise<Array<Post>> = memoize(retreiveAllPosts)

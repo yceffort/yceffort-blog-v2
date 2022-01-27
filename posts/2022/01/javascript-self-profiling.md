@@ -392,8 +392,53 @@ CPU 에 약간 투자할 여유가 있다면, 업로드하기전에 데이터 �
 
 문자열 데이터에 적용할 수 있는 압축방법은 다양하므로, 원하는 방법을 적용해 보는 것이 좋다.
 
-## 프로파일 분석하기
+## 팁
 
-이제 데이터를 받았다면, 분석을 해봐야 한다. 분석은 먼저 개별 프로파일링을 분석하는 법 (디버깅)과 대량의 데이터를 분석하는 법 (집계) 로 나누어 살펴보자.
+### minified javascript
 
-### 개별 프로파일
+만약 application에 minified 된 javascript가 있다면 프로파일에는 minified된 함수 명이 리포트 될 것이다. 이를 해결하기 위해서는 소스맵 등이 필요할 것이다.
+
+### 기명함수와 익명함수
+
+익명 함수가 있다면 이로 인해 많은 귀찮은 것들이 발생한다.
+
+```javascript
+{
+  "frames": [
+    ...
+    { "column": 0, "line": 10, "name": "", "resourceId": 0 }, // un-named function in root HTML page
+    { "column": 0, "line": 52, "name": "", "resourceId": 0 }, // another un-named function in root HTML page
+    ...
+  ],
+```
+
+이러한 현상을 방지하기 위해서는
+
+```html
+<script>
+// start some work
+</script>
+```
+
+대신
+
+```html
+<script>
+(function initializeThirdPartyInHTML() {
+  // start some work
+})();
+</script>
+```
+
+와 같은 즉시 실행 기명 함수를 사용하는 것이 좋다.
+
+```javascript
+{
+  "frames": [
+    ...
+    { "column": 0, "line": 10, "name": "initializeThirdPartyInHtml", "resourceId": 0 }, // now with 100% more name!
+    { "column": 0, "line": 52, "name": "doOtherWorkInHtml", "resourceId": 0 },
+    ...
+  ],
+```
+

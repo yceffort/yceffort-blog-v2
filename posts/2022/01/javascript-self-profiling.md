@@ -416,7 +416,7 @@ CPU 에 약간 투자할 여유가 있다면, 업로드하기전에 데이터 �
 
 ```html
 <script>
-// start some work
+  // start some work
 </script>
 ```
 
@@ -424,9 +424,9 @@ CPU 에 약간 투자할 여유가 있다면, 업로드하기전에 데이터 �
 
 ```html
 <script>
-(function initializeThirdPartyInHTML() {
-  // start some work
-})();
+  ;(function initializeThirdPartyInHTML() {
+    // start some work
+  })()
 </script>
 ```
 
@@ -441,4 +441,3 @@ CPU 에 약간 투자할 여유가 있다면, 업로드하기전에 데이터 �
     ...
   ],
 ```
-

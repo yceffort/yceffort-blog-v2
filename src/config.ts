@@ -1,4 +1,4 @@
-import getContactHref from '#constants/Contact'
+import getContactHref from '#utils/Contact'
 
 export const SiteConfig = {
   url: 'https://yceffort.kr',

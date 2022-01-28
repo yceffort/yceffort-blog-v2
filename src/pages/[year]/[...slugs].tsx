@@ -1,7 +1,7 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote'
 
-import { Post } from '#commons/types'
+import { Post } from '#src/type'
 import { parseMarkdownToMdx } from '#utils/Markdown'
 import PostLayout from '#components/layouts/Post'
 import MdxComponents from '#components/MDXComponents'

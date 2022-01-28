@@ -4,7 +4,7 @@ import glob from 'glob'
 import memoize from 'memoizee'
 import frontMatter from 'front-matter'
 
-import { FrontMatter, Post, TagWithCount } from '../common/types'
+import { FrontMatter, Post, TagWithCount } from '../type'
 
 const DIR_REPLACE_STRING = '/posts'
 

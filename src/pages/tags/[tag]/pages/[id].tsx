@@ -1,8 +1,8 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
 
 import { SiteConfig } from '#src/config'
-import { DEFAULT_NUMBER_OF_POSTS } from '#commons/const'
-import { Post } from '#commons/types'
+import { DEFAULT_NUMBER_OF_POSTS } from '#constants/index'
+import { Post } from '#src/type'
 import { getAllPosts, getAllTagsFromPosts } from '#utils/Post'
 import { PageSeo } from '#components/SEO'
 import ListLayout from '#components/layouts/List'

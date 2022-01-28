@@ -17,7 +17,7 @@ async function retreiveAllPosts(): Promise<Array<Post>> {
   for await (const f of files) {
     const file = await fs.promises.readFile(f, { encoding: 'utf8' })
     const { attributes, body } = frontMatter(file)
-    const fm: FrontMatter = attributes as any
+    const fm: FrontMatter = attributes as FrontMatter
     const { tags: fmTags, published, date } = fm
 
     const slug = f

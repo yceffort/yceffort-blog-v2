@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 
-import { Post } from '#commons/types'
+import { Post } from '#src/type'
 import CustomLink from '#components/Link'
 import Tag from '#components/Tag'
 

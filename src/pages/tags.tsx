@@ -5,7 +5,7 @@ import { PageSeo } from '#components/SEO'
 import { SiteConfig } from '#src/config'
 import Tag from '#components/Tag'
 import CustomLink from '#components/Link'
-import { TagWithCount } from '#commons/types'
+import { TagWithCount } from '#src/type'
 
 export default function Tags({ tags }: { tags: TagWithCount[] }) {
   return (

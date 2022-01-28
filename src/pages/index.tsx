@@ -1,15 +1,13 @@
 import { GetStaticProps } from 'next'
 import { format } from 'date-fns'
 
-import { Post } from '#commons/types'
+import { Post } from '#src/type'
 import { PageSeo } from '#components/SEO'
 import { SiteConfig } from '#src/config'
 import CustomLink from '#components/Link'
 import Tag from '#components/Tag'
-import { DEFAULT_NUMBER_OF_POSTS } from '#commons/const'
+import { DEFAULT_NUMBER_OF_POSTS } from '#constants/index'
 import { getAllPosts } from '#utils/Post'
-
-const MAX_DISPLAY = 5
 
 export default function Home({ posts }: { posts: Array<Post> }) {
   return (
@@ -30,7 +28,7 @@ export default function Home({ posts }: { posts: Array<Post> }) {
         </div>
         <ul className="divide-y divide-gray-200 dark:divide-gray-700">
           {posts
-            .slice(0, MAX_DISPLAY)
+            .slice(0, DEFAULT_NUMBER_OF_POSTS)
             .map(({ frontMatter: frontmatter, fields: { slug } }) => {
               const { date, title, tags, description } = frontmatter
               const updatedAt = format(new Date(date), 'yyyy-MM-dd')

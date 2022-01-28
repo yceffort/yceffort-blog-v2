@@ -2,7 +2,7 @@ import { useTheme } from 'next-themes'
 
 import Sun from '#components/icons/themes/sun'
 import Moon from '#components/icons/themes/moon'
-import { Theme } from '#constants/Theme'
+import { Theme } from '#constants/index'
 
 const ThemeSwitch = () => {
   const { theme, setTheme } = useTheme()

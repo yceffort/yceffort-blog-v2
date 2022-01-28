@@ -20,7 +20,7 @@
     "typeRoots": ["./typings", "./node_modules/@types"],
     "paths": {
       "#public/*": ["public/*"],
-      "#commons/*": ["src/common/*"],
+      "#commons/*": ["src/type/*"],
       "#components/*": ["src/components/*"],
       "#constants/*": ["src/constants/*"],
       "#utils/*": ["src/utils/*"],

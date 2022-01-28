@@ -2,7 +2,7 @@ import { format } from 'date-fns'
 import Image from 'next/image'
 import { PropsWithChildren } from 'react'
 
-import { FrontMatter } from '#commons/types'
+import { FrontMatter } from '#src/type'
 import SectionContainer from '#components/SectionContainer'
 import { BlogSeo } from '#components/SEO'
 import Tag from '#components/Tag'

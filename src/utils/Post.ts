@@ -12,47 +12,49 @@ const POST_PATH = `${process.cwd()}${DIR_REPLACE_STRING}`
 
 async function retreiveAllPosts(): Promise<Array<Post>> {
   const files = glob.sync(`${POST_PATH}/**/*.md`).reverse()
-  const posts: Array<Post> = []
 
-  for await (const f of files) {
-    const file = await fs.promises.readFile(f, { encoding: 'utf8' })
-    const { attributes, body } = frontMatter(file)
-    const fm: FrontMatter = attributes as FrontMatter
-    const { tags: fmTags, published, date } = fm
+  const posts = files
+    .reduce((prev, f) => {
+      const file = fs.readFileSync(f, { encoding: 'utf8' })
+      const { attributes, body } = frontMatter(file)
+      const fm: FrontMatter = attributes as FrontMatter
+      const { tags: fmTags, published, date } = fm
 
-    const slug = f
-      .slice(f.indexOf(DIR_REPLACE_STRING) + DIR_REPLACE_STRING.length + 1)
-      .replace('.md', '')
+      const slug = f
+        .slice(f.indexOf(DIR_REPLACE_STRING) + DIR_REPLACE_STRING.length + 1)
+        .replace('.md', '')
 
-    if (published) {
-      const tags: string[] = (fmTags || []).map((tag: string) => tag.trim())
+      if (published) {
+        const tags: string[] = (fmTags || []).map((tag: string) => tag.trim())
 
-      const result: Post = {
-        frontMatter: {
-          ...fm,
-          tags,
-          date: new Date(date).toISOString().substring(0, 19),
-        },
-        body,
-        fields: {
-          slug,
-        },
-        path: f,
+        const result: Post = {
+          frontMatter: {
+            ...fm,
+            tags,
+            date: new Date(date).toISOString().substring(0, 19),
+          },
+          body,
+          fields: {
+            slug,
+          },
+          path: f,
+        }
+
+        return [...prev, result]
       }
+      return prev
+    }, [] as Post[])
+    .sort((a, b) => {
+      if (a.frontMatter.date < b.frontMatter.date) {
+        return 1
+      }
+      if (a.frontMatter.date > b.frontMatter.date) {
+        return -1
+      }
+      return 0
+    })
 
-      posts.push(result)
-    }
-  }
-
-  return posts.sort((a, b) => {
-    if (a.frontMatter.date < b.frontMatter.date) {
-      return 1
-    }
-    if (a.frontMatter.date > b.frontMatter.date) {
-      return -1
-    }
-    return 0
-  })
+  return posts
 }
 
 export const getAllPosts: () => Promise<Array<Post>> = memoize(retreiveAllPosts)

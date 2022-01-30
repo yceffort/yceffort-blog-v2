@@ -113,3 +113,11 @@ RSC 서버 컴포넌트를 렌더링하기 위해서 실제로 어떤 일이 일
 
 ### 1. 서버가 렌더링 요청을 받는다.
 
+서버가 렌더링 과정의일부를 수행해야 하므로, 페이지의 라이프 사이클은 항상 서버에서 시작된다. 이 중 'root' 컴포넌트는 항상 서버 컴포넌트고, 다른 서버 또는 클라이언트를 렌더링할 수 있다. 서버는 요청에 전달된 정보에 따라 서버 컴포넌트와 어떤 props를 사용할지 결정한다. 이러한 요청은 일반적으로 특정 URL에서 페이지를 요청하는 형태로 나온다.
+
+- https://shopify.dev/custom-storefronts/hydrogen/framework/server-state
+- https://github.com/reactjs/server-components-demo/blob/main/server/api.server.js
+
+### 2. 서버가 루트 컴포넌트 엘리먼트를 JSON으로 직렬화
+
+여기에서 최종 목표는 최초 root 서버 컴포넌트를 기본 html 태그와 클라이언트 컴포넌트 placeholder 트리로 렌더링하는 것이다. 그리고 이 트리를 직렬화하여 (json으로) 브라우저로 보내면, 브라우저가 이를 다시 역직렬화 하여 클라이언트 placeholder에 실제 클라이언트 컴포넌트를 채우고 최종 겨로가를 렌더링하는 작업을 수행할 수 있다.

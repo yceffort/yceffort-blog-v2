@@ -241,3 +241,34 @@ function ClientComponent1({children}) {
 `ClientComponent2` 는 RSC 트리에서 나타나지 않는다. 대신, module reference 가 있는 엘리먼트와 `ClientComponent1`의 props만 볼 수 있다. 그러므로, `ClientComponent1`에 이벤트 핸들러가 있는 `ClientComponent2`를 자식으로 보내는 것은 안전하다.
 
 ### 3. 브라우저가 리액트 트리를 재구조화
+
+브라우저는 서버로 부터 JSON 결과물을 받고, 이제 브라우저에서 렌더링될 리액트 트리를 재구성하기 시작한다. type이 `module reference`인 엘리먼트를 만날 때마다, 실제 클라이언트 컴포넌트 함수에 대한 참조로 대체를 시도할 것이다.
+
+이 작업은 다시 번들러의 도움이 필요하다. 클라이언트 컴포넌트 함수의 기능을 서버 module reference로 대체해 주었던 것도 번들러였고, 이 module reference를 브라우저가 실제 클라이언트 컴포넌 함수로 대체하는 것을 아는 것도 번들러다.
+
+이를 그림으로 구성하면 다음과 같다.
+
+![RSC-client](https://blog.plasmic.app/static/images/react-server-components-client.png)
+
+이제 이 트리를 렌더링하고, DOM에 커밋한다.
+
+## Suspense에서도 같은 원리 일까?
+
+`Suspense`에 대해서 간략하게 이야기 하자면, 아직 준비되지 않는 요소가 필요할 때 (데이터를 빠르게 가져오거나, 컴포넌트를 느리게 가져오는 등) 리액트 컴포넌트로에서 promises를 던질 수 있다. 이 promise는 `Suspense boundary`에서 잡을 수 있다. Suspense에서 하위 트리를 렌더링 할 때, promise가 던져질 때마다 리액트는 이 promise가 resolve 될 때 까지 리액트 하위 트리 렌더링을 일시 중지한 다음 다시 시도한다.
+
+우리가 RSC 결과물을 만들기 위해 서버에서 서버 컴포넌트 함수를 호출 할 때, 이 함수들은 각자 필요한 데이터를 가져올 때 promise를 던질 수 있다. 그리고 [이 promise를 만나면](https://github.com/facebook/react/blob/42c30e8b122841d7fe72e28e36848a6de1363b0c/packages/react-server/src/ReactFlightServer.js#L416), 앞서와 마찬가지로 placeholder를 위치 시킨다. 그리고 이 promise가 resolve되면 서버 컴포넌트 함수를 다시 호출하고, 성공하면 이 완료된 청크를 내보낸다. 실제로 RSC 출력 스트림을 생성하고, promise가 나타나면 일시 중지하고, 이것이 resolve되면 추가적인 chunck를 스트리밍한다.
+
+마찬가지로, 브라우저에서 `fetch` 함수 호출로 RSC JSON 결과물을 스트리밍하고 있다. 이 프로세스 역시 결과물에서 placeholder를 마주하거나 (서버에서 던진 promise를 맞닥뜨린 경우), 스트림에서 placeholder를 아직 보지 못한 경우 (https://github.com/facebook/react/blob/main/packages/react-client/src/ReactFlightClientStream.js) promise를 던지는 것으로 끝날 수도 있다. 또는 클라이언트 컴포넌트 module reference를 마주치지만, 아직 브라우저에 로드된 클라이언트 컴포넌트 함수를 가지고 있지 않은 경우에도 promise를 던질 수 있다. 
+
+Suspense를 활용하면 서버 컴포넌트가 데이터를 가져올 때, 서버 스트리밍 RSC출력을 사용할 수 있으며 브라우저가 데이터를 점진적응로 렌더링하고 필요에 따라 클라이언트 컴포넌트 번들을 동적으로 가져올 수 있다.
+
+## RSC Wire format
+
+그런데 정확히 서버가 어떤 형태의 데이터를 보내는 것일까? 정확시 어떤 데이터가 서버에서 브라우저로 스트리밍 되는 것일까?
+
+꽤 간단한 형태로 구성되어 있다. 한줄에 JSON blob 데이터가 있고, 여기에 ID로 태그되어 있는 간단한 형식이다.
+
+```
+M1:{"id":"./src/ClientComponent.client.js","chunks":["client1"],"name":""}
+J0:["$","@1",null,{"children":["$","span",null,{"children":"Hello from server land"}]}]
+```

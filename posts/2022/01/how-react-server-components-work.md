@@ -121,3 +121,123 @@ RSC 서버 컴포넌트를 렌더링하기 위해서 실제로 어떤 일이 일
 ### 2. 서버가 루트 컴포넌트 엘리먼트를 JSON으로 직렬화
 
 여기에서 최종 목표는 최초 root 서버 컴포넌트를 기본 html 태그와 클라이언트 컴포넌트 placeholder 트리로 렌더링하는 것이다. 그리고 이 트리를 직렬화하여 (json으로) 브라우저로 보내면, 브라우저가 이를 다시 역직렬화 하여 클라이언트 placeholder에 실제 클라이언트 컴포넌트를 채우고 최종 겨로가를 렌더링하는 작업을 수행할 수 있다.
+
+그럼 위 예제에서, `OuterServerComponent`를 렌더링하고 싶다면, 단순히 `JSON.stringify(<OuterServerComponent />)`를 한다면 직렬화된 렌더링 트리를 얻을 수 이쓸까?
+
+거의 그렇다고 볼 수 있지만, 그것만으로 충분하지는 않다. 리액트 엘리먼트의 구조를 다시한번 생각해보자.
+
+```jsx
+// React element for <div>oh my</div>
+> React.createElement("div", { title: "oh my" })
+// 객체 형태로 표현
+{
+  $$typeof: Symbol(react.element),
+  type: "div",
+  props: { title: "oh my" },
+  ...
+}
+
+// React element for <MyComponent>oh my</MyComponent>
+> function MyComponent({children}) {
+    return <div>{children}</div>;
+  }
+> React.createElement(MyComponent, { children: "oh my" });
+// 객체 형태로 표현
+{
+  $$typeof: Symbol(react.element),
+  type: MyComponent  // reference to the MyComponent function
+  props: { children: "oh my" },
+  ...
+}
+```
+
+기본 html 태그 엘리먼트가 아닌 컴포넌트 엘리먼트의 경우, 컴포넌트를 참조하려고 하기 때문에 직렬화 할 수 없다.
+
+따라서 모든 것을 적절히 JSON-stringify를 하기 위해서는, 리액트는 [replacer function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#the_replacer_parameter) 을 `JSON.stringify()`에 넘겨 준다. 관련 코드는 [여기](https://github.com/facebook/react/blob/42c30e8b122841d7fe72e28e36848a6de1363b0c/packages/react-server/src/ReactFlightServer.js#L368)에서 찾을 수 있다.
+
+- 기본 HTML 태그의 경우에는 JSON으로 처리가 가능하므로 특별히 처리할 것이 없다.
+- 만약 서버 컴포넌트라면, 서버 컴포넌트 함수를 props와 함께 호출하고, 그 결과를 JSON으로 만들어서 내려보낸다. 이렇게 하면 서버 컴포넌트가 효과적으로 렌더링된다. 여기서 목적은 모든 서버 컴포넌트를 html 태그로 바꾸는 것이다.
+- 만약 클라이언트 컴포넌트라면, 사실 JSON으로 직렬화가 가능하다. 이미 필드가 컴포넌트 함수가 아닌 모듈 참조 객체 (module reference object)를 가리키고 있다.
+
+### `module reference` 객체란?
+
+RSC는 `module reference` 라고 불리우는, 리액트 엘리먼트의 `type` 필드에 새로운 값을 넣을 수 있도록 제공한다. 이 값으로 컴포넌트 함수대신, 이 `참조`를 직렬화 한다.
+
+예를 들어, `ClientComponent`는 아래와 같은 형태를 띈다.
+
+```javascript
+{
+  $$typeof: Symbol(react.element),
+  // 실제 컴포넌트 함수 대신에, 참조 객체를 갖게됨
+  type: {
+    $$typeof: Symbol(react.module.reference),
+    // ClientComponent is the default export...
+    name: "default",
+    // from this file!
+    filename: "./src/ClientComponent.client.js"
+  },
+  props: { children: "oh my" },
+}
+```
+
+그렇다면 클라이언크 컴포넌트 함수에 대한 참조를 직렬화 할 수 있는 `module reference` 객체로 변환하는 것은 어디에서 이루어지는 것일까?
+
+이러한 작업은 번들러에서 이루어진다. 리액트 팀은 RSC를 웹팩에서 사용할 수 있는 `react-server-dom-webpack`을 [webpack loader](https://github.com/facebook/react/blob/main/packages/react-server-dom-webpack/src/ReactFlightWebpackNodeLoader.js)나 [node-register](https://github.com/facebook/react/blob/main/packages/react-server-dom-webpack/src/ReactFlightWebpackNodeRegister.js) 에서 제공하고 있다.서버 컴포넌트가 `*.client.jsx` 파일에서 가져올 때, 실제로 import 하는 것이 아닌 파일 이름과 그 것을 참조하는 모듈 참조 객체만을 가져온다. 즉, 클라이언트 컴포넌트 함수는 서버에서 구성되는 리액트 트리의 구성요소가 아니었다.
+
+위 예제를 `JSON` 트리로 직렬화 한다면 아래와 같을 것이다.
+
+```javascript
+{
+  // ClientComponent 엘리먼트를 `module reference` 와 함께 placeholder로 배치
+  $$typeof: Symbol(react.element),
+  type: {
+    $$typeof: Symbol(react.module.reference),
+    name: "default",
+    filename: "./src/ClientComponent.client.js"
+  },
+  props: {
+    // 자식으로 ServerComponent가 넘어간다.
+    children: {
+      // ServerComponent는 바로 html tag로 렌더링됨      
+      $$typeof: Symbol(react.element),
+      type: "span",
+      props: {
+        children: "Hello from server land"
+      }
+    }
+  }
+}
+```
+
+### 직렬화된 리액트 트리
+
+![RSC placeholder](https://blog.plasmic.app/static/images/react-server-components-placeholders.png)
+
+#### 모든 props는 직렬화되야 한다.
+
+전체 리액트 트리를 JSON 직렬화하고 있기 때문에, 클라이언트 컴포넌트가 기본 html 태그에 전달하는 props도 직렬화 할 수 있어야 한다. 그러나 (당연하게도) 서버 컴포넌트에서는 이벤트 핸들러를 props 전달할 수 없다.
+
+```jsx
+// 서버 컴포넌트는 함수를 prop으로 넘겨줄 수 없다.
+// 함수는 직렬화 할 수 없기 때문이다.
+function SomeServerComponent() {
+  return <button onClick={() => alert('OHHAI')}>Click me!</button>
+}
+```
+
+그러나 여기서 유의할 점은, RSC 프로세스 중에 클라이언트 컴포넌트를 마주하게 된다면, 클라이언트 컴포넌트 함수를호출하거나 클라이언트 컴포넌트를 내림차순으로 정렬하지 않는다는 것이다. 그러므로, 다른 클라이언트 컴포넌트를 인스턴스화 하는 클라이언트 컴포넌트가 있는 경우,
+
+```jsx
+function SomeServerComponent() {
+  return <ClientComponent1>Hello world!</ClientComponent1>;
+}
+
+function ClientComponent1({children}) {
+  // 클라이언트에서는 가능
+  return <ClientComponent2 onChange={...}>{children}</ClientComponent2>;
+}
+```
+
+`ClientComponent2` 는 RSC 트리에서 나타나지 않는다. 대신, module reference 가 있는 엘리먼트와 `ClientComponent1`의 props만 볼 수 있다. 그러므로, `ClientComponent1`에 이벤트 핸들러가 있는 `ClientComponent2`를 자식으로 보내는 것은 안전하다.
+
+### 3. 브라우저가 리액트 트리를 재구조화

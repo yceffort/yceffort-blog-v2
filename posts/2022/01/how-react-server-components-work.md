@@ -198,7 +198,7 @@ RSC는 `module reference` 라고 불리우는, 리액트 엘리먼트의 `type` 
   props: {
     // 자식으로 ServerComponent가 넘어간다.
     children: {
-      // ServerComponent는 바로 html tag로 렌더링됨      
+      // ServerComponent는 바로 html tag로 렌더링됨
       $$typeof: Symbol(react.element),
       type: "span",
       props: {

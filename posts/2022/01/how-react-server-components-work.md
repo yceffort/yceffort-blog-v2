@@ -258,7 +258,7 @@ function ClientComponent1({children}) {
 
 우리가 RSC 결과물을 만들기 위해 서버에서 서버 컴포넌트 함수를 호출 할 때, 이 함수들은 각자 필요한 데이터를 가져올 때 promise를 던질 수 있다. 그리고 [이 promise를 만나면](https://github.com/facebook/react/blob/42c30e8b122841d7fe72e28e36848a6de1363b0c/packages/react-server/src/ReactFlightServer.js#L416), 앞서와 마찬가지로 placeholder를 위치 시킨다. 그리고 이 promise가 resolve되면 서버 컴포넌트 함수를 다시 호출하고, 성공하면 이 완료된 청크를 내보낸다. 실제로 RSC 출력 스트림을 생성하고, promise가 나타나면 일시 중지하고, 이것이 resolve되면 추가적인 chunck를 스트리밍한다.
 
-마찬가지로, 브라우저에서 `fetch` 함수 호출로 RSC JSON 결과물을 스트리밍하고 있다. 이 프로세스 역시 결과물에서 placeholder를 마주하거나 (서버에서 던진 promise를 맞닥뜨린 경우), 스트림에서 placeholder를 아직 보지 못한 경우 (https://github.com/facebook/react/blob/main/packages/react-client/src/ReactFlightClientStream.js) promise를 던지는 것으로 끝날 수도 있다. 또는 클라이언트 컴포넌트 module reference를 마주치지만, 아직 브라우저에 로드된 클라이언트 컴포넌트 함수를 가지고 있지 않은 경우에도 promise를 던질 수 있다. 
+마찬가지로, 브라우저에서 `fetch` 함수 호출로 RSC JSON 결과물을 스트리밍하고 있다. 이 프로세스 역시 결과물에서 placeholder를 마주하거나 (서버에서 던진 promise를 맞닥뜨린 경우), 스트림에서 placeholder를 아직 보지 못한 경우 (https://github.com/facebook/react/blob/main/packages/react-client/src/ReactFlightClientStream.js) promise를 던지는 것으로 끝날 수도 있다. 또는 클라이언트 컴포넌트 module reference를 마주치지만, 아직 브라우저에 로드된 클라이언트 컴포넌트 함수를 가지고 있지 않은 경우에도 promise를 던질 수 있다.
 
 Suspense를 활용하면 서버 컴포넌트가 데이터를 가져올 때, 서버 스트리밍 RSC출력을 사용할 수 있으며 브라우저가 데이터를 점진적응로 렌더링하고 필요에 따라 클라이언트 컴포넌트 번들을 동적으로 가져올 수 있다.
 
@@ -331,7 +331,7 @@ J3:["$","ul",null,{"children":[["$","li",null,{"children":["$","@4",null,{"tweet
 
 ### RSC Format 사용하기
 
-이 `RSC` 스트림을 브라우저에서 실제 리액트 엘리먼트로 어떻게 전환할까? `react-server-dom-webpack`는 [진입점 (`entrypoints`)을](https://github.com/facebook/react/blob/main/packages/react-server-dom-webpack/src/ReactFlightDOMClient.js) 가지고 있는데 여기에서 RSC 응답을 받아 리액트 엘리먼트 트리를 다시 만든다. 
+이 `RSC` 스트림을 브라우저에서 실제 리액트 엘리먼트로 어떻게 전환할까? `react-server-dom-webpack`는 [진입점 (`entrypoints`)을](https://github.com/facebook/react/blob/main/packages/react-server-dom-webpack/src/ReactFlightDOMClient.js) 가지고 있는데 여기에서 RSC 응답을 받아 리액트 엘리먼트 트리를 다시 만든다.
 
 ```jsx
 import { createFromFetch } from 'react-server-dom-webpack'
@@ -340,7 +340,11 @@ function ClientRootComponent() {
   // can then take the fetch result and reconstruct the React
   // element tree
   const response = createFromFetch(fetch('/rsc?...'))
-  return <Suspense fallback={null}>{response.readRoot() /* Returns a React element! */}</Suspense>
+  return (
+    <Suspense fallback={null}>
+      {response.readRoot() /* Returns a React element! */}
+    </Suspense>
+  )
 }
 ```
 
@@ -364,7 +368,7 @@ React 18을 사용하면, SSR과 RSC를 모두 활용하여 서버에서 html을
 
 예를 들어, 한 제품의 페이지를 보다가 다른 제품으로 넘어가는 경우와 같이, 새로운 내용을 렌더링 하기 위해 서버 컴포넌트가 필요한 경우 어떻게 해야할까?
 
-렌더링 자체가 서버에서 수행되므로, RSC 형식의 새 콘텐츠를 가져오기 위해 서버에 다른 API 호출이 필요하다. 브라우저가 새 컨텐츠를 받으면, 새로운 리액트 element 트리를 구성하고, 이전 리액트 트리와 reconciliation 을 수행하여 DOM에 필요한 최소한의 업데이트를 파악할 수 있으며, 모든 상태와 이벤트 핸들러는 클라이언트 컴포넌트에 유지된다. 
+렌더링 자체가 서버에서 수행되므로, RSC 형식의 새 콘텐츠를 가져오기 위해 서버에 다른 API 호출이 필요하다. 브라우저가 새 컨텐츠를 받으면, 새로운 리액트 element 트리를 구성하고, 이전 리액트 트리와 reconciliation 을 수행하여 DOM에 필요한 최소한의 업데이트를 파악할 수 있으며, 모든 상태와 이벤트 핸들러는 클라이언트 컴포넌트에 유지된다.
 
 지금은 루트 서버 컴포넌트에서 전체 응답 트리를 다시 렌더링 해야 하지만, 앞으로는 하위 트리에 대해서만 이 작업을 수행하도록 할 수 있다.
 
@@ -381,6 +385,6 @@ React 18을 사용하면, SSR과 RSC를 모두 활용하여 서버에서 html을
 - https://nextjs.org/docs/advanced-features/react-18
 - https://hydrogen.shopify.dev/
 
-앞서 언급한 프레임워크에서 사용은 가능하지만, 아직 프로덕션에서 사용하기에는 이른감이 있다. 
+앞서 언급한 프레임워크에서 사용은 가능하지만, 아직 프로덕션에서 사용하기에는 이른감이 있다.
 
 그러나 RSC가 미래에 리액트에서 큰 부분을 차지할 것이라는 사실에는 의심의 여지가 없다. 더 빠른 페이지 로딩, 더 작은 자바스크립트 번들, 그리고 더 빠른 인터랙션에 대한 리액트의 결과로, 리액트를 활용하여 여러 페이지를 만드는 애플리케이션을 만드는 방법에 대한 보다 효과적인 방법론이 될 것이다.

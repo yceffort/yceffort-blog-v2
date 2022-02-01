@@ -272,3 +272,57 @@ Suspense를 활용하면 서버 컴포넌트가 데이터를 가져올 때, 서�
 M1:{"id":"./src/ClientComponent.client.js","chunks":["client1"],"name":""}
 J0:["$","@1",null,{"children":["$","span",null,{"children":"Hello from server land"}]}]
 ```
+
+`M`으로 시작하는 라인은, 클라이언트 번들에서 컴포넌트 함수를 조회하는데 필요한 정보와 클라이언트 컴포넌트 module reference를 정의 한다.
+`J`로 시작하는 줄은 앞서 `M`라인에서 정의된 클라이언트 컴포넌트를 참조하는 것으로, 실제 리액트 컴포넌트 element 트리를 정의한다.
+
+이 형식의 포맷은 스트리밍으로 전송이 가능하다. 클라이언트가 전체 행을 읽는 즉시 JSON의 일부 구문을 분석하여 작업을 진행할 수 잇다. 서버가 렌더링하는 동안 suspense 바운더리에 도달한 경우, resolve시 각 청크에 해당하는 여러 `J`라인을 볼 수 있다.
+
+아래 예제를 살펴보자.
+
+```jsx
+// Tweets.server.js
+import { fetch } from 'react-fetch' // React's Suspense-aware fetch()
+import Tweet from './Tweet.client'
+export default function Tweets() {
+  const tweets = fetch(`/tweets`).json()
+  return (
+    <ul>
+      {tweets.slice(0, 2).map((tweet) => (
+        <li>
+          <Tweet tweet={tweet} />
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+// Tweet.client.js
+export default function Tweet({ tweet }) {
+  return <div onClick={() => alert(`Written by ${tweet.username}`)}>{tweet.body}</div>
+}
+
+// OuterServerComponent.server.js
+export default function OuterServerComponent() {
+  return (
+    <ClientComponent>
+      <ServerComponent />
+      <Suspense fallback={'Loading tweets...'}>
+        <Tweets />
+      </Suspense>
+    </ClientComponent>
+  )
+}
+```
+
+위 예제에서, RSC 스트림은 아래와 같이 나타난다.
+
+```
+M1:{"id":"./src/ClientComponent.client.js","chunks":["client1"],"name":""}
+S2:"react.suspense"
+J0:["$","@1",null,{"children":[["$","span",null,{"children":"Hello from server land"}],["$","$2",null,{"fallback":"Loading tweets...","children":"@3"}]]}]
+M4:{"id":"./src/Tweet.client.js","chunks":["client8"],"name":""}
+J3:["$","ul",null,{"children":[["$","li",null,{"children":["$","@4",null,{"tweet":{...}}}]}],["$","li",null,{"children":["$","@4",null,{"tweet":{...}}}]}]]}]
+```
+
+`J0` 은 추가 자식 컴포넌트를 갖게 되었다. `Suspense` 바운더리의 하위 항목으로, `@3`을 가리킨다. 여기서 흥미로운 점은 `@3`은 아직 정의 되지 않았따는 것이다. 서버가 `tweets`를 완전히 로드 하면, ₩

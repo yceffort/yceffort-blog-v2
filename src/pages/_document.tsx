@@ -90,7 +90,6 @@ export default class MyDocument extends Document {
             content="default"
           />
           <Meta name="apple-mobile-web-app-title" content="yceffort's blog" />
-          <Meta name="description" content="yceffort's blog" />
           <Meta name="format-detection" content="telephone=no" />
           <Meta name="mobile-web-app-capable" content="yes" />
           <Meta name="msapplication-TileColor" content="#00b7ff" />

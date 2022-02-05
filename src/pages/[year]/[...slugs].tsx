@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote'
 
@@ -6,6 +7,7 @@ import { parseMarkdownToMdx } from '#utils/Markdown'
 import PostLayout from '#components/layouts/Post'
 import MdxComponents from '#components/MDXComponents'
 import { getAllPosts } from '#utils/Post'
+import Meta from '#components/Meta'
 
 export default function PostPage({
   post,
@@ -15,9 +17,17 @@ export default function PostPage({
   mdx: MDXRemoteSerializeResult
 }) {
   return (
-    <PostLayout frontMatter={post.frontMatter} slug={post.fields.slug}>
-      <MDXRemote {...mdx} components={MdxComponents} />
-    </PostLayout>
+    <>
+      <Head>
+        <Meta
+          name="description"
+          content={post.frontMatter.description || "yceffort's blog"}
+        />
+      </Head>
+      <PostLayout frontMatter={post.frontMatter} slug={post.fields.slug}>
+        <MDXRemote {...mdx} components={MdxComponents} />
+      </PostLayout>
+    </>
   )
 }
 

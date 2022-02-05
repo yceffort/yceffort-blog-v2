@@ -1,10 +1,10 @@
 ---
-title: '더 나은 Dockerfile 작성을 위한 best practice: 2022년 버전'
+title: '더 나은 Dockerfile 작성을 위한 best practice - 2022년 버전'
 tags:
   - docker
 published: true
 date: 2022-02-05 23:24:24
-description: '리액트 18 존버 하는 중'
+description: '갑자기 docker를 파는 이유는'
 ---
 
 https://docs.docker.com/develop/develop-images/dockerfile_best-practices/ 글을 번역하고 조금 이해가 안되는 부분은 개인적으로 내용을 추가 했습니다.
@@ -143,13 +143,12 @@ https://docs.docker.com/develop/develop-images/multistage-build/
 - 라이브러리 의존성 설치 또는 업데이트
 - 애플리케이션 생성
 
-아래 Go 애플리케이션 예쩨를 살펴보자.
+아래 Go 애플리케이션 예제를 살펴보자.
 
 ```Dockerfile
 # syntax=docker/dockerfile:1
 FROM golang:1.16-alpine AS build
 
-# Run `docker build --no-cache .` to update dependencies
 # `docker build --no-cache .` 실행시 의존성 업데이트
 RUN apk add --no-cache git
 RUN go get github.com/golang/dep/cmd/dep

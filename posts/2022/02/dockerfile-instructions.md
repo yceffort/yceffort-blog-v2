@@ -9,17 +9,17 @@ description: '갑자기 docker를 파는 이유는 22'
 
 [여기](/2022/02/docker-best-practice-2022) 에서 이어집니다.
 
-하단 권장사항은 효율적이고 유지관리가 용이한 Dockerfile을 만드는데 도움이 되도록 제공되었다.
+하단 권장사항은 효율적이고 유지관리가 용이한 `Dockerfile`을 만드는데 도움이 되도록 제공되었다.
 
 ## Table of Contents
 
-## FROM
+## `FROM`
 
 https://docs.docker.com/engine/reference/builder/#from
 
 가능하면, 현재 제공되고 있는 공식 이미지를 사용하는 것이 좋다. 알파인 이미지는 리눅스 배포 판 중에서 크키가 매우작고 (6mb) 엄격하게 관리되고 있기 때문에 사용을 추천한다.
 
-## LABEL
+## `LABEL`
 
 https://docs.docker.com/config/labels-custom-metadata/
 
@@ -55,7 +55,7 @@ LABEL vendor=ACME\ Incorporated \
 - https://docs.docker.com/config/labels-custom-metadata/
 - https://docs.docker.com/engine/reference/builder/#label
 
-## RUN
+## `RUN`
 
 https://docs.docker.com/engine/reference/builder/#run
 
@@ -131,7 +131,7 @@ RUN apt-get update && apt-get install -y \
 
 > Debian Ubuntu에서는 자동으로 `apt-get clean`을 수행해주므로 이럴 필요가 없다.
 
-### Pipe
+### `Pipe`
 
 몇 몇 `RUN` 커맨드는 `|`에 의존하여 동작할 수 있다. 예를 들어
 
@@ -153,7 +153,7 @@ RUN set -o pipefail && wget -O - https://some.site | wc -l > /number
 RUN ["/bin/bash", "-c", "set -o pipefail && wget -O - https://some.site | wc -l > /number"]
 ```
 
-## CMD
+## `CMD`
 
 https://docs.docker.com/engine/reference/builder/#cmd
 
@@ -161,7 +161,7 @@ https://docs.docker.com/engine/reference/builder/#cmd
 
 대부분의 경우, `CMD`는 bash, paython, perl과 같은 대화형 셸이 필요하다. 예를들어 `CMD ["perl", "-de0"]`, CMD `["python"]`, or CMD `["php", "-a"]` 등이 있다. 이러한 형태를 사용하면, `docker run -it python`고과 같은 것을 실행하면 바로 셸로 진입할 수 있다.
 
-## EXPOSE
+## `EXPOSE`
 
 https://docs.docker.com/engine/reference/builder/#expose
 
@@ -169,7 +169,7 @@ https://docs.docker.com/engine/reference/builder/#expose
 
 외부에서 접근을 위해 `docker run`에 플래그를 사용하여 이 포트가 어떤 포트에 연결될지 지정할 수 있다.
 
-## ENV
+## `ENV`
 
 https://docs.docker.com/engine/reference/builder/#env
 
@@ -215,7 +215,7 @@ RUN export ADMIN_USER="mark" \
 CMD sh
 ```
 
-## ADD or COPY
+## `ADD` or `COPY`
 
 - https://docs.docker.com/engine/reference/builder/#add
 - https://docs.docker.com/engine/reference/builder/#copy
@@ -253,7 +253,7 @@ RUN mkdir -p /usr/src/things \
 
 자동 tar 압축 해제 기능 등이 필요하지 않은 다른 항목 (파일, 디렉토리) 에는 `COPY`를 쓰자.
 
-## ENTRYPOINT
+## `ENTRYPOINT`
 
 https://docs.docker.com/engine/reference/builder/#entrypoint
 
@@ -327,13 +327,13 @@ CMD ["postgres"]
  docker run --rm -it postgres bash
 ```
 
-## VOLUME
+## `VOLUME`
 
 https://docs.docker.com/engine/reference/builder/#volume
 
 `VOLUME`은 도커 컨테이너에서 만든 데이터 저장소 영역, 설정 저장소, 또는 파일이나 폴더를 노출하는데 사용해야 한다. 이미지의 변경 가능한 부분 및 사용자가 수정가능한 부분에는 `VOLUME`을 사용하는 것이 좋다.
 
-## USER
+## `USER`
 
 https://docs.docker.com/engine/reference/builder/#user
 
@@ -343,13 +343,13 @@ https://docs.docker.com/engine/reference/builder/#user
 
 마지막으로, 레이어와 복잡성을 줄이기 위해서는 너무 자주 `USER`를 사용하지 않는 것이 좋다.
 
-## WORKDIR
+## `WORKDIR`
 
 https://docs.docker.com/engine/reference/builder/#workdir
 
 명확성, 그리고 신뢰성을 위해 `WORKDIR`은 항상 절대 경로를 사용해야 한다. 읽기 어렵고, 유지보수도 어려운 `RUN cd … && do-something` 대신 `WORKDIR`을 사용하자.
 
-## ONBUILD
+## `ONBUILD`
 
 https://docs.docker.com/engine/reference/builder/#onbuild
 

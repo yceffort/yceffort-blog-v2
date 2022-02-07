@@ -23,7 +23,7 @@ https://docs.docker.com/engine/reference/builder/#from
 
 https://docs.docker.com/config/labels-custom-metadata/
 
-이미지에 레이블을 추가하여 프로젝트별 이미지 구성, 라이센스 정보 기록, 자동화 정보 등 기타 여러가지 정보를 기록할 수 있다. 각 레이블은 `LABEL`로 시작하고, 하나 이상의 키-값 쌍으로 추가하면 된다. 
+이미지에 레이블을 추가하여 프로젝트별 이미지 구성, 라이센스 정보 기록, 자동화 정보 등 기타 여러가지 정보를 기록할 수 있다. 각 레이블은 `LABEL`로 시작하고, 하나 이상의 키-값 쌍으로 추가하면 된다.
 
 공백이 있는 문자열은 따옴표로 묶거나 공백을 이스케이프 해야 한다. (`''` 도 마찬가지다.)
 
@@ -65,7 +65,7 @@ https://docs.docker.com/engine/reference/builder/#run
 
 `RUN`에서 아마 가장 자주 사용되는 명령어는 `apt-get`일 것이다. `RUN apt-get`은 패키지를 설치하는 명령어이기 때문에 몇가지를 고려 해야 한다.
 
-`RUN apt-get update` 와 `apt-get install`은 항상 같은 `RUN`구문 안에 있어야 한다. 
+`RUN apt-get update` 와 `apt-get install`은 항상 같은 `RUN`구문 안에 있어야 한다.
 
 ```Dockerfile
 RUN apt-get update && apt-get install -y \
@@ -157,9 +157,9 @@ RUN ["/bin/bash", "-c", "set -o pipefail && wget -O - https://some.site | wc -l 
 
 https://docs.docker.com/engine/reference/builder/#cmd
 
-`CMD` 는 나열되어 있는 인수와 함께, 이미지에 포함되어 있는 소프트웨어를 실행하는데 사용된다. CMD는 거의 대부분 항상 `["실행 파일", "param1", "param2"...]` 와 같은 형태로 사용되어야 한다. 
+`CMD` 는 나열되어 있는 인수와 함께, 이미지에 포함되어 있는 소프트웨어를 실행하는데 사용된다. CMD는 거의 대부분 항상 `["실행 파일", "param1", "param2"...]` 와 같은 형태로 사용되어야 한다.
 
-대부분의 경우, `CMD`는 bash, paython, perl과 같은 대화형 셸이 필요하다. 예를들어 `CMD ["perl", "-de0"]`, CMD `["python"]`, or CMD `["php", "-a"]` 등이 있다. 이러한 형태를 사용하면, `docker run -it python`고과 같은 것을 실행하면 바로 셸로 진입할 수 있다. 
+대부분의 경우, `CMD`는 bash, paython, perl과 같은 대화형 셸이 필요하다. 예를들어 `CMD ["perl", "-de0"]`, CMD `["python"]`, or CMD `["php", "-a"]` 등이 있다. 이러한 형태를 사용하면, `docker run -it python`고과 같은 것을 실행하면 바로 셸로 진입할 수 있다.
 
 ## EXPOSE
 
@@ -203,7 +203,8 @@ $ docker run --rm test sh -c 'echo $ADMIN_USER'
 
 mark
 ```
-이러한 사태를 방지하고, 환경 변수를 실제로 해지 하기 위해서는 `RUN`을 사용하여 변수를 단일 레이어에서 설정, 사용, 해제를 하면 된다. 이 명령어는 `;` `&&`을 사용하여 구분할 수 있다. 후자를 사용한다면, 명령이 실패한다면 도커 빌드도 실패한다. 
+
+이러한 사태를 방지하고, 환경 변수를 실제로 해지 하기 위해서는 `RUN`을 사용하여 변수를 단일 레이어에서 설정, 사용, 해제를 하면 된다. 이 명령어는 `;` `&&`을 사용하여 구분할 수 있다. 후자를 사용한다면, 명령이 실패한다면 도커 빌드도 실패한다.
 
 ```Dockerfile
 # syntax=docker/dockerfile:1
@@ -213,6 +214,7 @@ RUN export ADMIN_USER="mark" \
     && unset ADMIN_USER
 CMD sh
 ```
+
 ## ADD or COPY
 
 - https://docs.docker.com/engine/reference/builder/#add
@@ -240,7 +242,7 @@ RUN tar -xJf /usr/src/things/big.tar.xz -C /usr/src/things
 RUN make -C /usr/src/things all
 ```
 
-이 대신, 
+이 대신,
 
 ```Dockerfile
 RUN mkdir -p /usr/src/things \
@@ -250,7 +252,6 @@ RUN mkdir -p /usr/src/things \
 ```
 
 자동 tar 압축 해제 기능 등이 필요하지 않은 다른 항목 (파일, 디렉토리) 에는 `COPY`를 쓰자.
-
 
 ## ENTRYPOINT
 
@@ -338,15 +339,13 @@ https://docs.docker.com/engine/reference/builder/#user
 
 서비스를 실행하는데 별도로 권한이 필요 없다면, `USER` 를 사용하여 루트가 아닌 사용자로 변경해야 한다. `RUN groupadd -r postgres && useradd --no-log-init -r -g postgres postgres`와 같은 명령어로 유저나 그룹을 생성할 수 있다.
 
-`sudo`는 문제를 일으킬 여지가 있으므로 사용하지 않는 것이 좋다. 그럼에도 `sudo`가 어쩔 수 없이 필요한 경우 [gosu](https://github.com/tianon/gosu)의 사용을 고려해보자. 
+`sudo`는 문제를 일으킬 여지가 있으므로 사용하지 않는 것이 좋다. 그럼에도 `sudo`가 어쩔 수 없이 필요한 경우 [gosu](https://github.com/tianon/gosu)의 사용을 고려해보자.
 
 마지막으로, 레이어와 복잡성을 줄이기 위해서는 너무 자주 `USER`를 사용하지 않는 것이 좋다.
-
 
 ## WORKDIR
 
 https://docs.docker.com/engine/reference/builder/#workdir
-
 
 명확성, 그리고 신뢰성을 위해 `WORKDIR`은 항상 절대 경로를 사용해야 한다. 읽기 어렵고, 유지보수도 어려운 `RUN cd … && do-something` 대신 `WORKDIR`을 사용하자.
 
@@ -358,7 +357,7 @@ https://docs.docker.com/engine/reference/builder/#onbuild
 
 도커는 하위 Dockerfile의 명령에 앞서 `ONBUILD`를 수행한다.
 
-`ONBUILD`는 지정된 이미지에서 빌드할 이미지가 필요할 떄 유용하다. 예를 들어, `Dockerfile`내에서 해당 언어로 소프트웨어를 필요로 하는 이미지가 있다면, `ONBUILD` 명령어가 유용하다. 
+`ONBUILD`는 지정된 이미지에서 빌드할 이미지가 필요할 떄 유용하다. 예를 들어, `Dockerfile`내에서 해당 언어로 소프트웨어를 필요로 하는 이미지가 있다면, `ONBUILD` 명령어가 유용하다.
 
 `ONBUILD`로 빌드된 이미지에는 별도 태그가 있어야 한다. (`ruby:1.9-onbuild` `ruby:2.0-onbuild`)
 

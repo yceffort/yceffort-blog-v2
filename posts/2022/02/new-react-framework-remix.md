@@ -208,3 +208,52 @@ export default function SomePage() {
 
 ## hydration
 
+Nextjs에서 달성하고자 하는 기능 중 하나는 부분적인 hydration이다. 특히 정적인 컨텐츠의 경우, 리액트 SSR/SSG 프레임워크는 필요한 자바스크립트 번들 보다 훨씬 더 많이 전달되고 hydration 되므로, 페이지 로드 성능에 큰 영향을 미칠 수 있다.
+
+Remix는 개발자에게 언제 hydration이 일어날 수 있는지 결정할 수 있게 해준다. 하지만 현재는 페이지 단위로만 제공되고 있다. 이 방법은 조건부로 `Document` 내부의 `<Scripts/>`를 렌더링 하지 않는 것이다.
+
+https://remix.run/docs/en/v1/guides/disabling-javascript
+
+```jsx
+// app/entry.server.tsx
+
+import React from 'react'
+import { Meta, Links, Scripts, Outlet, useMatches } from 'remix'
+
+export default function App() {
+  let matches = useMatches()
+
+  // 아래 코드 참조
+  let includeScripts = matches.some((match) => match.handle?.hydrate)
+
+  // includeScripts 상태 값으로 제어 가능
+  return (
+    <html lang="en">
+      <head>
+        <meta charSet="utf-8" />
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        <Outlet />
+        {/* 스크립트 제어! */}
+        {includeScripts && <Scripts />}
+      </body>
+    </html>
+  )
+}
+```
+
+```jsx
+// app/routes/some-page.tsx
+
+export let handle = { hydrate: true }
+
+export default function SomePage() {
+  return <div>...</div>
+}
+```
+
+Remix 개발자가 현재 부분적인 hydration을 할 수 있는 방안에 대해서 아주 깊게 연구 하고 있다고 하니 기대해봄직하다.
+
+## 스타일링

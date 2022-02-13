@@ -1,0 +1,210 @@
+---
+title: 'Remix nextjs와 비교하면서 만들어보기'
+tags:
+  - javascript
+  - react
+  - remix
+  - nextjs
+published: true
+date: 2022-02-13 14:16:40
+description: '늘 새로워 짜릿해'
+---
+
+[remix](https://remix.run/)는 새로운 리액트 기반 풀스택 웹 프레임워크다. 뭐 어떤 프레임워크고 어떻게 쓰는지는 remix 홈페이지에 잘 나와 있으므로, nextjs에서의 관점에서 remix는 어떤 웹 프레임워크고 무엇이 좋은지, 또 쓸만은 한지 한번 고민해보려고 한다.
+
+## 클라이언트 - 서버 아키텍쳐
+
+### nextjs
+
+먼저 nextjs가 어떻게 애플리케이션을 구조화 하는지를 살펴보자. 일반적으로 nextjs에서는 클라리언트와 서버간의 통신을 위해서 클라이언트의 javascript에 의존하는 경우가 많다. 아래 예제를 살펴보자.
+
+```jsx
+// pages/contact.tsx
+
+export default function ContactPage() {
+  // form에 전송할 정보
+  const [name, setName] = useState(null)
+  const [email, setEmail] = useState(null)
+  // form 제출 상태와 관련있는 상태 값
+  const [submitting, setSubmitting] = useState(false)
+  const [errors, setErrors] = useState(null)
+  // 실제 클라이언트에 렌더링되는 form
+  return (
+    <form onSubmit={handleSubmit}>
+      <input type="text" name="name" />
+      {errors?.name && <em>Name is required</em>}
+      <input type="text" name="email" />
+      {errors?.email && <em>Email is required</em>}
+      <button type="submit">Contact me</button>
+    </form>
+  )
+  async function handleSubmit(e) {
+    // form submit시 페이지로 넘어가지 않기 위해
+    e.preventDefault()
+    const formData = { name, email }
+    // 클라이언트 측 validation
+    const errors = validateForm()
+    if (errors) {
+      setErrors(errors)
+    } else {
+      setSubmitting(true)
+      try {
+        // 서버에 post 요청
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          body: JSON.stringify({
+            contact: {
+              ...formData,
+            },
+          }),
+        })
+        const result = response.json()
+        if (result.errors) {
+          setErrors(result.errors)
+        } else {
+          // 홈으로 보내기
+          router.push('/')
+        }
+      } finally {
+        setSubmitting(false)
+      }
+    }
+  }
+}
+```
+
+그리고, nextjs에 `/api/` 동작을 추가할 수 있을 것이다.
+
+```js
+// pages/api/contact.js
+export default function handler(req, res) {
+  const { name, email } = req.body
+
+  const errors = {}
+  if (!name) errors.name = true
+  if (!email) errors.email = true
+
+  if (Object.keys(errors).length > 0) {
+    res.status(400).json(errors)
+  } else {
+    await createContactRequest({ name, email })
+
+    res.status(200).json({ success: true })
+  }
+}
+```
+
+이러한 방식은 nextjs에서 일반적인 방식으로, 위 코드에서 볼 수 있는 것 처럼 상당한 양의 자바스크립트 코드가 필요하다. (그리고 전체 페이지 번들에 hydration이 일어나지 않는다면 제대로 동작하지 않을 것이다.) 또한 위에 예제 처럼 수동으로 fetch 기반의 form을 만들어서 처리한다면, 비동기 fetch 이슈와 같은 문제도 처리해야 한다.
+
+### remix
+
+remix는 자바스크립트 코드를 훨씬 적게 썼던 php/rails 내부의 서버 템플릿 웹 앱 시절을 생각나게 한다. 아래 예제를 살펴보자.
+
+```jsx
+// app/routes/contact.tsx
+export const action: ActionFunction = async ({ request }) => {
+  const formData = await request.formData()
+
+  const name = formData.get('name')
+  const email = formData.get('email')
+
+  const errors = {}
+  if (!name) errors.name = true
+  if (!email) errors.email = true
+
+  if (Object.keys(errors).length > 0) {
+    return errors
+  }
+
+  await createContactRequest({ name, email })
+
+  return redirect('/')
+}
+
+export default function ContactPage() {  
+  // ActionFunction을 리턴으로 하는 action 함수가 기본으로 실행됨
+  const errors = useActionData()
+  return (
+    <form method="post">
+      <input type="text" name="name" />
+      {errors?.name && <em>Name is required</em>}
+      <input type="text" name="email" />
+      {errors?.email && <em>Email is required</em>}
+      <button type="submit">Contact me</button>
+    </form>
+  )
+```
+
+겉으로 보았을 때는 php 스타일로 작성된, post 핸들러를 갖춘 HTML form 일 뿐이다. 자바스크립트에 hydration이 이뤄지지 않더라도 이 코드는 작동한다. `useActionData`는 액션 핸들러에서 반환된 json 데이터를 사용할 수 있도록 한다. 이 액션 아키텍텨는 리액트를 풀스택 프레임워크로 정의하는 방법이다.
+
+remix의 디자인은 기존의 브라우저가 지원하는 클라이언트 - 서버 모델을 본떠서 만들어졌기 때문에, 훨씬 더 적은 코드로 작성되었다. 
+
+이러한 방식에 익숙하지 않은 개발자들은, 이러한 핸들러에 일반적인 패턴이 다음과 같이 존재한다는 것을 인지하고 있어야 한다.
+
+- validation이 실패하면, 에러를 서버로 부터 받고 동일한 페이지를 리렌더링 한다.
+- validation이 성공하면 대상 페이지로 리다이렉트가 일어난다. 그리고 이 도착 페이지에 toast 메시지를 노출할 수 있다. (remix에는 빌트인 [session](https://remix.run/docs/en/v1/api/remix#using-sessions)이 있는데, 이를 활용하면 된다.)
+
+만약 한 페이지에 여러개의 form이 있다면?
+
+숨겨진 필드를 사용하여 각 form이 무엇을 나타내는지를 구별하거나, submit button에 추가적인 값을 넘겨주면 된다.
+
+만약에 일반적인 REST API를 쓰고 싶다면?
+
+nextjs의  경우에는, api 엔드포인트는 임의의 페이지와 클라이언트를 서비스할 수 있는 일반적인 REST api의 일부였다. 이에 반해 remix는 `loader` 함수를 정의하여 (뒤에서 설명) 임의의 데이터를 반환하는 라우트인 리소스 라우트를 정의할 수 있다. nextjs와 다르게, `/pages/api`에 위치할 필요는 없다.
+
+만약 클라이언트 측에서 인터랙션이 있는 form validation을 사용하고 싶다면?
+
+`Form`과 함께 `useTransition`을 사용하면 된다. (리액트의 `useTransition`과 다름 주의)
+
+```jsx
+// app/routes/contact.tsx
+
+export const action: ActionFunction = async ({ request }) => {
+  /*...*/
+}
+
+export default function ContactPage() {
+  // 서버의 에러를 JSON 형태로 받을 수 있음. 이 경우에는 페이지를 리로드 하지 않고도 form을 리렌덜이 할 수 있음  
+  const errors = useActionData()
+  // form 성공시
+  const { submission } = useTransition()
+  return submission ? (
+    <Confirmation contact={Object.fromEntries(submission.formData)} />
+  ) : (
+    <Form method="post">...</Form>
+  )
+}
+```
+
+서버사이드에서는 여전히 validation을 수행하지만, 이제 빠르게 클라이언트에서 피드백을 반영할 수 있다. 클라이언트 측에서 validation을 하고 싶을 경우, 추가적으로 로직을 추가하여 클라이언트에서 validation을 실행할 수 있다.
+
+다만 이 경우 클라이언트가 JSON 데이터 fetch를 수행하거나, 자바스크립트를 아직 사용할 수 없는 경우 전체 html 응답을 요청하여 서버와 통신할 수 있다는 점이다.
+
+## 항상 SSR
+
+remix는 항상 서버사이드 렌더링이 일어나며, 특정 페이지가 정적으로 생성되는 것을 표시하는 개념을 지원하지 않는다. 그렇다고 정적 사이트를 만들 수 없다는 것은 아니다.
+
+기본적인 측면에서, 서버 사이드 데이터 fetch 및 렌더링 속도가 충분하게 빠를 경우, edge server에 배치하여 정적 사이트 수준의 성능을 달성할 수 있다. (자세한 방법은 하단 예시를 참조)
+
+그러나 이 방법은 언제나 가능한 것은 아니고, 페이지가 본질적으로 느린 백엔드 서비스에 의존할 수 있다. 이 경우 http 캐시를 활용할 수 있다. CDN을 서비스 인프라 최상단에 두고, 올바른 `Cache-Control` 헤더를 사용하면 CDN이 지연 시간을 최소화 하면서 변경되지 않은 콘텐츠를 저장하고 제공할 수 있다.
+
+이를 통해 정적 사이트 빌드를 수행하는 대신, 변경 사항을 즉시 재구현 할 수 있다는 이점이 있다.
+
+```jsx
+// app/routes/some-page.tsx
+
+export function headers() {
+  return {
+    'Cache-Control': 'public, max-age=300, s-maxage=3600, stale-while-revalidate=300',
+  }
+}
+
+export default function SomePage() {
+  return <div>...</div>
+}
+```
+
+이는 트레이드 오프가 있다. 직접적으로 프레임워크 수준에서 제어되는 invalidation을 포기하는 대신, CDN에 있는 전용 cache flushing 로직에 의존해야 한다. 사용자의 브라우저에서 캐시를 무효화하는 것 또 고려해야 하므로, 캐시 만료에 너무 지나치게 적극적으로 대응하지 않는 것이 좋다.
+
+## hydration
+

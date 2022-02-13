@@ -257,4 +257,179 @@ export default function SomePage() {
 
 Remix 개발자가 현재 부분적인 hydration을 할 수 있는 방안에 대해서 아주 깊게 연구 하고 있다고 하니 기대해봄직하다.
 
-## 스타일링
+## 스타일
+
+스타일을 적용하기 위해서는, header에 링크를 추가하면 된다. 이는 HTML 에 스타일 시트를 추가하는 것과 매우 유사하다. remix에 이러한 스타일 정보를 미리 제공하면, 모든 CSS를 캐시 가능한 스타일 시트 URL과 함께 병렬로 로딩할 수 있으므로, `prefetch`와 함께 사용한다면 최적의 페이지 로드 성능을 얻을 수 있다.
+
+> 이와 관련되서 스타일 순서가 보장되지 않는 nextjs의 오랜 버그가 있다. https://github.com/vercel/next.js/issues/16630
+
+```jsx
+// app/routes/some-page.tsx
+
+import styles from '~/styles/global.css'
+// styles is now something like /build/global-AE33KB2.css
+
+export function links() {
+  return [
+    {
+      rel: 'stylesheet',
+      href: 'https://unpkg.com/modern-css-reset@1.4.0/dist/reset.min.css',
+    },
+    {
+      rel: 'stylesheet',
+      href: styles,
+    },
+  ]
+}
+
+export default function SomePage() {
+  return <div>...</div>
+}
+```
+
+https://remix.run/docs/en/v1/guides/styling
+
+위 가이드를 보면 알겠지만, scss, css, css-in-js를 사용해도 `links`를 통해서 스타일을 노출 시키는 것은 필수사항이다. 
+
+## 파일 기반 라우팅
+
+remix는 nextjs를 사용하는 사람에게 매우 친숙한 파일 기반 라우팅을 사용한다. 그러나 nextjs 와 다르게 경로를 계층으로 구성할 수 있는 React Router 스타일의 중첩을 지원한다.
+
+예를 들어, 아래와 같은 라우팅이 있따고 가정해보자.
+
+- `/dashboard`
+- `/dashboard/settings`
+-  `/dashboard/reports`
+
+```jsx
+// app/routes/dashboard.tsx
+
+export default function DashboardLayout() {  
+  return (
+    <div>
+      <Header />
+      {/* 내부 중첩 라우팅에 필요한 컨텐츠가 들어간다. */}
+      <Outlet />
+      <Footer />
+    </div>
+  )
+}
+```
+
+```jsx
+// app/routes/dashboard/settings.tsx
+export default function Settings() {
+  // ...
+}
+```
+
+```jsx
+// app/routes/dashboard/reports.tsx
+export default function Reports() {
+  // ...
+}
+```
+
+```jsx
+// app/routes/dashboard/index.tsx
+export default function DashboardMain() {
+  // ...
+}
+```
+
+nextjs와 마찬가지로 remix는 isomorphic routing을 지원하므로 js에 hydration이 발생한다면 클라이언트에서 전환이 빠르게 일어난다.
+
+## 경로 위치에 있는 데이터 가져오기
+
+nextjs에서는 페이지 내부의 `getStaticProps` 또는 `getServerSideProps`에서 데이터를 가져올 수 있다. remix에서는 nextjs와 같은 방식으로 페이지 라우팅에 필요한 `loader` 함수를 사용할 수 있다. 마찬가지로, SSR 응답에 JSON으로 이 데이터를 직렬화한다.
+
+```jsx
+// app/routes/mypage.tsx
+
+// 데이터를 가져온다. 이는 서버에서 수행된다.
+export async function loader() {
+  return fetch(/*...*/)
+}
+
+export default function MyPage() {
+  const data = useLoaderData()
+  return <div />
+}
+```
+
+그러나 remix의 `loader`가 다른 점은 페이지 레벨 뿐만 아니라 중첩 라우팅에서도 사용이 가능하다는 것이다. 
+
+이것의 이점은, 데이터를 배치하는 것이 용이 해진다는 것이다. 예를 들어 `/dashboard`라는 루트 라우팅이 있을 경우, 하위 라우팅에 공통 페이지 레이아웃을 렌더링 할 수 있다는 것이다.
+
+```jsx
+export async function loader() {
+  return getCurrentUser()
+}
+
+export default function DashboardLayout() {
+  const currentUser = useLoaderData()
+  return (
+    <div>
+      <Header>
+        <UserAvatar user={currentUser} />
+      </Header>
+      {/* 하위 렌더링 페이지가 여기에 배치된다. */}
+      <Outlet />
+      <Footer />
+    </div>
+  )
+}
+```
+
+그리고 ` /dashboard/settings` 에 또다른 `loader`가 있다고 가정해보자. 루트는 이에 대해 관심이 없으며, 마찬가지로 다른 페이지에서도 이에 대해 가지고 있을 필요가 없다. nextjs에서는 `getServerSideProps`의 일부를 분산하여 이를 수동으로 구현할 수 있지만, remix는 좀더 자연스러운 지원을 제공한다.
+
+```jsx
+// parent route
+import { Outlet } from 'remix-utils'
+
+export default function Parent() {
+  return <Outlet data={{ something: 'here' }} />
+}
+```
+
+```jsx
+// child route
+import { useParentData } from 'remix-utils'
+
+export default function Child() {
+  const data = useParentData()
+  return <div>{data.something}</div>
+}
+```
+
+이러한 분산된 fetch 설계는 스타일 시트의 링크와 마찬가지로, remix가 전체 트리의 데이터 의존성을 미리 알고 있기 때문에 별렬로 실행할 수 있다는 장점이 있다.
+
+## 배포
+
+remix는 vercel, cloudflare worker, deno deploy, fly.io와 같은 다양한 배포 환경을 지원한다. 각 배포에는 프로젝트 별로 약간 다른 구성 및 패키지가 필요할 수 있겠지만, 노드 환경과 비노드 환경 (cloudflare)에서 모두 실행 가능하다.
+
+특정 배포 대상에 따른 remix 설정은 `create-remix`를 사용할 때 자동으로 구성되지만, 기본 설정에서 다른 설정으로 옮겨갈 경우에는 약간의 수정을 추가하면 된다.
+
+## 기타
+
+- remix 내부에는 세션과 쿠키를 처리할 수 있는 함수가 내장되어 있으며, 이는 클라이언트 서버 아키텍쳐에서 중요하다.
+- `app/routes/reports/$report.tsx` 형태의 동적 라우팅을 지원한다. nextjs는 `[param]`, remix는 `$param`이다.
+  ```jsx
+  export default function Report() {
+  // ...
+    return <div>...</div>
+  }
+  ```
+- nextjs 에 글로벌 `App` `Document` Wrapper가 있다면, remix에는 `entry.server.tsx`가 있다. 또한 `entry.client.tsx`를 사용하여 hydration과정에서 정확히 어떤일이 일어나는지 확인할 수 있다.
+- nextjs에 있지만 remix에 없는 것은
+  - 이미지 최적화 컴포넌트 `next/image`
+  - 구글 폰트와 Typekit를 위한 자동 폰트 CSS 인라이닝
+  - 스크립트 스케쥴링 및 우선순위 지정과 같은 세부적인 제어 
+
+## 느낀점
+
+- react-router-dom 스타일의 중첩 routing 지원, 그리고 부모 데이터를 불러올 수 있는 기능이 인상적이다. nextjs는 페이지별로 다 찢어져있어서 특정 페이지들을 위한 context 구현이 opt-out 하지 않는 이상 불가능 했는데 이점은 굉장히 맘에 든다. 
+- static한 페이지가 많은 애플리케이션은 여전히 nextjs가 더 좋은 방식을 제공하고 있는 것 같다. CDN과 cache를 사용하는 것은 물론 기존에 있는 접근이지만 서도, nextjs가 더 편리한 방식으로 구현했다고 본다.
+- 기본적으로 ssr이라는 점은 좋은 것 같다. 프론트엔드 개발자들이 static 파일을 upload하고 서빙하는 시대는 지났다. 이제 node 서버, 더 나아가 배포와 devOps에 대해서도 고민해야할 때가 왔다. (사실 진작에 왔다)
+- 위와 마찬가지로, SPA의 패러다임은 이제 조금씩 쇠퇴하고 있는 느낌이다. 기기의 성능이 갈수록 좋아지는 시대일 수록 SPA가 빛을 발한다는 이야기를 들었던 것 같은데 이제 틀린게 아닌가 싶다. 성능을 사용자의 기기에 의존해서는 안된다.
+- javascript가 실행되지 않는 환경을 고민하는 것 또한 인상적이다. 성능 측면에서 우리가 항상 고민해봐야할 문제다.

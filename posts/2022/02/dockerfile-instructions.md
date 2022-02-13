@@ -276,7 +276,7 @@ docker run s3cmd
 docker run s3cmd ls s3://mybucket
 ```
 
-`ENTRYPOINT` 명령은 helper 스크립트와 함께 사용할 수 있으므로, 특정 tool 을 시작할떄 위의 명령어와 유사한 방식으로 동작할 수도 있다.
+`ENTRYPOINT` 명령은 helper 스크립트와 함께 사용할 수 있으므로, 특정 tool 을 시작할때 위의 명령어와 유사한 방식으로 동작할 수도 있다.
 
 예를 들어, [Postgres 공식 이미지](https://hub.docker.com/_/postgres/)는 다음 스크립트를 `ENTRYPOINT`로 사용한다.
 
@@ -357,8 +357,8 @@ https://docs.docker.com/engine/reference/builder/#onbuild
 
 도커는 하위 Dockerfile의 명령에 앞서 `ONBUILD`를 수행한다.
 
-`ONBUILD`는 지정된 이미지에서 빌드할 이미지가 필요할 떄 유용하다. 예를 들어, `Dockerfile`내에서 해당 언어로 소프트웨어를 필요로 하는 이미지가 있다면, `ONBUILD` 명령어가 유용하다.
+`ONBUILD`는 지정된 이미지에서 빌드할 이미지가 필요할 때 유용하다. 예를 들어, `Dockerfile`내에서 해당 언어로 소프트웨어를 필요로 하는 이미지가 있다면, `ONBUILD` 명령어가 유용하다.
 
 `ONBUILD`로 빌드된 이미지에는 별도 태그가 있어야 한다. (`ruby:1.9-onbuild` `ruby:2.0-onbuild`)
 
-`ONBUILD`에 `ADD` `COPY`를 넣을 떄 주의하자. 새 빌드 컨텍스트에 이렇게 추가되는 리소스가 없을 경우 하위 "onbuild" 이미지가 실패할 것이다. 위에서 권장한대로 태그를 추가해서 구별하면, `Dockerfile` 작성자가 이를 선택할 수 있으므로 이러한 문제를 예방할 수 있다.
+`ONBUILD`에 `ADD` `COPY`를 넣을 때 주의하자. 새 빌드 컨텍스트에 이렇게 추가되는 리소스가 없을 경우 하위 "onbuild" 이미지가 실패할 것이다. 위에서 권장한대로 태그를 추가해서 구별하면, `Dockerfile` 작성자가 이를 선택할 수 있으므로 이러한 문제를 예방할 수 있다.

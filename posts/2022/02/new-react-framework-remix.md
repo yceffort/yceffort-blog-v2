@@ -289,7 +289,7 @@ export default function SomePage() {
 
 https://remix.run/docs/en/v1/guides/styling
 
-위 가이드를 보면 알겠지만, scss, css, css-in-js를 사용해도 `links`를 통해서 스타일을 노출 시키는 것은 필수사항이다. 
+위 가이드를 보면 알겠지만, scss, css, css-in-js를 사용해도 `links`를 통해서 스타일을 노출 시키는 것은 필수사항이다.
 
 ## 파일 기반 라우팅
 
@@ -299,12 +299,12 @@ remix는 nextjs를 사용하는 사람에게 매우 친숙한 파일 기반 라�
 
 - `/dashboard`
 - `/dashboard/settings`
--  `/dashboard/reports`
+- `/dashboard/reports`
 
 ```jsx
 // app/routes/dashboard.tsx
 
-export default function DashboardLayout() {  
+export default function DashboardLayout() {
   return (
     <div>
       <Header />
@@ -357,7 +357,7 @@ export default function MyPage() {
 }
 ```
 
-그러나 remix의 `loader`가 다른 점은 페이지 레벨 뿐만 아니라 중첩 라우팅에서도 사용이 가능하다는 것이다. 
+그러나 remix의 `loader`가 다른 점은 페이지 레벨 뿐만 아니라 중첩 라우팅에서도 사용이 가능하다는 것이다.
 
 이것의 이점은, 데이터를 배치하는 것이 용이 해진다는 것이다. 예를 들어 `/dashboard`라는 루트 라우팅이 있을 경우, 하위 라우팅에 공통 페이지 레이아웃을 렌더링 할 수 있다는 것이다.
 
@@ -416,7 +416,7 @@ remix는 vercel, cloudflare worker, deno deploy, fly.io와 같은 다양한 배�
 - `app/routes/reports/$report.tsx` 형태의 동적 라우팅을 지원한다. nextjs는 `[param]`, remix는 `$param`이다.
   ```jsx
   export default function Report() {
-  // ...
+    // ...
     return <div>...</div>
   }
   ```
@@ -424,11 +424,11 @@ remix는 vercel, cloudflare worker, deno deploy, fly.io와 같은 다양한 배�
 - nextjs에 있지만 remix에 없는 것은
   - 이미지 최적화 컴포넌트 `next/image`
   - 구글 폰트와 Typekit를 위한 자동 폰트 CSS 인라이닝
-  - 스크립트 스케쥴링 및 우선순위 지정과 같은 세부적인 제어 
+  - 스크립트 스케쥴링 및 우선순위 지정과 같은 세부적인 제어
 
 ## 느낀점
 
-- react-router-dom 스타일의 중첩 routing 지원, 그리고 부모 데이터를 불러올 수 있는 기능이 인상적이다. nextjs는 페이지별로 다 찢어져있어서 특정 페이지들을 위한 context 구현이 opt-out 하지 않는 이상 불가능 했는데 이점은 굉장히 맘에 든다. 
+- react-router-dom 스타일의 중첩 routing 지원, 그리고 부모 데이터를 불러올 수 있는 기능이 인상적이다. nextjs는 페이지별로 다 찢어져있어서 특정 페이지들을 위한 context 구현이 opt-out 하지 않는 이상 불가능 했는데 이점은 굉장히 맘에 든다.
 - static한 페이지가 많은 애플리케이션은 여전히 nextjs가 더 좋은 방식을 제공하고 있는 것 같다. CDN과 cache를 사용하는 것은 물론 기존에 있는 접근이지만 서도, nextjs가 더 편리한 방식으로 구현했다고 본다.
 - 기본적으로 ssr이라는 점은 좋은 것 같다. 프론트엔드 개발자들이 static 파일을 upload하고 서빙하는 시대는 지났다. 이제 node 서버, 더 나아가 배포와 devOps에 대해서도 고민해야할 때가 왔다. (사실 진작에 왔다)
 - 위와 마찬가지로, SPA의 패러다임은 이제 조금씩 쇠퇴하고 있는 느낌이다. 기기의 성능이 갈수록 좋아지는 시대일 수록 SPA가 빛을 발한다는 이야기를 들었던 것 같은데 이제 틀린게 아닌가 싶다. 성능을 사용자의 기기에 의존해서는 안된다.

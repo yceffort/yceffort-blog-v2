@@ -1,5 +1,5 @@
 ---
-title: 'Remix nextjs와 비교하면서 만들어보기'
+title: 'Remix nextjs와 비교하면서 살펴보기'
 tags:
   - javascript
   - react
@@ -7,7 +7,7 @@ tags:
   - nextjs
 published: true
 date: 2022-02-13 14:16:40
-description: '늘 새로워 짜릿해'
+description: '늘 새로워 짜릿해 새로운게 또 나왔어'
 ---
 
 [remix](https://remix.run/)는 새로운 리액트 기반 풀스택 웹 프레임워크다. 뭐 어떤 프레임워크고 어떻게 쓰는지는 remix 홈페이지에 잘 나와 있으므로, nextjs에서의 관점에서 remix는 어떤 웹 프레임워크고 무엇이 좋은지, 또 쓸만은 한지 한번 고민해보려고 한다.
@@ -433,3 +433,4 @@ remix는 vercel, cloudflare worker, deno deploy, fly.io와 같은 다양한 배�
 - 기본적으로 ssr이라는 점은 좋은 것 같다. 프론트엔드 개발자들이 static 파일을 upload하고 서빙하는 시대는 지났다. 이제 node 서버, 더 나아가 배포와 devOps에 대해서도 고민해야할 때가 왔다. (사실 진작에 왔다)
 - 위와 마찬가지로, SPA의 패러다임은 이제 조금씩 쇠퇴하고 있는 느낌이다. 기기의 성능이 갈수록 좋아지는 시대일 수록 SPA가 빛을 발한다는 이야기를 들었던 것 같은데 이제 틀린게 아닌가 싶다. 성능을 사용자의 기기에 의존해서는 안된다.
 - javascript가 실행되지 않는 환경을 고민하는 것 또한 인상적이다. 성능 측면에서 우리가 항상 고민해봐야할 문제다.
+- 다음 토이 프로젝트는 remix다.

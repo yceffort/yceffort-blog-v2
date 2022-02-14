@@ -10,6 +10,10 @@ date: 2022-02-13 14:16:40
 description: '늘 새로워 짜릿해 새로운게 또 나왔어'
 ---
 
+## Table of Contents
+
+## Introduction
+
 [remix](https://remix.run/)는 새로운 리액트 기반 풀스택 웹 프레임워크다. 뭐 어떤 프레임워크고 어떻게 쓰는지는 remix 홈페이지에 잘 나와 있으므로, nextjs에서의 관점에서 remix는 어떤 웹 프레임워크고 무엇이 좋은지, 또 쓸만은 한지 한번 고민해보려고 한다.
 
 ## 클라이언트 - 서버 아키텍쳐

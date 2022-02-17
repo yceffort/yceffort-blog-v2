@@ -1,9 +1,9 @@
 ---
 title: 'Page Visibility API와 성능과의 관계'
 tags:
-  - javascript  
+  - javascript
   - html
-published: true
+published: false
 date: 2022-02-17 21:06:23
 description: ''
 ---
@@ -26,33 +26,33 @@ https://caniuse.com/pagevisibility
 
 ```javascript
 console.log(document.visibilityState + ': ' + Date())
-document.onvisibilitychange = () => 
+document.onvisibilitychange = () =>
   console.log(document.visibilityState + ': ' + Date())
 ```
 
 w3의 스펙 문서에서는, 현재 페이지의 가시성에 따라서 페이지 로드시 비디오를 자동으로 시작될 수 있도록 이 상태 변화를 볼 수 있는 listener를 제공한다.
 
 ```javascript
-const videoElement = document.getElementById("videoElement");
+const videoElement = document.getElementById('videoElement')
 
 // Autoplay the video if application is visible
-if (document.visibilityState === "visible") {
-  videoElement.play();
+if (document.visibilityState === 'visible') {
+  videoElement.play()
 }
 
 // Handle page visibility change events
 function visibilityListener() {
-  switch(document.visibilityState) {
-    case "hidden":
-      videoElement.pause();
-      break;
-    case "visible":
-      videoElement.play();
-      break;
+  switch (document.visibilityState) {
+    case 'hidden':
+      videoElement.pause()
+      break
+    case 'visible':
+      videoElement.play()
+      break
   }
 }
 
-document.addEventListener("visibilitychange", visibilityListener);
+document.addEventListener('visibilitychange', visibilityListener)
 ```
 
 https://www.w3.org/TR/page-visibility/#examples-of-usage
@@ -67,9 +67,9 @@ https://www.w3.org/TR/page-visibility/#examples-of-usage
 
 ## 이 가시성이 중요한 이유
 
-대부분의 모던 브라우저는 현재 메인으로 보이고 있는 (foreground)에 대한 작업에 우선순위를 두기 때문에, 백그라운드 탭에서 로드되는 페이지의 경우에는 느릴 수가 있다. 
+대부분의 모던 브라우저는 현재 메인으로 보이고 있는 (foreground)에 대한 작업에 우선순위를 두기 때문에, 백그라운드 탭에서 로드되는 페이지의 경우에는 느릴 수가 있다.
 
-아래 데이터를 확인하면 이러한 visibility의 차이에 따라 성능차이가 크게 나타나는 것을 알 수 있다. 
+아래 데이터를 확인하면 이러한 visibility의 차이에 따라 성능차이가 크게 나타나는 것을 알 수 있다.
 
 ![Median Load time by visibility state](https://calendar.perfplanet.com/images/2021/paul/image1.jpg)
 
@@ -78,7 +78,5 @@ https://www.w3.org/TR/page-visibility/#examples-of-usage
 그런데, 이게 정말로 중요한 데이터인 것일까?
 
 ![Desktop Load Time Percentiles by Visibility State](https://calendar.perfplanet.com/images/2021/paul/image2.jpg)
-
-
 
 사용자 경험에 비추어보았을때, 페이지가 표시

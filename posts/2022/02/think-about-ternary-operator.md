@@ -66,14 +66,14 @@ if (someCondition) {
 
 초보자가 아니더라도, 3항 연산자는 종종 읽기 어려운 것이 사실이다. 특히, 이런 가독성 문제는 삼항연산자가 길어질 때 더욱 문제를 만든다.
 
-```javascript
 <!-- prettier-ignore-start -->
+```javascript
 const ten = Ratio.fromPair(10, 1);
 const maxYVal = Ratio.fromNumber(Math.max(...yValues));
 const minYVal = Ratio.fromNumber(Math.min(...yValues));
 const yAxisRange = (!maxYVal.minus(minYVal).isZero()) ? ten.pow(maxYVal.minus(minYVal).floorLog10()) : ten.pow(maxYVal.plus(maxYVal.isZero() ? Ratio.one : maxYVal).floorLog10());
-<!-- prettier-ignore-end -->
 ```
+<!-- prettier-ignore-end -->
 
 저 3항연산자 내부에서 정확히 무슨일이 일어나고 있는지 한번에 이해할 수 있는 사람은 별로 없다. 각 표현식 내부의 코드도 복잡하고, 3항 연산자도 내부에 중첩이 되어서 더욱 어렵다.
 
@@ -203,8 +203,8 @@ if (someCondition) {
 
 중첩 3항 연산자는 어떤가? 항상 피해야할까? 그렇지 않다. 만약 수직으로 잘 정렬만 해둔다면, 좀 깊이가 되는 3항연산자라 할지라도 가독성을 해치지 않을 수 있다.
 
-```javascript
 <!-- prettier-ignore-start -->
+```javascript
 const xAxisScaleFactor =
     (xRangeInSecs <= 60)       ? 'seconds' :
     (xRangeInSecs <= 3600)     ? 'minutes' :
@@ -212,8 +212,8 @@ const xAxisScaleFactor =
     (xRangeInSecs <= 2592000)  ? 'days'    :
     (xRangeInSecs <= 31536000) ? 'months'  :
     /* otherwise */              'years';
-<!-- prettier-ignore-end-->
 ```
+<!-- prettier-ignore-end-->
 
 위 코드에 대해서 prettier가 뭐라고 하겠지만, 잠시 이를 꺼둘 수도 있다. 물론 이 과정은 손이 간다. 그러나 3항 연산자와 if문을 좀더 책임감있게 작성하는 것이 가능해진다.
 

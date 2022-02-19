@@ -63,3 +63,186 @@ if (someCondition) {
 이 식을 읽는 것은 그리 어려운 일이 아니다. `someCondition`이 true면 `takeAction`을, 그렇지 않으면 `someOtherAction`을 실행할 것이다. 이는 크게 어려운 일이 아니다. 그러나 3항연산자는 기호와 구성되어 있기 때문에 위 코드처럼 쉽게 읽히지 않는다. 언어를 읽는 자연스러운 과정과 확실히 대비된다.
 
 ### 가독성이 떨어진다.
+
+초보자가 아니더라도, 3항 연산자는 종종 읽기 어려운 것이 사실이다.  특히, 이런 가독성 문제는 삼항연산자가 길어질 때 더욱 문제를 만든다.
+
+```javascript
+<!-- prettier-ignore-start -->
+const ten = Ratio.fromPair(10, 1);
+const maxYVal = Ratio.fromNumber(Math.max(...yValues));
+const minYVal = Ratio.fromNumber(Math.min(...yValues));
+const yAxisRange = (!maxYVal.minus(minYVal).isZero()) ? ten.pow(maxYVal.minus(minYVal).floorLog10()) : ten.pow(maxYVal.plus(maxYVal.isZero() ? Ratio.one : maxYVal).floorLog10());
+<!-- prettier-ignore-end -->
+```
+
+저 3항연산자 내부에서 정확히 무슨일이 일어나고 있는지 한번에 이해할 수 있는 사람은 별로 없다. 각 표현식 내부의 코드도 복잡하고, 3항 연산자도 내부에 중첩이 되어서 더욱 어렵다. 
+
+물론, prettier를 사용하면 조금더 상황이 나아질 수는 있다.
+
+```javascript
+const ten = Ratio.fromPair(10, 1);
+const maxYVal = Ratio.fromNumber(Math.max(...yValues));
+const minYVal = Ratio.fromNumber(Math.min(...yValues));
+const yAxisRange = !maxYVal.minus(minYVal).isZero()
+    ? ten.pow(maxYVal.minus(minYVal).floorLog10())
+    : ten.pow(maxYVal.plus(maxYVal.isZero() ? Ratio.one : maxYVal).floorLog10());
+```
+
+그럼에도 여전히 읽기 어렵다는 사실엔 변함이 없다. 
+
+물론, 실제 이런식으로 3항연산자를 복잡하게 쓰는 사람은 별로 없을 것이다. (코드 리뷰어가 잔소리를 한두마디 하겠지) 하지만 우리가 기억해야할 포인트는 여전하다. 
+
+> Any fool can write code that a computer can understand. Good programmers write code that humans can understand. - Martin Fowler
+
+우리는 컴퓨터가 아닌 사람이 읽기 좋은 코드를 짜야하는 책임을 가지고 있다. 그리고 이것이 3항 연산자가 가지는 가장 큰 문제라 생각한다. 일단 작성자가 코드를 우겨 넣는 것은 쉽다. 그러나 그렇게 코드를 우겨넣기 시작하면, 엉망진창이 될 가능성이 기하급수적으로 커진다. 특히 주니어 프로그래머라면, 3항연산자보다는 `if-else`를 쓰라고 이야기 하고 싶다.
+
+## if-else의 신뢰성 문제
+
+그래, 3항연산자는 그렇다 치자. `if-else`는 완벽한가? 그럼에도 3항연산자를 쓰는 이유는 간결하거나 조금더 영리하게 코드를 작성하기 위함이다.  아래 예시를 보자.
+
+```javascript
+let result;
+if (someCondition) {
+    result = calculationA();
+} else {
+    result = calculationB();
+}`
+```
+
+```javascript
+const result = (someCondition) ? calculationA() : calculationB();
+```
+
+사람들은 일반적으로 이 두 예제가 동일하다고 생각한다.  두 예제 모두 `result`라는 변수안에 조건에 따라 두 함수의 리턴 값을 넣어준다. 하지만 다른 측면으로 보면, 조금은 다르다. 먼저 `let`을 살펴보면 알수 있다.  두 차이점은, `if-else`는 문(statement)이지만, 3항연산자는 표현식(expression) 이라는데에 있다. 그래서 그 차이점이 뭔데?
+
+- 표현식 (expression)은 항상 어떠한 값을 계산한다.
+- 문(statement)는 하나의 실행 단위로 존재한다.
+
+이는 중요한 개념이다. 표현식은 값을 계산하지만, 문은 그렇지 않다. statement의 결과값을 어떤 변수에 할당할 수 없다. statement의 결과를 함수의 인수로 넘겨줄 수 없다. 그리고 `if-else`는 statement로, 어떠한 값을 resolve하고 있지 않다. 따라서 이를 사용할 수 있는 가장 좋은 케이스는 부수효과 (side-effect)을 일으키는 경우다.
+
+부수효과(side-effect)는 무엇인가? 이는 값을 resolve하는 것 이외에 코드에서 일어나는 모든 일들이다. 예를 들어
+
+- 네트워크 요청
+- 파일 읽고 쓰기
+- 데이터베이스 쿼리
+- DOM 엘리먼트 조작
+- 전역변수 수정
+- 콘솔 로그 등
+
+이 부수효과는 함수형 프로그래밍의 핵심 아이디어다. 우리는 이 부수효과를 잘 다룸으로써 코드에 대한 자신감을 얻게 된다. 최대한 가능한, 우리는 순수 함수로 작성해야할 의무가 있다. 우리는 순수함수에서 값을 계산하고 리턴한다는 사실을 염두해 두어야 한다.
+
+근데 이게 여기서 무슨 상관일까? 우리는 `if-else`를 항상 의심의 눈초리로 봐야 한다는 것을 의미한다. 
+
+```javascript
+if (someCondition) {
+    takeAction();
+} else {
+    someOtherAction();
+}
+```
+
+`someCondition` 의 결과가 어디로 이끌든 우리가 신경 쓸 문제가 아니다. 우리가 이 구문에서 주의해야할 것은 여기서 부수효과가 일어난다는 것이다. 여기서 부수효과는 `takeAction` `someOtherAction` 이다.  그리고 둘 모두 어떠한 값도 리턴하고 있지 않다.  그리고 이 두 함수가 수행하는 작업은 모두 이 블록 밖에서 이루어진다. 그리고 우리는 이 두함수가 어떤 부수효과를 이르키는지 알고 있어야 한다. 그것에 대해 대답할 수 없다면, 우리는 코드를 이해할 수 없다.
+
+## 3항연산자로 돌아와서
+
+`if-else`를 의심스럽게 봐야 한다는 건 그렇다 치자. 그렇다면 3항연산자는 어떤가? 이러한 부수효과의 측면에서 더 나은가? 이전에 했던 모든 논란은 여기서도 여전히 유효하다.  
+
+우리가 표현식을 좋아하는 이유는 표현식은 다른 표현식과 합칠 수 있기 때문이다. 다양한 연산자와 함수를 사용하면 복잡한 표현식을 간결하게 아래 처럼 작성해 줄 수 잇다.
+
+```jsx
+('<h1>' + page.title + '</h1>');
+```
+
+우리는 이 표현식을 함수의 인수로 넘겨줄 수 있다. 또는 다른 표현식과 연산자로 결합할 수도 있다. 표현식을 여러개 결합하는 것은 더욱 복잡한 연산을 가능하게 해준다. 표현식을 묶는 것은 코드를 작성하는 훌륭항 방법이다.
+
+하지만, statements도 결합할 수 있는 건 마찬가지 아닌가? for 문과 if 문도 합칠 수 있잖아? 그런데 왜 표현식에서 더 빛을 발하는 것일까?
+
+표현식의 장점은 바로 [참조 투명성 (referential transparency)](https://ko.wikipedia.org/wiki/%EC%B0%B8%EC%A1%B0_%ED%88%AC%EB%AA%85%EC%84%B1)에 있다.  이는 우리가 표현식에 있는 값을 취해서 다시 표현식 자체에 사용할 수 있다는 것을 의미한다. 그리고 우리는 이것을 바탕으로 항상 같은 결과가 리턴된다는 것을 확신할 수 있다. 이 참조 투명성은 statements와 expression을 작성하는 것과 의 차이점을 설명해준다. 
+
+그러면 표현식인 3항연산자를 더 선호해야 한다는 것인가? 그렇지 않다.  다른 언어처럼, 자바스크립트도 표현식에서 부수효과로 부터 자유롭지는 않다. 아래 예제를 보자.
+
+```javascript
+const result = (someCondition) ? dropDBTables() : mineDogecoin();
+```
+
+## 조건문을 쓸 때 가져야할 책임감
+
+그래 3항연산자도 별로고, if-else도 별로면 다른 언어를 써야하는 건가? 여기서 하고 싶은 조언은 항상 신중히 행동해야 한다는 것이다. 
+
+### statements가 때로는 더 나을 수도 있다.
+
+statements가 없다면 자바스크립트 코드를 제대로 작성하기 어렵다.  우리는 이 statements에서 벗어날수가 없다. 우리는 이 statements를 안전하게 작성해야 한다.
+
+가장 위험한 경우는 블록이 존재하는 경우다. 여기에는 if, for, while, switch 등이 포함된다. 이 들은 부수효과를 일으키는 것들이기 때문이다. 무언가 블록밖을 벗어나서, 현재의 환경을 변경시킬 수 있다.
+
+이보다 안전한 statements는 변수할당문과 리턴문이다. 변수 할당은 expression의 결과를 레이블에 바인딩 한다. 그리고 변수는 그자체로 expression이다. 우리가 원하는 만큼 많이, 자주 사용할 수 있다. 이 값의 변화를 피한다면 변수할당문은 안전하다.
+
+반환 문은 함수 호출을 값으로 확인하므로 유용하다. 함수 호출은 하나의 표현식이다. 변수할당과 마찬가지로 반환은 표현식을 만드는데[ 도움이 된다.
+
+이 두가지 전제조건을 바탕으로, 안전한 조건문을 쓸 수 있는지 생각해볼 수 있다.
+
+### 안전한 if 문
+
+안전한 if문을 작성하기 위해서는 다음의 간단한 규칙을 따르면 된다.  첫번째 분기 조건에서 return으로 끝나면 된다. 그렇게 하면, if-staement가 값을 resolve하지 않더라도, 외부 함수는 가능해질 것이다.
+
+```javascript
+if (someCondition) {
+    return resultOfMyCalculation();
+}
+```
+
+이 규칙만 따른다면, else 블록을 작성할 필요가 없어진다.  만약 else가 들어간다면, 거기에 부수효과가 들어간다는 것을 의미한다. 물론 작고 별일 하지 않을 수도 있지만, 부수효과가 존재하는 것은 사실이다.
+
+### 읽기 쉬운 3항 연산자
+
+3항 연산자는 항상 작고 간결해야 한다. 만약 그 식이 길어진다면, 수직으로 나누어서 가독성을 높여야 한다. 그럼에도 길어진다면, 변수 할당을 통해서 더욱 간결하게 만들 필요가 있다.
+
+중첩 3항 연산자는 어떤가? 항상 피해야할까? 그렇지 않다. 만약 수직으로 잘 정렬만 해둔다면, 좀 깊이가 되는 3항연산자라 할지라도 가독성을 해치지 않을 수 있다.
+
+```javascript
+<!-- prettier-ignore-start -->
+const xAxisScaleFactor =
+    (xRangeInSecs <= 60)       ? 'seconds' :
+    (xRangeInSecs <= 3600)     ? 'minutes' :
+    (xRangeInSecs <= 86400)    ? 'hours'   :
+    (xRangeInSecs <= 2592000)  ? 'days'    :
+    (xRangeInSecs <= 31536000) ? 'months'  :
+    /* otherwise */              'years';
+<!-- prettier-ignore-end-->
+```
+
+위 코드에 대해서 prettier가 뭐라고 하겠지만, 잠시 이를 꺼둘 수도 있다.  물론 이 과정은 손이 간다. 그러나 3항 연산자와 if문을 좀더 책임감있게 작성하는 것이 가능해진다. 
+
+## 미래엔..?
+
+우리가 이렇게 더 신경쓸수는 있지만, 할 수 있는 일은 제한적이다. 하지만 미래에 약간의 변화가 있을 수도 있다. TC39에 있는 [do expression](https://github.com/tc39/proposal-do-expressions)  이 바로 그것이다.
+
+```javascript
+let x = do {
+  if (foo()) { f() }
+  else if (bar()) { g() }
+  else { h() }
+};
+```
+`do` 블록 안에 많은 statements를 넣었고, 여기에서 하나의 값을 완성해서 리턴했다.  jsx에서 아마도 더 유용하게 사용될 수 있다.
+
+```jsx
+return (
+  <nav>
+    <Home />
+    {
+      do {
+        if (loggedIn) {
+          <LogoutButton />
+        } else {
+          <LoginButton />
+        }
+      }
+    }
+  </nav>
+)
+```
+
+아직 이게 언제 도입될지 알수는 없지만 서도, [babel](https://babeljs.io/docs/en/babel-plugin-proposal-do-expressions)을 써서 미리 써볼 수는 있을 것이다.
+
+

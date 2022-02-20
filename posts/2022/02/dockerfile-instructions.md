@@ -251,7 +251,7 @@ RUN mkdir -p /usr/src/things \
     && make -C /usr/src/things all
 ```
 
-자동 tar 압축 해제 기능 등이 필요하지 않은 다른 항목 (파일, 디렉토리) 에는 `COPY`를 쓰자.
+자동 tar 파일 압축 해제 기능 등이 필요하지 않은 다른 항목 (파일, 디렉토리) 에는 `COPY`를 쓰자.
 
 ## `ENTRYPOINT`
 

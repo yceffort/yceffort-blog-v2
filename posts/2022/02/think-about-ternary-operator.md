@@ -20,7 +20,7 @@ protocol = 'https' if isSecure else 'http'
 ```
 
 ```rust
-lex protocol = if isSecure ? { 'https' } else { 'http' };
+let protocol = if isSecure ? { 'https' } else { 'http' };
 ```
 
 3항 연산자를 쓰면서 느끼는 건, 이게 언어마다 서순이 조금씩 미묘해서 헷갈린다는 점이다. 자바스크립트와 파이썬이 특히 그렇다. 자바스크립트에 젖어서 그런지 파이썬은 코딩을 할 때 마다 헷갈리는 것 같다.

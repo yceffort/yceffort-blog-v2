@@ -99,3 +99,54 @@ cargo-workspaces는 워크스페이스를 만들고 관리할 수 있도록 도�
 - https://marketplace.visualstudio.com/items?itemName=bungcip.better-toml
 - https://marketplace.visualstudio.com/items?itemName=serayuzgur.crates
 - https://marketplace.visualstudio.com/items?itemName=belfz.search-crates-io
+
+## Hello World
+
+자, 이제 hello world를 작성해보자.
+
+```bash
+cargo new my-app
+```
+
+기본값으로, `cargo new`는 바이너리 애플리케이션 템플릿을 사용한다. 코드를 실행 한뒤에는, 아래와 같은 디렉토리 구조를 볼 수 있다.
+
+```
+my-app/
+├── .git
+├── .gitignore
+├── Cargo.toml
+└── src
+  └── main.rs
+```
+
+`cargo run`을 실행해보자.
+
+```bash
+» cargo run
+  Compiling my-app v0.1.0 (./my-app)
+  Finished dev [unoptimized + debuginfo] target(s) in 0.89s
+  Running `target/debug/my-app`
+Hello, world!
+```
+
+`cargo run`은 `cargo build`를 실행하여 애플리케이션을 빌드하고, 그리고 실행한다. 빌드된 바이너리는 `./target/debug/my-app`에서 확인할 수 있다. 실행 없이 빌드만 하고 싶다면, `cargo build`를 실행하면 된다. 기본적으로, 빌드는 `dev` 프로파일에서 실행되기 떄문에 파일의 크기, 성능과 같은 디버그에 유용한 정보를 얻을 수 있다. 실제 프로덕션에 필요한 프로그램을 얻기 위해서는 `cargo build --release`를 실행하면 되고, 해당 결과는 `./target/release/my-app`에 위치한다.
+
+`src/main.rs`를 살펴보자.
+
+```rust
+fn main() {
+  println!("Hello, World!")
+}
+```
+
+음 별다르게 특이한건 없다. 🤔
+
+- `main()`은 단독 실행 되는 애플리케이션을 만들 때 필요한 함수다. cli app의 시작지점이 된다.
+- `println!()`는 받은 인수를 STDOUT해주고 있다. 
+- `"Hello, world!"`는 string이다. 
+
+
+### 자바스크립트와 다른 것 1
+
+먼저 앞선 string을 변수에 넣어서 실행해보자. rust도 마찬가지로 변수를 선언할때 `let`을 쓴다. 자바스크립트 세계엔 `let` `const`가 있고, 대부분 `const`를 쓰지만, rust는 대부분 `let`을 쓴다.
+

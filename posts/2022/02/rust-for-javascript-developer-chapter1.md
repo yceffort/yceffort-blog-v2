@@ -1,11 +1,13 @@
 ---
-title: '[Rust] 자바스크립트에서 러스트로 - RustUp'
+title: '[Rust] 자바스크립트에서 러스트로 - rustup, hello world, 그리고 소유권과 빌림'
 tags:
   - rust
 published: true
 date: 2022-02-26 13:40:28
-description: ''
+description: 'Rust 공부해보기'
 ---
+
+## Table of Contents
 
 ## tools
 
@@ -147,4 +149,196 @@ fn main() {
 
 ### 자바스크립트와 다른 것 1
 
-먼저 앞선 string을 변수에 넣어서 실행해보자. rust도 마찬가지로 변수를 선언할때 `let`을 쓴다. 자바스크립트 세계엔 `let` `const`가 있고, 대부분 `const`를 쓰지만, rust는 대부분 `let`을 쓴다.
+먼저 앞선 string을 변수에 넣어서 실행해보자. rust도 마찬가지로 변수를 선언할때 `let`을 쓴다. 자바스크립트 세계엔 `let` `const`가 있고, 대부분 `const`를 쓰지만, rust는 대부분 `let`을 쓴다. 
+
+`let`을 사용하여 변수를 할당해서 사용해보자.
+
+```rust
+fn main() {
+  let message = "Hello, World!";
+  println!(message)
+}
+```
+
+```sh
+@yceffort ➜ /workspaces/rust-playground/chapter1/hello_cargo (main ✗) $ cargo run
+   Compiling hello_cargo v0.1.0 (/workspaces/rust-playground/chapter1/hello_cargo)
+error: format argument must be a string literal
+ --> src/main.rs:3:14
+  |
+3 |     println!(message)
+  |              ^^^^^^^
+  |
+help: you might be missing a string literal to format with
+  |
+3 |     println!("{}", message)
+  |              +++++
+
+error: could not compile `hello_cargo` due to previous error
+```
+
+자바스크립트 개발자의 시선에서는 동작해야할 코드였던 것 같은데, 동작하지 않았ㄷ. 대부분의 언어에서는 잘 동작할 코드일 것 같은데, 러스트는 그렇지 않다. 에러 메시를 일단 잘 살펴보자.
+
+> format argument must be a string literal
+
+`println!()`은 첫번째 인수를 string literal을 요구하고, 변수를 활용하여 formatting하는 것을 지원한다. 따라서 우리는 코드를 아래와 같이 고쳐야 한다.
+
+```rust
+fn main() {
+  let message = "Hello, World!";
+  println!("{}", message)
+}
+```
+
+### 자바스크립트와 다른 것 2
+
+이번엔 함수를 사용한다고 가정해보자.
+
+```rust
+fn main() {
+    greet("world")
+}
+
+fn greet(target: String) {
+    println!("hello, {}", target)
+}
+```
+
+이 코드 역시 에러가 난다.
+
+```shell
+@yceffort ➜ /workspaces/rust-playground/chapter1/hello_cargo (main ✗) $ cargo run
+   Compiling hello_cargo v0.1.0 (/workspaces/rust-playground/chapter1/hello_cargo)
+error[E0308]: mismatched types
+ --> src/main.rs:2:11
+  |
+2 |     greet("world")
+  |           ^^^^^^^- help: try using a conversion method: `.to_string()`
+  |           |
+  |           expected struct `String`, found `&str`
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `hello_cargo` due to previous error
+```
+
+`String`을 `target`으로 예상했지만, 그것이 아닌 `&str`을 전달받았다는 에러다. 이러한 일이 왜 일어나는지 알기 위해서는, rust에서 String이 무엇인지 알아봐야 하고, 그것보다 이전에 우리는 러스트의 '소유권' 과 '빌림' 의 개념에 대해서 알아야 한다. rust의 가장 핵심이 되는 개념이다.
+
+## 소유권과 빌림
+
+소유권은 러스트를 이해하는데 있어 첫번째 난관이다. 이해하기가 어렵다기보다는, 러스트의 규칙은 다른 언어에서는 잘 통용되는 논리와 구조를 다시금 생각하게 만드는 구조이기 떄문이다.
+
+러스트는 가비지 컬렉터 없이 안전한 메모리 해제를 약속한 덕분에 많은 인기와 지지를 얻을 수 있었따. 자바스크립트나 GO는 메모리를 관리하기 위해 가비지 컬렉션을 사용한다. 객체에 대한 모든 참조를 추적하고, 이 참조 카운트가 0으로 감소했을 때만 메모리를 해제한다. 이 가비지 컬렉터는 자완과 성능을 희생하여 개발자를 좀더 편하게 만들어 준다. 물론 이정도로도 충분할 수 있다. 그러나, 이것으로 부족할때, 이 가비지 컬렉터 문제를 해결하고 최적화 하는 것은 굉장히 어려운 일이다. 러스트에서는 가비지 컬렉터의 오버헤드 없이 메모리 안정성을 달성할 수 있다. 모든 자원을 특별히 노력을 기울이지 않아도 돌려 받을 수 있다.
+
+메모리의 안정성은 단순히 프로그램이 예기치 않은 크래쉬를 방지하는 것 그 이상의 것을 의미한다. 모든 종류의 보안 취약점을 차단한다는 것을 의미한다. SQL 인젝션을 들어보았는가? SQL 인젝션은 미처 관리되고 있지 않은 사용자 입력을 활용하여 의도치 않은 SQL 문을 만들어내고, 데이터를 빼돌리는 데이터베이스 클라이언트 쪽 취약성이다. 이 공격은 그다지 어려운 것이 아니라서 3관리가 가능하고 100% 예방 또한 가능하다. 그러나 오늘 날 웹 애플리케이션에서 가장 흔한 취약점으로 남아 있다. 메모리 측면에서 안전하지 않은 코드는 어디서나 나타날 수 있는 SQL 인젝션 취약성을 찾기 어려워진다는 것과 비슷하다. 메모리 안정성 측면의 버그는 심각한 취약점의 대부분을 차지한다. 그러므로, 성능에 영향을 미치지 않고 이러한 위협요소를 모두 제거할 수 있다는 것은 매력적인 개념이라고 볼 수 있다.
+
+### 변수 할당과 mutability
+
+앞서 이야기 한 것처럼 자바스크립트에는 `let` `const`가 있으며, `const`는 다시 재할당 할 수 없는 변수를 선언할 때 쓴다. 러스트에도 `let` `const`가 있지만, 일단 `let`만 쓴다.
+
+자바스크립트에서 `const`가 쓰고 싶다면, rust에서는 `let`을 쓰면 된다. `let`을 쓰고 싶다면, `let mut`을 쓰면 된다. `mut`은 변수 중에서도 재할당 가능한 변수를 선언할 때 사용한다. 
+
+```javascript
+let one = 1;
+console.log(one) // 1
+one = 3
+console.log(one) // 3
+```
+
+러스트에서는 
+
+```rust
+fn main() {
+  let mut one = 1;
+  println!("{}", one);
+  one = 3;
+  println!("{}", one)
+}
+```
+
+이렇게 작성하면 된다.
+
+한가지 큰 다른점은, 오로지 같은 타입일때만 가능하다는 것이다. 즉 아래와 같은 코드는 불가능하다.
+
+```rust
+fn main() {
+    let mut one = 1;
+    println!("{}", one);
+    one = "3";
+    println!("{}", one)
+}
+```
+
+```
+@yceffort ➜ /workspaces/rust-playground/chapter1/hello_cargo (main ✗) $ cargo run
+   Compiling hello_cargo v0.1.0 (/workspaces/rust-playground/chapter1/hello_cargo)
+error[E0308]: mismatched types
+ --> src/main.rs:4:11
+  |
+2 |     let mut one = 1;
+  |                   - expected due to this value
+3 |     println!("{}", one);
+4 |     one = "3";
+  |           ^^^ expected integer, found `&str`
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `hello_cargo` due to previous error
+```
+
+다른 타입을 변수에 할당하고 싶다면 `let`을 선언하여 같은 이름에 할당하는 방법을 쓰면 된다.
+
+```rust
+fn main() {
+    let one = 1;
+    println!("{}", one);
+    let one = "3";
+    println!("{}", one)
+}
+```
+
+### 러스트에서 빌림을 확인하는 법
+
+러스트에는 데이터를 전달하는 방법, 즉 데이터를 "빌리는 방법" 과 "소유권" 에대한 기본적인 규칙을 적용함으로써 메모리 안전성을 보장한다.
+
+### 규칙1. 소유권
+
+값을 전달하면, 호출하는 코드는 더이상 해당 데이터에 접근할 수 없다. 간단히 말해 소유권을 포기한 것이다. 아래 코드를 확인해보자.
+
+
+```rust
+use std::{collections::HashMap, fs::read_to_string};
+
+fn main() {
+    let source = read_to_string("./README.md").unwrap();
+    let mut files = HashMap::new();
+    files.insert("README", source);
+    files.insert("README2", source);
+}
+```
+
+```shell
+@yceffort ➜ /workspaces/rust-playground/chapter1/hello_cargo (main ✗) $ cargo run
+   Compiling hello_cargo v0.1.0 (/workspaces/rust-playground/chapter1/hello_cargo)
+error[E0382]: use of moved value: `source`
+ --> src/main.rs:7:29
+  |
+4 |     let source = read_to_string("./README.md").unwrap();
+  |         ------ move occurs because `source` has type `String`, which does not implement the `Copy` trait
+5 |     let mut files = HashMap::new();
+6 |     files.insert("README", source);
+  |                            ------ value moved here
+7 |     files.insert("README2", source);
+  |                             ^^^^^^ value used here after move
+```
+
+앞으로 rust를 공부하면서 가장 많이 마주하게될 에러 메시지, `use of moved value: source.`다. 처음 `source`를 HashMap에 넘겼을때, 이때는 우리는 소유권을 포기한 것이다. 따라서 두번째 줄에서는 동일하게 호출할 수 없었던 것이다. 위 코드가 실행되기 위해서는, 다음과 같이 고쳐야한다.
+
+```rust
+use std::{collections::HashMap, fs::read_to_string};
+
+fn main() {
+    let source = read_to_string("./README.md").unwrap();
+    let mut files = HashMap::new();
+    files.insert("README", source.clone());
+    files.insert("README2", source);
+}
+```

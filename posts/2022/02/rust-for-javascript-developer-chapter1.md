@@ -13,7 +13,7 @@ rust에서 사용하는 대표적인 툴을 nodejs 입장에서 비교해 보았
 
 - [nvm](https://github.com/nvm-sh/nvm) ➝ [rustup](https://rustup.rs/)
 - `npm` ➝ [cargo](https://rustup.rs/) (rust package manager)
-- `eslint`  ➝ [clippy](https://github.com/rust-lang/rust-clippy)
+- `eslint` ➝ [clippy](https://github.com/rust-lang/rust-clippy)
 - `prettier` ➝ [rustfmt](https://github.com/rust-lang/rustfmt)
 
 ## rustup 설치 및 사용
@@ -63,7 +63,7 @@ node.js에 `package.json`이 있다면 rust에는 `Cargo.toml`이 있다. 확장
 
 ### 테스트
 
-`npm test`는 `cargo test`와 같다. `cargo test`를 거치면 유닛테스트, 통합 테스트, 문서화 테스트를 자동으로 실행하게 된다. 
+`npm test`는 `cargo test`와 같다. `cargo test`를 거치면 유닛테스트, 통합 테스트, 문서화 테스트를 자동으로 실행하게 된다.
 
 ### 모듈 publish
 
@@ -142,11 +142,9 @@ fn main() {
 음 별다르게 특이한건 없다. 🤔
 
 - `main()`은 단독 실행 되는 애플리케이션을 만들 때 필요한 함수다. cli app의 시작지점이 된다.
-- `println!()`는 받은 인수를 STDOUT해주고 있다. 
-- `"Hello, world!"`는 string이다. 
-
+- `println!()`는 받은 인수를 STDOUT해주고 있다.
+- `"Hello, world!"`는 string이다.
 
 ### 자바스크립트와 다른 것 1
 
 먼저 앞선 string을 변수에 넣어서 실행해보자. rust도 마찬가지로 변수를 선언할때 `let`을 쓴다. 자바스크립트 세계엔 `let` `const`가 있고, 대부분 `const`를 쓰지만, rust는 대부분 `let`을 쓴다.
-

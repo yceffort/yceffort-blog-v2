@@ -1,7 +1,7 @@
 ---
 title: '[Rust] 자바스크립트에서 러스트로 - RustUp'
 tags:
-  - javascript
+  - rust
 published: true
 date: 2022-02-26 13:40:28
 description: ''
@@ -59,4 +59,43 @@ node.js에 `package.json`이 있다면 rust에는 `Cargo.toml`이 있다. 확장
 
 ### 글로벌하게 tool 설치
 
-앞서 눈치챘을 수도 있지만, `npm install -g`는 `cargo install`과 같다. 
+앞서 눈치챘을 수도 있지만, `npm install -g`는 `cargo install`과 같다.
+
+### 테스트
+
+`npm test`는 `cargo test`와 같다. `cargo test`를 거치면 유닛테스트, 통합 테스트, 문서화 테스트를 자동으로 실행하게 된다. 
+
+### 모듈 publish
+
+`npm publish`는 `cargo publish`와 같다. 앞서 언급했던 것 처럼, [crates.io](https://crates.io/) 계정과 인증이 필요하다.
+
+### 그밖에 작업 실행하기
+
+그밖에 cargo에서 대응되는 작업은 다음과 같다.
+
+- `npm run start`: `cargo run`
+- `npm run benchmarks`: `cargo bench`
+- `npm run build`: `cargo build`
+- `npm run clean`: `cargo clean` 이 작업을 실행하면 `target` 폴더를 청소한다.
+- `npm run docs`: `cargo doc`
+
+그외의 경우에는 rust 개발자가 개별적으로 대응해야 한다.
+
+## 그밖에 다른 도구들
+
+### `cargo-edit`
+
+`cargo-edit` 는 앞서 언급했던 것 처럼 `cargo add` `cargo rm`과 같은 명령어를 가능하게 해준다.
+
+### `cargo-workspaces`
+
+cargo-workspaces는 워크스페이스를 만들고 관리할 수 있도록 도와주는 도구다. 이는 node의 lerna에 영감을 받아 만들어졌다. 여기에는 패키지 자동 publish, local 의존성을 publish 버전으로 대체하는 등 다양한 도구를 제공한다.
+
+## VSCode에서 설치하면 도움이되는 도구들
+
+- https://marketplace.visualstudio.com/items?itemName=rust-lang.rust
+- https://marketplace.visualstudio.com/items?itemName=matklad.rust-analyzer
+- https://marketplace.visualstudio.com/items?itemName=vadimcn.vscode-lldb (debug)
+- https://marketplace.visualstudio.com/items?itemName=bungcip.better-toml
+- https://marketplace.visualstudio.com/items?itemName=serayuzgur.crates
+- https://marketplace.visualstudio.com/items?itemName=belfz.search-crates-io

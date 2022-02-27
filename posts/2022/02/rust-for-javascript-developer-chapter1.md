@@ -149,7 +149,7 @@ fn main() {
 
 ### 자바스크립트와 다른 것 1
 
-먼저 앞선 string을 변수에 넣어서 실행해보자. rust도 마찬가지로 변수를 선언할때 `let`을 쓴다. 자바스크립트 세계엔 `let` `const`가 있고, 대부분 `const`를 쓰지만, rust는 대부분 `let`을 쓴다. 
+먼저 앞선 string을 변수에 넣어서 실행해보자. rust도 마찬가지로 변수를 선언할때 `let`을 쓴다. 자바스크립트 세계엔 `let` `const`가 있고, 대부분 `const`를 쓰지만, rust는 대부분 `let`을 쓴다.
 
 `let`을 사용하여 변수를 할당해서 사용해보자.
 
@@ -235,16 +235,16 @@ error: could not compile `hello_cargo` due to previous error
 
 앞서 이야기 한 것처럼 자바스크립트에는 `let` `const`가 있으며, `const`는 다시 재할당 할 수 없는 변수를 선언할 때 쓴다. 러스트에도 `let` `const`가 있지만, 일단 `let`만 쓴다.
 
-자바스크립트에서 `const`가 쓰고 싶다면, rust에서는 `let`을 쓰면 된다. `let`을 쓰고 싶다면, `let mut`을 쓰면 된다. `mut`은 변수 중에서도 재할당 가능한 변수를 선언할 때 사용한다. 
+자바스크립트에서 `const`가 쓰고 싶다면, rust에서는 `let`을 쓰면 된다. `let`을 쓰고 싶다면, `let mut`을 쓰면 된다. `mut`은 변수 중에서도 재할당 가능한 변수를 선언할 때 사용한다.
 
 ```javascript
-let one = 1;
+let one = 1
 console.log(one) // 1
 one = 3
 console.log(one) // 3
 ```
 
-러스트에서는 
+러스트에서는
 
 ```rust
 fn main() {
@@ -303,7 +303,6 @@ fn main() {
 
 값을 전달하면, 호출하는 코드는 더이상 해당 데이터에 접근할 수 없다. 간단히 말해 소유권을 포기한 것이다. 아래 코드를 확인해보자.
 
-
 ```rust
 use std::{collections::HashMap, fs::read_to_string};
 
@@ -342,3 +341,7 @@ fn main() {
     files.insert("README2", source);
 }
 ```
+
+### 규칙2. 빌림
+
+데이터를 빌릴때, 즉 데이터의 참조를 가져가고 싶다면, `&` 키워드를 사용해서 참조를 가져올 수 있다. 이를 사용하면 앞서 했던 것 처럼 굳이 번거롭게 데이터를 계속 복사하지 않아도 참조를 안전하게 가져올 수 있다.

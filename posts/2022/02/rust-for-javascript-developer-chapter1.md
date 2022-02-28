@@ -417,7 +417,7 @@ error[E0499]: cannot borrow `files` as mutable more than once at a time
    |                     ---------- first mutable borrow occurs here
 10 |     let files_ref2 = &mut files;
    |                      ^^^^^^^^^^ second mutable borrow occurs here
-11 | 
+11 |
 12 |     print_borrowed_map(files_ref);
    |                        --------- first borrow later used here
 

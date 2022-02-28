@@ -1,5 +1,5 @@
 ---
-title: '[Rust] 자바스크립트에서 러스트로 - rustup, hello world, 그리고 소유권과 빌림'
+title: '[Rust] 자바스크립트에서 러스트로 (1) - rustup, hello world, 그리고 소유권과 빌림'
 tags:
   - rust
 published: true
@@ -160,7 +160,7 @@ fn main() {
 }
 ```
 
-```sh
+```shell
 @yceffort ➜ /workspaces/rust-playground/chapter1/hello_cargo (main ✗) $ cargo run
    Compiling hello_cargo v0.1.0 (/workspaces/rust-playground/chapter1/hello_cargo)
 error: format argument must be a string literal
@@ -345,3 +345,105 @@ fn main() {
 ### 규칙2. 빌림
 
 데이터를 빌릴때, 즉 데이터의 참조를 가져가고 싶다면, `&` 키워드를 사용해서 참조를 가져올 수 있다. 이를 사용하면 앞서 했던 것 처럼 굳이 번거롭게 데이터를 계속 복사하지 않아도 참조를 안전하게 가져올 수 있다.
+
+```rust
+use std::{collections::HashMap, fs::read_to_string};
+
+fn main() {
+    let source = read_to_string("./README.md").unwrap();
+    let mut files = HashMap::new();
+    files.insert("README", source.clone());
+    files.insert("README2", source);
+
+    // rust 참조 가져오기
+    let files_ref = &files;
+    let files_ref2 = &files;
+
+    print_borrowed_map(files_ref);
+    print_borrowed_map(files_ref2)
+}
+
+
+fn print_borrowed_map(map: &HashMap<&str, String>) {
+    println!("{:?}", map)
+}
+```
+
+만약 map에 mutable reference가 필요하다면, `let files_ref = &mut files;`를 사용하면 된다.
+
+```rust
+use std::{collections::HashMap, fs::read_to_string};
+
+fn main() {
+    let source = read_to_string("./README.md").unwrap();
+    let mut files = HashMap::new();
+    files.insert("README", source.clone());
+    files.insert("README2", source);
+
+    let files_ref = &mut files;
+    let files_ref2 = &mut files;
+
+    print_borrowed_map(files_ref);
+    print_borrowed_map(files_ref2);
+
+    needs_mutable_ref(files_ref);
+    needs_mutable_ref(files_ref2);
+}
+
+fn needs_mutable_ref(map: &mut HashMap<&str, String>) {}
+
+fn print_borrowed_map(map: &HashMap<&str, String>) {
+    println!("{:?}", map)
+}
+```
+
+그러나 빌드 하면 에러가 나게된다.
+
+```bash
+@yceffort ➜ /workspaces/rust-playground/chapter1/hello_cargo (main ✗) $ cargo build
+   Compiling hello_cargo v0.1.0 (/workspaces/rust-playground/chapter1/hello_cargo)
+warning: unused variable: `map`
+  --> src/main.rs:19:22
+   |
+19 | fn needs_mutable_ref(map: &mut HashMap<&str, String>) {}
+   |                      ^^^ help: if this is intentional, prefix it with an underscore: `_map`
+   |
+   = note: `#[warn(unused_variables)]` on by default
+
+error[E0499]: cannot borrow `files` as mutable more than once at a time
+  --> src/main.rs:10:22
+   |
+9  |     let files_ref = &mut files;
+   |                     ---------- first mutable borrow occurs here
+10 |     let files_ref2 = &mut files;
+   |                      ^^^^^^^^^^ second mutable borrow occurs here
+11 | 
+12 |     print_borrowed_map(files_ref);
+   |                        --------- first borrow later used here
+
+For more information about this error, try `rustc --explain E0499`.
+warning: `hello_cargo` (bin "hello_cargo") generated 1 warning
+error: could not compile `hello_cargo` due to previous error; 1 warning emitted
+```
+
+보면 볼수록 rust 컴파일러의 메시지가 참 친절하다고 느낀다. 만약 다른 참조를 사용하기 전에, 하나의 참조가 끝날 수 있도록 순서를 조정한다면, 이 에러는 더이상 나타나지 않을 것이다.
+
+```rust
+use std::{collections::HashMap, fs::read_to_string};
+
+fn main() {
+    let source = read_to_string("./README.md").unwrap();
+    let mut files = HashMap::new();
+    files.insert("README", source.clone());
+    files.insert("README2", source);
+
+    let files_ref = &mut files;
+    needs_mutable_ref(files_ref);
+    let files_ref2 = &mut files;
+    needs_mutable_ref(files_ref2);
+}
+
+fn needs_mutable_ref(map: &mut HashMap<&str, String>) {}
+```
+
+러스트를 시작할때, 코드의 순서를 조정하는 것만으로도 에러를 해결할 수 있는 경우가 많다.

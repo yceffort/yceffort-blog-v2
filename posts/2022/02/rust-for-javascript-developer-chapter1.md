@@ -4,7 +4,7 @@ tags:
   - rust
 published: true
 date: 2022-02-26 13:40:28
-description: 'Rust 공부해보기'
+description: 'Rust 공부해보기 (1)'
 ---
 
 ## Table of Contents

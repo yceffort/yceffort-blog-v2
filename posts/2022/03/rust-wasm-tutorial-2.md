@@ -40,7 +40,7 @@ mod tests {
 }
 ```
 
-일반적으로 단위테스트는 src 디렉토리의 각 파일에 테스트 할 코드와 함께 작성한다. 여기서 사용되는 규칙은 각 파일에 `mod tests`라는 모듈을 `#[cfg(test)]`와 함께 선언하고, 그안에 테스트할 코드를 작성하면 된다. `#[cfg(test)]` 로 선언된 모듈은 `cargo test`를 할 때만 실행되고, build시에는 컴파일 되지 않는다. 따라서 빌드 시 시간과 공간을 절약할 수 있다. 
+일반적으로 단위테스트는 src 디렉토리의 각 파일에 테스트 할 코드와 함께 작성한다. 여기서 사용되는 규칙은 각 파일에 `mod tests`라는 모듈을 `#[cfg(test)]`와 함께 선언하고, 그안에 테스트할 코드를 작성하면 된다. `#[cfg(test)]` 로 선언된 모듈은 `cargo test`를 할 때만 실행되고, build시에는 컴파일 되지 않는다. 따라서 빌드 시 시간과 공간을 절약할 수 있다.
 
 > cfg는 configuration 이라는 뜻이다.
 
@@ -81,13 +81,13 @@ pub fn greet(name: &str) {
 }
 ```
 
-[wasm-bindgen](https://github.com/rustwasm/wasm-bindgen)은 자바스크립트와 러스트 사이에 일종의 다리 역할을 한다고 보면 된다. 자바스크립트에서 rust api를 호출하거나, 반대로 rust가 js에서 발생한 예외처리를 하는 등의 처리를 할 수 있도록 해준다. 
+[wasm-bindgen](https://github.com/rustwasm/wasm-bindgen)은 자바스크립트와 러스트 사이에 일종의 다리 역할을 한다고 보면 된다. 자바스크립트에서 rust api를 호출하거나, 반대로 rust가 js에서 발생한 예외처리를 하는 등의 처리를 할 수 있도록 해준다.
 
 `#[XXX]`는 일종의 wrapper를 생성하는 속성 값인데, 이것이 무슨일을 하는지는 이후에 알아보자.
 
 `extern` 키워드는, 이 것이 rust 외부에 정의된 함수라는 것을 알린다. 외부에 `alert`라는 함수가 있으며, 이는 문자열 타입의 `s` 를 받는 다는 것을 의미한다. 눈치 챘을 수도 있지만, 이는 `window.alert`를 의미한다.
 
-즉, 자바스크립트에 무언가 함수를 호출 하고 싶다면 `extern` 키워드와 함께 추가하면 된다. 
+즉, 자바스크립트에 무언가 함수를 호출 하고 싶다면 `extern` 키워드와 함께 추가하면 된다.
 
 ```rust
 #[wasm_bindgen]
@@ -96,7 +96,7 @@ pub fn greet(name: &str) {
 }
 ```
 
-이번에는 `extern` 키워드 대신 다른 것이 나왔다. 이번에는 `fn` 구문을 wrapping 하고 있다. 이는 rust 함수를 자바스크립트에 의해 호출될 수 있도록 처리한다는 것을 의미한다. 즉 `extern`과는 반대가 되는 기능이다. 
+이번에는 `extern` 키워드 대신 다른 것이 나왔다. 이번에는 `fn` 구문을 wrapping 하고 있다. 이는 rust 함수를 자바스크립트에 의해 호출될 수 있도록 처리한다는 것을 의미한다. 즉 `extern`과는 반대가 되는 기능이다.
 
 함수를 보면 알겠지만, `greet()`는 문자열 타입 `name`을 받고 `hello {name}`이라는 문자열을 만들고 이를 alert에 넘겨주고 있다.
 
@@ -123,8 +123,8 @@ wasm-pack build --scope yceffort
 `hello_wasm.js`
 
 ```javascript
-import * as wasm from "./hello_wasm_bg.wasm";
-export * from "./hello_wasm_bg.js";
+import * as wasm from './hello_wasm_bg.wasm'
+export * from './hello_wasm_bg.js'
 ```
 
 `package.json`
@@ -132,9 +132,7 @@ export * from "./hello_wasm_bg.js";
 ```json
 {
   "name": "@yceffort/hello-wasm",
-  "collaborators": [
-    "yceffort <yceffort@gmail.com>"
-  ],
+  "collaborators": ["yceffort <yceffort@gmail.com>"],
   "description": "A sample project with wasm-pack",
   "version": "0.1.0",
   "license": "MIT/Apache-2.0",
@@ -181,23 +179,22 @@ export * from "./hello_wasm_bg.js";
 ```
 
 ```javascript
-const path = require('path');
+const path = require('path')
 module.exports = {
-  entry: "./index.js",
+  entry: './index.js',
   output: {
-    path: path.resolve(__dirname, "dist"),
-    filename: "index.js",
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'index.js',
   },
-  mode: "development"
-};
+  mode: 'development',
+}
 ```
-
 
 ```html
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>hello-wasm example</title>
   </head>
   <body>
@@ -207,10 +204,10 @@ module.exports = {
 ```
 
 ```javascript
-const js = import("./node_modules/@yceffort/hello-wasm/hello_wasm.js");
-js.then(js => {
-  js.greet("yceffort's first WebAssembly");
-});
+const js = import('./node_modules/@yceffort/hello-wasm/hello_wasm.js')
+js.then((js) => {
+  js.greet("yceffort's first WebAssembly")
+})
 ```
 
 ![first-wasm](./images/first-wasm.png)
@@ -223,9 +220,9 @@ js.then(js => {
 /* tslint:disable */
 /* eslint-disable */
 /**
-* @param {string} name
-*/
-export function greet(name: string): void;
+ * @param {string} name
+ */
+export function greet(name: string): void
 ```
 
 WebAssembly는 이러한 처리가 불가능하므로, 이 것을 수행해주는 것이 `wasm-bindgen`이다. 이 중 자바스크립트 파일은 러스트를 호출할때 사용되는 인터페이스 역할을 하고, `*_bg.wasm` 파일이 실제로 방금 컴파일한 것과 구현체를 가지고 있다.
@@ -233,27 +230,30 @@ WebAssembly는 이러한 처리가 불가능하므로, 이 것을 수행해주�
 `hello_wasm_bg.js` 파일은 다음과 같이 구현되어 있다.
 
 ```javascript
-import * as wasm from './hello_wasm_bg.wasm';
+import * as wasm from './hello_wasm_bg.wasm'
 
 // ...
 
 function getStringFromWasm0(ptr, len) {
-    return cachedTextDecoder.decode(getUint8Memory0().subarray(ptr, ptr + len));
+  return cachedTextDecoder.decode(getUint8Memory0().subarray(ptr, ptr + len))
 }
 
-
 /**
-* @param {string} name
-*/
+ * @param {string} name
+ */
 export function greet(name) {
-    var ptr0 = passStringToWasm0(name, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-    var len0 = WASM_VECTOR_LEN;
-    wasm.greet(ptr0, len0);
+  var ptr0 = passStringToWasm0(
+    name,
+    wasm.__wbindgen_malloc,
+    wasm.__wbindgen_realloc,
+  )
+  var len0 = WASM_VECTOR_LEN
+  wasm.greet(ptr0, len0)
 }
 
 export function __wbg_alert_a5a2f68cc09adc6e(arg0, arg1) {
-    alert(getStringFromWasm0(arg0, arg1));
-};
+  alert(getStringFromWasm0(arg0, arg1))
+}
 ```
 
 `wasm.greet(ptr0, len0);`를 보면, 이 함수는 문자열이 아닌 포인터와 length를 인수로 받고 있는 것을 알 수 있다.
@@ -281,4 +281,3 @@ pub extern fn __wasm_bindgen_generated_greet(arg0_ptr: *mut u8, arg0_len: usize)
 - wasm 타입을 rust 타입으로 변환 (러스트)
 
 즉, 앞서 언급했던 것 처럼, `wasm-bindgen`는 자바스크립트 - WASM - 러스트 사이에 다리 역할을 하고 있으며, 이를 위해 많은 일들이 뒷단에서 일어나고 있음을 알 수 있다.
-

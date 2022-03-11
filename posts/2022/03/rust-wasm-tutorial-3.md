@@ -66,7 +66,7 @@ fn rust() {
 // macro
 fn using_macro() {
     console_log!("Hello {}!", "yceffort");
-    console_log!("Hello yceffort"); 
+    console_log!("Hello yceffort");
 }
 
 // websys library
@@ -76,7 +76,7 @@ fn using_web_sys() {
     console::log_1(&"Hello using web-sys".into());
 
     let js: JsValue = 4.into();
-    
+
     console::log_2(&"Logging values are".into(), &js);
 }
 
@@ -129,7 +129,7 @@ pub fn main() {
     let body = document.body().expect("there is no body in a document");
 
     let p_element = document.create_element("p").expect("fail to create P element");
-    
+
     p_element.set_inner_html("Hello from rust");
 
     body.append_child(&p_element).expect("fail to append element");
@@ -153,24 +153,24 @@ pub fn add(a: u32, b: u32) -> u32 {
 
 ```javascript
 export function name() {
-  return 'Rust';
+  return 'Rust'
 }
 
 export class MyClass {
   constructor() {
-      this._number = 42;
+    this._number = 42
   }
 
   get number() {
-      return this._number;
+    return this._number
   }
 
   set number(n) {
-      return this._number = n;
+    return (this._number = n)
   }
 
   toString() {
-      return `My number is: ${this.number}`;
+    return `My number is: ${this.number}`
   }
 }
 ```
@@ -188,7 +188,7 @@ extern "C" {
     // 클래스 정의
     type MyClass;
 
-    // 클래스에 new keyword를 constructor로 정의 
+    // 클래스에 new keyword를 constructor로 정의
     #[wasm_bindgen(constructor)]
     fn new() -> MyClass;
 
@@ -233,4 +233,3 @@ pub fn run() {
 Hello from Rust!
 My number is: 10
 ```
-

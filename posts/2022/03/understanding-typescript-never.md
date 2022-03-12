@@ -88,7 +88,7 @@ fn(myAny)
 
 ### switch if-else 문에서 일치 하지 않는 값이 오는 경우
 
-함수가 `never` 타입만 인수로 받는 경우, 함수는 `never`외의 다른 값과 함꼐 실행 될 수 없다.
+함수가 `never` 타입만 인수로 받는 경우, 함수는 `never`외의 다른 값과 함께 실행 될 수 없다.
 
 
 
@@ -264,7 +264,7 @@ type Filtered = Filter<Foo, string>; // {name: string;}
 
 ### 제어 흐름에서 타입을 좁히고 싶을 때
 
-함수에서 리턴값을 `never`로 타이핑 했다는 사실은, 함수가 실행을 마칠 떄 호출자에게 제어 권한을 반환하지 않는 다는 것을 의미한다. 이를 활용하면, 컨트롤 플로우를 제어하여 타입을 좁힐 수 있다.
+함수에서 리턴값을 `never`로 타이핑 했다는 사실은, 함수가 실행을 마칠 때 호출자에게 제어 권한을 반환하지 않는 다는 것을 의미한다. 이를 활용하면, 컨트롤 플로우를 제어하여 타입을 좁힐 수 있다.
 
 > 함수가 never를 리턴하는 경우는 여러가지가 있다. exception, loop에 갇히거나, 혹은 `process.exit`
 
@@ -302,7 +302,7 @@ const guaranteedFoo = foo ?? throwError(); // string
 type t = number & string // never
 ```
 
-`never`와 intersecting을 했을 떄도 마찬가지다.
+`never`와 intersecting을 했을 때도 마찬가지다.
 
 ```typescript
 type t = never & number

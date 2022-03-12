@@ -50,7 +50,7 @@ https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes-func.html#o
 숫자 0 이 덧셈과 곱셈에서 작동하는 것과 비슷하게, `never` 타입도 `union`과 `intersection`에서 특별한 특징을 가지고 있다.
 
 - 0을 덧셈하면 그 값이 그대로 오는 것 처럼, `never`도 union 타입에서는 drop되는 특징을 가지고 있다.
-  
+
 ```typescript
 type t = never | string // string
 ```
@@ -61,7 +61,7 @@ type t = never | string // string
 type t = never & string // never
 ```
 
-이러한 두가지 특징은 이후에 알게 될 주요 사례의 치반이 된다.
+이러한 두가지 특징은 이후에 알게 될 주요 사례의 기반이 된다.
 
 ## `never` 타입은 어떻게 사용할 수 있을까
 
@@ -71,7 +71,7 @@ type t = never & string // never
 
 ```typescript
 // 이 함수는 never만 사용 가능하다.
-function fc (input: never) {
+function fn(input: never) {
   // do something...
 }
 
@@ -79,59 +79,56 @@ declare let myNever: never
 fn(myNever) // ✅
 
 // never 이외에 다른 값은 타입 에러를 야기한다.
-fn() // ❌ 
-fn(1) // ❌ 
-fn('foo') // ❌ 
+fn() // ❌
+fn(1) // ❌
+fn('foo') // ❌
 declare let myAny: any
-fn(myAny) 
+fn(myAny)
 ```
 
-### switch if-else 문에서 일치 하지 않는 값이 오는 경우
+### `switch` `if-else` 문에서 일치 하지 않는 값이 오는 경우
 
 함수가 `never` 타입만 인수로 받는 경우, 함수는 `never`외의 다른 값과 함께 실행 될 수 없다.
 
-
-
-이러한 특징을 사용하여, switch 문과 if-else 문장 내부에서 철저한 일치를 보장할 수 있다. 
+이러한 특징을 사용하여, `switch` 문과 `if-else` 문장 내부에서 철저한 일치를 보장할 수 있다.
 
 ```typescript
 function unknownColor(x: never): never {
-    throw new Error("unknown color");
+  throw new Error('unknown color')
 }
 
 type Color = 'red' | 'green' | 'blue'
 
 function getColorName(c: Color): string {
-    switch(c) {
-        case 'red':
-            return 'is red';
-        case 'green':
-            return 'is green';
-        default:
-            return unknownColor(c); // 그 외의 string으 불가능하다.
-    }
+  switch (c) {
+    case 'red':
+      return 'is red'
+    case 'green':
+      return 'is green'
+    default:
+      return unknownColor(c) // 그 외의 string으 불가능하다.
+  }
 }
 ```
 
-### 부분적으로 구조적 타이핑을 허용하ㅣㅈ 않는 방법
+### 부분적으로 구조적 타이핑을 허용하지 않는 방법
 
-어떤 함수에서, `VariantA`와 `VariantB` 타입의 파라미터만 허용한다고 가정해보자. 하지만 그 이외에 이 두가지 타입의 속성을 모두 갖고 있는 파라미터 (투 타입의 서브타입)는  허용하지 않는 다고 가정해보자.
+어떤 함수에서, `VariantA`와 `VariantB` 타입의 파라미터만 허용한다고 가정해보자. 하지만 그 이외에 이 두가지 타입의 속성을 모두 갖고 있는 파라미터 (두 타입의 서브타입)는 허용하지 않는 다고 가정해보자.
 
-위와 같은 경우, `VariantA | VariantB` 와 같은 유니언 타입으로 선언할 수도 잇다. 그러나 이 경우 타입 스크립트는 구조적 타이핑을 기반으로 하고 있기 때문에, 원래 타입보다 더 많은 속성을 가진 객체 타입을 함수에 전달하는 것이 허용된다. (객체 리터럴 제외) 무슨 말인지 아래 예시에서 살펴보자.
+위와 같은 경우, `VariantA | VariantB` 와 같은 유니언 타입으로 선언할 수도 있다. 그러나 이 경우 타입스크립트는 구조적 타이핑을 기반으로 하고 있기 때문에, 원래 타입보다 더 많은 속성을 가진 객체 타입을 함수에 전달하는 것이 허용된다. (객체 리터럴 제외) 무슨 말인지 아래 예시에서 살펴보자.
 
 ```typescript
 type VariantA = {
-    a: string,
+  a: string
 }
 
 type VariantB = {
-    b: number,
+  b: number
 }
 
 declare function fn(arg: VariantA | VariantB): void
 
-
-const input = {a: 'foo', b: 123 }
+const input = { a: 'foo', b: 123 }
 fn(input) // 타입스크립트는 이 경우 아무런 에러를 내지 않는다.
 ```
 
@@ -139,19 +136,18 @@ fn(input) // 타입스크립트는 이 경우 아무런 에러를 내지 않는�
 
 ```typescript
 type VariantA = {
-    a: string
-    b?: never
+  a: string
+  b?: never
 }
 
 type VariantB = {
-    b: number
-    a?: never
+  b: number
+  a?: never
 }
 
 declare function fn(arg: VariantA | VariantB): void
 
-
-const input = {a: 'foo', b: 123 }
+const input = { a: 'foo', b: 123 }
 fn(input) // ❌ a는 never라서 안댐
 ```
 
@@ -163,8 +159,8 @@ type Write = {}
 declare const toWrite: Write
 
 declare class MyCache<T, R> {
-  put(val: T): boolean;
-  get(): R;
+  put(val: T): boolean
+  get(): R
 }
 
 const cache = new MyCache<Write, Read>()
@@ -173,9 +169,8 @@ cache.put(toWrite) // ✅ generic type이기 때문에 가능
 
 위 예제에서, `get` 메소드를 통해 데이터를 읽을 수 있는 읽기전용 캐시를 만들고자 한다. 여기 `put` 메소드에 `never`를 활용하면 이러한 코드를 방지할 수 있다.
 
-
 ```typescript
-declare class ReadOnlyCache<R> extends MyCache<never, R> {}                         
+declare class ReadOnlyCache<R> extends MyCache<never, R> {}
 
 const readonlyCache = new ReadOnlyCache<Read>()
 readonlyCache.put(data) // ❌
@@ -186,10 +181,12 @@ readonlyCache.put(data) // ❌
 `infer`를 사용하여 조건 부 타입 내부에 또다른 타입을 변수를 만들 때, 모든 `infer` 키워드에 대해 다른 분기를 추가해야 한다.
 
 ```typescript
-type A = 'foo';
-type B = A extends infer C ? (
-    C extends 'foo' ? true : false// inside this expression, C represents A
-) : never // 여기는 닿을 수가 없다.
+type A = 'foo'
+type B = A extends infer C
+  ? C extends 'foo'
+    ? true
+    : false // inside this expression, C represents A
+  : never // 여기는 닿을 수가 없다.
 ```
 
 ### 유니언 유형에서 멤버를 필터링
@@ -204,18 +201,18 @@ type B = A extends infer C ? (
 
 ```typescript
 type Foo = {
-    name: 'foo'
-    id: number
+  name: 'foo'
+  id: number
 }
 
 type Bar = {
-    name: 'bar'
-    id: number
+  name: 'bar'
+  id: number
 }
 
 type All = Foo | Bar
 
-type ExtractTypeByName<T, G> = T extends {name: G} ? T : never
+type ExtractTypeByName<T, G> = T extends { name: G } ? T : never
 
 type ExtractedType = ExtractTypeByName<All, 'foo'> // the result type is Foo
 // type ExtractedType = {
@@ -227,14 +224,19 @@ type ExtractedType = ExtractTypeByName<All, 'foo'> // the result type is Foo
 위 타입이 실행되는 순서는 아래와 같다.
 
 ```typescript
-type ExtractedType = ExtractTypeByName<All, Name> 
+type ExtractedType = ExtractTypeByName<All, Name>
 type ExtractedType = ExtractTypeByName<Foo | Bar, 'foo'>
-type ExtractedType = ExtractTypeByName<Foo, 'foo'> | ExtractTypeByName<Bar, 'foo'>
+type ExtractedType =
+  | ExtractTypeByName<Foo, 'foo'>
+  | ExtractTypeByName<Bar, 'foo'>
 ```
 
 ```typescript
-type ExtractedType = Foo extends {name: 'foo'} ? Foo : never 
-                    | Bar extends {name: 'foo'} ? Bar : never
+type ExtractedType = Foo extends { name: 'foo' }
+  ? Foo
+  : never | Bar extends { name: 'foo' }
+  ? Bar
+  : never
 
 type ExtractedType = Foo | never
 type ExtractedType = Foo
@@ -246,20 +248,15 @@ type ExtractedType = Foo
 
 ```typescript
 type Filter<Obj extends Object, ValueType> = {
-    [Key in keyof Obj 
-        as ValueType extends Obj[Key] ? Key : never]
-        : Obj[Key]
+  [Key in keyof Obj as ValueType extends Obj[Key] ? Key : never]: Obj[Key]
 }
-
-
 
 interface Foo {
-    name: string;
-    id: number;
+  name: string
+  id: number
 }
 
-
-type Filtered = Filter<Foo, string>; // {name: string;}
+type Filtered = Filter<Foo, string> // {name: string;}
 ```
 
 ### 제어 흐름에서 타입을 좁히고 싶을 때
@@ -269,29 +266,25 @@ type Filtered = Filter<Foo, string>; // {name: string;}
 > 함수가 never를 리턴하는 경우는 여러가지가 있다. exception, loop에 갇히거나, 혹은 `process.exit`
 
 ```typescript
-
-
 function throwError(): never {
-    throw new Error();
+  throw new Error()
 }
 
-let foo: string | undefined;
+let foo: string | undefined
 
 if (!foo) {
-    throwError();
+  throwError()
 }
 
-foo; // string
+foo // string
 ```
 
 혹은 `||` `??` 키워드로도 가능하다.
 
 ```typescript
+let foo: string | undefined
 
-
-let foo: string | undefined;
-
-const guaranteedFoo = foo ?? throwError(); // string
+const guaranteedFoo = foo ?? throwError() // string
 ```
 
 ### 호환되지 않는 타입의 intersection이 불가능함을 나타내고 싶을 때
@@ -308,13 +301,11 @@ type t = number & string // never
 type t = never & number
 ```
 
-
 ## `never` 타입을 읽는 법 (에러메시지 에서)
 
-아마도 타입스크립트로 개발을 해본 사람이라면,  `Type 'number' is not assignable to type 'never'.` 이라는 메시지를 가끔씩 보았을 것이다. 이는 일반적으로 타입스크립트가 여러가지 타입을 intersect하는 과정에서 발생하는 에러다. 이러한 에러는 타입의 안전성을 유지하기 위해서 타입스크립트 컴파일러가 내보내는 경고다.
+아마도 타입스크립트로 개발을 해본 사람이라면, `Type 'number' is not assignable to type 'never'.` 이라는 메시지를 가끔씩 보았을 것이다. 이는 일반적으로 타입스크립트가 여러가지 타입을 intersect하는 과정에서 발생하는 에러다. 이러한 에러는 타입의 안전성을 유지하기 위해서 타입스크립트 컴파일러가 내보내는 경고다.
 
 아래 예제를 살펴보자.
-
 
 ```typescript
 type ReturnTypeByInputType = {
@@ -324,7 +315,7 @@ type ReturnTypeByInputType = {
 }
 
 function getRandom<T extends 'char' | 'int' | 'bool'>(
-  str: T
+  str: T,
 ): ReturnTypeByInputType[T] {
   if (str === 'int') {
     // 랜덤 숫자 생성
@@ -332,7 +323,7 @@ function getRandom<T extends 'char' | 'int' | 'bool'>(
   } else if (str === 'char') {
     // 랜덤 char 생성
     return String.fromCharCode(
-      97 + Math.floor(Math.random() * 26) // ❌ Type 'string' is not assignable to type 'never'.
+      97 + Math.floor(Math.random() * 26), // ❌ Type 'string' is not assignable to type 'never'.
     )
   } else {
     // 랜덤 boolean 생성
@@ -341,7 +332,7 @@ function getRandom<T extends 'char' | 'int' | 'bool'>(
 }
 ```
 
-이 함수는 `number`, `string`, `boolean` 을 넘겨 받은 변수에 따라서 리턴하고 싶었던 것 같다. 그러나 각각의 리턴 문에서 타입스크립트는 에러를 뱉는다.  타입스크립트는 프로그램에서 각각 가능한 상태들에 대해 이러한 타입을 좁히도록 도움을 준다.  즉, 여기에서 `ReturnTypeByInputType[T]`는 런타임시에 number가 될수도, string이 될수도, boolean이 될수도 있다는 것을 의미한다.
+이 함수는 `number`, `string`, `boolean` 을 넘겨 받은 변수에 따라서 리턴하고 싶었던 것 같다. 그러나 각각의 리턴 문에서 타입스크립트는 에러를 뱉는다. 타입스크립트는 프로그램에서 각각 가능한 상태들에 대해 이러한 타입을 좁히도록 도움을 준다. 즉, 여기에서 `ReturnTypeByInputType[T]`는 런타임시에 number가 될수도, string이 될수도, boolean이 될수도 있다는 것을 의미한다.
 
 여기의 리턴 유형이 가능한 모든 `ReturnTypeByInputType[T]`에 할당할 수 있는지 확인할 수 있는 경우에만 타입 안전성을 확보할 수 있다. 이 3가지 타입의 intersection은 무엇일까? 이 세가지 타입은 모두 서로 호환이 되지 않기 때문에 `never`를 반환하게 된다. 그래서 우리는 `never`메시지를 보게된 것이다. 이를 해결하기 위해서는, 타입 assertion이 필요하다.
 
@@ -351,9 +342,9 @@ function getRandom<T extends 'char' | 'int' | 'bool'>(
 또다른 예제를 살펴보자.
 
 ```typescript
-function f1(obj: { a: number, b: string }, key: 'a' | 'b') {
-    obj[key] = 1;    // Type 'number' is not assignable to type 'never'.
-    obj[key] = 'x';  // Type 'string' is not assignable to type 'never'.
+function f1(obj: { a: number; b: string }, key: 'a' | 'b') {
+  obj[key] = 1 // Type 'number' is not assignable to type 'never'.
+  obj[key] = 'x' // Type 'string' is not assignable to type 'never'.
 }
 ```
 
@@ -375,16 +366,14 @@ https://github.com/microsoft/TypeScript/issues/23182#issuecomment-379094672 의 
 
 - `never`는 빈 uinion이다
 - 타입스크립트는 조건 타입내부에 있는 유니온 타입을 자동으로 결정한다
-- 여기에서는 빈 uinon이 들어왔으므로, 여기에 조건 타입은 다시  `never`가 된다.
+- 여기에서는 빈 uinon이 들어왔으므로, 여기에 조건 타입은 다시 `never`가 된다.
 
 따라서 우리가 생각하는 `IsNever`의 목적을 달성하기 위해서는 아래와 같은 튜플을 이용하는 방식을 취해야 한다.
 
 ```typescript
-type IsNever<T> = [T] extends [never] ? true : false;
+type IsNever<T> = [T] extends [never] ? true : false
 type Res1 = IsNever<never> // 'true' ✅
 type Res2 = IsNever<number> // 'false' ✅
 ```
 
 > 사실 타입스크립트 소스코드에 있는 내용이다 https://github.com/microsoft/TypeScript/blob/main/tests/cases/conformance/types/conditional/conditionalTypes1.ts#L212
-
-

@@ -264,3 +264,64 @@ type Filtered = Filter<Foo, string>; // {name: string;}
 ```
 
 ### 제어 흐름에서 타입을 좁히고 싶을 때
+
+함수에서 리턴값을 `never`로 타이핑 했다는 사실은, 함수가 실행을 마칠 떄 호출자에게 제어 권한을 반환하지 않는 다는 것을 의미한다. 이를 활용하면, 컨트롤 플로우를 제어하여 타입을 좁힐 수 있다.
+
+> 함수가 never를 리턴하는 경우는 여러가지가 있다. exception, loop에 갇히거나, 혹은 `process.exit`
+
+```typescript
+
+
+function throwError(): never {
+    throw new Error();
+}
+
+let foo: string | undefined;
+
+if (!foo) {
+    throwError();
+}
+
+foo; // string
+```
+
+혹은 `||` `??` 키워드로도 가능하다.
+
+```typescript
+
+
+let foo: string | undefined;
+
+const guaranteedFoo = foo ?? throwError(); // string
+```
+
+### 호환되지 않는 타입의 intersection이 불가능함을 나타내고 싶을 때
+
+
+
+## `never` 타입을 읽는 법
+
+```typescript
+type ReturnTypeByInputType = {
+  int: number
+  char: string
+  bool: boolean
+}
+
+function getRandom<T extends 'char' | 'int' | 'bool'>(
+  str: T
+): ReturnTypeByInputType[T] {
+  if (str === 'int') {
+    // 랜덤 숫자 생성
+    return Math.floor(Math.random() * 10) // ❌ Type 'number' is not assignable to type 'never'.
+  } else if (str === 'char') {
+    // 랜덤 char 생성
+    return String.fromCharCode(
+      97 + Math.floor(Math.random() * 26) // ❌ Type 'string' is not assignable to type 'never'.
+    )
+  } else {
+    // 랜덤 boolean 생성
+    return Boolean(Math.round(Math.random())) // ❌ Type 'boolean' is not assignable to type 'never'.
+  }
+}
+```

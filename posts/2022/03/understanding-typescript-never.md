@@ -1,5 +1,5 @@
 ---
-title: '타입스크립트 타입 never에 대한 이해'
+title: '타입스크립트 타입 never 에 대해 자세히 알아보자'
 tags:
   - typescript
 published: true
@@ -39,13 +39,13 @@ https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes-func.html#o
   - 호환 되지 않는 타입 교차
   - 빈 유니언 타입 (유니언 했지만 아무것도 안되는 경우)
 - 실행이 완료되면 caller에게 제어 권한을 반환하지 않는 (혹은 의도된) 함수의 반환 유형 (예: node의 `process.exit()`)
-  - `void`와는 다르다. `voi`는 함수가 caller에게 아무것도 리턴하지 않는 다는 것을 의미한다.
+  - `void`와는 다르다. `void`는 함수가 caller에게 아무것도 리턴하지 않는 다는 것을 의미한다.
 - rejected된 promise의 fulfill 값
   ```typescript
   const p = Promise.reject('foo') // const p: Promise<never>
   ```
 
-## `never`가 union과 intersection에서 작동하는 방식
+## `never`가 `union`과 `intersection`에서 작동하는 방식
 
 숫자 0 이 덧셈과 곱셈에서 작동하는 것과 비슷하게, `never` 타입도 `union`과 `intersection`에서 특별한 특징을 가지고 있다.
 
@@ -132,7 +132,7 @@ const input = { a: 'foo', b: 123 }
 fn(input) // 타입스크립트는 이 경우 아무런 에러를 내지 않는다.
 ```
 
-이 경우, `never`를 사용한다면, 일부 구조 타이핑을 방지할 수 잇으며, 사용자가 두가지 모든 속성을 가진 객체를 가져오는 것을 방지할 수 있다.
+이 경우, `never`를 사용한다면, 일부 구조 타이핑을 방지할 수 있으며, 사용자가 두가지 모든 속성을 가진 객체를 가져오는 것을 방지할 수 있다.
 
 ```typescript
 type VariantA = {
@@ -244,7 +244,7 @@ type ExtractedType = Foo
 
 ### mapped type에서 키를 필터링 하는 용도
 
-타입스크립트에서는, 타입은 immutable 하다. 만약 객체 타입에서 속성을 삭제하고 싶다면, 기존 속성을 변환하고 필터링하여 새롭게 생성해야 한다. 이를 위해 매핑된 타입의 키를 조건부로 타시 매핑하면 해당 키가 필터링된다.
+타입스크립트에서는, 타입은 immutable 하다. 만약 객체 타입에서 속성을 삭제하고 싶다면, 기존 속성을 변환하고 필터링하여 새롭게 생성해야 한다. 이를 위해 매핑된 타입의 키를 조건부로 다시 매핑하면 해당 키가 필터링된다.
 
 ```typescript
 type Filter<Obj extends Object, ValueType> = {
@@ -352,7 +352,7 @@ function f1(obj: { a: number; b: string }, key: 'a' | 'b') {
 
 ## never를 확인하는 방법
 
-사실 `never`인지 확인하는 것은 생각보다 쉽지 ㅇ낳다.
+사실 `never`인지 확인하는 것은 생각보다 쉽지 않다.
 
 ```typescript
 type IsNever<T> = T extends never ? true : false

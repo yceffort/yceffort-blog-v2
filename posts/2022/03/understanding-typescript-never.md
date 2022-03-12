@@ -2,10 +2,9 @@
 title: '타입스크립트 타입 never에 대한 이해'
 tags:
   - typescript
-  - javascript
 published: true
 date: 2022-03-12 15:31:40
-description: ''
+description: '알쏭달쏭 신기한 타입스크립트와 타입의 세계'
 ---
 
 ## Table of Contents
@@ -39,7 +38,7 @@ https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes-func.html#o
   - 제네릭 및 함수에서 허용되지 않는 파라미터
   - 호환 되지 않는 타입 교차
   - 빈 유니언 타입 (유니언 했지만 아무것도 안되는 경우)
-- 실행이 완됴되면 caller에게 제어 권한을 반환하지 않는 (혹은 의도된) 함수의 반환 유형 (예: node의 `process.exit()`)
+- 실행이 완료되면 caller에게 제어 권한을 반환하지 않는 (혹은 의도된) 함수의 반환 유형 (예: node의 `process.exit()`)
   - `void`와는 다르다. `voi`는 함수가 caller에게 아무것도 리턴하지 않는 다는 것을 의미한다.
 - rejected된 promise의 fulfill 값
   ```typescript
@@ -297,9 +296,25 @@ const guaranteedFoo = foo ?? throwError(); // string
 
 ### 호환되지 않는 타입의 intersection이 불가능함을 나타내고 싶을 때
 
+호환이 되지 않는 서로다른 타입에 대해 intersection을 표시한다면 `never`가 된다.
+
+```typescript
+type t = number & string // never
+```
+
+`never`와 intersecting을 했을 떄도 마찬가지다.
+
+```typescript
+type t = never & number
+```
 
 
-## `never` 타입을 읽는 법
+## `never` 타입을 읽는 법 (에러메시지 에서)
+
+아마도 타입스크립트로 개발을 해본 사람이라면,  `Type 'number' is not assignable to type 'never'.` 이라는 메시지를 가끔씩 보았을 것이다. 이는 일반적으로 타입스크립트가 여러가지 타입을 intersect하는 과정에서 발생하는 에러다. 이러한 에러는 타입의 안전성을 유지하기 위해서 타입스크립트 컴파일러가 내보내는 경고다.
+
+아래 예제를 살펴보자.
+
 
 ```typescript
 type ReturnTypeByInputType = {
@@ -325,3 +340,51 @@ function getRandom<T extends 'char' | 'int' | 'bool'>(
   }
 }
 ```
+
+이 함수는 `number`, `string`, `boolean` 을 넘겨 받은 변수에 따라서 리턴하고 싶었던 것 같다. 그러나 각각의 리턴 문에서 타입스크립트는 에러를 뱉는다.  타입스크립트는 프로그램에서 각각 가능한 상태들에 대해 이러한 타입을 좁히도록 도움을 준다.  즉, 여기에서 `ReturnTypeByInputType[T]`는 런타임시에 number가 될수도, string이 될수도, boolean이 될수도 있다는 것을 의미한다.
+
+여기의 리턴 유형이 가능한 모든 `ReturnTypeByInputType[T]`에 할당할 수 있는지 확인할 수 있는 경우에만 타입 안전성을 확보할 수 있다. 이 3가지 타입의 intersection은 무엇일까? 이 세가지 타입은 모두 서로 호환이 되지 않기 때문에 `never`를 반환하게 된다. 그래서 우리는 `never`메시지를 보게된 것이다. 이를 해결하기 위해서는, 타입 assertion이 필요하다.
+
+- `return Math.floor(Math.random() * 10) as ReturnTypeByInputType[T]`
+- `return Math.floor(Math.random() * 10) as never`
+
+또다른 예제를 살펴보자.
+
+```typescript
+function f1(obj: { a: number, b: string }, key: 'a' | 'b') {
+    obj[key] = 1;    // Type 'number' is not assignable to type 'never'.
+    obj[key] = 'x';  // Type 'string' is not assignable to type 'never'.
+}
+```
+
+`obj[key]` 는 런타임시에 키에 따라서 string이 될수도 number가 될 수도 있다. 타입스크립트는 따라서 key로 올수 있는 모든 값에 대해 동작할 수 있어야 되므로 제한을 두었다. 따라서 여기에서는 `never`로 결정된다.
+
+## never를 확인하는 방법
+
+사실 `never`인지 확인하는 것은 생각보다 쉽지 ㅇ낳다.
+
+```typescript
+type IsNever<T> = T extends never ? true : false
+
+type Res = IsNever<never> // never 🧐
+```
+
+`IsNever`로 never인지 확인하기 위해 true, false를 리턴하게 헀지만 실상은 저것마저도 `never`가 된다.
+
+https://github.com/microsoft/TypeScript/issues/23182#issuecomment-379094672 의 대답을 요약하자면
+
+- `never`는 빈 uinion이다
+- 타입스크립트는 조건 타입내부에 있는 유니온 타입을 자동으로 결정한다
+- 여기에서는 빈 uinon이 들어왔으므로, 여기에 조건 타입은 다시  `never`가 된다.
+
+따라서 우리가 생각하는 `IsNever`의 목적을 달성하기 위해서는 아래와 같은 튜플을 이용하는 방식을 취해야 한다.
+
+```typescript
+type IsNever<T> = [T] extends [never] ? true : false;
+type Res1 = IsNever<never> // 'true' ✅
+type Res2 = IsNever<number> // 'false' ✅
+```
+
+> 사실 타입스크립트 소스코드에 있는 내용이다 https://github.com/microsoft/TypeScript/blob/main/tests/cases/conformance/types/conditional/conditionalTypes1.ts#L212
+
+

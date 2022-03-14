@@ -15,7 +15,7 @@ description: ''
 
 - [node.js의 filehandle.write](https://nodejs.org/api/fs.html#filehandlewritebuffer-offset-length-position)
   - `filehandle.write(buffer)`
-  - `filehandle.writestring]`
+  - `filehandle.write(string)`
 - [node-postgress](https://node-postgres.com/features/queries)의 쿼리
   - `client.query('query', (err, res) => ...)`
   - `client.query('query', ['value1', value2'] (err, res) => ...)`

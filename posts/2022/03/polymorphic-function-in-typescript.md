@@ -223,7 +223,7 @@ const v = search('key', (data) => {}) // ✅ void
 
 ```typescript
 function switchIt(input) {
-  if(typeof input === 'string') return Number(input)
+  if (typeof input === 'string') return Number(input)
   else return String(input)
 }
 ```
@@ -231,12 +231,14 @@ function switchIt(input) {
 이를 앞선 예제와 같은 형식으로 타입스크립트에서 구현한다면 이렇게 될 것이다.
 
 ```typescript
-function switchIt<T extends string | number>(input: T): T extends string ? number : string {
-    if (typeof input === 'string') {
-        return Number(input) as string & number
-    } else {
-        return String(input) as string & number
-    }
+function switchIt<T extends string | number>(
+  input: T,
+): T extends string ? number : string {
+  if (typeof input === 'string') {
+    return Number(input) as string & number
+  } else {
+    return String(input) as string & number
+  }
 }
 
 const num = switchIt('1') // has type number ✅
@@ -245,7 +247,7 @@ const str = switchIt(1) // has type string ✅
 
 이것을 함수 오버로딩 방식으로 타이핑 할 것이다.
 
-- 먼저 두개의 다른 시그니쳐를 만든다. 
+- 먼저 두개의 다른 시그니쳐를 만든다.
 - 오버로드한 함수의 구현부를 작성한다.
   - 유니언 타입으로 각 인수의 타입을 받는다.
   - 함수 내부에서는, 타입 가드를 사용하여 적절한 처리를 추가한다.
@@ -254,25 +256,25 @@ const str = switchIt(1) // has type string ✅
 function switchIt_overloaded(input: string): number
 function switchIt_overloaded(input: number): string
 function switchIt_overloaded(input: number | string): number | string {
-    if (typeof input === 'string') {
-        return Number(input) 
-    } else {
-        return String(input) 
-    } 
+  if (typeof input === 'string') {
+    return Number(input)
+  } else {
+    return String(input)
+  }
 }
 ```
 
-함수 오버로드를 사용하여, 
+함수 오버로드를 사용하여,
 
 - 제네릭과 조건부 타입을 제거
 - 타입 단언 제거
 
-이 덕분에 
+이 덕분에
 
 - 가독성 향상. 오버로드한 함수가 어떤 타입이 올 수 있는지 명확하게 구별할 수 있다. 또한 인수의 타입과 그에 따른 리턴 타입이 명확하게 분리되어 있다.
 - IDE가 오버로드 함수를 더욱 잘 지원할 수 있게 된다.
 
-### 좀더 복잡한 예쩨
+### 좀더 복잡한 예제
 
 방금 전에 만들었던 검색 함수 예제를 떠올려 보자. 이를 함수 오버로딩으로 구현하면 다음과 같이 처리할 수 있다.
 
@@ -283,7 +285,7 @@ function search_overloaded(term: string): Promise<Result[]>
 function search_overloaded(term: string, cb: Callback): void
 function search_overloaded(
   term: string,
-  cb?: Callback
+  cb?: Callback,
 ): void | Promise<Result[]> {
   const res = api(term)
 
@@ -307,11 +309,11 @@ const v = search_overloaded('key', (data) => {}) // ✅ void
 function switch_overloaded(input: string): number
 function switch_overloaded(input: number): string
 function switch_overloaded(input: number | string): number | string {
-     if (typeof input === 'string') {
-        return input // 그냥 string 리턴함
-    } else {
-        return input // 그냥 숫자 리턴함
-    } 
+  if (typeof input === 'string') {
+    return input // 그냥 string 리턴함
+  } else {
+    return input // 그냥 숫자 리턴함
+  }
 }
 
 const num = switch_overloaded('1') // ❌ ????
@@ -324,7 +326,7 @@ const str = switch_overloaded(1) // ❌ ????
 
 ### 사실 함수 오버로드도 함수타입의 intersection 일 뿐...
 
-함수 오버로드는 intersection 함수 타입에 대한 단지 문법적 설탕일 뿐이다. 
+함수 오버로드는 intersection 함수 타입에 대한 단지 문법적 설탕일 뿐이다.
 
 ```typescript
 function switchIt(input: string): number
@@ -334,26 +336,26 @@ function switchIt(input: number): string
 이는 사실 아래와 같다.
 
 ```typescript
-type F = ((input: string) => number) & ((input: number) => string) 
+type F = ((input: string) => number) & ((input: number) => string)
 
 const switchIt_intersection: F = (input) => {
-    if (typeof input === 'string') {
-        return Number(input)
-    } else {
-        return String(input)
-    }
+  if (typeof input === 'string') {
+    return Number(input)
+  } else {
+    return String(input)
+  }
 }
 
 const num = switchIt_intersection(1) // ✅
-const str = switchIt_intersection('1') // ✅ 
+const str = switchIt_intersection('1') // ✅
 ```
 
 마찬가지로, `F`도 객체 타입(인터페이스) 형태로 작성할 수도 있다.
 
 ```typescript
 interface F {
-    (input: number): string
-    (input: string): number
+  (input: number): string
+  (input: string): number
 }
 ```
 

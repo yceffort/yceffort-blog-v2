@@ -73,10 +73,10 @@ type GetReturnType<T> = T extends 'char' ? string : T extends 'int' ? number : n
 function getRandom<T extends'char' | 'int'>(str: T): GetReturnType<T> {
   if (str === 'int') {
     // generate a random number
-    return Math.floor(Math.random() * 10)  as GetReturnType<T>
+    return Math.floor(Math.random() * 10) as GetReturnType<T>
   } else {
     // generate a random char
-    return String.fromCharCode(97+Math.floor(Math.random() * 26))  as GetReturnType<T>
+    return String.fromCharCode(97+Math.floor(Math.random() * 26)) as GetReturnType<T>
 }
 ```
 

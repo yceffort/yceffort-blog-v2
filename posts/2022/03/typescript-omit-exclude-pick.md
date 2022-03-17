@@ -1,10 +1,10 @@
 ---
-title: '타입스크립트에서 omit, exclude, pick이 동작하는 방식'
+title: '타입스크립트의 Omit은 어떻게 동작할까? Exclude, Pick 부터 알아보기'
 tags:
   - typescript
 published: true
 date: 2022-03-16 22:08:36
-description: '타입스크립트 시리즈는 일단 여기까지'
+description: '헬퍼 타입도 잘 알고 써야 도움이 된다'
 ---
 
 ## Table of Contents

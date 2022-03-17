@@ -4,7 +4,7 @@ tags:
   - typescript
 published: true
 date: 2022-03-14 19:11:06
-description: ''
+description: 'mapped type과 오버로딩, 어떤걸 쓰는게 좋을까?'
 ---
 
 ## Table of Contents

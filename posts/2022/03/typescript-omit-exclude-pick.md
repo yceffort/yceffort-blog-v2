@@ -133,6 +133,7 @@ type Omit<T, K extends keyof string | number | symbol> = Pick<
 ```
 
 > https://github.com/microsoft/TypeScript/blob/546a87fa31086d3323ba4843a634863debb75781/lib/lib.es5.d.ts#L1513-L1516
+> 뭔가 저건 과하다고 생각한건지 `any`로 퉁쳤다.
 
 ### Omit 과정 다시한번 살펴보기
 
@@ -161,21 +162,24 @@ type TodoWithoutTitle = Pick<
   | ('createdAt' extends 'title' ? never : 'createdAt')
 >
 
-type TodoWithoutTitle = Pick<Todo, never | "description" | 'completed' | 'createdAt'>
+type TodoWithoutTitle = Pick<
+  Todo,
+  never | 'description' | 'completed' | 'createdAt'
+>
 
-type TodoWithoutTitle =  {
-  [Key in "description" | 'completed' | 'createdAt']: User[Key]
+type TodoWithoutTitle = {
+  [Key in 'description' | 'completed' | 'createdAt']: User[Key]
 }
 
 type TodoWithoutTitle = {
-  "description": Todo["description"]
-  "completed": Todo["completed"]
-  "createdAt": Todo["createdAt"]
+  description: Todo['description']
+  completed: Todo['completed']
+  createdAt: Todo['createdAt']
 }
 
 type TodoWithoutTitle = {
-  "description": string
-  "completed": boolean
-  "createdAt": number
+  description: string
+  completed: boolean
+  createdAt: number
 }
 ```

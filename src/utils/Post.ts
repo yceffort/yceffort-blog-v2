@@ -11,7 +11,7 @@ const DIR_REPLACE_STRING = '/posts'
 const POST_PATH = `${process.cwd()}${DIR_REPLACE_STRING}`
 
 async function retreiveAllPosts(): Promise<Array<Post>> {
-  const files = glob.sync(`${POST_PATH}/**/*.md`).reverse()
+  const files = glob.sync(`${POST_PATH}/**/*.md*`).reverse()
 
   const posts = files
     .reduce((prev, f) => {
@@ -22,6 +22,7 @@ async function retreiveAllPosts(): Promise<Array<Post>> {
 
       const slug = f
         .slice(f.indexOf(DIR_REPLACE_STRING) + DIR_REPLACE_STRING.length + 1)
+        .replace('.mdx', '')
         .replace('.md', '')
 
       if (published) {

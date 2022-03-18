@@ -57,7 +57,7 @@ http://www.ecma-international.org/ecma-262/6.0/#sec-properties-of-array-instance
 
 > The length property of an Array instance is a data property whose value is always numerically greater than the name of every configurable own property whose name is an array index.
 
-> The length property initially has the attributes { [[Writable]]: true, [[Enumerable]]: false, [[Configurable]]: false }.
+> The length property initially has the attributes `{ [[Writable]]: true, [[Enumerable]]: false, [[Configurable]]: false }`.
 
 > NOTE Reducing the value of the length property has the side-effect of deleting own array elements whose array index is between the old and new length values. However, non-configurable properties can not be deleted. Attempting to set the length property of an Array object to a value that is numerically less than or equal to the largest numeric own property name of an existing non-configurable array indexed property of the array will result in the length being set to a numeric value that is one greater than that non-configurable numeric own property name.
 

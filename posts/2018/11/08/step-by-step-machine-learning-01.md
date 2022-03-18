@@ -768,7 +768,7 @@ for mean_score, params in zip(cvres['mean_test_score'], cvres['params']):
 51672.291663087286 {'bootstrap': False, 'max_features': 4, 'n_estimators': 10}
 ```
 
-RMSE가 제일 작은 50199.124440913874 {'max_features': 8, 'n_estimators': 30} 가 최적의 모델인 것으로 나타났다.
+RMSE가 제일 작은 `50199.124440913874 {'max_features': 8, 'n_estimators': 30}` 가 최적의 모델인 것으로 나타났다.
 
 ### Randomize Search
 

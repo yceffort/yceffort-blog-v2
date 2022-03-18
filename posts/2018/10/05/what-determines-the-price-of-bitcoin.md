@@ -21,15 +21,7 @@ What Determines The Price Of Bitcoin?
 
 통화 분석 업체인 [Fundstrat](https://www.fundstrat.com/)는 그들이 비트코인의 미래 가격을 예측하는 방법을 발견했다고 생각했다. 그들은 Bitcoin이 2019년 말까지 36,000 달러에 도달할 것이라고 예측하기 위해, Bitcoin 마이닝 비용을 예상했다.
 
-<div class="jekyll-twitter-plugin"><blockquote class="twitter-tweet"><p lang="en" dir="ltr">CRYPTO: Our quant/data scientist <a href="https://twitter.com/fundstratQuant?ref_src=twsrc%5Etfw">@fundstratQuant</a> publishing <a href="https://twitter.com/hashtag/bitcoin?src=hash&amp;ref_src=twsrc%5Etfw">#bitcoin</a> mining white paper. Crypto mining economics lead/explain <a href="https://twitter.com/search?q=%24BTC&amp;src=ctag&amp;ref_src=twsrc%5Etfw">$BTC</a> price—suggests $39,000 per bitcoin by YE19. key takeaways below... <a href="https://t.co/f5ZQ4py3jS">pic.twitter.com/f5ZQ4py3jS</a></p>&mdash; Thomas Lee (@fundstrat) <a href="https://twitter.com/fundstrat/status/994566148007055361?ref_src=twsrc%5Etfw">May 10, 2018</a></blockquote>
-<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-</div>
-
 그러나 이 방법은 Bitcoin 커뮤니티로부터 상당한 비판을 받았다. 트위터에서 Blockstream의 수석 전략 책임자인 Samson Mow는 Fundstrat의 예측이 논란의 여지가 있는 경제 이론에 의존한다고 주장했다.
-
-<div class="jekyll-twitter-plugin"><blockquote class="twitter-tweet"><p lang="en" dir="ltr">I generally like your work <a href="https://twitter.com/fundstrat?ref_src=twsrc%5Etfw">@fundstrat</a>, but hashrate growth doesn’t "support" <a href="https://twitter.com/search?q=%24BTC&amp;src=ctag&amp;ref_src=twsrc%5Etfw">$BTC</a> price. You’re essentially making an argument for the labor theory of value -&gt; meaning people will pay x for a hole you dug just because you spent time digging. <a href="https://t.co/caYbaS8MJy">https://t.co/caYbaS8MJy</a></p>&mdash; Samson Mow (@Excellion) <a href="https://twitter.com/Excellion/status/995178042443141120?ref_src=twsrc%5Etfw">May 12, 2018</a></blockquote>
-<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-</div>
 
 [‘노동가치설’](https://terms.naver.com/entry.nhn?docId=1076599&cid=40942&categoryId=31846)은 본질적으로 상품이나 서비스의 가격이 그것을 생산하는 데 필요한 작업에 의해 결정된다고 말한다. 마르크스주의 경제학자들에게는 인기가 있지만, 대부분의 다른 경제학 학교들은 그것을 포기하고 ‘주관적 평가’를 선호했다. 이 평가는 선이나 서비스의 가치가 그것을 생산하기 위해 어떤 노력을 하든 상관없이 어떤 사람이 지불할 것인지를 의미한다. 모우의 주장은 주관적 평가가 가치의 노동 이론이 아니라 비트코인의 가격 역학을 이해하는 올바른 방법이라는 것이다.
 

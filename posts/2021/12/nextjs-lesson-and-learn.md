@@ -152,43 +152,6 @@ MyApp.getInitialProps = async (appContext) => {
 export default MyApp
 ```
 
-<!-- ## getInitialProps에서 사용자의 데이터를 다뤄도 될까?
-
-앱에 사용자가 최초 접근 시, 그러니까 `getIntialProps` 가 서버에서 실행될 때 사용자와 관련된 정보를 불러오고 그것을 애플리케이션 전체 라이프사이클에서 persistent하게 사용하고 싶었다. 그러니까, 대략 이런 코드였다.
-
-```jsx
-import App from 'next/app';
-import '../styles/globals.css';
-
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />;
-}
-
-MyApp.getInitialProps = async (appContext) => {
-  const appProps = await App.getInitialProps(appContext);
-  const {
-    ctx: { req },
-  } = appContext;
-
-  // 서버사이드라면
-  if (req) {
-    // req에 있는 쿠키든 뭐든 활용해서 유저정보를 가져옴.
-    const user = await fetchUserInfo({req})
-
-    // 서버사이드에서는 유저정보를 내려준다.
-    return { ...appProps, user}
-  }
-
-  return { ...appProps };
-};
-
-export default MyApp;
-```
-
-결론적으로, 이런 코드는 해서는 안됬었다. 그 이유를 이제 살펴보자.
-
-`fetchUserInfo`는 물론 빠른 비동기 함수겠지만, 어쩄거나 그 속도에는 차이가 있을 수 밖에 없다. 만약 이 API의 응답속도가 조금씩 다르다면 어떻게 될까? -->
-
 ## 환경변수 쓰기 전에 잘 점검하기
 
 | Method              | Set at    | Available in Next.js client side rendered code (browser) | Available in Next.js server side rendered code | Available in Node.js               | Notes                                                       |

@@ -38,9 +38,9 @@ rules: {
 
 https://github.com/eslint/eslint/issues/10930
 
-> @jlchereau ESLint's indent rule and Prettier's indentation styles do not match - they're completely separate implementations and are two different approaches to solving the same problem ("how do we enforce consistent indentation in a project").
+> @jlchereau ESLint's indent rule and Prettier's indentation styles do not match - they're completely separate implementations and are two different approaches to solving the same problem `("how do we enforce consistent indentation in a project")`.
 
-> When using Prettier, you shouldn't be using ESLint's indent rule at all. In your current configuration, the prettier config disables indent and then you're turning it back on using "indent": ["error", 4, { "SwitchCase": 1 }], in the rules property of your config. I don't use eslint-plugin-prettier, but I believe you should be letting that rule handle any warnings about indentation.
+> When using Prettier, you shouldn't be using ESLint's indent rule at all. In your current configuration, the prettier config disables indent and then you're turning it back on using `"indent": ["error", 4, { "SwitchCase": 1 }]`, in the rules property of your config. I don't use eslint-plugin-prettier, but I believe you should be letting that rule handle any warnings about indentation.
 
 이러한 `indent`룰 이외에도 충돌하는 룰이 몇가지 있다.
 

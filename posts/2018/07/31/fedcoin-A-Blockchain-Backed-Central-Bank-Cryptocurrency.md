@@ -64,10 +64,3 @@ FedCoin - A Blockchain-Backed Central Bank Cryptocurrency
 를 가져올 수 있다.
 
 ![fedcoin-structure](../images/fedcoin-structure.png)
-
-<!-- He queries that the input addresses are unspent and gets votes on their validity. That bundle of votes is then committed to the set of Nodes mapped to the shards of User ’s addresses, to get proof the transaction was saved in a low-level block.
-
-Nodes collect user transactions and seal them in a low-level block every epoch, to then post the block to the Central Bank.
-
-The Central Bank validates the in-order queue of low-level blocks it has received during the period. At the end of period, the Central Bank first notifies all Nodes to halt generation of new low-level blocks (see dotted arrow). The CB then seals the unique validated set of global transactions in a high-level block in the publicly visible blockchain. Once sealed, the Central Bank notifies Nodes to resume low-level block generation.
- -->

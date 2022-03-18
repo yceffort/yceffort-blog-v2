@@ -299,7 +299,7 @@ https://remix.run/docs/en/v1/guides/styling
 
 remix는 nextjs를 사용하는 사람에게 매우 친숙한 파일 기반 라우팅을 사용한다. 그러나 nextjs 와 다르게 경로를 계층으로 구성할 수 있는 React Router 스타일의 중첩을 지원한다.
 
-예를 들어, 아래와 같은 라우팅이 있따고 가정해보자.
+예를 들어, 아래와 같은 라우팅이 있다고 가정해보자.
 
 - `/dashboard`
 - `/dashboard/settings`

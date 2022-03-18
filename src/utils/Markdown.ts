@@ -3,7 +3,7 @@ import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import toc from 'remark-toc'
 import slug from 'remark-slug'
-import visit from 'unist-util-visit'
+import { visit } from 'unist-util-visit'
 import { Node } from 'unist'
 import sizeOf from 'image-size'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -105,7 +105,6 @@ export async function parseMarkdownToMdx(body: string, path: string) {
     mdxOptions: {
       remarkPlugins: [remarkMath, toc, slug, parseImageToNextImage(path)],
       rehypePlugins: [rehypeKatex, prism, parseCodeSnippet],
-      compilers: [],
     },
   })
 }

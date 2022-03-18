@@ -9,7 +9,7 @@ function NextImage(props: HTMLProps<HTMLImageElement>) {
       {...props}
       crossOrigin="anonymous"
       src={props.src || ''}
-      placeholder="blur"
+      placeholder="empty"
     />
   )
 }

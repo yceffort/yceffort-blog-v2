@@ -3,7 +3,7 @@ import Document, { Html, Head, Main, NextScript } from 'next/document'
 import Meta from '#components/Meta'
 
 export default class MyDocument extends Document {
-  render() {
+  public render() {
     return (
       <Html lang="ko">
         <Head>

@@ -12,7 +12,7 @@ import { SEO } from '#components/SEO'
 import LayoutWrapper from '#components/LayoutWrapper'
 
 class MyApp extends App {
-  componentDidMount() {
+  public componentDidMount() {
     window.history.scrollRestoration = 'auto'
 
     const cachedScrollPositions: Array<[number, number]> = []
@@ -46,7 +46,7 @@ class MyApp extends App {
     })
   }
 
-  render() {
+  public render() {
     const { Component, pageProps } = this.props
 
     return (

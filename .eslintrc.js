@@ -1,12 +1,12 @@
 const createConfig = require('@titicaca/eslint-config-triple/create-config')
 
-const { extends: extendConfigs, overrides } = createConfig({ type: 'frontend', project: './tsconfig.json' })
+const { extends: extendConfigs, overrides } = createConfig({
+  type: 'frontend',
+  project: './tsconfig.json',
+})
 
 module.exports = {
-  extends: [
-    ...extendConfigs,
-    'plugin:@next/next/recommended',
-  ],
+  extends: [...extendConfigs, 'plugin:@next/next/recommended'],
   overrides,
   rules: {
     'react/react-in-jsx-scope': 'off',
@@ -14,7 +14,7 @@ module.exports = {
     '@typescript-eslint/explicit-member-accessibility': 'off',
     'jsx-a11y/anchor-has-content': 'off',
     'jsx-a11y/accessible-emoji': 'off',
-    'jsx-a11y/anchor-is-valid': 'off'
+    'jsx-a11y/anchor-is-valid': 'off',
   },
   parserOptions: {
     requireConfigFile: false,

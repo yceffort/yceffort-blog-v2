@@ -86,7 +86,7 @@ Max Pooling 의 예다. 각 섹션 별로 큰 값만 추출해 낸 모습이다.
 
 일부 노드들을 훈련에 참여시키지 않고 몇개의 노드를 끊어서, 남은 노드들을 통해서만 훈련시키는 방식이다. 이 때 끊어버리는 노드는 랜덤으로 선택한다. pytorch에서는 기본값이 0.5 다. 즉 절반의 노드를 dropout하고 계산한다. 이렇게 함으로써, training하는 과정에서 Overfitting이 발생하지 않게 할 수 있다.
 
-<!-- ## 이미지 구별하기 예제
+## 이미지 구별하기 예제
 
 옷 이미지를 구별하는 예제에 CNN을 적용해 보려고 한다. 데이터 출처는 [여기](https://github.com/zalandoresearch/fashion-mnist)다.
 
@@ -128,20 +128,20 @@ train_loader = DataLoader(train, batch_size=100, shuffle=True)
 
 padding 크기는 출력결과가 원본과 같은 크기를 만들 수 있다면 얼마든지 가능하다.
 
-$$ \text{Padding} = \frac{\text{FilterSize}-1}{2}  = 2 $$
+$$ \text{Padding} = \frac{\text{FilterSize}-1}{2} = 2 $$
 
 - 패딩사이즈: P = 2
 
 이를 기반으로 출력 크기를 계산해보자.
 
-$$ \text{OutputHeight} =  \frac{(H + 2P - FH)}{S} + 1  $$
+$$ \text{OutputHeight} = \frac{(H + 2P - FH)}{S} + 1 $$
 
-$$ \text{OutputHeight} = \frac{28 + 2 * 2 - 5 }{1}  + 1 = 28  $$
+$$ \text{OutputHeight} = \frac{28 + 2 \* 2 - 5 }{1} + 1 = 28 $$
 
 두번째 출력은 필터 사이즈를 조금더 줄이고 (2), stride를 (2)로 설정한다.
 
-$$ \text{OutputHeight} = \frac{28 + 2 * 2 - 2 }{2}  + 1 = 16 $$
+$$ \text{OutputHeight} = \frac{28 + 2 \* 2 - 2 }{2} + 1 = 16 $$
 
 도 같을 것이다.
 
-`Conv-Relu-Pool-Conv-Relu-Pool` 이정도 느낌으로 만들어보자. -->
+`Conv-Relu-Pool-Conv-Relu-Pool` 이정도 느낌으로 만들어보자.

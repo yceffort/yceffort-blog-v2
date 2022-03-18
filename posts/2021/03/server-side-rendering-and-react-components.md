@@ -110,7 +110,7 @@ retry: ƒ ()arguments: (...)caller: (...)length: 0name: "bound retry"__proto__: 
 >
 > ...
 >
-> This works because useRef() creates a plain JavaScript object. The only difference between useRef() and creating a {current: ...} object yourself is that useRef will give you the same ref object on every render.
+> This works because useRef() creates a plain JavaScript object. The only difference between `useRef()` and creating a `{current: ...}` object yourself is that useRef will give you the same ref object on every render.
 
 https://reactjs.org/docs/hooks-reference.html#useref
 

@@ -320,7 +320,7 @@ const num = switch_overloaded('1') // ❌ ????
 const str = switch_overloaded(1) // ❌ ????
 ```
 
-> https://www.typescriptlang.org/play?#code/GYVwdgxgLglg9mABAZwO4yhAFgfTgNwFMAnAGzgEMATQqgChjAAcQoAuFKYxgcwEoOYEAFsARiQBQoSLAQp0mXARLlqtBs1aCR44gM7cwPKeGjwkaDNjxEylGvUYt2iIWJKIAPgd763urx8jRABvCUQIiJhgRDooAE8mQjgYp1ZEAF4sxAByZC5eHL5Q8Miy4kIoEGIkNKhEAHoGxEAP2sBThqCeREAazsAWRcALVdKIgF9EQlJkQhKy8srq2s16ptaOwGohwATxnoGhxFGJYYkJCAR81xFM+SslW1UHOhyARiLG5sAZcjPhPMQEpMQYZA+AVE6QwfwBFGgIAopFI8UQFE6RxO9XyxAulkUNhU9nUD2Ky3eqK+Pym-06iGB9VBZIhVWhsPhgJIQA
+> [typescript playground에서 보기](https://www.typescriptlang.org/play?#code/GYVwdgxgLglg9mABAZwO4yhAFgfTgNwFMAnAGzgEMATQqgChjAAcQoAuFKYxgcwEoOYEAFsARiQBQoSLAQp0mXARLlqtBs1aCR44gM7cwPKeGjwkaDNjxEylGvUYt2iIWJKIAPgd763urx8jRABvCUQIiJhgRDooAE8mQjgYp1ZEAF4sxAByZC5eHL5Q8Miy4kIoEGIkNKhEAHoGxEAP2sBThqCeREAazsAWRcALVdKIgF9EQlJkQhKy8srq2s16ptaOwGohwATxnoGhxFGJYYkJCAR81xFM+SslW1UHOhyARiLG5sAZcjPhPMQEpMQYZA+AVE6QwfwBFGgIAopFI8UQFE6RxO9XyxAulkUNhU9nUD2Ky3eqK+Pym-06iGB9VBZIhVWhsPhgJIQA)
 
 읭? 올바르지 않은 타입을 리턴해버렸음에도 에러가 나지 않는다. 타입스크립트 컴파일러는 함수 본체의 코드 (오버로드 된)의 함수 시그니처와 대조할 뿐이지, 분기 문에서 어떻게 오버로드를 다루는지는 알 수 없다. 결과적으로, 오버로드 함수 시그니처와 모순된 내부 코드를 작성할 수 있는 위험성이 존재한다.
 

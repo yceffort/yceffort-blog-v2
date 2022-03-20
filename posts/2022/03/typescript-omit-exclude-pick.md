@@ -74,7 +74,7 @@ type Pick<T, Key extends keyof T> = {
 
 작동방식을 확인하면 거의 유사하다는 것을 알 수 있다.
 
-> https://github.com/microsoft/TypeScript/blob/546a87fa31086d3323ba4843a634863debb75781/lib/lib.es5.d.ts#L1489-L1494
+> [타입스크립트 원본 코드 확인해보기](https://github.com/microsoft/TypeScript/blob/546a87fa31086d3323ba4843a634863debb75781/lib/lib.es5.d.ts#L1489-L1494)
 
 ## Omit
 

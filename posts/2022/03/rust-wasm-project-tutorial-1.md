@@ -6,7 +6,7 @@ tags:
   - rust
 published: true
 date: 2022-03-18 23:56:56
-description: '아이고야'
+description: '코로나 휴가를 틈탄 러스트 뻘짓'
 ---
 
 ## Table of Contents
@@ -52,4 +52,22 @@ cargo generate --git https://github.com/rustwasm/wasm-pack-template
 
 
 ### 내부 살펴보기
+
+```
+.
+├── Cargo.toml
+├── LICENSE_APACHE
+├── LICENSE_MIT
+├── README.md
+├── src
+│   ├── lib.rs
+│   └── utils.rs
+└── tests
+    └── web.rs
+```
+
+### `Cargo.toml`
+
+
+
 

@@ -68,6 +68,60 @@ cargo generate --git https://github.com/rustwasm/wasm-pack-template
 
 ### `Cargo.toml`
 
+`Cargo.toml`은 이 패키지에서 필요로하는 의존성과, cargo metadata를 포함하고 있다. 
 
+### `src/lib.rs`
 
+```rust
+mod utils;
+
+use wasm_bindgen::prelude::*;
+
+// When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
+// allocator.
+#[cfg(feature = "wee_alloc")]
+#[global_allocator]
+static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+
+#[wasm_bindgen]
+extern {
+    fn alert(s: &str);
+}
+
+#[wasm_bindgen]
+pub fn greet() {
+    alert("Hello, wasm-game-of-life!");
+}
+```
+
+우리가 이제 만들려고 하는 webassembly의 루트 파일이다. `wasm-bindgen`을 사용하여 자바스크립트 인터페이스와 연결하는 것을 볼 수 있다. 이전에 예제에서 살펴본 것처럼, 이 경우에는 `window.alert`를 구현한 것으로 볼 수 있다.
+
+#### `src/utils.rs`
+
+```rust
+pub fn set_panic_hook() {
+    // When the `console_error_panic_hook` feature is enabled, we can call the
+    // `set_panic_hook` function at least once during initialization, and then
+    // we will get better error messages if our code ever panics.
+    //
+    // For more details see
+    // https://github.com/rustwasm/console_error_panic_hook#readme
+    #[cfg(feature = "console_error_panic_hook")]
+    console_error_panic_hook::set_once();
+}
+```
+
+작업을 좀더 용이하게 하기 위한 공통 유틸리티를 관리하는 파일이다. wasm 코드 디버깅 등 다양한 일을 할 수 있는데, 일단 이단계에서는 무시한다.
+
+### 빌드
+
+`wasm-pack`을 사용하여 빌드할 경우, 다음의 단계를 거친다.
+
+- rust 1.30 이상이 설치되어 있는지, 그리고 wasm32-unknown-unknown 타깃이 rustup을 통해 설치되어 있는지 확인
+- rust 소스를 webassembly .wasm 바이너리로 컴파일
+- `wasm-bindgen`을 사용하여 rust webassembly에서 사용할 수 있는 자바스크립트 api를 생성
+
+`wasm-pack build`
+
+빌드가 끝나면, `pkg` 디렉토리 아래에 다음과 같은 내용르 확인할 수 있을 것이다.
 

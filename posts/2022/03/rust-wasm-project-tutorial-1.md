@@ -123,5 +123,99 @@ pub fn set_panic_hook() {
 
 `wasm-pack build`
 
-빌드가 끝나면, `pkg` 디렉토리 아래에 다음과 같은 내용르 확인할 수 있을 것이다.
+빌드가 끝나면, `pkg` 디렉토리 아래에 다음과 같은 내용을 확인할 수 있을 것이다.
 
+```
+./pkg/
+├── package.json
+├── README.md
+├── wasm_game_of_life_bg.js
+├── wasm_game_of_life_bg.wasm
+├── wasm_game_of_life_bg.wasm.d.ts
+├── wasm_game_of_life.d.ts
+└── wasm_game_of_life.js
+```
+
+#### `pkg/wasm_game_of_life_bg.wasm`
+
+`.wasm` 파일은 러스트 컴파일러가 러스트 소스에서 생성한 WebAssembly 바이러니다. 여기에는 우리가 만든 러스트 함수와 데이터가 wasm 버전으로 컴파일 되어있다. 이 경우에는, `greet()`함수가 있을 것이다.
+
+
+#### `pkg/wasm_game_of_life.js`
+
+`.js`는 `wasm-bindgen`에 의해 생성되며, DOM 및 자바스크립트 함수를 rust로 import하고, WebAssembly 함수에 대한 api를 자바스크립트에 노출하기 위한 연결 고리를 제공한다. 방금 예제에서는, webassembly에서 보낸 `greet` 함수를 감싸는 javascript `greet` 함수가 존재한다. wasm과 javascript 간에 값을 주고받기 시작하면 이러한 경계를 넘어서는데 도움이 될 것이다.
+
+#### `pkg/wasm_game_of_life.d.ts`
+
+다들 아는 것처럼 `d.ts`는 타입스크립트 코드의 타입 추론을 돕는 파일이다. 만약 타입스크립트를 사용한다면, webassembly 함수를 Import 할 때 도움이 될 것이다. 타입스크립트를 사용하지 않는다면 무시해도 된다. 
+
+#### `pkg/package.json`
+
+```json
+{
+  "name": "wasm-game-of-life",
+  "collaborators": [
+    "GitHub <noreply@github.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "wasm_game_of_life_bg.wasm",
+    "wasm_game_of_life.js",
+    "wasm_game_of_life_bg.js",
+    "wasm_game_of_life.d.ts"
+  ],
+  "module": "wasm_game_of_life.js",
+  "types": "wasm_game_of_life.d.ts",
+  "sideEffects": false
+}
+```
+
+`package.json`은 자바스크립트와 webassembly 패키지를 만드는데 필요한 메타데이터를 가진 파일이다. `npm`이 이 `package.json`을 사용하고, 자바스크립트 번들러는 이 패키지 내의 의존성, 버전 등을 관리할 수 있게 된다.
+
+### 웹 페이지에서 보기
+
+디렉토리에서, 아래 명령어를 실행하자.
+
+`npm init wasm-app www`
+
+```
+@yceffort ➜ /workspaces/rust-playground/wasm-game-of-life (main ✗) $ npm init wasm-app www
+npx: installed 1 in 3.952s
+🦀 Rust + 🕸 Wasm = ❤
+```
+
+`www` 디렉토리 아래 npm package가 생성된 것을 볼 수 있다.
+
+```
+./www/
+├── bootstrap.js
+├── index.html
+├── index.js
+├── LICENSE-APACHE
+├── LICENSE-MIT
+├── package.json
+├── package-lock.json
+├── README.md
+└── webpack.config.js
+```
+
+이 패키지에서, 우리가 사용할 webassembly를 사용할 수 있도록 `dependencies`에 의존성으로 걸어두어야 한다.
+
+```
+...
+"dependencies": {
+    "wasm-game-of-life": "file:../pkg"
+  },
+```
+
+그리고 `index.js`를 아래 내용으로 바꾼다.
+
+```javascript
+import * as wasm from "wasm-game-of-life";
+
+wasm.greet();
+```
+
+그리고 의존성을 설치한 뒤에, 실행해보면 `alert`가 정상적으로 뜨는 것을 확인할 수 있다.
+
+![wasm-alert](./images/wasm-alert.png)

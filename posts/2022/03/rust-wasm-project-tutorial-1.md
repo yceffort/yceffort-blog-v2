@@ -214,3 +214,5 @@ wasm.greet()
 그리고 의존성을 설치한 뒤에, 실행해보면 `alert`가 정상적으로 뜨는 것을 확인할 수 있다.
 
 ![wasm-alert](./images/wasm-alert.png)
+
+다음 포스트에서, 이제 구체적으로 game-of-life를 러스트를 통해서 구현해 보자.

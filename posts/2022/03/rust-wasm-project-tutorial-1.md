@@ -1,8 +1,8 @@
 ---
-title: 'Rust로 web assembly로 게임 만들어보기 (1)'
+title: 'Rust로 web assembly로 game of life 만들어보기 (1)'
 tags:
   - web
-  - javascript  
+  - javascript
   - rust
 published: true
 date: 2022-03-18 23:56:56
@@ -13,13 +13,13 @@ description: '코로나 휴가를 틈탄 러스트 뻘짓'
 
 ## Introduction
 
-이 튜토리얼은 https://rustwasm.github.io/docs/book/game-of-life/introduction.html 에서 제공하는 Rust WebAssembly로 만드는 Game of Life 을 기반으로 작성되었습니다. 직접 튜토리얼을 따라하면서 단순히 번역 이외에도 최신 라이브러리 버전 기준으로 재작성하였으며, 설명이 부족하거나 생략된 부분에 대해서도 별도로 주석을 달았습니다. 
+이 튜토리얼은 https://rustwasm.github.io/docs/book/game-of-life/introduction.html 에서 제공하는 Rust WebAssembly로 만드는 Game of Life 을 기반으로 작성되었습니다. 직접 튜토리얼을 따라하면서 단순히 번역 이외에도 최신 라이브러리 버전 기준으로 재작성하였으며, 설명이 부족하거나 생략된 부분에 대해서도 별도로 주석을 달았습니다.
 
 기본적으로 러스트에 대한 완벽한 이해를 기반으로 하지 않고 작성되었기 때문에, 일부 러스트 문법에 대한 설명이 적혀있을 수도 있습니다.
 
 ## Game of Life?
 
-[라이프 게임, 또는 생명 게임](https://ko.wikipedia.org/wiki/%EB%9D%BC%EC%9D%B4%ED%94%84_%EA%B2%8C%EC%9E%84)은 처음에 입력된 초기값을 기준으로 알아서 시작되는 게임이다. 
+[라이프 게임, 또는 생명 게임](https://ko.wikipedia.org/wiki/%EB%9D%BC%EC%9D%B4%ED%94%84_%EA%B2%8C%EC%9E%84)은 처음에 입력된 초기값을 기준으로 알아서 시작되는 게임이다.
 
 이 게임은 무한한 개수의 사각형 (이하 세포)로 이루어진 격자위에서 실행된다. 각 세포 주위에는 8개의 이웃 세포가 있으며, 각 세포는 살아있거나 죽어있는 상태를 가진다. 그리고 이 세포의 다음 상태는 다음과 같이 결정된다.
 
@@ -37,7 +37,6 @@ description: '코로나 휴가를 틈탄 러스트 뻘짓'
 - [cargo-generate](https://github.com/ashleygwilliams/cargo-generate): 이 라이브러리는 이미 존재하는 깃 저장소를 기본 템플릿으로 사용하여 빠르게 러스트 프로젝트를 만드는데 도움을 준다.
 - `npm`
 
-
 ## 2. Hello, World
 
 ### 프로젝트 클론
@@ -49,7 +48,6 @@ cargo generate --git https://github.com/rustwasm/wasm-pack-template
 ```
 
 그리고 게임 이름을 입력한다. `wasm-game-of-life`
-
 
 ### 내부 살펴보기
 
@@ -68,7 +66,7 @@ cargo generate --git https://github.com/rustwasm/wasm-pack-template
 
 ### `Cargo.toml`
 
-`Cargo.toml`은 이 패키지에서 필요로하는 의존성과, cargo metadata를 포함하고 있다. 
+`Cargo.toml`은 이 패키지에서 필요로하는 의존성과, cargo metadata를 포함하고 있다.
 
 ### `src/lib.rs`
 
@@ -140,23 +138,20 @@ pub fn set_panic_hook() {
 
 `.wasm` 파일은 러스트 컴파일러가 러스트 소스에서 생성한 WebAssembly 바이러니다. 여기에는 우리가 만든 러스트 함수와 데이터가 wasm 버전으로 컴파일 되어있다. 이 경우에는, `greet()`함수가 있을 것이다.
 
-
 #### `pkg/wasm_game_of_life.js`
 
 `.js`는 `wasm-bindgen`에 의해 생성되며, DOM 및 자바스크립트 함수를 rust로 import하고, WebAssembly 함수에 대한 api를 자바스크립트에 노출하기 위한 연결 고리를 제공한다. 방금 예제에서는, webassembly에서 보낸 `greet` 함수를 감싸는 javascript `greet` 함수가 존재한다. wasm과 javascript 간에 값을 주고받기 시작하면 이러한 경계를 넘어서는데 도움이 될 것이다.
 
 #### `pkg/wasm_game_of_life.d.ts`
 
-다들 아는 것처럼 `d.ts`는 타입스크립트 코드의 타입 추론을 돕는 파일이다. 만약 타입스크립트를 사용한다면, webassembly 함수를 Import 할 때 도움이 될 것이다. 타입스크립트를 사용하지 않는다면 무시해도 된다. 
+다들 아는 것처럼 `d.ts`는 타입스크립트 코드의 타입 추론을 돕는 파일이다. 만약 타입스크립트를 사용한다면, webassembly 함수를 Import 할 때 도움이 될 것이다. 타입스크립트를 사용하지 않는다면 무시해도 된다.
 
 #### `pkg/package.json`
 
 ```json
 {
   "name": "wasm-game-of-life",
-  "collaborators": [
-    "GitHub <noreply@github.com>"
-  ],
+  "collaborators": ["GitHub <noreply@github.com>"],
   "version": "0.1.0",
   "files": [
     "wasm_game_of_life_bg.wasm",
@@ -211,9 +206,9 @@ npx: installed 1 in 3.952s
 그리고 `index.js`를 아래 내용으로 바꾼다.
 
 ```javascript
-import * as wasm from "wasm-game-of-life";
+import * as wasm from 'wasm-game-of-life'
 
-wasm.greet();
+wasm.greet()
 ```
 
 그리고 의존성을 설치한 뒤에, 실행해보면 `alert`가 정상적으로 뜨는 것을 확인할 수 있다.

@@ -13,7 +13,7 @@ import { SiteConfig } from '#src/config'
 const LayoutWrapper = ({ children }: { children: ReactNode }) => {
   return (
     <SectionContainer>
-      <div className="flex flex-col justify-between h-screen">
+      <div className="flex h-screen flex-col justify-between">
         <header className="flex items-center justify-between py-10">
           <div>
             <Link href="/" aria-label="Tailwind CSS Blog">
@@ -25,7 +25,7 @@ const LayoutWrapper = ({ children }: { children: ReactNode }) => {
                     width={40}
                     height={40}
                     placeholder="blur"
-                    className="w-10 h-10 rounded-full"
+                    className="h-10 w-10 rounded-full"
                   />
                 </div>
                 <div className="hidden h-6 text-2xl font-semibold sm:block">
@@ -40,7 +40,7 @@ const LayoutWrapper = ({ children }: { children: ReactNode }) => {
                 <Link
                   key={link.label}
                   href={link.path}
-                  className="p-1 font-medium text-gray-900 sm:p-4 dark:text-gray-100"
+                  className="p-1 font-medium text-gray-900 dark:text-gray-100 sm:p-4"
                 >
                   {link.label}
                 </Link>

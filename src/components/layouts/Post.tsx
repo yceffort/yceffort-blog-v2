@@ -63,13 +63,13 @@ export default function PostLayout({
             </div>
           </header>
           <div
-            className="pb-8 divide-y divide-gray-200 xl:divide-y-0 dark:divide-gray-700 xl:grid xl:grid-cols-4 xl:gap-x-6"
+            className="divide-y divide-gray-200 pb-8 dark:divide-gray-700 xl:grid xl:grid-cols-4 xl:gap-x-6 xl:divide-y-0"
             style={{ gridTemplateRows: 'auto 1fr' }}
           >
-            <dl className="pt-6 pb-10 xl:pt-11 xl:border-b xl:border-gray-200 xl:dark:border-gray-700">
+            <dl className="pt-6 pb-10 xl:border-b xl:border-gray-200 xl:pt-11 xl:dark:border-gray-700">
               <dt className="sr-only">Author</dt>
               <dd>
-                <ul className="flex justify-center space-x-8 xl:block sm:space-x-12 xl:space-x-0 xl:space-y-8">
+                <ul className="flex justify-center space-x-8 sm:space-x-12 xl:block xl:space-x-0 xl:space-y-8">
                   <li className="flex items-center space-x-2">
                     <Image
                       src={profile}
@@ -77,9 +77,9 @@ export default function PostLayout({
                       alt="avatar"
                       width={40}
                       height={40}
-                      className="w-10 h-10 rounded-full"
+                      className="h-10 w-10 rounded-full"
                     />
-                    <dl className="text-sm font-medium leading-5 whitespace-nowrap">
+                    <dl className="whitespace-nowrap text-sm font-medium leading-5">
                       <dt className="sr-only">Name</dt>
                       <dd className="text-gray-900 dark:text-gray-100">
                         {SiteConfig.author.name}
@@ -89,8 +89,8 @@ export default function PostLayout({
                 </ul>
               </dd>
             </dl>
-            <div className="divide-y divide-gray-200 dark:divide-gray-700 xl:pb-0 xl:col-span-3 xl:row-span-2">
-              <div className="pt-10 pb-8 prose dark:prose-dark max-w-none">
+            <div className="divide-y divide-gray-200 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0">
+              <div className="prose max-w-none pt-10 pb-8 dark:prose-dark">
                 {children}
               </div>
               <div className="pt-6 pb-6 text-sm text-gray-700 dark:text-gray-300">
@@ -98,10 +98,10 @@ export default function PostLayout({
               </div>
             </div>
             <footer>
-              <div className="text-sm font-medium leading-5 divide-gray-200 xl:divide-y dark:divide-gray-700 xl:col-start-1 xl:row-start-2">
+              <div className="divide-gray-200 text-sm font-medium leading-5 dark:divide-gray-700 xl:col-start-1 xl:row-start-2 xl:divide-y">
                 {tags && (
                   <div className="py-4 xl:py-8">
-                    <h2 className="text-xs tracking-wide text-gray-500 uppercase dark:text-gray-400">
+                    <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
                       Tags
                     </h2>
                     <div className="flex flex-wrap">

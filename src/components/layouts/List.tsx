@@ -22,7 +22,7 @@ export default function ListLayout({
   return (
     <>
       <div className="divide-y">
-        <div className="pt-6 pb-8 space-y-2 md:space-y-5">
+        <div className="space-y-2 pt-6 pb-8 md:space-y-5">
           <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
             {title}
           </h1>
@@ -39,7 +39,7 @@ export default function ListLayout({
               const updatedAt = format(new Date(date), 'yyyy-MM-dd')
               return (
                 <li key={`${slug}_${index}`} className="py-4">
-                  <article className="space-y-2 xl:grid xl:grid-cols-4 xl:space-y-0 xl:items-baseline">
+                  <article className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
                     <dl>
                       <dt className="sr-only">Published on</dt>
                       <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
@@ -62,7 +62,7 @@ export default function ListLayout({
                           ))}
                         </div>
                       </div>
-                      <div className="prose text-gray-500 max-w-none dark:text-gray-400">
+                      <div className="prose max-w-none text-gray-500 dark:text-gray-400">
                         {description}
                       </div>
                     </div>
@@ -74,7 +74,7 @@ export default function ListLayout({
         </ul>
       </div>
       <div className="flex">
-        <div className="flex w-1/2 text-base font-medium leading-6 justify-start">
+        <div className="flex w-1/2 justify-start text-base font-medium leading-6">
           {pageNo !== 1 && (
             <CustomLink
               href={prevPath || `/pages/${pageNo - 1}`}
@@ -86,7 +86,7 @@ export default function ListLayout({
           )}
         </div>
 
-        <div className="flex w-1/2 text-base font-medium leading-6 justify-end">
+        <div className="flex w-1/2 justify-end text-base font-medium leading-6">
           {hasNextPage && (
             <CustomLink
               href={nextPath || `/pages/${pageNo + 1}`}

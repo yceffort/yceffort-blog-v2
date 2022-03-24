@@ -6,8 +6,8 @@ import { SiteConfig } from '#src/config'
 export default function Footer() {
   return (
     <footer>
-      <div className="flex flex-col items-center mt-16">
-        <div className="flex mb-3 space-x-4">
+      <div className="mt-16 flex flex-col items-center">
+        <div className="mb-3 flex space-x-4">
           <SocialIcon
             kind="mail"
             href={`mailto:${SiteConfig.author.contacts.email}`}
@@ -19,7 +19,7 @@ export default function Footer() {
             size={6}
           />
         </div>
-        <div className="flex mb-2 space-x-2 text-sm text-gray-500 dark:text-gray-400">
+        <div className="mb-2 flex space-x-2 text-sm text-gray-500 dark:text-gray-400">
           <div>{SiteConfig.author.name}</div>
           <div>{` • `}</div>
           <div>{`© ${new Date().getFullYear()}`}</div>

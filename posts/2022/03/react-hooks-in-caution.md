@@ -115,6 +115,8 @@ function User({ user }) {
 - 문자열의 경우, 크기와 구성하고 있는 글자가 같은 순서인지
 - 나머지 non-primitive의 경우, 이들은 mutate하기 때문에, 메모리 참조가 같은지 비교한다. 이는 일반적인 개발자의 직관과 다르다. `Object.is([], [])`는 두 배열 객체의 메모리 포인터가 다르므로 `false` 가 나온다.
 
+> [MDN 문서](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Object/is#%EC%84%A4%EB%AA%85) 참고
+
 ## 훅과 동일 비교
 
 훅은 dependencies를 비교할 때 `Object.is`를 사용한다. 따라서 의존성을 비교했을 때, 이 둘이 다를 때만 실행 된다. 여기서 같다는 것은 `Object.is`를 사용하여 비교한다.

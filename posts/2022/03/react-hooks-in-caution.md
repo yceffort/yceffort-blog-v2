@@ -6,7 +6,7 @@ tags:
   - react
 published: true
 date: 2022-03-24 10:44:01
-description: '코로나 정말 지독합니다'
+description: 'deps에 primitive 값만 사용하기, 훅을 컴포넌트에서 제거하기'
 ---
 
 ## Table of Contents

@@ -7,6 +7,7 @@ import slug from 'remark-slug'
 import { visit } from 'unist-util-visit'
 import { Node } from 'unist'
 import sizeOf from 'image-size'
+import remarkGfm from 'remark-gfm'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import prism from '@mapbox/rehype-prism'
@@ -104,7 +105,13 @@ function parseCodeSnippet() {
 export async function parseMarkdownToMdx(body: string, path: string) {
   return serialize(body, {
     mdxOptions: {
-      remarkPlugins: [remarkMath, toc, slug, parseImageToNextImage(path)],
+      remarkPlugins: [
+        remarkMath,
+        toc,
+        slug,
+        parseImageToNextImage(path),
+        remarkGfm,
+      ],
       rehypePlugins: [rehypeKatex, prism, parseCodeSnippet],
     },
   })

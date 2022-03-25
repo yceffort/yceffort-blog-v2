@@ -8,7 +8,7 @@ date: 2022-03-25 16:11:06
 description: ''
 ---
 
-이따금씩 다른 사람들의 코드를 보면, 함수형 컴포넌트의 리턴타입에 `React.FC<>`를 달아두어서 타이핑 한 것을 종종 볼 수 있었다. 
+이따금씩 다른 사람들의 코드를 보면, 함수형 컴포넌트의 리턴타입에 `React.FC<>`를 달아두어서 타이핑 한 것을 종종 볼 수 있었다.
 
 ## `React.FC<>`란 무엇인가?
 
@@ -20,31 +20,30 @@ description: ''
 일단 리액트는 타입스크립트로 작성되있지 않기 때문에, 리액트 커뮤니티에서는 `@types/react`패키지를 제공하여 리액트에 대한 타이핑을 지원하고 있다. 여기에는 `FC`라고 하는 제네릭 타입이 있는데, 이를 활용하면 함수형 컴포넌트를 아래와 같이 타이핑 할 수 있게 도와준다.
 
 ```typescript
-import { FC } from "react";
+import { FC } from 'react'
 
 type GreetingProps = {
-  name: string;
+  name: string
 }
 
-const Greeting:FC<GreetingProps> = ({ name }) => {
+const Greeting: FC<GreetingProps> = ({ name }) => {
   return <h1>Hello {name}</h1>
-};
+}
 ```
 
 그리고, 이 FC는 다음과 같은 구조로 되어 있다.
 
 ```typescript
-type FC<P = {}> = FunctionComponent<P>;
+type FC<P = {}> = FunctionComponent<P>
 
 interface FunctionComponent<P = {}> {
-    (props: PropsWithChildren<P>, context?: any): ReactElement<any, any> | null;
-    propTypes?: WeakValidationMap<P> | undefined;
-    contextTypes?: ValidationMap<any> | undefined;
-    defaultProps?: Partial<P> | undefined;
-    displayName?: string | undefined;
+  (props: PropsWithChildren<P>, context?: any): ReactElement<any, any> | null
+  propTypes?: WeakValidationMap<P> | undefined
+  contextTypes?: ValidationMap<any> | undefined
+  defaultProps?: Partial<P> | undefined
+  displayName?: string | undefined
 }
 ```
-
 
 > [github 소스 코드 보기](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/0beca137d8552f645064b8a622a6e153864c66ee/types/react/index.d.ts#L548-L556)
 
@@ -61,7 +60,7 @@ function Greeting({ name }) {
 먼저 쉽게할 수 있는 방법 중 하나는, 익명 함수를 변수에 할당하여 타이핑 하는 것이다.
 
 ```typescript
-const Greeting:FC<GreetingProps> = function({ name }) {
+const Greeting: FC<GreetingProps> = function ({ name }) {
   return <h1>Hello {name}</h1>
 }
 ```
@@ -69,7 +68,7 @@ const Greeting:FC<GreetingProps> = function({ name }) {
 혹은 화살표 함수를 쓸 수도 있겠다.
 
 ```typescript
-const Greeting: FC<{name: string}> = ({name})=> {
+const Greeting: FC<{ name: string }> = ({ name }) => {
   return <h1>Hello {name}</h1>
 }
 ```
@@ -84,18 +83,20 @@ function Greeting({ name }: GreetingProps) {
 
 ## `React.FC<>`는 항상 children을 가질수 있다.
 
-`React.FC<>`로 타이핑 하는 것은 컴포넌트에 children 있을 수 있다는 것을 의미한다. 
+`React.FC<>`로 타이핑 하는 것은 컴포넌트에 children 있을 수 있다는 것을 의미한다.
 
 ```typescript
-export const Greeting:FC<GreetingProps> = ({ name }) => {
+export const Greeting: FC<GreetingProps> = ({ name }) => {
   return <h1>Hello {name}</h1>
-};
+}
 
-const App = () => <>
-  <Greeting name="Stefan">
-    <span>{"I can set this element but it doesn't do anything"}</span>
-  </Greeting>
-</>
+const App = () => (
+  <>
+    <Greeting name="Stefan">
+      <span>{"I can set this element but it doesn't do anything"}</span>
+    </Greeting>
+  </>
+)
 ```
 
 `Greeting`에는 딱히 `children`을 렌더링하거나 처리하는 코드가 없음에도 위 코드는 정상적으로 처리되는 것을 볼수 있다.
@@ -117,17 +118,19 @@ const App = () => <>
 최소한 컴포넌트에 children의 존재가 가능한지 여부를 확인하는 것은 도움이 될 수 있다. 만약 컴포넌트에 children이 존재할 수도 있다는 것을 알리기 위해서는, `PropsWithChildren`을 사용하는 것이 좋다.
 
 ```typescript
-type PropsWithChildren<P> = P & { children?: ReactNode | undefined };
+type PropsWithChildren<P> = P & { children?: ReactNode | undefined }
 ```
 
 https://github.com/DefinitelyTyped/DefinitelyTyped/blob/0beca137d8552f645064b8a622a6e153864c66ee/types/react/index.d.ts#L830
 
 ```typescript
-function Card({ title, children }: PropsWithChildren<{title: string}>) {
-  return <>
-    <h1>{ title }</h1>
-    {children}
-  </>
+function Card({ title, children }: PropsWithChildren<{ title: string }>) {
+  return (
+    <>
+      <h1>{title}</h1>
+      {children}
+    </>
+  )
 }
 ```
 
@@ -136,8 +139,8 @@ function Card({ title, children }: PropsWithChildren<{title: string}>) {
 `defaultProps`는 클래스 기반 컴포넌트의 유물로, props에 기본값을 세팅할 수 있도록 도와준다. 함수형 컴포넌트에서는, 자바스크립트의 기본적인 기능을 활용하면 기본값을 제공할 수 있다.
 
 ```typescript
-function LoginMsg({ name = "Guest" }: LoginMsgProps) {
-  return <p>Logged in as {name}</p>;
+function LoginMsg({ name = 'Guest' }: LoginMsgProps) {
+  return <p>Logged in as {name}</p>
 }
 ```
 
@@ -145,21 +148,23 @@ function LoginMsg({ name = "Guest" }: LoginMsgProps) {
 
 ```typescript
 type GreetingProps = {
-  name: string;
+  name: string
 }
 
-export const Greeting:FC<GreetingProps> = ({ name }) => {
+export const Greeting: FC<GreetingProps> = ({ name }) => {
   return <h1>Hello {name}</h1>
-};
+}
 음
 Greeting.defaultProps = {
-  name: "World"
-};
+  name: 'World',
+}
 
-const App = () => <>
-  {/* name에 world가 들어오지 않음 💥*/}
-  <Greeting />
-</>
+const App = () => (
+  <>
+    {/* name에 world가 들어오지 않음 💥*/}
+    <Greeting />
+  </>
+)
 ```
 
 하지만, 일반적인 함수 방식이라면 `defaultProps`는 여전히 유효하다.
@@ -167,29 +172,31 @@ const App = () => <>
 ```typescript
 export const Greeting = ({ name }: GreetingProps) => {
   return <h1>Hello {name}</h1>
-};
+}
 
 Greeting.defaultProps = {
-  name: "World"
-};
+  name: 'World',
+}
 
-const App = () => <>
-  {/* Yes! ✅ */}
-  <Greeting />
-</>
+const App = () => (
+  <>
+    {/* Yes! ✅ */}
+    <Greeting />
+  </>
+)
 ```
 
 ## Stateless Function Component의 과거
 
-예전에는 모두가 함수형 컴포넌트를 stateless function component (무상태 함수형 컴포넌트)라고 불렀었다. 
+예전에는 모두가 함수형 컴포넌트를 stateless function component (무상태 함수형 컴포넌트)라고 불렀었다.
 
 ```typescript
-    /**
-     * @deprecated as of recent React versions, function components can no
-     * longer be considered 'stateless'. Please use `FunctionComponent` instead.
-     *
-     * @see [React Hooks](https://reactjs.org/docs/hooks-intro.html)
-     */
+/**
+ * @deprecated as of recent React versions, function components can no
+ * longer be considered 'stateless'. Please use `FunctionComponent` instead.
+ *
+ * @see [React Hooks](https://reactjs.org/docs/hooks-intro.html)
+ */
 ```
 
 https://github.com/DefinitelyTyped/DefinitelyTyped/blob/0beca137d8552f645064b8a622a6e153864c66ee/types/react/index.d.ts#L532-L548

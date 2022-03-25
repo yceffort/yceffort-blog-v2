@@ -87,7 +87,7 @@ function Greeting({ name }: GreetingProps) {
 
 ## `React.FC<>`는 항상 children을 가질수 있다.
 
-`React.FC<>`로 타이핑 하는 것은 컴포넌트에 children 있을 수 있다는 것을 의미한다.
+`React.FC<>`로 타이핑 하는 것은 컴포넌트에 children이 있을 수 있다는 것을 의미한다.
 
 ```typescript
 export const Greeting: FC<GreetingProps> = ({ name }) => {
@@ -125,7 +125,7 @@ const App = () => <>
 type PropsWithChildren<P> = P & { children?: ReactNode | undefined }
 ```
 
-https://github.com/DefinitelyTyped/DefinitelyTyped/blob/0beca137d8552f645064b8a622a6e153864c66ee/types/react/index.d.ts#L830
+[https://github.com/DefinitelyTyped/DefinitelyTyped/blob/0beca137d8552f645064b8a622a6e153864c66ee/types/react/index.d.ts#L830](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/0beca137d8552f645064b8a622a6e153864c66ee/types/react/index.d.ts#L830)
 
 ```typescript
 function Card({ title, children }: PropsWithChildren<{ title: string }>) {
@@ -138,7 +138,7 @@ function Card({ title, children }: PropsWithChildren<{ title: string }>) {
 }
 ```
 
-## `React.FC<>`는 defaultProps를 꺠뜨린다.
+## `React.FC<>`는 defaultProps를 쓰지 못하게 만든다.
 
 `defaultProps`는 클래스 기반 컴포넌트의 유물로, props에 기본값을 세팅할 수 있도록 도와준다. 함수형 컴포넌트에서는, 자바스크립트의 기본적인 기능을 활용하면 기본값을 제공할 수 있다.
 
@@ -148,7 +148,7 @@ function LoginMsg({ name = 'Guest' }: LoginMsgProps) {
 }
 ```
 
-타입스크립트 3.1 버전 이후로, `defaultProps`를 이해하는 메커니즘이 추가되었으며, 이는 사용가자 세팅한 값을 기반으로 기본값이 설정된다. 그러나 `React.FC`는 `defaultProps`를 타이핑 하기 때문에 이러한 기본값에 대한 연결고리를 끊어버리게 된다. 아래 코드를 살펴보자.
+타입스크립트 3.1 버전 이후로, `defaultProps`를 이해하는 메커니즘이 추가되었으며, 이는 사용자가 세팅한 값을 기반으로 기본값이 설정된다. 그러나 `React.FC`는 `defaultProps`에 대한 타이핑 하기 때문에 이러한 기본값에 대한 연결고리를 끊어버리게 된다. 아래 코드를 살펴보자.
 
 ```typescript
 type GreetingProps = {
@@ -203,7 +203,7 @@ const App = () => (
  */
 ```
 
-https://github.com/DefinitelyTyped/DefinitelyTyped/blob/0beca137d8552f645064b8a622a6e153864c66ee/types/react/index.d.ts#L532-L548
+[https://github.com/DefinitelyTyped/DefinitelyTyped/blob/0beca137d8552f645064b8a622a6e153864c66ee/types/react/index.d.ts#L532-L548](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/0beca137d8552f645064b8a622a6e153864c66ee/types/react/index.d.ts#L532-L548)
 
 훅이 소개된 이후로, 함수형 컴포넌트에는 많은 상태가 들어오기 시작했고 이제는 더이상 stateless하게 취급하지 않는다. 위 코드에서 볼 수 있는 것 처럼, `SFC`는 `FC`가 되었다. 또 훗날 `FC`가 무엇으로 바뀔 수 있을지도 모를일이다. 그러나 단순히 인수 (props)를 타이핑 하는 것은 이후에 함수의 타입이 바뀌더라도 안전하게 처리할 수 있다.
 

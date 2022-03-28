@@ -11,6 +11,7 @@ import remarkGfm from 'remark-gfm'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import prism from '@mapbox/rehype-prism'
+import imageMetadata from '#utils/imageMetadata'
 
 type TokenType =
   | 'tag'
@@ -39,57 +40,6 @@ const tokenClassNames: { [key in TokenType]: string } = {
   comment: 'text-gray-400 italic',
 }
 
-const postPrefix = 'posts/'
-
-function parseImageToNextImage(path: string) {
-  function getSizeOfImage(name: string) {
-    const path = `public${name}`
-    return sizeOf(path)
-  }
-
-  return () => {
-    return (tree: Node) => {
-      visit(
-        tree,
-        (node: any) =>
-          Boolean(
-            node.type === 'paragraph' &&
-              node.children.some((n: any) => n.type === 'image'),
-          ),
-        (node: any) => {
-          const imageNode = node.children.find((n: any) => n.type === 'image')
-
-          if (!imageNode.url.startsWith('http')) {
-            const startIndex = path.indexOf(postPrefix)
-            const endIndex = path.lastIndexOf('/')
-            const tempImgPath = path.slice(
-              startIndex + postPrefix.length,
-              endIndex,
-            )
-
-            const tempImgSplit = tempImgPath.split('/')
-            const imgPath =
-              tempImgSplit.length > 2
-                ? [tempImgSplit[0], tempImgSplit[1]].join('/')
-                : tempImgPath
-
-            const imageIndex = imageNode.url.indexOf('/') + 1
-
-            const imageUrl = `/${imgPath}/${imageNode.url.slice(imageIndex)}`
-
-            const imageSize = getSizeOfImage(imageUrl)
-
-            imageNode.type = 'jsx'
-            imageNode.value = `<Image alt={\`${imageNode.alt}\`} src={\`${imageUrl}\`} width={${imageSize.width}} height={${imageSize.height}}/>`
-
-            node.type = 'div'
-            node.children = [imageNode]
-          }
-        },
-      )
-    }
-  }
-}
 
 function parseCodeSnippet() {
   return (tree: Node) => {
@@ -108,11 +58,10 @@ export async function parseMarkdownToMdx(body: string, path: string) {
       remarkPlugins: [
         remarkMath,
         toc,
-        slug,
-        parseImageToNextImage(path),
+        slug,      
         remarkGfm,
       ],
-      rehypePlugins: [rehypeKatex, prism, parseCodeSnippet],
+      rehypePlugins: [rehypeKatex, prism, parseCodeSnippet, imageMetadata(path)],
     },
   })
 }

@@ -5,7 +5,7 @@ tags:
   - javascript
 published: true
 date: 2022-03-28 11:56:45
-description: '조금씩 알듯 말듯 하네'
+description: 'enum이 잘못했네'
 ---
 
 ## Table of Contents

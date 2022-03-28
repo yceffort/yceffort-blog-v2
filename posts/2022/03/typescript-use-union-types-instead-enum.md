@@ -12,7 +12,6 @@ description: '조금씩 알듯 말듯 하네'
 
 ## Introduction
 
-
 [이전 글](/2020/09/typescript-enum-not-treeshaked)에서도 언급했던 것 처럼, enum은 트리쉐이킹이 되지 않기 때문에 (정확히는 번들러가 무엇을 트리쉐이킹 해야할지 알 수 없으므로) 잘 사용하지 않는 다고 언급했었다.
 
 ```typescript
@@ -32,18 +31,18 @@ Direction.Right // 3
 는 자바스크립트로 아래와 같이 컴파일된다.
 
 ```javascript
-"use strict";
-var Direction;
-(function (Direction) {
-    Direction[Direction["Up"] = 0] = "Up";
-    Direction[Direction["Down"] = 1] = "Down";
-    Direction[Direction["Left"] = 2] = "Left";
-    Direction[Direction["Right"] = 3] = "Right";
-})(Direction || (Direction = {}));
-Direction.Up; // 0
-Direction.Down; // 1
-Direction.Left; // 2
-Direction.Right; // 3
+'use strict'
+var Direction
+;(function (Direction) {
+  Direction[(Direction['Up'] = 0)] = 'Up'
+  Direction[(Direction['Down'] = 1)] = 'Down'
+  Direction[(Direction['Left'] = 2)] = 'Left'
+  Direction[(Direction['Right'] = 3)] = 'Right'
+})(Direction || (Direction = {}))
+Direction.Up // 0
+Direction.Down // 1
+Direction.Left // 2
+Direction.Right // 3
 // { 0: "Up", 1: "Down", 2: "Left", 3: "Right", Up: 0, Down: 1, Left: 2, Right: 3 }
 ```
 
@@ -63,7 +62,7 @@ enum Direction {
   Right,
 }
 
-declare function move(direction: Direction): void;
+declare function move(direction: Direction): void
 
 move(100) // ??
 ```
@@ -76,20 +75,19 @@ move(100) // ??
 
 ## 문자형 enum의 경우
 
-
 구조적 타이핑 세계에서, enum은 named type으로 불리기도 한다. 즉, 값이 올바르고 호환 가능하다 할지라도, 문자열 enum이 필요한 함수나 객체에 값을 전달할 수 없다는 뜻이다. 아래 예시를 살펴보자.
 
 ```typescript
 enum Direction {
-  Up = "Up",
-  Down = "Down",
-  Left = "Left",
-  Right = "Right",
+  Up = 'Up',
+  Down = 'Down',
+  Left = 'Left',
+  Right = 'Right',
 }
 
-declare function move(direction: Direction): void;
+declare function move(direction: Direction): void
 
-move("Up") // impossible
+move('Up') // impossible
 move(Direction.Up) // possible
 ```
 
@@ -99,22 +97,21 @@ move(Direction.Up) // possible
 
 ```typescript
 enum Direction1 {
-  Up = "Up",
-  Down = "Down",
-  Left = "Left",
-  Right = "Right",
+  Up = 'Up',
+  Down = 'Down',
+  Left = 'Left',
+  Right = 'Right',
 }
 
 enum Direction2 {
-  Up = "Up",
-  Down = "Down",
-  Left = "Left",
-  Right = "Right",
+  Up = 'Up',
+  Down = 'Down',
+  Left = 'Left',
+  Right = 'Right',
 }
 
 // This condition will always return 'false' since the types 'Direction1.Up' and 'Direction2.Up' have no overlap.
 if (Direction1.Up === Direction2.Up) {
-  
 }
 ```
 
@@ -127,7 +124,7 @@ if (Direction1.Up === Direction2.Up) {
 ```typescript
 type Direction = 'Up' | 'Down' | 'Left' | 'Right'
 
-declare function move(direction: Direction): void;
+declare function move(direction: Direction): void
 
 move('Up') // possible
 ```
@@ -140,11 +137,11 @@ const Direction = {
   Down: 1,
   Left: 2,
   Right: 3,
-} as const;
+} as const
 
-type Values<T> = T[keyof T];
+type Values<T> = T[keyof T]
 
-declare function move(direction: Values<typeof Direction>): void;
+declare function move(direction: Values<typeof Direction>): void
 
 move(Direction.Up) // Ok!
 move(0) // Ok!
@@ -155,4 +152,3 @@ move(100) // ㅠ_ㅠ
 - 문자열 enum, 숫자형 enum 등으로 바꾼 다고 해서 (값을 바꾼다고해서) 동작에 차이가 발생하지 않음
 - 타입 안전성 확보
 - enum과 동일한 편의성 제공
-

@@ -32,19 +32,25 @@ async function addMetadata(node: ImageNode, postPath: string): Promise<void> {
   const {
     properties: { src },
   } = node
+
+  if (src.startsWith('http')) {
+    return
+  }
+
   const startIndex = postPath.indexOf('/posts')
   const endIndex = postPath.lastIndexOf('/')
   const tempImgPath = postPath.slice(startIndex + '/posts'.length, endIndex)
 
   const tempImgSplit = tempImgPath.split('/')
+
   const imgPath =
-    tempImgSplit.length > 3
-      ? [tempImgSplit[0], tempImgSplit[1]].join('/')
+    tempImgSplit.length > 2
+      ? [tempImgSplit[1], tempImgSplit[2]].join('/')
       : tempImgPath
 
   const imageIndex = src.indexOf('/') + 1
 
-  const imageUrl = `${imgPath}/${src.slice(imageIndex)}`
+  const imageUrl = `/${imgPath}/${src.slice(imageIndex)}`
 
   const imageSize = await sizeOf(`public${imageUrl}`)
 

@@ -6,11 +6,11 @@ import toc from 'remark-toc'
 import slug from 'remark-slug'
 import { visit } from 'unist-util-visit'
 import { Node } from 'unist'
-import sizeOf from 'image-size'
 import remarkGfm from 'remark-gfm'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import prism from '@mapbox/rehype-prism'
+
 import imageMetadata from '#utils/imageMetadata'
 
 type TokenType =
@@ -40,7 +40,6 @@ const tokenClassNames: { [key in TokenType]: string } = {
   comment: 'text-gray-400 italic',
 }
 
-
 function parseCodeSnippet() {
   return (tree: Node) => {
     visit(tree, 'element', (node: any) => {
@@ -55,13 +54,13 @@ function parseCodeSnippet() {
 export async function parseMarkdownToMdx(body: string, path: string) {
   return serialize(body, {
     mdxOptions: {
-      remarkPlugins: [
-        remarkMath,
-        toc,
-        slug,      
-        remarkGfm,
+      remarkPlugins: [remarkMath, toc, slug, remarkGfm],
+      rehypePlugins: [
+        rehypeKatex,
+        prism,
+        parseCodeSnippet,
+        imageMetadata(path),
       ],
-      rehypePlugins: [rehypeKatex, prism, parseCodeSnippet, imageMetadata(path)],
     },
   })
 }

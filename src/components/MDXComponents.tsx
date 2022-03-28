@@ -4,7 +4,7 @@ import { HTMLProps } from 'react'
 import CustomLink from './Link'
 
 function NextImage(props: HTMLProps<HTMLImageElement>) {
-  return props.src ?  (
+  return props.src ? (
     <Image
       {...props}
       crossOrigin="anonymous"

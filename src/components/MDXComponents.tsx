@@ -11,7 +11,9 @@ function NextImage(props: HTMLProps<HTMLImageElement>) {
       src={props.src}
       placeholder="empty"
     />
-  ) : null
+  ) : (
+    <p>Currently, image is not available. {props.src}</p>
+  )
 }
 
 const MdxComponents = {

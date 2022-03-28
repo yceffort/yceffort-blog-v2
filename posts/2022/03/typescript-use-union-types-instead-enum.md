@@ -95,6 +95,31 @@ move(Direction.Up) // possible
 
 이렇듯 문자형 enum과 숫자형 enum의 동작 방식에 차이가 있고, 또 위험성을 안고 있기 때문에 enum 사용을 꺼리는 편이다.
 
+## Enum간의 값 비교도 안됨
+
+```typescript
+enum Direction1 {
+  Up = "Up",
+  Down = "Down",
+  Left = "Left",
+  Right = "Right",
+}
+
+enum Direction2 {
+  Up = "Up",
+  Down = "Down",
+  Left = "Left",
+  Right = "Right",
+}
+
+// This condition will always return 'false' since the types 'Direction1.Up' and 'Direction2.Up' have no overlap.
+if (Direction1.Up === Direction2.Up) {
+  
+}
+```
+
+아무리 같은 값이라 할지라도, enum 내에 있으면 타입스크립트는 이 값을 비교할 수 없기 때문에 false가 리턴된다.
+
 ## Union Types을 대신 써보기
 
 우리에겐 union type이 있다.

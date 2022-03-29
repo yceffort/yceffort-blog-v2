@@ -168,7 +168,7 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 export default function ContactPage() {
-  // 서버의 에러를 JSON 형태로 받을 수 있음. 이 경우에는 페이지를 리로드 하지 않고도 form을 리렌덜이 할 수 있음
+  // 서버의 에러를 JSON 형태로 받을 수 있음. 이 경우에는 페이지를 리로드 하지 않고도 form을 리렌더링 할 수 있음
   const errors = useActionData()
   // form 성공시
   const { submission } = useTransition()

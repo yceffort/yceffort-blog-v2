@@ -58,7 +58,7 @@ window.history.replaceState(
 
 ## getServerSideProps와 \_app.getInitialProps와의 관계
 
-`getServerSideProps`는 무조건 서버에서 실행되는 코드로, 서버사이드 렌더링 시에 필요한 데이터를 미리 필요한 데이터를 불러올 때 쓰인다. `_app.getInitialProps`는 최초에 앱이 렌덜이되거나, 클라이언트 라우팅이 일어나는 순간에 실행된다. https://nextjs.org/docs/advanced-features/custom-app
+`getServerSideProps`는 무조건 서버에서 실행되는 코드로, 서버사이드 렌더링 시에 필요한 데이터를 미리 필요한 데이터를 불러올 때 쓰인다. `_app.getInitialProps`는 최초에 앱이 렌더링되거나, 클라이언트 라우팅이 일어나는 순간에 실행된다. https://nextjs.org/docs/advanced-features/custom-app
 
 - Persisting layout between page changes
 - Keeping state when navigating pages
@@ -123,7 +123,7 @@ getInitailProps!
 getServerSideProps
 ```
 
-`getInitialProps`가 실행되는 것을 알 수 있다. 이는 의도한 동작인 걸까? 그냥 나는 `getServerSideProps`만 재 호출하고 싶은 건데, (새로고침 등을 이유로) `getInitialProps`까지 호출해야 할까? 사실 지금 생각해보니 이것도 어떻게 보면 당연한 것 같기도하다. 🤔 의도야 어쩄든 라우팅이 일어나는 행위고, 라우팅에는 `getServerSideProps`가 수반되어야 하니까...?
+`getInitialProps`가 실행되는 것을 알 수 있다. 이는 의도한 동작인 걸까? 그냥 나는 `getServerSideProps`만 재 호출하고 싶은 건데, (새로고침 등을 이유로) `getInitialProps`까지 호출해야 할까? 사실 지금 생각해보니 이것도 어떻게 보면 당연한 것 같기도하다. 🤔 의도야 어쨌든 라우팅이 일어나는 행위고, 라우팅에는 `getServerSideProps`가 수반되어야 하니까...?
 
 아무튼, 이 상황을 막고 싶다면 아래와 같은 조건문을 추가해주면 된다.
 

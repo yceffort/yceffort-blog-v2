@@ -483,7 +483,7 @@ Virtual DOM은 메모리 내에서 표현되는 Real DOM 이다. UI는 메모리
 
 ### How Virtual DOM works?
 
-1. 어디서든 데이터가 편하면, Virtual DOM내에서 전체 UI가 다시 렌덜이 된다.
+1. 어디서든 데이터가 편하면, Virtual DOM내에서 전체 UI가 다시 렌더링 된다.
    ![virtual-dom-1](https://github.com/sudheerj/reactjs-interview-questions/raw/master../../../images/vdom1.png)
 
 2. 그런 다음 이전 DOM과 새로운 DOM을 비교한다.

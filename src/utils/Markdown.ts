@@ -7,6 +7,7 @@ import slug from 'remark-slug'
 import { visit } from 'unist-util-visit'
 import { Node } from 'unist'
 import remarkGfm from 'remark-gfm'
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import prism from '@mapbox/rehype-prism'
@@ -59,6 +60,7 @@ export async function parseMarkdownToMdx(body: string, path: string) {
         rehypeKatex,
         prism,
         parseCodeSnippet,
+        rehypeAutolinkHeadings,
         imageMetadata(path),
       ],
     },

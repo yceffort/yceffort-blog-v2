@@ -45,11 +45,9 @@ export default function StudentsList({ students }) {
 
 이 버그는 예전 회사에서도 봤던 버그고, 심지어 페이팔에서도 이러한 버그가 있었다고 한다.
 
-![paypal-bug](https://kentcdodds.com/static/330366840b58941a34169d30db87884b/e3189/no-contacts.png)
+![paypal-bug](https://res.cloudinary.com/kentcdodds-com/image/upload/f_auto,q_auto,dpr_2.0/v1625033483/kentcdodds.com/content/blog/use-ternaries-rather-than-and-and-in-jsx/no-contacts.png)
 
 자바스크립트에서 `0`은 `falsy`한 값으로 취급되기 때문에, `&&` 우측에 있는 값은 계산하지 않는다. 근데 어디까지나 `falsy`한 값인 거지, `null`이나 `undefined`처럼 렌더링을 안하는 값은 아니기 때문에 (순수하게 빈값으로 계산되지는 않으므로) 0이 나오게 된다.
-
-![terrible](https://upload.inven.co.kr/upload/2014/12/23/bbs/i3324974586.jpg)
 
 해결책은, `students.length === 0 && ...`을 쓰거나, 삼항연산자로 바꾸면 된다.
 

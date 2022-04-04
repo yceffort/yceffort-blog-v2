@@ -432,7 +432,7 @@ node 환경에서 스트리밍 지원
 
 #### `renderToReadableStream`
 
-Cloudflare, deno와 같이 모던 엣지 런테임 환경에서 스트리밍 지원
+Cloudflare, deno와 같이 모던 엣지 런타임 환경에서 스트리밍 지원
 
 `renderToString`는 여전히 존재하지만, 사용하는 것이 권장되지는 않는다.
 
@@ -552,7 +552,7 @@ function handleClick() {
 
 트리가 suspend 되었다가 fallback으로 돌아가면, 리앹그는 레이아웃 effect를 정리한 다음, 바운더리 내부의 내용이 다시 표시 될 때 까지 만든다. 이로인해 컴포넌트 라이브러리가 suspense와 함께 사용될때 레이아웃을 올바르게 측정할 수 없었던 문제가 해결된다.
 
-#### 새로운 js 환경 여구
+#### 새로운 js 환경 (polyfill 필요)
 
 리액트는 이제 모던 브라우저 기능인 `Promise` `Symbol` `Object.assign`에 의존한다. 최신 브라우저 기능을 제공하지 않거나, 혹은 호환되지 않는 인터넥 익스플로러등 오래된 브라우저 디바이스를 지원하고 있는 경우, 애플리케이션에 글로벌 플로필을 추가하는 것을 고려해봐야 한다.
 

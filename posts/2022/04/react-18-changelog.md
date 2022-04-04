@@ -144,17 +144,16 @@ function App() {
 
 이를 활용하면, 버튼을 눌러도 바로 로딩상태로 전환되는 것이 아니고 이전화면에서 진행상태를 볼 수 있게 된다.
 
-
 #### `useDeferredValue`
 
 `useDeferredValue`를 사용하면, 트리에서 급하지 않은 부분의 재렌더링을 지연할 수 있다. 이는 `debounce`와 비슷하지만, 몇가지 더 장점이 있다. 고정된 지연시간이 없으므로, 리액트는 첫번째 렌더링이 반영되는 즉시 지연 렌더링을 시도한다. 이 지연된 렌더링은 인터럽트가 가능하며, 사용자 입력을 차단하지 않는다.
 
 ```javascript
-import { useDeferredValue } from 'react';
+import { useDeferredValue } from 'react'
 
 const deferredValue = useDeferredValue(value, {
-  timeoutMs: 5000
-});
+  timeoutMs: 5000,
+})
 ```
 
 `value`의 값이 바뀌어도, 다른 렌더링이 발생하는 동안에는 최대 5000ms가 지연된다. 시간이 다되거나, 렌더링이 완료된다면 `deferredValue`가 변경되면서 상태값이 변하게 될 것이다.
@@ -213,81 +212,87 @@ const selectedField = useSyncExternalStore(store.subscribe, () => store.getSnaps
 `getSnapShot`의 결과로 메모이제이션 된 값을 제공하는 api는 다음과 같다.
 
 ```javascript
-import {useSyncExternalStoreWithSelector} from 'use-sync-external-store/with-selector';
+import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/with-selector'
 
 const selection = useSyncExternalStoreWithSelector(
   store.subscribe,
   store.getSnapshot,
   getServerSnapshot,
   selector,
-  isEqual
-);
+  isEqual,
+)
 ```
 
 [리액트 Conf에서 이야기한 실제 예제](https://www.youtube.com/watch?t=694&v=oPfSC5bQPR8&feature=youtu.be)에 대해 살펴보자.
 
 ```jsx
-import React, { useState, useEffect, useCallback, startTransition } from "react";
+import React, { useState, useEffect, useCallback, startTransition } from 'react'
 
 // library code
 
 const createStore = (initialState) => {
-  let state = initialState;
-  const getState = () => state;
-  const listeners = new Set();
+  let state = initialState
+  const getState = () => state
+  const listeners = new Set()
   const setState = (fn) => {
-    state = fn(state);
-    listeners.forEach((l) => l());
+    state = fn(state)
+    listeners.forEach((l) => l())
   }
   const subscribe = (listener) => {
-    listeners.add(listener);
-    return () => listeners.delete(listener);
+    listeners.add(listener)
+    return () => listeners.delete(listener)
   }
-  return {getState, setState, subscribe}
+  return { getState, setState, subscribe }
 }
 
 const useStore = (store, selector) => {
-  const [state, setState] = useState(() => selector(store.getState()));
+  const [state, setState] = useState(() => selector(store.getState()))
   useEffect(() => {
-    const callback = () => setState(selector(store.getState()));
-    const unsubscribe = store.subscribe(callback);
-    callback();
-    return unsubscribe;
-  }, [store, selector]);
-  return state;
+    const callback = () => setState(selector(store.getState()))
+    const unsubscribe = store.subscribe(callback)
+    callback()
+    return unsubscribe
+  }, [store, selector])
+  return state
 }
 
 //Application code
 
-const store = createStore({count: 0, text: 'hello'});
+const store = createStore({ count: 0, text: 'hello' })
 
 const Counter = () => {
-  const count = useStore(store, useCallback((state) => state.count, []));
+  const count = useStore(
+    store,
+    useCallback((state) => state.count, []),
+  )
   const inc = () => {
-    store.setState((prev) => ({...prev, count: prev.count + 1}))
+    store.setState((prev) => ({ ...prev, count: prev.count + 1 }))
   }
   return (
     <div>
       {count} <button onClick={inc}>+1</button>
     </div>
-  );
+  )
 }
 
 const TextBox = () => {
-  const text = useStore(store, useCallback((state) => state.text, []));
+  const text = useStore(
+    store,
+    useCallback((state) => state.text, []),
+  )
   const setText = (event) => {
-    store.setState((prev) => ({...prev, text: event.target.value}))
+    store.setState((prev) => ({ ...prev, text: event.target.value }))
   }
   return (
     <div>
-      <input value={text} onChange={setText} className='full-width'/>
+      <input value={text} onChange={setText} className="full-width" />
     </div>
-  );
+  )
 }
 
 const App = () => {
-  return(
-    <div className='container'>
+  return (
+    <div className="container">
       <Counter />
       <Counter />
       <TextBox />
@@ -302,17 +307,17 @@ const App = () => {
 `useState` `useEffect`를 사용하고 있는 `useStore`를 `useSyncExternalStore`로 변경해보자.
 
 ```javascript
-import { useSyncExternalStore } from 'react';
+import { useSyncExternalStore } from 'react'
 
 const useStore = (store, selector) => {
   return useSyncExternalStore(
     store.subscribe,
-    useCallback(() => selector(store.getState(), [store, selector]))
+    useCallback(() => selector(store.getState(), [store, selector])),
   )
 }
 ```
 
-코드가 훨씬 깔끔해진 것을 볼 수 있다. 
+코드가 훨씬 깔끔해진 것을 볼 수 있다.
 
 그렇다면 어떤 라이브러리들이 이러한 concurrent rendering에 영향을 받을까?
 
@@ -327,25 +332,25 @@ const useStore = (store, selector) => {
 
 클라이언트 사이드에서 `<style>` 태그를 생성해서 삽입할 때는 성능 이슈에 대해 민감하게 살펴보아야 한다. CSS 규칙을 추가하고 삭제한다면 이미 존재하는 모든 노드에 새로운 규칙을 적용하는 것이다. 이는 최적의 방법이 아니므로 많은 문제가 존재한다.
 
-이를 피할 수 있는 방법은 타이밍이다. 리액트가 DOM을 변환한경우, 레이아웃에서 무언가를 읽기전 (`clientWidth`와 같이) 또는 페인트를 위해 브라우저에 값을 전달하기 전에 DOM에 대한 다른 변경과 동일한 타이밍에 작업을 하면 된다. 
+이를 피할 수 있는 방법은 타이밍이다. 리액트가 DOM을 변환한경우, 레이아웃에서 무언가를 읽기전 (`clientWidth`와 같이) 또는 페인트를 위해 브라우저에 값을 전달하기 전에 DOM에 대한 다른 변경과 동일한 타이밍에 작업을 하면 된다.
 
 ```jsx
 function useCSS(rule) {
   useInsertionEffect(() => {
     if (!isInserted.has(rule)) {
-      isInserted.add(rule);
-      document.head.appendChild(getStyleForRule(rule));
+      isInserted.add(rule)
+      document.head.appendChild(getStyleForRule(rule))
     }
-  });
-  return rule;
+  })
+  return rule
 }
 function Component() {
-  let className = useCSS(rule);
-  return <div className={className} />;
+  let className = useCSS(rule)
+  return <div className={className} />
 }
 ```
 
-이는 `useLayoutEffect`와 마찬가지로 서버에서 실행되지는 않는다. 
+이는 `useLayoutEffect`와 마찬가지로 서버에서 실행되지는 않는다.
 
 ### React DOM Client
 
@@ -355,35 +360,34 @@ function Component() {
 
 렌더링 또는 언마운트할 루트를 만드는 새로운 메소드다. `ReactDOM.render`대신 사용하며, 리액트 18의 새로운 기능은 이 것 없이 동작 하지 않는다.
 
-
 **before**
 
 ```jsx
-import ReactDOM from 'react-dom';
-import App from 'App';
+import ReactDOM from 'react-dom'
+import App from 'App'
 
-const container = document.getElementById('root');
+const container = document.getElementById('root')
 
-ReactDOM.render(<App name="yceffort blog" />, container);
+ReactDOM.render(<App name="yceffort blog" />, container)
 
-ReactDOM.render(<App name="yceffort post" />, container);
+ReactDOM.render(<App name="yceffort post" />, container)
 ```
 
 **after**
 
 ```jsx
-import ReactDOM from "react-dom";
-import App from 'App';
+import ReactDOM from 'react-dom'
+import App from 'App'
 
-const container = document.getElementById('root');
+const container = document.getElementById('root')
 
 // 루트 생성
-const root = ReactDOM.createRoot(container);
+const root = ReactDOM.createRoot(container)
 
 // 최초 렌더링
-root.render(<App name="yceffort blog" />);// During an update, there is no need to pass the container again
+root.render(<App name="yceffort blog" />) // During an update, there is no need to pass the container again
 // 업데이트 시에는, container를 다시 넘길 필요가 없다.
-root.render(<App name="yceffort post" />);
+root.render(<App name="yceffort post" />)
 ```
 
 #### `hydrateRoot`
@@ -392,7 +396,7 @@ root.render(<App name="yceffort post" />);
 
 **before**
 
-```jsx
+````jsx
 import ReactDOM from 'react-dom';
 import App from 'App';
 
@@ -410,9 +414,9 @@ import App from 'App';
 const container = document.getElementById('root');
 
 const root = ReactDOM.hydrateRoot(container, <App name="yceffort blog" />);
-```
+````
 
-위 두 메소드 모드 `onRecoverableError`를 옵션으로 받을 수 있는데, 리액트가 렌더링이나 hydration시 에러가 발생하여 리커버리를 시도할 때 logging을 할 수 있는 목적으로 제공된다.  기본값으로 [reportError](https://developer.mozilla.org/en-US/docs/Web/API/reportError)나 구형 브라우저에서는 `console.error`를 쓴다.
+위 두 메소드 모드 `onRecoverableError`를 옵션으로 받을 수 있는데, 리액트가 렌더링이나 hydration시 에러가 발생하여 리커버리를 시도할 때 logging을 할 수 있는 목적으로 제공된다. 기본값으로 [reportError](https://developer.mozilla.org/en-US/docs/Web/API/reportError)나 구형 브라우저에서는 `console.error`를 쓴다.
 
 ### React DOM Server
 
@@ -442,55 +446,54 @@ Cloudflare, deno와 같이 모던 엣지 런테임 환경에서 스트리밍 지
 - `react-dom`: `ReactDOM.renderSubtreeIntoContainer`
 - `react-dom/server`: `ReactDOMServer.renderToNodeStream`
 
-
 ## Breaking Change
 
 ### React
 
 #### `Automatic batching`
 
-React Batch 업데이트 방식을 변경하여 자동으로 더 많은 배치를 수행할 수 있도록 성능이 향상되었다. 여기서 `batching`이란 여러 상태 업데이트를 하나의 리렌더링으로 처리하여 성능을 향상시키는 방법이다. 예를 들어, 버튼 하나 클릭이 두개의 상태를 업데이트 (`useState`가 두번 수행) 한다면, 리액트는 이를 하나의 리렌더링으로 처리할 수 있도록 해주는 것을 의미한다. 
+React Batch 업데이트 방식을 변경하여 자동으로 더 많은 배치를 수행할 수 있도록 성능이 향상되었다. 여기서 `batching`이란 여러 상태 업데이트를 하나의 리렌더링으로 처리하여 성능을 향상시키는 방법이다. 예를 들어, 버튼 하나 클릭이 두개의 상태를 업데이트 (`useState`가 두번 수행) 한다면, 리액트는 이를 하나의 리렌더링으로 처리할 수 있도록 해주는 것을 의미한다.
 
-그러나 리액트는 언데 업데이트를 배치로 처리했는지가 일관성있게 이뤄지고 있지 않았다. 옐르 들어 데이터를 fetch 한 다음, `handleClick` 에서 상태를 업데이트 하는 경우, 리액트는 업데이트를 배치하지 않고 개별 업데이트 두개를 수행하곤 했었다. 그 이유는 브라우저 이벤트 중에는 배치로 일괄 처리 하지만, 이벤트가 이미 처리된 후(콜백)에서 상태를 업데이트 처리하고 있었기 때문이다. 
+그러나 리액트는 언데 업데이트를 배치로 처리했는지가 일관성있게 이뤄지고 있지 않았다. 옐르 들어 데이터를 fetch 한 다음, `handleClick` 에서 상태를 업데이트 하는 경우, 리액트는 업데이트를 배치하지 않고 개별 업데이트 두개를 수행하곤 했었다. 그 이유는 브라우저 이벤트 중에는 배치로 일괄 처리 하지만, 이벤트가 이미 처리된 후(콜백)에서 상태를 업데이트 처리하고 있었기 때문이다.
 
-리액트 18에서는, 어디에서 이벤트가 발생했는지와 상관없이 자동으로 모든 업데이트가 배치되어 이뤄진다. 
+리액트 18에서는, 어디에서 이벤트가 발생했는지와 상관없이 자동으로 모든 업데이트가 배치되어 이뤄진다.
 
 ```jsx
 function App() {
-  const [count, setCount] = useState(0);
-  const [flag, setFlag] = useState(false);
+  const [count, setCount] = useState(0)
+  const [flag, setFlag] = useState(false)
 
   function handleClick() {
     fetchSomething().then(() => {
       // React 18 and later DOES batch these:
-      setCount(c => c + 1);
-      setFlag(f => !f);
+      setCount((c) => c + 1)
+      setFlag((f) => !f)
       // React will only re-render once at the end (that's batching!)
-    });
+    })
   }
 
   return (
     <div>
       <button onClick={handleClick}>Next</button>
-      <h1 style={{ color: flag ? "blue" : "black" }}>{count}</h1>
+      <h1 style={{ color: flag ? 'blue' : 'black' }}>{count}</h1>
     </div>
-  );
+  )
 }
 ```
 
-만약 이러한 동작을 원치 않는다면 `flushSync`를 쓰면 된다. 
+만약 이러한 동작을 원치 않는다면 `flushSync`를 쓰면 된다.
 
 ```jsx
-import { flushSync } from 'react-dom'; // Note: react-dom, not react
+import { flushSync } from 'react-dom' // Note: react-dom, not react
 
 function handleClick() {
   flushSync(() => {
-    setCounter(c => c + 1);
-  });
+    setCounter((c) => c + 1)
+  })
   // React has updated the DOM by now
   flushSync(() => {
-    setFlag(f => !f);
-  });
+    setFlag((f) => !f)
+  })
   // React has updated the DOM by now
 }
 ```
@@ -502,16 +505,16 @@ function handleClick() {
 ```javascript
 handleClick = () => {
   setTimeout(() => {
-    this.setState(({ count }) => ({ count: count + 1 }));
+    this.setState(({ count }) => ({ count: count + 1 }))
 
     // { count: 1, flag: false }
 
     // 사실은 배치 때문에 // { count: 0, flag: false } 임
-    console.log(this.state);
+    console.log(this.state)
 
-    this.setState(({ flag }) => ({ flag: !flag }));
-  });
-};
+    this.setState(({ flag }) => ({ flag: !flag }))
+  })
+}
 ```
 
 리액트 18에서는, 이러한 케이스는 더이상 존재하지 않는다. `setTimeout`에 있는 것 조차 배치로 때려버리기 때문에, 위는 동기적으로 렌더링이 진행되지 않을 것이다.
@@ -545,7 +548,6 @@ function handleClick() {
 
 트리에 완전히 추가되기전에, 컴포넌트가 suspend 된 경우, 리액트는 불완전한 상태로 컴포넌트를 추가하거나 effect를 발생시키지 않는다. 대신 리액트는 새 트리를 완전히 버리고 비동기 작업이 완료될 때 가지 기다린 다음, 다시 처음부터 렌더링을 시도한다. 리액트는 브라우저를 차단하지 않고 동시에 렌더링을 재시도 한다.
 
-
 #### Suspense와 layout effect
 
 트리가 suspend 되었다가 fallback으로 돌아가면, 리앹그는 레이아웃 effect를 정리한 다음, 바운더리 내부의 내용이 다시 표시 될 때 까지 만든다. 이로인해 컴포넌트 라이브러리가 suspense와 함께 사용될때 레이아웃을 올바르게 측정할 수 없었던 문제가 해결된다.
@@ -568,7 +570,7 @@ e2e 테스트 시 `act` 경고는 불필요하다. [`opt-in` 개념을 도입](h
 
 #### No Suppression of `console.log`
 
-strict 모드에서, 각 컴포넌트를 두번씩 렌더링 하면 예끼치않은 사이드 이펙트를 겪을 수 있다. react 17에서는 이러한 로그를 쉽게 읽게 하기 위해 두 렌더링 중에 하나의 `console.log`를 의도적으로 띄우지 않았다. 그러나 [이러한 동작이 혼란스럽다는 의견](https://github.com/facebook/react/issues/21783)이 있어 더이상 경고문을 제거하지 않는다.  대신, `React DevTools`가 설치되어 있다면, 두번째 로그가 회색으로 표시되고, 이를 완전히 없앨 수 있는 옵션이 존재한다.
+strict 모드에서, 각 컴포넌트를 두번씩 렌더링 하면 예끼치않은 사이드 이펙트를 겪을 수 있다. react 17에서는 이러한 로그를 쉽게 읽게 하기 위해 두 렌더링 중에 하나의 `console.log`를 의도적으로 띄우지 않았다. 그러나 [이러한 동작이 혼란스럽다는 의견](https://github.com/facebook/react/issues/21783)이 있어 더이상 경고문을 제거하지 않는다. 대신, `React DevTools`가 설치되어 있다면, 두번째 로그가 회색으로 표시되고, 이를 완전히 없앨 수 있는 옵션이 존재한다.
 
 #### 메모리 사용량 최적화
 
@@ -584,8 +586,6 @@ strict 모드에서, 각 컴포넌트를 두번씩 렌더링 하면 예끼치않
 
 서버에서 suspending이 일어날 경우 더이상 에러가 발생하지 않는다. 대신 가장 가까운 `<Suspense>` 바운더리에 fallback HTML을 내보낸후, 클라이언트 레벨에서 같은 렌더링을 재시도 한다.
 
-
 ## All Changes
 
 위 내용을 포함한 모든 변경사항은 [https://github.com/facebook/react/blob/main/CHANGELOG.md#all-changes](https://github.com/facebook/react/blob/main/CHANGELOG.md#all-changes)에 나와 있다.
-

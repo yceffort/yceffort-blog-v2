@@ -40,6 +40,7 @@ const tokenClassNames: { [key in TokenType]: string } = {
 
 function parseCodeSnippet() {
   return (tree: Node) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     visit(tree, 'element', (node: any) => {
       const [token, type]: [string, TokenType] = node.properties.className || []
       if (token === 'token') {

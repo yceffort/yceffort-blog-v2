@@ -396,14 +396,14 @@ root.render(<App name="yceffort post" />)
 
 **before**
 
-````jsx
+```jsx
 import ReactDOM from 'react-dom';
 import App from 'App';
 
 const container = document.getElementById('root');
 
 ReactDOM.hydrate(<App name="yceffort blog" />, container);
-`1``
+```
 
 **after**
 

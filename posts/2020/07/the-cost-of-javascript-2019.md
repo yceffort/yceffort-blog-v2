@@ -18,7 +18,7 @@ template: post
 
 <iframe width="640px" height="360px" src="https://www.youtube.com/embed/X9eRLElSW1c" frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
 
-2019년 들어서 자바스크립트를 처리하는데 드는 주요 비용은 다운로드와 CPU 실행 시간이다. 유저 인터랙션은 브라우저의 메인쓰레드가 자바스크립트를 실행하는라 바쁘다면 약간 지연 될 수 있다. 따라서 스크립스 실행 시간 및 네트워크 병목현상을 최적화 하는 것이 효과적이다.
+2019년 들어서 자바스크립트를 처리하는데 드는 주요 비용은 다운로드와 CPU 실행 시간이다. 유저 인터랙션은 브라우저의 메인스레드가 자바스크립트를 실행하는라 바쁘다면 약간 지연 될 수 있다. 따라서 스크립스 실행 시간 및 네트워크 병목현상을 최적화 하는 것이 효과적이다.
 
 ## 실행가능한 고오급 지침
 
@@ -32,11 +32,11 @@ template: post
 
 ### 실행 시간 최적화
 
-- 메인쓰레드에 부담을 주는 [Long Tasks](https://w3c.github.io/longtasks/)를 피하고, 페이지를 최대한 빠르게 작동가능하게 (interactive) 만들어라. 다운로드 이후 스크립트 시간은 속도에 있어 이제 중요한 척도(비용)가 되었다.
+- 메인스레드에 부담을 주는 [Long Tasks](https://w3c.github.io/longtasks/)를 피하고, 페이지를 최대한 빠르게 작동가능하게 (interactive) 만들어라. 다운로드 이후 스크립트 시간은 속도에 있어 이제 중요한 척도(비용)가 되었다.
 
 ### 1kb 이상의 큰 인라인 스크립트를 피하라
 
-- 만약 스크립트가 1kb가 넘는다면, 인라인으로 사용하는 것을 피하라. 큰 인라인 스크립트는 메인 쓰레드에서 파싱되고 컴파일 된다.
+- 만약 스크립트가 1kb가 넘는다면, 인라인으로 사용하는 것을 피하라. 큰 인라인 스크립트는 메인 스레드에서 파싱되고 컴파일 된다.
 
 > Chrome has a minimum size for code caches, currently set to 1 KiB of source code. This means that smaller scripts are not cached at all, since we consider the overheads to be greater than the benefits.
 
@@ -60,7 +60,7 @@ template: post
 
 자바스크립트 실행 시간을 최적화 할때는, UI스레드를 장기간 독점하고 있는 Long Tasks에 주의 하자. 이는 시각적으로 페이지가 준비된 것처럼 보여도, 중요한 태스크 실행을 차단하고 있을 수 있다. 이러한 것들은 가능한 작게 나누어야 한다. 코드를 분할하고, 로드 되는 순서에 우선순위를 지정하여 페이지 상호작용을 더 빠르게 할 수 있고, 입력 지연 시간을 줄일 수도 있다.
 
-![메인 쓰레드를 독점하는 작업을 잘게 나누자](https://v8.dev/_img/cost-of-javascript-2019/long-tasks.png)
+![메인 스레드를 독점하는 작업을 잘게 나누자](https://v8.dev/_img/cost-of-javascript-2019/long-tasks.png)
 
 ## 파싱과 컴파일을 향상시키기 위해 V8은 무엇을 했나?
 

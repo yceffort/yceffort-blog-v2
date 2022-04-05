@@ -802,7 +802,7 @@ redux-saga 는 side effects (데이터를 가져오는 비동기적인 작업이
 
 ### What is the mental model of redux-saga?
 
-`Saga`는 애플리케이션과 분리된 스레드와 같은것으로, 부수적인 역할을 담당하기 위한 책임을 가지고 있다. redux-saga는 redux의 미들웨어로, 메인 application 에서 Redux actions 과 함께 쓰레드를 시작, 중지, 취소 할 수 있으며 전체의 Redux application 상태에 접근할 수 있으며 Redux actions 도 전달할 수 있다.
+`Saga`는 애플리케이션과 분리된 스레드와 같은것으로, 부수적인 역할을 담당하기 위한 책임을 가지고 있다. redux-saga는 redux의 미들웨어로, 메인 application 에서 Redux actions 과 함께 스레드를 시작, 중지, 취소 할 수 있으며 전체의 Redux application 상태에 접근할 수 있으며 Redux actions 도 전달할 수 있다.
 
 ### What are the differences between `call()` and `put()` in redux-saga?
 

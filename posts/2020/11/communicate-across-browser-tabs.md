@@ -44,7 +44,7 @@ https://codesandbox.io/s/tab-communications-1-localstorage-5ldjw
 잘 작동하는 것 같지만 몇가지 문제가 존재한다.
 
 - 정확히는 탭 별로 이벤트가 발생하는게 아니고 storage의 event를 가져다 쓰는 꼼수라는 점
-- localStorage는 동기로 작동하기 때문에 메인 UI 쓰레드를 블로킹할 수도 있음.
+- localStorage는 동기로 작동하기 때문에 메인 UI 스레드를 블로킹할 수도 있음.
 
 ## Broadcast Channel API
 

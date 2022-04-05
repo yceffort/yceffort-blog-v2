@@ -119,18 +119,18 @@ function writeToMyFile(data, callback) {
 
 많은 사람들이 CPU 집약적인 작업은 Node.js의 EventLoop를 블로킹한다고 믿고 있다. 이는 어느정도는 사실이지만, EventLoop를 차단하지 않는 일부 함수들이 있기 때문에 100% 사실이 아니다.
 
-일반적으로, 암호화/압축 작업은 CPU를 많이 잡아 먹는다. 이러한 이유로, 특정 crypto 함수나 zlib함수는 비동기 버전이 있으며, 이 함수는 EventLoop를 차단하지 않도록 libuv 쓰레드 풀에서 계산을 수행한다. 그 함수들의 목록은 아래와 같다.
+일반적으로, 암호화/압축 작업은 CPU를 많이 잡아 먹는다. 이러한 이유로, 특정 crypto 함수나 zlib함수는 비동기 버전이 있으며, 이 함수는 EventLoop를 차단하지 않도록 libuv 스레드 풀에서 계산을 수행한다. 그 함수들의 목록은 아래와 같다.
 
 - `crypto.pbkdf2()`
 - `crypto.randomFill()`
 - `crypto.randomBytes()`
 - `zlib`의 모든 비동기 함수
 
-그러나 순수 자바스크립트를 사용하여 libuv 쓰레드 풀에서 CPU 집약적인 작업을 수행할 수 있는 방법은 없다. 그러나 libuv 스레드 풀에서 작업을 예약할 수 있는 C++ addon을 직접 작성할 수는 있다. CPU 집약적인 연산을 수행하고, CPU 바운더리 연산을 위한 비동기 API를 구현하기 위해 C++ addon을 사용하는 이와 같은 라이브러리에는 [brcypt](https://github.com/kelektiv/node.bcrypt.js)가 있다.
+그러나 순수 자바스크립트를 사용하여 libuv 스레드 풀에서 CPU 집약적인 작업을 수행할 수 있는 방법은 없다. 그러나 libuv 스레드 풀에서 작업을 예약할 수 있는 C++ addon을 직접 작성할 수는 있다. CPU 집약적인 연산을 수행하고, CPU 바운더리 연산을 위한 비동기 API를 구현하기 위해 C++ addon을 사용하는 이와 같은 라이브러리에는 [brcypt](https://github.com/kelektiv/node.bcrypt.js)가 있다.
 
-## 모든 비동기 작업은 쓰레드 풀에서 실행된다?
+## 모든 비동기 작업은 스레드 풀에서 실행된다?
 
-최신 운영체제들은 Event Notification(linux의 epoll, Macos의 kqueue, 윈도우의 IOCP)을 사용하여 네트워크 IO작업을 위한 네이티브 비동기화를 용이하게 지원하는 커널을 내장하고 있다. 따라서 네트워크 IO는 libuv쓰레드 풀에서 실행되지 않는다.
+최신 운영체제들은 Event Notification(linux의 epoll, Macos의 kqueue, 윈도우의 IOCP)을 사용하여 네트워크 IO작업을 위한 네이티브 비동기화를 용이하게 지원하는 커널을 내장하고 있다. 따라서 네트워크 IO는 libuv스레드 풀에서 실행되지 않는다.
 
 그러나 파일 IO는 운영체제 전반에 있어서, 경우에 따라는 운영체제 버전에 따라서 상이한 경우가 많다. 따라서 일반화된 플랫폼 독립 File IO api를 만드는 것이 매우어렵다. 따라서 파일 시스템 작업은 일관된 비동기 API를 만들기 위해서 libuv 스레드 풀에서 수행된다.
 
@@ -140,7 +140,7 @@ function writeToMyFile(data, callback) {
 
 정확히 말하면, 이는 과거까지는 사실이었지만 이제 [worker thread](https://www.google.com/search?q=worker_thread&oq=worker_thread&aqs=chrome..69i57j0i10i19i30j0i19i30l8.2621j1j1&sourceid=chrome&ie=UTF-8)가 도입되면서 가능해졌다. 따라서 CPU 집약적인 작업을 처리하는 프로덕션 애플리케이션에서 Node.js를 사용하기에 적합해졌다.
 
-각 Nodejs의 워커 쓰레드는 자체 v8 런타임의 복사본, Event Loop, libuv 스레드풀을 가진다. 그러므로 CPU 집약적인 블로킹 작업을 하는 하나의 worker thread는 다른 worker thread에 영향을 주지 않게 된다.
+각 Nodejs의 워커 스레드는 자체 v8 런타임의 복사본, Event Loop, libuv 스레드풀을 가진다. 그러므로 CPU 집약적인 블로킹 작업을 하는 하나의 worker thread는 다른 worker thread에 영향을 주지 않게 된다.
 
 https://yceffort.kr/2021/04/nodejs-multithreading-worker-threads
 

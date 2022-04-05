@@ -426,7 +426,7 @@ console.timeEnd('Regexp')
 
 ### Nodejs환경에서의 ReDos
 
-[ReDos](https://en.wikipedia.org/wiki/ReDoS)는 앞서 언급했던 Catastrophic Backtracking를 활용하여 nodejs 서버를 공격할 수 있다. 자바스크립트는 싱글 쓰레드 이기 때문에, `ReDos` 공격은 요청이 완료 될 때 까지 서버가 중단되도록 공격할 수 있다.
+[ReDos](https://en.wikipedia.org/wiki/ReDoS)는 앞서 언급했던 Catastrophic Backtracking를 활용하여 nodejs 서버를 공격할 수 있다. 자바스크립트는 싱글 스레드 이기 때문에, `ReDos` 공격은 요청이 완료 될 때 까지 서버가 중단되도록 공격할 수 있다.
 
 일례로, 2.15.2이하 버전의 Moment.js 에서는 ReDos 취약성이 존재한다.
 

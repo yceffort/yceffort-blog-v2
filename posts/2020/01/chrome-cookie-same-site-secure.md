@@ -47,7 +47,7 @@ https://bugs.chromium.org/p/chromium/issues/detail?id=1019168#c26
 ■ 변경 내용 : Chrome 80 SameSite Cookie 정책 변경에 따른 naverpay javascript sdk layer 타입 지원 종료
 ```
 
-보안을 위한 Cookie 정책 업데이트가 크롬에서 있었는데 (베타), 정작 google signin에서 대응을 못하고 있는 것이었다. 대략 1월 쯤에 조치를 해줄 것으로 보인다. 아직도 쓰레드에서 이야기 되는 것으로 보아하니, 조만간 업데이트가 될 것 같다.
+보안을 위한 Cookie 정책 업데이트가 크롬에서 있었는데 (베타), 정작 google signin에서 대응을 못하고 있는 것이었다. 대략 1월 쯤에 조치를 해줄 것으로 보인다. 아직도 스레드에서 이야기 되는 것으로 보아하니, 조만간 업데이트가 될 것 같다.
 
 # SameSite=None, Secure Cookie Settings은 무슨 정책일까?
 

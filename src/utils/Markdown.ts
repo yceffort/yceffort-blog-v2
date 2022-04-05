@@ -1,4 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
 import { serialize } from 'next-mdx-remote/serialize'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
@@ -8,9 +7,7 @@ import { visit } from 'unist-util-visit'
 import { Node } from 'unist'
 import remarkGfm from 'remark-gfm'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import prism from '@mapbox/rehype-prism'
+import prism from 'rehype-prism-plus'
 
 import imageMetadata from '#utils/imageMetadata'
 

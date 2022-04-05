@@ -397,24 +397,24 @@ root.render(<App name="yceffort post" />)
 **before**
 
 ```jsx
-import ReactDOM from 'react-dom';
-import App from 'App';
+import ReactDOM from 'react-dom'
+import App from 'App'
 
-const container = document.getElementById('root');
+const container = document.getElementById('root')
 
-ReactDOM.hydrate(<App name="yceffort blog" />, container);
+ReactDOM.hydrate(<App name="yceffort blog" />, container)
 ```
 
 **after**
 
 ```jsx
-import ReactDOM from 'react-dom';
-import App from 'App';
+import ReactDOM from 'react-dom'
+import App from 'App'
 
-const container = document.getElementById('root');
+const container = document.getElementById('root')
 
-const root = ReactDOM.hydrateRoot(container, <App name="yceffort blog" />);
-````
+const root = ReactDOM.hydrateRoot(container, <App name="yceffort blog" />)
+```
 
 위 두 메소드 모드 `onRecoverableError`를 옵션으로 받을 수 있는데, 리액트가 렌더링이나 hydration시 에러가 발생하여 리커버리를 시도할 때 logging을 할 수 있는 목적으로 제공된다. 기본값으로 [reportError](https://developer.mozilla.org/en-US/docs/Web/API/reportError)나 구형 브라우저에서는 `console.error`를 쓴다.
 

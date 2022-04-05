@@ -37,3 +37,53 @@ span.icon.icon-link {
 .dark span.icon.icon-link { 
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 490 490' style='enable-background:new 0 0 490 490; fill:white;' xml:space='preserve'%3E%3Cpath d='M64.333 490h58.401l33.878-137.69h122.259L245.39 490h58.401l33.878-137.69h119.92v-48.162h-108.24l29.2-117.324h79.04v-48.162H390.23L424.108 0H365.31l-33.878 138.661H208.79L242.668 0h-58.415l-33.864 138.661H32.411v48.162h106.298l-28.818 117.324h-77.48v48.162h65.8L64.333 490zM197.11 186.824h122.642l-29.2 117.324h-122.26l28.818-117.324z'/%3E%3C/svg%3E");
 }
+
+pre {
+  overflow-x: auto;
+}
+
+/**
+ * Inspired by gatsby remark prism - https://www.gatsbyjs.com/plugins/gatsby-remark-prismjs/
+ * 1. Make the element just wide enough to fit its content.
+ * 2. Always fill the visible space in .code-highlight.
+ */
+.code-highlight {
+  float: left; /* 1 */
+  min-width: 100%; /* 2 */
+}
+
+.code-line {
+  display: block;
+  padding-left: 16px;
+  padding-right: 16px;
+  margin-left: -16px;
+  margin-right: -16px;
+  border-left-width: 4px;
+  border-left-color: rgba(31, 41, 55, 0); /* Set code block color */
+}
+
+.code-line.inserted {
+  background-color: rgba(16, 185, 129, 0.2); /* Set inserted line (+) color */
+}
+
+.code-line.deleted {
+  background-color: rgba(239, 68, 68, 0.2); /* Set deleted line (-) color */
+}
+
+.highlight-line {
+  margin-left: -16px;
+  margin-right: -16px;
+  background-color: rgba(55, 65, 81, 0.5); /* Set highlight bg color */
+  border-left-width: 4px;
+  border-left-color: rgb(59, 130, 246); /* Set highlight accent border color */
+}
+
+.line-number::before {
+  display: inline-block;
+  width: 1rem;
+  text-align: right;
+  margin-right: 16px;
+  margin-left: -8px;
+  color: rgb(156, 163, 175); /* Line number color */
+  content: attr(line);
+}

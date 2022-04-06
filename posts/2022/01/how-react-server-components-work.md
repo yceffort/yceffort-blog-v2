@@ -122,7 +122,7 @@ RSC 서버 컴포넌트를 렌더링하기 위해서 실제로 어떤 일이 일
 
 여기에서 최종 목표는 최초 root 서버 컴포넌트를 기본 html 태그와 클라이언트 컴포넌트 placeholder 트리로 렌더링하는 것이다. 그리고 이 트리를 직렬화하여 (json으로) 브라우저로 보내면, 브라우저가 이를 다시 역직렬화 하여 클라이언트 placeholder에 실제 클라이언트 컴포넌트를 채우고 최종 결과를 렌더링하는 작업을 수행할 수 있다.
 
-그럼 위 예제에서, `OuterServerComponent`를 렌더링하고 싶다면, 단순히 `JSON.stringify(<OuterServerComponent />)`를 한다면 직렬화된 렌더링 트리를 얻을 수 이쓸까?
+그럼 위 예제에서, `OuterServerComponent`를 렌더링하고 싶다면, 단순히 `JSON.stringify(<OuterServerComponent />)`를 한다면 직렬화된 렌더링 트리를 얻을 수 있을까?
 
 거의 그렇다고 볼 수 있지만, 그것만으로 충분하지는 않다. 리액트 엘리먼트의 구조를 다시한번 생각해보자.
 

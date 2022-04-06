@@ -2,7 +2,8 @@ import 'src/tailwind.css'
 
 import App from 'next/app'
 import Head from 'next/head'
-import { Router } from 'next/router'
+// eslint-disable-next-line import/no-named-as-default
+import Router from 'next/router'
 import { ThemeProvider } from 'next-themes'
 import { DefaultSeo } from 'next-seo'
 import Script from 'next/script'

@@ -36,7 +36,7 @@ const tokenClassNames: { [key in TokenType]: string } = {
   function: 'text-code-blue',
   boolean: 'text-code-red',
   comment: 'text-gray-400 italic',
-}
+} as const
 
 function parseCodeSnippet() {
   return (tree: Node) => {

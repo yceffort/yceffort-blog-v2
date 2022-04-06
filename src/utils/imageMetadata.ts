@@ -1,6 +1,6 @@
 import { promisify } from 'util'
 
-import imageSize from 'image-size'
+import { imageSize } from 'image-size'
 import { Processor } from 'unified'
 import { Node } from 'unist'
 import { visit } from 'unist-util-visit'

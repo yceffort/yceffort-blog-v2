@@ -8,6 +8,7 @@ function NextImage(props: HTMLProps<HTMLImageElement>) {
 
   if (src) {
     if (src.startsWith('http')) {
+      // eslint-disable-next-line @next/next/no-img-element
       return <img src={src} alt={src} />
     } else {
       return (

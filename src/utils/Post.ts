@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-import glob from 'glob'
+import { sync } from 'glob'
 import memoize from 'memoizee'
 import frontMatter from 'front-matter'
 
@@ -11,7 +11,7 @@ const DIR_REPLACE_STRING = '/posts'
 const POST_PATH = `${process.cwd()}${DIR_REPLACE_STRING}`
 
 async function retreiveAllPosts(): Promise<Array<Post>> {
-  const files = glob.sync(`${POST_PATH}/**/*.md*`).reverse()
+  const files = sync(`${POST_PATH}/**/*.md*`).reverse()
 
   const posts = files
     .reduce((prev, f) => {

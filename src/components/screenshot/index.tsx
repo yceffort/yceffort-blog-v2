@@ -39,6 +39,7 @@ export default function Screenshot({
             </p>
           ) : null}
         </main>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           className={styles.image}
           src={imageSrc || '/default-image.png'}

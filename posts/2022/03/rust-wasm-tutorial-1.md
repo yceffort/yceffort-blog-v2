@@ -20,7 +20,7 @@ description: '인생은 실전이다'
 
 ### Web Assembly가 달성하고자 하는 목표
 
-> https://www.w3.org/community/webassembly/
+> [https://www.w3.org/community/webassembly/](https://www.w3.org/community/webassembly/)
 
 - 빠르고, 효과적이고, 이식성이 좋을 것
 - 읽기 쉽고 디버깅이 가능한 구조일 것
@@ -65,7 +65,7 @@ WebAssembly는 자바스크립트와 다른 언어지만, 자바스크립트를 
 - Zig
 - Grain
 
-> https://webassembly.org/getting-started/developers-guide/
+> [https://webassembly.org/getting-started/developers-guide/](https://webassembly.org/getting-started/developers-guide/)
 
 ## 왜 러스트인가?
 
@@ -73,7 +73,7 @@ WebAssembly는 자바스크립트와 다른 언어지만, 자바스크립트를 
 
 `.wasm`은 네트워크를 통해 받아야하는 바이너리 파일로, 이 코드 크기는 성능에 있어 매우 중요하다. 러스트는 가비지 컬렉터와 같은 추가적인 bloat이 포함되어 있지 않아 작은 크기의 `.wasm`을 사용할 수 있다. 즉, 실제로 사용하는 함수와 기능에 대해서만 값을 치루면 된다.
 
-예를 들어 Go와 같이 상대적으로 작은 런타임 언어도, hello world 수준의 프로그램을 컴파일 하면 2MB가 넘는 바이너리 크리를 갖는다. 반면 rust는 1.46kb에 불과하다. 또한 `.wasm`으로 컴파일 시에 네이티브에 애플리케이션에 비례하는 실행 속도를 누릴 수 있으므로, 속도와 성능 모두를 잡을 수 있게 된다.
+예를 들어 Go와 같이 상대적으로 작은 런타임 언어도, hello world 수준의 프로그램을 컴파일 하면 2MB가 넘는 바이너리 트리를 갖는다. 반면 rust는 1.46kb에 불과하다. 또한 `.wasm`으로 컴파일 시에 네이티브에 애플리케이션에 비례하는 실행 속도를 누릴 수 있으므로, 속도와 성능 모두를 잡을 수 있게 된다.
 
 ### 자바스크립트와 비슷한 생태계
 

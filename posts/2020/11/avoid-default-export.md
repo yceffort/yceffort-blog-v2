@@ -30,7 +30,7 @@ export default function Foo {
 import Foo from './foo'
 ```
 
-그런데 왜 이것을 않았으면 좋겠는지 몇 가지 이유를 들어서 설득해보자.
+그런데 왜 이것을 않으면 좋은지 몇 가지 이유를 들어서 설득해보자.
 
 ## Table of Contents
 

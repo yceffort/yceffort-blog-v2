@@ -56,11 +56,11 @@ index(row, column, universe) = row * width(universe) + column
 
 이를 자바스크립트에 표현하기 위해 사용할 수 있는 방법은 무엇이 있을까? 먼저 `Universe`에서 [std::fmt::Display](https://doc.rust-lang.org/1.25.0/std/fmt/trait.Display.html)를 구현하여 텍스트 문자로 렌더링 할 수 있는 Rust String을 생성할 수 있다. 그런 다음 이 러스트 문자령르 웹 어셈블리의 선형 메모리에서 자바스크립트의 문자열로 보낸다음, HTML의 `textContent`로 설정하여 표시하면 된다. 이러한 구현을 한단계 진화시켜서 `<canvas>`에 그리는 방법도 있을 것이다.
 
-또다른 방법으로는, 러스트가 모든 우주를 자바스크립트에 노출시키는 대신, 각 틱이 발생한 후에 상태가 변경된 모든 셀의 목록을 반환하는 방법도 있다. 이렇게 하면 자바스크립트는 렌더링할 때 모든 전체 우주를 반복할 필요가 없고, 렌더링이 필요한 부분 집합만 구할 수 있다. 단점은  이 방법이 조금더 구현이 어렵다는 것이다.
+또다른 방법으로는, 러스트가 모든 우주를 자바스크립트에 노출시키는 대신, 각 틱이 발생한 후에 상태가 변경된 모든 셀의 목록을 반환하는 방법도 있다. 이렇게 하면 자바스크립트는 렌더링할 때 모든 전체 우주를 반복할 필요가 없고, 렌더링이 필요한 부분 집합만 구할 수 있다. 단점은 이 방법이 조금더 구현이 어렵다는 것이다.
 
 ## 러스트 구현
 
-`greet`과 `alert`를 제거하고, 아래 세포를 정의한 코드로 대체하자. 
+`greet`과 `alert`를 제거하고, 아래 세포를 정의한 코드로 대체하자.
 
 ```rust
 #[wasm_bindgen]
@@ -78,7 +78,6 @@ pub enum Cell {
 > u8은 숫자를 표현할 수 있는 최소 단위다
 
 > `derive`일부 특성에 대한 기본 구현을 할 수 있도록 도와주는 도구다.
-
 
 다음으로는 우주를 정의하자. 우주는 너비와 높이를 가진다.
 
@@ -152,7 +151,7 @@ impl Universe {
 
                 // 다음 셀은 다음과 같이 결정된다.
                 let next_cell = match (cell, live_neighbors) {
-  
+
                     // 규칙1. 살아있는 세포 근처에 두명 미만의 세포가 살아있다면, 죽는다.
                     (Cell::Alive, x) if x < 2 => Cell::Dead,
                     // 규칙 2: 살아있는 세포 규칙에 2~3의 살아있는 세포가 있다면, 산다.
@@ -247,25 +246,25 @@ impl Universe {
 그리고 `wasm-game-of-life/www/index.js`의 최상단에, 우리가 만든 `Universe`를 import 하자.
 
 ```javascript
-import { Universe } from "wasm-game-of-life";
+import { Universe } from 'wasm-game-of-life'
 ```
 
 그리고, `<pre>` 엘리먼트에 우리가 만든 `Universe`를 새로 만든다.
 
 ```javascript
-const pre = document.getElementById("game-of-life-canvas");
-const universe = Universe.new();
+const pre = document.getElementById('game-of-life-canvas')
+const universe = Universe.new()
 ```
 
 매틱마다 매끄러운 렌더링을 구현하기 위해 [requestAnimationFrame](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame)을 사용한다. 매 iteration 마다, 현재 우주 상태를 `<pre>`에 그리고, `Universe::tick`을 호출한다.
 
 ```javascript
 const renderLoop = () => {
-  pre.textContent = universe.render();
-  universe.tick();
+  pre.textContent = universe.render()
+  universe.tick()
 
-  requestAnimationFrame(renderLoop);
-};
+  requestAnimationFrame(renderLoop)
+}
 ```
 
 그리고 이제 매 틱마다 실행될 수 있도록, 최초 한번 실행한다.
@@ -280,7 +279,6 @@ requestAnimationFrame(renderLoop)
 
 > 잘 모르겠지만,, 뭔가 일어나고 있음,,,
 
-
 ## 메모리에서 캔버스로 바로 렌더링 해보기
 
 앞서 언급했던 것처럼, 러스트에서 문자열을 생성하고 할당한 다음, `wasm-bindgen`으로 유효한 자바스크립트 문자열로 반환하는 작업은 불필요하게 셀의 복사본을 두번 만드는 것이다. 자바스크립트는 이미 전체 너비와 높이를 알고 있고, 셀을 구성하고 있는 웹 어셈블리의 선형 메모리를 직접 읽을 수 있으므로, 렌더링 방법을 수정해보자.
@@ -292,7 +290,7 @@ requestAnimationFrame(renderLoop)
 ```html
 <body>
   <canvas id="game-of-life-canvas"></canvas>
-  <script src='./bootstrap.js'></script>
+  <script src="./bootstrap.js"></script>
 </body>
 ```
 
@@ -324,95 +322,93 @@ impl Universe {
 
 ```javascript
 // Construct the universe, and get its width and height.
-const universe = Universe.new();
-const width = universe.width();
-const height = universe.height();
+const universe = Universe.new()
+const width = universe.width()
+const height = universe.height()
 
 // 세포 사이에 1px border
-const canvas = document.getElementById("game-of-life-canvas");
-canvas.height = (CELL_SIZE + 1) * height + 1;
-canvas.width = (CELL_SIZE + 1) * width + 1;
+const canvas = document.getElementById('game-of-life-canvas')
+canvas.height = (CELL_SIZE + 1) * height + 1
+canvas.width = (CELL_SIZE + 1) * width + 1
 
-const ctx = canvas.getContext('2d');
+const ctx = canvas.getContext('2d')
 
 const renderLoop = () => {
-  universe.tick();
+  universe.tick()
 
-  drawGrid();
-  drawCells();
+  drawGrid()
+  drawCells()
 
-  requestAnimationFrame(renderLoop);
-};
+  requestAnimationFrame(renderLoop)
+}
 ```
 
 그리드를 그리기 위해서, 같은 간격의 수평선과 수직선 세트를 그린다. 이 선들을 교차하여 그리드를 그리게 될 것이다.
 
 ```javascript
 const drawGrid = () => {
-  ctx.beginPath();
-  ctx.strokeStyle = GRID_COLOR;
+  ctx.beginPath()
+  ctx.strokeStyle = GRID_COLOR
 
   // Vertical lines.
   for (let i = 0; i <= width; i++) {
-    ctx.moveTo(i * (CELL_SIZE + 1) + 1, 0);
-    ctx.lineTo(i * (CELL_SIZE + 1) + 1, (CELL_SIZE + 1) * height + 1);
+    ctx.moveTo(i * (CELL_SIZE + 1) + 1, 0)
+    ctx.lineTo(i * (CELL_SIZE + 1) + 1, (CELL_SIZE + 1) * height + 1)
   }
 
   // Horizontal lines.
   for (let j = 0; j <= height; j++) {
-    ctx.moveTo(0,                           j * (CELL_SIZE + 1) + 1);
-    ctx.lineTo((CELL_SIZE + 1) * width + 1, j * (CELL_SIZE + 1) + 1);
+    ctx.moveTo(0, j * (CELL_SIZE + 1) + 1)
+    ctx.lineTo((CELL_SIZE + 1) * width + 1, j * (CELL_SIZE + 1) + 1)
   }
 
-  ctx.stroke();
-};
+  ctx.stroke()
+}
 ```
 
 웹 어셈블리의 선형메모리에 바로 접근하기 위해, raw wasm module인 `wasm_game_of_life_bg`를 활용할 것이다. 세포를 그리기 위해 현재 우주의 세포에 대한 포인터를 얻고, 세포 버퍼가있는 `Unit8Array`를 구성하고, 각 세포를 순회하면서 세포가 죽었는지 살았는지에 따라 각각 사각형을 그린다. 포인터와 오버레이로 작업하여 매 틱에서 경계를 넘어 셀을 복사하는 것을 피한다.
 
 ```javascript
 // Import the WebAssembly memory at the top of the file.
-import { memory } from "wasm-game-of-life/wasm_game_of_life_bg";
+import { memory } from 'wasm-game-of-life/wasm_game_of_life_bg'
 
 // ...
 
 const getIndex = (row, column) => {
-  return row * width + column;
-};
+  return row * width + column
+}
 
 const drawCells = () => {
-  const cellsPtr = universe.cells();
-  const cells = new Uint8Array(memory.buffer, cellsPtr, width * height);
+  const cellsPtr = universe.cells()
+  const cells = new Uint8Array(memory.buffer, cellsPtr, width * height)
 
-  ctx.beginPath();
+  ctx.beginPath()
 
   for (let row = 0; row < height; row++) {
     for (let col = 0; col < width; col++) {
-      const idx = getIndex(row, col);
+      const idx = getIndex(row, col)
 
-      ctx.fillStyle = cells[idx] === Cell.Dead
-        ? DEAD_COLOR
-        : ALIVE_COLOR;
+      ctx.fillStyle = cells[idx] === Cell.Dead ? DEAD_COLOR : ALIVE_COLOR
 
       ctx.fillRect(
         col * (CELL_SIZE + 1) + 1,
         row * (CELL_SIZE + 1) + 1,
         CELL_SIZE,
-        CELL_SIZE
-      );
+        CELL_SIZE,
+      )
     }
   }
 
-  ctx.stroke();
-};
+  ctx.stroke()
+}
 ```
 
 최초 렌더링 프로세스를 시작 하기 위해서, `renderLoop`에 있는 프로세스를 가져와 실행한다.
 
 ```javascript
-drawGrid();
-drawCells();
-requestAnimationFrame(renderLoop);
+drawGrid()
+drawCells()
+requestAnimationFrame(renderLoop)
 ```
 
 다시한번 빌드하고, 실행해보자.
@@ -445,10 +441,10 @@ Version: webpack 4.43.0
 Time: 524ms
 Built at: 04/08/2022 6:13:05 AM
                            Asset       Size  Chunks                         Chunk Names
-                  0.bootstrap.js   10.5 KiB       0  [emitted]              
-8ca3edcd4459872d299d.module.wasm   20.6 KiB       0  [emitted] [immutable]  
+                  0.bootstrap.js   10.5 KiB       0  [emitted]
+8ca3edcd4459872d299d.module.wasm   20.6 KiB       0  [emitted] [immutable]
                     bootstrap.js    369 KiB    main  [emitted]              main
-                      index.html  494 bytes          [emitted]              
+                      index.html  494 bytes          [emitted]
 Entrypoint main = bootstrap.js
 [0] multi (webpack)-dev-server/client?http://localhost:8080 ./bootstrap.js 40 bytes {main} [built]
 [../pkg/wasm_game_of_life.js] 95 bytes {0} [built]
@@ -470,4 +466,3 @@ Entrypoint main = bootstrap.js
 ```
 
 ![game-of-life-canvas](./images/game-of-life-canvas.gif)
-

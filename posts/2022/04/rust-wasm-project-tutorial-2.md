@@ -466,3 +466,5 @@ Entrypoint main = bootstrap.js
 ```
 
 ![game-of-life-canvas](./images/game-of-life-canvas.gif)
+
+> 지금까지 작성한 코드는 [github](https://github.com/yceffort/rust-playground/tree/main/wasm-game-of-life)에서 확인하실 수 있습니다.

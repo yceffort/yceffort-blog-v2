@@ -13,7 +13,7 @@ description: '코로나 휴가를 틈탄 러스트 뻘짓'
 
 ## Introduction
 
-이 튜토리얼은 https://rustwasm.github.io/docs/book/game-of-life/introduction.html 에서 제공하는 Rust WebAssembly로 만드는 Game of Life 을 기반으로 작성되었습니다. 직접 튜토리얼을 따라하면서 단순히 번역 이외에도 최신 라이브러리 버전 기준으로 재작성하였으며, 설명이 부족하거나 생략된 부분에 대해서도 별도로 주석을 달았습니다.
+이 튜토리얼은 [https://rustwasm.github.io/docs/book/game-of-life/introduction.html](https://rustwasm.github.io/docs/book/game-of-life/introduction.html) 에서 제공하는 Rust WebAssembly로 만드는 Game of Life 을 기반으로 작성되었습니다. 직접 튜토리얼을 따라하면서 단순히 번역 이외에도 최신 라이브러리 버전 기준으로 재작성하였으며, 설명이 부족하거나 생략된 부분에 대해서도 별도로 주석을 달았습니다.
 
 기본적으로 러스트에 대한 완벽한 이해를 기반으로 하지 않고 작성되었기 때문에, 일부 러스트 문법에 대한 설명이 적혀있을 수도 있습니다.
 

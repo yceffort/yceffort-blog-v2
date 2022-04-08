@@ -413,7 +413,7 @@ requestAnimationFrame(renderLoop)
 
 다시한번 빌드하고, 실행해보자.
 
-```basg
+```bash
 @yceffort ➜ /workspaces/rust-playground/wasm-game-of-life (main ✗) $ wasm-pack build
 [INFO]: Checking for the Wasm target...
 [INFO]: Compiling to Wasm...

@@ -100,4 +100,42 @@ return React.createElement(SomeComponent, {a: 42, b: "testing"}, "Text Here")
 
 ### 리액트 렌더링 규칙
 
-리액트 렌더링의 중요한 규칙 중 하나는 **렌더링은 '순수' 해야하고 '부수작용' 이 없어야ㅑ한다는 것** 이다. 근데 이는 매우 복잡하고 어려운데, 왜냐하면 대다수의 부수 작용이 왜 이러났는지 뚜렷하지 못하고, 어떤 것도 망가 뜨리지 않기 때문이다.
+리액트 렌더링의 중요한 규칙 중 하나는 **렌더링은 '순수' 해야하고 '부수작용' 이 없어야ㅑ한다는 것** 이다. 근데 이는 매우 복잡하고 어려운데, 왜냐하면 대다수의 부수 작용이 왜 이러났는지 뚜렷하지 못하고, 어떤 것도 망가 뜨리지 않기 때문이다. 예를 들어, 엄밀히 말하면 `console.log()`도 부수작업을 야기하지만, 그 어떤 것도 망가 뜨리지 않는다. `prop` 가 변경되는 것은 명백한 부수효과 이며, 이는 무언가를 망가 뜨릴 수 있다. 렌더링 중간에 ajax 호출 또한 부수효과를 일으키고, 이는 요청의 종류에 따라서 명백하게 앱에 예기치 못한 결과를 야기할 수 있다.
+
+[Rules of React](https://gist.github.com/sebmarkbage/75f0838967cd003cd7f9ab938eb1958f)라는 글이 있다. 이 글에서는, 렌더링을 표함한 다양한 리액트의 라이프 사이클 메소드의 동작과, 어떠한 동작이 '순수' 한지, 혹은 안전한지를 나타내고 있다. 요약하자면
+
+렌더링 로직이 할 수 없는 것
+
+- 존재하는 변수나 객체를 변경해서는 안된다.
+- `Math.random()` `Date.now()`와 같은 래덤 값을 생성할 수 없다.
+- 네트워크 요청을 할 수 없다.
+- `state`를 업데이트
+
+렌더링 로직은
+
+- 렌더링 도중에 새롭게 만들어진 객체를 변경
+- 에러 던지기
+- 아직 만들어지지 않은 데이터를 lazy 초기화 하는일 (캐시 같은)
+
+### 컴포넌트 메타데이터와 파이버
+
+리액트는 애플리케이션에 존재하는 모든 현재 컴포넌트 인스턴스를 추적하는 내부 데이터 구조를 가지고 있다. 이 데이터 구조의 핵심적인 부분은, 다음 과 같은 메타데이터 필드를 포함하고 있는 Fiber라고 불리는 객체다.
+
+- 컴포넌트 트리의 특정 시점에서 렌더링 해야하는 컴포넌트 타입의 유형
+- 이 컴포넌트와 관련된 prop, state의 상태
+- 부모, 형제, 자식 컴포넌트에 대한 포인터
+- 리액트가 렌더링 프로세스를 추적하는데 사용되는 기타 메타데이터
+
+리액트 17의 `fiber` 타입은 [여기](https://github.com/facebook/react/blob/v17.0.0/packages/react-reconciler/src/ReactFiber.new.js#L47-L174)에서 볼 수 있다.
+
+렌더링 패스 동안, 리액트는 fiber 객체의 트리를 순회하고, 새로운 렌더링 결과를 계산한 결과로 나온 업데이트 된 트리를 생성한다.
+
+**`fiber` 객체는 실제 컴포넌트 prop과 state 값을 저장하고 있다.** 컴포넌트에서 `prop`와 `state`의 값을 꺼내서 쓴다는 것은, 사실 리액트는 이러한 값을 fiber 객체에 있는 것으로 전달해준다. 사실, 클래스 컴포넌트의 경우, 리액트는 컴포넌트를 렌더링 하기 직전에 [`componentInstance.props = newProps`를 통해서 복사본을 저장](https://github.com/facebook/react/blob/v17.0.0/packages/react-reconciler/src/ReactFiberClassComponent.new.js#L1038-L1042)해준다. `this.props`가 존재한다는 것은, 리액트가 내부 데이터 구조의 참조를 복사해 두었다는 뜻이기도 하다. 즉, 컴포넌트라는 것은 리액트 fiber 객체를 보여주는 일종의 외관이라고 볼 수 있다.
+
+비슷하게, [리액트 훅의 작동 또한 해당 컴포넌트의 fiber 객체에 연결된 링크드 리스트 형태로 저장하는 방식](https://www.swyx.io/getting-closure-on-hooks/)으로 동작한다. 리액트가 함수형 컴포넌트를 렌덜이하면, fiber에 연결된 후의 링크드 리스트롤 가져오며, [다른 훅을 호출할 떄마다 훅에 저장된 적절한 값을 반환한다.](https://github.com/facebook/react/blob/v17.0.0/packages/react-reconciler/src/ReactFiberHooks.new.js#L795)
+
+부모 컴포넌트가 렌더링되어 자식 컴포넌트가 주어진다면, 리액트는 fiber 객체를 만들어 이 컴포넌트의 인스턴스를 추적한다. 클래스 컴포넌트의 경우, [`const instance = new YourComponentType(props)` 가 호출되고](https://github.com/facebook/react/blob/v17.0.0/packages/react-reconciler/src/ReactFiberClassComponent.new.js#L653) 새로운 컴포넌트 인스턴스를 fiber 객체에 저장한다. 함수형 컴포넌트의 경우에는, [YourComponentType(props)](https://github.com/facebook/react/blob/v17.0.0/packages/react-reconciler/src/ReactFiberHooks.new.js#L405)를 호출한다.
+
+### 컴포넌트 타입과 재조정 (`Reconciliation`)
+
+[재조정 페이지에 언급되어 있는 것](https://reactjs.org/docs/reconciliation.html#elements-of-different-types) 처럼, 리액트는 기존 컴포넌트 트리오 ㅏDOM 구조를 가능한 많이 재사용함으로써 리렌더링의 효율성을 추구한다. 동일한 유형의 컴포넌트, 또는 HTML 노드를 트리의 동일한 위치에 렌더링하도록 리액트에 요청하게 되면, 리액트는 해당 컴포넌트 또는 HTML 노드를 만드는 대신에 해당 업데이트만 적용한다. 즉, 리액트에 해당 컴포넌트 타입을 같은 위치에 렌더링 하도록 계속 요청이 있다면, 리액트는 계속 컴포넌트의 인스턴스를 유지한다는 뜻이다. 클래스 컴포넌트의 경우, 실제 컴포넌트의 실제 인스턴스와 동일한 인스턴스를 사용한다. 함수형 컴포넌트는, 클래스와 같은 느낌의 인스턴스는 없지만, `<MyFunctionComponent />` 가 보여지고 활성화 상태로 유지되고 있다는 관점에서 인스턴스를 나타내는 것으로 볼수도 있다.

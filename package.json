@@ -54,7 +54,6 @@
     "unist-util-visit": "^4.1.0"
   },
   "devDependencies": {
-    "@tailwindcss/jit": "^0.1.18",
     "@titicaca/eslint-config-triple": "^3.1.0",
     "@types/date-fns": "^2.6.0",
     "@types/memoizee": "^0.4.7",

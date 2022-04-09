@@ -146,13 +146,13 @@ return React.createElement(SomeComponent, {a: 42, b: "testing"}, "Text Here")
 
 즉, 렌더링 동안에는 절대로 새로운 컴포넌트 타입을 만들어서는 안된다. 새로운 컴포넌트 타입을 만들다면, 이는 참조가 다르고, 이는 리액트가 차위 컴포넌트 트리를 모두 파괴하고 새로운 트리를 만들게 된다.
 
-코드로 설명하자면, 
+코드로 설명하자면,
 
 ```jsx
 function ParentComponent() {
   // 이는 매번 새로운 컴포넌트 참조를 만들게 된다.
   function ChildComponent() {}
-  
+
   return <ChildComponent />
 }
 ```
@@ -163,17 +163,19 @@ function ParentComponent() {
 // 컴포넌트 타입 참조가 한번 딱 만들어진다.
 
 function ChildComponent() {}
-  
-function ParentComponent() {
 
+function ParentComponent() {
   return <ChildComponent />
 }
 ```
 
 를 사용하자.
 
-### `key`와  `Reconciliation`
+### `key`와 `Reconciliation`
 
 또한가지, 리액틀가 컴포넌트 인스턴스를 식별하는 방법으로 `key` prop이 있다. `key`는 실제 컴포넌트로 전달되는 요소는 아니다. 리액트는 이를 활용해 컴포넌트 타입의 특정 인스턴스를 구별하는데 사용할 수 있는 고유한 식별자로 사용한다.
 
 아마도 `key`를 가장 많이 사용하는 경우는 리스트를 렌더링 할 때 일 것이다. `key`는 목록의 순서변경, 추가, 삭제와 같은 방식으로 변경될 수 있는 데이터를 렌더링하는 경우에 매우 중요하다. 여기서 중요하다는 것은 고유한 값을 사용해야 한다는 것이다. 고유한 값을 사용할 수 없는 최후의 수단으로, 배열의 인덱스를 사용해야 한다.
+
+왜 중요한지 한번 살펴보자.
+

@@ -94,7 +94,7 @@ return React.createElement(SomeComponent, {a: 42, b: "testing"}, "Text Here")
 
 **일반적인 렌더링의 경우, 리액트는 `props`가 변경되어 있는지 신경쓰지 않는다. 부모 컴포넌트가 렌더링 되어 있기 때문에, 자식 컴포넌트도 무조건 리렌더링 된다.**
 
-즉, 루트에서 `setState()를 호출한다는 것은, 기본적으로, 컴포넌트 트리에 있는 모든 컴포넌트를 렌더링 한다는 것을 의미한다. 이제 트리의 대부분의 컴포넌트가 동일한 렌더링 결과물을 반환할 가능성이 높기 때문에, 리액트는 DOM을 변경할 필요가 없다. 그러나 리액트는 여전히 컴포넌트에게 렌더링을 요청하고, 이 렌더링 결과물을 비교하는 작업을 요구한다. 두가지 모두 시간과 노력이 필요하다.
+즉, 루트에서 `setState()`를 호출한다는 것은, 기본적으로, 컴포넌트 트리에 있는 모든 컴포넌트를 렌더링 한다는 것을 의미한다. 이제 트리의 대부분의 컴포넌트가 동일한 렌더링 결과물을 반환할 가능성이 높기 때문에, 리액트는 DOM을 변경할 필요가 없다. 그러나 리액트는 여전히 컴포넌트에게 렌더링을 요청하고, 이 렌더링 결과물을 비교하는 작업을 요구한다. 두가지 모두 시간과 노력이 필요하다.
 
 한가지 기억해둬야 할 것은, 렌더링이 꼭 나쁜 것만은 아니라는 것이다. 단지 리액트가 실제로 DOM을 변경해야 하는지 여부를 확인하는 것일 뿐이다.
 
@@ -182,3 +182,162 @@ function ParentComponent() {
 대신에 `key={todo.id}`와 같은 것으로 처리했다면, 리액트는 올바르게 2개의 아이템을 지우고 3개를 추가할 것이다. 이는 두개의 컴포넌트 인스턴스와 DOM노드를 지우고, 새롭게 3개의 컴포넌트 인스턴스, DOM노드를 만드는 것을 의미한다.
 
 `key`는 리스트에 있는 컴포넌트의 인스턴스를 식별하는데 유용하다. **어떤 리액트 컴포넌트에든 `key`를 추가하여 식별자를 부여할 수 있고, `key`를 변경하는 것은 리액트가 오래된 컴포넌트 인스턴스를 없애고, 새로운 DOM을 만든다는 것을 의미한다.** 일반적인 유즈케이스는 앞서 언급한 리스트의 경우이다. `<Form key={selectedItem.id}>`을 렌더링하면 선택한 항목이 변경될 때 리액트가 form을 삭제하고 다시 생성하므로, form의 오래된 상태 문제를 방지할 수도 있다.
+
+### 렌더링 배치와 타이밍
+
+기본적으로, `setState()`를 호출하는 것은 리액트가 새로운 렌더링 패스를 시작한다는 뜻이고, 이는 동기적으로 실행되어 리턴된다. 이에 추가적으로, 리액트는 렌더링 배치 형태의 최적화를 자동으로 실행한다. 여기서 말하는 렌더링 배치란, `setState()`에 대한 여러 호출로 인해 하나의 렌더 패스가 대기열에 저장되어 실행되는 것을 말하며, 일반적으로 약간의 지연이 발생한다.
+
+[리액트 문서에서 언급하는 것 중 하나는 `state` 업데이트는 비동기 적일 수 있다는 사실](https://reactjs.org/docs/state-and-lifecycle.html#state-updates-may-be-asynchronous)이다. 특히 리액트는 리액트 이벤트 핸들러에서 발생하는 상태 업데이트를 자동으로 일괄적으로 처리한다. 리액트 이벤트 핸들러는, 일반적인 리액트 애플리케이션에서 매우 큰부분을 차지하기 때문에, 이는 주어진 앱의 대부분의 상태 업데이트가 실제로 일괄적으로 처리된다는 것을 의미한다.
+
+리액트는 이벤트 핸들러를 `instability_batchedUpdates` 라고 하는 내부 함수로 래핑하여 이벤트 핸들러르르 렌더링 한다. 리액트는 `instability_batchedUpdates`가 실행중일 때, 대기중인 모든 상태 업데이트를 추적한 다음에, 단일 렌더링 경로로 적용한다. 리액트는 지정된 이벤트에 대해서 어떤 핸들러를 호출해야하는지 이미 정확하게 알고 있기 때문에, 이벤트 핸들러에서 사용하는 이방법은 매우 잘 먹힌다.
+
+개념적으로, 리액트가 내부적으로 한느 일을 다음과 같은 의사 코드로 상상해볼 수 있다.
+
+```javascript
+// 진짜 이렇게 코드가 돌아간다는 건 아님
+function internalHandleEvent(e) {
+  const userProvidedEventHandler = findEventHandler(e)
+
+  let batchedUpdates = []
+
+  unstable_batchedUpdates(() => {
+    // 이 안에 대기중인 모든 업데이트가 일괄 처리된 업데이트로 푸쉬될 것이다
+    userProvidedEventHandler(e)
+  })
+
+  renderWithQueuedStateUpdates(batchedUpdates)
+}
+```
+
+그러나 이는 실제 즉시 콜스택 외부에 대기중인 상태 업데이트와 함께 배치되지 않는 다는 것을 의미한다. 아래 예제를 살펴보자.
+
+```javascript
+const [counter, setCounter] = useState(0)
+
+const onClick = async () => {
+  setCounter(0)
+  setCounter(1)
+
+  const data = await fetchSomeData()
+
+  setCounter(2)
+  setCounter(3)
+}
+```
+
+이는 세개의 렌더링 패스를 실행할 것이다. 먼저 `setCounter(0)` `setCounter(1)`를 함께 배치할 것이다. 이는 둘다 원래 이벤트 핸들러의 콜 스택 중에 발생하므로, 둘다 `unstable_batchedUpdates`의 호출 내에서 발생할 것이기 때문이다.
+
+그러나 `setCounter(2)`는 `await` 이후에 실행된다. 즉 원래 동기식 콜 스택이 완료되고, 이 함수의 후반부는 완전히 다른 이벤트 루프 콜 스택에서 훨씬 나중에 실행될 것이다. 그 때문에, 리액트는 전체 렌더링 패스를 `setCounter(2)` 호출의 마지막 단계로 동기적으로 실행하고, 렌더링 패스를 완료 한 이후에, `setCounter(2)`에서 리턴할 것이다. 이와 유사한 동작이 `setCounter(3)`에서도 마찬가지 형태로 일어날 것이다.
+
+커밋단계의 라이프사이클 메소드에는 `componentDidMount` `componentDidUpdate` `useLayoutEffect`와 같은 몇가지 추가 적인 엣지 케이스가 존재한다. 이는 주로 브라우저가 페인팅을 하기전에 렌더링 후 추가 로직을 수행할 수 있도록 하기 위해 존재한다. 일반적인 사용사례는 다음과 같다.
+
+- 불완전한 일부 데이터로 컴포넌트를 최초 렌더링
+- 커밋 단계 라이프 사이클에서, DOM 노드의 실제 크기를 `ref`를 통해 측정하고자 할 때
+- 해당 측정을 기준으로 일부 컴포넌트의 상태 설정
+- 업데이트된 데이터를 기준으로 즉시 리렌더링
+
+이러한 사용사례에서, 초기의 부분 렌더링된 UI가 사용자에게 절대로 표시되지 않도록 하고, 최종 UI 만 나타날 수 있게 한다. 브라우저는 수정중인 DOM 구조를 다시 계산하지 자바스크립트는 여전히 실행중이고,이벤트 루프를 차단하는 동안에는 실제로 화면에 아무것도 페인팅하지 않는다. 그러므로, `div.innerHTML = "a"`, `div.innerHTML="b"`와 같은 작업을 수행하면 `a`는 나타나지 않고 `b`만 나타날 것이다.
+
+이 때문에 리액트는 항상 커밋 단계 라이프사이클에서 렌더링을 동기로 실행한다. 이렇게 하면 부분적인 렌더링을 무시하고 최동 단계의 렌더링 내용만 화면에 표시할 수 있다.
+
+마지막으로, 모든 `useEffect` 콜백이 완료되면 `useEffect` 콜백의 상태 업데이트가 대기열에 저장되고, `Passive Effects` 단계가 끝나면 플러시된다.
+
+`unstable_batchedUpdates`API가 public 하게 export 되는 것에 주목할 필요가 있다. 그러나
+
+- 이름에서 알 수 있듯이, `불안정`으로 표시되고, React API에서 공식으로 지원하는 부분은 아니다.
+- 그러나 리액트 팀은 `불안정`한 api 치고는 가장 안전적이며, 페이스북의 코드 절반이 이에 의존하고 있다고 이야기 했다.
+- `react` 패키지에서 export 되는 다른 React의 핵심 API와는 다르게, `unstable_batchedUpdates`는 reconciler에 특화된 API로 리액트 패키지의 일부가 아니다. 대신에, 이는 `react-dom` `react-native`에서 export 된다. 즉, `react-three-fiber`나 `ink`와 같은 다른 reconciler와는 다르게 `unstable_batchedUpdates`를 export 하지 않을 가능성이 크다.
+
+리액트 18에서 소개된 Concurrent 모드에서는, 리액트는 모든 업데이트를 배치로 실행한다.
+
+> [Automatic Batching에 대하여 알아보기](/2022/04/react-18-changelog#automatic-batching)
+
+### 렌더 동작의 엣지 케이스
+
+리액트에서 개발중인 `<StrictMode >` 태그 내부에서는 컴포넌트를 이중으로 렌더링 한다. 즉, 렌더링 로직이 실행되는 횟수가 커밋된 렌더링 패스의 횟수와 동일하지 않으며, 렌더링을 수행하는 동안 `console.log()`문에 의존하여 발생한 렌더링의 수를 셀 수 없다. 대신 `React DevTools Profiler`를 사용하여 추적을 캡쳐하고, 전체적으로 커밋된 렌더링 갯수를 세거나, `useEffect` 훅 또는 `componentDidMount` `componentDidUpdate` 라이프 사이클에서 로깅을 추가하는 방법을 사용해야 한다. 이렇게 하면 실제로 렌더링 패스를 완료하고 이를 커밋한 경우에만 로그가 찍힌다.
+
+정상적인 상황에서는 절대로 실제 렌더링 로직에서 상태 업데이트를 대기열에 넣어서는 안된다. 즉, 클릭이 발생할 때 `setState()`를 호출하는 콜백을 사용하는 것은 괜찮지만, 실제 렌더링 동작의 일부로 `setState()`를 호출하는 것은 안된다.
+
+그러나 여기에는 한가지 예외가 있다. 함수 컴포넌트는 렌더링하는 동안 `setState()`를 직접호출할 수 있지만, 이는 조건부로 수행되고 컴포넌트가 렌더링될 때 마다 실행되지 않는다. 이것은 클래스 컴포넌트의 `getDerivedStateFromProps`와 동등하게 작동한다. 렌더링 하는 동안 함수 컴포넌트가 상태 업데이트를 대기열에 밀어 넣어두면, 리액트는 즉시 상태 업데이트를 적용하고 해당 컴포넌트 중 하나를 동기화 하여 다시 렌더링 한 후 계속 진행한다. 컴포넌트가 상태 업데이트를 무한하게 queueing하고 리액트가 다시 렌더링을 하도록 강제하는 경우, 리액트는 최대 50회까지 만 실행한 후에 이 무한반복을 끊어버리고 오류를 발생 시킨다. 이 기법은 `useEffect` 내부에 `setState()`호출과 리렌더링을 하지 않고 prop 값을 기준으로 state의 값을 강제로 업데이트 할 때 사용할 수 있다.
+
+```jsx
+function ScrollView({ row }) {
+  const [isScrollingDown, setIsScrollingDown] = useState(false)
+  const [prevRow, setPrevRow] = useState(null)
+
+  // 조건부로 prop 값을 기준으로 바로 state를 업데이트 때릴 수 있음
+  if (row !== prevRow) {
+    setIsScrollingDown(prevRow !== null && row > prevRow)
+    setPrevRow(row)
+  }
+
+  return `Scrolling down: ${isScrollingDown}`
+}
+```
+
+## 렌더링 성능 향상시키기
+
+렌더링은 리액트의 동작 방식에서 일반적으로 예상할 수 있는 부분이지만, 렌더링 작업이 때때로 낭비될 수 있다는 것도 사실이다. 컴포넌트의 렌더링 출력이 변경되지 않았고, DOM의 해당 부분을 업데이트할 필요가 없다면 해당 컴포넌트를 렌덜이 태우는 것은 정말로 시간낭비다.
+
+리액트 컴포넌트 렌더링 결과물은 항상 현재 props와 state의 상태를 기반으로 결정되어야 한다. 따라서 props와 state가 변경되지 않았음을 미리 알고 있다면 렌더링 결과물은 동일 할 것이고, 이 컴포넌트에 대해 변경이 필요하지 않고 렌더링 작업을 건너 뛸 수 도 있다는 것에 대해서도 알아야 한다.
+
+일반적으로 소프트웨어 성능을 개선하는 건 두가지 접근법이 존재한다.
+
+- 동일한 작업을 가능한 더 빨리 수행하는 것
+- 더 적게 작업하는 것
+
+리액트에서 렌더링을 최적화하는 것은 주로 컴포넌트 렌더링을 적절하게 건너뛰어서 작업량을 줄이는 것이다.
+
+### 컴포넌트 렌더링 최적화 기법
+
+리액트는 컴포넌트 렌더링을 생략할 수 있는 세가지 API를 제공한다.
+
+- [React.Component.shouldComponentUpdate](https://reactjs.org/docs/react-component.html#shouldcomponentupdate): 클래스 컴포넌트의 옵셔널 라이프 사이클 메소드로, false를 리턴하면 리액트는 컴포넌트 렌더링을 건너뛴다. 이 메소드 내부에는 `boolean`을 리턴할 어떤 로직이든 집어넣을 수 있지만, 가장 일반적인 방법은 컴포넌트의 prop와 state가 변경되었는지 확인하고, 변경되지 않았을 때 false를 리턴하는 것이다.
+- [React.PureComponent](https://reactjs.org/docs/react-api.html#reactpurecomponent): `shouldComponentUpdate`를 구현할때 props와 state를 비교하는 것이 가장 일반적인 방법이므로, `PureComponent` 를 base class로 구현하면 `Component` + `shouldComponentUpdate`를 사용하는 것과 같은 효과를 볼 수 있다.
+- [React.Memo()](https://reactjs.org/docs/react-api.html#reactmemo): 내장 고차 컴포넌트 타입으로, 컴포넌트 타입을 인수로 받고, 새롭게 래핑된 컴포넌트를 리턴된다. 래퍼 컴포넌트의 기본 동작은 `props`의 변경이 있는지 확인하고, 변경된 `props`가 없다면 다시 렌더링 하지 못하게 하는 것이다. 함수 컴포넌트와 클래스 컴포넌트는 모두 이 것을 사용하여 래핑 할 수 있다.
+
+이 모든 기법은 `shallow equality (얕은 비교)`를 사용한다. 즉 서로 다른 객체에 있는 모든 개별 필드를 검사하여 객체의 내용이 같은지 다른지 확인한다. 다시말해, `obj1.a === obj2.a && obj1.b === obj2.b && ........`를 수행하는 것이다. 이는 자바스크립트 엔진에서 매우 간단한 작업인 `===`를 사용하므로 매우 빠르게 끝난다. 그러므로, 세가지 방법은 모두 같은 방법론을 사용하는 것이다. `const shouldRender = !shallowEqual(newProps, prevProps)`
+
+여기에 잘 알려지지 않은 기법도 하나 더 있다. 리액트 컴포넌트가 렌더링 결과물을 지난번과 정확히 동일한 참조를 반환한다면, 리액트는 해당 하위 컴포넌트를 렌더링하는 것을 건너 뛴다. 이 기술을 구현하는 방법은 대략 두가지 정도가 있다.
+
+- 결과물에 `props.children`이 있다면, 이 컴포넌트가 상태 업데이트를 수행해도 element는 동일할 것이다.
+- 일부 Element를 `useMemo()`로 감싸면, 종속성이 변경될 때 까지 동일하게 유지된다.
+
+아래 코드를 살펴보자.
+
+```jsx
+// 상태가 업데이트되도 props.children은 다시렌더링 되지 않는다.
+function SomeProvider({ children }) {
+  const [counter, setCounter] = useState(0)
+
+  return (
+    <div>
+      <button onClick={() => setCounter(counter + 1)}>Count: {counter}</button>
+      <OtherChildComponent />
+      {children}
+    </div>
+  )
+}
+
+function OptimizedParent() {
+  const [counter1, setCounter1] = useState(0)
+  const [counter2, setCounter2] = useState(0)
+
+  const memoizedElement = useMemo(() => {
+    // counter2가 업데이트되도 같은 참조를 반환하므로, counter1이 변경되지 않는 한 같은 참조를 리턴할 것이다.
+    return <ExpensiveChildComponent />
+  }, [counter1])
+
+  return (
+    <div>
+      <button onClick={() => setCounter1(counter1 + 1)}>
+        Counter 1: {counter1}
+      </button>
+      <button onClick={() => setCounter1(counter2 + 1)}>
+        Counter 2: {counter2}
+      </button>
+      {memoizedElement}
+    </div>
+  )
+}
+```

@@ -341,3 +341,63 @@ function OptimizedParent() {
   )
 }
 ```
+
+이러한 모든 기법들에서, 컴포넌트 렌더링을 건더뛰면 리액트는 마찬가지로 하위 트리의 전체 렌더링을 건너뛰어 이는 "재귀적으로 자식을 렌더링" 하는 동작을 중지하게 된다.
+
+### 새로운 props의 참조가 렌더링 최적화에 어떻게 영향을 미치는가?
+
+앞서 보앗듯, **기본적으로 리액트는 중첩된 컴포넌트의 props가 변경되지 않았더라도 다시 렌더링을 수행한다.** 이는 하위 컴포넌트에 새로운 참조를 props로 전달하는 것 또한 문제가 되지 않는다는 것을 의미한다. 왜냐하면 같은 props가 오던 상관없이 렌더링을 할 것이기 때문이다. 아래 예제를 살펴보자.
+
+```jsx
+// ParentComponent가 렌더링될때마다, 하위 자식 컴포넌트의 props는 변경되지 않았지만 그것과 상관없이 계속 리렌더링 된다.
+function ParentComponent() {
+  const onClick = () => {
+    console.log('Button clicked')
+  }
+
+  const data = { a: 1, b: 2 }
+
+  return <NormalChildComponent onClick={onClick} data={data} />
+}
+```
+
+`ParentComponent`가 매번 렌더링 될 때 마다, 매번 새로운 `onClick` 함수의 참조와 새로운 `data` 객체 참조를 만들어서, 이를 props로 자식 컴포넌트에 넘겨줄 것이다. (함수가 화살표건 일반 함수건, 어쩄거나 새로운 함수 참조가 생긴다는 사실에는 변함이 없다.)
+
+이는 또한 `<div/>`나 `<button/>`를 `React.memo()`래핑하는 것 처럼, 호스트 컴포넌트에 대해 렌더링을 최적화 하는 것이 별 의미가 없다는 것을 뜻한다. 이러하나 기본 컴포넌트 하위에 하위 컴포넌트가 없으므로 렌더링 프로세스는 여기서 중지되버리고 말 것이다.
+
+하지만, **하위 컴포넌트가 props가 변경되었는지 확인하여 렌더링을 최적화 하려는 경우, 새 props를 전달하면 하위 컴포넌트가 렌더링을 수행하게 된다.** 새 prop 참조가 실제로 새로운 데이터인 경우에 이방법이 유용하다. 그러나 상위 컴포넌트가 단순히 콜백 함수를 전달하는 수준이면 어떻게 될까?
+
+```jsx
+const MemoizedChildComponent = React.memo(ChildComponent)
+
+function ParentComponent() {
+  const onClick = () => {
+    console.log('Button clicked')
+  }
+
+  const data = { a: 1, b: 2 }
+
+  return <MemoizedChildComponent onClick={onClick} data={data} />
+}
+```
+
+이제, `ParentComponent`가 렌더링 될 때 마다 `MemoizedChildComponent`는 해당 props 가 새로운 참조로 변경되었음을 확인하고 다시 렌더링을 수행한다. `onClick` 함수와 데이터 객체의 값이 변하지 않았음에도!
+
+이러한 과정을 요약하자면
+
+- `MemoizedChildComponent`는 렌더링을 건너뛰고 싶었지만, 항상 다시 렌더링 될 것이다.
+- 새로운 참조가 계속해서 생기기 때문에 `props`의 변화를 비교하는 것은 무의미한 일이다.
+
+비슷하게,
+
+```jsx
+function Component() {
+  return (
+    <MemoizedChild>
+      <OtherComponent />
+    </MemoizedChild>
+  )
+}
+```
+
+도, `props.children`이 항상 새로운 참조를 가리키기 때문에 항상 자식 컴포넌트를 새로 렌더링 할 것이다.

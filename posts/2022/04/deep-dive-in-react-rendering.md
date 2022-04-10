@@ -401,3 +401,21 @@ function Component() {
 ```
 
 도, `props.children`이 항상 새로운 참조를 가리키기 때문에 항상 자식 컴포넌트를 새로 렌더링 할 것이다.
+
+### props 참조를 최적화하기
+
+클래스 컴포넌트는 항상 동일한 참조인 인스턴스 메소드를 가질 수 있기 때문에, 실수로 새 콜백 함수 참조를 만들어 버릴 걱정을 크게 할 필요는 없다. 그러나 별도의 자손 아이템에 유니크한 콜백을 생성하거나, 익명 함수의 값을 캡쳐하여 자식에게 전달하는 경우가 있을 수 있다. 이 경우 새로운 참조가 생성되고, 렌더링하는 동안 하위 props으로 새로운 객체가 만들어져 전달 될 수 있다. 애석하게도 리액트는 이러한 경우를 최적화하는데 도움이 되는 기능이 없다.
+
+함수 컴포넌트의 경우, 리액트는 동일한 참조를 재사용하는데 도움이 되는 두가지 훅이 있다. 객체 생성이나 복잡한 계산과 같은 모든 종류의 일반 데이터에 `useMemo`를 사용하거나, 콜백 함수를 만들 때는 `useCallback`을 사용한다.
+
+### 그냥.. 다 메모이제이션 해버리는건 어떨까?
+
+> 이 글의 포인트를 돌고 돌아 여기에서 ...
+
+위에서 언급했던 것 처럼, 모든 함수와 값을 `useMemo` `useCallback`으로 감싸서 사용할 필요는 없다. 이러한 처리는 단지 자식 컴포넌트의 동작에 변화를 만들 뿐이다. (즉, `useEffect`에 대한 의존성 배열 비교는 자식이 일관된 props 참조를 받기 원하는 경우를 만듦으로써, 상황이 더욱 복잡해 질 수 있다.)
+
+또 다른 질문은 왜 리액트가 기본적으로 모든 것을 `memo`로 감싸지 않았냐는 것이다.
+
+**Dan Abramov가 계속해서 지적하는 것은 props을 비교하는 것은 공짜가 아니라는 것이다.** 그리고 컴포넌트가 항상 새로운 `props`를 받기 떄문에 메모이션으로 체크한다고 리렌더링을 막을 수 없는 상황 또한 존재한다.
+
+> Shallow comparisons aren’t free. They’re O(prop count). And they only buy something if it bails out. All comparisons where we end up re-rendering are wasted. Why would you expect always comparing to be faster? Considering many components always get different props. - [twitter](https://twitter.com/dan_abramov/status/1095661142477811717)

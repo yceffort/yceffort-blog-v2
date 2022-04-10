@@ -14,7 +14,8 @@
     "prettier:fix": "prettier '**/*.{json,md,yaml}' --write",
     "lint:style": "stylelint './**/*.{js,ts,tsx}'",
     "lint:style:fix": "stylelint './**/*.{js,ts,tsx}' --fix",
-    "pre-commit": "lint-staged"
+    "pre-commit": "lint-staged",
+    "prepare": "husky install"
   },
   "repository": "https://github.com/yceffort/yceffort-blog-v2",
   "author": "yceffort <root@yceffort.kr>",
@@ -72,12 +73,10 @@
   },
   "lint-staged": {
     "**/*.{ts,tsx}": [
-      "eslint",
-      "git add"
+      "eslint --fix"
     ],
     "**/*.{json,yaml,md}": [
-      "prettier",
-      "git add"
+      "prettier --write"
     ]
   }
 }

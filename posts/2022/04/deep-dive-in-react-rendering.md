@@ -134,7 +134,7 @@ return React.createElement(SomeComponent, {a: 42, b: "testing"}, "Text Here")
 
 **`fiber` 객체는 실제 컴포넌트 prop과 state 값을 저장하고 있다.** 컴포넌트에서 `prop`와 `state`의 값을 꺼내서 쓴다는 것은, 사실 리액트는 이러한 값을 fiber 객체에 있는 것으로 전달해준다. 사실, 클래스 컴포넌트의 경우, 리액트는 컴포넌트를 렌더링 하기 직전에 [`componentInstance.props = newProps`를 통해서 복사본을 저장](https://github.com/facebook/react/blob/v17.0.0/packages/react-reconciler/src/ReactFiberClassComponent.new.js#L1038-L1042)해준다. `this.props`가 존재한다는 것은, 리액트가 내부 데이터 구조의 참조를 복사해 두었다는 뜻이기도 하다. 즉, 컴포넌트라는 것은 리액트 fiber 객체를 보여주는 일종의 외관이라고 볼 수 있다.
 
-비슷하게, [리액트 훅의 작동 또한 해당 컴포넌트의 fiber 객체에 연결된 링크드 리스트 형태로 저장하는 방식](https://www.swyx.io/getting-closure-on-hooks/)으로 동작한다. 리액트가 함수형 컴포넌트를 렌덜이하면, fiber에 연결된 후의 링크드 리스트롤 가져오며, [다른 훅을 호출할 떄마다 훅에 저장된 적절한 값을 반환한다.](https://github.com/facebook/react/blob/v17.0.0/packages/react-reconciler/src/ReactFiberHooks.new.js#L795)
+비슷하게, [리액트 훅의 작동 또한 해당 컴포넌트의 fiber 객체에 연결된 링크드 리스트 형태로 저장하는 방식](https://www.swyx.io/getting-closure-on-hooks/)으로 동작한다. 리액트가 함수형 컴포넌트를 렌덜이하면, fiber에 연결된 후의 링크드 리스트롤 가져오며, [다른 훅을 호출할 때마다 훅에 저장된 적절한 값을 반환한다.](https://github.com/facebook/react/blob/v17.0.0/packages/react-reconciler/src/ReactFiberHooks.new.js#L795)
 
 부모 컴포넌트가 렌더링되어 자식 컴포넌트가 주어진다면, 리액트는 fiber 객체를 만들어 이 컴포넌트의 인스턴스를 추적한다. 클래스 컴포넌트의 경우, [`const instance = new YourComponentType(props)` 가 호출되고](https://github.com/facebook/react/blob/v17.0.0/packages/react-reconciler/src/ReactFiberClassComponent.new.js#L653) 새로운 컴포넌트 인스턴스를 fiber 객체에 저장한다. 함수형 컴포넌트의 경우에는, [YourComponentType(props)](https://github.com/facebook/react/blob/v17.0.0/packages/react-reconciler/src/ReactFiberHooks.new.js#L405)를 호출한다.
 
@@ -179,7 +179,7 @@ function ParentComponent() {
 
 아마도 `key`를 가장 많이 사용하는 경우는 리스트를 렌더링 할 때 일 것이다. `key`는 목록의 순서변경, 추가, 삭제와 같은 방식으로 변경될 수 있는 데이터를 렌더링하는 경우에 매우 중요하다. **여기서 중요하다는 것은 고유한 값을 사용해야 한다는 것이다. 고유한 값을 사용할 수 없는 최후의 수단으로, 배열의 인덱스를 사용해야 한다.**
 
-왜 중요한지 한번 살펴보자. `<TodoListItem />` 컴포넌트 10개를 렌더링하고, 이를 키로 index를 사용하여 `0..9`를 할당했다. 이제, `6`, `7`을 지우고, 새롭게 3개를 추가해서 이제 키가 `0..10`이 되었다. 리액트는 이 때 단순히 하나만 추가하고 마는데, 리액트가 보기엔 10개에서 11개로 늘어난 차이밖에 없기 떄문이다. 리액트는 이제 기존에 있던 컴포넌트와 DOM 노드를 재활용할 것이다. 그러나 이 뜻은, `<TodoListItem key={6} />`가 8로 넘겨받은 props를 사용하여 렌더링 할 것이다. 컴포넌트 인스턴스는 살아있지만, 이전과 다른 데이터 객체를 기반으로 하고 있다. 이는 효과가 있을 수도 있지만, 예기치 못한 문제가 발생할 수 있다. 또한 기존 목록의 아이템이 이전과 다른 데이터를 표시해야 하기 때문에, 리액트는 텍스트와 다른 DOM내용을 변경하기 위해 목록의 아이템중 몇개에 업데이트를 적용해야 한다. 그러나, 목록의 아이템이 사실상 변한 것이 아니므로 업데이트가 필요하지 않는 것으로 간주된다.
+왜 중요한지 한번 살펴보자. `<TodoListItem />` 컴포넌트 10개를 렌더링하고, 이를 키로 index를 사용하여 `0..9`를 할당했다. 이제, `6`, `7`을 지우고, 새롭게 3개를 추가해서 이제 키가 `0..10`이 되었다. 리액트는 이 때 단순히 하나만 추가하고 마는데, 리액트가 보기엔 10개에서 11개로 늘어난 차이밖에 없기 때문이다. 리액트는 이제 기존에 있던 컴포넌트와 DOM 노드를 재활용할 것이다. 그러나 이 뜻은, `<TodoListItem key={6} />`가 8로 넘겨받은 props를 사용하여 렌더링 할 것이다. 컴포넌트 인스턴스는 살아있지만, 이전과 다른 데이터 객체를 기반으로 하고 있다. 이는 효과가 있을 수도 있지만, 예기치 못한 문제가 발생할 수 있다. 또한 기존 목록의 아이템이 이전과 다른 데이터를 표시해야 하기 때문에, 리액트는 텍스트와 다른 DOM내용을 변경하기 위해 목록의 아이템중 몇개에 업데이트를 적용해야 한다. 그러나, 목록의 아이템이 사실상 변한 것이 아니므로 업데이트가 필요하지 않는 것으로 간주된다.
 
 대신에 `key={todo.id}`와 같은 것으로 처리했다면, 리액트는 올바르게 2개의 아이템을 지우고 3개를 추가할 것이다. 이는 두개의 컴포넌트 인스턴스와 DOM노드를 지우고, 새롭게 3개의 컴포넌트 인스턴스, DOM노드를 만드는 것을 의미한다.
 
@@ -363,7 +363,7 @@ function ParentComponent() {
 }
 ```
 
-`ParentComponent`가 매번 렌더링 될 때 마다, 매번 새로운 `onClick` 함수의 참조와 새로운 `data` 객체 참조를 만들어서, 이를 props로 자식 컴포넌트에 넘겨줄 것이다. (함수가 화살표건 일반 함수건, 어쩄거나 새로운 함수 참조가 생긴다는 사실에는 변함이 없다.)
+`ParentComponent`가 매번 렌더링 될 때 마다, 매번 새로운 `onClick` 함수의 참조와 새로운 `data` 객체 참조를 만들어서, 이를 props로 자식 컴포넌트에 넘겨줄 것이다. (함수가 화살표건 일반 함수건, 어쨌거나 새로운 함수 참조가 생긴다는 사실에는 변함이 없다.)
 
 이는 또한 `<div/>`나 `<button/>`를 `React.memo()`래핑하는 것 처럼, 호스트 컴포넌트에 대해 렌더링을 최적화 하는 것이 별 의미가 없다는 것을 뜻한다. 이러하나 기본 컴포넌트 하위에 하위 컴포넌트가 없으므로 렌더링 프로세스는 여기서 중지되버리고 말 것이다.
 
@@ -418,7 +418,7 @@ function Component() {
 
 또 다른 질문은 왜 리액트가 기본적으로 모든 것을 `memo`로 감싸지 않았냐는 것이다.
 
-**Dan Abramov가 계속해서 지적하는 것은 props을 비교하는 것은 공짜가 아니라는 것이다.** 그리고 컴포넌트가 항상 새로운 `props`를 받기 떄문에 메모이션으로 체크한다고 리렌더링을 막을 수 없는 상황 또한 존재한다.
+**Dan Abramov가 계속해서 지적하는 것은 props을 비교하는 것은 공짜가 아니라는 것이다.** 그리고 컴포넌트가 항상 새로운 `props`를 받기 때문에 메모이션으로 체크한다고 리렌더링을 막을 수 없는 상황 또한 존재한다.
 
 > Shallow comparisons aren’t free. They’re O(prop count). And they only buy something if it bails out. All comparisons where we end up re-rendering are wasted. Why would you expect always comparing to be faster? Considering many components always get different props. - [twitter](https://twitter.com/dan_abramov/status/1095661142477811717)
 
@@ -494,4 +494,158 @@ this.setState({ todos })
 
 [React DevTools Profiler](https://reactjs.org/blog/2018/09/10/introducing-the-react-profiler.html)를 활용하여 어떤 컴포넌트가 각 커밋 마다 렌더링되는지 살펴보자. 예기치 못하게 리렌더링 되는 컴포넌트를 찾아서 왜 리렌더링 되었는지, 그리고 어떻게 고칠 수 있는지 확인 해보자. (`React.memo()`로 감싸거나, 부모 컴포넌트가 넘겨주는 `props`를 메모이즈 하는 등의 방법이 있을 수 있다.)
 
-또한, 리액트는 dev build에서 느리게 실행된다는 점을 기억해야 한다. development 모드에서는 어떤 컴포넌트가 왜 렌더링 되었는지 살펴보고, 컴포넌트가 렌더링되는데 소요되는 시간등을 비교할 수 있다.
+또한, 리액트는 dev build에서 느리게 실행된다는 점을 기억해야 한다. development 모드에서는 어떤 컴포넌트가 왜 렌더링 되었는지 살펴보고, 컴포넌트가 렌더링되는데 소요되는 시간등을 비교할 수 있다. **그러나 절대 리액트 development 모드로 렌더링 속도를 측정하서는 안된다. 반드시 프로덕션 빌드로 렌더링 속도를 측정해야 한다.**
+
+## 컨텍스트(Context)와 렌더링 동작
+
+리액트의 `Context API`는 주어진 `<MyContext.Provider/>` 내에 모든 하위 컴포넌트에서 단일한 사용자 지정 값을 사용하라 수 있도록 하는 메커니즘이다. 이를 사용하면, `prop`을 번거롭게 넘길 필요 없이 하위 컴포넌트에서 값을 사용할 수 있다.
+
+**Context API는 절대 상태관리 도구가 아니다** 상황에 맞게 전달되는 값을 직접 관리 해야 한다. 이는 일반적으로 리액트 컴포넌트 state 내부의 값을 유지하고, 해당 데이터를 기반으로 context 값을 만드는 데 사용된다.
+
+### Context API 기초
+
+Context provider는 `<MyContext.Provider value={42}>`와 같은 형태로 `value` prop을 받는다. 자식 컴포넌트는 컨텍스트 consumer를 렌더링하고 prop을 전달받음으로서 해당 값을 사용할 수 있다.
+
+```jsx
+<MyContext.Consumer>{(value) => <div>{value}</div>}</MyContext.Consumer>
+```
+
+`useContext()`를 사용하면 다음과 같이 쓸 수 있다.
+
+```javascript
+const value = useContext(MyContext)
+```
+
+### Context 값 업데이트
+
+리액트는 감싸져 있는 컴포넌트가 provider를 렌더링 할 때, 컨텍스트 provider에 새로운 값이 지정되어 있는지 확인한다. 만약 해당 값이 새로운 참조인 경우, 리액트는 값이 변경되었으며 해당 컨텍스트를 사용하는 컴포넌트를 업데이트 해야 한다는 사실을 알게 된다.
+
+이제 컨텍스트 provider에 새로운 값을 전달하면 다음과 같이 업데이트가 진행된다.
+
+```jsx
+function GrandchildComponent() {
+  const value = useContext(MyContext)
+  return <div>{value.a}</div>
+}
+
+function ChildComponent() {
+  return <GrandchildComponent />
+}
+
+function ParentComponent() {
+  const [a, setA] = useState(0)
+  const [b, setB] = useState('text')
+
+  const contextValue = { a, b }
+
+  return (
+    <MyContext.Provider value={contextValue}>
+      <ChildComponent />
+    </MyContext.Provider>
+  )
+}
+```
+
+위 예제에서, `ParentComponent`가 렌더링 될 때 마다 리액트는 해당 값을 `MyContext.Provider`에 기록하고, 아래로 루프를 돌면서 `MyContext`를 사용하는 컴포넌트를 찾는다. Context Provider에 새로운 값이 있다면, 해당 컨텍스트를 사용하는 모든 중첩 컴포넌트가 강제로 리렌더링 된다.
+
+리액트 관점에서 각 Context Provider는 단일 값만 가진다. 객체, 배열, 원시 값이든 상관 없이 하나의 컨텍스트 값일 뿐이다. **현재로서는 해당 컨텍스트를 사용하는 모든 컴포넌트는 새 값의 일부만 변경되었다 하더라도, 새 컨텍스트 값으로 인한 업데이트를 건너 뛸 수 없다.**
+
+> [Code Sandbox에서 직접 해보기](https://codesandbox.io/s/contextapi-rendering-036kzb?file=/src/App.js)
+
+### state 업데이트, 컨텍스트, 그리고 리렌더링
+
+앞서 이야기 했던 내용을 종합해보자.
+
+- `setState()`를 호출하면 컴포넌트 렌더링을 큐에 집어넣는다.
+- 리액트는 재귀적으로 하위 컴포넌트를 렌더링한다.
+- Context provider는 컴포넌트에 의해 렌더링해야할 값을 받는다.
+- 위에서 언급했던 값은 보통 부모 컴포넌트의 state에 기반한다.
+
+이 말인 즉슨, 기본적으로 Context Provider를 구성하는 상위 컴포넌트에 대한 state 업데이트는 모든 하위 항목이 해당 Context 값을 읽는지 여부에 상관없이 다시 렌더링 되도록 한다.
+
+위 예제에서 살펴본다면, `Parent/Child/Grandchild`의 경우, `GrandchildComponent`는 컨텍스트가 업데이트 되어서가 아니라 `ChildComponent`가 리렌더링되는 것 만으로도 리렌더링 될 수 있다는 것이다. 위 예제에서는, 불필요한 리렌더링을 최적화하려는 것이 없으므로, 리액트는 `ParentComponent`가 렌더링 할 때마다 `ChildComponent` `GrandchildComponent`를 렌더링 한다. 부모가 새 컨텍스트 값을 넣는 경우, `GrandchildComponent`는 그 값을 사용하기 때문에 리렌더링 된다. 그러나 이는 어차피 상위 컴포넌트가 리렌더링되기 때문에 발생할 일이었을 뿐이다.
+
+### Context 업데이트와 렌더링 최적화
+
+위 예시를 최적화 해보는 동시에, `GreatGrandChildComponent`를 하나 더 만들어서 살펴보자.
+
+```jsx
+function GreatGrandchildComponent() {
+  return <div>Hi</div>
+}
+
+function GrandchildComponent() {
+  const value = useContext(MyContext)
+  return (
+    <div>
+      {value.a}
+      <GreatGrandchildComponent />
+    </div>
+  )
+}
+
+function ChildComponent() {
+  return <GrandchildComponent />
+}
+
+const MemoizedChildComponent = React.memo(ChildComponent)
+
+function ParentComponent() {
+  const [a, setA] = useState(0)
+  const [b, setB] = useState('text')
+
+  const contextValue = { a, b }
+
+  return (
+    <MyContext.Provider value={contextValue}>
+      <MemoizedChildComponent />
+    </MyContext.Provider>
+  )
+}
+```
+
+여기에서 이제 `setA(100)`를 호출하면 다음과 같은 일들이 일어난다.
+
+- `ParentComponent`가 렌더링됨
+- 새로운 `contextvalue`가 세팅
+- 리액트는 `MyContext.Provider`에 새로운 값이 들어왔음을 감지하고, `MyContext`을 사용하는 컴포넌트에 업데이트가 필요하다고 표시
+- `MemoizedChildComponent`를 렌더링하려고 한다. 그리고 이는 `memo`로 메모이즈 되어 있고, `props`가 전혀 넘어가지 않으므로 변경이 일어나지 않은 것으로 간주된다. 따라서 `ChildComponent`의 렌더링을 스킵한다.
+- 하지만 `MyContext.Provider`는 업데이트 되었으므로, 이 아래에는 아마 업데이트가 되어야할 컴포넌트가 있을 수도 있다.
+- 리액트는 자식 컴포넌트를 순회하다가 `GrandchildComponent`를 만난다. 해당 컴포넌트는 컨텍스트를 사용하므로, 새로운 값으로 렌더링 되어야 하므로 새로운 context 값으로 렌더링 한다.
+- `GrandchildComponent`가 렌더링 되었으므로, 하위 컴포넌트인 `GreatGrandchildComponent`도 리렌더링 된다.
+
+> [Code Sandbox에서 직접해보기](https://codesandbox.io/s/optimized-contextapi-rendering-forked-xmrhom?file=/src/App.js)
+
+**Context Provider 하위에 있는 컴포넌트는 `React.memo`가 되어 있어야 한다.**
+
+이렇게 최적화한다면, 부모 컴포넌트의 state 업데이트는 더이상 모든 컴포넌트의 리렌더링을 강요하지 않고, 단순히 context를 사용하는 컴포넌트만 리렌더링 하게 된다. 그러나, `GrandchildComponent`의 경우에는 Context의 값을 사용하였기 때문에 리렌더링 되었고, 그 자식인 `GreatGrandchildComponent`는 Context를 사용하지 않았다 하더라도 리렌더링 된다.
+
+## 요약
+
+- 리액트는 기본적으로 재귀적으로 컴포넌트를 렌더링 한다. 그러므로, 부모가 렌더링 되면 자식도 렌더링 된다.
+- 렌더링 그 자체로는 문제가 되지 않는다. 렌더링은 리액트가 DOM의 변화가 있는지 확인하기 위한 절차일 뿐이다.
+- 그러나 렌더링은 시간이 소요되며, UI 변화가 없는 불필요한 렌더링은 시간을 소비한다.
+- 콜백함수와 객체에 새로운 참조로 값을 전달하는 것은 대부분 괜찮다.
+- `React.memo`를 사용하면, `props`가 변하지 않는다면 렌더링을 막는다.
+- 그러나 항상 새로운 참조 값을 `props`로 `React.memo()`를 전달하면 렌더링을 스킵할 수 없으므로, 이러한 값들은 적절히 메모이제이션 해야 한다.
+- `Context`를 사용하면 해당 값에 관심이 있는 컴포넌트들이 중첩되어있는 상태에서도 `props` 없이 엑세스할 수 있게 해준다.
+- `Context Provider`는 값이 변하였는지 확인하기 위해 참조를 비교한다.
+- 새로운 `Context` 값은 중첩된 모든 컨슈머들의 리렌더링을 야기한다.
+- 그러나 이러한 `Context`의 값의 변화가 아닌 일반적인 부모 > 자식 리렌더링 프로세스로 인해 리렌더링 되는 경우가 많다.
+- 이를 방지하기 위하여 Context Provider 하위 컴포넌트에 `React.memo`를 사용하거나 `{props.children}`을 사용해야 한다.
+- 하위 컴포넌트가 `Context` 값을 사용하고 있다며느 그 하위 컴포넌트 또한 순차적으로 리렌더링 된다.
+
+## Context API, 상태관리 언제 써야 할까?
+
+### Context API로만 충분한 경우
+
+- 자주 변하지 않는 간단한 값만 전달하는 경우
+- 애플리케이션 일부에 일부 state나 함수를 전달하지만, 이 값이 props로 많은 부분 넘기고 싶지 않은 경우
+- 추가적인 라이브러리 없이 리액트 기능만으로 구현하고 싶을때
+
+### 상태관리 솔루션이 필요할때
+
+- 애플리케이션 여러 위치에 많은 양의 애플리케이션의 상태 값이 필요한 경우
+- 애플리케이션의 상태가 시간에 따라 자주 업데이트 되는 경우
+- 상태 관리 로직이 복잡한 경우
+- 애플리케이션이 매우 크고, 많은 사람이 개발하는 경우

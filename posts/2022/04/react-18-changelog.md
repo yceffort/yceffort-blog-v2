@@ -302,7 +302,7 @@ const App = () => {
 }
 ```
 
-만약 위의 예제 처럼, `startTransition`를 사용하고 있따면, 이는 코드가 `tearing`될 수 있다는 것을 의미한다. 이러한 이슈를 해결하기 위해, `useSyncExternalStore`를 사용할 수 있다.
+만약 위의 예제 처럼, `startTransition`를 사용하고 있다면, 이는 코드가 `tearing`될 수 있다는 것을 의미한다. 이러한 이슈를 해결하기 위해, `useSyncExternalStore`를 사용할 수 있다.
 
 `useState` `useEffect`를 사용하고 있는 `useStore`를 `useSyncExternalStore`로 변경해보자.
 

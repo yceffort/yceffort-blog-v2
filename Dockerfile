@@ -1,4 +1,4 @@
-FROM node:14-alpine AS base
+FROM node:16-alpine AS base
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
@@ -15,7 +15,7 @@ COPY . .
 RUN npm run build
 
 # release
-FROM node:14-alpine as release
+FROM node:16-alpine as release
 WORKDIR /app
 
 COPY --from=build /app/.next ./.next

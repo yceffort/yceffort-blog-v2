@@ -56,7 +56,6 @@
   },
   "devDependencies": {
     "@titicaca/eslint-config-triple": "^3.1.0",
-    "@types/date-fns": "^2.6.0",
     "@types/memoizee": "^0.4.7",
     "@types/node": "^17.0.23",
     "@types/react": "^17.0.43",

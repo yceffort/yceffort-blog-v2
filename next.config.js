@@ -4,9 +4,7 @@ const runtimeCaching = require('next-pwa/cache')
 module.exports = withPWA({
   pwa: {
     dest: 'public',
-    // 임시처리
-    disable: true,
-    // disable: process.env.NODE_ENV !== 'production',
+    disable: process.env.NODE_ENV !== 'production',
     runtimeCaching,
   },
   swcMinify: true,

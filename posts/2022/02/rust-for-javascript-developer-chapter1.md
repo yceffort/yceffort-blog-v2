@@ -177,7 +177,7 @@ help: you might be missing a string literal to format with
 error: could not compile `hello_cargo` due to previous error
 ```
 
-자바스크립트 개발자의 시선에서는 동작해야할 코드였던 것 같은데, 동작하지 않았ㄷ. 대부분의 언어에서는 잘 동작할 코드일 것 같은데, 러스트는 그렇지 않다. 에러 메시를 일단 잘 살펴보자.
+자바스크립트 개발자의 시선에서는 동작해야할 코드였던 것 같은데, 동작하지 않았다. 대부분의 언어에서는 잘 동작할 코드일 것 같은데, 러스트는 그렇지 않다. 에러 메시를 일단 잘 살펴보자.
 
 > format argument must be a string literal
 

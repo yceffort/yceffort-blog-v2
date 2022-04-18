@@ -386,7 +386,7 @@ CPU 에 약간 투자할 여유가 있다면, 업로드하기전에 데이터 �
 
 한 가지 방법은 [Compression Stream API](https://wicg.github.io/compression/)를 이용하는 것으로, 문자열을 gzip으로 압축된 데이터 스트림으로 변경할 수 있다. 한가지 단점은 비동기식이기 때문에 압축된 프로필 데이터를 업로드 하기 전에 먼저 압축된 바이트가 포함되어 있는 콜백을 기다려야 한다는 것이다.
 
-`application/x-ww-form-urlcoded` 인코딩을 통ㅇ해 데이터를 전송하기 위해서ㅕ는, URL 인코딩된 `JSON.stringify()`보다 그 결과가 커질 수 있다는 것을 명심해둬야 한다. 예를 들어 `JSON.stringify`로는 25kb인데 반해, `application/x-ww-form-urlcoded` 는 36kb로 증가한다.
+`application/x-ww-form-urlcoded` 인코딩을 통해 데이터를 전송하기 위해서는, URL 인코딩된 `JSON.stringify()`보다 그 결과가 커질 수 있다는 것을 명심해둬야 한다. 예를 들어 `JSON.stringify`로는 25kb인데 반해, `application/x-ww-form-urlcoded` 는 36kb로 증가한다.
 
 이러한 사태를 방지하기 위해 [JSURL](https://github.com/Sage/jsurl)과 같은 라이브러리를 대신 써보는 것도 검토해봄직하다. 이 라이브러리는 `JSON`과 비슷해 보이지만, `application/x-www-form-urlencoded` 보다는 크기가 작다.
 

@@ -476,7 +476,7 @@ const onClick = () => {
 
 이렇게 하면 새로운 바열 객체를 넘겨줄 수 있고, 컴포넌트는 반드시 리렌더링 될 것이다.
 
-한가지 알아둬야 할 것은, 클래스 컴포넌트와 함수형 컴포넌트 사이엔 동작에 뚜렷한 차이가 있다는 것이다. 클래스 컴포넌트의 `this.setState()`을, 함수형 컴포넌트의 `useState` `useReducer` 훅을 사용한단ㄴ 것이다. `this.setState()`는 값이 불변이 아니어도 된다. 항상 리렌더링을 한다.
+한가지 알아둬야 할 것은, 클래스 컴포넌트와 함수형 컴포넌트 사이엔 동작에 뚜렷한 차이가 있다는 것이다. 클래스 컴포넌트의 `this.setState()`을, 함수형 컴포넌트의 `useState` `useReducer` 훅을 사용한단 것이다. `this.setState()`는 값이 불변이 아니어도 된다. 항상 리렌더링을 한다.
 
 ```javascript
 const { todos } = this.state

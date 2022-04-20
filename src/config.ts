@@ -32,7 +32,7 @@ export const SiteConfig = {
       email: 'root@yceffort.kr',
       facebook: '',
       telegram: '',
-      twitter: '',
+      twitter: getContactHref('twitter', 'yceffort_dev'),
       github: getContactHref('github', 'yceffort'),
       rss: '',
       linkedin: '',

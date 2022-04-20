@@ -46,6 +46,10 @@ export default function About() {
                 kind="github"
                 href={SiteConfig.author.contacts.github}
               />
+              <SocialIcon
+                kind="twitter"
+                href={SiteConfig.author.contacts.twitter}
+              />
             </div>
           </div>
           <div className="prose max-w-none pt-8 pb-8 dark:prose-dark xl:col-span-2">

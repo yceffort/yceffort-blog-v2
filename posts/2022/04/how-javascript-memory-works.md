@@ -26,13 +26,17 @@ function memoryUsed() {
 }
 
 console.log('before')
-memoryUsed()
+memoryUsed() // Memory used: 4.7296905517578125 MB
 
 const bigString = 'x'.repeat(10 * 1024 * 1024)
 console.log(bigString) // 컴파일러가 bitString을 최적화하여 날려먹지 않게 필요하다.
 
 console.log('after')
-memoryUsed()
-
-// Memory used: 14.417839050292969 MB
+memoryUsed() // Memory used: 14.417839050292969 MB
 ```
+
+엄청나게 큰 10mb짜리 string을 선언한 뒤 확인해보니, 해당 문자열 만큼의 약10mb의 차이가 있는 것을 확인할 수 있었다. 앞서 언급했던 스택 사이즈의 경우, 오직 864kb 밖에 없었다. 그렇다. 스택에는 이렇게 큰 문자열을 저장할 공간이 없다.
+
+## 자바스크립트의 원시 값은 대부분 재활용 된다.
+
+##

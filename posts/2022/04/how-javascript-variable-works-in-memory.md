@@ -1,0 +1,141 @@
+---
+title: 'V8에서 관리되는 자바스크립트 변수'
+tags:
+  - javascript
+  - nodejs
+published: true
+date: 2022-04-21 22:10:10
+description: 'V8 내부 코드를 자유롭게 읽을 수 있는 그날까지'
+---
+
+## 거의 대부분은 힙에 존재한다.
+
+**일반적으로 원시값은 스택에, 객체는 힙에 할당된다고 알려져있지만, 이와 반대로 자바스크립트의 모든 원시값도 힙에 할당되어 있다.** 이는 굳이 V8 소스코드를 까지 않고도 알 수 있는 방법이 존재한다.
+
+1. 먼저 자신의 로컬 머신에 `node --v8-options` 명령어를 날려보자. 여기에는 다양한 노드 v8과 관련된 옵션값이 존재한다. 그 중에 `stack-size`라는 옵션을 활용하면, 로컬머신의 V8 스택 사이즈를 확인할 수 있다. 나는 최신버전의 (20220422 기준) 노드 v16.6.2를 사용하고 있는데, 864kb가 나왔다.
+2. 자바스크립트 파일을 생성한다음, 엄청나게 큰 string을 만들고, `process.memoryUsage().heapUsed`를 활용해서 힙을 얼마나 차지하고 있는지 확인해보자.
+
+```javascript
+function memoryUsed() {
+  const mbUsed = process.memoryUsage().heapUsed / 1024 / 1024
+  console.log(`Memory used: ${mbUsed} MB`)
+}
+
+function memoryUsed() {
+  const mbUsed = process.memoryUsage().heapUsed / 1024 / 1024
+  console.log(`Memory used: ${mbUsed} MB`)
+}
+
+console.log('before')
+memoryUsed() // Memory used: 4.7296905517578125 MB
+
+const bigString = 'x'.repeat(10 * 1024 * 1024)
+console.log(bigString) // 컴파일러가 bitString을 최적화하여 날려먹지 않게 필요하다.
+
+console.log('after')
+memoryUsed() // Memory used: 14.417839050292969 MB
+```
+
+엄청나게 큰 10mb짜리 string을 선언한 뒤 확인해보니, 해당 문자열 만큼의 약10mb의 차이가 있는 것을 확인할 수 있었다. 앞서 언급했던 스택 사이즈의 경우, 오직 864kb 밖에 없었다. 그렇다. 스택에는 이렇게 큰 문자열을 저장할 공간이 없다.
+
+## 자바스크립트의 원시 값은 대부분 재활용 된다.
+
+만약 아까 만들었던 `'x'.repeat(10 * 1024 * 1024)`를 또다른 변수에 할당한다면, 메모리에 그것을 그대로 복사해서 힙에 총 20mb 를 차지하게 될까?
+
+정답은 그렇지 않다. 중복된 문자열은 별도로 할당되지 않는다. 우리가 일반적으로 알고 있는 것 처럼, 자바스크립트에서 변수를 할당 하는 동작은 실제 값의 크기에 비례하는 비용이 드는 것은 아니다. 자바스크립트 변수의 대부분은 포인터로 이루어져 있다.
+
+이러한 사실을 Chrome DevTools를 활용한 메모리 프로파일링을 통해서 확인할 수 있다.
+
+```html
+<html>
+  <body>
+    <button id="button">button</button>
+    <script>
+      const button = document.querySelector('#button')
+
+      button.addEventListener('click', function () {
+        const string1 = 'hello'
+        const string2 = 'hello'
+      })
+    </script>
+  </body>
+</html>
+```
+
+다음과 같은 html 문서를 만들어 저장하고, Chrome Devtool의 Memory 탭에서 확인해보자.
+
+![chrome-devtool1](./images/chrome-devtool1.png)
+
+![chrome-devtool2](./images/chrome-devtool2.png)
+
+클릭을 여러번해도, string "hello"`는 힙에 단 하나만 존재하는 것을 알 수 있다.
+
+이러한 것을 [String interning](https://en.wikipedia.org/wiki/String_interning)이라고 한다. 각 문자열의 값을 복사본 하나만 저장하는 방법으로, 불변해서 관리하는 것을 의미한다. 이러한 방법을 활용하면, 문자열이 생성되거나 인터닝 될때, 이로인한 시간 소요나 공간을 효율적으로 관리할 수 있게 된다.
+
+v8 내부에서는, 이를 [string-table](https://chromium.googlesource.com/v8/v8/+/fc0cbc144530662db5ef27406e1c7302760e8461/src/objects/string-table.h) 이라는 코드의 형태로 관리한다.
+
+여기에 추가로, V8에는 [oddball](https://chromium.googlesource.com/v8/v8/+/master/src/builtins/base.tq#506) 이라고 불리는 것이 존재한다.
+
+```tq
+type TheHole extends Oddball;
+type Null extends Oddball;
+type Undefined extends Oddball;
+type True extends Oddball;
+type False extends Oddball;
+type Exception extends Oddball;
+type EmptyString extends String;
+type Boolean = True|False;
+```
+
+이들은 스크립트의 첫번째 라인이 실행되기전에 V8에 의해 힙에 미리 할당되는 값이다. 즉, 자바스크립트 프로그램에서 이러한 값이 사용되던 말건 상관없이 미리 할당해두는 값이라고 보면 된다
+
+그리고 이 값들은 항상 재사용된다. 즉,각 `oddball` 별로 하나의 값만 가지고 있다.
+
+```javascript
+function Oddballs() {
+  this.undefined = undefined
+  this.true = true
+  this.false = false
+  this.null = null
+  this.emptyString = ''
+}
+const obj1 = new Oddballs()
+const obj2 = new Oddballs()
+```
+
+앞서 실행해보았던 코드에 위 코드를 추가하고, 다시한번 스냅샷을 찍어보자.
+
+![chrome-devtool3](./images/chrome-devtool3.png)
+
+클릭을 두번해서 별개의 객체가 생성되었음에도, 각각의 값들은 같은 주소를 가리키고 있는 것을 볼 수 있다.
+
+자바스크립트가 `oddball`을 가지고 있는 변수를 만들경우, 이들은 값을 생성하거나 파괴하는 동작을 거치는게 아닌 미리 만들어둔 값을 부르는 방식으로 관리하는 것을 볼 수 있다.
+
+## 자바스크립트 변수들은 대부분 포인터다.
+
+V8 소스코드를 더 깊게 파고들어가 보면, 자바스크립트 프로그램에서 생성한 변수가, 힙에 위치한 C++ 객체를 가리키는 메모리 주소라는 사실을 알 수 있다.
+
+예를 들어, `undefined`는 V8에서 [다음](https://chromium.googlesource.com/v8/v8/+/a684fc4c927940a073e3859cbf91c301550f4318/include/v8-primitive.h#830)과 같이 구현되어 있다.
+
+```h
+V8_INLINE Local<Primitive> Undefined(Isolate* isolate) {
+  using S = internal::Address;
+  using I = internal::Internals;
+  I::CheckInitialized(isolate);
+  S* slot = I::GetRoot(isolate, I::kUndefinedValueRootIndex);
+  return Local<Primitive>(reinterpret_cast<Primitive*>(slot));
+}
+```
+
+우리가 주목해야할 것은, `GetRoot`다. `GeetRoot`는 [다음](https://chromium.googlesource.com/v8/v8/+/a684fc4c927940a073e3859cbf91c301550f4318/include/v8-internal.h#388)과 같이 구현되어 있다.
+
+```h
+V8_INLINE static internal::Address* GetRoot(v8::Isolate* isolate, int index) {
+    internal::Address addr = reinterpret_cast<internal::Address>(isolate) +
+                             kIsolateRootsOffset +
+                             index * kApiSystemPointerSize;
+    return reinterpret_cast<internal::Address*>(addr);
+  }
+```
+
+## 숫자는 조금 복잡

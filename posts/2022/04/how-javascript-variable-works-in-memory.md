@@ -76,7 +76,7 @@ v8 내부에서는, 이를 [string-table](https://chromium.googlesource.com/v8/v
 
 여기에 추가로, V8에는 [oddball](https://chromium.googlesource.com/v8/v8/+/master/src/builtins/base.tq#506) 이라고 불리는 것이 존재한다.
 
-```tq
+```
 type TheHole extends Oddball;
 type Null extends Oddball;
 type Undefined extends Oddball;
@@ -117,7 +117,7 @@ V8 소스코드를 더 깊게 파고들어가 보면, 자바스크립트 프로�
 
 예를 들어, `undefined`는 V8에서 [다음](https://chromium.googlesource.com/v8/v8/+/a684fc4c927940a073e3859cbf91c301550f4318/include/v8-primitive.h#830)과 같이 구현되어 있다.
 
-```h
+```
 V8_INLINE Local<Primitive> Undefined(Isolate* isolate) {
   using S = internal::Address;
   using I = internal::Internals;
@@ -129,7 +129,7 @@ V8_INLINE Local<Primitive> Undefined(Isolate* isolate) {
 
 우리가 주목해야할 것은, `GetRoot`다. `GeetRoot`는 [다음](https://chromium.googlesource.com/v8/v8/+/a684fc4c927940a073e3859cbf91c301550f4318/include/v8-internal.h#388)과 같이 구현되어 있다.
 
-```h
+```
 V8_INLINE static internal::Address* GetRoot(v8::Isolate* isolate, int index) {
     internal::Address addr = reinterpret_cast<internal::Address>(isolate) +
                              kIsolateRootsOffset +
@@ -139,3 +139,5 @@ V8_INLINE static internal::Address* GetRoot(v8::Isolate* isolate, int index) {
 ```
 
 ## 숫자는 조금 복잡
+
+V8에서, 숫자는 64비트 아키텍쳐를 기반으로 $$-2^{31}$$ 에서 $$2^{31}-1$$ 까지 구성되어 있다.

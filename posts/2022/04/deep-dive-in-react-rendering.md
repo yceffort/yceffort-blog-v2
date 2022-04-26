@@ -134,7 +134,7 @@ return React.createElement(SomeComponent, {a: 42, b: "testing"}, "Text Here")
 
 **`fiber` 객체는 실제 컴포넌트 prop과 state 값을 저장하고 있다.** 컴포넌트에서 `prop`와 `state`의 값을 꺼내서 쓴다는 것은, 사실 리액트는 이러한 값을 fiber 객체에 있는 것으로 전달해준다. 사실, 클래스 컴포넌트의 경우, 리액트는 컴포넌트를 렌더링 하기 직전에 [`componentInstance.props = newProps`를 통해서 복사본을 저장](https://github.com/facebook/react/blob/v17.0.0/packages/react-reconciler/src/ReactFiberClassComponent.new.js#L1038-L1042)해준다. `this.props`가 존재한다는 것은, 리액트가 내부 데이터 구조의 참조를 복사해 두었다는 뜻이기도 하다. 즉, 컴포넌트라는 것은 리액트 fiber 객체를 보여주는 일종의 외관이라고 볼 수 있다.
 
-비슷하게, [리액트 훅의 작동 또한 해당 컴포넌트의 fiber 객체에 연결된 링크드 리스트 형태로 저장하는 방식](https://www.swyx.io/getting-closure-on-hooks/)으로 동작한다. 리액트가 함수형 컴포넌트를 렌덜이하면, fiber에 연결된 후의 링크드 리스트롤 가져오며, [다른 훅을 호출할 때마다 훅에 저장된 적절한 값을 반환한다.](https://github.com/facebook/react/blob/v17.0.0/packages/react-reconciler/src/ReactFiberHooks.new.js#L795)
+비슷하게, [리액트 훅의 작동 또한 해당 컴포넌트의 fiber 객체에 연결된 링크드 리스트 형태로 저장하는 방식](https://www.swyx.io/getting-closure-on-hooks/)으로 동작한다. 리액트가 함수형 컴포넌트를 렌더링하면, fiber에 연결된 후의 링크드 리스트롤 가져오며, [다른 훅을 호출할 때마다 훅에 저장된 적절한 값을 반환한다.](https://github.com/facebook/react/blob/v17.0.0/packages/react-reconciler/src/ReactFiberHooks.new.js#L795)
 
 부모 컴포넌트가 렌더링되어 자식 컴포넌트가 주어진다면, 리액트는 fiber 객체를 만들어 이 컴포넌트의 인스턴스를 추적한다. 클래스 컴포넌트의 경우, [`const instance = new YourComponentType(props)` 가 호출되고](https://github.com/facebook/react/blob/v17.0.0/packages/react-reconciler/src/ReactFiberClassComponent.new.js#L653) 새로운 컴포넌트 인스턴스를 fiber 객체에 저장한다. 함수형 컴포넌트의 경우에는, [YourComponentType(props)](https://github.com/facebook/react/blob/v17.0.0/packages/react-reconciler/src/ReactFiberHooks.new.js#L405)를 호출한다.
 
@@ -279,7 +279,7 @@ function ScrollView({ row }) {
 
 ## 렌더링 성능 향상시키기
 
-렌더링은 리액트의 동작 방식에서 일반적으로 예상할 수 있는 부분이지만, 렌더링 작업이 때때로 낭비될 수 있다는 것도 사실이다. 컴포넌트의 렌더링 출력이 변경되지 않았고, DOM의 해당 부분을 업데이트할 필요가 없다면 해당 컴포넌트를 렌덜이 태우는 것은 정말로 시간낭비다.
+렌더링은 리액트의 동작 방식에서 일반적으로 예상할 수 있는 부분이지만, 렌더링 작업이 때때로 낭비될 수 있다는 것도 사실이다. 컴포넌트의 렌더링 출력이 변경되지 않았고, DOM의 해당 부분을 업데이트할 필요가 없다면 해당 컴포넌트를 렌더링 태우는 것은 정말로 시간낭비다.
 
 리액트 컴포넌트 렌더링 결과물은 항상 현재 props와 state의 상태를 기반으로 결정되어야 한다. 따라서 props와 state가 변경되지 않았음을 미리 알고 있다면 렌더링 결과물은 동일 할 것이고, 이 컴포넌트에 대해 변경이 필요하지 않고 렌더링 작업을 건너 뛸 수 도 있다는 것에 대해서도 알아야 한다.
 
@@ -451,7 +451,7 @@ function Component() {
 
 또다른 문제는 `useState`와 `useReducer` 훅이다. `setCounter()`나 `dispatch()`가 호출될 때 마다, 리액트는 리렌더링을 큐에 밀어넣을 것이다. 그러나 리액트는 모든 훅의 상태 업데이트에 새 객체/배열의 참조이거나, 새 원시(문자열, 숫자.. 등)로 전달, 반환해야 한다.
 
-리액트는 렌더링 단계 동안 모든 상태 업데이트를 적용한다. 리액트는 훅에서 상태 업데이트를 적용하려고 하면, 새 값이 동일한 참조인지 확인한다. 리액트는 항상 업데이트 대기열에 있는 컴포넌트 렌더링을 끝낸다. 그러나 이전과 값이 동일한 참조이고, 렌더링을 해야하는 다른 이유가 없다면 (부모 컴포넌트의 리렌덜이 등) 리액트는 컴포넌트에 대한 렌더링 결과를 버리고 렌더링 패스를 벗어난다.
+리액트는 렌더링 단계 동안 모든 상태 업데이트를 적용한다. 리액트는 훅에서 상태 업데이트를 적용하려고 하면, 새 값이 동일한 참조인지 확인한다. 리액트는 항상 업데이트 대기열에 있는 컴포넌트 렌더링을 끝낸다. 그러나 이전과 값이 동일한 참조이고, 렌더링을 해야하는 다른 이유가 없다면 (부모 컴포넌트의 리렌더링 등) 리액트는 컴포넌트에 대한 렌더링 결과를 버리고 렌더링 패스를 벗어난다.
 
 ```javascript
 const [todos, setTodos] = useState(someTodosArray)

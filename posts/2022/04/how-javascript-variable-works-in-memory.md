@@ -170,7 +170,7 @@ const num2 = new MyNumbers()
 
 ![chrome-devtool4](./images/chrome-devtool4.png)
 
-immediate value인 1은 `smi`가 되어서 관리되고 있어 속성 값에서 나타나지 않았다. 앞서 말한 ㅏ것처럼, `smi`값 1은 힙메모리에 할당되지 않기 때문이다.
+immediate value인 1은 `smi`가 되어서 관리되고 있어 속성 값에서 나타나지 않았다. 앞서 말한 것처럼, `smi`값 1은 힙메모리에 할당되지 않기 때문이다.
 
 ![chrome-devtool5](./images/chrome-devtool4.png)
 

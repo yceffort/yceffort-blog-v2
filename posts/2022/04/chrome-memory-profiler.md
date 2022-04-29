@@ -34,4 +34,26 @@ HTML의 역사는 매우매우 오래되었고 또 갖가지 문법들이 유서
 
 놀랍게도, 아무것도 없는 말그대로 빈페이지 주제에 단순히 빈 페이지를 렌더링하는데에도 많은 오브젝트가 관여되어 있는 것을 볼 수 있다. 이 페이지가 로드된 이후, 인스턴스화된 각 자바스크립트 객체는 해당 생성자 클래스 아래에 그룹화되어 있는 것을 볼 수 있다. 괄호로 쳐져있는 그룹 `()`은 직접 호출할 수 없는 네이티브 생성자를 나타낸다. 위 그림에서 보면 많은 `(compiled code)` `(system)` 등도 볼 수 있고, 그리고 `Date` `String` `RangeError` 과 같은 전통적인 자바스크립트 객체도 볼 수 있다.
 
-이 모든
+이 모든 것을 이해하기 위해서, 유저가 간단하게 버튼을 눌러서 동작하는 작업을 추가해보자.
+
+```html
+<html>
+  <head>
+    <script>
+      var counter = 0
+      var instances = []
+
+      function X() {
+        this.i = counter++
+      }
+
+      function allocate() {
+        instances.push(new X())
+      }
+    </script>
+  </head>
+  <body>
+    <button onclick="allocate()">Allocate</button>
+  </body>
+</html>
+```

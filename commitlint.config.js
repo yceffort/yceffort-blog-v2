@@ -46,6 +46,7 @@ module.exports = {
         ':truck:', // 이름경로 변경
         ':rocket:', // 배포
         ':label:', // 타입
+        ':package:', // 패키지 신규 설치
       ],
     ],
   },

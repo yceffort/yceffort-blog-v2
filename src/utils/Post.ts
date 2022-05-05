@@ -14,9 +14,9 @@ async function retreiveAllPosts(): Promise<Array<Post>> {
   const files = sync(`${POST_PATH}/**/*.md*`).reverse()
 
   const posts = files
-    .reduce<Post[]>((prev, file) => {
-      const path = fs.readFileSync(file, { encoding: 'utf8' })
-      const { attributes, body } = frontMatter<FrontMatter>(path)
+    .reduce<Post[]>((prev, path) => {
+      const file = fs.readFileSync(path, { encoding: 'utf8' })
+      const { attributes, body } = frontMatter<FrontMatter>(file)
       const fm: FrontMatter = attributes
       const { tags: fmTags, published, date } = fm
 
@@ -26,7 +26,7 @@ async function retreiveAllPosts(): Promise<Array<Post>> {
         .replace('.md', '')
 
       if (published) {
-        const tags: string[] = (fmTags || []).map((tag) => tag.trim())
+        const tags: string[] = (fmTags || []).map((tag: string) => tag.trim())
 
         const result: Post = {
           frontMatter: {

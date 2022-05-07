@@ -6,7 +6,7 @@ tags:
   - rust
 published: true
 date: 2022-04-08 11:45:16
-description: '사이드 프로젝트도 열심히하고 싶은데 ㄹㅇ 바쁩니다'
+description: '사이드 프로젝트도 열심히 하고 싶은데 바쁘기도 바쁘고 체력도 안되는 것 같고 아무튼 핑계입니다.'
 ---
 
 ## Table of Contents

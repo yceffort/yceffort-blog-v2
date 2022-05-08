@@ -197,10 +197,12 @@ deepEqualCompare([1, 2, 3], [1]) // Argument of type 'number[]' is not assignabl
 
 ```typescript
 deepEqualCompare('배열은 비교할 수 없습니다.', '배열은 비교할 수 없습니다.') // ????
+// 물론 코드가 잘못된 것은 아니지만, 우리가 원하는 바는 이게 아닐 것이다.
 ```
 
 ### 타입스크립트의 타입을 공부할 때 도움이 되는 것들
 
 - [ts-belt](https://github.com/millsp/ts-toolbelt): 타입스크립트에서 유용하게 사용할 수 있는 다양탄 유틸리티 라이브러리를 제공한다. 찾아보면 별에 별 유틸리티 타입들을 다 제공하는데, 이를 어떻게 만들었을지 상상해 보는 재미가 있다.
 - [zod](https://github.com/colinhacks/zod): [joi](https://github.com/sideway/jo)의 타입스크립트 버전이라고 보면된다. 타입스크립트의 스키마를 체크하는데 도와주는 라이브러리다.
-- [type-challenges](https://github.com/type-challenges/type-challenges): 알고리즘에 백준이 있다면, 타입스크립트에는 `type-challenge`가 있다. 문제를 하나씩 풀어나가는 재미가 있다. hard까지는 그럭저럭 꾸역꾸역할 수 있었는데, `extreme`부터는 약간 그냥 테스트를 위한 테스트 같은 느낌이다. (내가 못풀어서 그런 걸수도 있다.) 실무에서 개발하는 타입스크립트 개발자라면, medium까지만 풀어도 충분할 것 같다.
+- [type-challenges](https://github.com/type-challenges/type-challenges): 알고리즘에 백준이 있다면, 타입스크립트에는 `type-challenge`가 있다. 문제를 하나씩 풀어나가는 재미가 있다. `hard`까지는 그럭저럭 꾸역꾸역할 수 있었는데, `extreme`부터는 약간 그냥 테스트를 위한 테스트 같은 느낌이다. (내가 못풀어서 그런 걸수도 있다.) 실무에서 개발하는 타입스크립트 개발자라면, `medium`까지만 풀어도 충분할 것 같다.
+- [TypeScript Error Translator](https://marketplace.visualstudio.com/items?itemName=mattpocock.ts-error-translator): 타입스크립트를 처음 접했을 때 많이 헤매는 것이 잘못된 타입으로 인한 에러인데, 이 에러를 읽기가 처음에는 약간 버거운 경우도 있다. 이러한 불친절한 에러를 사람이 읽기 쉽게 번역해주는 extension이다.

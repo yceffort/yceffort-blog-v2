@@ -5,7 +5,7 @@ tags:
   - react
 published: true
 date: 2022-04-16 18:51:14
-description: '메모이제이션에 대한 고민, 이 다음으로는 왜 메모이제이션을 그냥 다 하는게 좋은지에 대해 알아보도록 하겠습니다 🤔'
+description: '메모이제이션에 대한 고민 🤔'
 ---
 
 ## Table of Contents

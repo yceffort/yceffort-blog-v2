@@ -202,3 +202,41 @@ parser가 분석하는 내용은 일반적으로 자바스크립트 구문이 �
 ## 타입 검사
 
 앞선 과정은 자바스크립트 컴파일러에도 존재하는 과정이었다면, 타입스크립트만의 특별한 과정인 타입검사가 다음으로 존재한다.
+
+### binder
+
+[https://github.com/microsoft/TypeScript/blob/main/src/compiler/binder.ts](https://github.com/microsoft/TypeScript/blob/main/src/compiler/binder.ts)
+
+바인더는 전체 파일(전체 신택스 트리)를 읽어서 타입 검사에 필요한 데이터를 수집하는 과정이라고 볼 수 있다. 전체를 읽어 드린다는 말에서 느낌이 오는 것 처럼, 이 과정은 꽤나 무거운 작업으로 볼 수 있다. 이 과정을 통해서 메타데이터를 수집하고, 타입분석에 필요한 계층 구조등을 만든다.
+
+```typescript
+const message: string = 'Hello, world!'
+welcome(message)
+
+function welcome(str: string) {
+  console.log(str)
+}
+```
+
+위 파일을 다시 살펴보면 크게 global scope와 function scope 두가지로 나눠져 있는 것을 볼 수 있다.
+
+- global scope
+  - `message`
+  - `welcome`
+- function scope (welcome)
+  - `str`
+
+바인더는 이를 순회하면서 어디에, 그리고 어떤 `identifier`가 있는지 확인한다. 자세한 과정을 아래를 통해서 확인해보자.
+
+- `message`가 그 첫번째 `identifier`로, 0번째 식별자로 설정해두고, `const`이기 때문에 `BlockScopedVariable`로 기억해둔다.
+- 그 다음엔 `welcome`을 찾을 수 있다. 그러나 아직 이 식별자는 선언되지 않았으므로, 지나간다.
+- 인수로 선언되어 있는 `message`도 현재는 그 쓰임새를 알 수 없으므로 지나간다.
+- `welcome`을 드디어 찾았다. 이제 `welcome`을 만날 떄 마다 무엇을 실행해야하는지 알 수 있게 되었다. 그리고 `welcome`을 `Function`으로 기억해둦다.
+  - `welcome`은 함수 스코프로, `parent`인 global scope를 등록한다.
+  - `str`은 함수의 인수로, `BlockScopeVariable` 로 등록한다.
+
+이렇게 등록해둔 내용, 이른바 symbol은 향후 스코프에서 이 `identifier`를 만날때 무엇인지 판단할 때 쓸 수 있는 테이블에 등록한다.
+
+![symbol](./images/symbol.png)
+
+또 한자기 binder에서 알아두어야 할 것은 `flw nodes`라는 개념이다.

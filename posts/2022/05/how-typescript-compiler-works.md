@@ -247,11 +247,13 @@ function log(x: string | number) {
   // string number
   if (typeof x === 'string') {
     // string
+    // (1)
     return x
   } else {
     // number
     return x + 1
   }
+  // 사실 여기는 unreachable
   // string number
   return x
 }
@@ -259,4 +261,35 @@ function log(x: string | number) {
 
 위 코드를 보면, `x`라고 하는 변수의 타입이 각각 무엇이 될 수 있는지 머릿속에 흐름을 그려볼 수 있을 것이다. 타입스크립트에서 이러한 기능이 가능한 것은, 기본적으로 타입스크립트는 이러한 타입의 흐름을 추적하고 있기 때문인데, 이에 추가로 타입스크립트는 앞서 언급했던 스코프 내에서의 변수의 타입 변화도 추적한다.
 
-`typeof x === 'string'`과 같은 구문을 flow condition, 그리고 이러한 플로우를 추적하는 스코프를 `flow container`라고 한다. `flow condition`을 기점으로 두개의 `flow container`가 두개 생긴것을 알 수 있다.
+`typeof x === 'string'`과 같은 구문을 flow condition, 그리고 이러한 플로우를 추적하는 스코프를 `flow container`라고 한다. `flow condition`을 기점으로 두개의 `flow container`가 두개 생긴것을 알 수 있다. 그리고 이러한 컨테이너 내부에서 해당 노드 (변수, identifier)가 어떤 타입인지 기억한다. 이를 바탕으로 코드가 내부에서 어떤 흐름으로 작동하는지 판단할 수 있게 된다.
+
+이러한 flow는 타입스크립트가 해당 변수가 어떤 타입인지 추적할 수 있게 도와주는데, 이러한 추적은 밑에서 위로 올라가는 방식으로 진행된다. `(1)`에서 시작한다고 가정해보자. 해당 위치에서, 타입스크립트는 `x`의 타입이 무엇인지 flow node를 통해 물어보게되고, 가장 먼저 만나는 `flow condition`을 통해 `x`는 `string`임을 알게 된다. 이처럼, 해당 변수의 타입을 알기 위해서 `flow container` 내부에서 `flow condition`을 만나는지, 혹은 `flow container`의 시작지점에서 어떻게 선언되어있는지를 확인하는 bottom-to-top 방식으로 확인한다.
+
+바인더도 여타 다른 과정과 마찬가지로 코드를 검사하는 과정을 거친다. binder에서 확인할 수 있는 것들은 다음과 같다.
+
+```ts
+const a = 123
+delete a // 'delete' cannot be called on an identifier in strict mode.(1102)
+
+const abc = 123
+const abc = 123 // Cannot redeclare block-scoped variable 'abc'.(2451)
+
+yield // Identifier expected. 'yield' is a reserved word in strict mode.
+
+class A {} // duplicate identifier 'A;
+type A {}
+```
+
+이처럼 바인더는 전체를 읽어 드리는 과정에서 전체적인 context를 이해하였으므로, 이러한 전체 신택스 트리를 기준으로 잡아낼 수 있는 문제점을 지적할 수 있다. 예를 들어 `strict mode`에 대한 검사나, 스코프 내에서 중복된 `identifier` 등을 잡아낼 수 있다.
+
+### checker
+
+[https://github.com/microsoft/TypeScript/blob/main/src/compiler/checker.ts](https://github.com/microsoft/TypeScript/blob/main/src/compiler/checker.ts) 는 이름에서도 알 수 있는 것 처럼 실제 타입을 체크하는 파일이다. 타입스크립트의 꽃이라고 볼 수 있으며, github의 file을 보면 알 수 있지만 2.67mb의 위용을 자랑한다. 대략 42000줄의 코드가 포함되어 있으며, 여기에 우리가 상상할 수 있는 흥미로운 것들이 많이 존재한다. (왜 `unknown`이 `any`보다 나은지, 타입스크립트의 구조적 타이핑은 무엇인지 등등..)
+
+> 이렇게 하나의 파일에 크게 모두 담아 둔 이유는, 파일을 나눠서 관리하는 것 보다 하나의 파일에서 관리하는 것이 속도 측면에서 훨씬 좋기 떄문이다. 특히 `checker`의 경우, 기존에는 100개가 넘는 import 가 존재하였는데, 이것이 속도에 있어 많은 걸림돌이 되었다고 한다.
+
+> - https://github.com/microsoft/TypeScript/issues/27891#issuecomment-530535972
+> - https://twitter.com/orta/status/1178805954869125125
+> - https://twitter.com/SeaRyanC/status/1178848975656345601
+
+여기에 있는 내용을 모두 다 다루기 위해서는, 코드의 길이만큼의 설명이 필요하기 때문에 개괄적인 내용에 대해서만 다루고자한다.

@@ -239,4 +239,24 @@ function welcome(str: string) {
 
 ![symbol](./images/symbol.png)
 
-또 한자기 binder에서 알아두어야 할 것은 `flw nodes`라는 개념이다.
+또 한가지 binder에서 알아두어야 할 것은 `flw nodes`라는 개념이다.
+
+```ts
+// string, number
+function log(x: string | number) {
+  // string number
+  if (typeof x === 'string') {
+    // string
+    return x
+  } else {
+    // number
+    return x + 1
+  }
+  // string number
+  return x
+}
+```
+
+위 코드를 보면, `x`라고 하는 변수의 타입이 각각 무엇이 될 수 있는지 머릿속에 흐름을 그려볼 수 있을 것이다. 타입스크립트에서 이러한 기능이 가능한 것은, 기본적으로 타입스크립트는 이러한 타입의 흐름을 추적하고 있기 때문인데, 이에 추가로 타입스크립트는 앞서 언급했던 스코프 내에서의 변수의 타입 변화도 추적한다.
+
+`typeof x === 'string'`과 같은 구문을 flow condition, 그리고 이러한 플로우를 추적하는 스코프를 `flow container`라고 한다. `flow condition`을 기점으로 두개의 `flow container`가 두개 생긴것을 알 수 있다.

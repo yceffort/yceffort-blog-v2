@@ -288,8 +288,239 @@ type A {}
 
 > 이렇게 하나의 파일에 크게 모두 담아 둔 이유는, 파일을 나눠서 관리하는 것 보다 하나의 파일에서 관리하는 것이 속도 측면에서 훨씬 좋기 떄문이다. 특히 `checker`의 경우, 기존에는 100개가 넘는 import 가 존재하였는데, 이것이 속도에 있어 많은 걸림돌이 되었다고 한다.
 
+> 참고자료
+>
 > - https://github.com/microsoft/TypeScript/issues/27891#issuecomment-530535972
 > - https://twitter.com/orta/status/1178805954869125125
 > - https://twitter.com/SeaRyanC/status/1178848975656345601
 
 여기에 있는 내용을 모두 다 다루기 위해서는, 코드의 길이만큼의 설명이 필요하기 때문에 개괄적인 내용에 대해서만 다루고자한다.
+
+`checker` 라는 이름에서 알수 있듯이, 대다수의 타입스크립트 validation이 여기에서 이루어진다..
+
+![ts-diagnostics](./images/ts-diagnostics.png)
+
+> https://orta.keybase.pub/talks/tsconf-2021/long-tsconf-2021.pdf?dl=1
+
+여기에서 중점적으로 다루고자 하는 것은, 어떻게 체크를 하는지, 그리고 어떻게 타입을 비교하는지, 그리고 추론 시스템은 어떻게 구성되어 있는 지 등 총 3가지에 대해 이야기 해보고자 한다.
+
+```ts
+const message: string = 'Hello, world'
+```
+
+거의 대부분의 신택스 트리에는, 이에 맞는 checker 함수가 있다고 보면 된다. 타입스크립트는 이 신택스 트리를 순회하면서 대부분의 객체들을 체크 하게 된다.
+
+- `VariableStatement`
+  - `VariableDeclarationList`
+  - `VariableDeclaration`
+    - `Identifier`
+    - `StringKeyword`
+    - `StringLiteral`
+
+```
+checker.checkSourceElementWorker
+checker.checkVariableStatement
+checker.checkGrammarVariableDeclarationList
+checker.checkVariableDeclaration
+checker.checkVariableLikeDeclaration
+checker.checkTypeAssignableToAndOptionallyElaborate
+checker.isTypeRelatedTo
+```
+
+이렇듯 신택스 트리를 순차적으로 순회하면서, 체크 가능한 모든 것들을 체크하면서 validation을 진행하게 된다.
+
+앞서, `string = "Hello, world"` 구문은, 다음의 과정을 거치게 된다. (`checker.isTypeRelatedTo`)
+
+```ts
+function isSimpleTypeRelatedTo(
+  source: Type,
+  target: Type,
+  relation: ESMap<string, RelationComparisonResult>,
+  errorReporter?: ErrorReporter,
+) {
+  const s = source.flags
+  const t = target.flags
+  if (
+    t & TypeFlags.AnyOrUnknown ||
+    s & TypeFlags.Never ||
+    source === wildcardType
+  )
+    return true
+  if (t & TypeFlags.Never) return false
+  if (s & TypeFlags.StringLike && t & TypeFlags.String) return true
+  if (
+    s & TypeFlags.StringLiteral &&
+    s & TypeFlags.EnumLiteral &&
+    t & TypeFlags.StringLiteral &&
+    !(t & TypeFlags.EnumLiteral) &&
+    (source as StringLiteralType).value === (target as StringLiteralType).value
+  )
+    return true
+  if (s & TypeFlags.NumberLike && t & TypeFlags.Number) return true
+  if (
+    s & TypeFlags.NumberLiteral &&
+    s & TypeFlags.EnumLiteral &&
+    t & TypeFlags.NumberLiteral &&
+    !(t & TypeFlags.EnumLiteral) &&
+    (source as NumberLiteralType).value === (target as NumberLiteralType).value
+  )
+    return true
+  if (s & TypeFlags.BigIntLike && t & TypeFlags.BigInt) return true
+  if (s & TypeFlags.BooleanLike && t & TypeFlags.Boolean) return true
+  if (s & TypeFlags.ESSymbolLike && t & TypeFlags.ESSymbol) return true
+  if (
+    s & TypeFlags.Enum &&
+    t & TypeFlags.Enum &&
+    isEnumTypeRelatedTo(source.symbol, target.symbol, errorReporter)
+  )
+    return true
+  if (s & TypeFlags.EnumLiteral && t & TypeFlags.EnumLiteral) {
+    if (
+      s & TypeFlags.Union &&
+      t & TypeFlags.Union &&
+      isEnumTypeRelatedTo(source.symbol, target.symbol, errorReporter)
+    )
+      return true
+    if (
+      s & TypeFlags.Literal &&
+      t & TypeFlags.Literal &&
+      (source as LiteralType).value === (target as LiteralType).value &&
+      isEnumTypeRelatedTo(
+        getParentOfSymbol(source.symbol)!,
+        getParentOfSymbol(target.symbol)!,
+        errorReporter,
+      )
+    )
+      return true
+  }
+  // In non-strictNullChecks mode, `undefined` and `null` are assignable to anything except `never`.
+  // Since unions and intersections may reduce to `never`, we exclude them here.
+  if (
+    s & TypeFlags.Undefined &&
+    ((!strictNullChecks && !(t & TypeFlags.UnionOrIntersection)) ||
+      t & (TypeFlags.Undefined | TypeFlags.Void))
+  )
+    return true
+  if (
+    s & TypeFlags.Null &&
+    ((!strictNullChecks && !(t & TypeFlags.UnionOrIntersection)) ||
+      t & TypeFlags.Null)
+  )
+    return true
+  if (s & TypeFlags.Object && t & TypeFlags.NonPrimitive) return true
+  if (relation === assignableRelation || relation === comparableRelation) {
+    if (s & TypeFlags.Any) return true
+    // Type number or any numeric literal type is assignable to any numeric enum type or any
+    // numeric enum literal type. This rule exists for backwards compatibility reasons because
+    // bit-flag enum types sometimes look like literal enum types with numeric literal values.
+    if (
+      s & (TypeFlags.Number | TypeFlags.NumberLiteral) &&
+      !(s & TypeFlags.EnumLiteral) &&
+      (t & TypeFlags.Enum ||
+        (relation === assignableRelation &&
+          t & TypeFlags.NumberLiteral &&
+          t & TypeFlags.EnumLiteral))
+    )
+      return true
+  }
+  return false
+}
+```
+
+> https://raw.githubusercontent.com/microsoft/TypeScript/main/src/compiler/checker.ts
+
+먼저 타입 `string`과 `string literal`즉, 값의 `string`을 비교하여 확인하게 되는데, 이 둘이 일치하면 `true`를 리턴하게 된다. 코드의 길이는 길지만, 이 경우에는 비교가 비교적 간단하여 함수 전체를 실행하지는 않을 것이다.
+
+만약 아래와 같은 코드는 어떻게 될까?
+
+```ts
+{ hello: number} = {hello: "world"}
+```
+
+타입스크립트는 구조적 타이핑 (structural typing)을 기반으로 하고 있으므로 먼저 외적인 구조 부터 비교를 시작하여 안으로 파고 들게 된다. 이 경우 둘다 `object`의 형태를 띄고 있기 때문에 이 시점의 비교에서는 `true`가 리턴될 것이다. 그리고 그 다음 내부의 필드를 비교하는데, 두개 모두 `hello`를 가지고 있으므로 여기서도 `true`가 될 것이다. 그 다음 필드의 값을 비교하게 되는데, `number` (위 코드 기준 `TypeFlags.NumberLike`), 그리고 `string literal`인 `"world"`가 들어가 있으므로 결국에는 `false`가 리턴될 것이다.
+
+이와 거의 유사한 방식으로 `type generic`도 비교하게 된다.
+
+```ts
+Promise<string> = Promise<{hello: string}>
+```
+
+> 물론, [제네릭의 공변성과 반공변성](<https://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)>)에 대해 다루기 시작하면 복잡해진다.
+
+`Promise`, `Generic` (`<string>`, `{hello: string}`)
+
+그 다음으로는 타입 추론에 대해서 알아보자. 코드의 타입 추론도 마찬가지로 `checker`의 역할 중 하나다.
+
+```typescript
+const message: string = 'Hello, world!'
+```
+
+처럼 쓸 수도 있지만, 대부분의 경우에는
+
+```typescript
+const message = 'Hello, world!'
+```
+
+를 더 선호할 것이다.
+
+위 와 같은 경우에는, 아래와 같은 신택스 트리가 생성된다.
+
+- `VariableStatement`
+  - `VariableDeclarationList`
+    - `VariableDeclaration`
+      - `StringKeyword` (`name`)
+      - 타입이 업ㅂ다! 🤔
+      - `StringLiteral` (`initializer`)
+
+이 경우에는 간단하게 `initializer`의 타입을 비어 있는 타입쪽으로 이동 시키면 된다.
+
+```ts
+declare function setup<T>(config: { initial(): T }): T
+```
+
+위와 같은 타입 파라미터 추론의 경우에는 조금 복잡해진다. 여기에서 선언된 `T`는 실제 함수가 사용되기 전까지 무슨 타입이 올지 알 수 없다. 여기서 `checker`가 얻을 수 있는 정보는 다음과 같다.
+
+- Generic Function
+- Generic Arg T
+- Return Value T
+- parameter는 객체이며 `initial`이 키이고, 값은 `T`
+
+그리고 함수의 사용이 다음과 같을 때, 위와 마찬가지 프로세스로 비교하게 된다.
+
+```ts
+const abc = setup({
+  initial() {
+    return 'abc'
+  },
+})
+```
+
+```ts
+// 객체를 시작으로 밖에서부터 비교
+// T를 만날때까지 안으로 파고 든다.
+// T는 string으로 추론할 수 있다.
+{ initial(): T } = { initial(): string }
+```
+
+`T`를 만나서 `string`이라는 것이 확인 되는 순간, `cheker`는 해당 함수`setup`으로 새로운 인스턴스를 만들게 된다. 이 인스턴스에는 `T`가 `string`이라는 정보가 담기게 되고, 모든 `T`를 `string`으로 변경한다. 그리고 그 다음에 다시 `checker`는 비교를 시작하게 된다.
+
+```ts
+const abc = setup({initial() { return "abc" }})
+{initial(): string} = {initial():"abc"}
+```
+
+마지막으로 알아볼 것은 `contextual typing`, 즉 문맥상의 타이핑이다. 문맥상의 타이핑이란, 타입의 결정이 코드의 위치 (문맥) 을 기준으로 일어난다는 것을 의미한다.
+
+```ts
+type Adder = {
+  inc(n: number): number
+}
+
+const adder: Adder = {
+  inc(n) {
+    return n + 1
+  },
+}
+```
+
+여기에서도 마찬가지로, parameter 에서 시작하여 신택스 트리 밑으로 파고 들어가서 비교 하게 된다.

@@ -231,7 +231,7 @@ function welcome(str: string) {
 - `message`가 그 첫번째 `identifier`로, 0번째 식별자로 설정해두고, `const`이기 때문에 `BlockScopedVariable`로 기억해둔다.
 - 그 다음엔 `welcome`을 찾을 수 있다. 그러나 아직 이 식별자는 선언되지 않았으므로, 지나간다.
 - 인수로 선언되어 있는 `message`도 현재는 그 쓰임새를 알 수 없으므로 지나간다.
-- `welcome`을 드디어 찾았다. 이제 `welcome`을 만날 떄 마다 무엇을 실행해야하는지 알 수 있게 되었다. 그리고 `welcome`을 `Function`으로 기억해둦다.
+- `welcome`을 드디어 찾았다. 이제 `welcome`을 만날 때 마다 무엇을 실행해야하는지 알 수 있게 되었다. 그리고 `welcome`을 `Function`으로 기억해둦다.
   - `welcome`은 함수 스코프로, `parent`인 global scope를 등록한다.
   - `str`은 함수의 인수로, `BlockScopeVariable` 로 등록한다.
 
@@ -286,7 +286,7 @@ type A {}
 
 [https://github.com/microsoft/TypeScript/blob/main/src/compiler/checker.ts](https://github.com/microsoft/TypeScript/blob/main/src/compiler/checker.ts) 는 이름에서도 알 수 있는 것 처럼 실제 타입을 체크하는 파일이다. 타입스크립트의 꽃이라고 볼 수 있으며, github의 file을 보면 알 수 있지만 2.67mb의 위용을 자랑한다. 대략 42000줄의 코드가 포함되어 있으며, 여기에 우리가 상상할 수 있는 흥미로운 것들이 많이 존재한다. (왜 `unknown`이 `any`보다 나은지, 타입스크립트의 구조적 타이핑은 무엇인지 등등..)
 
-> 이렇게 하나의 파일에 크게 모두 담아 둔 이유는, 파일을 나눠서 관리하는 것 보다 하나의 파일에서 관리하는 것이 속도 측면에서 훨씬 좋기 떄문이다. 특히 `checker`의 경우, 기존에는 100개가 넘는 import 가 존재하였는데, 이것이 속도에 있어 많은 걸림돌이 되었다고 한다.
+> 이렇게 하나의 파일에 크게 모두 담아 둔 이유는, 파일을 나눠서 관리하는 것 보다 하나의 파일에서 관리하는 것이 속도 측면에서 훨씬 좋기 때문이다. 특히 `checker`의 경우, 기존에는 100개가 넘는 import 가 존재하였는데, 이것이 속도에 있어 많은 걸림돌이 되었다고 한다.
 
 > 참고자료
 >

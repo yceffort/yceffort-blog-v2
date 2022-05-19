@@ -6,10 +6,10 @@ github repository of https://yceffort.kr
 
 ## Dependencies
 
-- React@^17.0.2
+- React@^18.1.0
 - Typescript@^4.4.2
 - tailwindcss
-- Nextjs@^11.1.0
+- Nextjs@^12.1.0
 - next-mdx-remote
 - vercel
 

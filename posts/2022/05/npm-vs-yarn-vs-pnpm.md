@@ -115,3 +115,36 @@ yarn berry 팀은 이후 릴리즈에서 많은 문제를 해결하고자 노력
 ### npm
 
 nodejs 내부에 npm이 내장되어 있으므로, 추가적으로 작업을 할 필요가 없다. [nvm](https://github.com/nvm-sh/nvm)이나 [volta](https://volta.sh/)를 사용하면, node와 npm 버전을 관리하는데 매우 유용하게 쓸 수 있다.
+
+### yarn classic
+
+`npm i -g yarn`으로 설치하면 된다.
+
+### yarn berry
+
+[yarn classic에서 yarn berry로 넘어가는 방법](https://yarnpkg.com/getting-started/migration)으로 추천할만한 것은 다음과 같다.
+
+- yarn 1.x 등 최신버전으로 업데이트
+- `yarn set version berry`
+
+[사실 추천하는 방법](https://yarnpkg.com/getting-started/install#install-corepack)은 Corepack을 사용하는 것이다.
+
+[Corepack](https://nodejs.org/api/corepack.html)은 yarn berry 개발자에 의해 만들어진 도구로, [package manager manager](https://github.com/nodejs/TSC/issues/904) (;;;) 라는 이름으로 처음 제안되었고, node lts v16에 머지되었다.
+
+Corepack의 도움으로 node는 yarn classic, yarn berry, pnpm의 바이너리를 shim으로 가지고 있기 때문에 npm의 대체 패키지 매니저를 별도로 설치할 필요는 없다. 이 shim을 활용하면, yarn과 pnpm 명령어를 명시적으로 설피할 필요 없이, 실행할 수 잇다.
+
+Corepack은 nodejs@16.9.0 부터 사전 설치되며, 이전 버전에서는 `npm install -g corepack`으로 설치할 수 있다.
+
+Corepack을 사용하기 위해서는, 먼저 활성화를 해야 한다.
+
+```
+$ corepack enable
+$ corepack prepare yarn@3.1.1 --activate
+```
+
+### pnpm
+
+pnpm 도 마찬가지 두 가지 방법으로 설치 할 수 있다.
+
+- `$ npm i -g pnpm`
+- `$ corepack prepare pnpm@6.24.2 --activate`

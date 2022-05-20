@@ -95,3 +95,23 @@ pnpm은 이러한 호이스트 방식 대신, 다른 dependencies를 해결하�
 > [https://pnpm.io/blog/2021/12/29/yearly-update](https://pnpm.io/blog/2021/12/29/yearly-update)
 
 ### yarn berry, plug n play
+
+yarn berry 는 2020년 1월에 출시되었으며 yarn classic의 업그레이드 버전이다. yarn 팀은 본질적으로 새로운 코드 베이스와 새로운 원칙을 가진 완전히 새로운 패키지 매니저라는 것을 분명하게 하기 위해 `yarn berry`라고 부르기 시작했다.
+
+yarn berry에서 눈여겨 봐야 할 것은 [plug n play](https://yarnpkg.com/features/pnp/)로, [node_modules를 fix 위한 전략](https://yarnpkg.com/features/pnp#fixing-node_modules)이다. node_modules를 생성하는 대신, `.pnp.cjs`라 불리는 의존성 lookup 파일이 생성되는데, 이는 중첩된 폴더 구조 대신 단일 파일 이기 때문에 더 효율적으로 처리할 수 있다. 또한 모든 패키지는 `.yarn/cache` 폴더 내부에 zip 파일로 저장되므로, node_modules 폴더보다 더 디스크 공간을 적게 차지한다.
+
+이 모든 변화는, 릴리즈 이후에 많은 논란을 일으켰다. pnp의 breaking change는 [메인테이너들로 하여금 기존에 존재하는 패키지를 업데이트 하게 끔 만들었다.](https://blog.hao.dev/state-of-yarn-2-berry-in-2021) 새로운 pnp 방식은 default로 설정되었고, node_modules로 돌아가는 것 또한 간단하지 않았다. 이 때문에 [많은 유명한 개발자들이 yarn berry를 opt-in으로 만들지 않은 것에 대해 비판하기 시작했다.](https://www.youtube.com/watch?v=bPae4Z8BFt8)
+
+yarn berry 팀은 이후 릴리즈에서 많은 문제를 해결하고자 노력했다. PnP의 비호환성을 해결하기 위해 default 작동 모드를 쉽게 바꾸기 위한 몇가지 방법을 제안했다. [node_modules plugin](https://github.com/yarnpkg/berry/tree/master/packages/plugin-nm)의 도움으로, 기본적인 node_modules로 돌아가는 데 한 줄의 코드만으로 가능해졌다.
+
+[호환성 표](https://yarnpkg.com/features/pnp#compatibility-table)에서 볼 수 있듯이, 많은 대형 프로젝트 들이 점차 yarn berry를 지원하는 방향으로 가기 시작했다.
+
+앞선 3가지 패키지 매니저 중에서 가장 최근에 나왔지만, 패키니 매니저 환경에 많은 영향을 미쳤다. 2020년말, pnpm도 plug n play 방식을 지원하기 시작했다.
+
+## 패키지 매니저 설치하기
+
+패키지 매니저를 사용하기 위해서는, 개발자의 로컬 혹은 CI/CD 시스템에 설치해야 한다.
+
+### npm
+
+nodejs 내부에 npm이 내장되어 있으므로, 추가적으로 작업을 할 필요가 없다. [nvm](https://github.com/nvm-sh/nvm)이나 [volta](https://volta.sh/)를 사용하면, node와 npm 버전을 관리하는데 매우 유용하게 쓸 수 있다.

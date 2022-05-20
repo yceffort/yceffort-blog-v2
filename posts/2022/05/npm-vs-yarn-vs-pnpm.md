@@ -83,3 +83,15 @@ yarn classic은 2020년 부터 유지보수 모드로 전환되었다. 그리고
 ### pnpm 빠르고 휴올적인 디스크 관리
 
 pnpm은 2017년에 만들어졌으며, npm 의 drop-in replacement(설정을 바꿀 필요 없이 바로 사용가능하며, 속도와 안정성 등 다양한 기능 향상이 이루어지는 대체품) 으로, npm만 있다면 바로 사용할 수 있다.
+
+pnpm 제작자들이 생각한 npm 과 yarn의 가장 큰 문제는 프로젝트 간에 사용되는 dependencies의 중복 저장이다. yarn classic이 물론 npm 보다 빠르지만, 두 매니저 모두 node_modules 내부에 flat하게 패키지를 설치하여 (=동일한 디렉토리에 flat하게 저장) 관리했다.
+
+pnpm은 이러한 호이스트 방식 대신, 다른 dependencies를 해결하는 전략인 [content-addressable storage](https://pnpm.io/next/symlinked-node-modules-structure)를 사용했다. 이 방법을 사용하면, home 폴더의 글로벌 저장소 (`~/.pnpm-store`)에 패키지를 저장하는 중첩된 node_modules 폴더가 생성된다. 따라서 모든 버전의 dependencies은 해당 폴더에 물리적으로 한번만 저장되므로, single source of truth를 구성하고, 상당한 디스크 공간을 절약할 수 있다.
+
+이는 node_modules의 레이아웃을 통해 이루어지고, `symlinks`를 사용하여 dependencies의 중첩된 구조를 생성한다. 여기서 폴더 내부의 모든 패키지 파일은 저장소에 대한 하드 링크로 구성되어 있다.
+
+![pnpm](https://d33wubrfki0l68.cloudfront.net/64b2f62af3b1c3dc4314df0ec517d9661d03b934/aca71/assets/images/node-modules-structure-8ab301ddaed3b7530858b233f5b3be57.jpg)
+
+> [https://pnpm.io/blog/2021/12/29/yearly-update](https://pnpm.io/blog/2021/12/29/yearly-update)
+
+### yarn berry, plug n play

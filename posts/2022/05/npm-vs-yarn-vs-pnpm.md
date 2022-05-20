@@ -46,4 +46,40 @@ npm 에서 시작한 node package management의 역사는, 이제 3가지 옵션
 
 10여년이 넘는 시간 동안 npm 이 존재했는데, yarn, pnpm 등이 등장하게 된 것일까?
 
--
+- `node_modules` 효율화를 위한 다른 구조 (nested vs flat, node_modules, vs pnp mode)
+- 보안에 영향을 미치는 호이스팅 지원
+- 성능에 영향을 미칠 수 있는 `lock`파일 형식
+- 디스크 효율성에 영향을 미치는 패키지를 디스크에 저장하는 방식
+- 대규모 모노레포의 유지 보수성 과 속도에 영향을 미치는 workspace라 알려진 멀티 패키지 관리 및 지원
+- 새로운 도구와 명령어 관리에 대한 관리
+  - 이와 관련된 다양하고 확장가능한 플러그인과 커뮤니티 툴
+- 다양한 기능 구현 가능성과 유연함
+
+npm 이 최초로 등장하 이래로 이러한 니즈가 어떻게 나타났는지, yarn classic은 그 이후 등장해서 어떻게 해결햏ㅅ는지, pnpm이 이러한 개념을 어떻게 확장했는지, yarn berry가 전통적인 개념과 프로테스에 의해 설정된 틀을 깨기 위해 어떠한 노력을 했는지 간략한 역사를 파악해보자.
+
+### 선구자 npm
+
+본격적으로 시작하기에 앞서 재밌는 사실을 이야기 해보자면, `npm`은 `node package manager`의 약자가 아니다. npm의 전신은 사실 `pm`이라 불리는 bash 유틸리티인데, 이는 `pkgmakeinst`의 약자다. 그리고 이의 node 버전이 `npm`인 것이다.
+
+> [https://github.com/npm/cli#is-npm-an-acronym-for-node-package-manager](https://github.com/npm/cli#is-npm-an-acronym-for-node-package-manager)
+
+npm 이전에는 프로젝트의 dependencies를 수동으로 다운로드하고 관리하였기 때문에 엄청난 혁명을 가져왔다고 볼 수 있다. 이와 더불어 메타데이터를 가지고 있는 `package.json`와 같은 개념, dependencies를 `node_modules`라 불리는 폴더에 설치한다는 개념, 커스텀 스크립트, public & private 패키지 레지스트리와 같은 개념들 모두 npm에 의해 도입되었다.
+
+### 많은 혁명을 가져온 yarn classic
+
+[2016년의 블로그 글](https://engineering.fb.com/2016/10/11/web/yarn-a-new-package-manager-for-javascript/)에서, 페이스북은 구글과 몇몇 다른 개발자들과 함께 npm이 가지고 있던 일관성, 보안, 성능 문제 등을 해결하기 위한 새로운 패키지 매니저를 만들기 위한 시도를 진행 중이라고 발표 했다. 그리고 이듬해 `Yet Another Resource Negotiator`의 약자인 yarn을 발표했다.
+
+yarn은 대부분의 개념과 프로세스에 npm을 기반으로 설계했지만, 이외에 패키지 관리자 환경에 큰 영향을 미쳤다. npm과 대조적으로, yarn은 초기버전의 npm의 주요 문제점 중 하나였던 설치 프로세스의 속도를 높이기 위해 작업을 병렬화 하였다.
+
+yarn은 dx(개발자 경험), 보안 및 성능에 대한 기준을 높였으며, 다음과 같은 개념을 패키지 매니저에 도입하였다.
+
+- native 모노레포 지원
+- cache-aware 설치
+- 오프라인 캐싱
+- lock files
+
+yarn classic은 2020년 부터 유지보수 모드로 전환되었다. 그리고 1.x 버전은 모두 레거시로 간주하고 yarn classic으로 이름이 바뀌었다. 현재는 yarn berry에서 개발과 개선이 이루어지고 있다.
+
+### pnpm 빠르고 휴올적인 디스크 관리
+
+pnpm은 2017년에 만들어졌으며, npm 의 drop-in replacement(설정을 바꿀 필요 없이 바로 사용가능하며, 속도와 안정성 등 다양한 기능 향상이 이루어지는 대체품) 으로, npm만 있다면 바로 사용할 수 있다.

@@ -153,6 +153,87 @@ pnpm 도 마찬가지 두 가지 방법으로 설치 할 수 있다.
 
 프로젝트의 구조를 살펴보면, 각 패키지 매니저의 주요 특성을 한눈에 살펴볼 수 있다. 특정 패키지 매니저를 구성하는데 사용하는 파일과, 설치단계에서 생성되는 파일을 쉽게 알아볼 수 있다.
 
-기본적으로, 모든 패키지 매니저는 모든 중요한 메타 정보를 `package.json`에 저장한다. 또한 루트 레벨에 설정파일을 사용하여 프라이빗 레지스트리나 dependency resolution 방법을 설정할 수 있다.
+기본적으로, 모든 패키지 매니저는 모든 중요한 메타 정보를 `package.json`에 저장한다. 또한 루트 레벨에 설정파일을 사용하여 프라이빗 레지스트리나 dependency resolution 방법을 설정할 수 있다. 그리고 이 단계에서 dependencies를 파일 구조 (node_modules)에 저장하고 lock 파일이 생성된다.
 
-설치 단계에서, dependencies를 파일 구조 (node_modules)에 저장하고 lock 파일이 생성된다. 이 글에서는 workspaces에 대해서는 다루지 않는다.
+> 이 글에서는 workspaces에 대해서는 다루지 않는다.
+
+### npm
+
+`$npm install` 또는 `$npm i` 명령어를 실행하면, `package-lock.json`이 생성되고 `node_modules` 폴더도 생성된다. 이 외에도 `.npmrc` 설정 파일도 생성될 수 있다.
+
+```
+.
+├── node_modules/
+├── .npmrc
+├── package-lock.json
+└── package.json
+```
+
+### yarn classic
+
+`$yarn`을 실행하면, `yarn.lock`과 `node_modules` 폴더가 생성된다. 마찬가지로 [`.yarnrc` 파일](https://classic.yarnpkg.com/en/docs/yarnrc)도 옵셔널로 생성할 수 있다. 이에 더해 `.npmrc` 파일이 있으면 이를 이용할 수도 있다. 그리고 캐시 폴더인 `.yarn/cache/`와 현재 yarn classic의 버전을 저장하는 `.yarn/releases/`도 생성될 수 있다. 이처럼 설정에 따라서 다양하게 변경될 수 있다.
+
+```.
+├── .yarn/
+│   ├── cache/
+│   └── releases/
+│       └── yarn-1.22.17.cjs
+├── node_modules/
+├── .yarnrc
+├── package.json
+└── yarn.lock
+```
+
+### yarn berry와 `node_modules`
+
+install mode에 관계 없이, yarn berry 프로젝트에서는 다른 패키지 관리자보다 더 많은 파일 보다 폴더를 처리해야 한다. 일부는 선택사항이고, 그리고 일부는 필수 사항이다.
+
+yarn berry는 더이상 `.npmrc` 다 `.yarnrc`를 사용하지 않는다. 대신 [`yarnrc.yml` 설정 파일](https://yarnpkg.com/configuration/yarnrc)을 필요로 한다. 전통적인 `node_modules`를 생성하는 워크플로우가 존재하는 경우, [nodeLinker config](https://yarnpkg.com/configuration/yarnrc#nodeLinker) 파일을 아래와 같은 형태로 제공해야 한다.
+
+```
+# .yarnrc.yml
+nodeLinker: node-modules # or pnpm
+```
+
+`$ yarn`을 실행하면, 모든 의존성을 `node_modules`에 설치한다. `yarn.lock` 파일이 생성되는데, 이 파일은 기존 `yarn classic`과 호환되지는 않는다. 또한 오프라인 모드에서 설치를 위해 `.yarn/cache` 폴더도 생성된다. `releases` 폴더는 프로젝트에서 사용하는 yarn berry의 버전을 저장하기 위해 옵셔널로 생성된다.
+
+```
+.
+├── .yarn/
+│   ├── cache/
+│   └── releases/
+│       └── yarn-3.1.1.cjs
+├── node_modules/
+├── .yarnrc.yml
+├── package.json
+└── yarn.lock
+```
+
+### yarn berry with pnp
+
+PnP 모드에는 [strict](https://yarnpkg.com/features/pnp)와 [loose](https://yarnpkg.com/features/pnp#pnp-loose-mode) 모드가 있는데, 일단은 모드에 상관없이 `yarn`을 실행하면 `.yarn/cache`와 `.yarn/unplugged`, `.pnp.cjs` `yarn.lock` 파일이 생성된다. strict 모드는 기본 값이고, loose는 아래 처럼 옵셔널로 설정해두어야 한다.
+
+```
+# .yarnrc.yml
+nodeLinker: pnp
+pnpMode: loose
+```
+
+PnP 프로젝트에서, `.yarn/` 폴더 내부에는 `release/`외에도 [ide 지원](https://yarnpkg.com/getting-started/editor-sdks)을 위한 `sdk/` 폴더를 포함할 가능성이 높다. [이외에도 사용례에 따라서, 다양한 폴더들이 생성될 수 있다.](https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored)
+
+```
+.
+├── .yarn/
+│   ├── cache/
+│   ├── releases/
+│   │   └── yarn-3.1.1.cjs
+│   ├── sdk/
+│   └── unplugged/
+├── .pnp.cjs
+├── .pnp.loader.mjs
+├── .yarnrc.yml
+├── package.json
+└── yarn.lock
+```
+
+### pnpm

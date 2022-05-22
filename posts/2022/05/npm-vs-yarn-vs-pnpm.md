@@ -237,3 +237,15 @@ PnP 프로젝트에서, `.yarn/` 폴더 내부에는 `release/`외에도 [ide �
 ```
 
 ### pnpm
+
+`pnpm`도 다른 패키지 매니저와 마찬가지로 `package.json` 이 필요하다. `$ pnpm i`를 실행하면, `node_modules` 가 생성되는 것 까지는 다른 패키지 관리자와 동일하지만, 앞서 언급한 `content-addressable storage approach`라는 특성 때문에 이후의 구조가 완전히 다르다.
+
+pnpm은 자체 lock 파일인 `pnp-lock.yml`을 생성한다. 그리고 마찬가지로 `.npmrc`로 설정을 추가할 수도 있다.
+
+## Lock 파일과 dependency 저장
+
+앞서 언급한 것 처럼, 모든 패키지 매니저는 각자 다른 형태의 lock 파일이 존재한다.
+
+일단 lock 파일의 정의를 먼저 살펴보면, lock 파일이란 매 설치시 결정적이고 (= 항상 같은 버전을 설치하고) 예측가능한 특성을 보장하기 위하여, 각 버전의 정확한 의존성 버전을 저장하고 있는 파일을 의미한다. `package.json`은 정확한 버전이 기재되어 있는 것이 아니고, `>= 1.2.5`와 같은 형식의 [버전 범위 aka 시멘틱 버저닝](https://docs.npmjs.com/about-semantic-versioning)이 존재하기 때문에, lock파일이 없다면 매 설치마다 설치하는 버전이 달라질 수 있다.
+
+lock 파일은 또한 체크섬이 존재하는데, 이에 대해서는 보안 관련 섹션에서 다룬다.

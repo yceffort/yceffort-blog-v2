@@ -173,7 +173,8 @@ pnpm 도 마찬가지 두 가지 방법으로 설치 할 수 있다.
 
 `$yarn`을 실행하면, `yarn.lock`과 `node_modules` 폴더가 생성된다. 마찬가지로 [`.yarnrc` 파일](https://classic.yarnpkg.com/en/docs/yarnrc)도 옵셔널로 생성할 수 있다. 이에 더해 `.npmrc` 파일이 있으면 이를 이용할 수도 있다. 그리고 캐시 폴더인 `.yarn/cache/`와 현재 yarn classic의 버전을 저장하는 `.yarn/releases/`도 생성될 수 있다. 이처럼 설정에 따라서 다양하게 변경될 수 있다.
 
-```.
+```
+.
 ├── .yarn/
 │   ├── cache/
 │   └── releases/

@@ -265,8 +265,10 @@ cli 커맨드는 워낙 많고 다양하여, 여기에서 모든 것을 다루�
 
 ### 의존성 관리
 
-|     | npm | yarn classic | yarn berry | pnpm |
-| --- | --- | ------------ | ---------- | ---- |
+|              | npm           | yarn classic             | yarn berry       | pnpm           |
+| ------------ | ------------- | ------------------------ | ---------------- | -------------- |
+| install deps | `npm install` | `yarn install` or `yarn` | like classic     | `pnpm install` |
+| update deps  | `npm update`  | `yarn upgrade`           | `yarn semver up` | `pnpm update`  |
 
 ### 패키지 관련
 

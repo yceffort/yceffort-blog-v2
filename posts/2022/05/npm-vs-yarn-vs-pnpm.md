@@ -265,10 +265,16 @@ cli 커맨드는 워낙 많고 다양하여, 여기에서 모든 것을 다루�
 
 ### 의존성 관리
 
-|              | npm           | yarn classic             | yarn berry       | pnpm           |
-| ------------ | ------------- | ------------------------ | ---------------- | -------------- |
-| install deps | `npm install` | `yarn install` or `yarn` | like classic     | `pnpm install` |
-| update deps  | `npm update`  | `yarn upgrade`           | `yarn semver up` | `pnpm update`  |
+|                                              | npm                       | yarn classic               | yarn berry       | pnpm                     |
+| -------------------------------------------- | ------------------------- | -------------------------- | ---------------- | ------------------------ |
+| install deps                                 | `npm install`             | `yarn install` or `yarn`   | like classic     | `pnpm install`           |
+| update deps                                  | `npm update`              | `yarn upgrade`             | `yarn semver up` | `pnpm update`            |
+| update deps to latest                        | N/A                       | `yarn upgrade --latest`    | `yarn up`        | `pnpm update --latest`   |
+| update deps interactively                    | N/A                       | `yarn upgrade-interactive` | like classic     | `pnpm up -- interactive` |
+| add specific dep                             | `npm i react`             | `yarn add react`           | like classic     | `pnpm add react`         |
+| add specific dep in dev                      | `npm i -D babel`          | `yarn add -D babel`        | like Classic     | `pnpm add -D babel`      |
+| uninstall deps                               | `npm uninstall react`     | `yarn remove react`        | like Classic     | `pnpm remove react`      |
+| uninstall deps without update `package.json` | `npm uninstall --no-save` | N/A                        | N/A              | N/A                      |
 
 ### 패키지 관련
 

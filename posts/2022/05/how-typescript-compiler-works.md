@@ -5,7 +5,7 @@ tags:
   - javascript
 published: true
 date: 2022-05-15 08:32:39
-description: '그리고 이를 위협하는 swc...'
+description: 'clone 받아서 읽어보세여 재밌어여 (안재밌음)'
 ---
 
 ## Table of Contents
@@ -469,7 +469,7 @@ const message = 'Hello, world!'
   - `VariableDeclarationList`
     - `VariableDeclaration`
       - `StringKeyword` (`name`)
-      - 타입이 업ㅂ다! 🤔
+      - 타입이 없다! 🤔
       - `StringLiteral` (`initializer`)
 
 이 경우에는 간단하게 `initializer`의 타입을 비어 있는 타입쪽으로 이동 시키면 된다.
@@ -561,7 +561,7 @@ const message: string = 'Hello, world'
       - `StringKeyword` (type)
       - `StringLiteral` (initializer)
 
-**자바스크립트의 신택스 트리**
+_자바스크립트의 신택스 트리_
 
 - `VariableStatement`
   - `VariableDeclarationList`

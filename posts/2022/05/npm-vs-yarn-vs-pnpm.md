@@ -278,4 +278,19 @@ cli 커맨드는 워낙 많고 다양하여, 여기에서 모든 것을 다루�
 
 ### 패키지 관련
 
-## 일반적인 커맨드
+아래 예제는 [ntl](https://github.com/ruyadorno/ntl)과 같은 바이너리 파일 처럼, development 환경에서 유틸리티 도구를 구성하는 패키지를 관리하는 명령어를 나타낸다.
+
+yarn berry에서는 보안상의 이유로 패키지에서 지정한 바이너리 또는 `package.json`에 명시된 실행할 수 있다는 것을 염두해 두어야 한다. 이는 `pnpm`에서도 마찬가지다.
+
+|                                          | npm            | yarn classic         | yarn berry     | pnpm                    |
+| ---------------------------------------- | -------------- | -------------------- | -------------- | ----------------------- |
+| install, update, remove package globally | `npm i -g ntl` | `yarn global ad ntl` | N/A            | `pnpm add --global ntl` |
+| run binaries from terminal               | `npm exec ntl` | `yarn ntl`           | `yarn ntl`     | `pnpm ntl`              |
+| run binaries from script                 | `ntl`          | `ntl`                | `ntl`          | `ntl`                   |
+| dynamic package execution                | `npx ntl`      | N/A                  | `yarn dlx ntl` | `pnpm dlx ntl`          |
+
+## 자주 쓰이는 커맨드
+
+|         | npm           | yarn classic   | yarn berry         | pnpm           |
+| ------- | ------------- | -------------- | ------------------ | -------------- |
+| publish | `npm publish` | `yarn publish` | `yarn npm publish` | `pnpm publish` |

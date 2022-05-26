@@ -289,8 +289,55 @@ yarn berry에서는 보안상의 이유로 패키지에서 지정한 바이너�
 | run binaries from script                 | `ntl`          | `ntl`                | `ntl`          | `ntl`                   |
 | dynamic package execution                | `npx ntl`      | N/A                  | `yarn dlx ntl` | `pnpm dlx ntl`          |
 
-## 자주 쓰이는 커맨드
+### 자주 쓰이는 커맨드
 
-|         | npm           | yarn classic   | yarn berry         | pnpm           |
-| ------- | ------------- | -------------- | ------------------ | -------------- |
-| publish | `npm publish` | `yarn publish` | `yarn npm publish` | `pnpm publish` |
+|                       | npm               | yarn classic    | yarn berry                 | pnpm            |
+| --------------------- | ----------------- | --------------- | -------------------------- | --------------- |
+| publish               | `npm publish`     | `yarn publish`  | `yarn npm publish`         | `pnpm publish`  |
+| list installed deps   | `npm ls`          | `yarn list`     | like Classic               | `pnpm list`     |
+| list outdated deps    | `npm outdated`    | `yarn outdated` | `yarn upgrade-interactive` | `pnpm outdated` |
+| print info about deps | `npm explain ntl` | `yarn why ntl`  | like Classic               | `pnpm why ntl`  |
+| init project          | `npm init`        | `yarn init`     | `yarn init`                | `pnpm init`     |
+
+## 성능과 디스크 관리의 효율성
+
+성능은 의사결정을 하는데 있어 중요한 부분이다. 이 섹션에서는 각 프로젝트의 벤치 마크 성능을 다룬다.
+
+- https://p.datadoghq.eu/sb/d2wdprp9uki7gfks-c562c42f4dfd0ade4885690fa719c818?tpl_var_npm=%2A&tpl_var_pnpm=%2A&tpl_var_yarn-classic=%2A&tpl_var_yarn-modern=%2A&tpl_var_yarn-nm=%2A&tpl_var_yarn-pnpm=no&from_ts=1645791374255&to_ts=1653567374255&live=true
+- https://pnpm.io/benchmarks
+
+성능으로 미뤄 보건데, `yarn berry` + `Plug n Play strict`가 가장 설치도 빠르고 디스크 효율적인 모습을 보여주었고, 그다음으로는 pnpm이 뒤를 이었다.
+
+## 보안
+
+### npm
+
+npm은 그 역사가 오래된 만큼 사건 사고도 많았다. [과거 npm v5.7.0에서 파일시스템 권한을 바꿀 수 있는 버그](https://github.com/npm/npm/issues/19883)가 발견된 적도 있다. `sudo npm` 명령어를 사용하면, 시스템 파일의 소유권을 변경하게 되어 os를 사용할 수 없게된 적이 있었따.
+
+2018년에는 비트코인과 관련된 사건 사고도 있었다. [EventStream](https://www.npmjs.com/package/event-stream) [패키지 v3.3.6에서 악의적인 의존성이 추가되어, 개발자의 컴퓨터에서 비트코인을 훔치고자 하는 악의적인 코드가 존재한 바 있다.](https://blog.npmjs.org/post/180565383195/details-about-the-event-stream-incident.html)
+
+이러한 문제를 해결하기 위해, 요즘 최신버전의 npm 에서는 package-lock.json에서 SHA-512 알고리즘을 확인하여 설치하고자 하는 패키지의 무결성을 확인한다.
+
+전반적으로 npm은 사건사고가 많았던 것 만큼, 보안 문제에 각별히 신경을 많이 쓰고 있는 추세다.
+
+### yarn
+
+yarn classic, yarn berry 둘다 처음부터 `yarn.lock`에 지정된 체크섬을 활용하여 각 패키지의 무결성을 확인한다. 또한 `package.json` 내부에 선언되지 않은 의심스러운 패키지가 존재하면 설치가 중단된다.
+
+yarn berry는 이에 더해 [package.json에서 명시한 의존성의 바이너리 파일만 실행할 수 있다.](https://github.com/yarnpkg/berry/issues/2784#issuecomment-831825366) 이는 pnpm과 유사하다.
+
+### pnpm
+
+pnpm 또한 체크섬을 활용하여 패키지의 무결성을 확인한다. pnpm은 [npm과 yarn classic에서 이슈가 되는 패키지 호이스팅](https://www.mo4tech.com/deep-thoughts-on-modern-package-managers-why-do-i-now-recommend-pnpm-over-npm-yarn-2.html)을 하지 않기 때문에 이러한 문제를 피한다. 이 대신, 위험한 dependency 액세스의 위험성을 제거하는 내부에 중첩된 `node_modules`폴더를 생성한다. 즉, dependency가 package.json 에서 명시적으로 선언된 경우에만 다른 dependency에 액세스 할 수 있다.
+
+## 결론
+
+현재 대부분의 패키지 매니저들은 모두 사용하기에 무리가 없는 수준까지 기능이 구성되어 있다. 대부분의 패키지 매니저가 기능성 사이에서 동등함을 보이고 있다. 물론, 그 아래에서 동작하는 방식은 매우 다르다.
+
+pnpm은 npm과 비슷해보이지만, 종속성 관리 측면에서 매우 다른 모습을 보인다. pnpm을 사용하면 성능이 향상되고, 디스크 효율성을 극대화 할 수 있다. yarn classic도 훌륭한 선택지이지만, 레거시로 간주되고 가까운 미래에 지원이 중단될 수도 있는 가능성이 존재해서 선택하는 것을 추천하지는 않는다. yarn berry의 plug n play 는 완전히 새로운 혁신으로 다가왔지만, 아직 그 모든 잡재력을 달성한 것 같지는 않다. 그럼에도 요즘 사람들이 많이 쓰는 패키지 매니저는 yarn berry의 pnp 인 것으로 보인다. 성능과 디스크 효율성, 속도 모두에서 뛰어난 모습을 보이고 있다.
+
+## 참고
+
+- https://blog.logrocket.com/javascript-package-managers-compared/
+- https://medium.com/wantedjobs/yarn-berry-%EC%A0%81%EC%9A%A9%EA%B8%B0-1-e4347be5987
+- https://toss.tech/article/node-modules-and-yarn-berry

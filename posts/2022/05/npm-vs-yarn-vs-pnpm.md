@@ -312,7 +312,7 @@ yarn berry에서는 보안상의 이유로 패키지에서 지정한 바이너�
 
 ### npm
 
-npm은 그 역사가 오래된 만큼 사건 사고도 많았다. [과거 npm v5.7.0에서 파일시스템 권한을 바꿀 수 있는 버그](https://github.com/npm/npm/issues/19883)가 발견된 적도 있다. `sudo npm` 명령어를 사용하면, 시스템 파일의 소유권을 변경하게 되어 os를 사용할 수 없게된 적이 있었따.
+npm은 그 역사가 오래된 만큼 사건 사고도 많았다. [과거 npm v5.7.0에서 파일시스템 권한을 바꿀 수 있는 버그](https://github.com/npm/npm/issues/19883)가 발견된 적도 있다. `sudo npm` 명령어를 사용하면, 시스템 파일의 소유권을 변경하게 되어 os를 사용할 수 없게된 적이 있었다.
 
 2018년에는 비트코인과 관련된 사건 사고도 있었다. [EventStream](https://www.npmjs.com/package/event-stream) [패키지 v3.3.6에서 악의적인 의존성이 추가되어, 개발자의 컴퓨터에서 비트코인을 훔치고자 하는 악의적인 코드가 존재한 바 있다.](https://blog.npmjs.org/post/180565383195/details-about-the-event-stream-incident.html)
 

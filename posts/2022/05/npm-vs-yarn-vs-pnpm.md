@@ -343,3 +343,5 @@ pnpm은 npm과 비슷해보이지만, 종속성 관리 측면에서 매우 다�
 - https://blog.logrocket.com/javascript-package-managers-compared/
 - https://medium.com/wantedjobs/yarn-berry-%EC%A0%81%EC%9A%A9%EA%B8%B0-1-e4347be5987
 - https://toss.tech/article/node-modules-and-yarn-berry
+- https://d2.naver.com/helloworld/0923884
+- https://d2.naver.com/helloworld/7553804

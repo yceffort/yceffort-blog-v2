@@ -26,6 +26,21 @@ a {
   overflow-x: auto;
 }
 
+h2 > a > span.icon.icon-link {
+  width: 18px;
+  height: 18px;
+}
+
+h3 > a > span.icon.icon-link {
+  width: 15px;
+  height: 15px;
+}
+
+h4 > a > span.icon.icon-link {
+  width: 12px;
+  height: 12px;
+}
+
 span.icon.icon-link {
   display: inline-block;
   width: 15px;

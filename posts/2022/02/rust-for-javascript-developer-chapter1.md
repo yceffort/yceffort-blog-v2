@@ -29,7 +29,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 기본으로 설치하면 알아서 잘 설치되는 것을 볼 수 있다. 몇가지 명령어를 사용해보자.
 
 - `rustup show`: 현재 시스템에 설치된 러스트 버전을 알 수 있다.
-- `rustup completions`: cli에서 tab 등으로 자동완서응ㄹ 할 수 있도록 도와주는 도구. `rustup completions zsh`를 입력하면 `zsh`에서 자동완성을 할 수 있도록 도와준다.
+- `rustup completions`: cli에서 tab 등으로 자동완성을 할 수 있도록 도와주는 도구. `rustup completions zsh`를 입력하면 `zsh`에서 자동완성을 할 수 있도록 도와준다.
 - `rustup update`: 가장 최신버전으로 업데이트 한다.
 - `rustup install [version]`: 특정 버전, stable, nightly 버전 등으로 설치할 수 있다.
 

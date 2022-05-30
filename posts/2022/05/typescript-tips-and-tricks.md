@@ -4,12 +4,12 @@ tags:
   - typescript
 published: true
 date: 2022-05-08 04:12:01
-description: '\"타입\"스크립트니까 타입만 잘 할줄 알면 됩니다.'
+description: '"타입"스크립트니까 타입을 잘 할줄 알아야 합니다.'
 ---
 
 ### 제네릭 활용하기
 
-테이블 컴포넌트가 있고, 여기에 props를 할당해서 그린다고 생각해보면, 보통은 이런 코드가 나올 것이다.
+테이블 컴포넌트가 있고, 여기에 props를 할당해서 그린다고 생각해보면, 보통은 이런 코드가 나올 po`것이다.
 
 ```tsx
 import React from 'react'

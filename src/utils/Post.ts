@@ -1,7 +1,6 @@
 import fs from 'fs'
 
 import { sync } from 'glob'
-import memoize from 'memoizee'
 import frontMatter from 'front-matter'
 
 import { FrontMatter, Post, TagWithCount } from '../type'
@@ -10,7 +9,7 @@ const DIR_REPLACE_STRING = '/posts'
 
 const POST_PATH = `${process.cwd()}${DIR_REPLACE_STRING}`
 
-async function retreiveAllPosts(): Promise<Array<Post>> {
+export async function getAllPosts(): Promise<Array<Post>> {
   const files = sync(`${POST_PATH}/**/*.md*`).reverse()
 
   const posts = files
@@ -56,8 +55,6 @@ async function retreiveAllPosts(): Promise<Array<Post>> {
 
   return posts
 }
-
-export const getAllPosts: () => Promise<Array<Post>> = memoize(retreiveAllPosts)
 
 export async function getAllTagsFromPosts(): Promise<Array<TagWithCount>> {
   const tags: string[] = (await getAllPosts()).reduce<string[]>(

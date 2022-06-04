@@ -15,13 +15,13 @@ description: '갑자기 docker를 파는 이유는 22'
 
 ## `FROM`
 
-https://docs.docker.com/engine/reference/builder/#from
+[https://docs.docker.com/engine/reference/builder/#from](https://docs.docker.com/engine/reference/builder/#from)
 
 가능하면, 현재 제공되고 있는 공식 이미지를 사용하는 것이 좋다. 알파인 이미지는 리눅스 배포 판 중에서 크키가 매우작고 (6mb) 엄격하게 관리되고 있기 때문에 사용을 추천한다.
 
 ## `LABEL`
 
-https://docs.docker.com/config/labels-custom-metadata/
+[https://docs.docker.com/config/labels-custom-metadata/](https://docs.docker.com/config/labels-custom-metadata/)
 
 이미지에 레이블을 추가하여 프로젝트별 이미지 구성, 라이센스 정보 기록, 자동화 정보 등 기타 여러가지 정보를 기록할 수 있다. 각 레이블은 `LABEL`로 시작하고, 하나 이상의 키-값 쌍으로 추가하면 된다.
 
@@ -52,12 +52,12 @@ LABEL vendor=ACME\ Incorporated \
       com.example.release-date="2015-02-12"
 ```
 
-- https://docs.docker.com/config/labels-custom-metadata/
-- https://docs.docker.com/engine/reference/builder/#label
+- [https://docs.docker.com/config/labels-custom-metadata/](https://docs.docker.com/config/labels-custom-metadata/)
+- [https://docs.docker.com/engine/reference/builder/#label](https://docs.docker.com/engine/reference/builder/#label)
 
 ## `RUN`
 
-https://docs.docker.com/engine/reference/builder/#run
+[https://docs.docker.com/engine/reference/builder/#run](https://docs.docker.com/engine/reference/builder/#run)
 
 길거나 복잡한 `RUN` 구문은 백슬래시를 활용하여 여러줄로 분할하는 것이 `Dockerfile` 관리에 좋다.
 
@@ -139,7 +139,7 @@ RUN apt-get update && apt-get install -y \
 RUN wget -O - https://some.site | wc -l > /number
 ```
 
-도커는 `/bin/sh -c ` 커맨드를 사용하여, 이러한 명령어를 실행한다. 이 명령어는 마지막 작업의 종료코드만 확인하여 성공 실패 여부를 결정한다. 위의 예제에서 살펴보면, 이 빌드 단계는 `wget` 명령어가 실패하더라도, `wc -l` 명령어가 성공하면 새로운 이미지를 만들어 낼 것이다.
+도커는 `/bin/sh -c` 커맨드를 사용하여, 이러한 명령어를 실행한다. 이 명령어는 마지막 작업의 종료코드만 확인하여 성공 실패 여부를 결정한다. 위의 예제에서 살펴보면, 이 빌드 단계는 `wget` 명령어가 실패하더라도, `wc -l` 명령어가 성공하면 새로운 이미지를 만들어 낼 것이다.
 
 파이프의 어느 단계에서든 오류로 인해 명령이 실패하도록 하려면, `set -o pipefail &&`를 앞에 추가하면 된다.
 
@@ -155,7 +155,7 @@ RUN ["/bin/bash", "-c", "set -o pipefail && wget -O - https://some.site | wc -l 
 
 ## `CMD`
 
-https://docs.docker.com/engine/reference/builder/#cmd
+[https://docs.docker.com/engine/reference/builder/#cmd](https://docs.docker.com/engine/reference/builder/#cmd)
 
 `CMD` 는 나열되어 있는 인수와 함께, 이미지에 포함되어 있는 소프트웨어를 실행하는데 사용된다. CMD는 거의 대부분 항상 `["실행 파일", "param1", "param2"...]` 와 같은 형태로 사용되어야 한다.
 
@@ -163,7 +163,7 @@ https://docs.docker.com/engine/reference/builder/#cmd
 
 ## `EXPOSE`
 
-https://docs.docker.com/engine/reference/builder/#expose
+[https://docs.docker.com/engine/reference/builder/#expose](https://docs.docker.com/engine/reference/builder/#expose)
 
 `EXPOSE`는 컨테이너가 연결을 받는 포트를 나타낸다. 따라서 애플리케이션에서 공통으로 사용되는 기존 포트를 사용해야 한다. (아파치 `EXPOSE 80`, 몽고 디비 `EXPOSE 27017`과 같이)
 
@@ -171,7 +171,7 @@ https://docs.docker.com/engine/reference/builder/#expose
 
 ## `ENV`
 
-https://docs.docker.com/engine/reference/builder/#env
+[https://docs.docker.com/engine/reference/builder/#env](https://docs.docker.com/engine/reference/builder/#env)
 
 `ENV`를 사용하여 컨테이너가 설치하는 소프트웨어의 PATH 환경변수를 업데이트 할 수 있다. 예를 들어, `ENV PATH=/usr/local/nginx/bin:$PATH`는 `CMD ["nginx"]` 명령어가 실행될 수 있도록 해준다.
 
@@ -217,8 +217,8 @@ CMD sh
 
 ## `ADD` or `COPY`
 
-- https://docs.docker.com/engine/reference/builder/#add
-- https://docs.docker.com/engine/reference/builder/#copy
+- [https://docs.docker.com/engine/reference/builder/#add](https://docs.docker.com/engine/reference/builder/#add)
+- [https://docs.docker.com/engine/reference/builder/#copy](https://docs.docker.com/engine/reference/builder/#copy)
 
 `ADD` `COPY` 두 명령어가 기능적으로 거의 유사하지만, `COPY`가 일반적으로 더 사용된다. 그 이유는 `ADD` 보다 더 순수하기 때문이다. `COPY`는 단순히 컨테이너에 있는 로컬 파일을 복사할 뿐이다. 반면 `ADD`는 몇가지 추가적이 있다. (로컬 전용 tar 파일 해제, 원격 URL 지원 등) 따라서 `ADD`는 `ADD rootfs.tar.xz /` 와 같은 상황에서 사용하는 것이 좋다.
 
@@ -255,7 +255,7 @@ RUN mkdir -p /usr/src/things \
 
 ## `ENTRYPOINT`
 
-https://docs.docker.com/engine/reference/builder/#entrypoint
+[https://docs.docker.com/engine/reference/builder/#entrypoint](https://docs.docker.com/engine/reference/builder/#entrypoint)
 
 `ENTRYPOINT`를 쓰는 가장 좋은 방법은 이미지의 메인 커맨드를 설정해두어, 해당 명령어를 기본으로 사용할 수 있게 하는 것이다.
 
@@ -329,13 +329,13 @@ CMD ["postgres"]
 
 ## `VOLUME`
 
-https://docs.docker.com/engine/reference/builder/#volume
+[https://docs.docker.com/engine/reference/builder/#volume](https://docs.docker.com/engine/reference/builder/#volume)
 
 `VOLUME`은 도커 컨테이너에서 만든 데이터 저장소 영역, 설정 저장소, 또는 파일이나 폴더를 노출하는데 사용해야 한다. 이미지의 변경 가능한 부분 및 사용자가 수정가능한 부분에는 `VOLUME`을 사용하는 것이 좋다.
 
 ## `USER`
 
-https://docs.docker.com/engine/reference/builder/#user
+[https://docs.docker.com/engine/reference/builder/#user](https://docs.docker.com/engine/reference/builder/#user)
 
 서비스를 실행하는데 별도로 권한이 필요 없다면, `USER` 를 사용하여 루트가 아닌 사용자로 변경해야 한다. `RUN groupadd -r postgres && useradd --no-log-init -r -g postgres postgres`와 같은 명령어로 유저나 그룹을 생성할 수 있다.
 
@@ -345,13 +345,13 @@ https://docs.docker.com/engine/reference/builder/#user
 
 ## `WORKDIR`
 
-https://docs.docker.com/engine/reference/builder/#workdir
+[https://docs.docker.com/engine/reference/builder/#workdir](https://docs.docker.com/engine/reference/builder/#workdir)
 
 명확성, 그리고 신뢰성을 위해 `WORKDIR`은 항상 절대 경로를 사용해야 한다. 읽기 어렵고, 유지보수도 어려운 `RUN cd … && do-something` 대신 `WORKDIR`을 사용하자.
 
 ## `ONBUILD`
 
-https://docs.docker.com/engine/reference/builder/#onbuild
+[https://docs.docker.com/engine/reference/builder/#onbuild](https://docs.docker.com/engine/reference/builder/#onbuild)
 
 `ONBUILD` 명령은 현재 `Dockerfile`의 빌드가 완료된 후 실행된다. `ONBUILD`는 현재 이미지에서 파생된 하위 이미지에서 실행된다. `ONBUILD` 명령은 상위 `Dockerfile`이 하위 `Dockerfile`에 제공하는 명령이라고 보면 된다.
 

@@ -44,3 +44,11 @@ node_modules/
 
 functions/env.json
 .lighthouseci
+
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions

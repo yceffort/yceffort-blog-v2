@@ -1,10 +1,10 @@
 import { promisify } from 'util'
 
 import { imageSize } from 'image-size'
-import { Processor } from 'unified'
-import { Node } from 'unist'
+import type { Processor } from 'unified'
+import type { Node } from 'unist'
 import { visit } from 'unist-util-visit'
-import { VFile } from 'vfile'
+import type { VFile } from 'vfile'
 
 const sizeOf = promisify(imageSize)
 

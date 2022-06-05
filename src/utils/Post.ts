@@ -56,9 +56,14 @@ export async function getAllPosts(): Promise<Array<Post>> {
   return posts
 }
 
+interface Tag {
+  tag: string
+  count: number
+}
+
 export async function getAllTagsFromPosts(): Promise<Array<TagWithCount>> {
   const tags: string[] = (await getAllPosts()).reduce<string[]>(
-    (prev, curr) => {
+    (prev: string[], curr: Post) => {
       curr.frontMatter.tags.forEach((tag: string) => {
         prev.push(tag)
       })
@@ -72,5 +77,5 @@ export async function getAllTagsFromPosts(): Promise<Array<TagWithCount>> {
     count: tags.filter((t) => t === tag).length,
   }))
 
-  return tagWithCount.sort((a, b) => b.count - a.count)
+  return tagWithCount.sort((a: Tag, b: Tag) => b.count - a.count)
 }

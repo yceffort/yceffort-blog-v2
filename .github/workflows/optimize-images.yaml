@@ -12,3 +12,4 @@ jobs:
         uses: calibreapp/image-actions@main
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
+          ignorePaths: 'LCPSample.jpeg'

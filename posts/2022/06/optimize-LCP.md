@@ -34,3 +34,45 @@ LCP를 최적화 하기전에, 먼저 그 정의를 살펴보자.
 > https://web.dev/lcp/
 
 여기에서 알아둬야 할 점 중 하나는, 구글 (라이트 하우스)는 LCP가 빨리 도달하기만 하면, 그 방법이야 어찌되었던 크게 신경쓰지 않는 다는 것이다. 페이지 로딩 라이프사이클과 LCP 사이에서는 다음과 같은 많은 일 들이 일어난다.
+
+- DNS, TCP, TLS
+- 리다이렉트
+- TTFB
+- First Paint
+- FCP
+
+만약 이것들 중 어떤 것이라도 느리다면, LCP에는 안좋은 영향을 미친다. 이러한 것들을 가능한한 낮게 얻을 수 있다면 LCP에 도움이 될 것이다.
+
+## LCP 최적화 기법
+
+이미지 기반의 LCP가 있다면, 적절한 파일 포맷, 적절한 크기, 그리고 또 압축이 잘되어 있는지 확인해봐야 한다. 그리고 LCP 요소들은 3MB TIFF 를 넘어서는 안된다.
+
+물론 가장 좋은 방법은 LCP를 텍스트 기반으로 만드는 것이다. 당연하게도 텍스트는 이미지보다 훨씬 크기가 작고, LCP 수치를 높이는데 많은 도움을 준다.
+
+물론, 이미지를 빼는 선택을 하기에는 어려운 상황들이 많을 것이다. 당장에 이미지를 뺴고 글자를 채우자고 한다면 그 누구도 좋아하지 않을 것이다. 그렇다면 이 것을 어떻게 최적화 하면 좋을지 살펴보자.
+
+LCP 내의 이미지를 선언하는 방법들은 다음과 같은 것이 있다.
+
+- `<img />`
+- `<svg />` 내부의 `<img />`
+- `<video />`의 poster
+- HTMLElement에 css로 background image `url()` 를 사용하여 이미지를 깔아 놓은 경우
+- 텍스트 노드 또는 인라인 레벨의 텍스트를 포함하는 [블록 레벨](https://developer.mozilla.org/ko/docs/Web/HTML/Block-level_elements) HTMLElement
+
+```html
+<img src="lcp.jpg" ... />
+```
+
+```html
+<svg xmlns="http://www.w3.org/1000/svg">
+  <image href="lcp.jpg" ... />
+</svg>
+```
+
+```html
+<video poster="lcp.jpg" ...></video>
+```
+
+```html
+<div style="background-image: url(lcp.jpg)">...</div>
+```

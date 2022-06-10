@@ -5,7 +5,7 @@ tags:
   - browser
 published: true
 date: 2022-06-09 00:21:56
-description: ''
+description: 'Core Web Vitals LCP FID CLS'
 ---
 
 ## Table of Contents

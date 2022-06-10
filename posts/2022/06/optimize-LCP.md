@@ -63,16 +63,24 @@ LCP 내의 이미지를 선언하는 방법들은 다음과 같은 것이 있다
 <img src="lcp.jpg" ... />
 ```
 
+https://yceffort.kr/LCP/img.html
+
 ```html
 <svg xmlns="http://www.w3.org/1000/svg">
   <image href="lcp.jpg" ... />
 </svg>
 ```
 
+https://yceffort.kr/LCP/svg.html
+
 ```html
 <video poster="lcp.jpg" ...></video>
+
+https://yceffort.kr/LCP/video.html
 ```
 
 ```html
 <div style="background-image: url(lcp.jpg)">...</div>
 ```
+
+https://yceffort.kr/LCP/background-image.html

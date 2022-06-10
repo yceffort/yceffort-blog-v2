@@ -84,3 +84,5 @@ https://yceffort.kr/LCP/video.html
 ```
 
 https://yceffort.kr/LCP/background-image.html
+
+각 페이지를 https://www.webpagetest.org/ 에서 테스트 해보자.

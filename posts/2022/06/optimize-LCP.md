@@ -134,3 +134,5 @@ svg 내부에 있는 img는 프리로드 스캐너에서 숨겨진 것 처럼 �
 #### `background-image: url()`
 
 ![LCP_css](./images/LCP_css.png)
+
+CSS에 정의된 리소스 (url 을 통해 요청된 모든 리소스) 는 기본적으로 느리다. 여기서 말하는 리소스는 background-image과 web font 등이다.

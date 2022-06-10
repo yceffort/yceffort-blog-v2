@@ -65,7 +65,7 @@
     "@types/react": "^17.0.43",
     "autoprefixer": "^10.4.4",
     "eslint-config-next": "^12.1.4",
-    "husky": "^7.0.4",
+    "husky": "^8.0.0",
     "lint-staged": "^12.3.7",
     "next-remote-watch": "^1.0.0",
     "postcss": "^8.4.12",

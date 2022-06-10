@@ -59,6 +59,8 @@ LCP 내의 이미지를 선언하는 방법들은 다음과 같은 것이 있다
 - HTMLElement에 css로 background image `url()` 를 사용하여 이미지를 깔아 놓은 경우
 - 텍스트 노드 또는 인라인 레벨의 텍스트를 포함하는 [블록 레벨](https://developer.mozilla.org/ko/docs/Web/HTML/Block-level_elements) HTMLElement
 
+### 테스트
+
 ```html
 <img src="lcp.jpg" ... />
 ```
@@ -86,3 +88,49 @@ https://yceffort.kr/LCP/video.html
 https://yceffort.kr/LCP/background-image.html
 
 각 페이지를 https://www.webpagetest.org/ 에서 테스트 해보자.
+
+### 테스트 결과
+
+![LCP_result](./images/LCP_result.png)
+
+![LCP_progress](./images/LCP_Progress.png)
+
+https://www.webpagetest.org/video/compare.php?tests=220610_AiDc96_7AZ%2C220610_AiDc3F_7B4%2C220610_BiDc9B_7JJ%2C220610_AiDc1M_7B6&thumbSize=150&ival=500&end=visual
+
+#### `<img />`
+
+![LCP_img](./images/LCP_img.png)
+
+이미지가 LCP에서 차지하는 비중이 높다면, 가장 먼저 선택해야할 방법이다. `<img />`는 특별하게 개발자가 망치지 않는 한, [프리로드 스캐너](https://andydavies.me/blog/2013/10/22/how-the-browser-pre-loader-makes-pages-load-faster/)에 의해 빠르게 요청되기 때문에, 병렬적으로 요청하여 미리 그려질 수 있다. (블로킹 리소스와 함께도 가능하다)
+
+#### `<picture />`, `<source />`
+
+`<picture />`가 `<img />`와 같은 방식으로 동작한 다는 점을 알고 있어야 한다. 따라서 `srcset` `size` 속성에 상세하게 작성해야 한다. 이를 정확히 제공하면, 앞서 언급한 프리로드 스캐너를 통해 이미지에 대한 충분한 정보를 브라우저에 제공하게 되면, 레이아웃을 기다릴 필요가 없어진다. (물론 기술적으로 연산에 필요한 오버헤드는 존재할 수 있다.)
+
+https://developer.mozilla.org/en-US/docs/Web/HTML/Element/picture
+
+#### `<svg/>`
+
+![LCP_svg](./images/LCP_svg.png)
+
+svg 내부의 이미지는 두가지 흥미로운 동작이 있다. 먼저 한가지는 크롬이 svg 내부의 이미지가 미처 불러와지지 않았음에도 LCP가 완료된 것 처럼 판단한다는 것이다. 상황에 따라 점수만 먹고 튀고 싶다면(?) 이 방법을 응용할 수도 있다.
+
+![LCP_chrome_bug](./images/LCP_chrome_bug.png)
+
+> 물론 이는 어디까지나 현재 블로그 글을 작성 중인 102 버전 이하의 동작으로, 이후에는 수정될 수도 있다.
+
+어쨌든 이는 LCP 상의 버그 일뿐, 실제로 브라우저가 리소스를 처리하는 방법에는 영향을 주지는 않는다. 위 스크린샷에서도 볼 수 있는 것처럼, 워터폴 방식으로 느리게 불러오는 것을 볼 수 있다.
+
+svg 내부에 있는 img는 프리로드 스캐너에서 숨겨진 것 처럼 보인다. 즉, 내부의 `href`는 브라우저의 기본 파서가 이를 발견할 떄까지 구분 분석되지 않는다. 이를 미루어 보아 프리로드 스캐너는 SVG가 아닌 HTML 를 스캔하기 위해 만들어졌다는 것을 알 수 있다.
+
+#### `<video />`의 `poster`
+
+![LCP_video](./images/LCP_video.png)
+
+사실 `video` 의 `poster` 가 이렇게 선방할 줄은 몰랐다. 이는 `img`와 동일하게 동작하는 것으로 보이며, 프리로드 스캐너에 의해 조기에 발견된다. 이는 본질적으로 poster가 굉장히 빠르다는 것을 의미한다.
+
+그리고 또다른 소식 중 하나는, `poster`가 없는 `video`는 첫번쨰 프레임을 LCP로 가져가려는 의도가 있다는 것이다. https://bugs.chromium.org/p/chromium/issues/detail?id=1289664 즉 동영상을 실제로 로딩해서 LCP로 가져가려 한다는 뜻인데, 아무래도 동영상은 이미지보다 용량이 크므로, LCP로 동영상을 가져가기 위해서는 `poster`가 필수적으로 보인다.
+
+#### `background-image: url()`
+
+![LCP_css](./images/LCP_css.png)

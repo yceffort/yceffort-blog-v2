@@ -93,7 +93,7 @@ https://yceffort.kr/LCP/background-image.html
 
 ![LCP_result](./images/LCP_result.png)
 
-![LCP_progress](./images/LCP_Progress.png)
+![LCP_progress](./images/LCP_progress.png)
 
 https://www.webpagetest.org/video/compare.php?tests=220610_AiDc96_7AZ%2C220610_AiDc3F_7B4%2C220610_BiDc9B_7JJ%2C220610_AiDc1M_7B6&thumbSize=150&ival=500&end=visual
 

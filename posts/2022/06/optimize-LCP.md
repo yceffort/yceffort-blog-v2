@@ -5,7 +5,7 @@ tags:
   - browser
 published: true
 date: 2022-06-09 00:21:56
-description: 'Core Web Vitals LCP FID CLS'
+description: '브라우저 동작 방식을 이해하기'
 ---
 
 ## Table of Contents

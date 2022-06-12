@@ -119,3 +119,70 @@ CSS 파일의 경우, [스타일링이 적용되지 않는 콘텐츠가 잠깐 �
 ## 자바스크립트 Lazy Loading
 
 레이지 로딩은 데이터를 불러오기 위한 효과적인 방법으로 일반적으로 이미지에 적용된다. [그러나 때때로 이 레이지 로딩이 above the fold 영역에 있는 이미지에 잘못 적용될 수 있다.](https://yceffort.kr/2022/06/optimize-LCP#lcp-%EB%A5%BC-lazy-load-%ED%95%98%EC%A7%80-%EB%A7%90-%EA%B2%83)
+
+이로인해 프리로드 스캐너가 관련된 리소스를 검색하는 문제에 잠재적으로 문제를 일으킬 수 있으며, 이미지라면 이미지에 대한 참조를 검색하고 다운로드 하고 디코딩하며 표시하는데 걸리는 시간을 불필요하게 지연시킬 수 있다.
+
+```html
+<img data-src="/sand-wasp.jpg" alt="Sand Wasp" width="384" height="255" />
+```
+
+이 `data-` 자바스크립트에서 주로 활용되는 레이지 로더다. 이미지가 뷰포트로 스캐너 된다면 `lazy-loader` 는 `data-` 를 제거하여 정상적인 `src`로 바꾼다. 그러면 브라우저는 이 리소스를 불러올 것이다.
+
+이 패턴은 페이지 최초 로딩에 걸리지 않는 이미지라면 크게 문제되지 않는다. 그러나 문제는 프리로더 스캐너가 `data-src`와 같은 것은 읽지 않기 때문에 이미지를 일찍 검색하지 못한다. 더 나쁜 것은 이 이미지는 `lazy-loader`가 자바스크립트로 다운로드, 컴파일, 실행 될 때 까지 지연된다.
+
+[웹페이지](https://preload-scanner-fights.glitch.me/js-lazy-load-suboptimal.html)
+
+[결과](https://www.webpagetest.org/result/220612_BiDcPB_2JM/)
+
+![waterfall-chart](https://www.webpagetest.org/waterfall.php?test=220612_BiDcPB_2JM&run=1&cached=&step=1)
+
+이미지의 크기, 뷰포트의 크기에 따라 이 이미지는 LCP에 걸릴수도 있다. 프리로드 스캐너가 미리 이미지 리소스를 가져올 수 없는 경우에는 LCP에 피해를 입을 것이다.
+
+이미지 마크업을 다음과 같이 바꿔보자.
+
+```html
+<img src="/sand-wasp.jpg" alt="Sand Wasp" width="384" height="255" />
+```
+
+이렇게 최적화 한다면 프리로드 스캐너가 이미지 리소스를 빠르게 검색하고 가져올 수 있기 때문에, LCP에 걸리는 이미지라면 매우 좋은 방법이 될 것이다.
+
+[웹페이지](https://preload-scanner-fights.glitch.me/js-lazy-load-optimal.html)
+
+[결과](https://www.webpagetest.org/result/220612_AiDcMW_2PY/)
+
+![waterfall-chart](https://www.webpagetest.org/waterfall.php?test=220612_AiDcMW_2PY&run=1&cached=&step=1)
+
+이 결과 LCP가 향상되었음을 알 수 있다. 물론 그다지 드라마틱한 효과가 아닌것처럼 보일 수 있지만, 수정해야하는 양이 작고 매우 쉽다. LCP 내 리소스는 다른 많은 자원들과 함께 대역폭을 놓고 경쟁해야하는 경우가 빈번해 지므로 이와 같은 최적화가 중요해지고 있다.
+
+> 이미지 뿐만 아니라 `<iframe>` 도 이와같은 영향을 받을 수 있으며, `<iframe/>`는 하위 리소스가더 많기 때문에 성능에 더 심한 영향을 미칠 수 있다.
+
+## CSS background image
+
+브라우저 프리로드 스캐너는 마크업을 스캔한다. 그러나 프리로드 스캐너는 CSS에 있는 `background-image` 속성에 있는 리소스와 같은 타입의 리소스는 검색하지 않는다.
+
+HTML과 마찬가지로 브라우저는 CSSOM으로 알려진 자체 객체 모델로 CSSOM을 처리한다. 만약 CSSOM에 외부 리소스가 발견된다면, 그런 자원들은 프리로드 스캐너가 아닌 발견된 시점에 리퀘스트가 일어난다.
+
+[웹페이지](https://preload-scanner-fights.glitch.me/css-background-image-no-preload.html)
+
+[결과](https://www.webpagetest.org/result/220612_AiDcCK_2TG/)
+
+![waterfall-chart](https://www.webpagetest.org/waterfall.php?test=220612_AiDcCK_2TG&run=1&cached=&step=1)
+
+이 경우에는 프리로드 스캐너가 관여하지 않는다. 그렇지만서도, 만약 LCP에 CSS background-image가 존재한다면, 아무래도 미리 로드되기를 바랄 것이다.
+
+```html
+<!-- <head> 태그 안, 스타일시트 밑에 이 태그를 삽입한다면 로딩에 방해되지 않고 프리로드 스캐너에 의해 미리 발견될 것이다. -->
+<link rel="preload" as="image" href="lcp-image.jpg" />
+```
+
+이 `rel=preload` 힌트는 작지만, 브라우저가 이미지를 더 빠르게 발견하는데 도움이 된다.
+
+[웹페이지](https://preload-scanner-fights.glitch.me/css-background-image-with-preload.html)
+
+[결과](https://www.webpagetest.org/result/220612_BiDcV2_2T8/)
+
+![waterfall-chart](https://www.webpagetest.org/waterfall.php?test=220612_BiDcV2_2T8&run=1&cached=&step=1)
+
+`rel=preload`를 사용하면 LCP를 빠르게 발견하여 LCP 시간이 단축된다. 이 힌트가 이 문제를 해결하는데 도움이 되었지만, 더 나은 방법도 있다. `<image>`를 사용하면 뷰포트에 적합한 이미지를 로드하는 동시에 프리로드 스캐너가 해당 이미지를 검색할 수 있다.
+
+## 마크업을 클라이언트 사이드 자바스크립트에서 렌더링

@@ -86,7 +86,7 @@ cloud function은 slack, survey monkey, jandi 등의 웹 훅 용으로 유용하
 
 ![cloud functions](./images/cloud-functions.png)
 
-[최근에는 블로그 썸네일 생성기로도 사용하기도 했다.](https://yceffort.kr/2020/12/generate-serverless-thumbnail) 감사합니다. 다음엔 꼭 픽셀 폰 싸서 보답하겠습니다.
+[최근에는 블로그 썸네일 생성기로도 사용하기도 했다.](/2020/12/generate-serverless-thumbnail) 감사합니다. 다음엔 꼭 픽셀 폰 싸서 보답하겠습니다.
 
 ### vercel
 

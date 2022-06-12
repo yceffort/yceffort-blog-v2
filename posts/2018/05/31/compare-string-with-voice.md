@@ -11,7 +11,7 @@ slug: /2018/05/31/compare-string-with-voice/
 template: post
 ---
 
-앞선 [포스팅](https://yceffort.kr/2018/05/31/Levenshtein-distance) 을 통해서 두 String을 문자열 기반으로 분석하였을때. 유사도를 어떻게 측정하는지 알아보았다.
+앞선 [포스팅](/2018/05/31/Levenshtein-distance) 을 통해서 두 String을 문자열 기반으로 분석하였을때. 유사도를 어떻게 측정하는지 알아보았다.
 
 그러나 음성인식으로 String을 비교 했을 때,  다음과 같은 문제에 직면하였다.
 

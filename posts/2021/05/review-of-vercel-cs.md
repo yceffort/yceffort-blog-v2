@@ -147,7 +147,7 @@ imageNode.value = `<Image
 - https://github.com/vercel/next.js/issues/23894
 - https://github.com/vercel/next.js/issues/23668
 
-추가로 모든 이미지들에 대해서 최적화 작업을 진행했다. [이 포스트](https://yceffort.kr/2021/05/compress-all-images-in-directory)가 나온건 그 때문이었다.
+추가로 모든 이미지들에 대해서 최적화 작업을 진행했다. [이 포스트](/2021/05/compress-all-images-in-directory)가 나온건 그 때문이었다.
 
 ## 마치며
 

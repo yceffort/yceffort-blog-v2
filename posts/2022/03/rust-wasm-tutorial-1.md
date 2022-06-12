@@ -77,7 +77,7 @@ WebAssembly는 자바스크립트와 다른 언어지만, 자바스크립트를 
 
 ### 자바스크립트와 비슷한 생태계
 
-[이전에도 언급했던 것](https://yceffort.kr/2022/02/rust-for-javascript-developer-chapter1) 처럼 자바스크립트와 러스트는 비교적 비슷한 생태계를 가지고 있다.
+[이전에도 언급했던 것](/2022/02/rust-for-javascript-developer-chapter1) 처럼 자바스크립트와 러스트는 비교적 비슷한 생태계를 가지고 있다.
 
 ### Web Assembly를 위한 다양한 도구
 

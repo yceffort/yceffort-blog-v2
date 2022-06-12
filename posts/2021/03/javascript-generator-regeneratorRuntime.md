@@ -7,7 +7,7 @@ date: 2021-03-09 20:43:10
 description: '아직도 자바스크립트 산을 기어 올라가는 중'
 ---
 
-[이 전에 generator에 대해서 설명한 적이 있다.](https://yceffort.kr/2020/05/javascript-generator) 이번 포스팅에서는 제네레이터의 설명보다는, 이와 관련된 개념적인 이해와 제네레이터를 사용하기 위해 폴리필로 쓰이는 regeneratorRuntime에 대한 이야기를 해보려고한다.
+[이 전에 generator에 대해서 설명한 적이 있다.](/2020/05/javascript-generator) 이번 포스팅에서는 제네레이터의 설명보다는, 이와 관련된 개념적인 이해와 제네레이터를 사용하기 위해 폴리필로 쓰이는 regeneratorRuntime에 대한 이야기를 해보려고한다.
 
 ## 블로킹 하지 않는 다는 것
 

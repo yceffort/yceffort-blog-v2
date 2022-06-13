@@ -3,6 +3,20 @@ const createConfig = require('@titicaca/eslint-config-triple/create-config')
 const { extends: extendConfigs, overrides } = createConfig({
   type: 'frontend',
   project: './tsconfig.json',
+  allowedNames: [
+    'cloud_name',
+    'api_key',
+    'api_secret',
+    'access_type',
+    'public_id',
+    'unique_filename',
+    'client_email',
+    'private_key',
+    'project_id',
+    'event_category',
+    'event_label',
+    'non_interaction',
+  ],
 })
 
 module.exports = {

@@ -9,6 +9,7 @@ specifiers:
   '@tailwindcss/typography': ^0.5.2
   '@titicaca/eslint-config-triple': ^3.1.0
   '@types/glob': ^7.2.0
+  '@types/gtag.js': ^0.0.10
   '@types/node': ^17.0.42
   '@types/react': ^18.0.12
   '@types/unist': ^2.0.6
@@ -92,6 +93,7 @@ devDependencies:
   '@stylelint/postcss-css-in-js': 0.38.0_ryeeqdz73dmnun3unz5nxq65vi
   '@titicaca/eslint-config-triple': 3.1.0_n73vjamwgj3yrr3ezxcj7h4bg4
   '@types/glob': 7.2.0
+  '@types/gtag.js': 0.0.10
   '@types/node': 17.0.42
   '@types/react': 18.0.12
   '@types/unist': 2.0.6
@@ -1897,6 +1899,10 @@ packages:
     dependencies:
       '@types/minimatch': 3.0.5
       '@types/node': 17.0.42
+
+  /@types/gtag.js/0.0.10:
+    resolution: {integrity: sha512-98Hy7woUb3jMAMXkZQwfIOYNyfxmI0+U4m0PpCGdnd/FHk0tDpQFCqgXdNkdEoXsKkcGya/2Gew1cAJjKJspVw==}
+    dev: true
 
   /@types/hast/2.3.4:
     resolution: {integrity: sha512-wLEm0QvaoawEDoTRwzTXp4b4jpwiJDvR5KMnFnVodm3scufTlBOWRD6N1OBf9TZMhjlNsSfcO5V+7AF4+Vy+9g==}

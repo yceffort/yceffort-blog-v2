@@ -122,7 +122,7 @@ useState({ current: initialValue })[0]
 
 ### `useCallback`을 모든 콜백함수에 쓰는 이유
 
-`memo`에서 하고 있는 생각과 동일하다. 대부분의 콜백의 경우, 다른 컴포넌트의 `props`로 전달된다. 만약 이를 `useCallback`으로 감싸지 않는다면, `memo`가 꺠질 것이다. 간단하다. `memo`가 동작하기 위해서, `useCallback`을 사용한다.
+`memo`에서 하고 있는 생각과 동일하다. 대부분의 콜백의 경우, 다른 컴포넌트의 `props`로 전달된다. 만약 이를 `useCallback`으로 감싸지 않는다면, `memo`가 깨질 것이다. 간단하다. `memo`가 동작하기 위해서, `useCallback`을 사용한다.
 
 primitive 컴포넌트 전달되는 콜백은 어떤가? 여기에는 `useCallback`이 필요 없나? 그렇다. 그러나 만약 다른 사람이 이를 다른 컴포넌트로 감싼다면, 이 원래 컴포넌트 내부의 콜백을 다시 `useCallback`으로 감쌀까? 아마도 아닐 것이다.
 

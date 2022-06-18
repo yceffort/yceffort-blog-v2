@@ -148,11 +148,11 @@ JSON.stringify(foo) // '{}'
 | function         | undefined     | 'null'    | omitted   |
 | NaN              | 'null'        | 'null'    | 'null'    |
 | Infinity         | 'null'        | 'null'    | 'null'    |
-| Regex            | '{}'          | '{}'      | '{}'      |
-| Map              | '{}'          | '{}'      | '{}'      |
-| Set              | '{}'          | '{}'      | '{}'      |
-| WeakMap          | '{}'          | '{}'      | '{}'      |
-| WeakSet          | '{}'          | '{}'      | '{}'      |
+| Regex            | '\{\}'        | '\{\}'    | '\{\}'    |
+| Map              | \{\}          | '\{\}'    | '\{\}'    |
+| Set              | '\{\}'        | '\{\}'    | '\{\}'    |
+| WeakMap          | '\{\}'        | '\{\}'    | '\{\}'    |
+| WeakSet          | '\{\}'        | '\{\}'    | '\{\}'    |
 | BigInt           | TypeError     | TypeError | TypeError |
 | Cyclic objects   | TypeError     | TypeError | TypeError |
 
@@ -261,6 +261,73 @@ function JSONStringify(data: unknown): string {
 }
 ```
 
-## 진짜 스펙 살펴보기
+테스트 해보기
 
-JSON.stringify 가 왜 이지경이 되었는지 는 [이 문서](https://262.ecma-international.org/5.1/#sec-15.12.3)에서 확인해 볼 수 있다.
+```typescript
+const test = [
+  1,
+  null,
+  'foo',
+  {'foo': 'bar'},
+  ['foo', 'bar'],
+  undefined,
+  new Map(),
+  new Set(),
+  [undefined],
+  {foo: undefined},
+  [Symbol()],
+  {foo: Symbol()},
+  [() => {}],
+  {foo: () => {}},
+  [/foo/],
+  {foo: /foo/},
+  [new Set()],
+  {foo: new Set()},
+  [new Map()],
+  {foo: new Map()},
+]
+
+for (const tc of test) {
+  const result1 = JSON.stringify(tc)
+  const result2 = JSONStringify(tc)
+
+
+  if (result1===result2) {
+    console.log(tc, 'TRUE')
+  } else if (result1 === undefined && result2 === undefined) {
+    console.log(tc, 'TRUE')
+  } else {
+    console.log(tc, 'FALSE')
+  }
+}
+
+/**
+ 1 TRUE
+null TRUE
+foo TRUE
+{ foo: 'bar' } TRUE
+[ 'foo', 'bar' ] TRUE
+undefined TRUE
+Map {} TRUE
+Set {} TRUE
+[ undefined ] TRUE
+{ foo: undefined } TRUE
+[ Symbol() ] TRUE
+{ foo: Symbol() } TRUE
+[ [Function] ] TRUE
+{ foo: [Function: foo] } TRUE
+[ /foo/ ] TRUE
+{ foo: /foo/ } TRUE
+[ Set {} ] TRUE
+{ foo: Set {} } TRUE
+[ Map {} ] TRUE
+{ foo: Map {} } TRUE
+ * /
+```
+
+## 참고
+
+- [`JSON.stringify`의 공식 문서](https://262.ecma-international.org/5.1/#sec-15.12.3)에서
+- [fast-json-stringify](https://github.com/fastify/fast-json-stringify)
+- [How to improve the performance of JSON. stringify ()?
+  ](https://developpaper.com/how-to-improve-the-performance-of-json-stringify/)

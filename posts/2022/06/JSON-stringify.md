@@ -155,3 +155,112 @@ JSON.stringify(foo) // '{}'
 | WeakSet          | '{}'          | '{}'      | '{}'      |
 | BigInt           | TypeError     | TypeError | TypeError |
 | Cyclic objects   | TypeError     | TypeError | TypeError |
+
+## 구현해보기
+
+가장 먼저 해야할 것은 순환 참조인지 확인하는 함수를 만든 것이다.
+
+```typescript
+function isCyclic(input: unknown): boolean {
+  const seen = new Set()
+
+  function dfs(obj: unknown) {
+    if (typeof obj !== 'object' || obj === null) {
+      return false
+    }
+    seen.add(obj)
+
+    return Object.entries(obj).some(([key, value]) => {
+      const result = seen.has(value) ? true : isCyclic(value)
+      seen.delete(result)
+      return result
+    })
+  }
+
+  return dfs(input)
+}
+```
+
+이제 본격적으로 `stringify`를 구현해보자.
+
+```typescript
+function isCyclic(input: unknown): boolean {
+  const seen = new Set()
+
+  function dfs(obj: unknown) {
+    if (typeof obj !== 'object' || obj === null) {
+      return false
+    }
+    seen.add(obj)
+
+    return Object.entries(obj).some(([key, value]) => {
+      const result = seen.has(value) ? true : isCyclic(value)
+      seen.delete(result)
+      return result
+    })
+  }
+
+  return dfs(input)
+}
+
+function JSONStringify(data: unknown): string {
+  if (isCyclic(data)) {
+    throw new TypeError('순환참조 객체는 stringify 할 수 없습니다.')
+  }
+
+  if (typeof data === 'bigint') {
+    throw new TypeError('Bigint는 stringify로 변환할 수 없습니다.')
+  }
+
+  if (data === null) {
+    return String(null)
+  }
+
+  if (typeof data !== 'object') {
+    if (Number.isNaN(data) || data === Infinity) {
+      return String(null)
+    } else if (['function', 'undefined', 'symbol'].includes(typeof data)) {
+      return String(undefined)
+    } else if (typeof data === 'string') {
+      return `"${data}"`
+    } else {
+      return String(data)
+    }
+  } else {
+    if (data instanceof Date) {
+      return JSONStringify(data.toJSON())
+    } else if (data instanceof Array) {
+      const result = data.map((item) => {
+        if (
+          typeof item === 'undefined' ||
+          typeof item === 'function' ||
+          typeof item === 'symbol'
+        ) {
+          return String(null)
+        } else {
+          return JSONStringify(item)
+        }
+      })
+
+      return `[${result}]`.replace(/'/g, '"')
+    } else {
+      const result = Object.entries(data).reduce((result, [key, value]) => {
+        if (
+          value !== undefined &&
+          typeof value !== 'function' &&
+          typeof value !== 'symbol'
+        ) {
+          result.push(`"${key}":${JSONStringify(value)}`)
+        }
+        return result
+      }, [] as string[])
+
+      return `{${result}}`.replace(/'/g, '"')
+    }
+  }
+}
+```
+
+## 진짜 스펙 살펴보기
+
+JSON.stringify 가 왜 이지경이 되었는지 는 [이 문서](https://262.ecma-international.org/5.1/#sec-15.12.3)에서 확인해 볼 수 있다.

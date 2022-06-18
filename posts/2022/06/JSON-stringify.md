@@ -23,3 +23,135 @@ type JSONType =
   | JSONType[]
   | { [key: string]: JSONType }
 ```
+
+JSON은 언어에 종속적이지 않기 때문에, 자바스크립트에만 있는 고유의 타입, `undefined` `Symbol` `BigInt` 등과 `Function` `Class` `Map` 등도 지원하지 않는다.
+
+## 현기증 나는 `JSON.stringify`
+
+`JSON.stringify`를 계속 쓰다보면, 이 함수의 동작은 참 일관적이지 않다는 것을 깨닫게 된다.
+
+```typescript
+JSON.stringify(1) // '1'
+JSON.stringify(null) // 'null'
+JSON.stringify('foo') // '"foo"'
+JSON.stringify({ foo: 'bar' }) // '{"foo":"bar"}'
+JSON.stringify(['foo', 'bar']) // '["foo","bar"]'
+```
+
+### JSON이 지원하지 않는 타입은 undefined
+
+여기까지는 우리가 모두 이해하는 수준이다. 그러나 앞서 언급했던, `JSON`이 지원하지 않는 일부 타입에 대해서는 다음과 같이 반환된다.
+
+```typescript
+JSON.stringify(undefined) // undefined
+JSON.stringify(Symbol('foo')) // undefined
+JSON.stringify(() => {}) // undefined
+```
+
+모두 `undefined`가 나온다면 그래도 행복할 것 같다. 그러나
+
+### Map, Regex, Set은 빈 JSON
+
+```typescript
+JSON.stringify(/foo/) // '{}'
+JSON.stringify(new Map()) // '{}'
+JSON.stringify(new Set()) //'{}'
+```
+
+....?
+
+### Array와 Object 내부에 지원하지 않는 타입이 있는 경우
+
+더 골 때리는 것은 serialize가 가능한 값, 예를 들어 array나 object에서 더 일관성 없이 동작한다는 것이다. `undefined` `Symbol` `Function` 이 배열안에 있으면 `'null'`로 변환된다. 그리고 객체 안에 속성이 있다면 그 속성 전체는 완전히 무시되고 빈 객체 (정확히는 빈 JSON) 가 된다.
+
+```typescript
+JSON.stringify([undefined]) // '[null]'
+JSON.stringify({ foo: undefined }) // '{}'
+
+JSON.stringify([Symbol()]) // '[null]'
+JSON.stringify({ foo: Symbol() }) // '{}'
+
+JSON.stringify([() => {}]) // '[null]'
+JSON.stringify({ foo: () => {} }) // '{}'
+```
+
+이와 다르게, `Map` `Set` `Regex`가 배열이나 객체 내부에 있다면, 이들은 모두 일관되게 `{}`으로 변환된다. 그리고, 당연히 값도 날아간다.
+
+```typescript
+JSON.stringify([/foo/]) // '[{}]'
+JSON.stringify({ foo: /foo/ }) // '{"foo":{}}'
+
+JSON.stringify([new Set()]) // '[{}]'
+JSON.stringify({ foo: new Set() }) // '{"foo":{}}'
+
+JSON.stringify([new Map()]) // '[{}]'
+JSON.stringify({ foo: new Map() }) // '{"foo":{}}'
+```
+
+### BigInt와 순환참조는 throw error
+
+여기에 추가로, `BigInt`가 내부에 오게 되면 `TypeError`를 리턴하게 된다.
+
+```typescript
+bigint = BigInt(9007199254740991)
+JSON.stringify(bigint) //  Uncaught TypeError: Do not know how to serialize a BigInt
+```
+
+그리고 우리가 잘 알고 있는 것 처럼, 순환참조를 하는 객체의 경우에도 에러가 난다.
+
+```typescript
+const foo = {}
+foo.a = foo
+
+JSON.stringify(foo) // Uncaught TypeError: Converting circular structure to JSON
+```
+
+한가지 유념에 두어야 할 것은, `BigInt`와 `Cyclic Object` 이 딱 두가지 경우에만 error를 던진다. `JSON.stringify`는 우리가 아는 함수 중에서 가장 관대한 편에 속한다.
+
+### NaN과 Infinity는 null
+
+숫자 중에서도 `NaN`과 `Infinity`는 `null`로 리턴된다.
+
+```typescript
+JSON.stringify(NaN) // null
+JSON.stringify(Infinity)
+```
+
+### 날짜는 ISO String
+
+`Date`의 경우에는 ISO string으로 변환된다. 그 이유는 [Date.prototype.toJSON](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Date/toJSON)의 동작 때문이다.
+
+```typescript
+JSON.stringify(new Date()) // '"2022-06-18T03:43:12.133Z"'
+```
+
+### 열거불가능, Symbol 키는 무시
+
+`JSON.stringify`는 오직 열거 가능한, 비 심볼키 속성에 대해서만 처리한다. 즉, 심볼키로 되어 있거나, 열거 불가능한 속성은 무시하게 된다.
+
+```typescript
+const foo = {}
+foo[Symbol('p1')] = 'bar'
+Object.defineProperty(foo, 'p2', { value: 'baz', enumerable: false })
+
+JSON.stringify(foo) // '{}'
+```
+
+> 이 코드 조각을 보고 나니 왜 `JSON.parse`와 `JSON.stringify`로 객체를 깊은 복사하는 것이 불가능한지 이해할 수 있게 되었다.
+
+### 요약
+
+| UnSupported type | pass directly | array     | object    |
+| ---------------- | ------------- | --------- | --------- |
+| undefined        | undefined     | 'null'    | omitted   |
+| symbol           | undefined     | 'null'    | omitted   |
+| function         | undefined     | 'null'    | omitted   |
+| NaN              | 'null'        | 'null'    | 'null'    |
+| Infinity         | 'null'        | 'null'    | 'null'    |
+| Regex            | '{}'          | '{}'      | '{}'      |
+| Map              | '{}'          | '{}'      | '{}'      |
+| Set              | '{}'          | '{}'      | '{}'      |
+| WeakMap          | '{}'          | '{}'      | '{}'      |
+| WeakSet          | '{}'          | '{}'      | '{}'      |
+| BigInt           | TypeError     | TypeError | TypeError |
+| Cyclic objects   | TypeError     | TypeError | TypeError |

@@ -220,7 +220,7 @@ function JSONStringify(data: unknown): string {
     if (Number.isNaN(data) || data === Infinity) {
       return String(null)
     } else if (['function', 'undefined', 'symbol'].includes(typeof data)) {
-      return String(undefined)
+      return undefined
     } else if (typeof data === 'string') {
       return `"${data}"`
     } else {

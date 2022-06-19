@@ -1,4 +1,4 @@
-import { GetServerSideProps } from 'next'
+import type { GetServerSideProps } from 'next'
 
 import Screenshot from '#components/screenshot'
 
@@ -26,21 +26,19 @@ export default function GenerateScreenshot({
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const {
-    title,
-    tags,
-    url,
-    imageSrc = '',
-    imageCredit = '',
-    slug,
-  } = context.query
-  let engTitle = ''
-  if (slug) {
-    const splitSlug = (slug as string).split('/')
-    const tempTitle = splitSlug[splitSlug.length - 1].replace(/-/gi, ' ')
-    engTitle = tempTitle.charAt(0).toUpperCase() + tempTitle.slice(1)
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const { title, tags, url, imageSrc = '', imageCredit = '', slug } = query
+
+  if (!slug && typeof slug !== 'string') {
+    return {
+      notFound: true,
+    }
   }
+
+  const splitSlug = (slug as string).split('/')
+  const tempTitle = splitSlug[splitSlug.length - 1].replace(/-/gi, ' ')
+  const engTitle = tempTitle.charAt(0).toUpperCase() + tempTitle.slice(1)
+
   return {
     props: { title: engTitle || title, tags, url, imageSrc, imageCredit },
   }

@@ -8,6 +8,7 @@ module.exports = withPWA({
     disable: true,
     runtimeCaching,
   },
+  reactStrictMode: true,
   swcMinify: true,
   async redirects() {
     return [

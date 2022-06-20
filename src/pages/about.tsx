@@ -67,7 +67,7 @@ export default function About() {
               to hide away. Oh, I believe in yesterday.
             </p>
             <p>
-              <CustomLink href="https://www.notion.so/yceffort/9fc4262c01744a63a849cdccdde5c85f">
+              <CustomLink href="https://resume.yceffort.kr">
                 Detailed Resume (Notion)
               </CustomLink>
             </p>

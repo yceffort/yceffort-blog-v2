@@ -442,7 +442,7 @@ function isSimpleTypeRelatedTo(
 이와 거의 유사한 방식으로 `type generic`도 비교하게 된다.
 
 ```ts
-Promise<string> = Promise<{hello: string}>
+Promise<string> = Promise<{ hello: string }>
 ```
 
 > 물론, [제네릭의 공변성과 반공변성](<https://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)>)에 대해 다루기 시작하면 복잡해진다.

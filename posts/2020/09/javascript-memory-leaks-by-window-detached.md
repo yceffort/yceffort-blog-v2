@@ -241,7 +241,7 @@ let timer = setInterval(() => {
 
 #### 해결책: WeakRef 사용하기
 
-> [WeakRef](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakRef)는 자바스크립트의 새로운 기능으로, 아직 지원한느 브라우저가 많지 않다. (크롬, 파이어폭스) 이 방법은 문제를 해결하는 방법이라기 보다, 문제를 디버깅 하는 방법에 더 가깝다.
+> [WeakRef](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakRef)는 자바스크립트의 새로운 기능으로, 아직 지원하는 브라우저가 많지 않다. (크롬, 파이어폭스) 이 방법은 문제를 해결하는 방법이라기 보다, 문제를 디버깅 하는 방법에 더 가깝다.
 
 자바스크립트에서 참조 객체를 가비지 콜렉팅 가능하게 하기 위한 방법으로 `WeakRef`를 새롭게 지원하고 있다. `WeakRef`는 객체를 직접적으로 참조하는 것이 아니라, `.deref()`라고 불리우는, 가비지 수집되지 않는 한 객체에 대한 참조를 반환하는 새로운 방법을 제공한다. `WeakRef`를 사용하면 창이나 문서의 현재 값에 액세스 하면서도 동시에 가비지 콜렉팅이 가능하다. `pageHide`, `window.closed`와 같은 속성에 대응하여 수동으로 해제해야 하는 창에 대한 참조를 유지하는 대신, 필요에 따라 창에 대한 액세스를 얻는다. 창이 닫히면 메모리 수집이 가능해져 `.deref()`메소드가 `undefined`를 리턴한다.
 

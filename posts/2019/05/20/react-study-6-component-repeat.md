@@ -39,7 +39,7 @@ class App extends Component {
 }
 ```
 
-특별한 거는 없지만, 콘솔에서 `key`가 없다는 에러가 발생한다. 가상 DOM을 비교한느 과정에서, Key값을 활용하여 변화가 일어나는지 확인하기 때문에, key값을 지정해줘야한다.
+특별한 거는 없지만, 콘솔에서 `key`가 없다는 에러가 발생한다. 가상 DOM을 비교하는 과정에서, Key값을 활용하여 변화가 일어나는지 확인하기 때문에, key값을 지정해줘야한다.
 
 ```javascript
 class IterationSample extends Component {

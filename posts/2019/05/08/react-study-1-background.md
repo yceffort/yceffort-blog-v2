@@ -6,7 +6,7 @@ tags:
   - react
   - javascript
 description:
-  '## 리액트 요약 기존에 많은 자바스크립트 기반 플게임워크들이 있었는데, 대부분의 프레임워크들은 MVC
+  '## 리액트 요약 기존에 많은 자바스크립트 기반 프레임워크들이 있었는데, 대부분의 프레임워크들은 MVC
   (Model-View-Controller), MVVM(Model-View-View Model), MVW(Model-View-Whatever)
   아키텍쳐를 사용하여 개발되었다.  ![MVC](https://mdn.mozillademos.org/files/1...'
 category: react
@@ -16,7 +16,7 @@ template: post
 
 ## 리액트 요약
 
-기존에 많은 자바스크립트 기반 플게임워크들이 있었는데, 대부분의 프레임워크들은 MVC (Model-View-Controller), MVVM(Model-View-View Model), MVW(Model-View-Whatever) 아키텍쳐를 사용하여 개발되었다.
+기존에 많은 자바스크립트 기반 프레임워크들이 있었는데, 대부분의 프레임워크들은 MVC (Model-View-Controller), MVVM(Model-View-View Model), MVW(Model-View-Whatever) 아키텍쳐를 사용하여 개발되었다.
 
 ![MVC](https://mdn.mozillademos.org/files/16042/model-view-controller-light-blue.png)
 

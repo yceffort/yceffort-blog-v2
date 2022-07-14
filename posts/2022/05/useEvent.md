@@ -259,7 +259,7 @@ function useEvent(handler) {
   return useCallback((...args) => {
     // 실제 구현에서는, 렌더링중 호출되면 에러를 발생 시킬 것이다.
     // 즉 렌더링 중에는 이 함수는 처리되지 않아야 한다는 것을 의미한다.
-    // 렌덜이 중에 함수가 호출되지 않게 함으로써 이들의 identity를 안전하게 가져갈 수 있또록 한다.
+    // 렌더링 중에 함수가 호출되지 않게 함으로써 이들의 identity를 안전하게 가져갈 수 있또록 한다.
     // 렌더링 중에는 호출할 수 없으므로, 렌더링에 영향을 주지 않고, input이 변경된더라도 변경할 필요가 없다.
     const fn = handlerRef.current
     return fn(...args)

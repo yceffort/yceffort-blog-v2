@@ -53,7 +53,7 @@ myButton.addEventListener('click', handleClick)
 
 만약 페이지 내에서 여러 개의 리액트 버전이 존재한다면, 이벤트 핸들러가 최상단에 붙게 될 것이다. 이는 `e.stopPropagation()`을 어기게 된다. 만약 nested tree에서 이벤트에 대해 전파를 중지하더라도, 바깥 트리에서는 계속해서 이벤트를 받게 된다. 이는 리액트 내부에서 서로다른 버전의 tree를 갖는 것을 어렵게 만든다.
 
-리액트 17부터, 이벤트 핸들러를 더 이상 큐먼트의 최상 노드인 `html`에 붙이 지 않는다. 대신, 리액트 트리가 렌더링 되는 DOM Container에 이벤트를 붙이게 된다.
+리액트 17부터, 이벤트 핸들러를 더 이상 도큐먼트의 최상 노드인 `html`에 붙이 지 않는다. 대신, 리액트 트리가 렌더링 되는 DOM Container에 이벤트를 붙이게 된다.
 
 ```javascript
 const rootNode = document.getElementById('root')

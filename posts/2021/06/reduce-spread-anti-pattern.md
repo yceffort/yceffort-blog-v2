@@ -98,7 +98,7 @@ let aClone = { ...a }
 let aClone = Object.assign({}, a)
 ```
 
-desuagred된 구문도 거의 동일한 작업을 수행하므로, 전개 연산자와 비슷한 시간 복잡성을 가질 것이다. 즉, 새 객체를 생성한다음, 나머지 객체의 키를 새객체에 반복해서 복사하는 것이다.
+위 구문도 거의 동일한 작업을 수행하므로, 전개 연산자와 비슷한 시간 복잡성을 가질 것이다. 즉, 새 객체를 생성한다음, 나머지 객체의 키를 새객체에 반복해서 복사하는 것이다.
 
 - [babel transpile](https://babeljs.io/repl#?browsers=defaults%2C%20not%20ie%2011%2C%20not%20ie_mob%2011&build=&builtIns=false&corejs=false&spec=true&loose=true&code_lz=MYewdgzgLgBAllApgWwjAvDA2gKBjAbzAENlEAuGAchACNTiqAaGYgcwpgEYAGF0AK5goAJwCelKgFUAygEEqAXyZ5CJMpNEDkAB2asOlLgBZ-IIaInVZC5aqKlOVZCHD72nAMwB2MxfGSANIA8gBKAKK2KvgOGtTAADZwwm4sHpQAbKYwgsIB1vJKLPbqTrQCEAAW7oYwxgCcfnlW0oXKMDgAujg4oJCwIogQAglQnhjwSKgAdIMAJgLAiAAUyzqDAG4sCCgAlBgAfDDLBKrT5-uIW9g7yNOlnZQE6ZMo0x5NlpS307mWijhFLsWAQgUA&debug=false&forceAllTransforms=true&shippedProposals=false&circleciRepo=&evaluate=true&fileSize=false&timeTravel=false&sourceType=script&lineWrap=true&presets=env%2Creact&prettier=false&targets=&version=7.14.3&externalPlugins=)
 - [typescript](https://www.typescriptlang.org/play?#code/MYewdgzgLgBAllApgWwjAvDA2gWAFAwwDeYAhsogFwwDkIARuaTQDQykDmVMAjAAxtQAVzBQATgE9qNAKoBlAII0Avi3yES5bjXFDkAB1bsu1HgBZBIEeKm15S1euJkK05CHBHO3AMwB2S2tJaQBpAHkAJQBRBzUCZy1pYAAbOFFPNm9qADYLGGFRYLtFFTYnTVdaeiEIAAsvExgzAE5AwttZEtUYfABdfHxQSFgxRAghZKgfDHgkVAA6UYATIWBEAAp1-VGANzYEFABKDAA+GHWiJ3nr7cQ97APkeZdEXuoiLNmUee82m2pHvMCjZlPhlIc2ERwUA)

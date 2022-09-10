@@ -580,11 +580,11 @@ strict 모드에서, 각 컴포넌트를 두번씩 렌더링 하면 예끼치않
 
 #### `renderToString`
 
-서버에서 suspending이 일어날 경우 더이상 에러가 발생하지 않는다. 대신 가장 가까운 `<Suspense>` 바운더리에 fallback HTML을 내보낸후, 클라이언트 레벨에서 같은 렌더링을 재시도 한다. `renderToString`보다는 `renderToPipableStream` `renderToReadableStream`과 같은 스트리밍 api로 전환하는 것을 추천한다.
+서버에서 suspending이 일어날 경우 더이상 에러가 발생하지 않는다. 대신 가장 가까운 `<Suspense>` 바운더리에 fallback HTML을 내보낸후, 클라이언트 레벨에서 같은 렌더링을 재시도 한다. `renderToString`보다는 `renderToPipeableStream` `renderToReadableStream`과 같은 스트리밍 api로 전환하는 것을 추천한다.
 
 #### `renderToStaticMarkup`
 
-서버에서 suspending이 일어날 경우 더이상 에러가 발생하지 않는다. 대신 가장 가까운 `<Suspense>` 바운더리에 fallback HTML을 내보낸후, 클라이언트 레벨에서 같은 렌더링을 재시도 한다.
+서버에서 suspending이 일어날 경우 더이상 에러가 발생하지 않는다. 대신 가장 가까운 `<Suspense>` 바운더리에 fallback HTML을 내보낸 후, 클라이언트 레벨에서 같은 렌더링을 재시도 한다.
 
 ## All Changes
 

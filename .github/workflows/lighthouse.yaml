@@ -8,6 +8,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 7
       - name: Use Node.js 16.x
         uses: actions/setup-node@v2
         with:

@@ -1,13 +1,4 @@
-const withPWA = require('next-pwa')
-const runtimeCaching = require('next-pwa/cache')
-
-module.exports = withPWA({
-  pwa: {
-    dest: 'public',
-    // disable: process.env.NODE_ENV !== 'production',
-    disable: true,
-    runtimeCaching,
-  },
+module.exports = {
   reactStrictMode: true,
   swcMinify: true,
   async redirects() {
@@ -49,4 +40,4 @@ module.exports = withPWA({
       },
     ]
   },
-})
+}

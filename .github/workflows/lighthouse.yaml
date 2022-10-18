@@ -7,14 +7,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: pnpm/action-setup@v2.2.2
       - name: Use Node.js 16.x
         uses: actions/setup-node@v2
         with:
           node-version: 16.x
-      - name: npm install, build
+      - name: install & build
         run: |
-          npm install
-          npm run build
+          pnpm install
+          pnpm build
       - name: run Lighthouse CI
         run: |
           npm install -g @lhci/cli@0.8.x

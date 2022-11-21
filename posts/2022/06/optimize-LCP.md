@@ -77,9 +77,9 @@ https://yceffort.kr/LCP/svg.html
 
 ```html
 <video poster="lcp.jpg" ...></video>
+```
 
 https://yceffort.kr/LCP/video.html
-```
 
 ```html
 <div style="background-image: url(lcp.jpg)">...</div>
@@ -129,7 +129,7 @@ svg 내부에 있는 img는 프리로드 스캐너에서 숨겨진 것 처럼 �
 
 사실 `video` 의 `poster` 가 이렇게 선방할 줄은 몰랐다. 이는 `img`와 동일하게 동작하는 것으로 보이며, 프리로드 스캐너에 의해 조기에 발견된다. 이는 본질적으로 poster가 굉장히 빠르다는 것을 의미한다.
 
-그리고 또다른 소식 중 하나는, `poster`가 없는 `video`는 첫번쨰 프레임을 LCP로 가져가려는 의도가 있다는 것이다. https://bugs.chromium.org/p/chromium/issues/detail?id=1289664 즉 동영상을 실제로 로딩해서 LCP로 가져가려 한다는 뜻인데, 아무래도 동영상은 이미지보다 용량이 크므로, LCP로 동영상을 가져가기 위해서는 `poster`가 필수적으로 보인다.
+그리고 또다른 소식 중 하나는, `poster`가 없는 `video`는 첫번째 프레임을 LCP로 가져가려는 의도가 있다는 것이다. https://bugs.chromium.org/p/chromium/issues/detail?id=1289664 즉 동영상을 실제로 로딩해서 LCP로 가져가려 한다는 뜻인데, 아무래도 동영상은 이미지보다 용량이 크므로, LCP로 동영상을 가져가기 위해서는 `poster`가 필수적으로 보인다.
 
 #### `background-image: url()`
 

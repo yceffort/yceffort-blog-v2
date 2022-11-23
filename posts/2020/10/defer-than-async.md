@@ -71,11 +71,11 @@ async와 defer는 HTML 파서를 차단하지 않고 스크립트를 로드할 �
 ### async
 
 ```html
-<script ASYNC src="aphid.js"></script>
-<script src="bmovie.js></script>
+<script async src="aphid.js"></script>
+<script src="bmovie.js"></script>
 <script src="seaserpent.js"></script>
-<img src="deejay.gif">
-<img src="elope.gif">
+<img src="deejay.gif" />
+<img src="elope.gif" />
 ```
 
 ```bash
@@ -93,11 +93,11 @@ image render               *
 ### defer
 
 ```html
-<script DEFER src="aphid.js"></script>
-<script src="bmovie.js></script>
+<script defer src="aphid.js"></script>
+<script src="bmovie.js"></script>
 <script src="seaserpent.js"></script>
-<img src="deejay.gif">
-<img src="elope.gif">
+<img src="deejay.gif" />
+<img src="elope.gif" />
 ```
 
 ```

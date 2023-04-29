@@ -2,6 +2,7 @@
   "version": "1.0.0",
   "name": "yceffort-blog",
   "description": "yceffort-blog",
+  "packageManager": "pnpm@8.3.0",
   "scripts": {
     "dev": "next-remote-watch ./posts",
     "sitemap": "ts-node --project tsconfig.node.json ./src/utils/siteMap.ts",
@@ -34,7 +35,7 @@
     "front-matter": "^4.0.2",
     "glob": "^8.0.3",
     "image-size": "^1.0.2",
-    "next": "^12.3.1",
+    "next": "^13.3.0",
     "next-mdx-remote": "^4.1.0",
     "next-pwa": "^5.6.0",
     "next-seo": "^5.6.0",

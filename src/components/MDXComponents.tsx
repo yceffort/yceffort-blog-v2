@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { HTMLProps } from 'react'
 
 import CustomLink from './Link'
@@ -12,8 +11,9 @@ function NextImage(props: HTMLProps<HTMLImageElement>) {
       return <img src={src} alt={src} />
     } else {
       return (
-        <Image
+        <img
           {...props}
+          alt={props.alt || ''}
           crossOrigin="anonymous"
           src={src}
           placeholder="empty"

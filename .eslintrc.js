@@ -1,27 +1,9 @@
-const createConfig = require('@titicaca/eslint-config-triple/create-config')
-
-const { extends: extendConfigs, overrides } = createConfig({
-  type: 'frontend',
-  project: './tsconfig.json',
-  allowedNames: [
-    'cloud_name',
-    'api_key',
-    'api_secret',
-    'access_type',
-    'public_id',
-    'unique_filename',
-    'client_email',
-    'private_key',
-    'project_id',
-    'event_category',
-    'event_label',
-    'non_interaction',
-  ],
-})
-
 module.exports = {
-  extends: [...extendConfigs, 'plugin:@next/next/recommended'],
-  overrides,
+  "extends": [
+    "plugin:@next/next/recommended",
+    "@titicaca/eslint-config-triple",
+    "@titicaca/eslint-config-triple/prettier"
+  ],
   rules: {
     'react/react-in-jsx-scope': 'off',
     '@typescript-eslint/no-explicit-any': 'warn',
@@ -32,5 +14,5 @@ module.exports = {
   },
   parserOptions: {
     requireConfigFile: false,
-  },
+  }
 }

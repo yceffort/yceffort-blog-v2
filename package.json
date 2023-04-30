@@ -1,31 +1,30 @@
 {
-  "version": "1.0.0",
   "name": "yceffort-blog",
+  "version": "1.0.0",
   "description": "yceffort-blog",
-  "packageManager": "pnpm@8.3.0",
-  "scripts": {
-    "dev": "next-remote-watch ./posts",
-    "sitemap": "ts-node --project tsconfig.node.json ./src/utils/siteMap.ts",
-    "build-next": "next build",
-    "build": "pnpm sitemap && pnpm build-next",
-    "start": "next start",
-    "lint": "eslint '**/*.{ts,tsx}'",
-    "lint:fix": "pnpm lint -- --fix",
-    "prettier": "prettier '**/*.{json,md,yaml}' --check",
-    "prettier:fix": "prettier '**/*.{json,md,yaml}' --write",
-    "lint:style": "stylelint './**/*.{js,ts,tsx}'",
-    "lint:style:fix": "stylelint './**/*.{js,ts,tsx}' --fix",
-    "pre-commit": "lint-staged",
-    "prepare": "husky install"
-  },
-  "repository": "https://github.com/yceffort/yceffort-blog-v2",
-  "author": "yceffort <root@yceffort.kr>",
-  "license": "MIT",
   "keywords": [
     "react",
     "nextjs",
     "blog"
   ],
+  "repository": "https://github.com/yceffort/yceffort-blog-v2",
+  "license": "MIT",
+  "author": "yceffort <root@yceffort.kr>",
+  "scripts": {
+    "build": "pnpm sitemap && pnpm build-next",
+    "build-next": "next build",
+    "dev": "next-remote-watch ./posts",
+    "lint": "eslint '**/*.{ts,tsx}'",
+    "lint:fix": "pnpm lint -- --fix",
+    "lint:style": "stylelint './**/*.{js,ts,tsx}'",
+    "lint:style:fix": "stylelint './**/*.{js,ts,tsx}' --fix",
+    "pre-commit": "lint-staged",
+    "prepare": "husky install",
+    "prettier": "prettier '**/*.{json,md,yaml}' --check",
+    "prettier:fix": "prettier '**/*.{json,md,yaml}' --write",
+    "sitemap": "ts-node --project tsconfig.node.json ./src/utils/siteMap.ts",
+    "start": "next start"
+  },
   "dependencies": {
     "@babel/core": "^7.19.3",
     "@tailwindcss/forms": "^0.5.3",
@@ -60,7 +59,6 @@
   "devDependencies": {
     "@commitlint/cli": "^17.1.2",
     "@commitlint/config-conventional": "^17.1.0",
-    "@stylelint/postcss-css-in-js": "^0.38.0",
     "@titicaca/eslint-config-triple": "^5.0.0",
     "@titicaca/prettier-config-triple": "^1.0.2",
     "@types/glob": "^7.2.0",
@@ -69,8 +67,8 @@
     "@types/react": "^18.0.21",
     "@types/unist": "^2.0.6",
     "autoprefixer": "^10.4.12",
-    "eslint-config-next": "^13.3.0",
     "eslint": "^8.39.0",
+    "eslint-config-next": "^13.3.0",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "next-remote-watch": "^1.0.0",
@@ -83,5 +81,6 @@
     "typescript": "^4.8.4",
     "unified": "^10.1.2",
     "webpack": "^5.74.0"
-  }
+  },
+  "packageManager": "pnpm@8.3.0"
 }

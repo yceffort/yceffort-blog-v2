@@ -5,12 +5,12 @@ import Router from 'next/router'
 import { ThemeProvider } from 'next-themes'
 import { DefaultSeo } from 'next-seo'
 import Script from 'next/script'
-import { getAnalytics } from "firebase/analytics";
+import { getAnalytics } from 'firebase/analytics'
 
 import { SiteConfig as config } from '#src/config'
 import { SEO } from '#components/SEO'
 import LayoutWrapper from '#components/LayoutWrapper'
-import firebaseApp from "#src/lib/firebase";
+import firebaseApp from '#src/lib/firebase'
 
 class MyApp extends App {
   public componentDidMount() {

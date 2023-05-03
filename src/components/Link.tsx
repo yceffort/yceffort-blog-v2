@@ -7,7 +7,12 @@ const CustomLink = ({ href, ...rest }: HTMLProps<HTMLAnchorElement>) => {
 
   if (isInternalLink) {
     return (
-      <Link href={href} passHref className={rest.className} onClick={rest.onClick}>
+      <Link
+        href={href}
+        passHref
+        className={rest.className}
+        onClick={rest.onClick}
+      >
         {rest.children}
       </Link>
     )

@@ -61,6 +61,7 @@
     "@commitlint/config-conventional": "^17.1.0",
     "@titicaca/eslint-config-triple": "^5.0.0",
     "@titicaca/prettier-config-triple": "^1.0.2",
+    "@titicaca/stylelint-config-triple": "^1.1.0",
     "@types/glob": "^7.2.0",
     "@types/gtag.js": "^0.0.10",
     "@types/node": "^18.11.0",

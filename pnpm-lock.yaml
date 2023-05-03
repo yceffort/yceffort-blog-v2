@@ -102,6 +102,9 @@ devDependencies:
   '@titicaca/prettier-config-triple':
     specifier: ^1.0.2
     version: 1.0.2(prettier@2.7.1)
+  '@titicaca/stylelint-config-triple':
+    specifier: ^1.1.0
+    version: 1.1.0(postcss@8.4.18)(stylelint@14.14.0)(typescript@4.8.4)
   '@types/glob':
     specifier: ^7.2.0
     version: 7.2.0
@@ -1891,6 +1894,20 @@ packages:
       prettier: ^2.0.0
     dependencies:
       prettier: 2.7.1
+    dev: true
+
+  /@titicaca/stylelint-config-triple@1.1.0(postcss@8.4.18)(stylelint@14.14.0)(typescript@4.8.4):
+    resolution: {integrity: sha512-LSdr8HNFXUU3P9Y/v5hSJLswqQepW0mCRm8oHaRz3t7kYs0d2R+5JZQ6DlKZN7OzIGlwQlKh9Ov+7q8Y45471Q==}
+    peerDependencies:
+      stylelint: ^15.3.0
+    dependencies:
+      postcss-styled-syntax: 0.4.0(postcss@8.4.18)(typescript@4.8.4)
+      stylelint: 14.14.0
+      stylelint-config-recommended: 11.0.0(stylelint@14.14.0)
+    transitivePeerDependencies:
+      - postcss
+      - supports-color
+      - typescript
     dev: true
 
   /@tootallnate/once@1.1.2:
@@ -3985,6 +4002,10 @@ packages:
   /estree-walker@1.0.1:
     resolution: {integrity: sha512-1fMXF3YP4pZZVozF8j/ZLfvnR8NSIljt56UhbZ5PeeDmmGHpgpdwQt7ITlGvYaQukCvuBRMLEiKiYC+oeIg4cg==}
     dev: false
+
+  /estree-walker@2.0.2:
+    resolution: {integrity: sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==}
+    dev: true
 
   /estree-walker@3.0.1:
     resolution: {integrity: sha512-woY0RUD87WzMBUiZLx8NsYr23N5BKsOMZHhu2hoNRVh6NXGfoiT1KOL8G3UHlJAnEDGmfa5ubNA/AacfG+Kb0g==}
@@ -6686,6 +6707,19 @@ packages:
       cssesc: 3.0.0
       util-deprecate: 1.0.2
 
+  /postcss-styled-syntax@0.4.0(postcss@8.4.18)(typescript@4.8.4):
+    resolution: {integrity: sha512-LvG++K8LtIyX1Q1mNuZVQYmBo+SCwn90cEkMigo4/I0QwXrEiYt8nPeJ5rrI5Uuh+5w7hRfPyJKlvQdhVZBhUg==}
+    peerDependencies:
+      postcss: ^8.4.21
+    dependencies:
+      '@typescript-eslint/typescript-estree': 5.54.0(typescript@4.8.4)
+      estree-walker: 2.0.2
+      postcss: 8.4.18
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
+    dev: true
+
   /postcss-syntax@0.36.2(postcss@8.4.18):
     resolution: {integrity: sha512-nBRg/i7E3SOHWxF3PpF5WnJM/jQ1YpY9000OaVXlAQj6Zp/kIqJxEDWIZ67tAd7NLuk7zqN4yqe9nc0oNAOs1w==}
     peerDependencies:
@@ -7756,6 +7790,14 @@ packages:
       client-only: 0.0.1
       react: 18.2.0
     dev: false
+
+  /stylelint-config-recommended@11.0.0(stylelint@14.14.0):
+    resolution: {integrity: sha512-SoGIHNI748OCZn6BxFYT83ytWoYETCINVHV3LKScVAWQQauWdvmdDqJC5YXWjpBbxg2E761Tg5aUGKLFOVhEkA==}
+    peerDependencies:
+      stylelint: ^15.3.0
+    dependencies:
+      stylelint: 14.14.0
+    dev: true
 
   /stylelint@14.14.0:
     resolution: {integrity: sha512-yUI+4xXfPHVnueYddSQ/e1GuEA/2wVhWQbGj16AmWLtQJtn28lVxfS4b0CsWyVRPgd3Auzi0NXOthIEUhtQmmA==}

@@ -1,3 +1,5 @@
+'use client'
+
 import Head from 'next/head'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote'

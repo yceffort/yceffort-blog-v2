@@ -1,22 +1,17 @@
-import { GetStaticProps } from 'next'
 import { format } from 'date-fns'
+import Link from 'next/link'
 
-import { Post } from '#src/type'
-import { PageSeo } from '#components/SEO'
-import { SiteConfig } from '#src/config'
+import { getAllPosts } from '#utils/Post'
+import { DEFAULT_NUMBER_OF_POSTS } from '#src/constants'
 import CustomLink from '#components/Link'
 import Tag from '#components/Tag'
-import { DEFAULT_NUMBER_OF_POSTS } from '#constants/index'
-import { getAllPosts } from '#utils/Post'
+import { SiteConfig } from '#src/config'
 
-export default function Home({ posts }: { posts: Array<Post> }) {
+export default async function Page() {
+  const allPosts = await getAllPosts()
+  const recentPosts = allPosts.slice(0, DEFAULT_NUMBER_OF_POSTS)
   return (
     <>
-      <PageSeo
-        title="Home"
-        description={SiteConfig.subtitle}
-        url={SiteConfig.url}
-      />
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
         <div className="space-y-2 pt-6 pb-8 md:space-y-5">
           <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
@@ -27,10 +22,11 @@ export default function Home({ posts }: { posts: Array<Post> }) {
           </p>
         </div>
         <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-          {posts
-            .slice(0, DEFAULT_NUMBER_OF_POSTS)
-            .map(({ frontMatter: frontmatter, fields: { slug } }) => {
-              const { date, title, tags, description } = frontmatter
+          {recentPosts.map(
+            ({
+              frontMatter: { date, title, tags, description },
+              fields: { slug },
+            }) => {
               const updatedAt = format(new Date(date), 'yyyy-MM-dd')
               return (
                 <li key={slug} className="py-12">
@@ -39,10 +35,7 @@ export default function Home({ posts }: { posts: Array<Post> }) {
                       <dl>
                         <dt className="sr-only">Published on</dt>
                         <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
-                          <time dateTime={updatedAt}>
-                            {/* {updated} */}
-                            {updatedAt}
-                          </time>
+                          <time dateTime={updatedAt}>{updatedAt}</time>
                         </dd>
                       </dl>
                       <div className="space-y-5 xl:col-span-3">
@@ -80,26 +73,19 @@ export default function Home({ posts }: { posts: Array<Post> }) {
                   </article>
                 </li>
               )
-            })}
+            },
+          )}
         </ul>
       </div>
       <div className="flex justify-end text-base font-medium leading-6">
-        <CustomLink
+        <Link
           href="/pages/1"
           className="text-blue-500 hover:text-blue-600 dark:hover:text-blue-400"
           aria-label="all posts"
         >
           All Posts &rarr;
-        </CustomLink>
+        </Link>
       </div>
     </>
   )
-}
-
-export const getStaticProps: GetStaticProps = async () => {
-  const recentPosts = (await getAllPosts()).slice(0, DEFAULT_NUMBER_OF_POSTS)
-
-  return {
-    props: { posts: recentPosts.map((post) => ({ ...post, path: '' })) },
-  }
 }

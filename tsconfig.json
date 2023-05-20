@@ -26,8 +26,18 @@
       "#utils/*": ["src/utils/*"],
       "#src/*": ["src/*"]
     },
-    "incremental": true
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "exclude": ["dist", ".next", "out", "next.config.js"],
-  "include": ["next-env.d.ts", "typing/*.d.ts", "**/*.ts*"]
+  "include": [
+    "next-env.d.ts",
+    "typing/*.d.ts",
+    "**/*.ts*",
+    ".next/types/**/*.ts"
+  ]
 }

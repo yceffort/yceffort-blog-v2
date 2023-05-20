@@ -3,6 +3,7 @@
 import Head from 'next/head'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote'
+import { Suspense } from 'react'
 
 import { Post } from '#src/type'
 import { parseMarkdownToMdx } from '#utils/Markdown'
@@ -27,7 +28,9 @@ export default function PostPage({
         />
       </Head>
       <PostLayout frontMatter={post.frontMatter} slug={post.fields.slug}>
-        <MDXRemote {...mdx} components={MdxComponents} />
+        <Suspense fallback={null}>
+          <MDXRemote {...mdx} components={MdxComponents} />
+        </Suspense>
       </PostLayout>
     </>
   )

@@ -61,6 +61,8 @@ export async function parseMarkdownToMdx(body: string, path: string) {
         rehypeAutolinkHeadings,
         imageMetadata(path),
       ],
+      // @see https://github.com/hashicorp/next-mdx-remote/issues/307#issuecomment-1363415249
+      development: false,
     },
   })
 }

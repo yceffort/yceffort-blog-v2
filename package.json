@@ -13,7 +13,7 @@
   "scripts": {
     "build": "pnpm sitemap && pnpm build-next",
     "build-next": "next build",
-    "dev": "next-remote-watch ./posts",
+    "dev": "next dev",
     "lint": "eslint '**/*.{ts,tsx}' && prettier '**/*.{ts,tsx}'",
     "lint:fix": "eslint '**/*.{ts,tsx}' --fix && prettier '**/*.{ts,tsx}' --write",
     "lint:style": "stylelint './**/*.{js,ts,tsx}'",
@@ -33,7 +33,7 @@
     "front-matter": "^4.0.2",
     "glob": "^8.0.3",
     "image-size": "^1.0.2",
-    "next": "^13.3.0",
+    "next": "^13.4.0",
     "next-mdx-remote": "^4.1.0",
     "next-pwa": "^5.6.0",
     "next-seo": "^5.6.0",

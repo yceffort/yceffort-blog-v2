@@ -1,12 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { memo, useState } from 'react'
 
 import Link from './Link'
 
 import { SiteConfig } from '#src/config'
 
-const MobileNav = () => {
+const MobileNav = memo(() => {
   const [navShow, setNavShow] = useState(false)
 
   const onToggleNav = () => {
@@ -77,6 +77,6 @@ const MobileNav = () => {
       </div>
     </div>
   )
-}
+})
 
 export default MobileNav

@@ -85,5 +85,11 @@
     "unified": "^10.1.2",
     "webpack": "^5.76.0"
   },
+  "pnpm": {
+    "overrides": {
+      "@mdx-js/mdx": "2.1.5",
+      "@mdx-js/react": "2.1.5"
+    }
+  },
   "packageManager": "pnpm@8.3.0"
 }

@@ -18,6 +18,7 @@ import profile from '#public/profile.png'
 import PageTitle from '#components/PageTitle'
 import imageMetadata from '#utils/imageMetadata'
 import { parseCodeSnippet } from '#utils/Markdown'
+import MDXComponents from '#components/MDXComponents'
 
 export async function generateMetadata({
   params: { year, slug },
@@ -119,6 +120,7 @@ export default async function Page({
               {/* @ts-ignore */}
               <MDXRemote
                 source={body}
+                components={MDXComponents}
                 options={{
                   mdxOptions: {
                     remarkPlugins: [

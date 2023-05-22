@@ -11,8 +11,7 @@
   "license": "MIT",
   "author": "yceffort <root@yceffort.kr>",
   "scripts": {
-    "build": "pnpm sitemap && pnpm build-next",
-    "build-next": "next build",
+    "build": "next build",
     "dev": "next dev",
     "lint": "eslint '**/*.{ts,tsx}' && prettier '**/*.{ts,tsx}'",
     "lint:fix": "eslint '**/*.{ts,tsx}' --fix && prettier '**/*.{ts,tsx}' --write",
@@ -22,7 +21,6 @@
     "prepare": "husky install",
     "prettier": "prettier '**/*.{json,md,yaml}' --check",
     "prettier:fix": "prettier '**/*.{json,md,yaml}' --write",
-    "sitemap": "ts-node --project tsconfig.node.json ./src/utils/siteMap.ts",
     "start": "next start"
   },
   "dependencies": {

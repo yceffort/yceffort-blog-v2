@@ -10,6 +10,7 @@ export const size = OpenGraphImageSize
 
 export const contentType = 'image/png'
 
+// https://github.com/vercel/next.js/issues/48162#issuecomment-1540040105
 export default function OpenGraphImage() {
   return new ImageResponse(
     (

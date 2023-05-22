@@ -74,7 +74,7 @@
     "eslint-plugin-n": "^15.0.0",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
-    "next-remote-watch": "^1.0.0",
+    "next-remote-watch": "^2.0.0",
     "postcss": "^8.4.21",
     "postcss-syntax": "^0.36.2",
     "prettier": "^2.7.1",
@@ -84,12 +84,6 @@
     "typescript": "^4.8.4",
     "unified": "^10.1.2",
     "webpack": "^5.76.0"
-  },
-  "pnpm": {
-    "overrides": {
-      "@mdx-js/mdx": "2.1.5",
-      "@mdx-js/react": "2.1.5"
-    }
   },
   "packageManager": "pnpm@8.3.0"
 }

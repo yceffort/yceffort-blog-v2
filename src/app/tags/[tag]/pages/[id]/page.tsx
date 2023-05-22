@@ -2,8 +2,8 @@ import { notFound } from 'next/navigation'
 
 import { getAllPosts, getAllTagsFromPosts } from '#utils/Post'
 import { DEFAULT_NUMBER_OF_POSTS } from '#src/constants'
-import CustomLink from '#components/Link'
 import ListLayout from '#components/layouts/ListLayout'
+import PageNumber from '#components/layouts/PageNumber'
 
 export async function generateMetadata({
   params: { tag, id },
@@ -70,31 +70,12 @@ export default async function Page({
   return (
     <>
       <ListLayout posts={posts} title={title} />
-      <div className="flex">
-        <div className="flex w-1/2 justify-start text-base font-medium leading-6">
-          {pageNo !== 1 && (
-            <CustomLink
-              href={`/tags/${tag}/pages/${pageNo - 1}`}
-              className="text-blue-500 hover:text-blue-600 dark:hover:text-blue-400"
-              aria-label="all posts"
-            >
-              Page {pageNo - 1} &larr;
-            </CustomLink>
-          )}
-        </div>
-
-        <div className="flex w-1/2 justify-end text-base font-medium leading-6">
-          {hasNextPage && (
-            <CustomLink
-              href={`/tags/${tag}/pages/${pageNo + 1}`}
-              className="text-blue-500 hover:text-blue-600 dark:hover:text-blue-400"
-              aria-label="all posts"
-            >
-              Page {pageNo + 1} &rarr;
-            </CustomLink>
-          )}
-        </div>
-      </div>
+      <PageNumber
+        pageNo={pageNo}
+        next={`/tags/${tag}/pages/${pageNo + 1}`}
+        prev={`/tags/${tag}/pages/${pageNo - 1}`}
+        hasNextPage={hasNextPage}
+      />
     </>
   )
 }

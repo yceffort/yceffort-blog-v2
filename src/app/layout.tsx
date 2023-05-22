@@ -13,6 +13,7 @@ export const metadata: Metadata = {
   referrer: 'origin-when-cross-origin',
   creator: SiteConfig.author.name,
   publisher: SiteConfig.author.name,
+  metadataBase: new URL('https://yceffort.kr'),
   formatDetection: {
     email: false,
     address: false,

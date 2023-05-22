@@ -38,7 +38,7 @@ const tokenClassNames: { [key in TokenType]: string } = {
   comment: 'text-gray-400 italic',
 } as const
 
-function parseCodeSnippet() {
+export function parseCodeSnippet() {
   return (tree: Node) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     visit(tree, 'element', (node: any) => {

@@ -5,6 +5,7 @@ import { ReactNode } from 'react'
 
 import { SiteConfig } from '#src/config'
 import LayoutWrapper from '#components/LayoutWrapper'
+import { Providers } from '#components/Provider'
 
 export const metadata: Metadata = {
   title: SiteConfig.title,
@@ -47,7 +48,9 @@ export default function Layout({ children }: { children: ReactNode }) {
     <>
       <html lang="kr">
         <body>
-          <LayoutWrapper>{children}</LayoutWrapper>
+          <Providers>
+            <LayoutWrapper>{children}</LayoutWrapper>
+          </Providers>
         </body>
       </html>
     </>

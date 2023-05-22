@@ -46,7 +46,7 @@ export const metadata: Metadata = {
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <>
-      <html lang="kr">
+      <html lang="kr" suppressHydrationWarning>
         <body className="bg-white text-black antialiased dark:bg-gray-900 dark:text-white">
           <Providers>
             <LayoutWrapper>{children}</LayoutWrapper>

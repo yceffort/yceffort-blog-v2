@@ -6,6 +6,16 @@ import { DEFAULT_NUMBER_OF_POSTS } from '#src/constants'
 import CustomLink from '#components/Link'
 import Tag from '#components/Tag'
 
+export async function generateMetadata({
+  params: { tag, id },
+}: {
+  params: { tag: string; id: string }
+}) {
+  return {
+    title: `${tag}: Page ${id}`,
+  }
+}
+
 export async function generateStaticParams() {
   const allTags = await getAllTagsFromPosts()
   const posts = await getAllPosts()

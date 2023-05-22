@@ -25,8 +25,6 @@ export const dynamic = 'error'
 
 export const dynamicParams = false
 
-export const revalidate = Infinity
-
 export async function generateMetadata({
   params: { year, slug },
 }: {
@@ -45,15 +43,17 @@ export async function generateMetadata({
 
 export async function generateStaticParams() {
   const allPosts = await getAllPosts()
-  return allPosts.reduce<Array<{ year: string; slugs: string[] }>>(
+  const result = allPosts.reduce<Array<{ year: string; slug: string[] }>>(
     (prev, { fields: { slug } }) => {
       const [year, ...slugs] = `${slug.replace('.md', '')}`.split('/')
 
-      prev.push({ year, slugs })
+      prev.push({ year, slug: slugs })
       return prev
     },
     [],
   )
+
+  return result
 }
 
 export default async function Page({

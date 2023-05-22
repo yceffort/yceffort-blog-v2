@@ -23,6 +23,10 @@ import MathLoader from '#components/layouts/Post/math'
 
 export const dynamic = 'error'
 
+export const dynamicParams = false
+
+export const revalidate = Infinity
+
 export async function generateMetadata({
   params: { year, slug },
 }: {

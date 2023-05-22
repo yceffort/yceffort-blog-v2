@@ -9,6 +9,12 @@ const DIR_REPLACE_STRING = '/posts'
 
 const POST_PATH = `${process.cwd()}${DIR_REPLACE_STRING}`
 
+export async function findPostByYearAndSlug(year: string, slug: string[]) {
+  const slugs = [year, ...slug].join('/')
+  const posts = await getAllPosts()
+  return posts.find((p) => p?.fields?.slug === slugs)
+}
+
 export async function getAllPosts(): Promise<Array<Post>> {
   const files = sync(`${POST_PATH}/**/*.md*`).reverse()
 

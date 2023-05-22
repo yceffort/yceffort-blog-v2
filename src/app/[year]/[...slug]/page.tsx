@@ -21,6 +21,8 @@ import { parseCodeSnippet } from '#utils/Markdown'
 import MDXComponents from '#components/MDXComponents'
 import MathLoader from '#components/layouts/Post/math'
 
+export const dynamic = 'error'
+
 export async function generateMetadata({
   params: { year, slug },
 }: {

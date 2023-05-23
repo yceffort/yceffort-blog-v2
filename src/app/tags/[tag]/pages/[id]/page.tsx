@@ -5,6 +5,8 @@ import { DEFAULT_NUMBER_OF_POSTS } from '#src/constants'
 import ListLayout from '#components/layouts/ListLayout'
 import PageNumber from '#components/layouts/PageNumber'
 
+export const dynamic = 'error'
+
 export async function generateMetadata({
   params: { tag, id },
 }: {

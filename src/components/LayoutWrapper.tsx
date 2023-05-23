@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { ReactNode } from 'react'
+import Link from 'next/link'
 
-import Link from './Link'
 import SectionContainer from './SectionContainer'
 import Footer from './Footer'
 import MobileNav from './MobileNav'

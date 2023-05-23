@@ -1,4 +1,4 @@
-import Link from './Link'
+import Link from 'next/link'
 
 import SocialIcon from '#components/icons'
 import { SiteConfig } from '#src/config'

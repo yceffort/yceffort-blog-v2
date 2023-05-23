@@ -1,8 +1,7 @@
 'use client'
 
 import { memo, useState } from 'react'
-
-import Link from './Link'
+import Link from 'next/link'
 
 import { SiteConfig } from '#src/config'
 

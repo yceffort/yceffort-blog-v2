@@ -1,9 +1,9 @@
 import Image from 'next/image'
+import Link from 'next/link'
 
 import profile from '#public/profile.png'
 import { SiteConfig } from '#src/config'
 import SocialIcon from '#components/icons'
-import CustomLink from '#components/Link'
 
 export default function Page() {
   return (
@@ -50,9 +50,9 @@ export default function Page() {
           hide away. Oh, I believe in yesterday.
         </p>
         <p>
-          <CustomLink href="https://resume.yceffort.kr">
+          <Link href="https://resume.yceffort.kr">
             Detailed Resume (Notion)
-          </CustomLink>
+          </Link>
         </p>
       </div>
     </>

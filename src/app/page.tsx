@@ -4,7 +4,6 @@ import Script from 'next/script'
 
 import { getAllPosts } from '#utils/Post'
 import { DEFAULT_NUMBER_OF_POSTS } from '#src/constants'
-import CustomLink from '#components/Link'
 import Tag from '#components/Tag'
 import { SiteConfig } from '#src/config'
 
@@ -43,12 +42,12 @@ export default async function Page() {
                         <div className="space-y-6">
                           <div>
                             <h2 className="text-2xl font-bold leading-8 tracking-tight">
-                              <CustomLink
+                              <Link
                                 href={`/${slug}`}
                                 className="text-gray-900 dark:text-gray-100"
                               >
                                 {title}
-                              </CustomLink>
+                              </Link>
                             </h2>
                             <div className="flex flex-wrap">
                               {tags.map((tag) => (
@@ -61,13 +60,13 @@ export default async function Page() {
                           </div>
                         </div>
                         <div className="text-base font-medium leading-6">
-                          <CustomLink
+                          <Link
                             href={`/${slug}`}
                             className="text-blue-500 hover:text-blue-600 dark:hover:text-blue-400"
                             aria-label={`Read "${title}"`}
                           >
                             Read more &rarr;
-                          </CustomLink>
+                          </Link>
                         </div>
                       </div>
                     </div>

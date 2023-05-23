@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
+import Link from 'next/link'
 
-import CustomLink from '#components/Link'
 import Tag from '#components/Tag'
 import { Post } from '#src/type'
 
@@ -40,12 +40,12 @@ export default function ListLayout({
                   <div className="space-y-3 xl:col-span-3">
                     <div>
                       <h3 className="text-2xl font-bold leading-8 tracking-tight">
-                        <CustomLink
+                        <Link
                           href={`/${slug}`}
                           className="text-gray-900 dark:text-gray-100"
                         >
                           {title}
-                        </CustomLink>
+                        </Link>
                       </h3>
                       <div className="flex flex-wrap">
                         {tags.map((tag) => (

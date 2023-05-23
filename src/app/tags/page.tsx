@@ -1,5 +1,6 @@
+import Link from 'next/link'
+
 import Tag from '#components/Tag'
-import CustomLink from '#components/Link'
 import { getAllTagsFromPosts } from '#utils/Post'
 
 export default async function Page() {
@@ -18,12 +19,12 @@ export default async function Page() {
           return (
             <div key={tag} className="mt-2 mb-2 mr-5">
               <Tag text={tag} />
-              <CustomLink
+              <Link
                 href={`/tag/${tag}`}
                 className="-ml-2 text-sm font-semibold uppercase text-gray-600 dark:text-gray-300"
               >
                 {count}
-              </CustomLink>
+              </Link>
             </div>
           )
         })}

@@ -1,6 +1,5 @@
 import { HTMLProps } from 'react'
-
-import CustomLink from './Link'
+import Link from 'next/link'
 
 function NextImage(props: HTMLProps<HTMLImageElement>) {
   const { src } = props
@@ -27,7 +26,16 @@ function NextImage(props: HTMLProps<HTMLImageElement>) {
 
 const MdxComponents = {
   img: NextImage,
-  a: CustomLink,
+  a: (props: HTMLProps<HTMLAnchorElement>) => (
+    <Link
+      href={props.href || ''}
+      className={props.className}
+      target={props.target}
+      rel={props.rel}
+    >
+      {props.children}
+    </Link>
+  ),
 }
 
 export default MdxComponents

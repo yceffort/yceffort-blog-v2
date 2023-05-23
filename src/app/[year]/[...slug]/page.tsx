@@ -9,10 +9,10 @@ import remarkGfm from 'remark-gfm'
 import rehypeKatex from 'rehype-katex'
 import prism from 'rehype-prism-plus'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import Link from 'next/link'
 
 import { findPostByYearAndSlug, getAllPosts } from '#utils/Post'
 import Tag from '#components/Tag'
-import CustomLink from '#components/Link'
 import { SiteConfig } from '#src/config'
 import profile from '#public/profile.png'
 import PageTitle from '#components/PageTitle'
@@ -22,8 +22,6 @@ import MDXComponents from '#components/MDXComponents'
 import MathLoader from '#components/layouts/Post/math'
 
 export const dynamic = 'error'
-
-export const dynamicParams = false
 
 export async function generateMetadata({
   params: { year, slug },
@@ -150,7 +148,7 @@ export default async function Page({
                 />
               </div>
               <div className="pt-6 pb-6 text-sm text-gray-700 dark:text-gray-300">
-                <CustomLink href={link}>Issue on GitHub</CustomLink>
+                <Link href={link}>Issue on GitHub</Link>
               </div>
             </div>
             <footer>
@@ -169,12 +167,12 @@ export default async function Page({
                 )}
               </div>
               <div className="pt-4 xl:pt-8">
-                <CustomLink
+                <Link
                   href="/"
                   className="text-blue-500 hover:text-blue-600 dark:hover:text-blue-400"
                 >
                   &larr; Back to the blog
-                </CustomLink>
+                </Link>
               </div>
             </footer>
           </div>

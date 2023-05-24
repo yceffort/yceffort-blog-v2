@@ -26,16 +26,30 @@ function NextImage(props: HTMLProps<HTMLImageElement>) {
 
 const MdxComponents = {
   img: NextImage,
-  a: (props: HTMLProps<HTMLAnchorElement>) => (
-    <Link
-      href={props.href || ''}
-      className={props.className}
-      target={props.target}
-      rel={props.rel}
-    >
-      {props.children}
-    </Link>
-  ),
+  a: (props: HTMLProps<HTMLAnchorElement>) => {
+    const { href, ...rest } = props
+
+    if (!href) {
+      return null
+    }
+
+    const isAnchorLink = href.startsWith('#')
+
+    if (isAnchorLink) {
+      return <a href={href} {...rest} />
+    }
+
+    return (
+      <Link
+        href={href}
+        className={props.className}
+        target={props.target}
+        rel={props.rel}
+      >
+        {props.children}
+      </Link>
+    )
+  },
 }
 
 export default MdxComponents

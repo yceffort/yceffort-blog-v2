@@ -221,7 +221,7 @@ next@13 부터 [Route Segment Config](https://nextjs.org/docs/app/api-reference/
 
 ### before
 
-과거 이 블로그는 ogtag 이미지 동적 생성을 위해 `generate-screenshot` 페이지와 서버리스 구글 cloud function을 사용하여 동적으로 블로그 포스트 썸네일을 생성했다. [관련 글](https://www.google.com/search?q=yceffort+og+image&oq=yceffort+og+image&aqs=chrome..69i57j69i60l3.1924j0j1&sourceid=chrome&ie=UTF-8) 이 방법은 개발자 입장에서는 재밌을지는 몰라도, 확실히 비효율적이긴했다.
+과거 이 블로그는 ogtag 이미지 동적 생성을 위해 `generate-screenshot` 페이지와 서버리스 구글 cloud function을 사용하여 동적으로 블로그 포스트 썸네일을 생성했다. [관련 글](https://yceffort.kr/2020/12/generate-serverless-thumbnail) 이 방법은 개발자 입장에서는 재밌을지는 몰라도, 확실히 비효율적이긴했다.
 
 ### after
 

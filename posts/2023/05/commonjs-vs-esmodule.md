@@ -155,7 +155,7 @@ exports = { hello: false }
 - 파일 확장자가 `.mjs` `.cjs` `.json` `.node` `.js` 가 아닌 경우. 이 경우 가장 가까운 부모의 `package.json`이 `type: "module"`로 되어 있다고 하더라도, 모듈 내부에 `require()`를 쓰고 있다면 commonjs로 인식한다.
 - 모듈이 `require()`로 호출 되는 경우 내부 파일에 상관없이 무조건 `commonjs`로 인식한다.
 
-## module wrapper
+### module wrapper
 
 TBD
 

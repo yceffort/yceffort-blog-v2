@@ -2,6 +2,7 @@ import './tailwind.css'
 
 import type { Metadata } from 'next'
 import { ReactNode } from 'react'
+import Script from 'next/script'
 
 import { SiteConfig } from '#src/config'
 import LayoutWrapper from '#components/LayoutWrapper'
@@ -51,6 +52,19 @@ export default function Layout({ children }: { children: ReactNode }) {
           <Providers>
             <LayoutWrapper>{children}</LayoutWrapper>
           </Providers>
+          <Script
+            src={`https://www.googletagmanager.com/gtag/js?id=${SiteConfig.googleAnalyticsId}`}
+            strategy="afterInteractive"
+          />
+          <Script id="google-analytics" strategy="afterInteractive">
+            {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){window.dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', '${SiteConfig.googleAnalyticsId}');
+        `}
+          </Script>
         </body>
       </html>
     </>

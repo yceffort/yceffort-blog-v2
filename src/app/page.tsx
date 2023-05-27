@@ -1,6 +1,5 @@
 import { format } from 'date-fns'
 import Link from 'next/link'
-import Script from 'next/script'
 
 import { getAllPosts } from '#utils/Post'
 import { DEFAULT_NUMBER_OF_POSTS } from '#src/constants'
@@ -86,19 +85,6 @@ export default async function Page() {
           All Posts &rarr;
         </Link>
       </div>
-      <Script
-        src={`https://www.googletagmanager.com/gtag/js?id=${SiteConfig.googleAnalyticsId}`}
-        strategy="afterInteractive"
-      />
-      <Script id="google-analytics" strategy="afterInteractive">
-        {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){window.dataLayer.push(arguments);}
-          gtag('js', new Date());
-
-          gtag('config', '${SiteConfig.googleAnalyticsId}');
-        `}
-      </Script>
     </>
   )
 }

@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 export const OpenGraphImageSize = {
   width: 1200,
   height: 1546 / (2850 / 1200),
@@ -24,7 +26,7 @@ export default function OpenGraphComponent({
 }) {
   return (
     <>
-      <img
+      <Image
         alt={title}
         src={imageSrc || 'https://yceffort.kr/default-image.png'}
         style={{

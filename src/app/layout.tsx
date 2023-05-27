@@ -3,6 +3,7 @@ import './tailwind.css'
 import type { Metadata } from 'next'
 import { ReactNode } from 'react'
 import Script from 'next/script'
+import { Analytics } from '@vercel/analytics/react'
 
 import { SiteConfig } from '#src/config'
 import LayoutWrapper from '#components/LayoutWrapper'
@@ -65,6 +66,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           gtag('config', '${SiteConfig.googleAnalyticsId}');
         `}
           </Script>
+          <Analytics />
         </body>
       </html>
     </>

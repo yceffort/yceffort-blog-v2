@@ -8,7 +8,7 @@ export const SiteConfig = {
   copyright: 'yceffort © All rights reserved.',
   disqusShortname: '',
   postsPerPage: 5,
-  googleAnalyticsId: 'UA-139493546-1',
+  googleAnalyticsId: 'G-ND58S24JBX',
   useKatex: false,
   menu: [
     {

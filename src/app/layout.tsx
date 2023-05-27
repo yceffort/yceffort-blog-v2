@@ -59,7 +59,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           <Script id="google-analytics" strategy="afterInteractive">
             {`
           window.dataLayer = window.dataLayer || [];
-          function gtag(){window.dataLayer.push(arguments);}
+          function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
 
           gtag('config', '${SiteConfig.googleAnalyticsId}');

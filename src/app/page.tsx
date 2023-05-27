@@ -96,7 +96,7 @@ export default async function Page() {
           function gtag(){window.dataLayer.push(arguments);}
           gtag('js', new Date());
 
-          gtag('config', 'GA_MEASUREMENT_ID');
+          gtag('config', '${SiteConfig.googleAnalyticsId}');
         `}
       </Script>
     </>

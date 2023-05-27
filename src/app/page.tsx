@@ -87,19 +87,18 @@ export default async function Page() {
         </Link>
       </div>
       <Script
-        id="gtag"
-        dangerouslySetInnerHTML={{
-          __html: `
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-
-                gtag('config', '${SiteConfig.googleAnalyticsId}', {
-                  page_path: window.location.pathname,
-                });
-              `,
-        }}
+        src={`https://www.googletagmanager.com/gtag/js?id=${SiteConfig.googleAnalyticsId}`}
+        strategy="afterInteractive"
       />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){window.dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'GA_MEASUREMENT_ID');
+        `}
+      </Script>
     </>
   )
 }

@@ -178,7 +178,12 @@ Partial은 key를 옵셔널하게 해준다.
 // 이거는
 let PartialColorProperties = Partial<ColorProperties>
 // 이거와 같다.
-let PartialColorProperties = { red?: string, blue?: string, green?: string, black?: string }
+let PartialColorProperties = {
+  red: string,
+  blue: string,
+  green: string,
+  black: string,
+}
 ```
 
 ## 정리

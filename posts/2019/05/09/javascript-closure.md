@@ -197,7 +197,7 @@ function MyObject(name, message) {
   this.getMessage = function () {
     return this.message
   }
-}.call(MyObject.prototype))
+}).call(MyObject.prototype)
 ```
 
 이렇게 쓴다면 좀더 섹시해 보일 것이다.

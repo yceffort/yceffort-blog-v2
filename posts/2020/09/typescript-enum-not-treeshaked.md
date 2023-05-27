@@ -120,7 +120,7 @@ const Direction = {
   Down: 'DOWN',
 } as const
 
-type Direction = typeof Direction[keyof typeof Direction]
+type Direction = (typeof Direction)[keyof typeof Direction]
 
 for (const d of Object.values(Direction)) {
   console.log(d)

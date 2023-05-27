@@ -358,7 +358,7 @@ export function render(data, target) {
   Object.defineProperty(__webpack_exports__, '__esModule', { value: true })
   var __WEBPACK_IMPORTED_MODULE_0__comments_js__ = __webpack_require__(1)
   Object(__WEBPACK_IMPORTED_MODULE_0__comments_js__['a' /* render */])()
-},
+}),
   /* 1 */
   function (module, __webpack_exports__, __webpack_require__) {
     'use strict'
@@ -366,7 +366,7 @@ export function render(data, target) {
     function render(data, target) {
       console.log('Rendered!')
     }
-  })
+  }
 ```
 
 과거 이러한 방식은 CommonJS나 AMD 모듈로 부터 분리시키기 위해 필요했다. 그러나 이러한 방식은 각 모듈의 사이즈를 키우고 퍼포먼스를 저하시킨다.
@@ -452,12 +452,12 @@ module.exports = {
   // A module that exports `window.React`. Without `externals`,
   // this module would include the whole React bundle
   module.exports = React
-},
+}),
   function (module, exports) {
     // A module that exports `window.ReactDOM`. Without `externals`,
     // this module would include the whole ReactDOM bundle
     module.exports = ReactDOM
-  })
+  }
 ```
 
 ### `AMD` 패키지의 경우

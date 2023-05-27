@@ -1,17 +1,21 @@
 import { HTMLProps } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 function NextImage(props: HTMLProps<HTMLImageElement>) {
   const { src } = props
+  const width = Number(props.width)
+  const height = Number(props.height)
 
   if (src) {
     if (src.startsWith('http')) {
       // eslint-disable-next-line @next/next/no-img-element
-      return <img src={src} alt={src} />
+      return <Image src={src} alt={src} width={width} height={height} />
     } else {
       return (
-        <img
-          {...props}
+        <Image
+          width={width}
+          height={height}
           alt={props.alt || ''}
           crossOrigin="anonymous"
           src={src}

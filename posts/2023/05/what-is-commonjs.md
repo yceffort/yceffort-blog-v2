@@ -1,10 +1,10 @@
 ---
-title: '1부) commonjs vs esmodule'
+title: '1부) commonjs란 무엇인가?'
 tags:
   - nodejs
 published: true
 date: 2023-05-26 13:52:26
-description: '아 require 랑 import 는 안다구요'
+description: 'const module = require("./module.js")'
 ---
 
 > 이 글은 `commonjs`와 `esmodule` 의 동작 원리와 차이점을 알기 위해 작성된 글이다. 총 3부작으로 작성할 예정이고, 작성될 때 마다 본문에 링크를 추가해 두겠다.

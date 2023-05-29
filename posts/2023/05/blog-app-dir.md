@@ -381,7 +381,7 @@ export default function robots(): MetadataRoute.Robots {
 ## 그 외 시행착오 와 소감
 
 - 서버 컴포넌트를 본격적으로 지원하기 시작하면서, 내가 사용하는 라이브러리가 서버에서 사용가능한지, 클라이언트에서 사용가능한지 확인이 필요해졌다. 마크다운 렌더링을 위해 [next-mdx-remote](https://github.com/hashicorp/next-mdx-remote)를 사용했는데, 이 라이브러리를 서버에서 사용할 경우 내부적으로 `useState`를 사용하고 있어 렌더링 시 오류가 발생했다. 다행히 [해당 기능을 지원](https://github.com/hashicorp/next-mdx-remote#react-server-components-rsc--nextjs-app-directory-support)해줘서 큰 문제는 없었지만, 16.8 의 등장으로 훅을 지원하느냐 여부에 따라 리액트 라이브러리의 생태계가 많이 갈렸던 것 처럼 일대 혼란이 있을 것으로 보인다. 사내에서 만드는 라이브러리가 있는데, 이 라이브러리들이 어디까지가 서버컴포넌트에서 돌아갈지 고민해봐야할 필요가 있을 것 같다.
-- `app`과 `pages`에 동일한 주소가 있을 경우 (당연히) 정상적으로 실행되지 않는다. 블로그의 경우 기능이 그렇게 많지 않아 과감하게 모두 날리고 다시 만들었지만, 실제 실무 프로젝트라면 당연히 그렇게 못헀을 것이다. 따로 `new` prefix를 추가한 주소에서 `app`을 사용했을 것 같다.
+- `app`과 `pages`에 동일한 주소가 있을 경우 (당연히) 정상적으로 실행되지 않는다. 블로그의 경우 기능이 그렇게 많지 않아 과감하게 모두 날리고 다시 만들었지만, 실제 실무 프로젝트라면 당연히 그렇게 못했을 것이다. 따로 `new` prefix를 추가한 주소에서 `app`을 사용했을 것 같다.
 - `next dev --turbo`를 사용해보았는데, 역시나 swc 때와 마찬가지로 베타라는 말이 무색하게 여기저기서 에러가 터졌었다. 물론 vercel 팀을 비난하려는건 아니고, 아무튼 사용에 주의가 필요해보였다. (사랑해요 vercel)
 - [typescript 5.1 부터 비동기 컴포넌트를 정식으로 지원할 예정](https://devblogs.microsoft.com/typescript/announcing-typescript-5-1-rc/#decoupled-type-checking-between-jsx-elements-and-jsx-tag-types)이라서 현 버전에서는 `@ts-ignore`로 어글리하게 처리한 케이스가 몇개 있다.
 - 생각보다 `pages`에서 `app`으로 전환하는데 사고가 빠르게 되지 않았다. `getServerSideProps`를 다른 프로젝트에서 마이그레이션 해보았지만, router segment 별로 caching 정책을 가져간다거나 `fetch`별로 캐싱을 하는게 익숙하지 않았다. 이 기분은 마치 next@8 인가 7을 내가 처음 써봤을 때 `getInitialProps`가 클라와 서버에서 동시에 실행될 때 느꼈던 혼란의 그것과 유사했다. 이 또한 적응 될 것이다. (늙어서 그렇지)

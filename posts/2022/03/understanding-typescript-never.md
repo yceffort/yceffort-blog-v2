@@ -360,7 +360,7 @@ type IsNever<T> = T extends never ? true : false
 type Res = IsNever<never> // never 🧐
 ```
 
-`IsNever`로 never인지 확인하기 위해 true, false를 리턴하게 헀지만 실상은 저것마저도 `never`가 된다.
+`IsNever`로 never인지 확인하기 위해 true, false를 리턴하게 했지만 실상은 저것마저도 `never`가 된다.
 
 https://github.com/microsoft/TypeScript/issues/23182#issuecomment-379094672 의 대답을 요약하자면
 

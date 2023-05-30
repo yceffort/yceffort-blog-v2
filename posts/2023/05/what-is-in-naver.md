@@ -247,6 +247,16 @@ html은 검색영역, 그리고 리액트의 루트 영역으로 추정되는 `d
 
 네이버의 경우 `X-XSS-Protection` 헤더로 cross site scripting을 막는 반면, `iframe`으로 제공되는 페이지들에는 딱히 그런 처리가 없는 것으로 확인되었다. (광고라서 누가 띄워주면 개이득?)
 
+### MIME 타입 요약
+
+![naver-11](./images/naver-11.png)
+
+대부분 요청이 이미지를 차지하고 있다. 이러한 이미지들을
+
+- 최대한 화질 손상 없이 압축
+- progressive jpeg으로 변경 (IE에서는 소용 없지만)
+- 중요하지 않은 이미지 들에 대한 [`loading=lazy` 속성 추가](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading#images_and_iframes)
+
 ## 요약
 
 - naver 는 클라이언트에서 fetch 요청을 최소화 하기 위해 서버에서 미리 필요한 데이터를 요청 한다음, `window['EAGER-DATA']` 에 넣어둔다.

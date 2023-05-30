@@ -236,7 +236,7 @@ module.exports[localStorage.getItem(Math.random())] = () => { … };
 
 ## CommonJS와 트리쉐이킹
 
-CommonJS 모듈이 다이나믹 definition을 하기 때문에 이를 분석하는 것은 매우 어렵다. 그에 반에 ESModule은 항상 string module을 활용하여 import 하기 때문에 매우 명확하다.
+CommonJS 모듈이 다이나믹 definition을 하기 때문에 이를 분석하는 것은 매우 어렵다. 그에 반해 ESModule은 항상 string module을 활용하여 import 하기 때문에 매우 명확하다.
 
 만약 현재 사용하고 있는 라이브러리가 (`lodash` 같은 경우) CommonJS의 컨벤션을 따르는 경우, 웹팩의 써드 파티 라이브러리인 [Webpack Common Shake](https://github.com/indutny/webpack-common-shake)를 활용하여 사용하지 않는 export를 제거 할 수도 있다. 이 라이브러리가 트리 쉐이킹을 지원하지만, CommonJS에서 사용 가능한 모든 디펜던시를 커버하는 것은 아니다. 이 말인 즉슨, ES Modules 만큼은 보장되지 않는 다는 것이다. 추가로, `webpack`에서 빌드를 하는데 있어서 추가적인 비용이 지출된다.
 

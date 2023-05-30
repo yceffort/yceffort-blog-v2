@@ -10,7 +10,7 @@ function NextImage(props: HTMLProps<HTMLImageElement>) {
   if (src) {
     if (src.startsWith('http')) {
       // eslint-disable-next-line @next/next/no-img-element
-      return <Image src={src} alt={src} width={width} height={height} />
+      return <img src={src} alt={src} width={width} height={height} />
     } else {
       return (
         <Image

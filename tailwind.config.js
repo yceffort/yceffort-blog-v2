@@ -67,6 +67,7 @@ module.exports = {
               paddingTop: '2px',
               paddingBottom: '2px',
               borderRadius: '0.25rem',
+              wordBreak: 'break-word',
             },
             'code:before': {
               content: 'none',

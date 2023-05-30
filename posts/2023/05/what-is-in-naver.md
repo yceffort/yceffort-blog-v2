@@ -1,5 +1,5 @@
 ---
-title: '새로 바뀐 네이버 홈엔 무엇이 있을까?'
+title: '새로 바뀐 네이버 홈은 어떻게 만들어졌을까?'
 tags:
   - javascript
   - web

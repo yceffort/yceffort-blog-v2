@@ -380,6 +380,7 @@ console.log(test[hello])
 
 - `query-string`: https://github.com/sindresorhus/query-string/releases/tag/v8.0.0
 - `d3.js`: https://github.com/d3/d3/releases/tag/v7.0.0
+- `chalk`: https://github.com/chalk/chalk/releases/tag/v5.0.0
 
 등등 유명한 라이브러리들이 `commonjs` 지원을 중단하고 `esmodule`로 넘어가고 있는 추세다. 그 이유는 여러가지 있다.
 

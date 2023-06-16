@@ -180,3 +180,23 @@ console.log(test)
 ```
 
 이러한 방식이 불가능한 이유는, `commonjs`는 항상 동적으로 (synchronous)하게 모듈을 불러오는 반면, esmodule은 비동기로 실행을 가져가기 때문이다. esmodule로 작성된 파일을 commonjs에서 불러오고 싶다면 `await import`을 사용해야 하는 이유가 이 때문이다.
+
+### commonjs 네임스페이스
+
+라이브러리를 처음 만들어 본 사람들이 제일 혼란 스러워 하는 것이 바로 `default`가 동작하는 방식이다. 결론부터 말하자면, `module.exports`가 esmodule 방식의 default로 동작한다. 다음과 같은 방식의 코드를 이해해 두면 편하다.
+
+```javascript
+// test.js
+module.exports = {
+  foo: 'bar',
+}
+
+// main.mjs
+import { default as test1 } from './test.js'
+
+import test from './test.js'
+
+console.log(test1 === test) // true
+```
+
+이는 nodejs가 제하는 문법적 설탕으로, commonjs 모듈에서 가져오는 `default` sms

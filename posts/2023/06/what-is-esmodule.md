@@ -2,7 +2,7 @@
 title: '2부) esmodule은 무엇인가?'
 tags:
   - nodejs
-published: true
+published: false
 date: 2023-06-06 11:02:49
 description: '누구나 알지만 모르는 esmodule'
 ---

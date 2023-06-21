@@ -3,7 +3,7 @@ title: 'nodejs의 성능 분석은 어떻게 할까?'
 tags:
   - javascript
   - nodejs
-published: true
+published: false
 date: 2023-06-15 22:32:58
 description: '이론도 중요하지만 🤔'
 ---
@@ -30,6 +30,64 @@ https://github.com/pnpm/pnpm/blob/main/pnpm/src/main.ts
 
 이야기가 조금 샜지만 pnpm을 대상으로 작성하게 된 것은, 요즘 왠지 pnpm이 조금 느려진 것 같다는 생각을 하게 되면서다. pnpm 코드 자체에는 크게 관심이 없었지만, 무언가 조금 느려진 것이 아닌가 하는 의심을 하면서 부터 조금씩 성능에 대해 파해쳐 봐야겠다는 생각을 하기 시작했다.
 
-## 정말로 느려졌나?
+## `--prof`
 
-평소에도 급한 내 성격이 더 ㅈㄹ 맞아져서 느리게 생각하는 걸 수도 있다. 같은 동작을 yarn과 pnpm으로 해보면서 직접적으로 성능을 비교 해보았다. npm은 논의 하는 것 자체가 의미가 없는 것 같아 생략했다.
+nodejs 에는 크롬 개발자 도구를 직접 붙이는 것 외에도 내장 프로파일러 도구가 존재하는데, 그것이 바로 `--prof`다. `node --prof`를 실행하면 스크립트를 직접 분석할 수 있다. `--prof`로 nodejs 스크립트를 실행하면 `*.log`이라는 파일이 생성되는데, 이 파일을 기반으로 성능을 확인할 수 있다.
+
+```bash
+> node --prof ./node_modules/pnpm/dist/pnpm.cjs run echo
+```
+
+```text
+isolate-0x150078000-38143-v8.log
+
+v8-version,10,2,154,26,-node.26,0
+v8-platform,macos,macos
+shared-library,/Users/yceffort/.nvm/versions/node/v18.16.0/bin/node,0x102e60000,0x104186294,48611328
+shared-library,/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation,0x19d5acb00,0x19d79c0a0,487899136
+shared-library,/usr/lib/libobjc.A.dylib,0x19d1aa000,0x19d1de7e0,487899136
+shared-library,/System/Library/PrivateFrameworks/CoreServicesInternal.framework/Versions/A/CoreServicesInternal,0x1a06560e0,0x1a068cec0,487899136
+shared-library,/usr/lib/liboah.dylib,0x1a8ea6c9c,0x1a8eabda0,487899136
+shared-library,/usr/lib/libfakelink.dylib,0x1a8eda4d0,0x1a8edbb80,487899136
+shared-library,/usr/lib/libicucore.A.dylib,0x1a008ec3c,0x1a02d93f0,487899136
+shared-library,/usr/lib/libSystem.B.dylib,0x1a8ed74c8,0x1a8ed7aec,487899136
+shared-library,/System/Library/PrivateFrameworks/SoftLinking.framework/Versions/A/SoftLinking,0x1a8edcbbc,0x1a8edce50,487899136
+shared-library,/usr/lib/libc++abi.dylib,0x19d4f41d8,0x19d507e58,487899136
+shared-library,/usr/lib/libc++.1.dylib,0x19d466c40,0x19d4c7694,487899136
+// ...
+```
+
+그러나 이 파일만으로는 시각적인 정보를 얻기 쉽지 않다. 그래서 이 파일을 기반으로 또다른 명령어를 실행한다.
+
+```bash
+> node --prof-process --preprocess -j isolate*.log > v8.json
+```
+
+이 명령어는 앞서 `node --prof`로 생성된 로그 파일을 하나로 모아서 json 파일을 만드는 역할을 한다.
+
+```json
+{
+  "code": [
+    {
+      "name": "/Users/yceffort/.nvm/versions/node/v18.16.0/bin/node",
+      "type": "SHARED_LIB"
+    },
+    {
+      "name": "T node::AsyncResource::AsyncResource(v8::Isolate*, v8::Local<v8::Object>, char const*, double)",
+      "type": "CPP"
+    }
+  ]
+}
+```
+
+그러나 이 파일 역시 만만치 않은 크기를 자랑한다. 이 json 파일을 바탕으로 시각적인 정보를 확인할 수 있는 도구가 존재하는데, 바로 [flamebearer](https://mapbox.github.io/flamebearer/) 다. 이 도구를 활용하면 앞서 만든 `json`파일을 기반으로 flame graph를 생성할 수 있다.
+
+![flamebearer](./images/flamebearer1.png)
+
+![flamebearer](./images/flamebearer2.png)
+
+이렇게하면 이 `node`가 실행되기 위해 어떠한 과정을 거쳤고, 또 각 모듈이 스크립트 실행에 미치는 영향도를 파악할 수 있게 된다. 이러한 정보를 바탕으로, 스크립트 실행과정에서 불필요한 작업이 발생하지는 않았는지, 또 너무 오래 걸리거나 많은 비용이 드는 작업은 없었는지 확인 할 수 있다.
+
+## Import Graph Visualizer
+
+![](./images/import-graph-visualizer.png)

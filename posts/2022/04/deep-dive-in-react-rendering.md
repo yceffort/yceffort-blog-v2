@@ -19,7 +19,7 @@ description: '리액트에서 메모이제이션을 언제 해야하는가 고�
 
 렌더링이 일어나는 동안, 리액트는 컴포넌트의 루트에서 시작하여 아래쪽으로 쭉 훑어 보면서, 업데이트가 필요하다고 플래그가 지정되어 있는 모든 컴포넌트를 찾는다. 만약 플래그가 지정되어 있는 컴포넌트를 만난다면, 클래스 컴포넌트의 경우 `classComponentInstance.render()`를, 함수형 컴포넌트의 경우 `FunctionComponent()`를 호출하고, 렌더링된 결과를 저장한다.
 
-컴포넌트의 렌더링 결과물은 일반적으로 JSX 문법으로 구성되어 있으며, 이는 js가 컴파일되고 배포 준비가 되는순간에 `React.createElement()`를 호출하여 변환된다. `createElement`는 UI 구조를 설명하는 일반적인 JS 객체인 React Element를 리턴한다. 아래 예제를 살펴보자.
+컴포넌트의 렌더링 결과물은 일반적으로 JSX 문법으로 구성되어 있으며, 이는 js가 컴파일되고 런타임 시점에 `React.createElement()`를 호출하여 변환된다. `createElement`는 UI 구조를 설명하는 일반적인 JS 객체인 React Element를 리턴한다. 아래 예제를 살펴보자.
 
 ```jsx
 // 일반적인 jsx문법

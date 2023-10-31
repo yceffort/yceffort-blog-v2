@@ -1,4 +1,4 @@
-import { ImageResponse } from 'next/server'
+import { ImageResponse } from 'next/og'
 
 import { SiteConfig } from '#src/config'
 import OpenGraphComponent, { OpenGraphImageSize } from '#components/OpenGraph'

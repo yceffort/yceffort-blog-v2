@@ -39,10 +39,6 @@ export const metadata: Metadata = {
       follow: true,
     },
   },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-  },
 }
 
 export default function Layout({ children }: { children: ReactNode }) {

@@ -50,7 +50,7 @@ export default function Page() {
           hide away. Oh, I believe in yesterday.
         </p>
         <p>
-          <Link href="https://resume.yceffort.kr">
+          <Link href="https://yceffort.notion.site/9fc4262c01744a63a849cdccdde5c85f">
             Detailed Resume (Notion)
           </Link>
         </p>

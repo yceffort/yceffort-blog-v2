@@ -1,3 +1,4 @@
 {
-  "extends": ["@titicaca/stylelint-config-triple"]
+    "extends": ["@naverpay/stylelint-config"],
+    "defaultSeverity": "error"
 }

@@ -8,11 +8,9 @@ import {getAllPosts} from '#utils/Post'
 export const dynamic = 'error'
 
 export async function generateMetadata(props: {params: Promise<{id: string}>}) {
-    const params = await props.params;
+    const params = await props.params
 
-    const {
-        id
-    } = params;
+    const {id} = params
 
     return {
         title: `Page ${id}`,
@@ -26,7 +24,7 @@ export async function generateStaticParams() {
 }
 
 export default async function Page(props: {params: Promise<{id: string}>}) {
-    const params = await props.params;
+    const params = await props.params
     const allPosts = await getAllPosts()
     const pageNo = parseInt(params.id)
 

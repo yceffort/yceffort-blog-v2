@@ -6,13 +6,13 @@ github repository of <https://yceffort.kr>
 
 ## Dependencies
 
-- nodejs@18
-- React@18
-- Typescript@5
-- tailwindcss
-- Nextjs@14
-- next-mdx-remote
-- pnpm
+- nodejs@22.11.0
+- react@19.x
+- typescript@5.x
+- tailwindcss@4.x
+- nextjs@15.x
+- next-mdx-remote@5.x
+- pnpm@10.x
 - vercel
 
 ## Frontmatter
@@ -35,8 +35,6 @@ description: '여기에 Description을 적어둡니다.' #required
 ```md
 ## Table of Contents
 ```
-
-를 적어두면 생성합니다.
 
 ## author
 

@@ -18,15 +18,13 @@
         "dev": "next dev",
         "lint": "eslint '**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,yaml,yml,json}'",
         "lint:fix": "eslint '**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,yaml,yml,json}' --fix",
-        "lint:style": "stylelint './**/*.{js,ts,tsx}'",
-        "lint:style:fix": "stylelint './**/*.{js,ts,tsx}' --fix",
+        "lint:style": "stylelint '**/*.{css,scss}'",
+        "lint:style:fix": "stylelint --fix '**/*.{css,scss}'",
         "pre-commit": "lint-staged",
         "prepare": "husky install",
         "prettier": "prettier --check '**/*.{ts,tsx,js,mjs,cjs,jsx,json,yaml,yml}'",
         "prettier:fix": "prettier --write '**/*.{ts,tsx,js,mjs,cjs,jsx,json,yaml,yml}'",
-        "start": "next start",
-        "stylelint": "stylelint '**/*.{css,scss}'",
-        "stylelint:fix": "stylelint --fix '**/*.{css,scss}'"
+        "start": "next start"
     },
     "dependencies": {
         "@tailwindcss/forms": "^0.5.10",

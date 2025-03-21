@@ -22,8 +22,8 @@
         "lint:style:fix": "stylelint './**/*.{js,ts,tsx}' --fix",
         "pre-commit": "lint-staged",
         "prepare": "husky install",
-        "prettier": "prettier --check '**/*.{ts,tsx,js,mjs,cjs,jsx,json}'",
-        "prettier:fix": "prettier --write '**/*.{ts,tsx,js,mjs,cjs,jsx,json}'",
+        "prettier": "prettier --check '**/*.{ts,tsx,js,mjs,cjs,jsx,json,yaml,yml}'",
+        "prettier:fix": "prettier --write '**/*.{ts,tsx,js,mjs,cjs,jsx,json,yaml,yml}'",
         "start": "next start",
         "stylelint": "stylelint '**/*.{css,scss}'",
         "stylelint:fix": "stylelint --fix '**/*.{css,scss}'"

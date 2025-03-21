@@ -1,26 +1,26 @@
 name: build
 
 on:
-  push:
-    branches-ignore:
-      - 'main'
+    push:
+        branches-ignore:
+            - 'main'
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+    build:
+        runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [22.x]
+        strategy:
+            matrix:
+                node-version: [22.x]
 
-    steps:
-      - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@v2.2.4
-        with:
-          version: 8
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - run: pnpm install
-      - run: pnpm build
+        steps:
+            - uses: actions/checkout@v3
+            - name: Setup Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: 'pnpm'
+            - run: corepack enable
+            - run: corepack prepare --activate
+            - run: pnpm install --frozen-lockfile
+            - run: pnpm build

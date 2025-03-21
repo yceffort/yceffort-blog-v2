@@ -132,9 +132,15 @@ export default async function Page(props: {params: Promise<{year: string; slug: 
                                             rehypePlugins: [
                                                 rehypeKatex,
                                                 rehypeSlug,
+                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                // @ts-ignore
                                                 prism,
                                                 parseCodeSnippet,
+                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                // @ts-ignore
                                                 rehypeAutolinkHeadings,
+                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                // @ts-ignore
                                                 imageMetadata(path),
                                             ],
                                         },

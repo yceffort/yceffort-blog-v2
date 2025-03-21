@@ -3,7 +3,7 @@
         "target": "esnext",
         "module": "esnext",
         "jsx": "preserve",
-        "lib": ["dom", "es2017"],
+        "lib": ["dom", "es2022"],
         "baseUrl": "./",
         "moduleResolution": "bundler",
         "strict": true,
@@ -33,6 +33,6 @@
             }
         ]
     },
-    "exclude": ["dist", ".next", "out", "next.config.js"],
+    "exclude": ["dist", ".next", "out", "next.config.mjs"],
     "include": ["next-env.d.ts", "typing/*.d.ts", "**/*.ts*", ".next/types/**/*.ts"]
 }

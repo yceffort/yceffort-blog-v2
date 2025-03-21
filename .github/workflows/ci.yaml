@@ -1,26 +1,81 @@
-name: build
+name: CI
 
 on:
-  push:
-    branches-ignore:
-      - 'main'
+    push:
+        branches-ignore:
+            - main
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+    lint-and-prettier:
+        name: Lint & Prettier
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                node-version: [22.x]
+        steps:
+            - uses: actions/checkout@v4
+            - uses: pnpm/action-setup@v4
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: pnpm
 
-    strategy:
-      matrix:
-        node-version: [18.x]
+            - run: pnpm install --frozen-lockfile
 
-    steps:
-      - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@v2.2.4
-        with:
-          version: 8
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - run: pnpm install
-      - run: pnpm build
+            - run: pnpm lint
+            - run: pnpm prettier
+            - run: pnpm lint:style
+
+    build:
+        name: Build
+        runs-on: ubuntu-latest
+        needs: [lint-and-prettier]
+        strategy:
+            matrix:
+                node-version: [22.x]
+
+        steps:
+            - uses: actions/checkout@v3
+            - uses: pnpm/action-setup@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: pnpm
+
+            - run: corepack enable
+            - run: corepack prepare --activate
+            - run: pnpm install --frozen-lockfile
+
+            - run: pnpm build
+
+    lighthouse:
+        name: Lighthouse CI
+        runs-on: ubuntu-latest
+        needs: [build]
+
+        steps:
+            - uses: actions/checkout@v3
+            - uses: pnpm/action-setup@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22.x
+
+            - run: corepack enable
+            - run: corepack prepare --activate
+
+            - name: install & build
+              run: |
+                  pnpm install --frozen-lockfile
+                  pnpm build
+
+            - name: run Lighthouse CI
+              run: |
+                  npm install -g @lhci/cli@0.12.0
+                  lhci autorun
+              env:
+                  LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}

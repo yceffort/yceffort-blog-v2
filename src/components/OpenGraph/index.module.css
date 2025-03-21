@@ -1,64 +1,59 @@
 .wrapper {
     position: absolute;
-    left: 0;
     top: 0;
-    height: 100vh;
-    width: 100vw;
+    left: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgb(15 15 15);
+    width: 100vw;
+    height: 100vh;
+    background: rgb(15, 15, 15);
 }
-
 .preview {
-    height: 630px;
-    width: 1200px;
-    background: rgba(83, 186, 266, 0.8);
-    color: rgb(254 254 254);
     position: relative;
+    width: 1200px;
+    height: 630px;
+    background: rgba(83, 186, 266, 0.8);
+    color: rgb(254, 254, 254);
 }
-
 .main {
     position: relative;
     z-index: 2;
-
-    font-size: 1.25rem;
+    display: grid;
     height: calc(100% - 4rem);
     margin: 2rem;
     padding: 2rem;
-    border: 3px solid white;
-    border-color: white;
-    display: grid;
+    border: 3px solid #fff;
+    border-color: #fff;
+    font-size: 1.25rem;
     gap: 2rem;
-    grid-template-rows: 1fr auto auto 1fr auto auto auto;
-    grid-template-columns: 3fr 2fr 1fr;
-    grid-template-areas:
-    '. . .'
-    'title title .'
-    'tags tags .'
-    'url url url'
-    '. . .'
-    '. attribution attribution'
-    'author attribution attribution';
+    grid-template:
+        ' . . .'
+        'title title .'
+        'tags tags .'
+        'url url url'
+        ' . . .'
+        ' . attribution attribution'
+        'author attribution attribution'
+        / 3fr 2fr 1fr
+        1fr auto auto 1fr auto auto auto;
 }
-
 .image {
     position: absolute;
-    z-index: 1;
     top: -1px;
     right: -1px;
     bottom: -1px;
     left: -1px;
+    z-index: 1;
     width: 100%;
     height: 100%;
+    margin: 0;
+    opacity: 0.5;
     object-fit: cover;
     object-position: center center;
     filter: grayscale(100%);
-    opacity: 0.5;
     mix-blend-mode: overlay;
-    margin: 0;
 }
-
 .h1 {
     margin: 0;
     font-size: 3em;
@@ -66,48 +61,40 @@
     grid-area: title;
     line-height: 3.25rem;
 }
-
 .tag_list {
     grid-area: tags;
     font-size: 1.25em;
 }
-
 .tag_ul {
-    font-size: 1.5em;
-
-    color: white;
-    list-style: none;
-    padding: 0;
-    margin: 0;
     display: inline-block;
+    margin: 0;
+    padding: 0;
+    font-size: 1.5em;
+    color: #fff;
+    list-style: none;
 }
-
 .tag_li {
+    display: inline-block;
     margin: 0;
     margin-right: 5px;
-    display: inline-block;
 }
-
 .url {
     grid-area: url;
     display: block;
     font-size: 1.5em;
 }
-
 .author {
     grid-area: author;
     display: block;
     font-size: 2em;
 }
-
 .attribution {
-    grid-area: attribution;
-    font-size: 0.8em;
-    text-align: right;
     align-self: end;
     margin: 0;
+    font-size: 0.8em;
+    text-align: right;
+    grid-area: attribution;
 }
-
 .attribution_by {
     display: block;
 }

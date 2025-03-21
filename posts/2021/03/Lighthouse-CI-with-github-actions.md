@@ -17,10 +17,13 @@ Lighthouse는 웹사이트의 성능을 측정하는 유명한 도구중 하나�
 ## Local에서 사용하기
 
 1. 설치
+
    ```bash
    npm install -g @lhci/cli
    ```
+
 2. 루트 디렉토리에서 `lighthouserc.js`를 만들자. 여기가 [설정](https://github.com/GoogleChrome/lighthouse-ci/blob/v0.4.1/docs/configuration.md#configuration-file)이 들어가는 곳이다.
+
    ```javascript
    module.exports = {
      ci: {
@@ -33,6 +36,7 @@ Lighthouse는 웹사이트의 성능을 측정하는 유명한 도구중 하나�
      },
    }
    ```
+
 3. Lighthouse CI가 실행 될때마다, 서버가 구동되어 사이트가 시작되어야 한다. 이 서버가 작동하게되면, Lighthouse CI가 해당 서버를 토대로 웹사이트 성능을 추적할 것이다. 작업이 끝나면, 알아서 종료된다. 제대로 작동하기 위해서는 둘 중에 하나를 설정해둬야 한다.
    1. `staticDir`: `ci.collect`에 해당 속성과 함께 static 파일이 위치한 곳을 설정해 두면된다. 그러면 Lighthouse CI는 알아서 그 파일을 기준으로 서버를 실행해서 테스트를 하게 된다.
    2. `startServerCommand`: static한 사이트가 아니라면, `ci.collect`에 서버를 키는 명령어를 적어두면 된다. (`npm run start`) 그러면 Lighthouse CI는 알아서 해당 명령어를 실행해서 서버를 키고, 끝난 후에는 종료 시킬 것이다.
@@ -119,6 +123,7 @@ module.exports = {
 
 1. `.github/workflows`에 원하는 이름으로 파일을 만든다. 나는 `lightouse-ci.yaml`로 했다.
 2. 해당 파일 내용을 다음과 같이 꾸몄다.
+
    ```yaml
    name: Build project and run Lighthouse CI
    on: [push]
@@ -142,11 +147,13 @@ module.exports = {
              npm install -g @lhci/cli@0.3.x
              lhci autorun --upload.target=temporary-public-storage || echo "LHCI failed!"
    ```
+
    1. nodejs 설치
    2. npm ci
    3. 프로젝트 빌드
    4. lhci 설치 및 실행
 3. assert 를 추가
+
    ```javascript
    module.exports = {
      ci: {

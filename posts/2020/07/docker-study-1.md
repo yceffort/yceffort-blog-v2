@@ -231,7 +231,7 @@ ca-key.pem  client-cert.pem  ib_buffer_pool  ib_logfile0  ibtmp1       performan
 
 ### 2. 볼륨 컨테이너
 
-`-v` 옵션으로 볼륨을 사용하는 컨테이너를, 다른 컨테이너와 공유하는 것이다. 컨테이너 생성시 `--volumes-from `을 사용하면 `-v`를 사용한 컨테이너의 볼륨 디렉토리를 공유할 수 있다.
+`-v` 옵션으로 볼륨을 사용하는 컨테이너를, 다른 컨테이너와 공유하는 것이다. 컨테이너 생성시 `--volumes-from`을 사용하면 `-v`를 사용한 컨테이너의 볼륨 디렉토리를 공유할 수 있다.
 
 ```shell
 ubuntu@study:~$ docker run -i -t --name volume_overide -v /home/wordpress_db:/home/testdir_2 alicek106/volume_test

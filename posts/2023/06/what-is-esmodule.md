@@ -67,7 +67,7 @@ import { foo } from 'bar'
 
 앞서 설명했듯이 esmodule은 URL을 기반으로 모듈을 불러오고 캐싱한다. 따라서 일부 특수문자의 경우에는 `%`를 사용한 인코딩을 사용해야 한다.
 
-현재 nodejs는 `file:` `node:` `data:` 방식의 URL 스킴을 지원하고 있다. 다만 deno와 같이 `https://example.com/app.js' http https 모듈을 불러오는 것은 지원하지 않고 있다. 그리고 일반적인 `URL`과 마찬가지로, 쿼리와 fragment가 다르면 다른 모듈로 인식한다.
+현재 nodejs는 `file:` `node:` `data:` 방식의 URL 스킴을 지원하고 있다. 다만 deno와 같이 `https://example.com/app.js' http https 모듈을 불러오는 것은 지원하지 않고 있다. 그리고 일반적인`URL`과 마찬가지로, 쿼리와 fragment가 다르면 다른 모듈로 인식한다.
 
 #### `file:`
 

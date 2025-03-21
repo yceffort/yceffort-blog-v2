@@ -125,12 +125,12 @@ markdown에 pretter를 적용하고 싶었는데, mathjax 를 위해 사용한 �
 ### mathjax error 에러
 
 ```
-14:11:12.944  	error CHTML - Unknown character: U+BE14 in MathJax_Main,MathJax_Size1,MathJax_AMS
-14:11:12.945  	error CHTML - Unknown character: U+B85D in MathJax_Main,MathJax_Size1,MathJax_AMS
-14:11:12.946  	error CHTML - Unknown character: U+B2F9 in MathJax_Main,MathJax_Size1,MathJax_AMS
-14:11:12.947  	error CHTML - Unknown character: U+C791 in MathJax_Main,MathJax_Size1,MathJax_AMS
-14:11:12.948  	error CHTML - Unknown character: U+C5C5 in MathJax_Main,MathJax_Size1,MathJax_AMS
-14:11:12.948  	error CHTML - Unknown character: U+C99D in MathJax_Main,MathJax_Size1,MathJax_AMS
+14:11:12.944    error CHTML - Unknown character: U+BE14 in MathJax_Main,MathJax_Size1,MathJax_AMS
+14:11:12.945    error CHTML - Unknown character: U+B85D in MathJax_Main,MathJax_Size1,MathJax_AMS
+14:11:12.946    error CHTML - Unknown character: U+B2F9 in MathJax_Main,MathJax_Size1,MathJax_AMS
+14:11:12.947    error CHTML - Unknown character: U+C791 in MathJax_Main,MathJax_Size1,MathJax_AMS
+14:11:12.948    error CHTML - Unknown character: U+C5C5 in MathJax_Main,MathJax_Size1,MathJax_AMS
+14:11:12.948    error CHTML - Unknown character: U+C99D in MathJax_Main,MathJax_Size1,MathJax_AMS
 ```
 
 `$$...$$`로 대변되는 mathjax syntax안에 내가 한글을 넣어놨나보다. 이 한글을 찾아내서 모두 없애야 빌드 타임에 비명을 지르지 않을텐데, 귀찮아서 아직 수정하지 못하고 있다. (ㅠㅠ)

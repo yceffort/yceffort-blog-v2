@@ -1,8 +1,8 @@
 # yceffort-blog
 
-previously, https://github.com/yceffort/yceffort-blog
+previously, <https://github.com/yceffort/yceffort-blog>
 
-github repository of https://yceffort.kr
+github repository of <https://yceffort.kr>
 
 ## Dependencies
 

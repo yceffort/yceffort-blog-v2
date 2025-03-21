@@ -272,19 +272,23 @@ interface JayG extends Dog {}
 타입 시스템에는, 타입 가변성이라는 개념이 존재한다. (Type Variance) 이는 타입과 서브타입의 관계를 서술한 것을 의미한다. 여기에는 네가지가 존재한다.
 
 - Covariance: `A`가 `B`의 서브타입일 경우, `T<A>` 도 `T<B>`의 서브타입인 경우
+
   ```typescript
   function hello(d: Dog) {}
   hello(animal) //error
   hello(dog) // ok
   hello(jayg) //ok
   ```
+
 - Contravariance: `A`가 `B`의 서브타입일 경우, `T<B>`가 `T<A>`의 서브타입인 경우
+
   ```typescript
   function hello(d: Dog) {}
   hello(animal) //ok
   hello(dog) // ok
   hello(jayg) // error
   ```
+
 - Invariance: 다른 타입을 허용하지 않음
 - Bivariance: 아무 타입이나 다 허용
 

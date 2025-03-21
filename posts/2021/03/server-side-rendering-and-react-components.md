@@ -52,14 +52,14 @@ file:///.../node_modules/tui-calendar/dist/tui-calendar.js (16:4)
 
 ```javascript
 (function webpackUniversalModuleDefinition(root, factory) {
-	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("tui-code-snippet"), require("tui-date-picker"));
-	else if(typeof define === 'function' && define.amd)
-		define(["tui-code-snippet", "tui-date-picker"], factory);
-	else if(typeof exports === 'object')
-		exports["Calendar"] = factory(require("tui-code-snippet"), require("tui-date-picker"));
-	else
-		root["tui"] = root["tui"] || {}, root["tui"]["Calendar"] = factory((root["tui"] && root["tui"]["util"]), (root["tui"] && root["tui"]["DatePicker"]));
+  if(typeof exports === 'object' && typeof module === 'object')
+    module.exports = factory(require("tui-code-snippet"), require("tui-date-picker"));
+  else if(typeof define === 'function' && define.amd)
+    define(["tui-code-snippet", "tui-date-picker"], factory);
+  else if(typeof exports === 'object')
+    exports["Calendar"] = factory(require("tui-code-snippet"), require("tui-date-picker"));
+  else
+    root["tui"] = root["tui"] || {}, root["tui"]["Calendar"] = factory((root["tui"] && root["tui"]["util"]), (root["tui"] && root["tui"]["DatePicker"]));
 })(window, function(__WEBPACK_EXTERNAL_MODULE_tui_code_snippet__, __WEBPACK_EXTERNAL_MODULE_tui_date_picker__) // 여기에서 에러가 난다.
 ```
 

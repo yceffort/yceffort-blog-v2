@@ -164,7 +164,7 @@ Let us look at th
 
 ```javascript
 /******/ (() => { // webpackBootstrap
-/******/ 	"use strict";
+/******/   "use strict";
 
 // CONCATENATED MODULE: ./utils.js**
 const add = (a, b) => a + b;

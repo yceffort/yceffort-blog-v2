@@ -99,7 +99,7 @@ onClick: onLogin }, 'Login' )
 
 두 가지 방법이 존재한다.
 
-1.  함수형 컴포넌트: 컴포넌트를 만드는 가장 심플한 방식이다. `props`를 첫번째 파라미터로 받는 받는 순수 자바스크립트 함수를 만들고, React Element를 반환하면 된다.
+1. 함수형 컴포넌트: 컴포넌트를 만드는 가장 심플한 방식이다. `props`를 첫번째 파라미터로 받는 받는 순수 자바스크립트 함수를 만들고, React Element를 반환하면 된다.
 
 ```javascript
 function Greeting({ message }) {
@@ -107,7 +107,7 @@ function Greeting({ message }) {
 }
 ```
 
-1.  클래스 컴포넌트: ES6의 클래스를 활용하여 컴포넌트를 정의할 수도 있다. 위 컴포넌트를 클래스 컴포넌트로 바꾼다면 이렇게 될 것이다.
+1. 클래스 컴포넌트: ES6의 클래스를 활용하여 컴포넌트를 정의할 수도 있다. 위 컴포넌트를 클래스 컴포넌트로 바꾼다면 이렇게 될 것이다.
 
 ```javascript
 class Greeting extends React.Component {

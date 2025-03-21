@@ -140,7 +140,7 @@ Lax 설정시 embedded된 음성 파일 요청시에는 쿠키가 들어가지 �
 
 - [이는 2020년 2월 4일에 배포될 예정이다.](https://www.chromestatus.com/features/schedule)
 
-* `SameSite=None`을 쓰고 싶다면 Secure 플래그를 활성화 해야 한다.
+- `SameSite=None`을 쓰고 싶다면 Secure 플래그를 활성화 해야 한다.
 
 ```
    > Rejected | Set-Cookie: widget_session=abc123; SameSite=None

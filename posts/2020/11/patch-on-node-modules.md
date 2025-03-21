@@ -57,8 +57,8 @@ diff -Naur node_modules/react-dom/index.js patches/react-dom-index.js > patches/
 ```
 
 ```
---- node_modules/react-dom/index.js	1985-10-26 17:15:00.000000000 +0900
-+++ patches/react-dom-index.js	2020-11-23 16:55:32.000000000 +0900
+--- node_modules/react-dom/index.js  1985-10-26 17:15:00.000000000 +0900
++++ patches/react-dom-index.js  2020-11-23 16:55:32.000000000 +0900
 @@ -28,6 +28,8 @@
    }
  }

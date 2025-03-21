@@ -90,6 +90,7 @@ module.exports = {
 디펜던시를 별도의 chunk로 분리하기 위해서는, 아래 3가지 과정을 거치면 된다.
 
 1. output 파일명을 `[name].[chunkname].js`로 바꾼다.
+
    ```javascript
    // webpack.config.js
    module.exports = {
@@ -101,6 +102,7 @@ module.exports = {
      },
    }
    ```
+
 2. `entry`를 object로 바꾼다.
 
 ```javascript

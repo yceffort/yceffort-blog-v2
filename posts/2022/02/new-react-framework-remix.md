@@ -385,7 +385,7 @@ export default function DashboardLayout() {
 }
 ```
 
-그리고 ` /dashboard/settings` 에 또다른 `loader`가 있다고 가정해보자. 루트는 이에 대해 관심이 없으며, 마찬가지로 다른 페이지에서도 이에 대해 가지고 있을 필요가 없다. nextjs에서는 `getServerSideProps`의 일부를 분산하여 이를 수동으로 구현할 수 있지만, remix는 좀더 자연스러운 지원을 제공한다.
+그리고 `/dashboard/settings` 에 또다른 `loader`가 있다고 가정해보자. 루트는 이에 대해 관심이 없으며, 마찬가지로 다른 페이지에서도 이에 대해 가지고 있을 필요가 없다. nextjs에서는 `getServerSideProps`의 일부를 분산하여 이를 수동으로 구현할 수 있지만, remix는 좀더 자연스러운 지원을 제공한다.
 
 ```jsx
 // parent route
@@ -418,12 +418,14 @@ remix는 vercel, cloudflare worker, deno deploy, fly.io와 같은 다양한 배�
 
 - remix 내부에는 세션과 쿠키를 처리할 수 있는 함수가 내장되어 있으며, 이는 클라이언트 서버 아키텍쳐에서 중요하다.
 - `app/routes/reports/$report.tsx` 형태의 동적 라우팅을 지원한다. nextjs는 `[param]`, remix는 `$param`이다.
+
   ```jsx
   export default function Report() {
     // ...
     return <div>...</div>
   }
   ```
+
 - nextjs 에 글로벌 `App` `Document` Wrapper가 있다면, remix에는 `entry.server.tsx`가 있다. 또한 `entry.client.tsx`를 사용하여 hydration과정에서 정확히 어떤일이 일어나는지 확인할 수 있다.
 - nextjs에 있지만 remix에 없는 것은
   - 이미지 최적화 컴포넌트 `next/image`

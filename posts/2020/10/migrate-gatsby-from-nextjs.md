@@ -158,12 +158,12 @@ module.exports = {
 7분 가까이 빌드에 소요되었었다. ㅠㅠ
 
 ```bash
-16:54:32.265  	Running "npm run build"
+16:54:32.265    Running "npm run build"
 ...
 
-16:56:13.131  	success Rewriting compilation hashes - 0.006s
-16:59:23.076  	success Building static HTML for pages - 7.784s - 655/655 84.15/s
-16:59:24.034  	success Generating image thumbnails - 275.708s - 2434/2434 8.83/s
+16:56:13.131    success Rewriting compilation hashes - 0.006s
+16:59:23.076    success Building static HTML for pages - 7.784s - 655/655 84.15/s
+16:59:24.034    success Generating image thumbnails - 275.708s - 2434/2434 8.83/s
 ```
 
 정적파일 빌드 하는데 3분이 넘게 걸렸고, 쓸데 없이 이미지 썸네일 만드는데에 5분까지 걸렸다.

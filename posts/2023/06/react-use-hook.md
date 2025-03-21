@@ -170,7 +170,7 @@ function Note({ id }) {
 
   - `status` 필드에 `pending` `fulfilled` `rejected`
   - `promise`가 이행 (fulfilled) 되었다면, `value` 필드에 이행된 값을 채워둔다.
-  - `promise`가 거절 (fulfilled) 되었다면,` reason` 필드에 거절된 이유, 에러 객체를 추가한다.
+  - `promise`가 거절 (fulfilled) 되었다면,`reason` 필드에 거절된 이유, 에러 객체를 추가한다.
 
   한가지 명심해야 하는 것은, 모든 `promise`에 이 값을 추가하는 것은 아니라는 것이다. 단지 `use`를 사용하는 `promise`에 대해서만 이러한 값을 추가한다. 이 덕분에 `Promise.prototype`을 오염시키지 않아도 되며, 리액트가 아닌 코드에 영향을 미치지 않게 된다. 이는 물론 자바스크립트 표준은 아니지만, 리액트가 `promise`의 결과를 추
   적하는데 도움을 준다. 만약 미래에 `Promise.inpect`와 같이 동기적으로 `Promise`의 현재 상태를 알 수 있는 api가 제공된다면, 이를 사용할 의향도 있다.

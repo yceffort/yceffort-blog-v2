@@ -160,10 +160,10 @@ module.exports = exports = class Square {
 
 - 파일 확장자가 `.cjs`로 되어 있는 경우
 - 파일 확장자가 `.js`로 되어 있으며
-    - 가장 가까운 부모의 `package.json`의 파일의 `type`필드에 값이 `commonjs`인 경우
-    - 가장 가까운 부모의 `package.json`파일에 `type` 필드가 명시되어 있지 않은 경우
-        - 이것이 바로 그 commonjs 라이브러리로 대표되는 `lodash`의 사례다. [lodash의 경우 package.json에 `type`이 할당되어 있지 않다.](https://github.com/lodash/lodash/blob/master/package.json)
-        - 라이브러리 제작자라면, 어쩄거나 이 `type` 필드에 값을 `commonjs`든 뭐든 넣어주는 것이 좋다. 이는 빌드 도구나 번들러들이 모듈을 빠르게 결정해서 작업하는데 도움을 준다.
+  - 가장 가까운 부모의 `package.json`의 파일의 `type`필드에 값이 `commonjs`인 경우
+  - 가장 가까운 부모의 `package.json`파일에 `type` 필드가 명시되어 있지 않은 경우
+    - 이것이 바로 그 commonjs 라이브러리로 대표되는 `lodash`의 사례다. [lodash의 경우 package.json에 `type`이 할당되어 있지 않다.](https://github.com/lodash/lodash/blob/master/package.json)
+    - 라이브러리 제작자라면, 어쩄거나 이 `type` 필드에 값을 `commonjs`든 뭐든 넣어주는 것이 좋다. 이는 빌드 도구나 번들러들이 모듈을 빠르게 결정해서 작업하는데 도움을 준다.
 - 파일 확장자가 `.mjs` `.cjs` `.json` `.node` `.js` 가 아닌 경우. 이 경우 가장 가까운 부모의 `package.json`이 `type: "module"`로 되어 있다고 하더라도, 모듈 내부에 `require()`를 쓰고 있다면 commonjs로 인식한다.
 - 모듈이 `require()`로 호출 되는 경우 내부 파일에 상관없이 무조건 `commonjs`로 인식한다.
 
@@ -188,7 +188,7 @@ module.exports = exports = class Square {
 
 - 모듈 최상단에 있는 `var` `const` `let` 등으로 선언된 변수가 글로벌 객체 (`global`)에 등록되는 것을 막는다.
 - 모듈에서 글로벌 객체 있는 `exports` `require` `module` `__filename` `__dirname`을 사용할 수 있게 해준다.
-    - 그렇다. `esmodule`에서 `__filename`, `__dirname` 등을 사용하지 못하는 이유는 `module wrapper`가 없기 때문이다.
+  - 그렇다. `esmodule`에서 `__filename`, `__dirname` 등을 사용하지 못하는 이유는 `module wrapper`가 없기 때문이다.
 
 ### 순환 참조에서는 어떻게 동작할까?
 
@@ -386,7 +386,7 @@ console.log(test[hello])
 
 - `webpack@4`와 같은 `commonjs` 만 지원하는 번들러가 점차 사라지고 있음
 - 라이브러리 관리자들이 유지보수하기 굉장히 빡셈
-    - 라이브러리를 두종류로 번들링 해야하는 데 따른 시간 증가 및 관리 포인트 증가
+  - 라이브러리를 두종류로 번들링 해야하는 데 따른 시간 증가 및 관리 포인트 증가
 - 트리쉐이킹을 지원하지 못함
 
 `commonjs`를 표준에서 제외해야 하는가, `deprecated` 해야 하는가, `nodejs`에서 지원을 중단해야 하는가 여부는 매우 논쟁적인 부분이지만, 대부분의 자바스크립트 개발자들은 `esmodule`을 더 선호한다는 것에는 동의할 것이다.

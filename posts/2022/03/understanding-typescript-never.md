@@ -41,6 +41,7 @@ https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes-func.html#o
 - 실행이 완료되면 caller에게 제어 권한을 반환하지 않는 (혹은 의도된) 함수의 반환 유형 (예: node의 `process.exit()`)
   - `void`와는 다르다. `void`는 함수가 caller에게 아무것도 리턴하지 않는 다는 것을 의미한다.
 - rejected된 promise의 fulfill 값
+
   ```typescript
   const p = Promise.reject('foo') // const p: Promise<never>
   ```

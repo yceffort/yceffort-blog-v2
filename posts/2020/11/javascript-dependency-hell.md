@@ -178,28 +178,28 @@ gatsby의 lodash 의존을 살펴보면, 모두 같은 버전의 lodash를 사�
 
 ```bash
 » du -sh node_modules
-348M	node_modules
+348M  node_modules
 ```
 
 300메가 정도면 괜찮은 편이다. 만약 `node_modules`에서 무엇이 비중을 많이 차지 하는지 살펴보고 싶다면 아래 명령어를 실행하면 된다.
 
 ```bash
 » du -sh ./node_modules/* | sort -nr | grep '\dM.*'
- 30M	./node_modules/@graphql-tools
- 20M	./node_modules/date-fns
- 17M	./node_modules/rxjs
- 14M	./node_modules/gatsby
- 14M	./node_modules/@babel
-8.7M	./node_modules/prettier
-8.4M	./node_modules/babel-runtime
-8.3M	./node_modules/gatsby-recipes
-6.9M	./node_modules/core-js
-6.8M	./node_modules/core-js-pure
-5.5M	./node_modules/eslint
-5.1M	./node_modules/moment
-5.1M	./node_modules/@types
-4.9M	./node_modules/webpack
-4.8M	./node_modules/lodash
+ 30M  ./node_modules/@graphql-tools
+ 20M  ./node_modules/date-fns
+ 17M  ./node_modules/rxjs
+ 14M  ./node_modules/gatsby
+ 14M  ./node_modules/@babel
+8.7M  ./node_modules/prettier
+8.4M  ./node_modules/babel-runtime
+8.3M  ./node_modules/gatsby-recipes
+6.9M  ./node_modules/core-js
+6.8M  ./node_modules/core-js-pure
+5.5M  ./node_modules/eslint
+5.1M  ./node_modules/moment
+5.1M  ./node_modules/@types
+4.9M  ./node_modules/webpack
+4.8M  ./node_modules/lodash
 ...
 ```
 

@@ -5,7 +5,7 @@
     "jsx": "preserve",
     "lib": ["dom", "es2017"],
     "baseUrl": "./",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "strict": true,
     "allowJs": true,
     "noEmit": true,

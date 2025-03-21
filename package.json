@@ -55,8 +55,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.22.1",
-    "@commitlint/cli": "^17.6.3",
-    "@commitlint/config-conventional": "^17.6.3",
     "@titicaca/eslint-config-triple": "^5.0.0",
     "@titicaca/prettier-config-triple": "^1.0.2",
     "@titicaca/stylelint-config-triple": "^1.1.0",
@@ -82,5 +80,5 @@
     "unified": "^10.1.2",
     "webpack": "^5.84.1"
   },
-  "packageManager": "pnpm@8.3.0"
+  "packageManager": "pnpm@10.6.5"
 }

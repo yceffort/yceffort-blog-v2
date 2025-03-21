@@ -1,5 +1,6 @@
 module.exports = {
     reactStrictMode: true,
+    transpilePackages: ['next-mdx-remote'],
     async redirects() {
         return [
             {

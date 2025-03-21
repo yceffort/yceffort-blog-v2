@@ -7,9 +7,9 @@ import {MDXRemote} from 'next-mdx-remote/rsc'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeKatex from 'rehype-katex'
 import prism from 'rehype-prism-plus'
+import rehypeSlug from 'rehype-slug'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
-import remarkSlug from 'remark-slug'
 import remarkToc from 'remark-toc'
 
 import MathLoader from '#components/layouts/Post/math'
@@ -128,9 +128,10 @@ export default async function Page(props: {params: Promise<{year: string; slug: 
                                     components={MDXComponents}
                                     options={{
                                         mdxOptions: {
-                                            remarkPlugins: [remarkMath, remarkToc, remarkSlug, remarkGfm],
+                                            remarkPlugins: [remarkMath, remarkToc, remarkGfm],
                                             rehypePlugins: [
                                                 rehypeKatex,
+                                                rehypeSlug,
                                                 prism,
                                                 parseCodeSnippet,
                                                 rehypeAutolinkHeadings,

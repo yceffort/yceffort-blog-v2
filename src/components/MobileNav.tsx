@@ -22,7 +22,7 @@ const MobileNav = memo(() => {
 
     return (
         <div className="sm:hidden">
-            <button type="button" className="ml-1 mr-1 h-8 w-8 rounded" aria-label="Toggle Menu" onClick={onToggleNav}>
+            <button type="button" className="ml-1 mr-1 h-8 w-8 rounded-sm" aria-label="Toggle Menu" onClick={onToggleNav}>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20"
@@ -52,7 +52,7 @@ const MobileNav = memo(() => {
                 <button
                     type="button"
                     aria-label="toggle modal"
-                    className="fixed h-full w-full cursor-auto focus:outline-none"
+                    className="fixed h-full w-full cursor-auto focus:outline-hidden"
                     onClick={onToggleNav}
                 />
                 <nav className="fixed mt-8 h-full">

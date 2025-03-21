@@ -7,7 +7,14 @@ import {getAllPosts, getAllTagsFromPosts} from '#utils/Post'
 
 export const dynamic = 'error'
 
-export async function generateMetadata({params: {tag, id}}: {params: {tag: string; id: string}}) {
+export async function generateMetadata(props: {params: Promise<{tag: string; id: string}>}) {
+    const params = await props.params;
+
+    const {
+        tag,
+        id
+    } = params;
+
     return {
         title: `${tag}: Page ${id}`,
     }
@@ -29,7 +36,8 @@ export async function generateStaticParams() {
     return paths
 }
 
-export default async function Page({params}: {params: {tag: string; id: string}}) {
+export default async function Page(props: {params: Promise<{tag: string; id: string}>}) {
+    const params = await props.params;
     const allPosts = await getAllPosts()
     const {tag = 'javascript', id = '1'} = params
     const pageNo = parseInt(id)

@@ -24,7 +24,14 @@ import {findPostByYearAndSlug, getAllPosts} from '#utils/Post'
 
 export const dynamic = 'error'
 
-export async function generateMetadata({params: {year, slug}}: {params: {year: string; slug: string[]}}) {
+export async function generateMetadata(props: {params: Promise<{year: string; slug: string[]}>}) {
+    const params = await props.params;
+
+    const {
+        year,
+        slug
+    } = params;
+
     const post = await findPostByYearAndSlug(year, slug)
 
     if (!post) {
@@ -48,7 +55,14 @@ export async function generateStaticParams() {
     return result
 }
 
-export default async function Page({params: {year, slug}}: {params: {year: string; slug: string[]}}) {
+export default async function Page(props: {params: Promise<{year: string; slug: string[]}>}) {
+    const params = await props.params;
+
+    const {
+        year,
+        slug
+    } = params;
+
     const post = await findPostByYearAndSlug(year, slug)
 
     if (!post) {

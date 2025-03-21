@@ -13,6 +13,7 @@
     },
     "license": "MIT",
     "author": "yceffort <root@yceffort.kr>",
+    "type": "module",
     "scripts": {
         "build": "next build",
         "dev": "next dev",

@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@naverpay/commit-helper':
+        specifier: ^1.1.0
+        version: 1.1.0(husky@8.0.3)(typescript@5.8.2)
       '@naverpay/eslint-config':
         specifier: ^2.2.4
         version: 2.2.4(@types/estree@1.0.6)(@typescript-eslint/eslint-plugin@8.27.0(@typescript-eslint/parser@8.27.0(eslint@9.23.0(jiti@2.4.2))(typescript@5.8.2))(eslint@9.23.0(jiti@2.4.2))(typescript@5.8.2))(@typescript-eslint/parser@8.27.0(eslint@9.23.0(jiti@2.4.2))(typescript@5.8.2))(eslint@9.23.0(jiti@2.4.2))(jsonc-eslint-parser@2.4.0)(typescript@5.8.2)
@@ -363,6 +366,13 @@ packages:
 
   '@naverpay/ast-parser@0.0.2':
     resolution: {integrity: sha512-o9T9GmtF2r/z4jQVgUsaNrupKsxvpZ+zsa21UB37l7fnZSv3Nef8CiNFp2p4u5Vojp+X/uV/XT0sBw2kwd4y3w==}
+
+  '@naverpay/commit-helper@1.1.0':
+    resolution: {integrity: sha512-PjH1LqYcm7ZKLDpzT0+MbPiKPmgyVRpokFLzYma/BeVncMFWbWEc1S0jGCAeFIkbjU4BYlpPXViZD1CIISvSeQ==}
+    engines: {node: '>=18.0.0'}
+    hasBin: true
+    peerDependencies:
+      husky: ^8.0.3
 
   '@naverpay/eslint-config@2.2.4':
     resolution: {integrity: sha512-bW7n82sYfD1YzATW/DBaZ3RlyuQmInJyWPWQDyWmU0lyQLRmVuHP3dUtAr2WH0p3Opjxo1ADhWZznmhEULzcBg==}
@@ -1060,6 +1070,15 @@ packages:
   cosmiconfig@7.1.0:
     resolution: {integrity: sha512-AdmX6xUzdNASswsFtmwSt7Vj8po9IuqXm0UXz7QKPuEUmPB4XyjGfaAr2PSuELMwkRMVH1EpIkX5bTZGRB3eCA==}
     engines: {node: '>=10'}
+
+  cosmiconfig@8.3.6:
+    resolution: {integrity: sha512-kcZ6+W5QzcJ3P1Mt+83OUv/oHFqZHIx8DuxG6eZ5RGMERoLqp4BuGjhHLYGK+Kf5XVkQvqBSmAy/nGWN3qDgEA==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      typescript: '>=4.9.5'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
 
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
@@ -1878,6 +1897,11 @@ packages:
     resolution: {integrity: sha512-dFcAjpTQFgoLMzC2VwU+C/CbS7uRL0lWmxDITmqm7C+7F0Odmj6s9l6alZc6AELXhrnggM2CeWSXHGOdX2YtwA==}
     engines: {node: '>= 6'}
 
+  husky@8.0.3:
+    resolution: {integrity: sha512-+dQSyqPh4x1hlO1swXBiNb2HzTDN1I2IGLQx1GrBuiqFJfoMrnZWwVmatvSiO+Iz8fBUnf+lekwNo4c2LlXItg==}
+    engines: {node: '>=14'}
+    hasBin: true
+
   iconv-lite@0.4.24:
     resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==}
     engines: {node: '>=0.10.0'}
@@ -2440,6 +2464,10 @@ packages:
   media-typer@0.3.0:
     resolution: {integrity: sha512-dq+qelQ9akHpcOl/gUVRTxVIOkAJ1wR3QAvb4RsVjS8oVoFjDGTc679wJYmUmknUF5HwMLOgb5O+a3KxfWapPQ==}
     engines: {node: '>= 0.6'}
+
+  meow@12.1.1:
+    resolution: {integrity: sha512-BhXM0Au22RwUneMPwSCnyhTOizdWoIEPU9sp0Aqa1PnDMR5Wv2FGXYDjuzJEIX+Eo2Rb8xuYe5jrnm5QowQFkw==}
+    engines: {node: '>=16.10'}
 
   meow@9.0.0:
     resolution: {integrity: sha512-+obSblOQmRhcyBt62furQqRAQpNyWXo8BuQ5bN7dG8wmwQ+vwHKp/rCFD4CrTP8CsDQD1sjoZ94K417XEUk8IQ==}
@@ -3979,6 +4007,14 @@ snapshots:
       - supports-color
       - typescript
 
+  '@naverpay/commit-helper@1.1.0(husky@8.0.3)(typescript@5.8.2)':
+    dependencies:
+      cosmiconfig: 8.3.6(typescript@5.8.2)
+      husky: 8.0.3
+      meow: 12.1.1
+    transitivePeerDependencies:
+      - typescript
+
   '@naverpay/eslint-config@2.2.4(@types/estree@1.0.6)(@typescript-eslint/eslint-plugin@8.27.0(@typescript-eslint/parser@8.27.0(eslint@9.23.0(jiti@2.4.2))(typescript@5.8.2))(eslint@9.23.0(jiti@2.4.2))(typescript@5.8.2))(@typescript-eslint/parser@8.27.0(eslint@9.23.0(jiti@2.4.2))(typescript@5.8.2))(eslint@9.23.0(jiti@2.4.2))(jsonc-eslint-parser@2.4.0)(typescript@5.8.2)':
     dependencies:
       '@eslint/eslintrc': 3.3.1
@@ -4690,6 +4726,15 @@ snapshots:
       parse-json: 5.2.0
       path-type: 4.0.0
       yaml: 1.10.2
+
+  cosmiconfig@8.3.6(typescript@5.8.2):
+    dependencies:
+      import-fresh: 3.3.1
+      js-yaml: 4.1.0
+      parse-json: 5.2.0
+      path-type: 4.0.0
+    optionalDependencies:
+      typescript: 5.8.2
 
   cross-spawn@7.0.6:
     dependencies:
@@ -5795,6 +5840,8 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  husky@8.0.3: {}
+
   iconv-lite@0.4.24:
     dependencies:
       safer-buffer: 2.1.2
@@ -6446,6 +6493,8 @@ snapshots:
   mdurl@1.0.1: {}
 
   media-typer@0.3.0: {}
+
+  meow@12.1.1: {}
 
   meow@9.0.0:
     dependencies:

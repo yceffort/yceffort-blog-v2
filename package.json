@@ -28,6 +28,7 @@
         "start": "next start"
     },
     "dependencies": {
+        "@naverpay/commit-helper": "^1.1.0",
         "@naverpay/eslint-config": "^2.2.4",
         "@naverpay/eslint-plugin": "^2.1.1",
         "@naverpay/markdown-lint": "^0.0.3",

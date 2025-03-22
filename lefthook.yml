@@ -13,3 +13,7 @@ pre-commit:
         markdownlint:
             glob: '*.md'
             run: pnpm exec markdownlint --fix {staged_files}
+commit-msg:
+    commands:
+        commit-helper:
+            run: 'pnpm exec commit-helper {1}'

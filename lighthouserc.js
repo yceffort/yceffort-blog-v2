@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     ci: {
         collect: {
             // @see: https://github.com/GoogleChrome/lighthouse-ci/issues/799

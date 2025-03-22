@@ -8,7 +8,7 @@ import ThemeSwitch from './ThemeSwitch'
 
 import type {ReactNode} from 'react'
 
-import profile from '#public/profile.png'
+import profile from '#public/profile.jpeg'
 import {SiteConfig} from '#src/config'
 
 const LayoutWrapper = ({children}: {children: ReactNode}) => {

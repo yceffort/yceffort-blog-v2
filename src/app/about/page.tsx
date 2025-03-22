@@ -2,7 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import SocialIcon from '#components/icons'
-import profile from '#public/profile.png'
+import profile from '#public/profile.jpeg'
 import {SiteConfig} from '#src/config'
 
 export default function Page() {

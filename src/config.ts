@@ -23,10 +23,14 @@ export const SiteConfig = {
       label: 'about',
       path: '/about',
     },
+    {
+      label: '🧪 Research',
+      path: 'https://research.yceffort.kr',
+    },
   ],
   author: {
     name: 'yceffort',
-    photo: '/profile.png',
+    photo: '/profile.jpeg',
     bio: 'frontend engineer',
     contacts: {
       email: 'root@yceffort.kr',

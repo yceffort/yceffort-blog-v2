@@ -1,4 +1,4 @@
-import {serialize} from 'next-mdx-remote/serialize'
+import {serialize} from 'next-mdx-remote-client/serialize'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeKatex from 'rehype-katex'
 import prism from 'rehype-prism-plus'
@@ -10,7 +10,7 @@ import {visit} from 'unist-util-visit'
 
 import type {Node} from 'unist'
 
-import imageMetadata from '#utils/imageMetadata'
+import imageMetadataPlugin from '#utils/imageMetadata'
 
 type TokenType =
     | 'tag'
@@ -52,14 +52,19 @@ export function parseCodeSnippet() {
 }
 
 export async function parseMarkdownToMdx(body: string, path: string) {
-    return serialize(body, {
-        mdxOptions: {
-            remarkPlugins: [remarkMath, toc, slug, remarkGfm],
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            rehypePlugins: [rehypeKatex, prism, parseCodeSnippet, rehypeAutolinkHeadings, imageMetadata(path)],
-            // @see https://github.com/hashicorp/next-mdx-remote/issues/307#issuecomment-1363415249
-            development: false,
+    return serialize({
+        source: body,
+        options: {
+            mdxOptions: {
+                remarkPlugins: [remarkMath, toc, slug, remarkGfm],
+                rehypePlugins: [
+                    rehypeKatex,
+                    prism,
+                    parseCodeSnippet(),
+                    rehypeAutolinkHeadings,
+                    [imageMetadataPlugin, {path}],
+                ],
+            },
         },
     })
 }

@@ -3,7 +3,7 @@ import Link from 'next/link'
 import {notFound} from 'next/navigation'
 
 import {format} from 'date-fns'
-import {MDXRemote} from 'next-mdx-remote/rsc'
+import {MDXRemote} from 'next-mdx-remote-client/rsc'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeKatex from 'rehype-katex'
 import prism from 'rehype-prism-plus'
@@ -18,7 +18,7 @@ import PageTitle from '#components/PageTitle'
 import Tag from '#components/Tag'
 import profile from '#public/profile.png'
 import {SiteConfig} from '#src/config'
-import imageMetadata from '#utils/imageMetadata'
+import imageMetadataPlugin from '#utils/imageMetadata'
 import {parseCodeSnippet} from '#utils/Markdown'
 import {findPostByYearAndSlug, getAllPosts} from '#utils/Post'
 
@@ -121,8 +121,6 @@ export default async function Page(props: {params: Promise<{year: string; slug: 
                         </dl>
                         <div className="divide-y divide-gray-200 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0">
                             <div className="prose max-w-none pt-10 pb-8 dark:prose-dark">
-                                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                                {/* @ts-ignore */}
                                 <MDXRemote
                                     source={body}
                                     components={MDXComponents}
@@ -132,16 +130,10 @@ export default async function Page(props: {params: Promise<{year: string; slug: 
                                             rehypePlugins: [
                                                 rehypeKatex,
                                                 rehypeSlug,
-                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                                // @ts-ignore
                                                 prism,
                                                 parseCodeSnippet,
-                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                                // @ts-ignore
                                                 rehypeAutolinkHeadings,
-                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                                // @ts-ignore
-                                                imageMetadata(path),
+                                                [imageMetadataPlugin, {path}],
                                             ],
                                         },
                                     }}

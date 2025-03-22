@@ -1,0 +1,15 @@
+pre-commit:
+    parallel: true
+    commands:
+        eslint:
+            glob: '*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,yaml,yml}'
+            run: pnpm exec eslint --fix {staged_files}
+        prettier:
+            glob: '*.{ts,cts,tsx,js,cjs,jsx,json,md,yaml,yml}'
+            run: pnpm exec prettier --write {staged_files}
+        stylelint:
+            glob: '*.{scss,css}'
+            run: pnpm exec stylelint --fix {staged_files}
+        markdownlint:
+            glob: '*.md'
+            run: pnpm exec markdownlint --fix {staged_files}

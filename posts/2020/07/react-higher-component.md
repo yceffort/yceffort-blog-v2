@@ -310,9 +310,7 @@ function withSubscription(WrappedComponent) {
   class WithSubscription extends React.Component {
     /* ... */
   }
-  WithSubscription.displayName = `WithSubscription(${getDisplayName(
-    WrappedComponent,
-  )})`
+  WithSubscription.displayName = `WithSubscription(${getDisplayName(WrappedComponent)})`
   return WithSubscription
 }
 
@@ -398,10 +396,10 @@ MyComponent.someFunction = someFunction
 export default MyComponent
 
 // ...export the method separately...
-export { someFunction }
+export {someFunction}
 
 // ...and in the consuming module, import both
-import MyComponent, { someFunction } from './MyComponent.js'
+import MyComponent, {someFunction} from './MyComponent.js'
 ```
 
 ### Ref 는 넘어가지 않는다.

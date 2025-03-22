@@ -86,10 +86,10 @@ function getRandom<T extends'char' | 'int'>(str: T): GetReturnType<T> {
 type GetReturnType<T> = T extends 'char'
   ? string
   : T extends 'int'
-  ? number
-  : T extends 'bool'
-  ? boolean
-  : never
+    ? number
+    : T extends 'bool'
+      ? boolean
+      : never
 
 function getRandom<T extends 'char' | 'int' | 'bool'>(
   str: T,

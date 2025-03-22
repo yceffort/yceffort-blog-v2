@@ -20,7 +20,7 @@ export async function MyMiddleware(
 
   // ctx를 조작하여 인증등의 옵션을 처리할 수 있다.
   const {
-    header: { auth },
+    header: {auth},
   } = ctx
 
   if (auth === 'foo') {

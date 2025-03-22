@@ -122,7 +122,7 @@ const App = () => <>
 최소한 컴포넌트에 children의 존재가 가능한지 여부를 확인하는 것은 도움이 될 수 있다. 만약 컴포넌트에 children이 존재할 수도 있다는 것을 알리기 위해서는, `PropsWithChildren`을 사용하는 것이 좋다.
 
 ```typescript
-type PropsWithChildren<P> = P & { children?: ReactNode | undefined }
+type PropsWithChildren<P> = P & {children?: ReactNode | undefined}
 ```
 
 [https://github.com/DefinitelyTyped/DefinitelyTyped/blob/0beca137d8552f645064b8a622a6e153864c66ee/types/react/index.d.ts#L830](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/0beca137d8552f645064b8a622a6e153864c66ee/types/react/index.d.ts#L830)

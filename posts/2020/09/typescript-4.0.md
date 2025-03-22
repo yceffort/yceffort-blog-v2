@@ -290,7 +290,7 @@ let stuff = (
 // with a JSDoc-style multiline syntax to take effect.
 /** @jsx h */
 /** @jsxFrag Fragment */
-import { h, Fragment } from 'preact'
+import {h, Fragment} from 'preact'
 let stuff = h(Fragment, null, h('div', null, 'Hello'))
 ```
 

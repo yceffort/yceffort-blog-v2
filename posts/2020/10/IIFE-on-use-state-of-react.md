@@ -71,7 +71,7 @@ const Counter = () => {
 
 ```javascript
 // prop 또는 이미 존재하는 변수의 값을 리턴
-const Counter = ({ initialCount }) => {
+const Counter = ({initialCount}) => {
   const [count, setCount] = useState(() => initialCount)
 
   // ...

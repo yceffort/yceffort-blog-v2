@@ -11,11 +11,11 @@ description: '솔직히 뭔가 멋있어서 많이 쓰긴 함'
 
 ```javascript
 const items = [
-  { name: 'obama', age: 10, country: 'USA' },
-  { name: 'trump', age: 14, country: 'USA' },
-  { name: 'moon', age: 37, country: 'KOREA' },
-  { name: 'clinton', age: 64, country: 'USA' },
-  { name: 'bush', age: 49, country: 'USA' },
+  {name: 'obama', age: 10, country: 'USA'},
+  {name: 'trump', age: 14, country: 'USA'},
+  {name: 'moon', age: 37, country: 'KOREA'},
+  {name: 'clinton', age: 64, country: 'USA'},
+  {name: 'bush', age: 49, country: 'USA'},
 ]
 ```
 
@@ -23,7 +23,7 @@ const items = [
 
 ```javascript
 const result = items.reduce((prev, item) => {
-  prev[item.name] = { age: item.age, country: item.country }
+  prev[item.name] = {age: item.age, country: item.country}
   return prev
 }, {})
 
@@ -41,7 +41,7 @@ const result = items.reduce((prev, item) => {
 ```javascript
 const result2 = {}
 for (let item of items) {
-  result2[item] = { age: item.age, country: item.country }
+  result2[item] = {age: item.age, country: item.country}
 }
 ```
 
@@ -53,7 +53,7 @@ for (let item of items) {
 const result3 = items.reduce(
   (prev, item) => ({
     ...prev,
-    [item.name]: { age: item.age, country: item.country },
+    [item.name]: {age: item.age, country: item.country},
   }),
   {},
 )
@@ -94,7 +94,7 @@ result = {'obama': {age: 10, country: 'USA'}, 'trump': {age: 14, country: 'USA'}
 그전에 먼저, [tc39에 나와있는 객체 전개 연산자의 스펙](https://github.com/tc39/proposal-object-rest-spread/blob/master/Spread.md)을 살펴보자.
 
 ```javascript
-let aClone = { ...a }
+let aClone = {...a}
 let aClone = Object.assign({}, a)
 ```
 
@@ -113,12 +113,12 @@ https://twitter.com/fildon_dev/status/1396252890721918979
 
 ```javascript
 const users = [
-  { id: 1, name: 'Tony Stark', active: false },
-  { id: 2, name: 'Bruce Banner', active: true },
-  { id: 3, name: 'Natasha Romanoff', active: false },
-  { id: 4, name: 'Chris Evans', active: true },
-  { id: 5, name: 'Chris Hemsworth', active: false },
-  { id: 6, name: 'Clark Gregg', active: false },
+  {id: 1, name: 'Tony Stark', active: false},
+  {id: 2, name: 'Bruce Banner', active: true},
+  {id: 3, name: 'Natasha Romanoff', active: false},
+  {id: 4, name: 'Chris Evans', active: true},
+  {id: 5, name: 'Chris Hemsworth', active: false},
+  {id: 6, name: 'Clark Gregg', active: false},
 ]
 
 // good?
@@ -126,13 +126,13 @@ const result1 = users.reduce((acc, curr) => {
   if (curr.active) {
     return acc
   }
-  return { ...acc, [curr.id]: curr.name }
+  return {...acc, [curr.id]: curr.name}
 })
 
 // bad?
 const result2 = users
   .filter((user) => !user.active)
-  .map((user = (user) => ({ [user.id]: user.name })))
+  .map((user = (user) => ({[user.id]: user.name})))
   .reduce(Object.assign, {})
 ```
 

@@ -21,7 +21,7 @@ type JSONType =
   | number
   | string
   | JSONType[]
-  | { [key: string]: JSONType }
+  | {[key: string]: JSONType}
 ```
 
 JSON은 언어에 종속적이지 않기 때문에, 자바스크립트에만 있는 고유의 타입, `undefined` `Symbol` `BigInt` 등과 `Function` `Class` `Map` 등도 지원하지 않는다.
@@ -34,7 +34,7 @@ JSON은 언어에 종속적이지 않기 때문에, 자바스크립트에만 있
 JSON.stringify(1) // '1'
 JSON.stringify(null) // 'null'
 JSON.stringify('foo') // '"foo"'
-JSON.stringify({ foo: 'bar' }) // '{"foo":"bar"}'
+JSON.stringify({foo: 'bar'}) // '{"foo":"bar"}'
 JSON.stringify(['foo', 'bar']) // '["foo","bar"]'
 ```
 
@@ -66,26 +66,26 @@ JSON.stringify(new Set()) //'{}'
 
 ```typescript
 JSON.stringify([undefined]) // '[null]'
-JSON.stringify({ foo: undefined }) // '{}'
+JSON.stringify({foo: undefined}) // '{}'
 
 JSON.stringify([Symbol()]) // '[null]'
-JSON.stringify({ foo: Symbol() }) // '{}'
+JSON.stringify({foo: Symbol()}) // '{}'
 
 JSON.stringify([() => {}]) // '[null]'
-JSON.stringify({ foo: () => {} }) // '{}'
+JSON.stringify({foo: () => {}}) // '{}'
 ```
 
 이와 다르게, `Map` `Set` `Regex`가 배열이나 객체 내부에 있다면, 이들은 모두 일관되게 `{}`으로 변환된다. 그리고, 당연히 값도 날아간다.
 
 ```typescript
 JSON.stringify([/foo/]) // '[{}]'
-JSON.stringify({ foo: /foo/ }) // '{"foo":{}}'
+JSON.stringify({foo: /foo/}) // '{"foo":{}}'
 
 JSON.stringify([new Set()]) // '[{}]'
-JSON.stringify({ foo: new Set() }) // '{"foo":{}}'
+JSON.stringify({foo: new Set()}) // '{"foo":{}}'
 
 JSON.stringify([new Map()]) // '[{}]'
-JSON.stringify({ foo: new Map() }) // '{"foo":{}}'
+JSON.stringify({foo: new Map()}) // '{"foo":{}}'
 ```
 
 ### BigInt와 순환참조는 throw error
@@ -132,7 +132,7 @@ JSON.stringify(new Date()) // '"2022-06-18T03:43:12.133Z"'
 ```typescript
 const foo = {}
 foo[Symbol('p1')] = 'bar'
-Object.defineProperty(foo, 'p2', { value: 'baz', enumerable: false })
+Object.defineProperty(foo, 'p2', {value: 'baz', enumerable: false})
 
 JSON.stringify(foo) // '{}'
 ```

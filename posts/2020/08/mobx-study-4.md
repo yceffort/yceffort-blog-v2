@@ -214,7 +214,7 @@ ReactDOM.render(
 const store = observableTodoStore
 store.todos[0].completed = !store.todos[0].completed
 store.todos[1].task = 'Random todo ' + Math.random()
-store.todos.push({ task: 'Find a fine cheese', completed: true })
+store.todos.push({task: 'Find a fine cheese', completed: true})
 // etc etc.. add your own statements here...
 ```
 
@@ -226,7 +226,7 @@ store.todos.push({ task: 'Find a fine cheese', completed: true })
 const store = observableTodoStore
 store.todos[0].completed = !store.todos[0].completed
 store.todos[1].task = 'Random todo ' + Math.random()
-store.todos.push({ task: 'Find a fine cheese', completed: true })
+store.todos.push({task: 'Find a fine cheese', completed: true})
 // etc etc.. add your own statements here...
 ```
 

@@ -190,7 +190,7 @@ immediate value인 1은 `smi`가 되어서 관리되고 있어 속성 값에서 
 const a = 'foo'
 const b = 123
 const c = false
-const d = { name: 'foo', number: 123 }
+const d = {name: 'foo', number: 123}
 ```
 
 컴파일러를 거치면, 이러한 변수는 메모리에 위치하게 된다.

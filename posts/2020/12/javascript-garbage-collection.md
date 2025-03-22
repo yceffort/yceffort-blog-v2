@@ -144,7 +144,7 @@ const http = require('http')
 
 const ml_Var = []
 const server = http.createServer((req, res) => {
-  let chunk = JSON.stringify({ url: req.url, now: new Date() })
+  let chunk = JSON.stringify({url: req.url, now: new Date()})
   ml_Var.push(chunk)
 
   res.writeHead(200)

@@ -14,7 +14,7 @@ template: post
 ## 서두
 
 ```javascript
-const o = { foo: 1 }
+const o = {foo: 1}
 o.hasOwnProperty('foo') // true
 o.hasOwnProperty('bar') // false
 ```

@@ -34,7 +34,7 @@ template: post
 아래와 같이 한번 사용해보자.
 
 ```javascript
-history.pushState({ hello: 'world' }, 'title', 'hello')
+history.pushState({hello: 'world'}, 'title', 'hello')
 ```
 
 현재 있는 페이지 주소창에서 `hello`가 추가되었음을 알 수 있다. 그러나 브라우저는 이를 불러오지도 않고, 해당 주소의 존재여부도 파악하지 않는다. 그저 주소만 바뀐 것이다.

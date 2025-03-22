@@ -48,7 +48,7 @@ React Context API는 분명 나쁜 API는 아니지만, 그 한계가 어느정�
 
 ```javascript
 import React from 'react'
-import { RecoilRoot, atom } from 'recoil'
+import {RecoilRoot, atom} from 'recoil'
 
 function App() {
   return (
@@ -130,7 +130,7 @@ function selector<T>({
 예제를 살펴보자.
 
 ```javascript
-import { atom, selector, useRecoilState, DefaultValue } from 'recoil'
+import {atom, selector, useRecoilState, DefaultValue} from 'recoil'
 
 // 화씨 온도를 저장해 두는 atom
 const tempFahrenheit = atom({
@@ -142,9 +142,9 @@ const tempFahrenheit = atom({
 const tempCelsius = selector({
   key: 'tempCelsius',
   // 현재 화씨 값을 기준으로 연산하여 화씨 값을 가져온다.
-  get: ({ get }) => ((get(tempFahrenheit) - 32) * 5) / 9,
+  get: ({get}) => ((get(tempFahrenheit) - 32) * 5) / 9,
   // 섭씨 값을 설정하면, 화씨 값을 set 한다.
-  set: ({ set }, newValue) =>
+  set: ({set}, newValue) =>
     set(
       tempFahrenheit,
       newValue instanceof DefaultValue ? newValue : (newValue * 9) / 5 + 32,

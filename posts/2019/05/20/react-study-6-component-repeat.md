@@ -17,7 +17,7 @@ template: post
 ## 컴포넌트 반복해서 쓰기
 
 ```javascript
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 
 class IterationSample extends Component {
   render() {
@@ -57,7 +57,7 @@ class IterationSample extends Component {
 보통은 이렇게 정적인 데이터를 쓰기보다는, 동적인 데이터를 더 렌더링할 기회가 더 많을 것이다.
 
 ```javascript
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 
 class IterationSample extends Component {
   state = {
@@ -80,7 +80,7 @@ class IterationSample extends Component {
 
   handleRemove = (index) => {
     // this.state의 레퍼런스
-    const { names } = this.state
+    const {names} = this.state
     this.setState({
       names: names.filter((item, idx) => {
         return idx !== index

@@ -106,8 +106,8 @@ module.exports = {
     },
     assert: {
       assertions: {
-        'categories:performance': ['warn', { minScore: 1 }],
-        'categories:accessibility': ['error', { minScore: 1 }],
+        'categories:performance': ['warn', {minScore: 1}],
+        'categories:accessibility': ['error', {minScore: 1}],
       },
     },
     upload: {
@@ -152,6 +152,7 @@ module.exports = {
    2. npm ci
    3. 프로젝트 빌드
    4. lhci 설치 및 실행
+
 3. assert 를 추가
 
    ```javascript

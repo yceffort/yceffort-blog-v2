@@ -25,7 +25,9 @@ web font에 대해서 이야기 할 때, 자주나오는 두 용어의 정의와
 ```css
 @font-face {
   font-family: 'Typefesse';
-  src: url('typefesse.woff2') format('woff2'), url('typefesse.woff') format('woff');
+  src:
+    url('typefesse.woff2') format('woff2'),
+    url('typefesse.woff') format('woff');
 }
 ```
 
@@ -48,7 +50,9 @@ IE8 지원을 할 것이 아니라면, WOFF2나 WOF 보다 더 오래된 폰트 
 ```css
 @font-face {
   font-family: 'Typefesse';
-  src: url('typefesse.woff2') format('woff2'), url('typefesse.woff') format('woff');
+  src:
+    url('typefesse.woff2') format('woff2'),
+    url('typefesse.woff') format('woff');
   font-display: swap;
 }
 ```

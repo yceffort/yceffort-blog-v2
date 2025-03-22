@@ -28,7 +28,7 @@ CommonJS 형식으로 모듈을 정의하면, 이를 export 할 수 있고, 다�
 
 ```javascript
 // utils.js
-const { maxBy } = require('lodash-es')
+const {maxBy} = require('lodash-es')
 const fns = {
   add: (a, b) => a + b,
   subtract: (a, b) => a - b,
@@ -44,7 +44,7 @@ Object.keys(fns).forEach((fnName) => (module.exports[fnName] = fns[fnName]))
 
 ```javascript
 // index.js
-const { add } = require('./utils')
+const {add} = require('./utils')
 console.log(add(1, 2))
 ```
 
@@ -89,13 +89,13 @@ export const subtract = (a, b) => a - b
 export const multiply = (a, b) => a * b
 export const divide = (a, b) => a / b
 
-import { maxBy } from 'lodash-es'
+import {maxBy} from 'lodash-es'
 
 export const max = (arr) => maxBy(arr)
 ```
 
 ```javascript
-import { add } from './utils'
+import {add} from './utils'
 
 console.log(add(1, 2))
 ```
@@ -135,7 +135,7 @@ export const subtract = (a, b) => a - b
 
 ```javascript
 // index.js
-import { add } from './utils'
+import {add} from './utils'
 const subtract = (a, b) => a - b
 
 console.log(add(1, 2))
@@ -193,7 +193,7 @@ console.log(add(1, 2));**
 
 ```javascript
 // utils.js
-const { maxBy } = require('lodash-es')
+const {maxBy} = require('lodash-es')
 
 const fns = {
   add: (a, b) => a + b,

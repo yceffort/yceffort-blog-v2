@@ -44,13 +44,13 @@ useEffect(fn, [these, states])
 
 ```javascript
 // before. Don't do this!
-function DogInfo({ dogId }) {
+function DogInfo({dogId}) {
   const [dog, setDog] = React.useState(null)
   const controllerRef = React.useRef(null)
   const fetchDog = React.useCallback((dogId) => {
     controllerRef.current?.abort()
     controllerRef.current = new AbortController()
-    return getDog(dogId, { signal: controller.signal }).then(
+    return getDog(dogId, {signal: controller.signal}).then(
       (d) => setDog(d),
       (error) => {
         // handle the error
@@ -68,11 +68,11 @@ function DogInfo({ dogId }) {
 위의 코드를 다음과 같이 바꿨다.
 
 ```javascript
-function DogInfo({ dogId }) {
+function DogInfo({dogId}) {
   const [dog, setDog] = React.useState(null)
   React.useEffect(() => {
     const controller = new AbortController()
-    getDog(dogId, { signal: controller.signal }).then(
+    getDog(dogId, {signal: controller.signal}).then(
       (d) => setDog(d),
       (error) => {
         // handle the error

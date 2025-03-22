@@ -24,7 +24,7 @@ const [state, dispatch] = useReducer(reducer, initialArg, init)
 useState를 쓰기전
 
 ```javascript
-function Counter({ initialCount }) {
+function Counter({initialCount}) {
   const [count, setCount] = useState(initialCount)
   return (
     <>
@@ -38,14 +38,14 @@ function Counter({ initialCount }) {
 ```
 
 ```javascript
-const initialState = { count: 0 }
+const initialState = {count: 0}
 
 function reducer(state, action) {
   switch (action.type) {
     case 'increment':
-      return { count: state.count + 1 }
+      return {count: state.count + 1}
     case 'decrement':
-      return { count: state.count - 1 }
+      return {count: state.count - 1}
     default:
       throw new Error()
   }
@@ -56,8 +56,8 @@ function Counter() {
   return (
     <>
       Count: {state.count}
-      <button onClick={() => dispatch({ type: 'increment' })}>+</button>
-      <button onClick={() => dispatch({ type: 'decrement' })}>-</button>
+      <button onClick={() => dispatch({type: 'increment'})}>+</button>
+      <button onClick={() => dispatch({type: 'decrement'})}>-</button>
     </>
   )
 }
@@ -65,15 +65,15 @@ function Counter() {
 
 ```javascript
 function init(initialCount) {
-  return { count: initialCount }
+  return {count: initialCount}
 }
 
 function reducer(state, action) {
   switch (action.type) {
     case 'increment':
-      return { count: state.count + 1 }
+      return {count: state.count + 1}
     case 'decrement':
-      return { count: state.count - 1 }
+      return {count: state.count - 1}
     case 'reset':
       return init(action.payload)
     default:
@@ -81,18 +81,16 @@ function reducer(state, action) {
   }
 }
 
-function Counter({ initialCount }) {
+function Counter({initialCount}) {
   const [state, dispatch] = useReducer(reducer, initialCount, init)
   return (
     <>
       Count: {state.count}
-      <button
-        onClick={() => dispatch({ type: 'reset', payload: initialCount })}
-      >
+      <button onClick={() => dispatch({type: 'reset', payload: initialCount})}>
         Reset
       </button>
-      <button onClick={() => dispatch({ type: 'increment' })}>+</button>
-      <button onClick={() => dispatch({ type: 'decrement' })}>-</button>
+      <button onClick={() => dispatch({type: 'increment'})}>+</button>
+      <button onClick={() => dispatch({type: 'decrement'})}>-</button>
     </>
   )
 }

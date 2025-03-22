@@ -79,7 +79,7 @@ export default class Queue<T> {
 - 큐에서 무작정 `pop`이나 `shift`하는 것이 아니라, 우선순위가 가장 높은 것이 나오는 형태
 
 ```typescript
-export type PQItem<T> = { priority: number; data: T }
+export type PQItem<T> = {priority: number; data: T}
 
 export default class PriorityQueue<T> {
   private queue: PQItem<T>[]

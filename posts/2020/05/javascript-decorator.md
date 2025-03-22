@@ -97,7 +97,7 @@ Object.defineProperties(hello, {
 ```typescript
 // 클래스의 constructor를 덮어쓴다.
 function setName(name: string) {
-  return <T extends { new (...args: any[]): {} }>(constructor: T) => {
+  return <T extends {new (...args: any[]): {}}>(constructor: T) => {
     return class extends constructor {
       name = name
     }

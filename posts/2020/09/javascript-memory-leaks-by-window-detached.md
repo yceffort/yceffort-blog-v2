@@ -23,7 +23,7 @@ template: post
 let A = {}
 console.log(A) // 지역변수를 참조
 
-let B = { A } // B.A로 A를 참조
+let B = {A} // B.A로 A를 참조
 
 A = null // 참조를 해제함.
 

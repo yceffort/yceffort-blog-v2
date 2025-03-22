@@ -104,7 +104,7 @@ console.log([...arr]) // 1, 2, 3
 
 ```javascript
 const user = new Proxy(
-  { name: 'John' },
+  {name: 'John'},
   {
     get(target, prop, receiver) {
       return target[prop]
@@ -119,7 +119,7 @@ const user = new Proxy(
 
 ```javascript
 const user = new Proxy(
-  { name: 'John' },
+  {name: 'John'},
   {
     get(target, prop, receiver) {
       return Reflect.get(target, prop, receiver) // target[prop] 를 대체 해주었다.
@@ -161,7 +161,7 @@ function observable(target) {
       if (result) {
         // 각 handler에 현재 set arguments를 넘겨준다.
         target[handlers].forEach((handler) =>
-          handler({ target, property, value, receiver }),
+          handler({target, property, value, receiver}),
         )
       }
       return result
@@ -171,7 +171,7 @@ function observable(target) {
 
 const user = observable({})
 
-user.observe(({ property, value }) => {
+user.observe(({property, value}) => {
   console.log(`'${property}' => '${value}'`)
 })
 

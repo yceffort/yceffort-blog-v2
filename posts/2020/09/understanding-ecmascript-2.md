@@ -12,7 +12,7 @@ template: post
 우리는 자바스크립트에서 속성이 프로토타입 체인을 통해 찾는 것을 알고 있다.
 
 ```javascript
-const o1 = { foo: 99 }
+const o1 = {foo: 99}
 const o2 = {}
 Object.setPrototypeOf(o2, o1)
 o2.foo

@@ -91,10 +91,10 @@ console.log(func(null)) // null
 ```javascript
 const [a = 'a'] = [] // a
 const [b = 'b'] = [undefined] // b
-const { prop: c = 'c' } = {} // c
-const { prop: d = 'd' } = { prop: undefined } //d
+const {prop: c = 'c'} = {} // c
+const {prop: d = 'd'} = {prop: undefined} //d
 const [e = 'e'] = [null] // null
-const { prop: f = 'f' } = { prop: null } // null
+const {prop: f = 'f'} = {prop: null} // null
 ```
 
 ### 옵셔널 체이닝
@@ -105,7 +105,7 @@ const { prop: f = 'f' } = { prop: null } // null
 function getProp(obj) {
   return obj?.prop
 }
-getProp({ prop: 123 }) // 123
+getProp({prop: 123}) // 123
 getProp(undefined) // undefined
 getProp(null) // undefined
 ```

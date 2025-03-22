@@ -81,12 +81,12 @@ Data.getInitialProps = async (_: NextPageContext) => {
 3. 1번의 이유에 따라서, `getInitialProps`내에서 서버사이드에서만 실행될 수 있는 모듈을 내장하고 있다면, 주의를 기울여야 한다. 만약 서버사이드에서만 작동하고 싶은 로직이 있다면, 아래처럼 하면 된다.
 
 ```typescript
-Data.getInitialProps = async ({ req }: NextPageContext) => {
+Data.getInitialProps = async ({req}: NextPageContext) => {
   console.log('fetch some data')
   const response = await fetch(
     'http://dummy.restapiexample.com/api/v1/employees',
   )
-  const { data } = await response.json()
+  const {data} = await response.json()
 
   let isServer = false
   if (req) {
@@ -94,7 +94,7 @@ Data.getInitialProps = async ({ req }: NextPageContext) => {
     isServer = true
   }
 
-  return { data, isServer }
+  return {data, isServer}
 }
 ```
 
@@ -107,12 +107,12 @@ export async function getStaticProps(_: NextPageContext) {
   const response = await fetch(
     'http://dummy.restapiexample.com/api/v1/employees',
   )
-  const { data } = await response.json()
+  const {data} = await response.json()
 
   console.log('fetchData in build time!')
 
   return {
-    props: { data },
+    props: {data},
   }
 }
 ```
@@ -244,7 +244,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 `getStaticPaths` 에서 `/pages/post/[id]`로 접근 가능한 모든 목록을 땡겨온다. 그리고 가능한 접근 목록을
 
 ```json
-[{ "params": { "id": 1 } }, { "params": { "id": 2 } }]
+[{"params": {"id": 1}}, {"params": {"id": 2}}]
 ```
 
 와 같은 형태로 만들어 둔다. 문서와 다르게 꼭 주의 해야 할 것은 **value는 무조건 string 이어야 한다는 것이다.** 그리고 이제 빌드 타임에 가능한 모두 경우의 수를 땡겨와서 - 빌드 하게 된다.
@@ -258,11 +258,11 @@ export async function getStaticPaths() {
   const response = await fetch('https://jsonplaceholder.typicode.com/todos/')
   const data = await response.json()
 
-  const paths = data.map(({ id, userId }: TodoInterface) => ({
-    params: { userId: String(userId), id: String(id) },
+  const paths = data.map(({id, userId}: TodoInterface) => ({
+    params: {userId: String(userId), id: String(id)},
   }))
 
-  return { paths, fallback: false }
+  return {paths, fallback: false}
 }
 ```
 
@@ -274,19 +274,16 @@ export async function getStaticPaths() {
   const data = await response.json()
 
   const paths = data.reduce(
-    (
-      acc: Array<{ params: { slug: string[] } }>,
-      { userId, id }: PostInterface,
-    ) => {
+    (acc: Array<{params: {slug: string[]}}>, {userId, id}: PostInterface) => {
       return acc.concat([
-        { params: { slug: [String(userId), String(id)] } },
-        { params: { slug: [String(id)] } },
+        {params: {slug: [String(userId), String(id)]}},
+        {params: {slug: [String(id)]}},
       ])
     },
     [],
   )
 
-  return { paths, fallback: false }
+  return {paths, fallback: false}
 }
 ```
 
@@ -299,7 +296,7 @@ export async function getStaticPaths() {
 `getStaticProps`에서는 `params`로 접근하면
 
 ```json
-{ "slug": ["1", "3"] }
+{"slug": ["1", "3"]}
 ```
 
 여기서 꺼내 쓰면 된다.

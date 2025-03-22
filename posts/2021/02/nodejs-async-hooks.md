@@ -30,9 +30,7 @@ const async_hooks = require('async_hooks')
 const writeSomething = (phase, more) => {
   fs.writeSync(
     1,
-    `Phase: "${phase}", Exec. Id: ${async_hooks.executionAsyncId()} ${
-      more ? ', ' + more : ''
-    }\n`,
+    `Phase: "${phase}", Exec. Id: ${async_hooks.executionAsyncId()} ${more ? ', ' + more : ''}\n`,
   )
 }
 

@@ -442,7 +442,7 @@ function isSimpleTypeRelatedTo(
 이와 거의 유사한 방식으로 `type generic`도 비교하게 된다.
 
 ```ts
-Promise<string> = Promise<{ hello: string }>
+Promise<string> = Promise<{hello: string}>
 ```
 
 > 물론, [제네릭의 공변성과 반공변성](<https://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)>)에 대해 다루기 시작하면 복잡해진다.
@@ -475,7 +475,7 @@ const message = 'Hello, world!'
 이 경우에는 간단하게 `initializer`의 타입을 비어 있는 타입쪽으로 이동 시키면 된다.
 
 ```ts
-declare function setup<T>(config: { initial(): T }): T
+declare function setup<T>(config: {initial(): T}): T
 ```
 
 위와 같은 타입 파라미터 추론의 경우에는 조금 복잡해진다. 여기에서 선언된 `T`는 실제 함수가 사용되기 전까지 무슨 타입이 올지 알 수 없다. 여기서 `checker`가 얻을 수 있는 정보는 다음과 같다.

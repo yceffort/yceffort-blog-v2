@@ -130,7 +130,7 @@ type AsyncAction = any
 ### Middleware
 
 ```typescript
-type MiddlewareAPI = { dispatch: Dispatch; getState: () => State }
+type MiddlewareAPI = {dispatch: Dispatch; getState: () => State}
 type Middleware = (api: MiddlewareAPI) => (next: Dispatch) => Dispatch
 ```
 

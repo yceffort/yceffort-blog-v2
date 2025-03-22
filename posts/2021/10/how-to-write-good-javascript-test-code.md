@@ -176,7 +176,7 @@ stub, mock, nock 등으로 아래 요소를 점검
 
 ```javascript
 class TransferService {
-  async transfer({ id, sender, receiver, transferAmount, bankName }) {
+  async transfer({id, sender, receiver, transferAmount, bankName}) {
     // 유효성 검사
     if (!sender || !receiver || !transferAmount || !bankName) {
       throw new Error('Some mandatory property was not provided')
@@ -188,7 +188,7 @@ class TransferService {
       sender.credit < transferAmount
     ) {
       this.numberOfDeclined++ // 거절 횟수 증가
-      return { id, status: 'declined', date }
+      return {id, status: 'declined', date}
     }
 
     // 돈을 보내고
@@ -207,7 +207,7 @@ class TransferService {
       bankName,
     })
 
-    return { id, status: 'approved', date: new Date() }
+    return {id, status: 'approved', date: new Date()}
   }
 
   getTransfers(senderName) {
@@ -323,7 +323,7 @@ transferRequest.howMuch = 110 //
 const amountMoreThanTheUserCredit = 110
 transferRequest.howMuch = amountMoreThanTheUserCredit
 // 또는
-transferRequest = { credit: 50, howMuch: 100 }
+transferRequest = {credit: 50, howMuch: 100}
 ```
 
 Pattern: Copy only what is necessary
@@ -418,7 +418,7 @@ Pattern: Annotative
 test('크레딧이 없을 경우, 거절된 송금은 송금자의 송금 히스토리에 남아서는 안된다.', () => {
   // Arrange
   const transferRequest = testHelpers.factorMoneyTransfer({
-    sender: { credit: 50 },
+    sender: {credit: 50},
     transferAmount: 100,
   })
   const transferServiceUnderTest = new TransferService({

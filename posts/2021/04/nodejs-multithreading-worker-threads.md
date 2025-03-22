@@ -212,11 +212,11 @@ Worker Thread와 메모리도 공유할 수 있다. 이러한 용도로 많이 �
 
 ```javascript
 // index.js
-const { Worker } = require('worker_threads')
+const {Worker} = require('worker_threads')
 
 function runService(workerData) {
   return new Promise((resolve, reject) => {
-    const worker = new Worker('./service.js', { workerData })
+    const worker = new Worker('./service.js', {workerData})
     worker.on('message', resolve)
     worker.on('error', reject)
     worker.on('exit', (code) => {
@@ -236,10 +236,10 @@ run().catch((err) => console.error(err))
 보시다시피, 파일 이름과 데이터를 argument로 넘기는 것 만으로도 쉽게 구현이 가능하다. 이 데이터는 복제되었다. 그런 다음 메시지 이벤트를 리슨하여 Worker Thread가 메시지를 보낼 때 까지 기다린다.
 
 ```javascript
-const { workerData, parentPort } = require('worker_threads')
+const {workerData, parentPort} = require('worker_threads')
 
 // 여기에서 무거운 작업을 동기로 메인 스레드를 방해하지 않으면서 처리할 수 있다.
-parentPort.postMessage({ hello: workerData })
+parentPort.postMessage({hello: workerData})
 ```
 
 여기서는 메인 애플리케이션이 보낸 `workerData`와 메인 애플리케이션으로 정보를 돌려보내는 방법 이 두가지가 필요하다. 작업이 끝나면 `parentPort.postMessage`를 통해서 결과를 보낼 수 있다.

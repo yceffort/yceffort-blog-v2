@@ -78,7 +78,7 @@ export function render(data, target) {
 ```javascript
 // bundle.js (part of)
 'use strict'
-Object.defineProperty(__webpack_exports__, '__esModule', { value: true })
+Object.defineProperty(__webpack_exports__, '__esModule', {value: true})
 /* harmony export (immutable) */ __webpack_exports__['render'] = render
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__comments_css__ =
   __webpack_require__(1)
@@ -97,7 +97,7 @@ function render(data, target) {
 function t(e, n) {
   console.log('Rendered!')
 }
-Object.defineProperty(n, '__esModule', { value: !0 }), (n.render = t)
+Object.defineProperty(n, '__esModule', {value: !0}), (n.render = t)
 var o = r(1)
 r.n(o)
 ```
@@ -142,7 +142,7 @@ module.exports = {
         test: /\.css$/,
         use: [
           'style-loader',
-          { loader: 'css-loader', options: { minimize: true } },
+          {loader: 'css-loader', options: {minimize: true}},
         ],
       },
     ],
@@ -216,7 +216,7 @@ export const render = () => {
 export const commentRestEndpoint = '/rest/comments'
 
 // index.js
-import { render } from './comments.js'
+import {render} from './comments.js'
 render()
 ```
 
@@ -341,7 +341,7 @@ module.exports = {
 
 ```javascript
 // index.js
-import { render } from './comments.js'
+import {render} from './comments.js'
 render()
 
 // comments.js
@@ -355,7 +355,7 @@ export function render(data, target) {
 /* 0 */
 ;(function (module, __webpack_exports__, __webpack_require__) {
   'use strict'
-  Object.defineProperty(__webpack_exports__, '__esModule', { value: true })
+  Object.defineProperty(__webpack_exports__, '__esModule', {value: true})
   var __WEBPACK_IMPORTED_MODULE_0__comments_js__ = __webpack_require__(1)
   Object(__WEBPACK_IMPORTED_MODULE_0__comments_js__['a' /* render */])()
 }),
@@ -375,7 +375,7 @@ export function render(data, target) {
 
 ```javascript
 // index.js
-import { render } from './comments.js'
+import {render} from './comments.js'
 render()
 
 // comments.js
@@ -392,7 +392,7 @@ export function render(data, target) {
 /* 0 */
 ;(function (module, __webpack_exports__, __webpack_require__) {
   'use strict'
-  Object.defineProperty(__webpack_exports__, '__esModule', { value: true })
+  Object.defineProperty(__webpack_exports__, '__esModule', {value: true})
 
   // CONCATENATED MODULE: ./comments.js
   function render(data, target) {
@@ -465,11 +465,11 @@ module.exports = {
 ```javascript
 // webpack.config.js
 module.exports = {
-  output: { libraryTarget: 'amd' },
+  output: {libraryTarget: 'amd'},
 
   externals: {
-    react: { amd: '/libraries/react.min.js' },
-    'react-dom': { amd: '/libraries/react-dom.min.js' },
+    react: {amd: '/libraries/react.min.js'},
+    'react-dom': {amd: '/libraries/react-dom.min.js'},
   },
 }
 ```

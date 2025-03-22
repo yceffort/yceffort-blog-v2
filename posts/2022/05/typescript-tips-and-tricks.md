@@ -15,8 +15,8 @@ description: '"타입"스크립트니까 타입을 잘 할줄 알아야 합니�
 import React from 'react'
 
 interface Props {
-  items: Array<{ id: string }>
-  renderItem: (item: { id: string }) => React.ReactNode
+  items: Array<{id: string}>
+  renderItem: (item: {id: string}) => React.ReactNode
 }
 
 export const Table = (props: Props) => {
@@ -26,7 +26,7 @@ export const Table = (props: Props) => {
 export const Component = () => {
   return (
     <Table
-      items={[{ id: '1' }]}
+      items={[{id: '1'}]}
       renderItem={(item) => {
         return null
       }}
@@ -53,14 +53,14 @@ export const Component = () => {
   return (
     <>
       <Table
-        items={[{ id: '1' }]}
+        items={[{id: '1'}]}
         // item이 {id: "1"}로 추론되는 것을 볼 수 있다.
         renderItem={(item) => {
           return null
         }}
       />
       <Table
-        items={[{ id: '1', name: 'yceffort' }]}
+        items={[{id: '1', name: 'yceffort'}]}
         // 서로 다른 props가 와도 문제 없다.
         renderItem={(item) => {
           return null
@@ -153,8 +153,8 @@ export type RequiredInformationForHuman = GetRequiredInformation<Human>
 
 ```typescript
 type GetRequiredInformation<TType> = TType extends Animal
-  ? { age: number }
-  : { salary: number }
+  ? {age: number}
+  : {salary: number}
 ```
 
 `extends`를 사용하면 단순히 상속하는 것 뿐만 아니라, 마치 조건문으로 사용해서 상속할 수 있는지 여부도 확인할 수 있다. 이에 따라 타입별로 원하는 추가 타입을 선언해 줄 수 있다.
@@ -163,10 +163,10 @@ type GetRequiredInformation<TType> = TType extends Animal
 
 ```typescript
 type GetRequiredInformation<TType> = TType extends Animal
-  ? { age: number }
+  ? {age: number}
   : TType extends Human
-  ? { salary: number }
-  : never
+    ? {salary: number}
+    : never
 ```
 
 [과거 글](/2022/03/understanding-typescript-never#왜-never가-필요한가)에서 이야기 했던 것처럼, 그 어떤 것도 사용할 수 없는 불가능한 타입, bottom type을 만들고 싶을 때 `never`를 사용한다.

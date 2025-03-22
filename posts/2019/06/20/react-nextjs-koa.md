@@ -97,7 +97,7 @@ express를 만든 개발자들이 따로 떨어져 나와서 만든 web framewor
 
 ```typescript
 declare module 'koa-proxies' {
-  import { Middleware } from 'koa'
+  import {Middleware} from 'koa'
   namespace koaProxies {}
   function koaProxies(name: string, options?: any): Middleware
   export = koaProxies
@@ -187,7 +187,7 @@ function renderNext(nextApp: next.Server, route: string) {
 }
 
 async function main() {
-  const nextApp = next({ isDev })
+  const nextApp = next({isDev})
   const app = new Koa()
   const router = new Router()
 

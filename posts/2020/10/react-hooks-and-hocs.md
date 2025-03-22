@@ -37,7 +37,7 @@ import * as React from 'react'
 
 const withError =
   (Component) =>
-  ({ error, ...rest }) => {
+  ({error, ...rest}) => {
     if (error) {
       return <div>Something went wrong ...</div>
     }
@@ -57,7 +57,7 @@ import * as React from 'react'
 
 const withLoading =
   (Component) =>
-  ({ isLoading, ...rest }) => {
+  ({isLoading, ...rest}) => {
     if (isLoading) {
       return <div>Loading ...</div>
     }
@@ -133,7 +133,7 @@ url->   error->     error
 ```javascript
 const App = () => {
   const url = 'https://api.mydomain/mydata'
-  const { data, isLoading, error } = useFetch(url)
+  const {data, isLoading, error} = useFetch(url)
 
   if (error) {
     return <div>Something went wrong ...</div>
@@ -236,9 +236,9 @@ HOC는 강력하지만, 때로는 너무 강력할 때가 있다. HOC는 부모�
 
 ```javascript
 const withLoading =
-  ({ loadingText }) =>
+  ({loadingText}) =>
   (Component) =>
-  ({ isLoading, ...rest }) => {
+  ({isLoading, ...rest}) => {
     if (isLoading) {
       return <div>{loadingText ? loadingText : 'Loading ...'}</div>
     }
@@ -247,9 +247,9 @@ const withLoading =
   }
 
 const withError =
-  ({ errorText }) =>
+  ({errorText}) =>
   (Component) =>
-  ({ error, ...rest }) => {
+  ({error, ...rest}) => {
     if (error) {
       return <div>{errorText ? errorText : 'Something went wrong ...'}</div>
     }

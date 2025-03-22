@@ -19,15 +19,15 @@ nextjs를 본격적으로 쓴 것은 2~3년 전부터이지만, 이 정도로 �
 nextjs에서 routing이 일어나면 `getServerSideProps`, `getStaticProps`, `getInitialProps` 를 야기한다. https://nextjs.org/docs/routing/shallow-routing 그러나 이를 실행시키지 않고 현재 URL을 업데이트 하는 것이 shallow routing이다.
 
 ```javascript
-import { useEffect } from 'react'
-import { useRouter } from 'next/router'
+import {useEffect} from 'react'
+import {useRouter} from 'next/router'
 
 function Page() {
   const router = useRouter()
 
   useEffect(() => {
     // Always do navigations after the first render
-    router.push('/?counter=10', undefined, { shallow: true })
+    router.push('/?counter=10', undefined, {shallow: true})
   }, [])
 
   useEffect(() => {
@@ -74,7 +74,7 @@ window.history.replaceState(
 import App from 'next/app'
 import '../styles/globals.css'
 
-function MyApp({ Component, pageProps }) {
+function MyApp({Component, pageProps}) {
   return <Component {...pageProps} />
 }
 
@@ -83,7 +83,7 @@ MyApp.getInitialProps = async (appContext) => {
 
   console.log('getInitailProps!')
 
-  return { ...appProps }
+  return {...appProps}
 }
 
 export default MyApp
@@ -92,7 +92,7 @@ export default MyApp
 ### index
 
 ```javascript
-import { useRouter } from 'next/dist/client/router'
+import {useRouter} from 'next/dist/client/router'
 
 export default function Home() {
   const router = useRouter()
@@ -131,14 +131,14 @@ getServerSideProps
 import App from 'next/app'
 import '../styles/globals.css'
 
-function MyApp({ Component, pageProps }) {
+function MyApp({Component, pageProps}) {
   return <Component {...pageProps} />
 }
 
 MyApp.getInitialProps = async (appContext) => {
   const appProps = await App.getInitialProps(appContext)
   const {
-    ctx: { req },
+    ctx: {req},
   } = appContext
 
   if (req?.url.startsWith('/_next')) {
@@ -146,7 +146,7 @@ MyApp.getInitialProps = async (appContext) => {
     // EX: /_next/data/development/index.json
   }
 
-  return { ...appProps }
+  return {...appProps}
 }
 
 export default MyApp

@@ -1,7 +1,7 @@
 ---
 title: '1부) commonjs란 무엇인가?'
 tags:
-    - nodejs
+  - nodejs
 published: true
 date: 2023-05-26 13:52:26
 description: 'const module = require("./module.js")'
@@ -57,13 +57,13 @@ const mySquare = new Squre(2)
 ```javascript
 // square.js
 module.exports = class Square {
-    constructor(width) {
-        this.width = width
-    }
+  constructor(width) {
+    this.width = width
+  }
 
-    area() {
-        return this.width ** 2
-    }
+  area() {
+    return this.width ** 2
+  }
 }
 ```
 
@@ -93,13 +93,13 @@ module.exports === exports // true
 
 ```javascript
 module.exports = class Square {
-    constructor(width) {
-        this.width = width
-    }
+  constructor(width) {
+    this.width = width
+  }
 
-    area() {
-        return this.width ** 2
-    }
+  area() {
+    return this.width ** 2
+  }
 }
 
 console.log('exports >>>', exports) // [class Square]
@@ -112,13 +112,13 @@ const Square = require('./Math.js') // {}
 
 ```javascript
 exports = class Square {
-    constructor(width) {
-        this.width = width
-    }
+  constructor(width) {
+    this.width = width
+  }
 
-    area() {
-        return this.width ** 2
-    }
+  area() {
+    return this.width ** 2
+  }
 }
 
 console.log('exports >>>', exports) // {}
@@ -148,7 +148,7 @@ exports = {hello: false}
 
 ```js
 module.exports = exports = class Square {
-    // something...
+  // something...
 }
 ```
 
@@ -180,7 +180,7 @@ module.exports = exports = class Square {
 
 ```js
 ;(function (exports, require, module, __filename, __dirname) {
-    // 내부 모듈 코드는 실제로 여기에 들어감
+  // 내부 모듈 코드는 실제로 여기에 들어감
 })
 ```
 
@@ -252,7 +252,7 @@ commonjs의 특징은 모듈을 동기로 불러온다는 것이다. 이 말인 
 console.log('module1 로드 시작')
 
 setTimeout(() => {
-    console.log('module1 실행')
+  console.log('module1 실행')
 }, 2000)
 
 console.log('module1')
@@ -347,7 +347,7 @@ console.log(data1, data2, data3)
 ```javascript
 // test.js
 module.exports = {
-    [globalThis.hello]: 'world',
+  [globalThis.hello]: 'world',
 }
 ```
 

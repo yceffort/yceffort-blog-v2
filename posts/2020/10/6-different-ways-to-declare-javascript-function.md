@@ -139,7 +139,7 @@ const f2 = (x, y, z) => {
 위 `f1` `f2`는 값이 같다. object를 바로 리턴하려면 괄호를 씌우면 된다.
 
 ```javascript
-const f3 = (x, y, z) => ({ x, y, z })
+const f3 = (x, y, z) => ({x, y, z})
 ```
 
 ## this

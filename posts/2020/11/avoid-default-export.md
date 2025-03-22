@@ -59,13 +59,13 @@ export function hi() {
 ## 검색이 어렵다.
 
 ```typescript
-import { h } from './bar'
+import {h} from './bar'
 ```
 
 default export를 하게 되면 내보내기가 있는지 여부가 불투명하다.
 
 ```typescript
-import { Foo } from 'something'
+import {Foo} from 'something'
 ```
 
 그러나 기본값이 없으면 코드 intellisense로 내부에 어떤 것을 import 할 수 있는지 쉽게 알 수 있다.
@@ -92,7 +92,7 @@ module.exports = {
 ## re-export
 
 ```typescript
-export { default as Foo } from './foo'
+export {default as Foo} from './foo'
 ```
 
 ```typescript
@@ -109,7 +109,7 @@ foo.default()
 ```
 
 ```typescript
-const { hello } = await import('./bar')
+const {hello} = await import('./bar')
 hello()
 ```
 
@@ -168,7 +168,7 @@ export const foo2 = 'foo2'
 
 ```javascript
 import Foo from './foo'
-import { foo2 } from './bar'
+import {foo2} from './bar'
 
 console.log(Foo.foo1)
 console.log(foo2)

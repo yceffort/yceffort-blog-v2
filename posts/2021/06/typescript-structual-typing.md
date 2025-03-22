@@ -27,7 +27,7 @@ interface Vector2DWithName extends Vector2D {
   name: string
 }
 
-const a: Vector2DWithName = { name: 'hi', x: 5, y: 10 }
+const a: Vector2DWithName = {name: 'hi', x: 5, y: 10}
 calcLength(a) // works fine
 
 interface Vector2DName {
@@ -36,7 +36,7 @@ interface Vector2DName {
   y: number
 }
 
-const b: Vector2DName = { name: 'hello', x: 10, y: 10 }
+const b: Vector2DName = {name: 'hello', x: 10, y: 10}
 calcLength(b) // works fine, too.
 ```
 
@@ -86,7 +86,7 @@ function calcLengthV1(v: Vector3D) {
 그러나, 위에서 이야기 한 것처럼 타입스크립트의 타입이 열려 있다는 것을 생각해본다면 타당한 에러다.
 
 ```typescript
-const v = { x: 1, y: 2, z: 3, name: 'hi, h i~' }
+const v = {x: 1, y: 2, z: 3, name: 'hi, h i~'}
 calcLengthV1(v) // name의 값이 NaN이라서 결과가 NaN으로 뜰 수 있다.
 ```
 
@@ -109,7 +109,7 @@ class MadMonster {
 }
 
 const hi1 = new MadMonster('hello') // 원래 내가 의도한 코드
-const hi2: MadMonster = { tan: 'hello' } // ?!?!
+const hi2: MadMonster = {tan: 'hello'} // ?!?!
 ```
 
 왜 `hi2`가 `MadMonster`로 할당이 가능한걸까? `MadMonster`에는 `tan`이라는 string 속성이 있다. 추가로, `constructor` (`Object.prototype`에서 온) 를 가지고 있는데, 이는 `tan`이라는 인수를 받기 때문에 구조적으로 일치한다. 그렇다. 구조적 타이핑의 결과 인 것이다.
@@ -124,7 +124,7 @@ interface Employee {
 
 function getEmployee(db: DB): Employee[] {
   const rows = db.runQuery('SELECT name, id from EMPLOYEES')
-  return rows.map((row) => ({ name: row[0], id: row[1] }))
+  return rows.map((row) => ({name: row[0], id: row[1]}))
 }
 ```
 
@@ -142,7 +142,7 @@ interface DB {
 
 function getEmployee(db: DB): Employee[] {
   const rows = db.runQuery('SELECT name, id from EMPLOYEES')
-  return rows.map((row) => ({ name: row[0], id: row[1] }))
+  return rows.map((row) => ({name: row[0], id: row[1]}))
 }
 ```
 

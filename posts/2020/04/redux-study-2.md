@@ -72,11 +72,11 @@ function visibilityFilter(state = 'SHOW_ALL', action) {
 function todos(state = [], action) {
   switch (action.type) {
     case 'ADD_TODO':
-      return state.concat([{ text: action.text, completed: false }])
+      return state.concat([{text: action.text, completed: false}])
     case 'TOGGLE_TODO':
       return state.map((todo, index) =>
         action.index === index
-          ? { text: todo.text, completed: !todo.completed }
+          ? {text: todo.text, completed: !todo.completed}
           : todo,
       )
     default:
@@ -186,7 +186,7 @@ function todos(state = [], action) {
   }
 }
 
-import { combineReducers, createStore } from 'redux'
-const reducer = combineReducers({ visibilityFilter, todos })
+import {combineReducers, createStore} from 'redux'
+const reducer = combineReducers({visibilityFilter, todos})
 const store = createStore(reducer)
 ```

@@ -45,7 +45,7 @@ ORM에 깊게 들어가기에 앞서 추상화 계층 (abstraction layer)을 살
 
 // $ npm install pg
 
-const { Client } = require('pg')
+const {Client} = require('pg')
 const connection = require('./connection.json')
 const client = new Client(connection)
 
@@ -133,7 +133,7 @@ const DISABLE_SEQUELIZE_DEFAULTS = {
   freezeTableName: true,
 }
 
-const { DataTypes } = Sequelize
+const {DataTypes} = Sequelize
 const sequelize = new Sequelize({
   database: connection.database,
   username: connection.user,
@@ -147,9 +147,9 @@ const sequelize = new Sequelize({
 const Dish = sequelize.define(
   'dish',
   {
-    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    name: { type: DataTypes.STRING },
-    veg: { type: DataTypes.BOOLEAN },
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    name: {type: DataTypes.STRING},
+    veg: {type: DataTypes.BOOLEAN},
   },
   DISABLE_SEQUELIZE_DEFAULTS,
 )
@@ -157,9 +157,9 @@ const Dish = sequelize.define(
 const Item = sequelize.define(
   'item',
   {
-    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    name: { type: DataTypes.STRING },
-    type: { type: DataTypes.STRING },
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    name: {type: DataTypes.STRING},
+    type: {type: DataTypes.STRING},
   },
   DISABLE_SEQUELIZE_DEFAULTS,
 )
@@ -167,10 +167,10 @@ const Item = sequelize.define(
 const Ingredient = sequelize.define(
   'ingredient',
   {
-    dish_id: { type: DataTypes.INTEGER, primaryKey: true },
-    item_id: { type: DataTypes.INTEGER, primaryKey: true },
-    quantity: { type: DataTypes.FLOAT },
-    unit: { type: DataTypes.STRING },
+    dish_id: {type: DataTypes.INTEGER, primaryKey: true},
+    item_id: {type: DataTypes.INTEGER, primaryKey: true},
+    quantity: {type: DataTypes.FLOAT},
+    unit: {type: DataTypes.STRING},
   },
   DISABLE_SEQUELIZE_DEFAULTS,
 )
@@ -185,7 +185,7 @@ Dish.belongsToMany(Item, {
   foreignKey: 'dish_id',
 })
 
-Dish.findOne({ where: { id: 1 }, include: [{ model: Item }] }).then((rows) => {
+Dish.findOne({where: {id: 1}, include: [{model: Item}]}).then((rows) => {
   console.log('Ingredients:')
   for (let row of rows.items) {
     console.log(
@@ -216,7 +216,7 @@ Dish.findOne({ where: { id: 1 }, include: [{ model: Item }] }).then((rows) => {
 // $ npm install sequelize pg
 
 const Sequelize = require('sequelize')
-const { Op, DataTypes } = Sequelize
+const {Op, DataTypes} = Sequelize
 const connection = require('./connection.json')
 const DISABLE_SEQUELIZE_DEFAULTS = {
   timestamps: false,
@@ -236,16 +236,16 @@ const sequelize = new Sequelize({
 const Item = sequelize.define(
   'item',
   {
-    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    name: { type: DataTypes.STRING },
-    type: { type: DataTypes.STRING },
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    name: {type: DataTypes.STRING},
+    type: {type: DataTypes.STRING},
   },
   DISABLE_SEQUELIZE_DEFAULTS,
 )
 
 // SELECT "id", "name", "type" FROM "item" AS "item"
 //     WHERE "item"."type" = 'veg';
-Item.findAll({ where: { type: 'veg' } }).then((rows) => {
+Item.findAll({where: {type: 'veg'}}).then((rows) => {
   console.log('Veggies:')
   for (let row of rows) {
     console.log(`${row.dataValues.id}t${row.dataValues.name}`)
@@ -302,9 +302,9 @@ const itemCollection = Waterline.Collection.extend({
   datastore: 'default',
   primaryKey: 'id',
   attributes: {
-    id: { type: 'number', autoMigrations: { autoIncrement: true } },
-    name: { type: 'string', required: true },
-    type: { type: 'string', required: true },
+    id: {type: 'number', autoMigrations: {autoIncrement: true}},
+    name: {type: 'string', required: true},
+    type: {type: 'string', required: true},
   },
 })
 
@@ -331,7 +331,7 @@ waterline.initialize(config, (err, ontology) => {
   const Item = ontology.collections.item
   // select "id", "name", "type" from "public"."item"
   //     where "type" = $1 limit 9007199254740991
-  Item.find({ type: 'veg' }).then((rows) => {
+  Item.find({type: 'veg'}).then((rows) => {
     console.log('Veggies:')
     for (let row of rows) {
       console.log(`${row.id}t${row.name}`)
@@ -354,7 +354,7 @@ const knex = require('knex')({
   connection,
   // debug: true
 })
-const { Model } = require('objection')
+const {Model} = require('objection')
 
 Model.knex(knex)
 

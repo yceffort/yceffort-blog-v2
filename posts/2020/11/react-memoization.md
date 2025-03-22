@@ -102,7 +102,7 @@ function App() {
   const fetchOptions = {
     method: 'POST',
     body,
-    headers: { 'content-type': 'application/json' },
+    headers: {'content-type': 'application/json'},
   }
 
   const callApi = () => (body ? fetch('/url', fetchOptions) : null)
@@ -134,7 +134,7 @@ const fetchOptions = useMemo(() => {
   return {
     method: 'POST',
     body,
-    headers: { 'content-type': 'application/json' },
+    headers: {'content-type': 'application/json'},
   }
 }, [body])
 ```
@@ -152,7 +152,7 @@ useEffect(() => {
   const fetchOptions = {
     method: 'POST',
     body,
-    headers: { 'content-type': 'application/json' },
+    headers: {'content-type': 'application/json'},
   }
 
   fetch('/url', fetchOptions)

@@ -129,7 +129,7 @@ type VariantB = {
 
 declare function fn(arg: VariantA | VariantB): void
 
-const input = { a: 'foo', b: 123 }
+const input = {a: 'foo', b: 123}
 fn(input) // 타입스크립트는 이 경우 아무런 에러를 내지 않는다.
 ```
 
@@ -148,7 +148,7 @@ type VariantB = {
 
 declare function fn(arg: VariantA | VariantB): void
 
-const input = { a: 'foo', b: 123 }
+const input = {a: 'foo', b: 123}
 fn(input) // ❌ a는 never라서 안댐
 ```
 
@@ -213,7 +213,7 @@ type Bar = {
 
 type All = Foo | Bar
 
-type ExtractTypeByName<T, G> = T extends { name: G } ? T : never
+type ExtractTypeByName<T, G> = T extends {name: G} ? T : never
 
 type ExtractedType = ExtractTypeByName<All, 'foo'> // the result type is Foo
 // type ExtractedType = {
@@ -233,11 +233,11 @@ type ExtractedType =
 ```
 
 ```typescript
-type ExtractedType = Foo extends { name: 'foo' }
+type ExtractedType = Foo extends {name: 'foo'}
   ? Foo
-  : never | Bar extends { name: 'foo' }
-  ? Bar
-  : never
+  : never | Bar extends {name: 'foo'}
+    ? Bar
+    : never
 
 type ExtractedType = Foo | never
 type ExtractedType = Foo
@@ -343,7 +343,7 @@ function getRandom<T extends 'char' | 'int' | 'bool'>(
 또다른 예제를 살펴보자.
 
 ```typescript
-function f1(obj: { a: number; b: string }, key: 'a' | 'b') {
+function f1(obj: {a: number; b: string}, key: 'a' | 'b') {
   obj[key] = 1 // Type 'number' is not assignable to type 'never'.
   obj[key] = 'x' // Type 'string' is not assignable to type 'never'.
 }

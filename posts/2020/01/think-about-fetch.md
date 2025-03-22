@@ -166,7 +166,7 @@ const signal = controller.signal
 
 setTimeout(() => controller.abort(), 5000)
 
-fetch(url, { signal })
+fetch(url, {signal})
   .then((response) => {
     return response.text()
   })
@@ -184,7 +184,7 @@ DOMException: The user aborted a request.
 fetch시에 발생한 exception이 abort인지를 구별하기 위해서는 아래와 같이 처리하면 된다.
 
 ```javascript
-fetch(url, { signal })
+fetch(url, {signal})
   .then((response) => {
     return response.text()
   })

@@ -20,9 +20,6 @@ importers:
       '@naverpay/markdown-lint':
         specifier: ^0.0.3
         version: 0.0.3
-      '@naverpay/prettier-config':
-        specifier: ^1.0.0
-        version: 1.0.0(prettier@3.5.3)
       '@naverpay/stylelint-config':
         specifier: ^0.0.3
         version: 0.0.3(postcss-scss@4.0.9(postcss@8.5.3))(postcss@8.5.3)(stylelint-order@5.0.0(stylelint@14.16.1))(stylelint-scss@4.7.0(stylelint@14.16.1))(stylelint@14.16.1)
@@ -387,11 +384,6 @@ packages:
   '@naverpay/markdown-lint@0.0.3':
     resolution: {integrity: sha512-Hfqm/kVA7M4O2GiCggpAnunu9WYkCDoIrWvkSAJsRzTyxDN1Eg7U36813KH9h+CR3Egp2xwJk4E/zFdBBTbDwA==}
     hasBin: true
-
-  '@naverpay/prettier-config@1.0.0':
-    resolution: {integrity: sha512-YIOen+hTzW18kl5PsOfty5QwqpgqNfErKs+qOX7TfDFv3PMDHzDVPlFuP9CwjY4bB6NZN9GEG3iaocT/bBBMyg==}
-    peerDependencies:
-      prettier: ^2.8.8 || ^3.0.0
 
   '@naverpay/stylelint-config@0.0.3':
     resolution: {integrity: sha512-DYnVoXPJ3qzkYjMK4dcl3+QTQ2fO/z3r8vBJk6LkH5HYQGVncNGHf1O7w0dSzwtO1HQFBRJrK4yXB3E89Rjh6w==}
@@ -4059,10 +4051,6 @@ snapshots:
   '@naverpay/markdown-lint@0.0.3':
     dependencies:
       markdownlint-cli2: 0.11.0
-
-  '@naverpay/prettier-config@1.0.0(prettier@3.5.3)':
-    dependencies:
-      prettier: 3.5.3
 
   '@naverpay/stylelint-config@0.0.3(postcss-scss@4.0.9(postcss@8.5.3))(postcss@8.5.3)(stylelint-order@5.0.0(stylelint@14.16.1))(stylelint-scss@4.7.0(stylelint@14.16.1))(stylelint@14.16.1)':
     dependencies:

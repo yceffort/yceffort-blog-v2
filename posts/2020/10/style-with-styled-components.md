@@ -112,7 +112,7 @@ const App = () => {
 이와 유사하게, 리액트 컴포넌트를 확장할 수 도 있다.
 
 ```javascript
-const ButtonComponent = ({ className }) => {
+const ButtonComponent = ({className}) => {
   return (
     <Button
       className={className}
@@ -138,7 +138,7 @@ const PrimaryButton = styled(ButtonComponent)`
 기존에 존재하는 스타일과 합성도 가능하다.
 
 ```javascript
-import styled, { css } from 'styled-components'
+import styled, {css} from 'styled-components'
 const blackFont = css`
   color: black;
 `
@@ -165,7 +165,7 @@ const App = () => {
 prop을 받아서 스타일을 선택적으로 적용할 수도 있다.
 
 ```javascript
-import styled, { css } from 'styled-components'
+import styled, {css} from 'styled-components'
 const SuccessButton = styled(Button)`
   ${(props) =>
     props.$success

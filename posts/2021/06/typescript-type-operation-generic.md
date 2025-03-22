@@ -33,7 +33,7 @@ interface PersonWithBirth extends {
 `type`을 사용한다면, `&`으로도 가능하다.
 
 ```typescript
-type PersonWithBirth = Person & { birth: Date }
+type PersonWithBirth = Person & {birth: Date}
 ```
 
 ## 타입 좁히기
@@ -228,13 +228,13 @@ interface Name {
 type PairProgrammer<T extends Name> = [T, T]
 
 const day1: PairProgrammer<Name> = [
-  { last: 'KIM', first: 'YONGCHAN' },
-  { last: 'LEE', first: 'JAEYONG' },
+  {last: 'KIM', first: 'YONGCHAN'},
+  {last: 'LEE', first: 'JAEYONG'},
 ]
 
 const day2: PairProgrammer<Name> = [
-  { last: 'KIM' }, // Property 'first' is missing in type '{ last: string; }' but required in type 'Name'.
-  { last: 'LEE' }, // Property 'first' is missing in type '{ last: string; }' but required in type 'Name'.
+  {last: 'KIM'}, // Property 'first' is missing in type '{ last: string; }' but required in type 'Name'.
+  {last: 'LEE'}, // Property 'first' is missing in type '{ last: string; }' but required in type 'Name'.
 ]
 ```
 

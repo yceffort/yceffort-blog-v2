@@ -8,48 +8,55 @@ import {getAllPosts} from '#utils/Post'
 export const dynamic = 'error'
 
 export async function generateMetadata(props: {params: Promise<{id: string}>}) {
-    const params = await props.params
+  const params = await props.params
 
-    const {id} = params
+  const {id} = params
 
-    return {
-        title: `Page ${id}`,
-    }
+  return {
+    title: `Page ${id}`,
+  }
 }
 
 export async function generateStaticParams() {
-    const posts = await getAllPosts()
+  const posts = await getAllPosts()
 
-    return [...new Array(Math.round(posts.length / DEFAULT_NUMBER_OF_POSTS)).keys()].map((i) => ({id: `${i + 1}`}))
+  return [
+    ...new Array(Math.round(posts.length / DEFAULT_NUMBER_OF_POSTS)).keys(),
+  ].map((i) => ({id: `${i + 1}`}))
 }
 
 export default async function Page(props: {params: Promise<{id: string}>}) {
-    const params = await props.params
-    const allPosts = await getAllPosts()
-    const pageNo = parseInt(params.id)
+  const params = await props.params
+  const allPosts = await getAllPosts()
+  const pageNo = parseInt(params.id)
 
-    if (isNaN(pageNo) || pageNo > Math.ceil(allPosts.length / DEFAULT_NUMBER_OF_POSTS) || pageNo < 1) {
-        return notFound()
-    }
+  if (
+    isNaN(pageNo) ||
+    pageNo > Math.ceil(allPosts.length / DEFAULT_NUMBER_OF_POSTS) ||
+    pageNo < 1
+  ) {
+    return notFound()
+  }
 
-    const startIndex = (pageNo - 1) * DEFAULT_NUMBER_OF_POSTS
-    const endIndex = startIndex + DEFAULT_NUMBER_OF_POSTS
+  const startIndex = (pageNo - 1) * DEFAULT_NUMBER_OF_POSTS
+  const endIndex = startIndex + DEFAULT_NUMBER_OF_POSTS
 
-    const posts = allPosts.slice(startIndex, endIndex)
+  const posts = allPosts.slice(startIndex, endIndex)
 
-    const hasNextPage = Math.floor(allPosts.length / DEFAULT_NUMBER_OF_POSTS) > pageNo
+  const hasNextPage =
+    Math.floor(allPosts.length / DEFAULT_NUMBER_OF_POSTS) > pageNo
 
-    const title = `Page ${pageNo}`
+  const title = `Page ${pageNo}`
 
-    return (
-        <>
-            <ListLayout posts={posts} title={title} />
-            <PageNumber
-                pageNo={pageNo}
-                next={`/pages/${pageNo + 1}`}
-                prev={`/pages/${pageNo - 1}`}
-                hasNextPage={hasNextPage}
-            />
-        </>
-    )
+  return (
+    <>
+      <ListLayout posts={posts} title={title} />
+      <PageNumber
+        pageNo={pageNo}
+        next={`/pages/${pageNo + 1}`}
+        prev={`/pages/${pageNo - 1}`}
+        hasNextPage={hasNextPage}
+      />
+    </>
+  )
 }

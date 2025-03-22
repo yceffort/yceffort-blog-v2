@@ -30,10 +30,10 @@ description: '간만에 했본 간단하고 재밌는 일'
 exports.health = functions.https.onRequest(async (req, res) => {
   // {'health': {'run': '28.88118937860876', 'timestamps': '2021-03-17T08:45:00+09:00', 'unit': 'km'}}
   const {
-    health: { run, timestamps },
+    health: {run, timestamps},
   } = req.body
 
-  const { secret } = req.headers
+  const {secret} = req.headers
 
   if (secret !== APPLE_HEALTH_SECRET) {
     return res.send('permission denied! 🤬')

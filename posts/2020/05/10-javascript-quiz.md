@@ -44,7 +44,7 @@ console.log(
 ### 2. Set에 Object가 들어 있다면?
 
 ```javascript
-const mySet = new Set([{ a: 1 }, { a: 1 }])
+const mySet = new Set([{a: 1}, {a: 1}])
 const result = [...mySet]
 console.log(result)
 ```
@@ -167,7 +167,7 @@ notification >= 1 ? 's' : ''
 ### 8. 전개 구문과 변수명 변경
 
 ```javascript
-const arr1 = [{ firstName: 'James' }]
+const arr1 = [{firstName: 'James'}]
 const arr2 = [...arr1]
 arr2[0].firstName = 'Jonah'
 

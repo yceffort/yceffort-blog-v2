@@ -146,8 +146,9 @@ Critical Request란 초기 뷰포트에 표시되어야 하는 리소스를 의�
   font-family: 'Calibre';
   font-weight: 400;
   font-display: swap;
-  src: url('/Calibre-Regular.woff2') format('woff2'), url('/Calibre-Regular.woff')
-      format('woff');
+  src:
+    url('/Calibre-Regular.woff2') format('woff2'),
+    url('/Calibre-Regular.woff') format('woff');
 }
 
 .carousel-bg {

@@ -130,7 +130,7 @@ interface XYZ {
 }
 
 function dropXYZ<T extends XYZ>(obj: T) {
-  let { x, y, z, ...rest } = obj
+  let {x, y, z, ...rest} = obj
   return rest
 }
 ```
@@ -151,7 +151,7 @@ interface XYZ {
 type DropXYZ<T> = Pick<T, Exclude<keyof T, keyof XYZ>>
 
 function dropXYZ<T extends XYZ>(obj: T): DropXYZ<T> {
-  let { x, y, z, ...rest } = obj
+  let {x, y, z, ...rest} = obj
   return rest
 }
 ```

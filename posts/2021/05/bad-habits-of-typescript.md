@@ -94,7 +94,7 @@ item + 1 // error 지만, 컴파일시에는 모른다.
 ```
 
 ```typescript
-const user: { [key: string]: string } = { name: 'kyc' }
+const user: {[key: string]: string} = {name: 'kyc'}
 user.age + 1 // error 지만, 컴파일 시에는 모른다.
 ```
 
@@ -179,7 +179,7 @@ function userProcessor(user: UserInterface, processor: (user: UserInterface) => 
 만약 `processor`에서 이런짓을 하면 어떻게 될까?
 
 ```typescript
-userProcessor({ name: 'kyc', age: 15 }, (u) => delete u.age)
+userProcessor({name: 'kyc', age: 15}, (u) => delete u.age)
 // 타입 체크는 성공하지만, 에러가 날거다.
 ```
 
@@ -200,7 +200,7 @@ function userProcessor(
   }
 }
 
-userProcessor({ name: 'kyc', age: 15 }, (u) => delete u.age)
+userProcessor({name: 'kyc', age: 15}, (u) => delete u.age)
 // The operand of a 'delete' operator cannot be a read-only property.
 ```
 
@@ -213,7 +213,7 @@ function processFact(
   user: UserInterface,
   processor: (user: UserInterface) => void,
 ) {
-  const { age } = user
+  const {age} = user
   if (age) {
     processor(user)
     document.body.innerHTML = `${age + 1}` // safe

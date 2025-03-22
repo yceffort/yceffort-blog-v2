@@ -57,7 +57,7 @@ class App extends React.Component {
 리액트에서 `element`를 만드는 예시는 아래와 같다.
 
 ```javascript
-const element = React.createElement('div', { id: 'login-btn' }, 'Login')
+const element = React.createElement('div', {id: 'login-btn'}, 'Login')
 ```
 
 위 함수는 아래와 같은 object를 리턴한다
@@ -81,7 +81,7 @@ const element = React.createElement('div', { id: 'login-btn' }, 'Login')
 반면에 컴포넌트는 다양한 방식으로 선언가능하다. 컴포넌트는 `render()`와 함께 쓴다면 클래스가 될 수도 있다. 좀더 단순한 방법으로, 함수로도 선언이 될 수 있다. 두 방식 모두 `props`를 input으로 받으며, `JSX`를 리턴한다.
 
 ```javascript
-const Button = ({ onLogin }) => (
+const Button = ({onLogin}) => (
   <div id={'login-btn'} onClick={onLogin}>
     Login
   </div>
@@ -102,7 +102,7 @@ onClick: onLogin }, 'Login' )
 1. 함수형 컴포넌트: 컴포넌트를 만드는 가장 심플한 방식이다. `props`를 첫번째 파라미터로 받는 받는 순수 자바스크립트 함수를 만들고, React Element를 반환하면 된다.
 
 ```javascript
-function Greeting({ message }) {
+function Greeting({message}) {
   return <h1>{`Hello, ${message}`}</h1>
 }
 ```
@@ -191,7 +191,7 @@ this.state.message = 'Hello world'
 
 ```javascript
 //Correct
-this.setState({ message: 'Hello World' })
+this.setState({message: 'Hello World'})
 ```
 
 주의: state를 직접 할당할 수 있는 곳은 `constructor` 혹은 자바스크립트 클래스의 필드를 선언하는 syntax 뿐이다.
@@ -203,7 +203,7 @@ this.setState({ message: 'Hello World' })
 주의: 콜백함수를 사용하는 것보다 라이프사이클 메서드를 사용하는게 더 좋다.
 
 ```javascript
-setState({ name: 'John' }, () =>
+setState({name: 'John'}, () =>
   console.log('The name has updated and component re-rendered'),
 )
 ```
@@ -290,7 +290,7 @@ class Foo {
 이벤트 핸들러와 파라미터 전달을 화살표 함수로 감쌀 수 있다.
 
 ```html
-<button onClick={() => this.handleClick(id)} />
+<button onClick="{()" ="">this.handleClick(id)} /></button>
 ```
 
 이는 `.bind`와 같다.
@@ -376,13 +376,13 @@ class SearchBar extends Component {
   constructor(props) {
     super(props)
     this.txtSearch = null
-    this.state = { term: '' }
+    this.state = {term: ''}
     this.setInputSearchRef = (e) => {
       this.txtSearch = e
     }
   }
   onInputChange(event) {
-    this.setState({ term: this.txtSearch.value })
+    this.setState({term: this.txtSearch.value})
   }
   render() {
     return (
@@ -641,7 +641,7 @@ function HOC(WrappedComponent) {
 Context는 props을 탑다운으로 주지 않고도, 어느 레벨에서든 데이터를 컴포넌트 트리에 넘기는 방법이다. 예를 들어 인증받은 사용자, 언어 설정, UI theme 등 애플리케이션 단위에서 다양한 컴포넌트가 사용해야 하는 데이터를 context를 통해서 줄 수 있다.
 
 ```javascript
-const { Provider, Consumer } = React.createContext(defaultValue)
+const {Provider, Consumer} = React.createContext(defaultValue)
 ```
 
 ### What is children prop?
@@ -756,13 +756,13 @@ export const UnusedComponent = /* ... */;
 
 ```javascript
 // IntermediateComponent.js
-export { SomeComponent as default } from './MoreComponents.js'
+export {SomeComponent as default} from './MoreComponents.js'
 ```
 
 그리고 lazy 함수를 이용해서 아래와 같이 임포트 할 수 있다.
 
 ```javascript
-import React, { lazy } from 'react'
+import React, {lazy} from 'react'
 const SomeComponent = lazy(() => import('./IntermediateComponent.js'))
 ```
 
@@ -832,7 +832,7 @@ state의 사용에 종속적인 컴포넌트를 stateful component라고 한다.
 class App extends Component {
   constructor(props) {
     super(props)
-    this.state = { count: 0 }
+    this.state = {count: 0}
   }
 
   render() {
@@ -907,7 +907,7 @@ Error boundaries란 하위 component tree 에서 자바스크립트 에러 를 c
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { hasError: false }
+    this.state = {hasError: false}
   }
 
   componentDidCatch(error, info) {
@@ -917,7 +917,7 @@ class ErrorBoundary extends React.Component {
 
   static getDerivedStateFromError(error) {
     // fallback UI를 표현하기 위해여 state를 업데이트 할 수도 있다.
-    return { hasError: true }
+    return {hasError: true}
   }
 
   render() {
@@ -977,7 +977,7 @@ ReactDOM.render(element, container[, callback])
 
 ```jsx
 // using Express
-import { renderToString } from 'react-dom/server'
+import {renderToString} from 'react-dom/server'
 import MyPage from './MyPage'
 
 app.get('/', (req, res) => {
@@ -995,7 +995,7 @@ browser DOM에서 `innerHTML`대신 `dangerouslySetInnerHTML`를 사용할 수 �
 
 ```javascript
 function createMarkup() {
-  return { __html: 'First &middot; Second' }
+  return {__html: 'First &middot; Second'}
 }
 
 function MyComponent() {
@@ -1097,7 +1097,7 @@ class MyComponent extends React.Component {
 때로는 어떤 상태값에 따라서 렌더링을 다르게 해야하는 경우가 발생한다. JSX는 `false`나 `undefined`는 렌더링하지 않으므로, 특정 조건에 true를 주는 형식으로 조건부 렌더링을 할 수 있다.
 
 ```jsx
-const MyComponent = ({ name, address }) => (
+const MyComponent = ({name, address}) => (
   <div>
     <h2>{name}</h2>
     {address && <p>{address}</p>}
@@ -1108,7 +1108,7 @@ const MyComponent = ({ name, address }) => (
 if-else도 삼항연산자를 활용하면 아래와 같이 할 수 있다.
 
 ```jsx
-const MyComponent = ({ name, address }) => (
+const MyComponent = ({name, address}) => (
   <div>
     <h2>{name}</h2>
     {address ? <p>{address}</p> : <p>{'Address is not available'}</p>}
@@ -1125,7 +1125,7 @@ const ComponentA = () => (
   <ComponentB isDisplay={true} className={'componentStyle'} />
 )
 
-const ComponentB = ({ isDisplay, ...domProps }) => (
+const ComponentB = ({isDisplay, ...domProps}) => (
   <div {...domProps}>{'ComponentB'}</div>
 )
 ```
@@ -1347,9 +1347,9 @@ Page.propTypes = {
 
 ```javascript
 // assuming this.state.count === 0
-this.setState({ count: this.state.count + 1 })
-this.setState({ count: this.state.count + 1 })
-this.setState({ count: this.state.count + 1 })
+this.setState({count: this.state.count + 1})
+this.setState({count: this.state.count + 1})
+this.setState({count: this.state.count + 1})
 // this.state.count === 1, not 3
 ```
 
@@ -1681,7 +1681,7 @@ class WindowDimensions extends React.Component {
   }
 
   updateDimensions() {
-    this.setState({ width: window.innerWidth, height: window.innerHeight })
+    this.setState({width: window.innerWidth, height: window.innerHeight})
   }
 
   render() {
@@ -1760,7 +1760,7 @@ render() {
 `<pre>` 태그안에 `JSON.stringify()`를 사용하면 된다.
 
 ```javascript
-const data = { name: 'John', age: 42 }
+const data = {name: 'John', age: 42}
 
 class User extends React.Component {
   render() {
@@ -1814,8 +1814,8 @@ this.setState({ user })-
 - spread 연산자를 사용하는 법
 
 ```javascript
-const user = { ...this.state.user, age: 42 }
-this.setState({ user })
+const user = {...this.state.user, age: 42}
+this.setState({user})
 ```
 
 2. `setState()`와 함수를 사용하는 법
@@ -2080,7 +2080,7 @@ export const space = [0, 8, 16, 32, 64]
 그리고 각각의 컴포넌트에서 이를 임포트 하면 된다.
 
 ```javascript
-import { space, colors } from './styles'
+import {space, colors} from './styles'
 ```
 
 ### What are the popular React-specific linters?
@@ -2113,13 +2113,13 @@ class MyComponent extends React.Component {
           })
         },
         (error) => {
-          this.setState({ error })
+          this.setState({error})
         },
       )
   }
 
   render() {
-    const { error, employees } = this.state
+    const {error, employees} = this.state
     if (error) {
       return <div>Error: {error.message}</div>
     } else {

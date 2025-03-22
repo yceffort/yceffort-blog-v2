@@ -231,10 +231,10 @@ About.getInitialProps = function (_: NextPageContext) {
 {
   "pathname": "/posts/[id]",
   "route": "/posts/[id]",
-  "query": { "id": "1" },
+  "query": {"id": "1"},
   "asPath": "/posts/1",
   "components": {
-    "/posts/[id]": { "props": { "pageProps": {} } },
+    "/posts/[id]": {"props": {"pageProps": {}}},
     "/_app": {}
   },
   "isFallback": false,
@@ -248,12 +248,12 @@ About.getInitialProps = function (_: NextPageContext) {
 {
   "pathname": "/posts/[id]",
   "route": "/posts/[id]",
-  "query": { "hello": "world", "id": "1" },
+  "query": {"hello": "world", "id": "1"},
   "asPath": "/posts/1",
   "components": {
-    "/": { "props": { "pageProps": {} } },
+    "/": {"props": {"pageProps": {}}},
     "/_app": {},
-    "/posts/[id]": { "props": { "pageProps": {} } }
+    "/posts/[id]": {"props": {"pageProps": {}}}
   },
   "isFallback": false,
   "events": {}

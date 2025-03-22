@@ -16,7 +16,7 @@ export const sum = (a, b) => a + b
 그리고 이 값(함수)을 필요로 하는 곳에서 아래와 같이 사용한다.
 
 ```javascript
-import { sum } from './test'
+import {sum} from './test'
 
 sum(1, 2)
 ```
@@ -37,7 +37,7 @@ export const sum = (a, b) => a + b
 
 ```javascript
 async function calc(a, b) {
-  const { sum } = await import('./test')
+  const {sum} = await import('./test')
   sum(a, b)
 }
 
@@ -55,7 +55,7 @@ export default sum
 
 ```javascript
 async function calc() {
-  const { default: sum } = await import('./test')
+  const {default: sum} = await import('./test')
   sum(1, 2)
 }
 ```
@@ -79,5 +79,5 @@ export default sum
 ```
 
 ```javascript
-const { default: sum, sum1, sum2 } = await import('./test')
+const {default: sum, sum1, sum2} = await import('./test')
 ```

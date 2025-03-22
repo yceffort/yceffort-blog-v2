@@ -58,7 +58,7 @@ npx create-react-app my-app --template redux
 **앱의 전체 상태는, 단일 스토어 내의 오브젝트 트리에 저장된다.** 상태 트리에 변화를 주는 유일한 방법은 액션을 emit하는 것인데, 이는 오브젝트에 어떤 변화가 있는지를 알려주는 것이다. 액션이 어떻게 상태 트리를 변화시키는지 지정하기 위해, 순수한 리듀서를 작성한다.
 
 ```javascript
-import { createStore } from 'redux'
+import {createStore} from 'redux'
 /**
  아래 함수는 (state, action) => state로 구성된 순수한 함수인 리듀서 이다.
 
@@ -90,11 +90,11 @@ store.subscribe(() => console.log(store.getState()))
 
 // 내부 상태값을 바꾸는 유일한 방법은 action을 dispatch하는 것이다.
 //액션은 시리얼라이즈 할 수 있으며, 로그를 남기거나, 저장하거나, 이어서 할 수 있다.
-store.dispatch({ type: 'INCREMENT' })
+store.dispatch({type: 'INCREMENT'})
 // 1
-store.dispatch({ type: 'INCREMENT' })
+store.dispatch({type: 'INCREMENT'})
 // 2
-store.dispatch({ type: 'DECREMENT' })
+store.dispatch({type: 'DECREMENT'})
 // 1
 ```
 

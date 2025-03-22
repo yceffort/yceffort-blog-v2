@@ -118,9 +118,8 @@ type Writable<K extends string | number | symbol, V> = {
 
 type ExtractFromReadonlySet<T> = T extends ReadonlySet<infer R> ? R : never
 type ExtractFromReadonlyArray<T> = T extends ReadonlyArray<infer R> ? R : never
-type ExtractFromReadonlyMap<T> = T extends ReadonlyMap<infer K, infer V>
-  ? [K, V]
-  : never
+type ExtractFromReadonlyMap<T> =
+  T extends ReadonlyMap<infer K, infer V> ? [K, V] : never
 ```
 
 ```typescript
@@ -209,7 +208,7 @@ const immutableAppendGroupsToUser = (
   const newGroupIds = Array.from(new Set([...user.groupIds, ...groupIds]))
 
   // 함수가 완전히 새로운 객체를 리턴한다.
-  return Object.assign({}, user, { groupIds: newGroupIds })
+  return Object.assign({}, user, {groupIds: newGroupIds})
 }
 ```
 

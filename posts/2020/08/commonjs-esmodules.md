@@ -47,7 +47,7 @@ Nodejs 초창기에는, Node 모듈은 CommonJS 모듈로 작성되었다. 따�
 // @filename: util.cjs
 module.exports.sum = (x, y) => x + y
 // @filename: main.cjs
-const { sum } = require('./util.cjs')
+const {sum} = require('./util.cjs')
 console.log(sum(2, 4))
 ```
 
@@ -69,7 +69,7 @@ ESM 스크립트에서는, `import`와 `export`가 언어의 일부로 추가되
 // @filename: util.mjs
 export const sum = (x, y) => x + y
 // @filename: main.mjs
-import { sum } from './util.mjs'
+import {sum} from './util.mjs'
 console.log(sum(2, 4))
 ```
 
@@ -123,7 +123,7 @@ CJS가 ESM을 `require()` 하지 못하는 가장 단순한 이유는, ESM는 to
 
 ```javascript
 ;(async () => {
-  const { foo } = await import('./foo.mjs')
+  const {foo} = await import('./foo.mjs')
 })()
 ```
 
@@ -138,7 +138,7 @@ import _ from './lodash.cjs'
 이것은 불가능하다.
 
 ```javascript
-import { shuffle } from './lodash.cjs'
+import {shuffle} from './lodash.cjs'
 ```
 
 CJS는 named exports를 실행단계에서 연산하지만, ESM은 named exports를 파싱 단계에서 연산하기 때문이다.
@@ -147,7 +147,7 @@ CJS는 named exports를 실행단계에서 연산하지만, ESM은 named exports
 
 ```javascript
 import _ from './lodash.cjs'
-const { shuffle } = _
+const {shuffle} = _
 ```
 
 > 하지만 이방법은 tree shaking이 되지 않으므로 번들링 시 사이즈가 커지게 된다.

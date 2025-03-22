@@ -223,7 +223,7 @@ module.exports = {
   ...rootRule,
   plugins: ['yceffort-rules'],
   rules: {
-    'yceffort-rules/var-length': ['warn', { allowed: ['_'] }],
+    'yceffort-rules/var-length': ['warn', {allowed: ['_']}],
   },
 }
 ```
@@ -235,7 +235,7 @@ module.exports = {
 먼저 AST Explorer로 트리구조를 살펴보자.
 
 ```javascript
-import React, { MouseEvent } from 'react'
+import React, {MouseEvent} from 'react'
 import lodash from 'lodash'
 ```
 

@@ -64,6 +64,9 @@ span.icon.icon-link {
 pre {
     overflow-x: auto;
 }
+code {
+    word-wrap: break-word;
+}
 
 /**
  * Inspired by gatsby remark prism - https://www.gatsbyjs.com/plugins/gatsby-remark-prismjs/

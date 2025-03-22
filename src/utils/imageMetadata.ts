@@ -25,7 +25,9 @@ interface ImageMetadataOptions {
 
 async function addMetadata(node: ImageElement, postPath: string) {
     const {src} = node.properties
-    if (!src) {return}
+    if (!src) {
+        return
+    }
 
     if (src.startsWith('http')) {
         return

@@ -26,6 +26,7 @@ export default {
       typography: (theme) => ({
         DEFAULT: {
           css: {
+            code: {color: 'inherit'},
             color: theme('colors.gray.800'),
             a: {
               color: theme('colors.indigo.500'),

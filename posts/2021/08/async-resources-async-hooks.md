@@ -143,7 +143,7 @@ app.post("/user", (req, res) => {
 ### `setTimeout`
 
 ```javascript
-const { logger } = require('./setup')
+const {logger} = require('./setup')
 logger.clearLog()
 
 setTimeout(() => {
@@ -171,7 +171,7 @@ timer callback
 ### nested `setTimeout`
 
 ```javascript
-const { logger } = require('./setup')
+const {logger} = require('./setup')
 logger.clearLog()
 
 setTimeout(() => {
@@ -202,7 +202,7 @@ inner timer callback
 ### clear `setTimeout`
 
 ```javascript
-const { logger } = require('./setup')
+const {logger} = require('./setup')
 logger.clearLog()
 
 clearTimeout(
@@ -222,7 +222,7 @@ clearTimeout(
 ### `setInterval`
 
 ```javascript
-const { logger } = require('./setup')
+const {logger} = require('./setup')
 logger.clearLog()
 
 let count = 0
@@ -258,8 +258,8 @@ callback executed
 ### 자동으로 사라지는 Custom 비동기 리소스
 
 ```javascript
-const { logger } = require('./setup')
-const { AsyncResource, executionAsyncId } = require('async_hooks')
+const {logger} = require('./setup')
+const {AsyncResource, executionAsyncId} = require('async_hooks')
 logger.clearLog()
 
 class DBQuery extends AsyncResource {
@@ -317,8 +317,8 @@ query executed!
 이번에는, `setTimeout`안에서 `dbquery`를 참조하는 코드를 작성해보자.
 
 ```javascript
-const { logger } = require('./setup')
-const { AsyncResource, executionAsyncId } = require('async_hooks')
+const {logger} = require('./setup')
+const {AsyncResource, executionAsyncId} = require('async_hooks')
 logger.clearLog()
 
 class DBQuery extends AsyncResource {
@@ -369,8 +369,8 @@ query executed!
 `requireManualDestroy`가 `true`가 되면 `destroy` 훅이 자동으로 실행되지 않고, 비동기 리소스에서 `emitDestroy()`를 호출해서 수동으로 제거해야 한다.
 
 ```javascript
-const { logger } = require('./setup')
-const { AsyncResource, executionAsyncId } = require('async_hooks')
+const {logger} = require('./setup')
+const {AsyncResource, executionAsyncId} = require('async_hooks')
 logger.clearLog()
 
 class DBQuery extends AsyncResource {

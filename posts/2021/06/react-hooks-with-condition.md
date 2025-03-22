@@ -11,9 +11,9 @@ description: '처음 접했을 때 범할 수 있는 실수'
 리액트를 처음 접해서 작업을 했을때, 아래와 같은 실수를 해본 경험이 있다.
 
 ```tsx
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 
-export default function Hello({ effect }: { effect: boolean }) {
+export default function Hello({effect}: {effect: boolean}) {
   const [state, setState] = useState(false)
 
   console.log('effect', effect)
@@ -163,7 +163,7 @@ function Component() {
 만약에 이러한 훅 동작 외부에 조건문을 달면 어떻게 될까?
 
 ```javascript
-function Component({ doEffect }) {
+function Component({doEffect}) {
   const [first, setFirst] = useState(0)
   if (doEffect) {
     useEffect(/*...*/)
@@ -175,7 +175,7 @@ function Component({ doEffect }) {
 만약 해당 컴포넌트의 `doEffect`가 `false`로 넘어왔다고 가정해보자.
 
 ```javascript
-function Component({ doEffect }) {
+function Component({doEffect}) {
   // {value: 0, next: {value: 0, next: null}}
   const [first, setFirst] = useState(0)
   if (doEffect) {

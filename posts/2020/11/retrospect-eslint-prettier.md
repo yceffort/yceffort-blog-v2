@@ -57,7 +57,7 @@ https://github.com/prettier/eslint-config-prettier
 
 ```javascript
 // 설정이 잘 되어있어도 lodash 모든 것들을 가져온다.
-import { sortBy } from 'lodash'
+import {sortBy} from 'lodash'
 
 // sortBy 경로에서 가져온다.
 import sortBy from 'lodash-es/sortBy'

@@ -34,7 +34,7 @@ import arrayUtils from 'array-utils'
 
 ```javascript
 // Import only some of the utilities!
-import { unique, implode, explode } from 'array-utils'
+import {unique, implode, explode} from 'array-utils'
 ```
 
 위 `import`문과 차이점이라고 한다면, 모든 것을 `import` 하는 이전 코드와는 다르게 여기에서는 딱 필요한 method들만 `import`했다는 것이다. 이 코드가 dev build에서는 어차피 모든 모듈을 가져오기 때문에 실질적으로 변화가 일어나지 않는다. 그러나 프로덕션 빌드에서는 명시적으로 가져오지 않는 es6모듈에 대해 `export`를 `shake` 하도록 웹팩을 구성하여 프로덕션 빌드를 더 작게 만들 수 있다.
@@ -132,7 +132,7 @@ console.log(fruits) // (4) ["apple", "orange", "pear", "kiwi"]
 `Babel`의 설정을 es6로 유지하도록 변경했지만, 모듈에서 필요한 함수만 가져오도록 수정해야 한다.
 
 ```javascript
-import { simpleSort } from '../../utils/utils'
+import {simpleSort} from '../../utils/utils'
 ```
 
 이 구문은, `../../utils/utils`에서 `simpleSort`만 가져오도록 지정한다. 전체 유틸리티 모듈이 아닌, 하나의 함수만 가져오므로 기존의 `utils.simpleSort`를 모두 `simpleSort`로 수정해야 한다.
@@ -161,7 +161,7 @@ https://yceffort.kr/2020/07/how-commonjs-is-making-your-bundles-larger
 
 ```javascript
 // This still pulls in all of lodash even if everything is configured right.
-import { sortBy } from 'lodash'
+import {sortBy} from 'lodash'
 
 // This will only pull in the sortBy routine.
 import sortBy from 'lodash-es/sortBy'

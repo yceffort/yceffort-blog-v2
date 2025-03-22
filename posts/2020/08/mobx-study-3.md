@@ -65,7 +65,7 @@ MobX는 액션이 상태를 변경하는 단방향 데이터 흐름을 지원하
 아래 예제는 위에서 언급한 기본 개념과 원칙을 묘사하고 있다.
 
 ```jsx
-import { observable, autorun } from 'mobx'
+import {observable, autorun} from 'mobx'
 
 var todoStore = observable({
   /* 관찰의 대상이되는 state */

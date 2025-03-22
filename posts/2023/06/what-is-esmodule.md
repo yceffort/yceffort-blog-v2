@@ -19,14 +19,14 @@ function addTwo(num) {
   return num + 2
 }
 
-export { addTwo }
+export {addTwo}
 ```
 
 위 파일은 `addTwo.mjs`라는 파일명으로 작성된 예제이며, `addTwo`라는 함수를 내보내고 있다. 그리고 이 파일은 다음과 같이 불러오는 것이 가능하다.
 
 ```javascript
 // app.mjs
-import { addTwo } from './addTwo.mjs'
+import {addTwo} from './addTwo.mjs'
 
 // Prints: 6
 console.log(addTwo(4))
@@ -52,7 +52,7 @@ nodejs는 표준 문서에 나와있는 방식대로 esmodule 방식을 완전�
 많은 자바스크립트 개발자들이 알고 있는 것 처럼, `import`는 보통 `from` 키워드와 함께 널리 사용된다.
 
 ```javascript
-import { foo } from 'bar'
+import {foo} from 'bar'
 ```
 
 @@ -58,15 +62,15 @@ import { foo } from 'bar'
@@ -81,7 +81,7 @@ commonjs 모듈은 `module.exports`로 구성되어 있으며, 이를 활용하�
 
 ```javascript
 // 아래 두 방식은 모두 동일하다.
-import { default as cjs } from 'cjs'
+import {default as cjs} from 'cjs'
 import cjsSugar from 'cjs'
 
 console.log(cjs)
@@ -107,7 +107,7 @@ module.exports = {
 
 // index.mjs
 // 실제 없는 모듈을 import 함
-import { hi } from './test.cjs'
+import {hi} from './test.cjs'
 
 console.log(hi)
 ```

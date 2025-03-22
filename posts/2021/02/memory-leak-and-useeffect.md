@@ -11,7 +11,7 @@ description: 'https://overreacted.io/a-complete-guide-to-useeffect/ 도 시간�
 아래 코드는 일반적으로 `useEffect`를 활용해서 데이터를 가져오는 방식이다.
 
 ```javascript
-import React, { useEffect } from 'react'
+import React, {useEffect} from 'react'
 
 export default function App() {
   const [todo, setTodo] = useState(null)
@@ -40,8 +40,8 @@ dependency에 아무것도 넣지 않음으로써, 딱 한번만 실행되게 �
 마찬가지로, `id`를 의존성 목록에 넣어서 처리하는 경우도 있을 수 있다.
 
 ```javascript
-import React, { useEffect } from 'react'
-export default function App({ id }) {
+import React, {useEffect} from 'react'
+export default function App({id}) {
   const [todo, setTodo] = useState(null)
   useEffect(() => {
     const fetchData = async () => {

@@ -78,7 +78,10 @@ after
 // Before
 <button onClick="{openModal}" />
 
-// After <Button onClick={() => import('./Modal').then(m => m.openModal())} />
+// After
+<button onClick="{()" ="">
+  import('./Modal').then(m => m.openModal())} />
+</button>
 ```
 
 코드 스플릿은 여러분이 할 수 있는 가장 최선의 성능최적화다. 이는 많은 성능상 이점을 가져다 준다. 코드 스플릿팅을 하게되면, 로딩 시간을 60% 감소시킬 수 있다. 노션의 경우 40~45% 를 절감하는 효과를 가져왔다.

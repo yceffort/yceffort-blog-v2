@@ -75,7 +75,7 @@ MobX에는 몇가지 핵심 개념이 존재한다.
 MobX는 객체, 배열, 클래스 인스턴스와 같은 기존 데이트 구조에 예측 가능한 기능을 추가한다. 이것은 단순히 @observable 데코레이터만 추가하면 된다.
 
 ```javascript
-import { observable } from 'mobx'
+import {observable} from 'mobx'
 
 class Todo {
   id = Math.random()
@@ -89,7 +89,7 @@ class Todo {
 만약 개발환경에서 데코레이터 문법을 지원하지 않는다면, [이 글](https://mobx.js.org/best/decorators.html)을 참조해봐도 좋다. 그게 아니라면 MobX는 데코레이터 문법을 지원하지 않아도 decorate 유틸리티를 활용해서 똑같이 구현할 수 있다. 대부분의 MobX 유저들은 데코레이터 문법을 선호하는데, 이는 데코레이터 문법이 조금더 간결하기 때문이다.
 
 ```javascript
-import { decorate, observable } from 'mobx'
+import {decorate, observable} from 'mobx'
 
 class Todo {
   id = Math.random()
@@ -126,9 +126,9 @@ Reaction은 Compute Values와 비슷하지만 값을 계산하는 대신 콘솔,
 만약 리액트를 사용하고 있다면, `mobx-react` 패키지에 있는 [observer](http://mobxjs.github.io/mobx/refguide/observer-component.html) 함수/데코레이터를 추가하여 반응형 컴포넌트를 만들 수 있다.
 
 ```javascript
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
-import { observer } from 'mobx-react'
+import {observer} from 'mobx-react'
 
 @observer
 class TodoListView extends Component {
@@ -146,7 +146,7 @@ class TodoListView extends Component {
   }
 }
 
-const TodoView = observer(({ todo }) => (
+const TodoView = observer(({todo}) => (
   <li>
     <input
       type="checkbox"

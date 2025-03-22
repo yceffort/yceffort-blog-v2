@@ -1,14 +1,14 @@
 name: Test site for publicly known js vulnerabilities
 
 on:
-    push:
-        branches: [main]
+  push:
+    branches: [main]
 
 jobs:
-    security:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Test for public javascript library vulnerabilities
-              uses: lirantal/is-website-vulnerable@main
-              with:
-                  scan-url: 'https://yceffort.kr'
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test for public javascript library vulnerabilities
+        uses: lirantal/is-website-vulnerable@main
+        with:
+          scan-url: 'https://yceffort.kr'

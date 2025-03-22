@@ -87,8 +87,8 @@ Map은 잘 알려진 것처럼, key-value pair로 이루어진 컬렉션이다.
 ```javascript
 let messi = new Set()
 
-const 리오넬메시 = { name: '리오넬메시' }
-const 라이오넬멧시 = { name: '리오넬메시' }
+const 리오넬메시 = {name: '리오넬메시'}
+const 라이오넬멧시 = {name: '리오넬메시'}
 messi.add(리오넬메시)
 messi.add(라이오넬멧시)
 
@@ -101,8 +101,8 @@ console.log(messi.size) //2 ????
 - array, date, object 등은 reference를 비교한다. (메모리의 같은 위치를 참조하고 있는가?)
 
 ```javascript
-const 리오넬메시 = { name: '리오넬메시' }
-const 라이오넬멧시 = { name: '리오넬메시' }
+const 리오넬메시 = {name: '리오넬메시'}
+const 라이오넬멧시 = {name: '리오넬메시'}
 const 메석대 = 리오넬메시
 
 메석대 === 리오넬메시 // true
@@ -125,7 +125,7 @@ const 메석대 = 리오넬메시
 그렇다. 열거형이 존재하지 않는다. 그 이유는 참조하고 있는 오브젝트가 사라지면 해당 key, value가 사라지는 `WeakMap`, `WeakSet`의 특징 때문이다.
 
 ```javascript
-let john = { name: 'John' }
+let john = {name: 'John'}
 // 객체에 접근 가능, 해당 객체는 메모리에서 참조되고 있음.
 // 참조를 null로 overwrite
 john = null
@@ -133,7 +133,7 @@ john = null
 ```
 
 ```javascript
-let john = { name: 'John' }
+let john = {name: 'John'}
 let array = [john]
 john = null // 참조를 null로 overwrite
 
@@ -146,7 +146,7 @@ array[0]
 이는 기존 Map, Set에서도 동일하다.
 
 ```javascript
-let john = { name: 'John' }
+let john = {name: 'John'}
 
 let map = new Map()
 map.set(john, '윅')
@@ -160,7 +160,7 @@ john = null // 참조를 null로 overwrite
 그러나 WeakMap, WeakSet은 다르다
 
 ```javascript
-let john = { name: 'John' }
+let john = {name: 'John'}
 
 let weakMap = new WeakMap()
 weakMap.set(john, '윅')
@@ -173,7 +173,7 @@ john = null // 참조를 null로 overwrite
 그럼 도대체 이것은 언제 쓸까? 객체가 사라지면 자동으로 가비지 콜렉팅 해준다는 특성을 활용해, 아래와 같은 것이 가능하다.
 
 ```javascript
-let john = { name: 'John' }
+let john = {name: 'John'}
 // map: 유저 => 방문횟수
 let visitsCountMap = new Map()
 visitsCountMap.set(john, 123)

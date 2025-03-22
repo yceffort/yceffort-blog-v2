@@ -30,7 +30,7 @@ https://www.npmjs.com/package/react/v/18.3.0-next-1308e49a6-20230330?activeTab=c
 서버 컴포넌트의 등장으로 인해, 이제 다음과 같이 `async`한 컴포넌트를 만드는 것이 가능해졌다.
 
 ```javascript jsx
-export async function Note({ id, isEditing }) {
+export async function Note({id, isEditing}) {
   const note = await db.posts.get(id)
   return (
     <div>
@@ -69,7 +69,7 @@ function ClientComponent() {
 `use` 훅의 정의에 대해서, rfc에서는 리액트에서만 사용되는 `await`이라고 비유했다. `await`이 `async`함수에서만 쓰일 수 있는 것 처럼, `use`는 리액트 컴포넌트와 훅 내부에서만 사용될 수 있다.
 
 ```javascript
-import { use } from 'react'
+import {use} from 'react'
 
 function Component() {
   const data = use(promise)
@@ -83,7 +83,7 @@ function useHook() {
 `use`훅은 정말 파격적이게도, 다른 훅이 할수 없는 일을 할 수 있다. 예를 들어 조건부 내에서 호출될 수도 있고, 블록 구문내에 존재할 수도 있으며, 심지어 루프 구문에서도 존재할 수 있다. 이는 `use`가 여타 다른 훅과는 다르게 관리되고 있음을 의미함과 동시에, 다른 훅과 마찬가지로 컴포넌트 내에서만 쓸 수 있다는 제한이 있다는 것을 의미한다.
 
 ```jsx
-function Note({ id, shouldIncludeAuthor }) {
+function Note({id, shouldIncludeAuthor}) {
   const note = use(fetchNote(id))
 
   let byline = null
@@ -126,7 +126,7 @@ function Note({ id, shouldIncludeAuthor }) {
 그래서 리액트 팀은 현재 렌더링에 대해 영향을 미치지 않고, 데이터를 최적으로 가져올 수 있도록 단순히 `use`를 제공하는 방향으로 변경했다. `use`는 개발자가 직관적으로 사용할 수 있으며, 라이브러리와 상관없이 데이터를 가져오는 것이 훨씬더 자연스러워진다.
 
 ```jsx
-function TooltipContainer({ showTooltip }) {
+function TooltipContainer({showTooltip}) {
   // 이 요청은 데이터를 블로킹하지 않는다.
   const promise = fetchInfo()
 
@@ -149,7 +149,7 @@ function TooltipContainer({ showTooltip }) {
 `use`는 `async/await`과 거의 동일한 프로그래밍 모델을 제공하도록 설계되어 있지만, `async/await`과 다르게 일반 함수형 컴포넌트나 훅에서도 여전히 작동한다. 자바스크립트 비동기 함수와 유사하게, 런타임은 일시 중단 및 재개를 위해서 내부 상태를 관리하겠지만, 컴포넌트 작성자의 관점에서 보면 순차적으로 실행되는 함수 처럼 보인다.
 
 ```jsx
-function Note({ id }) {
+function Note({id}) {
   // fetch 요청은 비동기이지만, 컴포넌트 작성자는 동기 동작처럼 작성할 수 있다.
   const note = use(fetchNote(id))
   return (
@@ -180,10 +180,10 @@ function Note({ id }) {
   ```jsx
   async function fetchTodo(id) {
     const data = await fetchDataFromCache(`/api/todos/${id}`)
-    return { contents: data.contents }
+    return {contents: data.contents}
   }
 
-  function Todo({ id, isSelected }) {
+  function Todo({id, isSelected}) {
     const todo = use(fetchTodo(id))
     return (
       <div className={isSelected ? 'selected-todo' : 'normal-todo'}>
@@ -207,7 +207,7 @@ function Note({ id }) {
     return await response.json()
   })
 
-  function Note({ id }) {
+  function Note({id}) {
     // id가 변경되거나 캐시가 날아가지 않는한, 항상 같은 결과를 반환한다.
     const note = use(fetchNote(id))
     return (

@@ -110,7 +110,7 @@ JS Self-Profiling API는 [Profiler](https://wicg.github.io/js-self-profiling/#th
 ```javascript
 // Profiler를 지원하는지 확인
 if (typeof window.Profiler === 'function') {
-  var profiler = new Profiler({ sampleInterval: 10, maxBufferSize: 10000 })
+  var profiler = new Profiler({sampleInterval: 10, maxBufferSize: 10000})
   profiler.stop().then(function (trace) {
     sendProfile(trace)
   })
@@ -119,7 +119,7 @@ if (typeof window.Profiler === 'function') {
 
 ```javascript
 if (typeof window.Profiler === 'function') {
-  const profiler = new Profiler({ sampleInterval: 10, maxBufferSize: 10000 })
+  const profiler = new Profiler({sampleInterval: 10, maxBufferSize: 10000})
   var trace = await profiler.stop()
   sendProfile(trace)
 }
@@ -146,7 +146,7 @@ if (typeof window.Profiler === 'function') {
 이 말인 즉슨, 아무리 1이나 0을 선택해도 운영체제에 따라 만 최소 10ms내지 16ms만 가능하다는 것이다. `.sampleInterval`을 활용하면 언제든 현재 샘플링 레이트를 확인할 수 있다.
 
 ```javascript
-const profiler = new Profiler({ sampleInterval: 1, maxBufferSize: 10000 })
+const profiler = new Profiler({sampleInterval: 1, maxBufferSize: 10000})
 console.log(profiler.sampleInterval)
 ```
 
@@ -207,7 +207,7 @@ https://caniuse.com/mdn-api_profiler
 
 ```javascript
 function loadExpensiveThirdParty() {
-  const profiler = new Profiler({ sampleInterval: 10, maxBufferSize: 1000 })
+  const profiler = new Profiler({sampleInterval: 10, maxBufferSize: 1000})
 
   loadThirdParty(async function onThirdPartyComplete() {
     var trace = await profiler.stop()
@@ -230,7 +230,7 @@ function loadExpensiveThirdParty() {
 만약, 인터랙션이 프로파일러를 시작할 때 까지 기다린다면 앞서 언급한 것 처럼 1~2m정도의 시간이 소요된다.
 
 ```javascript
-let profiler = new Profiler({ sampleInterval: interval, maxBufferSize: 10000 })
+let profiler = new Profiler({sampleInterval: interval, maxBufferSize: 10000})
 
 const observer = new PerformanceObserver(function (list) {
   const perfEntries = list.getEntries().forEach((entry) => {
@@ -253,7 +253,7 @@ const observer = new PerformanceObserver(function (list) {
       })
     }
   })
-}).observe({ type: 'event', buffered: true })
+}).observe({type: 'event', buffered: true})
 ```
 
 ### 페이지 로드

@@ -58,7 +58,7 @@ function MyComponent() {
 이러한 경우에 `useCallback`이 빛을 발한다. `deps`에 같은 값이 주어질 때마다, hook은 렌더링 시에 완전히 같은 함수 인스턴스를 리턴한다.
 
 ```javascript
-import React, { useCallback } from 'react'
+import React, {useCallback} from 'react'
 
 function MyComponent() {
   // handleClick 은 완전히 같은 오브젝트다.
@@ -78,7 +78,7 @@ function MyComponent() {
 import React from 'react'
 import useSearch from './fetch-items'
 
-function BigList({ term, handleClick }) {
+function BigList({term, handleClick}) {
   const items = useSearch(term)
 
   const element = (item) => <div onClick={handleClick}>{item}</div>
@@ -92,9 +92,9 @@ export default React.memo(BigList)
 `items`가 정말 많다고 가정하고, 재 렌더링을 방지하지 위하여 `React.memo`를 사용했다. 만약 `BigList`에서 아이템을 클릭할 때 실행할 핸들러 함수가 필요하다고 가정해보자.
 
 ```javascript
-import React, { useCallback } from 'react'
+import React, {useCallback} from 'react'
 
-export default function Parent({ term }) {
+export default function Parent({term}) {
   const handleClick = useCallback(
     (item) => {
       console.log('You clicked ', item)
@@ -113,7 +113,7 @@ export default function Parent({ term }) {
 이제 다시 앞선 예제로 와보자.
 
 ```javascript
-import React, { useCallback } from 'react'
+import React, {useCallback} from 'react'
 
 function MyComponent() {
   const handleClick = useCallback(() => {

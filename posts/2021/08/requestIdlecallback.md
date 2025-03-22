@@ -66,7 +66,7 @@ function myNonEssentialWork(deadline) {
 
 ```javascript
 // 2초는 내가 기다려본다...
-requestIdleCallback(processPendingAnalyticsEvents, { timeout: 2000 })
+requestIdleCallback(processPendingAnalyticsEvents, {timeout: 2000})
 ```
 
 이렇게 시간 초과로 인해 콜백이 실행되는 경우 아래 두가지를 확인할 수 있다.
@@ -123,7 +123,7 @@ function schedulePendingEvents() {
 
   if ('requestIdleCallback' in window) {
     // 최대 2초 대기
-    requestIdleCallback(processPendingAnalyticsEvents, { timeout: 2000 })
+    requestIdleCallback(processPendingAnalyticsEvents, {timeout: 2000})
   } else {
     processPendingAnalyticsEvents()
   }

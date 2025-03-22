@@ -11,10 +11,10 @@ description: '사실 그냥 (몇 가지 합리적인 이유가 있는) 개인적
 다른 사람들이 쓴 리액트 코드를 볼 때 마다 몇가지 눈여겨 보는게 있는데, 그 중 하나가 jsx안의 조건절이다. 이 사람은 `&&`을 선호나는지, 아니면 3항연산자를 선호하는지 살펴본다. 근데 보통은 간단해서 그런지 `&&`를 쓰는 경우가 더 많은 것 같다. 예전에는 이 것과 관련해서 코드 리뷰를 올려볼까도 했는데, 멀쩡히 작동하는 코드인데 괜히 시비 거는 것 같아서, 고칠 코드도 많아서, 그리고 결정적으로 소심해서 그냥 그냥 넘어가고는 했다. 그렇다. 이 글은 그냥 소심한 반항인 것이다.
 
 ```jsx
-export default function StudentsList({ students }) {
+export default function StudentsList({students}) {
   return (
     <ul>
-      {students.map(({ id, name, score }) => (
+      {students.map(({id, name, score}) => (
         <li key={id}>
           {name} {score}
         </li>
@@ -27,11 +27,11 @@ export default function StudentsList({ students }) {
 여기에 이제 `&&`로 다음과 같은 조건을 추가했다고 생각해보자.
 
 ```jsx
-export default function StudentsList({ students }) {
+export default function StudentsList({students}) {
   return (
     <ul>
       {students.length &&
-        students.map(({ id, name, score }) => (
+        students.map(({id, name, score}) => (
           <li key={id}>
             {name} {score}
           </li>
@@ -52,11 +52,11 @@ export default function StudentsList({ students }) {
 해결책은, `students.length === 0 && ...`을 쓰거나, 삼항연산자로 바꾸면 된다.
 
 ```jsx
-export default function StudentsList({ students }) {
+export default function StudentsList({students}) {
   return (
     <ul>
       {students.length
-        ? students.map(({ id, name, score }) => (
+        ? students.map(({id, name, score}) => (
             <li key={id}>
               {name} {score}
             </li>
@@ -71,11 +71,11 @@ export default function StudentsList({ students }) {
 
 ```jsx
 // students가 undefined로 넘어왔다면?
-export default function StudentsList({ students }) {
+export default function StudentsList({students}) {
   return (
     students && (
       <ul>
-        {students.map(({ id, name, score }) => (
+        {students.map(({id, name, score}) => (
           <li key={id}>
             {name} {score}
           </li>

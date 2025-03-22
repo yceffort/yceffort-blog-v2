@@ -114,8 +114,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 ```typescript
 // src/pages/[year]/[...slugs].tsx
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { year, slugs } = params as SlugInterface
+export const getStaticProps: GetStaticProps = async ({params}) => {
+  const {year, slugs} = params as SlugInterface
 
   const slug = [year, ...(slugs as string[])].join('/')
   // md 파일을 찾고 그중에 일치하는 파일을 반환한다.
@@ -149,11 +149,11 @@ export async function generateStaticParams() {
   // 마크다운 파일을 다 불러온다음
   const allPosts = await getAllPosts()
   // Array<{ year: string; slug: string[] } 로 반환한다.
-  return allPosts.reduce<Array<{ year: string; slug: string[] }>>(
-    (prev, { fields: { slug } }) => {
+  return allPosts.reduce<Array<{year: string; slug: string[]}>>(
+    (prev, {fields: {slug}}) => {
       const [year, ...slugs] = `${slug.replace('.md', '')}`.split('/')
 
-      prev.push({ year, slug: slugs })
+      prev.push({year, slug: slugs})
       return prev
     },
     [],
@@ -268,7 +268,7 @@ https://nextjs.org/docs/app/building-your-application/optimizing/metadata
 export const metadata: Metadata = {
   title: SiteConfig.title,
   description: SiteConfig.url,
-  authors: [{ name: SiteConfig.author.name }],
+  authors: [{name: SiteConfig.author.name}],
   referrer: 'origin-when-cross-origin',
   creator: SiteConfig.author.name,
   publisher: SiteConfig.author.name,
@@ -303,9 +303,9 @@ export const metadata: Metadata = {
 
 // 동적인 경우
 export async function generateMetadata({
-  params: { year, slug },
+  params: {year, slug},
 }: {
-  params: { year: string; slug: string[] }
+  params: {year: string; slug: string[]}
 }) {
   const post = await findPostByYearAndSlug(year, slug)
 
@@ -328,9 +328,9 @@ export async function generateMetadata({
 이제는 `app/sitemap.ts`라는 예약어 파일을 만들면, 빌드 시점에 미리 sitemap도 생성해준다.
 
 ```typescript
-import { MetadataRoute } from 'next'
+import {MetadataRoute} from 'next'
 
-import { getAllPosts, getAllTagsFromPosts } from '#utils/Post'
+import {getAllPosts, getAllTagsFromPosts} from '#utils/Post'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = await getAllPosts()
@@ -365,7 +365,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 검색엔진에 도움이 되는 `robots.txt`도 설정이 가능하다. `app/robots.ts`를 다음과 같이 만들어 추가할 수 있다.
 
 ```typescript
-import { MetadataRoute } from 'next'
+import {MetadataRoute} from 'next'
 
 export default function robots(): MetadataRoute.Robots {
   return {

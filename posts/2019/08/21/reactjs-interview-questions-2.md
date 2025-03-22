@@ -54,9 +54,9 @@ Component 내에서 프로그래밍으로 라우팅/네비게이팅 하는 방�
    HOF의 `withRouter()`는 컴포넌트의 prop에 히스토리 오브젝트를 인젝트 한다. 이 오브젝트는 `push()` `replace()`를 제공하여 context의 사용을 피하게 해준다.
 
 ```javascript
-import { withRouter } from 'react-router-dom' // this also works with 'react-router-native'
+import {withRouter} from 'react-router-dom' // this also works with 'react-router-native'
 
-const Button = withRouter(({ history }) => (
+const Button = withRouter(({history}) => (
   <button
     type="button"
     onClick={() => {
@@ -72,11 +72,11 @@ const Button = withRouter(({ history }) => (
    `<Route>`는 `withRouter()`와 같은 props를 넘기므로, history prop을 통해 histoy 메서드에 접근할 수 있을 것이다.
 
 ```javascript
-import { Route } from 'react-router-dom'
+import {Route} from 'react-router-dom'
 
 const Button = () => (
   <Route
-    render={({ history }) => (
+    render={({history}) => (
       <button
         type="button"
         onClick={() => {
@@ -135,7 +135,7 @@ const foo = params.get('name')
 Route는 `<Switch>` 블록으로 감싸줘야 하는데, 왜냐하면 `<Switch>`는 라우트를 베타적으로 감싸기 때문이다. 먼저 `Switch`를 임포트 해야 한다.
 
 ```javascript
-import { Switch, Router, Route } from 'react-router'
+import {Switch, Router, Route} from 'react-router'
 ```
 
 그리고 route를 `<Switch>` 블록에 넣어햐 한다.
@@ -154,7 +154,7 @@ history 객체에 props를 보낼 수 있다.
 this.props.history.push({
   pathname: '/template',
   search: '?name=sudheer',
-  state: { detail: response.data },
+  state: {detail: response.data},
 })
 ```
 
@@ -177,7 +177,7 @@ this.props.history.push({
 1. history 오브젝트를 익스포트 하는 모듈을 만들고, 프로젝트 전체에서 해당 모듈을 임포트 한다. 예를들어,
 
 ```javascript
-import { createBrowserHistory } from 'history'
+import {createBrowserHistory} from 'history'
 
 export default createBrowserHistory({
   /* pass a configuration object here if needed */
@@ -187,7 +187,7 @@ export default createBrowserHistory({
 2. 빌트인 라우터 대신에, `<Router>` 컴포넌트를 쓴다. 위에서 만든 `history.js`를 `index.js`에 임포트 한다.
 
 ```javascript
-import { Router } from 'react-router-dom'
+import {Router} from 'react-router-dom'
 import history from './history'
 import App from './App'
 
@@ -213,8 +213,8 @@ history.push('/go-here')
 `react-router`sms `<Redirect>` 컴포넌트를 제공한다. `<Redirect>`를 렌더링 하면 새로운 위치로 이동하게 된다. 서버사이드 리다이렉트와 마찬가지로, 새로운 위치는 현재 히스토리 스택에 있는 현재 위치를 덮어쓰게 된다.
 
 ```javascript
-import React, { Component } from 'react'
-import { Redirect } from 'react-router'
+import React, {Component} from 'react'
+import {Redirect} from 'react-router'
 
 export default class LoginComponent extends Component {
   render() {
@@ -271,10 +271,10 @@ formatMessage(messages.accountMessage)
 
 ```jsx
 import React from 'react'
-import { injectIntl, intlShape } from 'react-intl'
+import {injectIntl, intlShape} from 'react-intl'
 
-const MyComponent = ({ intl }) => {
-  const placeholder = intl.formatMessage({ id: 'messageId' })
+const MyComponent = ({intl}) => {
+  const placeholder = intl.formatMessage({id: 'messageId'})
   return <input placeholder={placeholder} />
 }
 
@@ -294,7 +294,7 @@ export default injectIntl(MyComponent)
 higher-order 컴포넌트 `injectIntl()`는 컴포넌트의 props에 `formatDate()`메서드를 제공한다. 이 메서드는 내부적으로 `FormattedDate`인스턴스를 활용하고, 이는 포맷된 날짜를 string으로 제공한다.
 
 ```jsx
-import { injectIntl, intlShape } from 'react-intl'
+import {injectIntl, intlShape} from 'react-intl'
 
 const stringDate = this.props.intl.formatDate(date, {
   year: 'numeric',
@@ -302,7 +302,7 @@ const stringDate = this.props.intl.formatDate(date, {
   day: 'numeric',
 })
 
-const MyComponent = ({ intl }) => (
+const MyComponent = ({intl}) => (
   <div>{`The formatted date is ${stringDate}`}</div>
 )
 
@@ -352,7 +352,7 @@ expect(result.props.children).toEqual([
 ```jsx
 import TestRenderer from 'react-test-renderer'
 
-const Link = ({ page, children }) => <a href={page}>{children}</a>
+const Link = ({page, children}) => <a href={page}>{children}</a>
 
 const testRenderer = TestRenderer.create(
   <Link page={'https://www.facebook.com/'}>{'Facebook'}</Link>,
@@ -535,7 +535,7 @@ const mapStateToProps = (state) => ({
   isLoaded: state.isLoaded,
 })
 
-const mapDispatchToProps = { fetchData }
+const mapDispatchToProps = {fetchData}
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
 ```
@@ -549,7 +549,7 @@ container에서 store를 사용하기 위해서는 아래 두단계를 따라야
 
 ```jsx
 import React from 'react'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 
 class App extends React.Component {
   render() {
@@ -558,7 +558,7 @@ class App extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return { containerData: state.data }
+  return {containerData: state.data}
 }
 
 export default connect(mapStateToProps)(App)
@@ -595,15 +595,15 @@ const rootReducer = (state, action) => {
 ```javascript
 import React from 'react'
 import * as actionCreators from './actionCreators'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
+import {bindActionCreators} from 'redux'
+import {connect} from 'react-redux'
 
 function mapStateToProps(state) {
-  return { todos: state.todos }
+  return {todos: state.todos}
 }
 
 function mapDispatchToProps(dispatch) {
-  return { actions: bindActionCreators(actionCreators, dispatch) }
+  return {actions: bindActionCreators(actionCreators, dispatch)}
 }
 
 class MyApp extends React.Component {
@@ -616,15 +616,15 @@ export default connect(mapStateToProps, mapDispatchToProps)(MyApp)
 ```javascript
 import React from 'react'
 import * as actionCreators from './actionCreators'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
+import {bindActionCreators} from 'redux'
+import {connect} from 'react-redux'
 
 function mapStateToProps(state) {
-  return { todos: state.todos }
+  return {todos: state.todos}
 }
 
 function mapDispatchToProps(dispatch) {
-  return { actions: bindActionCreators(actionCreators, dispatch) }
+  return {actions: bindActionCreators(actionCreators, dispatch)}
 }
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -663,7 +663,7 @@ export function fetchAccount(id) {
 }
 
 function setAccount(data) {
-  return { type: 'SET_Account', data: data }
+  return {type: 'SET_Account', data: data}
 }
 ```
 
@@ -678,8 +678,8 @@ Redux Store 에서는 Data를 저장하고, 컴포넌트 내부에서는 UI 에 
 conenct를 사용한 `<FilterLink>` component예제를 아래에서 살펴보자.
 
 ```javascript
-import { connect } from 'react-redux'
-import { setVisibilityFilter } from '../actions'
+import {connect} from 'react-redux'
+import {setVisibilityFilter} from '../actions'
 import Link from '../components/Link'
 
 const mapStateToProps = (state, ownProps) => ({
@@ -723,17 +723,17 @@ export const CLEAR_COMPLETED = 'CLEAR_COMPLETED'
 1. 액션 생성시
 
 ```javascript
-import { ADD_TODO } from './actionTypes'
+import {ADD_TODO} from './actionTypes'
 
 export function addTodo(text) {
-  return { type: ADD_TODO, text }
+  return {type: ADD_TODO, text}
 }
 ```
 
 2. 리듀서
 
 ```javascript
-import { ADD_TODO } from './actionTypes'
+import {ADD_TODO} from './actionTypes'
 
 export default (state = [], action) => {
   switch (action.type) {
@@ -764,7 +764,7 @@ const mapDispatchToProps = (dispatch) => ({
   action: bindActionCreators(action, dispatch),
 })
 
-const mapDispatchToProps = { action }
+const mapDispatchToProps = {action}
 ```
 
 ### What is the use of the `ownProps` parameter in `mapStateToProps()` and `mapDispatchToProps()`?
@@ -779,7 +779,7 @@ import ConnectedComponent from './containers/ConnectedComponent'
 `mapStateToProps()`와 `mapDispatchToProps()`안의 `ownProps`는 객체가 될 것이다.
 
 ```json
-{ "user": "john" }
+{"user": "john"}
 ```
 
 이 객체를 활용하여 함수에서 무엇을 반환할지 결정할 수 있다.
@@ -869,7 +869,7 @@ Redux Form은 React와 Redux와 동시에 작동하며, React 폼 내에서 Redu
 `applyMiddleware()`를 사용하면 된다. 예를 들어, `applyMiddleware()`를 사용하여 `redux-thunk`와 `logger`를 추가할 수 있다.
 
 ```javascript
-import { createStore, applyMiddleware } from 'redux'
+import {createStore, applyMiddleware} from 'redux'
 const createStoreWithMiddleware = applyMiddleware(
   ReduxThunk,
   logger,
@@ -887,7 +887,7 @@ const rootReducer = combineReducers({
 })
 
 const initialState = {
-  todos: [{ id: 123, name: 'example', completed: false }],
+  todos: [{id: 123, name: 'example', completed: false}],
 }
 
 const store = createStore(rootReducer, initialState)

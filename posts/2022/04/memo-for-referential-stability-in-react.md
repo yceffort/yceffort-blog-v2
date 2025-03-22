@@ -72,7 +72,7 @@ form을 만들 때 사용하는 [react-hook-form](https://react-hook-form.com/)�
 
 ```javascript
 // useRef()
-useState({ current: initialValue })[0]
+useState({current: initialValue})[0]
 ```
 
 `state`와는 다르게, `reft의 값은 리렌더링 사이에 파괴되지 않으며, 새로 생성되지도 않는다.

@@ -132,7 +132,7 @@ type NameTypes = {
   [key in names]: string
 }
 
-const yc: NameTypes = { firstName: 'hi', lastName: 'yc' }
+const yc: NameTypes = {firstName: 'hi', lastName: 'yc'}
 
 interface NameInterface {
   // error
@@ -151,12 +151,12 @@ https://github.com/microsoft/TypeScript/wiki/Performance#preferring-interfaces-o
 여러 `type` 혹은 `interface`를 `&`하거나 `extends`할 때를 생각해보자. `interface`는 속성간 충돌을 해결하기 위해 단순한 객체 타입을 만든다. 왜냐하면 interface는 객체의 타입을 만들기 위한 것이고, 어차피 객체 만 오기 때문에 단순히 합치기만 하면 되기 때문이다. 그러나 타입의 경우, 재귀적으로 순회하면서 속성을 머지하는데, 이 경우에 일부 `never`가 나오면서 제대로 머지가 안될 수 있다. `interface`와는 다르게, `type`은 원시 타입이 올수도 있으므로, 충돌이 나서 제대로 머지가 안되는 경우에는 `never`가 떨어진다. 아래 예제를 살펴보자.
 
 ```typescript
-type type2 = { a: 1 } & { b: 2 } // 잘 머지됨
-type type3 = { a: 1; b: 2 } & { b: 3 } // resolved to `never`
+type type2 = {a: 1} & {b: 2} // 잘 머지됨
+type type3 = {a: 1; b: 2} & {b: 3} // resolved to `never`
 
-const t2: type2 = { a: 1, b: 2 } // good
-const t3: type3 = { a: 1, b: 3 } // Type 'number' is not assignable to type 'never'.(2322)
-const t3: type3 = { a: 1, b: 2 } // Type 'number' is not assignable to type 'never'.(2322)
+const t2: type2 = {a: 1, b: 2} // good
+const t3: type3 = {a: 1, b: 3} // Type 'number' is not assignable to type 'never'.(2322)
+const t3: type3 = {a: 1, b: 2} // Type 'number' is not assignable to type 'never'.(2322)
 ```
 
 따라서 타입 간 속성을 머지 할 때는 주의를 필요로 한다. 어차피 객체에서만 쓰는 용도라면, `interface`를 쓰는 것이 훨씬 낫다.
@@ -174,7 +174,7 @@ type t2 = t1 & {
   b: string
 }
 
-const typeSample: t2 = { a: 1, b: 2 } // error
+const typeSample: t2 = {a: 1, b: 2} // error
 // before(3.x): Type 'number' is not assignable to type 'string'.
 // after(4.x): Type 'number' is not assignable to type 'string'.(2322) input.tsx(14, 5): The expected type comes from property 'b' which is declared here on type 't2'
 ```

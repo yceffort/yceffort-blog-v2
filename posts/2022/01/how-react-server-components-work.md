@@ -334,7 +334,7 @@ J3:["$","ul",null,{"children":[["$","li",null,{"children":["$","@4",null,{"tweet
 이 `RSC` 스트림을 브라우저에서 실제 리액트 엘리먼트로 어떻게 전환할까? `react-server-dom-webpack`는 [진입점 (`entrypoints`)을](https://github.com/facebook/react/blob/main/packages/react-server-dom-webpack/src/ReactFlightDOMClient.js) 가지고 있는데 여기에서 RSC 응답을 받아 리액트 엘리먼트 트리를 다시 만든다.
 
 ```jsx
-import { createFromFetch } from 'react-server-dom-webpack'
+import {createFromFetch} from 'react-server-dom-webpack'
 function ClientRootComponent() {
   // fetch() from our RSC API endpoint.  react-server-dom-webpack
   // can then take the fetch result and reconstruct the React

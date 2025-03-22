@@ -103,7 +103,7 @@ function Chat() {
 ## `useEvent`를 사용하면 이벤트 핸들러가 변경되도 `useEffect`는 다시 호출되지 않는다.
 
 ```jsx
-function Chat({ selectedRoom }) {
+function Chat({selectedRoom}) {
   const [muted, setMuted] = useState(false)
   const theme = useContext(ThemeContext)
 
@@ -174,7 +174,7 @@ const onConnected = useEvent((connectedRoom) => {
 `useEvent`의 `props`로는 이 이벤트를 발생시킨 값을 받을 수 있다.
 
 ```jsx
-function Chat({ selectedRoom }) {
+function Chat({selectedRoom}) {
   const [muted, setMuted] = useState(false)
   const theme = useContext(ThemeContext)
 
@@ -189,7 +189,7 @@ function Chat({ selectedRoom }) {
     }
   }
 
-  useRoom(selectedRoom, { onConnected, onMessage })
+  useRoom(selectedRoom, {onConnected, onMessage})
   // ...
 }
 
@@ -215,7 +215,7 @@ function useRoom(room, events) {
 `useEvent`가 사용될 수 있는 또다른 예시를 살펴보자. 특정 페이지에 진입했을 때 로깅하는 컴포넌트를 구현한다고 가정해보자.
 
 ```jsx
-function Page({ route, currentUser }) {
+function Page({route, currentUser}) {
   useEffect(() => {
     logAnalytics('visit_page', route.url, currentUser.name)
   }, [route.url, currentUser.name])
@@ -226,7 +226,7 @@ function Page({ route, currentUser }) {
 이는 얼핏보면 잘 작동하는 것 처럼 보인다. 그러나 사용자가 이름을 바꾸면 어떻게 될까? 사용자는 단순히 이름만 바꿨는데, 다른 사용자로 인식되어 (=`useEffect`가 실행되어) 다시 한번 로깅을 할 것이다.
 
 ```jsx
-function Page({ route, currentUser }) {
+function Page({route, currentUser}) {
   // ✅ Stable identity
   const onVisit = useEvent((visitedUrl) => {
     logAnalytics('visit_page', visitedUrl, currentUser.name)
@@ -270,7 +270,7 @@ function useEvent(handler) {
 이와 비슷한 코드가 존재한다.
 
 ```typescript
-import { useLayoutEffect, useMemo, useRef } from 'react'
+import {useLayoutEffect, useMemo, useRef} from 'react'
 
 type Fn<ARGS extends any[], R> = (...args: ARGS) => R
 
@@ -282,7 +282,7 @@ const useEventCallback = <A extends any[], R>(fn: Fn<A, R>): Fn<A, R> => {
   return useMemo(
     () =>
       (...args: A): R => {
-        const { current } = ref
+        const {current} = ref
         return current(...args)
       },
     [],

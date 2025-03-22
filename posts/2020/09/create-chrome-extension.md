@@ -87,7 +87,7 @@ document.ondblclick = function () {
 
   // 메시지를 보낸다.
   chrome.runtime.sendMessage(
-    { word: selectedMessage },
+    {word: selectedMessage},
     async function (response) {
       console.log(response)
     },
@@ -99,7 +99,7 @@ document.ondblclick = function () {
 
 ```javascript
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  const { word } = request
+  const {word} = request
 
   // do something..
   // async 처리를 잘못하는 것 같다.

@@ -45,7 +45,7 @@ export default function ContactPage() {
   async function handleSubmit(e) {
     // form submit시 페이지로 넘어가지 않기 위해
     e.preventDefault()
-    const formData = { name, email }
+    const formData = {name, email}
     // 클라이언트 측 validation
     const errors = validateForm()
     if (errors) {
@@ -223,7 +223,7 @@ https://remix.run/docs/en/v1/guides/disabling-javascript
 // app/entry.server.tsx
 
 import React from 'react'
-import { Meta, Links, Scripts, Outlet, useMatches } from 'remix'
+import {Meta, Links, Scripts, Outlet, useMatches} from 'remix'
 
 export default function App() {
   let matches = useMatches()
@@ -252,7 +252,7 @@ export default function App() {
 ```jsx
 // app/routes/some-page.tsx
 
-export let handle = { hydrate: true }
+export let handle = {hydrate: true}
 
 export default function SomePage() {
   return <div>...</div>
@@ -389,16 +389,16 @@ export default function DashboardLayout() {
 
 ```jsx
 // parent route
-import { Outlet } from 'remix-utils'
+import {Outlet} from 'remix-utils'
 
 export default function Parent() {
-  return <Outlet data={{ something: 'here' }} />
+  return <Outlet data={{something: 'here'}} />
 }
 ```
 
 ```jsx
 // child route
-import { useParentData } from 'remix-utils'
+import {useParentData} from 'remix-utils'
 
 export default function Child() {
   const data = useParentData()

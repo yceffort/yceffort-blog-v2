@@ -30,10 +30,10 @@ console.log(b) // 20
 console.log(rest) // [30, 40, 50]
 
 // 객체 리터럴 식에서 구조 분해 할당을 하기 위해서는, 객체 리터럴 형식과 마찬가지로 { }로 표기하면 된다.
-;({ a, b } = { a: 10, b: 20 })
+;({a, b} = {a: 10, b: 20})
 console.log(a) // 10
 console.log(b) // 20
-;({ a, b, ...rest } = { a: 10, b: 20, c: 30, d: 40 })
+;({a, b, ...rest} = {a: 10, b: 20, c: 30, d: 40})
 console.log(a) // 10
 console.log(b) // 20
 console.log(rest) // {c: 30, d: 40}
@@ -60,14 +60,14 @@ console.log(b) // 3
 ### 객체 구조 분해
 
 ```javascript
-var o = { p: 42, q: true }
-var { p, q } = o
+var o = {p: 42, q: true}
+var {p, q} = o
 
 console.log(p) // 42
 console.log(q) // true
 
-var o = { p: 42, q: true }
-var { p: foo, q: bar } = o
+var o = {p: 42, q: true}
+var {p: foo, q: bar} = o
 
 // p와 q는 무시된다.
 console.log(foo) // 42
@@ -89,7 +89,7 @@ var metadata = {
 
 var {
   title: englishTitle,
-  translations: [{ title: localeTitle }],
+  translations: [{title: localeTitle}],
 } = metadata
 
 console.log(englishTitle) // "Scratchpad"
@@ -118,16 +118,16 @@ var people = [
 
 for (var {
   name: n,
-  family: { father: f },
+  family: {father: f},
 } of people) {
   console.log('Name: ' + n + ', Father: ' + f)
 }
 
-function userId({ id }) {
+function userId({id}) {
   return id
 }
 
-function whois({ displayName: displayName, fullName: { firstName: name } }) {
+function whois({displayName: displayName, fullName: {firstName: name}}) {
   console.log(displayName + ' is ' + name)
 }
 
@@ -147,7 +147,7 @@ console.log('userId: ' + userId(user)) // "userId: 42"
 whois(user) // "jdoe is John"
 
 let key = 'z'
-let { [key]: foo } = { z: 'bar' }
+let {[key]: foo} = {z: 'bar'}
 
 console.log(foo) // "bar"
 ```

@@ -1,83 +1,83 @@
 name: CI
 
 on:
-    push:
-        branches-ignore:
-            - main
+  push:
+    branches-ignore:
+      - main
 
 jobs:
-    lint-and-prettier:
-        name: Lint & Prettier
-        runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                node-version: [22.x]
-        steps:
-            - uses: actions/checkout@v4
-            - uses: pnpm/action-setup@v4
-            - name: Setup Node.js
-              uses: actions/setup-node@v4
-              with:
-                  node-version: ${{ matrix.node-version }}
-                  cache: pnpm
+  lint-and-prettier:
+    name: Lint & Prettier
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22.x]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: pnpm
 
-            - run: pnpm install --frozen-lockfile
+      - run: pnpm install --frozen-lockfile
 
-            - run: pnpm lint
-            - run: pnpm prettier
-            - run: pnpm lint:style
+      - run: pnpm lint
+      - run: pnpm prettier
+      - run: pnpm lint:style
 
-    build:
-        name: Build
-        runs-on: ubuntu-latest
-        needs: [lint-and-prettier]
-        strategy:
-            matrix:
-                node-version: [22.x]
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: [lint-and-prettier]
+    strategy:
+      matrix:
+        node-version: [22.x]
 
-        steps:
-            - uses: actions/checkout@v3
-            - uses: pnpm/action-setup@v4
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v4
 
-            - name: Setup Node.js
-              uses: actions/setup-node@v4
-              with:
-                  node-version: ${{ matrix.node-version }}
-                  cache: pnpm
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: pnpm
 
-            - run: corepack enable
-            - run: corepack prepare --activate
-            - run: pnpm install --frozen-lockfile
+      - run: corepack enable
+      - run: corepack prepare --activate
+      - run: pnpm install --frozen-lockfile
 
-            - run: pnpm build
+      - run: pnpm build
 
-    lighthouse:
-        # 임시막기
-        if: false
-        name: Lighthouse CI
-        runs-on: ubuntu-latest
-        needs: [build]
+  lighthouse:
+    # 임시막기
+    if: false
+    name: Lighthouse CI
+    runs-on: ubuntu-latest
+    needs: [build]
 
-        steps:
-            - uses: actions/checkout@v3
-            - uses: pnpm/action-setup@v4
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v4
 
-            - name: Setup Node.js
-              uses: actions/setup-node@v4
-              with:
-                  node-version: 22.x
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
 
-            - run: corepack enable
-            - run: corepack prepare --activate
+      - run: corepack enable
+      - run: corepack prepare --activate
 
-            - name: install & build
-              run: |
-                  pnpm install --frozen-lockfile
-                  pnpm build
+      - name: install & build
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
 
-            - name: run Lighthouse CI
-              run: |
-                  npm install -g @lhci/cli@0.14.x
-                  lhci autorun
-              env:
-                  LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+      - name: run Lighthouse CI
+        run: |
+          npm install -g @lhci/cli@0.14.x
+          lhci autorun
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}

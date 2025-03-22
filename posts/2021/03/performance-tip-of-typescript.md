@@ -26,18 +26,18 @@ interface Foo {
   prop: string
 }
 
-type Bar = { prop: string }
+type Bar = {prop: string}
 ```
 
 그러나 타입간 결합이 필요할 때는, `interface`를 확장하는 것이 성능상으로 유리하다. `interface`는 단순히 객체에 대한 모양을 표현하는 것이기 때문에, 여러개가 올 경우 단순히 합쳐버리면 된다. 그러나 `type`은 객체 뿐 만 아니라 단순히 원시타입도 올 수 있기 때문에 재귀적으로 속성을 머지해야 하고, 때때로 `never`가 나오곤 한다. (아래 참고)
 
 ```typescript
-type type2 = { a: 1 } & { b: 2 } // 잘 머지됨
-type type3 = { a: 1; b: 2 } & { b: 3 } // resolved to `never`
+type type2 = {a: 1} & {b: 2} // 잘 머지됨
+type type3 = {a: 1; b: 2} & {b: 3} // resolved to `never`
 
-const t2: type2 = { a: 1, b: 2 } // good
-const t3: type3 = { a: 1, b: 3 } // Type 'number' is not assignable to type 'never'.(2322)
-const t3: type3 = { a: 1, b: 2 } // Type 'number' is not assignable to type 'never'.(2322)
+const t2: type2 = {a: 1, b: 2} // good
+const t3: type3 = {a: 1, b: 3} // Type 'number' is not assignable to type 'never'.(2322)
+const t3: type3 = {a: 1, b: 2} // Type 'number' is not assignable to type 'never'.(2322)
 ```
 
 > 인터페이스를 쓴다면 이럴일이 없다.
@@ -49,7 +49,7 @@ const t3: type3 = { a: 1, b: 2 } // Type 'number' is not assignable to type 'nev
 타입 어노테이션, 특시 리턴 타입을 지정하는 것은 컴파일러에 많은 도움을 준다. 당연하게도, 직접 리턴타입을 지정해준다면 타입스크립트 컴파일러가 함수의 타입을 추론하는 것 보다 훨씬더 성능적으로 이점을 얻을 수 있고, 이는 declaration 파일을 읽고 쓰는데 많은 시간을 절약해준다. (incremental builds) 물론 타입 추론은 매우 편리한 기능이기 때문에, 다 이걸 처리할 필요는 없지만, 코드에서 약간의 병목현상이 생긴다면 고려해볼만 하다.
 
 ```typescript
-import { bar, barType } from 'bar'
+import {bar, barType} from 'bar'
 function foo() {
   return bar
 }
@@ -58,7 +58,7 @@ function foo() {
 이거보단, 아래 코드가 낫다.
 
 ```typescript
-import { bar, barType } from 'bar'
+import {bar, barType} from 'bar'
 function foo(): barType {
   return bar
 }
@@ -305,9 +305,9 @@ interface JayG extends Dog {
   age: number
 }
 
-const a: Animal = { name: 'hi' }
-const d: Dog = { name: 'hi', kind: 'mix' }
-const j: JayG = { name: 'hi', kind: 'mix', age: 34 }
+const a: Animal = {name: 'hi'}
+const d: Dog = {name: 'hi', kind: 'mix'}
+const j: JayG = {name: 'hi', kind: 'mix', age: 34}
 
 const animals: Animal[] = new Array(5)
 const dogs: Dog[] = new Array(5)

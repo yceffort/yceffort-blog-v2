@@ -1,38 +1,43 @@
 {
-    "compilerOptions": {
-        "target": "esnext",
-        "module": "esnext",
-        "jsx": "preserve",
-        "lib": ["dom", "es2022"],
-        "baseUrl": "./",
-        "moduleResolution": "bundler",
-        "strict": true,
-        "allowJs": true,
-        "noEmit": true,
-        "allowSyntheticDefaultImports": true,
-        "esModuleInterop": true,
-        "skipLibCheck": true,
-        "isolatedModules": true,
-        "preserveConstEnums": true,
-        "sourceMap": true,
-        "forceConsistentCasingInFileNames": true,
-        "resolveJsonModule": true,
-        "typeRoots": ["./typings", "./node_modules/@types"],
-        "paths": {
-            "#public/*": ["public/*"],
-            "#commons/*": ["src/type/*"],
-            "#components/*": ["src/components/*"],
-            "#constants/*": ["src/constants/*"],
-            "#utils/*": ["src/utils/*"],
-            "#src/*": ["src/*"]
-        },
-        "incremental": true,
-        "plugins": [
-            {
-                "name": "next"
-            }
-        ]
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "jsx": "preserve",
+    "lib": ["dom", "es2022"],
+    "baseUrl": "./",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "allowJs": true,
+    "noEmit": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "typeRoots": ["./typings", "./node_modules/@types"],
+    "paths": {
+      "#public/*": ["public/*"],
+      "#commons/*": ["src/type/*"],
+      "#components/*": ["src/components/*"],
+      "#constants/*": ["src/constants/*"],
+      "#utils/*": ["src/utils/*"],
+      "#src/*": ["src/*"]
     },
-    "exclude": ["dist", ".next", "out", "next.config.js"],
-    "include": ["next-env.d.ts", "typing/*.d.ts", "**/*.ts*", ".next/types/**/*.ts"]
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "exclude": ["dist", ".next", "out", "next.config.js"],
+  "include": [
+    "next-env.d.ts",
+    "typing/*.d.ts",
+    "**/*.ts*",
+    ".next/types/**/*.ts"
+  ]
 }

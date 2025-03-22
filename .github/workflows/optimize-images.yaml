@@ -1,15 +1,15 @@
 name: Optimize images
 on: pull_request
 jobs:
-    build:
-        name: calibreapp/image-actions
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout Repo
-              uses: actions/checkout@main
+  build:
+    name: calibreapp/image-actions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@main
 
-            - name: Compress Images
-              uses: calibreapp/image-actions@main
-              with:
-                  githubToken: ${{ secrets.GITHUB_TOKEN }}
-                  ignorePaths: 'LCPSample.jpeg'
+      - name: Compress Images
+        uses: calibreapp/image-actions@main
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          ignorePaths: 'LCPSample.jpeg'

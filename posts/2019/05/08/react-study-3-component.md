@@ -19,7 +19,7 @@ template: post
 기본적인 컴포넌트를 만들어 보자.
 
 ```javascript
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 
 class MyComponent extends Component {
   render() {
@@ -47,7 +47,7 @@ export default App
 컴포넌트의 속성을 줄때 사용하는 값이다.
 
 ```javascript
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 
 class MyComponent extends Component {
   render() {
@@ -90,7 +90,7 @@ export default MyComponent;
 props의 값을 검증하기 위해서는 propTypes를 사용한다.
 
 ```javascript
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 
 class MyComponent extends Component {
@@ -163,7 +163,7 @@ class MyComponent extends Component {
 위와 같은 방식으로도 할 수 있지만, `transform-class-properties`문법을 사용하여, constructor 바깥에서도 state와 props를 정의할 수 있다.
 
 ```javascript
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 
 class MyComponent extends Component {

@@ -20,7 +20,7 @@ template: post
 상속이라는 관점에서 봤을 때, 자바스크립트의 유일한 생성자는 객체 뿐이다. 모든 객체는 `[[prototype]]` 이라는 private 속성을 가지고 있는데, 이는 자신의 프로토타입이 되는 다른 객체를 가리킨다. 이렇게 자신의 프로토타입의 프로토타입의 프로토타입을 따라가다보면, 결국 null을 프로토타입으로 가지는 오브젝트에서 끝난다. null은 프로토타입이 더 이상 없다고 정의되며 이는 프로토타입의 종점을 말한다.
 
 ```javascript
-var obj = { a: 'hello' }
+var obj = {a: 'hello'}
 console.dir(obj)
 ```
 
@@ -147,7 +147,7 @@ dummy.prototype.foo:  bar
 ### 문법 생성자
 
 ```javascript
-var foo = { bar: 1 }
+var foo = {bar: 1}
 // foo의 프로토타입은 Object.prototype
 
 var arrayFoo = ['please', 'go', 'home']
@@ -183,7 +183,7 @@ var h = new hello()
 ### Object.create 활용
 
 ```javascript
-var a = { a: 1 }
+var a = {a: 1}
 // a --> Object.prototype --> null
 
 var b = Object.create(a)

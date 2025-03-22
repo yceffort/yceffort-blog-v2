@@ -19,14 +19,14 @@ export let data = 5
 `index.js`
 
 ```javascript
-import { data } from './module'
+import {data} from './module'
 ```
 
 그런데 만약에 이렇게 import를 해보면 어떨까?
 
 ```javascript
 const module = await import('./module.js')
-const { data: value } = await import('./module.js')
+const {data: value} = await import('./module.js')
 ```
 
 첫번째 import 에서 `module.data`를 하는 것은 맨 처음에 import 했던 결과와 완전히 동일 할 것이다. 두번째는, `data`를 `value`라는 새로운 identifier로 할당하고 있다. 그리고 이 동작은 앞선 두 케이스와 묘하게 다르다.
@@ -42,9 +42,9 @@ setTimeout(() => {
 ```
 
 ```javascript
-import { data } from './module.js'
+import {data} from './module.js'
 const module = await import('./module.js')
-const { data: value } = await import('./module.js')
+const {data: value} = await import('./module.js')
 
 setTimeout(() => {
   console.log(data) // 10
@@ -56,8 +56,8 @@ setTimeout(() => {
 또다른 변수로 아예 할당을 해버렸던 3번째 케이스를 제외하고 나머지 모든 값들은 변했다는 것을 알 수 있다. 그렇다. `import`는 일종의 참조 처럼 동작을 한다는 것을 알 수 있다. 사실 이러한 3번째 케이스의 동작은 아래처럼 생각하면 당연하다고 느껴 질 수 있다.
 
 ```javascript
-const obj = { foo: 'bar' }
-const { foo } = obj
+const obj = {foo: 'bar'}
+const {foo} = obj
 obj.foo = 'baz'
 console.log(foo) // 'bar'
 ```
@@ -68,12 +68,12 @@ console.log(foo) // 'bar'
 
 ```javascript
 // 특정 값을 참조하는 것 처럼 동작하여, 값이 바뀌면 서순에 따라서 그 바뀐 값을 들고 올 수도 있다.
-import { data } from './module.js'
-import { data as value } from './module.js'
+import {data} from './module.js'
+import {data as value} from './module.js'
 import * as all from './module.js'
 const module = await import('./module.js')
 // 현재 값을 새로운 변수에 그대로 할당해서, 참조측에서 값이 바뀌든 말든 최초의 값을 계속 간직한다.
-let { data } = await import('./module.js')
+let {data} = await import('./module.js')
 ```
 
 자 그럼, `export default`의 경우는 어떤가?
@@ -81,7 +81,7 @@ let { data } = await import('./module.js')
 > 요즘 핫하게 클릭되는 https://yceffort.kr/2020/11/avoid-default-export 이글도 살펴보세여 😘
 
 ```javascript
-export { data }
+export {data}
 export default data
 
 setTimeout(() => {
@@ -90,7 +90,7 @@ setTimeout(() => {
 ```
 
 ```javascript
-import { data, default as data2 } from './module.js'
+import {data, default as data2} from './module.js'
 import data3 from './module.js'
 
 setTimeout(() => {
@@ -148,7 +148,7 @@ setTimeout(() => {
 ```
 
 ```javascript
-import { data, default as data2 } from './module.js'
+import {data, default as data2} from './module.js'
 import data3 from './module.js'
 
 setTimeout(() => {
@@ -315,7 +315,7 @@ test()
 자바스크립트 내부에서는 아래와 같이 순환참조가 허용된다. 물론, 권장하지는 않는다.
 
 ```javascript
-import { hi } from './module.js'
+import {hi} from './module.js'
 
 hi()
 
@@ -325,7 +325,7 @@ export function hello() {
 ```
 
 ```javascript
-import { hello } from './index.js'
+import {hello} from './index.js'
 
 hello()
 
@@ -339,7 +339,7 @@ export function hi() {
 그러나... 아래의 경우에는 안된다.
 
 ```javascript
-import { hi } from './module.js'
+import {hi} from './module.js'
 
 hi()
 
@@ -347,7 +347,7 @@ export const hello = () => console.log('hello')
 ```
 
 ```javascript
-import { hello } from './index.js'
+import {hello} from './index.js'
 
 hello()
 

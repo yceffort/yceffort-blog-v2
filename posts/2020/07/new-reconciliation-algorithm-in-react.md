@@ -39,13 +39,13 @@ React는 사용자 인터페이스를 구축하기 위한 자바스크립트 라
 class ClickCounter extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { count: 0 }
+    this.state = {count: 0}
     this.handleClick = this.handleClick.bind(this)
   }
 
   handleClick() {
     this.setState((state) => {
-      return { count: state.count + 1 }
+      return {count: state.count + 1}
     })
   }
 

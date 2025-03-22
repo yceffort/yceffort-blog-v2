@@ -112,7 +112,7 @@ document.addEventListener(
     // Now this event handler uses the capture phase,
     // so it receives *all* click events below!
   },
-  { capture: true },
+  {capture: true},
 )
 ```
 

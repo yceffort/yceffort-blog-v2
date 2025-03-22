@@ -50,10 +50,10 @@ type T2 = ToCamel<'foo_bar_baz'> // "fooBarBaz"
 
 ```typescript
 type RouteParameters<T> = T extends `${string}/:${infer U}/${infer R}`
-  ? { [P in U | keyof RouteParameters<`/${R}`>]: string }
+  ? {[P in U | keyof RouteParameters<`/${R}`>]: string}
   : T extends `${string}/:${infer U}`
-  ? { [P in U]: string }
-  : {}
+    ? {[P in U]: string}
+    : {}
 
 type X = RouteParameters<'/api/:hello/:javascript/typescript/:world'>
 // type X = {
@@ -118,10 +118,10 @@ https://www.typescriptlang.org/docs/handbook/utility-types.html#picktype-keys
 ```typescript
 type RouteParameters<Route> =
   Route extends `${string}/:${infer Param}/${infer Rest}`
-    ? { [Entry in Param | keyof RouteParameters<`/${Rest}`>]: string }
+    ? {[Entry in Param | keyof RouteParameters<`/${Rest}`>]: string}
     : Route extends `${string}/:${infer Param}`
-    ? { [Entry in Param]: string }
-    : {}
+      ? {[Entry in Param]: string}
+      : {}
 ```
 
 확실히 이전보다 읽기가 편해졌다. (물론, 저 타입이 복잡하지 않다는 건 아니다 😑)

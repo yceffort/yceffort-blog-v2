@@ -32,7 +32,7 @@ async function getUser(id: number) {
 absolute url, origin이 고정되어 있는 경우라면 괜찮겠지만 그렇지 않다면 이렇게 처리하는건 안전하지 못하다. 따라서 우리는 absolute URL을 추론해야 한다. 추론할 수 있는 가장 좋은 방법은, `ctx.req` 즉 [IncomingMessage](https://nodejs.org/api/http.html#class-httpincomingmessage)를 사용하는 것이다. 여기에는 요청과 관련한 정보가 포함되어 있는데, 이 요청이 날라온 곳이 absolute url이라고 가정하고 코딩하는 것이다.
 
 ```typescript
-import { IncomingMessage } from 'http'
+import {IncomingMessage} from 'http'
 
 function getAbsoluteURL(req?: IncomingMessage) {
   // 로컬은 http, 프로덕션은 https 라는 가정
@@ -80,10 +80,10 @@ async function getUser(id: number, options?: FetchOptions) {
 
 ```typescript
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { req } = ctx
+  const {req} = ctx
   const userId = ctx.query?.userId
 
-  const user = await getUser(userId, { req })
+  const user = await getUser(userId, {req})
   return {
     props: {
       user,

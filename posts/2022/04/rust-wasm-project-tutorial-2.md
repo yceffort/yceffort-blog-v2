@@ -246,7 +246,7 @@ impl Universe {
 그리고 `wasm-game-of-life/www/index.js`의 최상단에, 우리가 만든 `Universe`를 import 하자.
 
 ```javascript
-import { Universe } from 'wasm-game-of-life'
+import {Universe} from 'wasm-game-of-life'
 ```
 
 그리고, `<pre>` 엘리먼트에 우리가 만든 `Universe`를 새로 만든다.
@@ -370,7 +370,7 @@ const drawGrid = () => {
 
 ```javascript
 // Import the WebAssembly memory at the top of the file.
-import { memory } from 'wasm-game-of-life/wasm_game_of_life_bg'
+import {memory} from 'wasm-game-of-life/wasm_game_of_life_bg'
 
 // ...
 

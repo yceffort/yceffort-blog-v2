@@ -13,10 +13,10 @@ template: post
 ## MobX 실제로 적용해보기
 
 ```jsx
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 
-import { observable } from 'mobx'
-import { observer } from 'mobx-react'
+import {observable} from 'mobx'
+import {observer} from 'mobx-react'
 
 // @observer 데코레이터가 장착되어 있는 리액트 컴포넌트는
 // @observable로 되어 있는 모든 것들을 rendering 하는 와중에 사용한다.
@@ -52,11 +52,11 @@ https://codesandbox.io/embed/mobx-9z6dh?fontsize=14&hidenavigation=1&theme=dark
 위 state를 상위 컴포넌트에서 props로 던지는 방식으로 바꿔보았다.
 
 ```jsx
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
 
-import { observable } from 'mobx'
-import { observer } from 'mobx-react'
+import {observable} from 'mobx'
+import {observer} from 'mobx-react'
 
 const appState = observable({
   count: 0,
@@ -105,10 +105,10 @@ ReactDOM.render(
 [mobx devtools](https://github.com/mobxjs/mobx-devtools)을 활용하면, state 값에 대한 디버그도 할 수 있다.
 
 ```jsx
-import { observable, computed } from 'mobx'
+import {observable, computed} from 'mobx'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { observer } from 'mobx-react'
+import {observer} from 'mobx-react'
 
 const t = new (class Temperature {
   // 온도 단위와 온도를 추적
@@ -141,7 +141,7 @@ const t = new (class Temperature {
   }
 })()
 
-const App = observer(({ temperature }) => (
+const App = observer(({temperature}) => (
   <div>
     {temperature.temperature} <br />
     <button onClick={() => (temperature.unit = 'F')}>F</button>
@@ -156,10 +156,10 @@ ReactDOM.render(<App temperature={t} />, document.getElementById('root'))
 데코레이터를 사용하지 않고, 마찬가지로 `observable`만 사용해서 똑같이 구현할 수 있다.
 
 ```jsx
-import { observable } from 'mobx'
+import {observable} from 'mobx'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { observer } from 'mobx-react'
+import {observer} from 'mobx-react'
 
 const t = observable({
   unit: 'C',
@@ -187,7 +187,7 @@ const t = observable({
   },
 })
 
-const App = observer(({ temperature }) => (
+const App = observer(({temperature}) => (
   <div>
     {temperature.temperature()} <br />
     <button onClick={() => (temperature.unit = 'F')}>F</button>

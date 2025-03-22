@@ -30,7 +30,7 @@ setState(newState)
 상태 유지값, 그리고 그 값을 수정하는 함수를 반환한다. 이전의 `state`값을 받아다가 수정할 수도 있다.
 
 ```javascript
-function Counter({ initialCount }) {
+function Counter({initialCount}) {
   const [count, setCount] = useState(initialCount)
   return (
     <>

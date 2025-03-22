@@ -21,7 +21,7 @@ template: post
 ### 컴퍼넌트 내부에서 사용
 
 ```javascript
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import './ValidationSample.css'
 
 class ValidationSample extends Component {
@@ -73,7 +73,7 @@ export default ValidationSample
 중요하게 봐야할 부분은 바로 여기
 
 ```html
-<input ref={(ref) => this.input=ref}/>
+<input ref="{(ref)" ="" /> this.input=ref}/>
 ```
 
 ref 속성을 추가할 때는 props를 설정하듯이 하면 된다. ref 값으로는 콜백 함수를 전달하는데, 이 콜백함수는 ref를 파라미터로 가지며 함수 내부에서 멤버변수에 ref를 담으면 된다. 여기에서는 `this.input`에 담았다.
@@ -83,11 +83,11 @@ ref 속성을 추가할 때는 props를 설정하듯이 하면 된다. ref 값�
 ### 컴포넌트에 Ref 달기
 
 ```javascript
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 
 class ScrollBox extends Component {
   scrollToBottom = () => {
-    const { scrollHeight, clientHeight, width } = this.box
+    const {scrollHeight, clientHeight, width} = this.box
     this.box.scrollTop = scrollHeight - clientHeight
   }
 
@@ -123,7 +123,7 @@ export default ScrollBox
 ```
 
 ```javascript
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import ScrollBox from './ScrollBox'
 
 class App extends Component {

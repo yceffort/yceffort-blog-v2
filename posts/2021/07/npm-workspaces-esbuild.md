@@ -95,7 +95,7 @@ https://esbuild.github.io/getting-started/#your-first-bundle
 const esbuild = require('esbuild')
 // 빌드시에 자동으로 node_modules를 제외 해준다.
 // https://github.com/pradel/esbuild-node-externals
-const { nodeExternalsPlugin } = require('esbuild-node-externals')
+const {nodeExternalsPlugin} = require('esbuild-node-externals')
 
 esbuild
   .build({
@@ -158,8 +158,8 @@ export default function formatNumberWithComma(value: string | number): string {
 **index.ts**
 
 ```typescript
-export { default as sum } from './sum'
-export { default as formatNumberWithComma } from './formatNumber'
+export {default as sum} from './sum'
+export {default as formatNumberWithComma} from './formatNumber'
 ```
 
 **결과**
@@ -178,7 +178,7 @@ function o(r) {
   for (; e.test(t); ) t = t.replace(e, '$1,$2')
   return t
 }
-export { o as formatNumberWithComma, m as sum }
+export {o as formatNumberWithComma, m as sum}
 //# sourceMappingURL=index.js.map
 ```
 

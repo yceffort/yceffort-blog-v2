@@ -105,10 +105,10 @@ function App() {
     </div>
   )
 }
-function MainNav({ children }) {
+function MainNav({children}) {
   return <div>{children}</div>
 }
-function Homepage({ leftNav, centerContent, rightContent }) {
+function Homepage({leftNav, centerContent, rightContent}) {
   return (
     <div>
       {leftNav}
@@ -117,13 +117,13 @@ function Homepage({ leftNav, centerContent, rightContent }) {
     </div>
   )
 }
-function LeftNav({ children }) {
+function LeftNav({children}) {
   return <div>{children}</div>
 }
-function CenterContent({ children }) {
+function CenterContent({children}) {
   return <div>{children}</div>
 }
-function RightContent({ children }) {
+function RightContent({children}) {
   return <div>{children}</div>
 }
 ```

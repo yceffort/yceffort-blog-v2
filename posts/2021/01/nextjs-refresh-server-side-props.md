@@ -9,9 +9,9 @@ description: '항상 감사하십시오 and I also, nextjs 조아'
 ---
 
 ```javascript
-import { useRouter } from 'next/router'
+import {useRouter} from 'next/router'
 
-export default function IndexPage({ time }) {
+export default function IndexPage({time}) {
   const router = useRouter()
 
   const refreshServerSide = () => {
@@ -29,7 +29,7 @@ export default function IndexPage({ time }) {
 export async function getServerSideProps(context) {
   const currentDateTime = new Date().getTime()
   return {
-    props: { time: currentDateTime },
+    props: {time: currentDateTime},
   }
 }
 ```
@@ -62,7 +62,7 @@ https://yceffort.kr/2020/03/nextjs-02-data-fetching#4-getserversideprops
 위 코드로 새로고침하면, 아래와 같은 json데이터만 받는다.
 
 ```json
-{ "pageProps": { "time": 1611795117182 }, "__N_SSP": true }
+{"pageProps": {"time": 1611795117182}, "__N_SSP": true}
 ```
 
 > `__N_SSP`는 server side props이라는 뜻이다. https://github.com/vercel/next.js/blob/e819e00d0c0b2d9cd851c2c7215af1211c561932/packages/next/next-server/lib/constants.ts#L39
@@ -89,7 +89,7 @@ useEffect(() => {
 그리고 이렇게 넘겨 받은 서버사이드 props를 고치고 싶다면, 아래와 같이 처리해주면 된다.
 
 ```javascript
-export default function IndexPage({ time }) {
+export default function IndexPage({time}) {
   const [currentTime, setCurrentTime] = useState(time)
   //...
 }

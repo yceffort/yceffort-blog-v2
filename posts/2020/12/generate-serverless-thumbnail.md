@@ -77,9 +77,9 @@ const takeScreenshot = async function (url) {
   })
 
   const page = await browser.newPage()
-  await page.setViewport({ height: 630, width: 1200 })
+  await page.setViewport({height: 630, width: 1200})
   await page.goto(url)
-  const buffer = await page.screenshot({ encoding: 'base64' })
+  const buffer = await page.screenshot({encoding: 'base64'})
   await browser.close()
   return `data:image/png;base64,${buffer}`
 }

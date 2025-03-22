@@ -51,10 +51,10 @@ React 18을 사용하면, `<Suspense>`를 사용하여 이 단계를 서로 독�
 
 import * as React from 'react'
 // import {renderToString} from 'react-dom/server';
-import { pipeToNodeWritable } from 'react-dom/server'
+import {pipeToNodeWritable} from 'react-dom/server'
 import App from '../src/App'
-import { DataProvider } from '../src/data'
-import { API_DELAY, ABORT_DELAY } from './delays'
+import {DataProvider} from '../src/data'
+import {API_DELAY, ABORT_DELAY} from './delays'
 
 // 실제 애플리케이션에서는, webpack이 처리하는 일
 let assets = {
@@ -80,7 +80,7 @@ module.exports = function render(url, res) {
   let didError = false
   const data = createServerData()
   // 여기가 바로 리액트 18에서 변경된 부분이다.
-  const { startWriting, abort } = pipeToNodeWritable(
+  const {startWriting, abort} = pipeToNodeWritable(
     <DataProvider data={data}>
       <App assets={assets} />
     </DataProvider>,
@@ -325,7 +325,7 @@ SSR은 일종의 매직 트릭과도 같다. 그렇다고 해서 애플리케이
 `React.lazy`로 코드를 분할하여 메인 번들에서 댓글 코드를 아래처럼 분리할 수 있다.
 
 ```jsx
-import { lazy } from 'react'
+import {lazy} from 'react'
 
 const Comments = lazy(() => import('./Comments.js'))
 

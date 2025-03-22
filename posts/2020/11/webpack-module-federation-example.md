@@ -26,7 +26,7 @@ react v17과 webpack 5를 바탕으로, 아주 기초적인 세팅만 해서 빠
 const path = require('path')
 
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const { ModuleFederationPlugin } = require('webpack').container
+const {ModuleFederationPlugin} = require('webpack').container
 
 module.exports = {
   entry: './src/index',
@@ -79,7 +79,7 @@ module.exports = {
 const path = require('path')
 
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const { ModuleFederationPlugin } = require('webpack').container
+const {ModuleFederationPlugin} = require('webpack').container
 
 module.exports = {
   entry: './src/index',
@@ -106,7 +106,7 @@ module.exports = {
   plugins: [
     new ModuleFederationPlugin({
       name: 'app1',
-      library: { type: 'var', name: 'app1' },
+      library: {type: 'var', name: 'app1'},
       filename: 'remoteEntry.js',
       exposes: {
         './Counter': './src/components/counter/index.jsx',
@@ -149,7 +149,7 @@ module.exports = {
 이름이 `bootstrap`인 이유는 공식 문서에서 그렇게 하고 있길래 그렇게 했다. 👀 뜻과도 연관이 있을듯.
 
 ```javascript
-import React, { Suspense } from 'react'
+import React, {Suspense} from 'react'
 import ReactDOM from 'react-dom'
 
 const Counter = React.lazy(() => import('app1/Counter'))

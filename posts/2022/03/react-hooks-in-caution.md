@@ -64,7 +64,7 @@ console.log(h.toString()) // "2"
 ## 클로져와 훅
 
 ```javascript
-function User({ user }) {
+function User({user}) {
   useEffect(() => {
     console.log(user.name)
   }, []) // exhaustive-deps
@@ -92,7 +92,7 @@ const useDebugUser = createEffect((user) => {
   console.log(user.name)
 })
 
-function User({ user }) {
+function User({user}) {
   useDebugUser(user)
 
   return <span>{user.name}</span>
@@ -135,12 +135,12 @@ const User({ user }) {
 
 ```javascript
 function App1() {
-  const user = { name: 'paco' }
+  const user = {name: 'paco'}
 
   return <User user={user} />
 }
 
-const user = { name: 'paco' }
+const user = {name: 'paco'}
 function App2() {
   return <User user={user} />
 }
@@ -157,9 +157,9 @@ function App2() {
 이번엔 실제 프로덕션에서 사용될 법한 코드를 살펴보자.
 
 ```javascript
-function App({ options, teamId }) {
+function App({options, teamId}) {
   const [user, setUser] = useState(null)
-  const params = { ...options, teamId }
+  const params = {...options, teamId}
 
   useEffect(() => {
     fetch(`/teams/${params.teamId}/user`)

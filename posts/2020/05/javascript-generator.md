@@ -65,9 +65,9 @@ countDown[Symbol.iterator] = function () {
     next() {
       _count++
       if (_count < value) {
-        return { value: _count, done: false }
+        return {value: _count, done: false}
       } else {
-        return { done: true }
+        return {done: true}
       }
     },
   }

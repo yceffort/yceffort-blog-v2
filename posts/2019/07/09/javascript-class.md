@@ -105,7 +105,7 @@ constructor() {
 ```javascript
 class Member {
   constructor(name) {
-    return { name: '메켓트' }
+    return {name: '메켓트'}
   }
 
   getName() {

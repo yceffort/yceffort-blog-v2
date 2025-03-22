@@ -263,7 +263,7 @@ const onClick = async () => {
 그러나 여기에는 한가지 예외가 있다. 함수 컴포넌트는 렌더링하는 동안 `setState()`를 직접호출할 수 있지만, 이는 조건부로 수행되고 컴포넌트가 렌더링될 때 마다 실행되지 않는다. 이것은 클래스 컴포넌트의 `getDerivedStateFromProps`와 동등하게 작동한다. 렌더링 하는 동안 함수 컴포넌트가 상태 업데이트를 대기열에 밀어 넣어두면, 리액트는 즉시 상태 업데이트를 적용하고 해당 컴포넌트 중 하나를 동기화 하여 다시 렌더링 한 후 계속 진행한다. 컴포넌트가 상태 업데이트를 무한하게 queueing하고 리액트가 다시 렌더링을 하도록 강제하는 경우, 리액트는 최대 50회까지 만 실행한 후에 이 무한반복을 끊어버리고 오류를 발생 시킨다. 이 기법은 `useEffect` 내부에 `setState()`호출과 리렌더링을 하지 않고 prop 값을 기준으로 state의 값을 강제로 업데이트 할 때 사용할 수 있다.
 
 ```jsx
-function ScrollView({ row }) {
+function ScrollView({row}) {
   const [isScrollingDown, setIsScrollingDown] = useState(false)
   const [prevRow, setPrevRow] = useState(null)
 
@@ -309,7 +309,7 @@ function ScrollView({ row }) {
 
 ```jsx
 // 상태가 업데이트되도 props.children은 다시렌더링 되지 않는다.
-function SomeProvider({ children }) {
+function SomeProvider({children}) {
   const [counter, setCounter] = useState(0)
 
   return (
@@ -357,7 +357,7 @@ function ParentComponent() {
     console.log('Button clicked')
   }
 
-  const data = { a: 1, b: 2 }
+  const data = {a: 1, b: 2}
 
   return <NormalChildComponent onClick={onClick} data={data} />
 }
@@ -377,7 +377,7 @@ function ParentComponent() {
     console.log('Button clicked')
   }
 
-  const data = { a: 1, b: 2 }
+  const data = {a: 1, b: 2}
 
   return <MemoizedChildComponent onClick={onClick} data={data} />
 }
@@ -479,9 +479,9 @@ const onClick = () => {
 한가지 알아둬야 할 것은, 클래스 컴포넌트와 함수형 컴포넌트 사이엔 동작에 뚜렷한 차이가 있다는 것이다. 클래스 컴포넌트의 `this.setState()`을, 함수형 컴포넌트의 `useState` `useReducer` 훅을 사용한단 것이다. `this.setState()`는 값이 불변이 아니어도 된다. 항상 리렌더링을 한다.
 
 ```javascript
-const { todos } = this.state
+const {todos} = this.state
 todos[3].completed = true
-this.setState({ todos })
+this.setState({todos})
 ```
 
 사실 이는 빈객체를 넘겨주는 것과 다를게 없다.
@@ -536,7 +536,7 @@ function ParentComponent() {
   const [a, setA] = useState(0)
   const [b, setB] = useState('text')
 
-  const contextValue = { a, b }
+  const contextValue = {a, b}
 
   return (
     <MyContext.Provider value={contextValue}>
@@ -594,7 +594,7 @@ function ParentComponent() {
   const [a, setA] = useState(0)
   const [b, setB] = useState('text')
 
-  const contextValue = { a, b }
+  const contextValue = {a, b}
 
   return (
     <MyContext.Provider value={contextValue}>

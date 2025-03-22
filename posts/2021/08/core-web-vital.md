@@ -55,9 +55,9 @@ Core web vital (이하 코어 웹 바이탈)은 모든 웹페이지에 적용되
 
 |                                                                                                        | LCP | FID | CLS |
 | :----------------------------------------------------------------------------------------------------: | :-: | :-: | :-: |
-| [Chrome User Experience Report](https://developers.google.com/web/tools/chrome-user-experience-report) |  ✔  |  ✔  |  ✔  |
-|             [PageSpeed Insights](https://developers.google.com/speed/pagespeed/insights/)              |  ✔  |  ✔  |  ✔  |
-|    [Search Console (Core Web Vitals Report)](https://support.google.com/webmasters/answer/9205520)     |  ✔  |  ✔  |  ✔  |
+| [Chrome User Experience Report](https://developers.google.com/web/tools/chrome-user-experience-report) | ✔  | ✔  | ✔  |
+|             [PageSpeed Insights](https://developers.google.com/speed/pagespeed/insights/)              | ✔  | ✔  | ✔  |
+|    [Search Console (Core Web Vitals Report)](https://support.google.com/webmasters/answer/9205520)     | ✔  | ✔  | ✔  |
 
 ![page-speed-insight](./images/yceffort-page-speed-insight.png)
 
@@ -74,13 +74,13 @@ Chrome User Experience Report에서 제공하는 데이터는, 사이트의 성�
 이 라이브러리를 사용하면 각 지표를 측정하는 것이 단일 함수를 호출하는 것 만큼 간단하다.
 
 ```javascript
-import { getCLS, getFID, getLCP } from 'web-vitals'
+import {getCLS, getFID, getLCP} from 'web-vitals'
 
 function sendToAnalytics(metric) {
   const body = JSON.stringify(metric)
   // Use `navigator.sendBeacon()` if available, falling back to `fetch()`.
   ;(navigator.sendBeacon && navigator.sendBeacon('/analytics', body)) ||
-    fetch('/analytics', { body, method: 'POST', keepalive: true })
+    fetch('/analytics', {body, method: 'POST', keepalive: true})
 }
 
 getCLS(sendToAnalytics)
@@ -96,8 +96,8 @@ getLCP(sendToAnalytics)
 
 |                                                                              | LCP | FID | CLS |
 | :--------------------------------------------------------------------------: | :-: | :-: | :-: |
-|           [web-vitals](https://github.com/GoogleChrome/web-vitals)           |  ✔  |  ✔  |  ✔  |
-| [web vitals Extension](https://github.com/GoogleChrome/web-vitals-extension) |  ✔  |  ✔  |  ✔  |
+|           [web-vitals](https://github.com/GoogleChrome/web-vitals)           | ✔  | ✔  | ✔  |
+| [web vitals Extension](https://github.com/GoogleChrome/web-vitals-extension) | ✔  | ✔  | ✔  |
 
 ![web-vitals-extension](./images/yceffort-web-vitals-extension.png)
 
@@ -110,7 +110,7 @@ new PerformanceObserver((entryList) => {
   for (const entry of entryList.getEntries()) {
     console.log('LCP candidate:', entry.startTime, entry)
   }
-}).observe({ type: 'largest-contentful-paint', buffered: true })
+}).observe({type: 'largest-contentful-paint', buffered: true})
 ```
 
 `FID`
@@ -121,7 +121,7 @@ new PerformanceObserver((entryList) => {
     const delay = entry.processingStart - entry.startTime
     console.log('FID candidate:', delay, entry)
   }
-}).observe({ type: 'first-input', buffered: true })
+}).observe({type: 'first-input', buffered: true})
 ```
 
 `CLS`
@@ -166,7 +166,7 @@ new PerformanceObserver((entryList) => {
       }
     }
   }
-}).observe({ type: 'layout-shift', buffered: true })
+}).observe({type: 'layout-shift', buffered: true})
 ```
 
 #### 코어 웹 바이탈을 측정할 수 있는 개발단계의 도구들
@@ -175,8 +175,8 @@ new PerformanceObserver((entryList) => {
 
 |                                                                            | LCP |                FID                 | CLS |
 | :------------------------------------------------------------------------: | :-: | :--------------------------------: | :-: |
-| [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools) |  ✔  | ✘ [TBT](https://web.dev/tbt/) 활용 |  ✔  |
-|      [Lighthouse](https://developers.google.com/web/tools/lighthouse)      |  ✔  | ✘ [TBT](https://web.dev/tbt/) 활용 |  ✔  |
+| [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools) | ✔  | ✘ [TBT](https://web.dev/tbt/) 활용 | ✔  |
+|      [Lighthouse](https://developers.google.com/web/tools/lighthouse)      | ✔  | ✘ [TBT](https://web.dev/tbt/) 활용 | ✔  |
 
 이러한 도구는 훌륭하지만, 실제 성능 측정을 대체할 수 있는 것은 아니다.
 

@@ -22,14 +22,14 @@ const f = () => {
 ```
 
 ```javascript
-f.bind({ foo: 'bar' })()
-f.call({ foo: 'bar' })
-f.call({ foo: 'bar' })
+f.bind({foo: 'bar'})()
+f.call({foo: 'bar'})
+f.call({foo: 'bar'})
 // 화살표 함수에 임의로 this를 바인딩 하는 행위는 언제나 무시된다.
 ```
 
 ```javascript
-const obj = { f }
+const obj = {f}
 obj.f() // true: 부모객체인 obj가 무시되고 언제나 this는 outerThis다.
 ```
 

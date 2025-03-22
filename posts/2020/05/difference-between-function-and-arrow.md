@@ -50,7 +50,7 @@ function createObject() {
   }
 }
 
-createObject.call({ foo: 21 }).bar()
+createObject.call({foo: 21}).bar()
 ```
 
 위 함수의 결과는
@@ -73,7 +73,7 @@ function createObject() {
   }
 }
 
-createObject.call({ foo: 21 }).bar()
+createObject.call({foo: 21}).bar()
 ```
 
 결과는

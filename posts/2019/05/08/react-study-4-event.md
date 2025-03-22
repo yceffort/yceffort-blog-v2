@@ -39,7 +39,7 @@ template: post
 - Transition
 
 ```javascript
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 
 class MyEventComponent2 extends Component {
   state = {

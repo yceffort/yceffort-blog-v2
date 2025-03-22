@@ -32,7 +32,7 @@ entries(o: {}): [string, any][];
 ```
 
 ```typescript
-const test = { a: 'a', b: 'b', c: 'c' }
+const test = {a: 'a', b: 'b', c: 'c'}
 for (const [k, v] of Object.entries(test)) {
   const value = test[k] // Element implicitly has an 'any' type because index expression is not of type 'number'.ts(7015)
 }
@@ -47,7 +47,7 @@ for (const [k, v] of Object.entries(test)) {
 ```typescript
 type testKey = 'a' | 'b' | 'c'
 
-const test: { [key in testKey]: string } = { a: 'a', b: 'b', c: 'c' }
+const test: {[key in testKey]: string} = {a: 'a', b: 'b', c: 'c'}
 for (const [k, v] of Object.entries(test)) {
   const value = test[k as testKey]
   console.log(k === v)

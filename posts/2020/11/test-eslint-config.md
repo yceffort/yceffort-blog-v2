@@ -40,10 +40,10 @@ console.log(hello_world)
 확실한 방법은 [eslint-nodejs-api](https://eslint.org/docs/developer-guide/nodejs-api)를 사용하는 것이다. nodejs api 레벨에서 테스트를 해보고, 그 결과를 가지고 좀더 정확히 분석하는 방법이다.
 
 ```javascript
-const { ESLint } = require('eslint')
+const {ESLint} = require('eslint')
 const config = require('../../../index')
 const {
-  rules: { curly },
+  rules: {curly},
 } = require('../../../rules/style')
 
 const RULE_ID = 'curly'
@@ -51,7 +51,7 @@ const RULE_ID = 'curly'
 const eslint = new ESLint({
   // 특정 룰만 가져온 이유는, 다른 룰로 인해서 에러가 나는 것을 방지하기 위해서다.
   // 즉 순수하게 테스트 하고 싶은 룰에 대해서만 룰을 집어 넣었다.
-  baseConfig: { ...config, rules: { curly } },
+  baseConfig: {...config, rules: {curly}},
 })
 
 describe('eslint-config-yceffort curly', function () {

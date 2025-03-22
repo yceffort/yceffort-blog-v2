@@ -101,7 +101,7 @@ export default Page1
 라우터는 일반적인 표준과 비슷하다.
 
 ```javascript
-import { Route, Switch } from 'react-router-dom'
+import {Route, Switch} from 'react-router-dom'
 
 import Page1 from './pages/page1'
 import Page2 from './pages/page2'
@@ -169,8 +169,8 @@ export default App
 
 ```javascript
 import React from 'react'
-import { ThemeProvider } from '@material-ui/core'
-import { theme } from './theme'
+import {ThemeProvider} from '@material-ui/core'
+import {theme} from './theme'
 import Dialog from './Dialog'
 
 function MainPage() {
@@ -218,7 +218,7 @@ module.exports = {
   plugins: [
     new ModuleFederationPlugin({
       name: 'container',
-      library: { type: 'commonjs-module' },
+      library: {type: 'commonjs-module'},
       filename: 'container.js',
       remotes: {
         containerB: '../1-container-full/container.js',

@@ -36,7 +36,7 @@ const config = require('./config')
 
 const enumerateErrorFormat = winston.format((info) => {
   if (info instanceof Error) {
-    Object.assign(info, { message: info.stack })
+    Object.assign(info, {message: info.stack})
   }
   return info
 })
@@ -49,7 +49,7 @@ const logger = winston.createLogger({
       ? winston.format.colorize()
       : winston.format.uncolorize(),
     winston.format.splat(),
-    winston.format.printf(({ level, message }) => `${level}: ${message}`),
+    winston.format.printf(({level, message}) => `${level}: ${message}`),
   ),
   transports: [
     new winston.transports.Console({
@@ -95,12 +95,12 @@ const errorResponseFormat = `${getIpFormat()}:method :url :status - :response-ti
 
 const successHandler = morgan(successResponseFormat, {
   skip: (req, res) => res.statusCode >= 400,
-  stream: { write: (message) => logger.info(message.trim()) },
+  stream: {write: (message) => logger.info(message.trim())},
 })
 
 const errorHandler = morgan(errorResponseFormat, {
   skip: (req, res) => res.statusCode < 400,
-  stream: { write: (message) => logger.error(message.trim()) },
+  stream: {write: (message) => logger.error(message.trim())},
 })
 
 module.exports = {

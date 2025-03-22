@@ -114,9 +114,9 @@ http 요청은 옵셔널 헤더인 [Referer](https://developer.mozilla.org/en-US
 
 |                                   | No Data        | Origin Only                                | Full URL                   |
 | --------------------------------- | -------------- | ------------------------------------------ | -------------------------- |
-| `no-referrer`                     | ✔              |                                            |                            |
-| `origin`                          |                | ✔                                          |                            |
-| `unsafe-url`                      |                |                                            | ✔                          |
+| `no-referrer`                     | ✔             |                                            |                            |
+| `origin`                          |                | ✔                                         |                            |
+| `unsafe-url`                      |                |                                            | ✔                         |
 | `strict-origin`                   | HTTPS → HTTP   | HTTPS → HTTPS, HTTP → HTTP                 |                            |
 | `no-referrer-when-downgrade`      | HTTPS → HTTP   |                                            | HTTPS → HTTPS, HTTP → HTTP |
 | `origin-when-cross-origin`        |                | `cross-origin`                             | `same-origin`              |
@@ -196,7 +196,7 @@ referrer policy가 제공되지 않는다면, 브라우저 기본 정책이 사�
 
 ```javascript
 const helmet = require('helmet')
-app.use(helmet.referrerPolicy({ policy: 'strict-origin-when-cross-origin' }))
+app.use(helmet.referrerPolicy({policy: 'strict-origin-when-cross-origin'}))
 ```
 
 ### 만약 예외가 필요하다면
@@ -209,7 +209,7 @@ app.use(helmet.referrerPolicy({ policy: 'strict-origin-when-cross-origin' }))
 ```
 
 ```javascript
-fetch(url, { referrerPolicy: 'no-referrer-when-downgrade' })
+fetch(url, {referrerPolicy: 'no-referrer-when-downgrade'})
 ```
 
 > element 별로 정책을 주는 것도 모든 브라우저에서 되는 것은 아니다. [참고](https://caniuse.com/?search=referrerpolicy)

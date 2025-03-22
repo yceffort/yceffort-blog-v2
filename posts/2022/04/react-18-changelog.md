@@ -32,7 +32,7 @@ description: '큰거 왔다'
 ```jsx
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-import { useId } from 'react'
+import {useId} from 'react'
 import Child from '../src/components/child'
 import SubChild from '../src/components/SubChild'
 
@@ -62,7 +62,7 @@ export default function Home() {
 ```
 
 ```jsx
-import { useId } from 'react'
+import {useId} from 'react'
 
 export default function Child() {
   const id = useId()
@@ -71,7 +71,7 @@ export default function Child() {
 ```
 
 ```jsx
-import { useId } from 'react'
+import {useId} from 'react'
 import Child from './child'
 
 export default function SubChild() {
@@ -118,7 +118,7 @@ child: :rh:
 ```javascript
 function App() {
   const [resource, setResource] = useState(initialResource)
-  const [startTransition, isPending] = useTransition({ timeoutMs: 3000 })
+  const [startTransition, isPending] = useTransition({timeoutMs: 3000})
   return (
     <>
       <button
@@ -149,7 +149,7 @@ function App() {
 `useDeferredValue`를 사용하면, 트리에서 급하지 않은 부분의 재렌더링을 지연할 수 있다. 이는 `debounce`와 비슷하지만, 몇가지 더 장점이 있다. 고정된 지연시간이 없으므로, 리액트는 첫번째 렌더링이 반영되는 즉시 지연 렌더링을 시도한다. 이 지연된 렌더링은 인터럽트가 가능하며, 사용자 입력을 차단하지 않는다.
 
 ```javascript
-import { useDeferredValue } from 'react'
+import {useDeferredValue} from 'react'
 
 const deferredValue = useDeferredValue(value, {
   timeoutMs: 5000,
@@ -212,7 +212,7 @@ const selectedField = useSyncExternalStore(store.subscribe, () => store.getSnaps
 `getSnapShot`의 결과로 메모이제이션 된 값을 제공하는 api는 다음과 같다.
 
 ```javascript
-import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/with-selector'
+import {useSyncExternalStoreWithSelector} from 'use-sync-external-store/with-selector'
 
 const selection = useSyncExternalStoreWithSelector(
   store.subscribe,
@@ -226,7 +226,7 @@ const selection = useSyncExternalStoreWithSelector(
 [리액트 Conf에서 이야기한 실제 예제](https://www.youtube.com/watch?t=694&v=oPfSC5bQPR8&feature=youtu.be)에 대해 살펴보자.
 
 ```jsx
-import React, { useState, useEffect, useCallback, startTransition } from 'react'
+import React, {useState, useEffect, useCallback, startTransition} from 'react'
 
 // library code
 
@@ -242,7 +242,7 @@ const createStore = (initialState) => {
     listeners.add(listener)
     return () => listeners.delete(listener)
   }
-  return { getState, setState, subscribe }
+  return {getState, setState, subscribe}
 }
 
 const useStore = (store, selector) => {
@@ -258,7 +258,7 @@ const useStore = (store, selector) => {
 
 //Application code
 
-const store = createStore({ count: 0, text: 'hello' })
+const store = createStore({count: 0, text: 'hello'})
 
 const Counter = () => {
   const count = useStore(
@@ -266,7 +266,7 @@ const Counter = () => {
     useCallback((state) => state.count, []),
   )
   const inc = () => {
-    store.setState((prev) => ({ ...prev, count: prev.count + 1 }))
+    store.setState((prev) => ({...prev, count: prev.count + 1}))
   }
   return (
     <div>
@@ -281,7 +281,7 @@ const TextBox = () => {
     useCallback((state) => state.text, []),
   )
   const setText = (event) => {
-    store.setState((prev) => ({ ...prev, text: event.target.value }))
+    store.setState((prev) => ({...prev, text: event.target.value}))
   }
   return (
     <div>
@@ -307,7 +307,7 @@ const App = () => {
 `useState` `useEffect`를 사용하고 있는 `useStore`를 `useSyncExternalStore`로 변경해보자.
 
 ```javascript
-import { useSyncExternalStore } from 'react'
+import {useSyncExternalStore} from 'react'
 
 const useStore = (store, selector) => {
   return useSyncExternalStore(
@@ -475,7 +475,7 @@ function App() {
   return (
     <div>
       <button onClick={handleClick}>Next</button>
-      <h1 style={{ color: flag ? 'blue' : 'black' }}>{count}</h1>
+      <h1 style={{color: flag ? 'blue' : 'black'}}>{count}</h1>
     </div>
   )
 }
@@ -484,7 +484,7 @@ function App() {
 만약 이러한 동작을 원치 않는다면 `flushSync`를 쓰면 된다.
 
 ```jsx
-import { flushSync } from 'react-dom' // Note: react-dom, not react
+import {flushSync} from 'react-dom' // Note: react-dom, not react
 
 function handleClick() {
   flushSync(() => {
@@ -505,14 +505,14 @@ function handleClick() {
 ```javascript
 handleClick = () => {
   setTimeout(() => {
-    this.setState(({ count }) => ({ count: count + 1 }))
+    this.setState(({count}) => ({count: count + 1}))
 
     // { count: 1, flag: false }
 
     // 사실은 배치 때문에 // { count: 0, flag: false } 임
     console.log(this.state)
 
-    this.setState(({ flag }) => ({ flag: !flag }))
+    this.setState(({flag}) => ({flag: !flag}))
   })
 }
 ```

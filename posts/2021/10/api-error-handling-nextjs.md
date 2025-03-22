@@ -67,8 +67,8 @@ export class AuthError extends ApiError {
 ### api.ts
 
 ```typescript
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
-import { AuthError, ForbiddenError } from './error'
+import axios, {AxiosRequestConfig, AxiosResponse} from 'axios'
+import {AuthError, ForbiddenError} from './error'
 
 // axios는 400 이상의 status 가 오면 다 에러를 리턴한다.
 // 이를 커스텀 할 수 있도록 하여 개발자가 정의한 에러일 때만 에러를 던질 수 있도록 인수를 받는다.
@@ -124,8 +124,8 @@ export default async function withAxios(requestConfig: RequestConfig) {
 ### withServerSideProps
 
 ```typescript
-import { GetServerSideProps, GetServerSidePropsContext } from 'next'
-import { ApiError, isInstanceOfAPIError } from './error'
+import {GetServerSideProps, GetServerSidePropsContext} from 'next'
+import {ApiError, isInstanceOfAPIError} from './error'
 
 export default function withGetServerSideProps(
   getServerSideProps: GetServerSideProps,
@@ -138,7 +138,7 @@ export default function withGetServerSideProps(
     } catch (error) {
       // apiError라면
       if (isInstanceOfAPIError(error)) {
-        const { redirectUrl, notFound } = error
+        const {redirectUrl, notFound} = error
         // 404로 보내거나
         if (notFound) {
           return {

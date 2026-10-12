@@ -108,7 +108,7 @@ jobs:
       - name: Install Chromium
         run: pnpm --filter blog exec playwright install --with-deps chromium
 
-      - name: Style parity
+      - name: Markdown styles
         run: pnpm --filter blog test:styles
 
   lighthouse:

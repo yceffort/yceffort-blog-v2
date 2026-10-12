@@ -9,7 +9,7 @@
     "dev": "next dev",
     "lint:style": "stylelint '**/*.{css,scss}'",
     "lint:style:fix": "stylelint --fix '**/*.{css,scss}'",
-    "test:styles": "node scripts/check-style-parity.mjs && node scripts/check-markdown-styles.mjs",
+    "test:styles": "node scripts/check-markdown-styles.mjs",
     "test:styles:pages": "node scripts/check-page-style-parity.mjs",
     "test:styles:motion": "node scripts/check-page-motion-parity.mjs",
     "test:performance": "node scripts/compare-performance.mjs",

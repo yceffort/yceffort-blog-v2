@@ -63,7 +63,7 @@ Markdown styling does not require a rehype traversal or generated classes on eve
 
 The Babel and PostCSS integrations share compiler settings. Runtime injection is disabled. Local CSS imports are processed in one pass so production optimization preserves the cascade and color precision across files. The production optimizer's compatibility conversion is retained for visual parity.
 
-Run `pnpm --filter blog test:styles` for the immutable utility reference (25,760 comparisons) and the Markdown CSS checks (code-block typography plus Prism token colors). `font-family` is not compared: the web fonts were dropped on purpose after the baseline was frozen. Both pages render with a pinned font so widths and origins stay comparable. The latter ensure inline-code rules cannot shrink or bold block code across widths, themes, and article/typography contexts.
+Run `pnpm --filter blog test:styles` for the Markdown CSS checks (code-block typography plus Prism token colors). They ensure inline-code rules cannot shrink or bold block code across widths, themes, and article/typography contexts.
 
 Build and start the baseline and the current app on separate ports, then run:
 

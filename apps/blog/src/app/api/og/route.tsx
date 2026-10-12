@@ -1,4 +1,5 @@
 import {ImageResponse} from 'next/og'
+import sharp from 'sharp'
 
 import {SiteConfig} from '@/config'
 import {loadOgFont, OG_FONT_URL} from '@/utils/ogFont'
@@ -50,9 +51,12 @@ export async function GET(request: Request) {
     if (!imageRes.ok) {
       throw new Error(`Failed to fetch image: ${imageUrl}`)
     }
-    const imageBuffer = await imageRes.arrayBuffer()
+    const imageBuffer = Buffer.from(await imageRes.arrayBuffer())
     const imageMime = hasThumbnail ? 'image/png' : 'image/jpeg'
-    const imageBase64 = Buffer.from(imageBuffer).toString('base64')
+    // satori 는 WebP 를 그리지 못하고 빈 이미지로 넘어간다. 썸네일은 PNG 로 바꿔 넣는다
+    const imageBase64 = (
+      hasThumbnail ? await sharp(imageBuffer).png().toBuffer() : imageBuffer
+    ).toString('base64')
 
     const fontData = await loadOgFont()
     if (!fontData) {

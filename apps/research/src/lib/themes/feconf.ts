@@ -513,12 +513,19 @@ section.closing h2 { color: var(--fgColor-default); font-size: 39px; font-weight
 section.closing > p { font-size: 28px; margin-bottom: 14px; }
 section.closing blockquote { background: none; color: var(--yellow); padding: 22px 0 0; border-top: 1px solid #51564b; margin-top: 24px; font-size: 28px; }
 
+/* Trace: 두 카드에 같은 파일이 나오면 그 파일을 같은 색으로 묶는다. */
+section.trace > blockquote { line-height: 1.8; }
+section.trace > blockquote code { background: none; padding: 0; }
+section.trace > blockquote strong code { background: var(--yellow); padding: 2px 6px; }
+section.trace > pre { grid-column: 1 / -1; margin-top: 26px; }
+
 section.resources h1 { font-size: 66px; margin: 0 0 4px; }
 section.resources h2 { margin: 0 0 30px; }
 section.resources > p { font-size: 25px; margin: 0 0 30px; }
 section.resources > ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 24px 40px; }
 section.resources > ul > li { font-size: 21px; padding: 20px 0 0; margin: 0; border-top: 2px solid var(--ink); }
 section.resources > ul > li a { display: block; font-size: 25px; font-weight: 500; margin-bottom: 10px; }
+section.resources > ul > li a + br { display: none; }
 
 /* Closing outcomes: five reductions above the related work. */
 section.outcomes { --marp-slide-padding: 100px 72px 76px; }
@@ -527,6 +534,7 @@ section.outcomes > p { font-size: 22px; margin-bottom: 24px; }
 section.outcomes table { table-layout: fixed; text-align: left; margin-bottom: 30px; }
 section.outcomes table th { text-align: left; font-size: 19px; padding: 10px 12px; }
 section.outcomes table td { padding: 16px 12px; font-size: 17px; }
+section.outcomes > p:has(> em:only-child) { margin-bottom: 28px; }
 section.outcomes table strong { display: block; font-size: 46px; font-weight: 600; line-height: 1.2; letter-spacing: -0.06em; margin-bottom: 4px; white-space: nowrap; }
 section.outcomes h2 { font-size: 26px; font-weight: 500; margin-bottom: 16px; }
 section.outcomes > ul { gap: 18px 40px; }

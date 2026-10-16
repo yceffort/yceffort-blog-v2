@@ -26,7 +26,10 @@
   ],
   "overrides": [
     {
-      "files": ["apps/blog/posts/2026/10/how-bundlers-remember-imports*.md"],
+      "files": [
+        "apps/blog/posts/2026/10/how-bundlers-remember-imports*.md",
+        "apps/research/research/feconf-2026-vendor-sdk.md"
+      ],
       "options": {"embeddedLanguageFormatting": "off"}
     }
   ]

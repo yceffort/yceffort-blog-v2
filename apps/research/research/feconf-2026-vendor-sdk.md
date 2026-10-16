@@ -25,6 +25,8 @@ art:
 
 ## 줄여야 할 코드,<br>지켜야 할 브라우저 동작
 
+![SDK의 모듈을 분리해 웹 전송 경로로 다시 조립하는 개념도](/feconf-2026/reassembly.svg)
+
 > **−69%**
 >
 > 웹 전송용 번들 / gzip
@@ -45,11 +47,13 @@ art:
 
 ## 사용자가 처음 만나는 화면을 만듭니다
 
+![김용찬의 블로그 favicon](/feconf-2026/blog-favicon.svg)
+
 ### 김용찬
 
 카카오페이증권 / 홈팀 프론트엔드 엔지니어
 
-- 『모던 리액트 Deep Dive』, 『npm Deep Dive』, 『프런트엔드 성능 최적화 Deep Dive』 저자
+- 저서: 『모던 리액트 Deep Dive』, 『npm Deep Dive』,<br>『프런트엔드 성능 최적화 Deep Dive』
 - DAN 24 연사
 
 _[yceffort.kr](https://yceffort.kr) / [github.com/yceffort](https://github.com/yceffort)_
@@ -62,25 +66,16 @@ _[yceffort.kr](https://yceffort.kr) / [github.com/yceffort](https://github.com/y
 
 ---
 
-<!-- _class: columns -->
+<!-- _class: dependency -->
 
 <!-- _header: FECONF 2026 / PROLOGUE -->
 
-## 이벤트만 보내는데, A/B 테스트 코드까지 내려받았습니다
+## 이벤트만 보내는데,<br>A/B 테스트 코드까지 내려받았습니다
 
-> ### 홈에서 쓰는 기능
+> ### @vendor/sdk / 같은 패키지의 초기화 경로
 >
-> **페이지뷰와 이벤트 전송**
->
-> 화면 진입과 사용자 행동을 수집 서버에 전달
-
-<!-- -->
-
-> ### 함께 들어온 기능
->
-> **A/B 테스트 평가 등 다른 기능**
->
-> 홈에서 호출하지 않아도 SDK 초기화 경로에 연결
+> - **페이지뷰와 이벤트 전송**<br>홈에서 쓰는 기능<br>화면 진입과 사용자 행동을 수집 서버에 전달
+> - **A/B 테스트 평가 등 다른 기능**<br>홈에서 호출하지 않는 기능<br>SDK 초기화 경로에서 함께 참조
 
 사내 사용 저장소 **8곳도 대부분 이벤트 전송만** 사용했습니다
 
@@ -164,6 +159,11 @@ _초기 분석 스냅샷 / esbuild 0.24 / gzip 레벨 9. 크기는 실제 초기
 ## 실험으로 원인을 나눠 보겠습니다
 
 > 01
+
+1. **진단**
+2. 재조립
+3. 브라우저 동작
+4. 배포와 검증
 
 <!--
 발표 15초 / 03:30~03:45
@@ -252,7 +252,7 @@ var Evaluator = (function () {
 >
 > **−74%**
 >
-> gzip 크기: 100 → 26
+> gzip: 100 → 26
 
 <!-- -->
 
@@ -260,11 +260,11 @@ var Evaluator = (function () {
 >
 > **−1%**
 >
-> gzip 크기: 100 → 99
+> gzip: 100 → 99
 
 **홈에서 쓰는 초기화 경로의 참조를 바꿔야 했습니다**
 
-_초기 분석 스냅샷 / 시나리오별 원본 gzip = 100 / [esbuild PURE 주석](https://esbuild.github.io/api/#pure)_
+_막대 위: 원본, 아래: PURE 적용 / 초기 분석 스냅샷 / 시나리오별 원본 gzip = 100 / [esbuild PURE 주석](https://esbuild.github.io/api/#pure)_
 
 <!--
 발표 90초 / 06:00~07:30
@@ -289,6 +289,11 @@ _초기 분석 스냅샷 / 시나리오별 원본 gzip = 100 / [esbuild PURE 주
 ## 원본을 확보하고, A/B 테스트 코드로 가는 경로를 끊습니다
 
 > 02
+
+1. 진단
+2. **재조립**
+3. 브라우저 동작
+4. 배포와 검증
 
 <!--
 발표 15초 / 07:30~07:45
@@ -394,18 +399,31 @@ export function createCore(options) {
 
 <!-- _header: 02 / REASSEMBLY -->
 
-## A/B 테스트 기능을 만드는 코드를 별도 파일로 옮겼습니다
+## A/B 테스트 기능을 만드는 코드를,<br>필요한 엔트리만 가져오게 했습니다
+
+### core.ts
 
 ```ts
-// core.ts: A/B 테스트 코드를 import하지 않음
-import type {Components} from './contracts'
-export function createCore(parts: Components) {
+import type {Components}
+  from './contracts'
+
+export function createCore(
+  parts: Components,
+) {
   return new Core(parts)
 }
+```
 
-// assembleEvaluation.ts: 평가가 필요한 쪽에서만 사용
-import {Evaluator} from './evaluation/Evaluator'
-export const assembleEvaluation = () => ({evaluator: new Evaluator()})
+### assembleEvaluation.ts
+
+```ts
+import {Evaluator}
+  from './evaluation/Evaluator'
+
+export const assembleEvaluation =
+  () => ({
+    evaluator: new Evaluator(),
+  })
 ```
 
 **코어는 완성된 구성요소를 받고, 엔트리가 조립을 선택합니다**
@@ -413,18 +431,18 @@ export const assembleEvaluation = () => ({evaluator: new Evaluator()})
 <!--
 발표 80초 / 11:15~12:35
 
-A/B 테스트 기능을 생성하고 등록하는 코드를 코어 바깥의 조립 파일로 옮겼습니다. 화면 위쪽의 코어는 필요한 구성요소를 인자로 받습니다. A/B 테스트 기능을 직접 가져와 만들지 않습니다.
+A/B 테스트 기능을 생성하고 등록하는 코드를 코어 바깥의 조립 파일로 옮겼습니다. 화면 왼쪽의 코어는 필요한 구성요소를 인자로 받습니다. A/B 테스트 기능을 직접 가져와 만들지 않습니다.
 
-Components는 구성요소의 타입입니다. import type은 런타임 JavaScript에서 제거되므로, 이 줄을 통해 A/B 테스트 코드를 가져오지는 않습니다. 실제로 A/B 테스트 기능을 import하고 생성하는 코드는 아래 파일에 모았습니다.
+Components는 구성요소의 타입입니다. import type은 런타임 JavaScript에서 제거되므로, 이 줄을 통해 A/B 테스트 코드를 가져오지는 않습니다. 실제로 A/B 테스트 기능을 import하고 생성하는 코드는 오른쪽 파일에 모았습니다.
 
-이제 평가가 필요한 엔트리만 아래 조립 파일을 가져오면 됩니다. 전송 엔트리는 전송 구성요소만 만들고, 평가 엔트리는 전송과 평가 구성요소를 함께 만들어 코어에 전달합니다. 코어가 모든 구현을 알고 직접 선택하던 일을 각 엔트리가 맡게 됐습니다.
+이제 평가가 필요한 엔트리만 오른쪽 조립 파일을 가져오면 됩니다. 전송 엔트리는 전송 구성요소만 만들고, 평가 엔트리는 전송과 평가 구성요소를 함께 만들어 코어에 전달합니다. 코어가 모든 구현을 알고 직접 선택하던 일을 각 엔트리가 맡게 됐습니다.
 
 전송 엔트리에서 시작해 import를 따라갔을 때 A/B 테스트 코드로 이어지는 경로가 없어야 합니다. 실제 구현에서도 A/B 테스트 기능과 매처, 실험 배정 계산을 가져오지 않는 전송 전용 코어 생성 경로를 두었습니다.
 -->
 
 ---
 
-<!-- _class: columns compact -->
+<!-- _class: columns compact entry-map -->
 
 <!-- _header: 02 / REASSEMBLY -->
 
@@ -576,6 +594,11 @@ _2026-09-05 웹용 측정본 / 패키지 이름으로 import / esbuild 0.24.2 / 
 
 > 03
 
+1. 진단
+2. 재조립
+3. **브라우저 동작**
+4. 배포와 검증
+
 <!--
 발표 15초 / 16:00~16:15
 
@@ -622,7 +645,7 @@ _원본과 대조한 것은 전체 엔트리뿐이었고, 나눈 엔트리는 �
 
 ## 페이지 이탈에서 전송까지, 연결을 복원했습니다
 
-1. **`pagehide`**<br>브라우저의 이탈 이벤트를<br>라이프사이클로 전달
+1. **`pagehide`**<br>이탈 이벤트를<br>라이프사이클로 전달
 2. **이벤트 프로세서**<br>리스너가 호출되어<br>`flush(true)` 실행
 3. **`sendBeacon`**<br>큐에 남은 이벤트를<br>전송 요청에 담음
 
@@ -642,7 +665,7 @@ _원본과 대조한 것은 전체 엔트리뿐이었고, 나눈 엔트리는 �
 
 ---
 
-<!-- _class: compact -->
+<!-- _class: compact event-test -->
 
 <!-- _header: 03 / BROWSER BEHAVIOR -->
 
@@ -776,7 +799,7 @@ client.close를 호출해도 이 패치는 원래대로 돌아오지 않았습�
 
 ---
 
-<!-- _class: compact -->
+<!-- _class: compact timeline -->
 
 <!-- _header: 03 / BROWSER BEHAVIOR -->
 
@@ -850,6 +873,11 @@ SDK가 패치하기 전에 원래 pushState와 replaceState를 보관했습니�
 ## 빌드 결과, 타입, 수집과 유지 비용
 
 > 04
+
+1. 진단
+2. 재조립
+3. 브라우저 동작
+4. **배포와 검증**
 
 <!--
 발표 10초 / 25:30~25:40
@@ -1025,6 +1053,11 @@ _모바일 에뮬레이션 / CPU 4배 감속 / 콜드 로드 / 개선 전 4회�
 [상세 기록: 소스 복원, 번들 재구성, 검증](https://yceffort.kr/2026/08/rebuilding-a-vendor-sdk)
 
 카카오페이증권 / 김용찬<br>[yceffort.kr](https://yceffort.kr) / [github.com/yceffort](https://github.com/yceffort)
+
+1. import를 줄이고
+2. 실행 연결을 지키고
+3. **다시 검증합니다**
+
 <!--
 발표 20초 / 30:35~30:55
 
@@ -1096,13 +1129,11 @@ esbuild src/index.send.ts --bundle --metafile=meta.json
 
 <!-- _header: APPENDIX / 03 -->
 
-<!-- _class: compact hidden-slide -->
+<!-- _class: compact hidden-slide chunk-evidence -->
 
 ## 백업: Next.js 공유 청크의 측정 조건
 
-Next.js 16 + Turbopack의 **한 빌드 안에** 라우트 3개를 두었습니다
-
-이 실험은 SDK를 재export하는 **앱 연동용 래퍼 패키지**를 import합니다
+Next.js 16 + Turbopack의 **한 빌드에 라우트 3개**를 두고,<br>SDK를 재export하는 **앱 연동용 래퍼 패키지**를 import했습니다
 
 ```bash
 $ grep -o 'static/chunks/[a-z0-9_-]*\.js' .next/server/app/min.html | sort -u
@@ -1118,9 +1149,9 @@ static/chunks/2izqmkhuyaa9a.js   # min과 init이 공유하는 SDK 청크
 
 **상수만 쓰는 페이지도 이 SDK 청크를 로드했습니다**
 
-[공유 청크의 source-map-explorer 분석 이미지](/feconf-2026/source-map-explorer.png)
-
 제거 가능성은 같은 엔트리의 최소 import와 초기화를 **별도 빌드**해서 비교해야 합니다
+
+_[공유 청크의 source-map-explorer 분석 이미지](/feconf-2026/source-map-explorer.png)_
 
 <!--
 질의응답용 / 본 발표 30분에 포함하지 않음

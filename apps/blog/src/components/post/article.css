@@ -176,24 +176,38 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
     margin-top: 40px;
-    padding: 14px 16px;
-    border-width: 1px;
-    border-style: solid;
-    border-color: var(--border) var(--border) var(--border) var(--border);
+    padding: 20px;
+    border: 1px solid var(--primary);
     border-radius: 12px;
-    background-attachment: scroll;
-    background-clip: border-box;
     background-color: var(--surface);
-    background-image: none;
-    background-repeat: repeat;
-    background-position: initial;
-    background-size: auto;
     font-size: 14px;
     color: var(--ink-2);
-    gap: 12px;
-    background-origin: padding-box;
+    gap: 16px;
+  }
+  .post-subscribe-icon {
+    display: grid;
+    flex-shrink: 0;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: var(--primary);
+  }
+  .post-subscribe-body {
+    flex: 1 1 240px;
+    min-width: 0;
+    line-height: 1.6;
+  }
+  .post-subscribe-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .post-subscribe-steps {
+    margin: 4px 0 0;
+    padding-left: 18px;
+    list-style: decimal;
   }
   .series-endnav-card {
     display: flex;
@@ -515,19 +529,21 @@
     align-items: center;
     gap: 14px;
   }
+
+  /* accent가 amber처럼 밝으면 primary 위 흰 글자가 안 읽혀서 잉크 색을 뒤집어 쓴다 */
   .post-subscribe-button {
-    padding: 6px 14px;
-    border: 1px solid var(--primary);
+    padding: 8px 18px;
+    border: 0;
     border-radius: 8px;
-    background-color: transparent;
+    background-color: var(--ink);
     font: inherit;
     font-weight: 600;
-    color: var(--primary);
-    transition: background-color 0.18s ease;
+    color: var(--bg);
+    transition: opacity 0.18s ease;
     cursor: pointer;
   }
   .post-subscribe-button:hover {
-    background-color: color-mix(in oklab, var(--primary) 12%, transparent);
+    opacity: 0.85;
   }
   .post-subscribe-button:disabled {
     cursor: progress;
@@ -740,14 +756,11 @@
       background-origin: padding-box;
     }
     .post-subscribe {
-      background-attachment: scroll;
-      background-clip: border-box;
-      background-color: color-mix(in oklab, var(--surface) 70%, transparent);
-      background-image: none;
-      background-repeat: repeat;
-      background-position: initial;
-      background-size: auto;
-      background-origin: padding-box;
+      border-color: color-mix(in oklab, var(--primary) 45%, var(--border));
+      background-color: color-mix(in oklab, var(--primary) 8%, var(--surface));
+    }
+    .post-subscribe-icon {
+      background-color: color-mix(in oklab, var(--primary) 16%, transparent);
     }
     .series-endnav-card {
       background-attachment: scroll;
@@ -800,6 +813,13 @@
     }
     .series-endnav {
       grid-template-columns: 1fr;
+    }
+    .post-subscribe-actions {
+      flex-basis: 100%;
+    }
+    .post-subscribe-button {
+      flex: 1;
+      padding: 12px 18px;
     }
   }
 }

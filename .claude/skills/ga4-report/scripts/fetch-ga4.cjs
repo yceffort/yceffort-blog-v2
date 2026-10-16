@@ -33,7 +33,44 @@ function arg(name, fallback) {
 }
 const DAYS = Number(arg('days', 28))
 const TREND = Number(arg('trend', 91))
+const WEEKS = Number(arg('weeks', 4))
+const TREND_WEEKS = Number(arg('trend-weeks', 26))
 const OUT = arg('out', path.join(process.cwd(), 'ga4-data.json'))
+
+// 고정 독자 지표는 ISO 주(월요일 시작) 단위로 끊는다. 28일 창은 경계만 옮겨도 증감률이 흔들린다.
+function ymd(d) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+function addDays(d, n) {
+  const x = new Date(d)
+  x.setDate(x.getDate() + n)
+  return x
+}
+const thisMonday = addDays(new Date(), -((new Date().getDay() + 6) % 7))
+thisMonday.setHours(0, 0, 0, 0)
+const weekRange = {
+  current: {
+    startDate: ymd(addDays(thisMonday, -7 * WEEKS)),
+    endDate: ymd(addDays(thisMonday, -1)),
+  },
+  previous: {
+    startDate: ymd(addDays(thisMonday, -14 * WEEKS)),
+    endDate: ymd(addDays(thisMonday, -7 * WEEKS - 1)),
+  },
+  trend: {startDate: ymd(addDays(thisMonday, -7 * TREND_WEEKS)), endDate: 'today'},
+}
+// research.yceffort.kr도 같은 측정 ID를 쓰므로 블로그 호스트로 한정한다 (발표 연습 같은 저자 방문이 research에 몰린다).
+const blogHost = {
+  filter: {fieldName: 'hostName', stringFilter: {value: 'yceffort.kr'}},
+}
+const humanOnly = {
+  andGroup: {
+    expressions: [
+      {filter: {fieldName: 'eventName', stringFilter: {value: 'human_visit'}}},
+      blogHost,
+    ],
+  },
+}
 
 // dotenv가 큰따옴표 값의 \n을 실제 개행으로 확장하는 경우 재시도 (apps/blog/src/utils/analytics.ts와 동일)
 function parseCredentials(credentialsJson) {
@@ -290,8 +327,113 @@ async function main() {
     }),
   ]
 
+  // ── 고정 독자 ──
+  // 사람 판별(human_visit) 기준 주별 신규/재방문. 저자 본인 방문은 세션에서는 크지만 사용자로는 몇 명이다.
+  reports.push(
+    // 진단 부록 KPI. totalsCompare와 같은 지표를 ISO 주 경계로 다시 뽑는다.
+    run('totalsWeeks', {
+      dateRanges: ['current', 'previous'].map((name) => ({
+        ...weekRange[name],
+        name,
+      })),
+      metrics: [
+        {name: 'activeUsers'},
+        {name: 'sessions'},
+        {name: 'screenPageViews'},
+        {name: 'engagementRate'},
+        {name: 'averageSessionDuration'},
+      ],
+    }),
+    run('weeklyReaders', {
+      dateRanges: [weekRange.trend],
+      dimensions: [{name: 'isoYearIsoWeek'}, {name: 'newVsReturning'}],
+      metrics: [{name: 'activeUsers'}],
+      dimensionFilter: humanOnly,
+      orderBys: [{dimension: {dimensionName: 'isoYearIsoWeek'}}],
+      limit: TREND_WEEKS * 3 + 10,
+    }),
+    // 처음 온 주별 코호트의 N주 뒤 재방문. 크롤러가 분모를 키우므로 한국으로 한정한다.
+    run('cohorts', {
+      dimensions: [{name: 'cohort'}, {name: 'cohortNthWeek'}],
+      metrics: [{name: 'cohortActiveUsers'}],
+      dimensionFilter: {
+        andGroup: {
+          expressions: [
+            {filter: {fieldName: 'country', stringFilter: {value: 'South Korea'}}},
+            blogHost,
+          ],
+        },
+      },
+      cohortSpec: {
+        cohorts: Array.from({length: 8}, (_, i) => {
+          const start = addDays(thisMonday, -7 * (i + 2))
+          return {
+            name: ymd(start),
+            dimension: 'firstSessionDate',
+            dateRange: {startDate: ymd(start), endDate: ymd(addDays(start, 6))},
+          }
+        }),
+        cohortsRange: {granularity: 'WEEKLY', endOffset: 4},
+      },
+    }),
+    // 글별 신규/재방문 독자. "고정 독자가 읽은 글"까지만 말해 준다.
+    run('postReaders', {
+      dateRanges: [weekRange.current],
+      dimensions: [{name: 'pagePath'}, {name: 'newVsReturning'}],
+      metrics: [
+        {name: 'activeUsers'},
+        {name: 'userEngagementDuration'},
+        {name: 'screenPageViews'},
+      ],
+      dimensionFilter: {
+        filter: {
+          fieldName: 'pagePath',
+          stringFilter: {matchType: 'PARTIAL_REGEXP', value: '^/(en/)?20'},
+        },
+      },
+      orderBys: [{metric: {metricName: 'activeUsers'}, desc: true}],
+      limit: 250,
+    }),
+    // 처음 유입 경로별 재방문 독자 (현재/직전 4주)
+    ...['current', 'previous'].map((k) =>
+      run(`firstTouch_${k}`, {
+        dateRanges: [weekRange[k]],
+        dimensions: [{name: 'firstUserSource'}, {name: 'newVsReturning'}],
+        metrics: [{name: 'activeUsers'}],
+        dimensionFilter: humanOnly,
+        orderBys: [{metric: {metricName: 'activeUsers'}, desc: true}],
+        limit: 60,
+      }),
+    ),
+    // 도선 주별 노출/클릭과 본 사람/누른 사람. 미뤄 둔 판정과 시리즈 이어 읽기에 쓴다.
+    run('weeklyNav', {
+      dateRanges: [weekRange.trend],
+      dimensions: [
+        {name: 'isoYearIsoWeek'},
+        {name: 'customEvent:nav_block'},
+        {name: 'eventName'},
+      ],
+      metrics: [{name: 'eventCount'}, {name: 'activeUsers'}],
+      dimensionFilter: {
+        filter: {
+          fieldName: 'eventName',
+          inListFilter: {values: ['internal_nav_view', 'internal_nav_click']},
+        },
+      },
+      orderBys: [{dimension: {dimensionName: 'isoYearIsoWeek'}}],
+      limit: 300,
+    }),
+  )
+
   const out = {
-    meta: {generatedAt: new Date().toISOString(), days: DAYS, trend: TREND},
+    meta: {
+      generatedAt: new Date().toISOString(),
+      days: DAYS,
+      trend: TREND,
+      weeks: WEEKS,
+      trendWeeks: TREND_WEEKS,
+      weekRange,
+    },
   }
   for (const r of await Promise.all(reports)) out[r.name] = r.rows
   fs.writeFileSync(OUT, JSON.stringify(out, null, 1))

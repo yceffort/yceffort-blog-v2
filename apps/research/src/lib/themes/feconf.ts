@@ -317,6 +317,19 @@ section.takeaways > ol > li::before { content: '0' counter(lesson); position: ab
 section.takeaways > ol strong { display: block; font-size: 29px; margin-bottom: 9px; font-weight: 600; }
 section.takeaways > ol strong + br { display: none; }
 section.takeaways > blockquote { margin: 30px 0 0; font-size: 25px; }
+section.hiring {
+  --paper: #171717; --ink: #fff; --muted: #a3a3a3; --rule: #404040;
+  justify-content: center; align-content: center;
+}
+section.hiring::before { border-color: var(--yellow); }
+section.hiring h2 { font-size: 46px; margin-bottom: 40px; }
+section.hiring > ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px; list-style: none; padding: 0; margin: 0 0 40px; counter-reset: lesson; }
+section.hiring > ol > li { counter-increment: lesson; border-top: 4px solid var(--yellow); padding-top: 18px; margin: 0; font-size: 20px; color: var(--muted); }
+section.hiring > ol > li::before { content: '0' counter(lesson); display: block; margin-bottom: 14px; font-family: var(--mono); font-size: 18px; color: var(--yellow); }
+section.hiring > ol strong { display: block; margin-bottom: 12px; font-size: 27px; color: var(--ink); }
+section.hiring > ol strong + br { display: none; }
+section.hiring > blockquote { background: var(--yellow); color: #171717; border: 0; padding: 20px 26px; margin: 0; font-size: 23px; }
+section.hiring > blockquote a { font-family: var(--mono); text-decoration-color: currentColor; }
 section.closing { justify-content: center; align-content: center; }
 section.closing h1 { width: 800px; font-size: 100px; font-weight: 400; margin-bottom: 32px; }
 section.closing h2 { width: 800px; font-size: 34px; font-weight: 400; margin-bottom: 38px; }

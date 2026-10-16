@@ -6,6 +6,7 @@ import {useTheme} from 'next-themes'
 import {useEffect, useRef, useState} from 'react'
 
 import * as tweaksStyles from '@/components/settings/tweaks.styles'
+import {usePushSubscription} from '@/hooks/usePushSubscription'
 
 const ACCENTS: {
   name: string
@@ -55,17 +56,6 @@ const THEMES = [
     Icon: Monitor,
   },
 ] as const
-function urlBase64ToUint8Array(base64: string) {
-  const padding = '='.repeat((4 - (base64.length % 4)) % 4)
-  const raw = atob((base64 + padding).replaceAll('-', '+').replaceAll('_', '/'))
-  return Uint8Array.from(raw, (char) => char.charCodeAt(0))
-}
-type PushState = 'unsupported' | 'off' | 'on' | 'busy'
-function trackPush(eventName: string) {
-  if (typeof window.gtag === 'function') {
-    window.gtag('event', eventName)
-  }
-}
 interface Props {
   open: boolean
   onClose: () => void
@@ -146,91 +136,7 @@ export default function TweaksPanel({open, onClose}: Props) {
       document.documentElement.classList.remove('theme-transition-circle')
     })
   }
-  const [pushState, setPushState] = useState<PushState>('unsupported')
-  useEffect(() => {
-    let cancelled = false
-    if ('serviceWorker' in navigator && 'PushManager' in window) {
-      const syncPushState = async () => {
-        const registration = await navigator.serviceWorker.getRegistration()
-        if (!registration || cancelled) {
-          return
-        }
-        const subscription = await registration.pushManager.getSubscription()
-        if (!cancelled) {
-          // eslint-disable-next-line react-hooks/set-state-in-effect
-          setPushState(subscription ? 'on' : 'off')
-        }
-      }
-      void syncPushState()
-    }
-    return () => {
-      cancelled = true
-    }
-  }, [])
-  const togglePush = async () => {
-    if (pushState === 'unsupported' || pushState === 'busy') {
-      return
-    }
-    const registration = await navigator.serviceWorker.getRegistration()
-    if (!registration) {
-      return
-    }
-    setPushState('busy')
-    try {
-      if (pushState === 'on') {
-        const subscription = await registration.pushManager.getSubscription()
-        if (subscription) {
-          await fetch('/api/push/subscribe', {
-            method: 'DELETE',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              endpoint: subscription.endpoint,
-            }),
-          })
-          await subscription.unsubscribe()
-        }
-        trackPush('push_unsubscribe')
-        setPushState('off')
-        return
-      }
-      const permission = await Notification.requestPermission()
-      if (permission !== 'granted') {
-        trackPush('push_permission_denied')
-        setPushState('off')
-        return
-      }
-      const subscription = await registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(
-          process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || '',
-        ),
-      })
-      const response = await fetch('/api/push/subscribe', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(subscription.toJSON()),
-      })
-      if (!response.ok) {
-        await subscription.unsubscribe()
-        trackPush('push_subscribe_failed')
-        setPushState('off')
-        return
-      }
-      trackPush('push_subscribe')
-      setPushState('on')
-    } catch {
-      trackPush(
-        pushState === 'on'
-          ? 'push_unsubscribe_failed'
-          : 'push_subscribe_failed',
-      )
-      setPushState('off')
-    }
-  }
+  const {pushState, togglePush} = usePushSubscription('tweaks')
   const [dragOffset, setDragOffset] = useState(0)
   const dragStartY = useRef<number | null>(null)
   const onHandleTouchStart = (e: React.TouchEvent) => {

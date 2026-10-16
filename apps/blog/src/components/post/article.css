@@ -509,6 +509,30 @@
     flex-shrink: 0;
     color: var(--primary);
   }
+  .post-subscribe-actions {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 14px;
+  }
+  .post-subscribe-button {
+    padding: 6px 14px;
+    border: 1px solid var(--primary);
+    border-radius: 8px;
+    background-color: transparent;
+    font: inherit;
+    font-weight: 600;
+    color: var(--primary);
+    transition: background-color 0.18s ease;
+    cursor: pointer;
+  }
+  .post-subscribe-button:hover {
+    background-color: color-mix(in oklab, var(--primary) 12%, transparent);
+  }
+  .post-subscribe-button:disabled {
+    cursor: progress;
+    opacity: 0.6;
+  }
   .post-slide-note-link {
     flex-shrink: 0;
     font-weight: 600;

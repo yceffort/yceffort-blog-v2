@@ -1,0 +1,8 @@
+IBM Plex fonts, unmodified WOFF2 files.
+https://github.com/IBM/plex
+
+IBM Plex Sans KR: @ibm/plex-sans-kr 1.1.0, fonts/complete/woff2/hinted
+IBM Plex Mono: @ibm/plex-mono 2.5.0, fonts/complete/woff2
+
+Distributed under SIL Open Font License 1.1; see the accompanying licenses.
+Self-hosted for predictable presentation and offline rendering.

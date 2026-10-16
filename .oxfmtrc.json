@@ -28,7 +28,9 @@
     {
       "files": [
         "apps/blog/posts/2026/10/how-bundlers-remember-imports*.md",
-        "apps/research/research/feconf-2026-vendor-sdk.md"
+        "apps/research/research/feconf-2026-vendor-sdk.md",
+        "apps/blog/posts/2026/10/cwv-to-tempo-and-mimir*.md",
+        "apps/research/research/cwv-basics-and-grafana.md"
       ],
       "options": {"embeddedLanguageFormatting": "off"}
     }

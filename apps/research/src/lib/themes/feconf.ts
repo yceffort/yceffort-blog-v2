@@ -195,7 +195,7 @@ section.profile > p { font-size: 24px; }
 section.profile > ul { font-size: 22px; line-height: 1.7; margin: 24px 0; }
 section.profile > p:has(> em:only-child) { font-size: 18px; }
 
-section.home { --marp-slide-padding: 96px 68px 64px 520px; }
+section.home { --marp-slide-padding: 96px 68px 64px 400px; }
 section.home > p:has(img) { position: absolute; left: 68px; top: 96px; margin: 0; line-height: 0; }
 section.home > p:has(img) img { height: 560px; border: 1px solid var(--rule); border-radius: 24px; }
 section.home > ul { list-style: none; padding: 0; margin: 12px 0 0; }

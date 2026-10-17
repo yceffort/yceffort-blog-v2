@@ -5,10 +5,7 @@ import {
 } from '@opentelemetry/exporter-metrics-otlp-http'
 import {OTLPTraceExporter} from '@opentelemetry/exporter-trace-otlp-http'
 import {resourceFromAttributes} from '@opentelemetry/resources'
-import {
-  MeterProvider,
-  PeriodicExportingMetricReader,
-} from '@opentelemetry/sdk-metrics'
+import {MeterProvider} from '@opentelemetry/sdk-metrics'
 import {
   BasicTracerProvider,
   BatchSpanProcessor,
@@ -18,6 +15,7 @@ import type {Metric} from 'web-vitals'
 import {toAttributes} from './attributes'
 import {BUCKETS} from './buckets'
 import {pageContextFor, type PageContext, readDeviceContext} from './context'
+import {FlushOnlyMetricReader} from './flush-reader'
 import {toLabels} from './labels'
 import {createNavigationTracker, type NavigationRef} from './navigation'
 import {createPageTrace} from './page-trace'
@@ -62,14 +60,13 @@ export function startTelemetry({collectorUrl}: Options): void {
   const meterProvider = new MeterProvider({
     resource,
     readers: [
-      new PeriodicExportingMetricReader({
-        exporter: new OTLPMetricExporter({
+      new FlushOnlyMetricReader(
+        new OTLPMetricExporter({
           url: `${collectorUrl}/v1/metrics`,
           // 브라우저는 수명이 짧고 탭마다 따로 센다. 누적값을 들고 있을 주체가 없어 delta 로 보낸다.
           temporalityPreference: AggregationTemporalityPreference.DELTA,
         }),
-        exportIntervalMillis: 10_000,
-      }),
+      ),
     ],
   })
 
@@ -91,11 +88,11 @@ export function startTelemetry({collectorUrl}: Options): void {
     void meterProvider.forceFlush()
   }
   // web-vitals 는 window 에서 capture 로 받아 CLS, INP 를 먼저 보고한다. 여기는 그 뒤에 불린다.
+  // metric 은 이 flush 에서만 나간다(FlushOnlyMetricReader).
   //
-  // pagehide 에서는 flush 하지 않는다. 문서를 떠날 때 pagehide 가 visibilitychange 보다 먼저 온다.
-  // sdk-metrics 2.9.0 부터 forceFlush 는 진행 중인 export 의 응답을 기다린 뒤에 다시 collect 한다.
-  // pagehide 에서 보낸 요청의 응답이 오기 전에 문서가 사라지므로, visibilitychange 에서 막 기록한
-  // CLS, INP 는 나가지 못한다(blog-experiments 의 cwv-otel-grafana/experiments/e7-unload-flush).
+  // pagehide 에서는 flush 하지 않는다. 문서를 떠날 때 pagehide 가 visibilitychange 보다 먼저 와서,
+  // pagehide 에서 보내면 visibilitychange 에서 막 기록한 CLS, INP 가 빠진다
+  // (blog-experiments 의 cwv-otel-grafana/experiments/e7-unload-flush).
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') flush()
   })
@@ -116,7 +113,24 @@ export function startTelemetry({collectorUrl}: Options): void {
         toLabels(metric, context.labels),
       )
     },
-    flush,
+    // 같은 id 로 다시 온 CLS, INP 는 histogram 에 넣지 않고 trace 에만 남긴다.
+    (metric, first, index) => {
+      const navigation = navigations.resolve(metric)
+      record(
+        navigation,
+        contextOf(navigation).attributes,
+        `cwv.${metric.name.toLowerCase()}.update`,
+        spanDurationMs(metric),
+        {
+          ...toAttributes(metric),
+          'cwv.update.index': index,
+          'cwv.update.first_value':
+            metric.name === 'CLS' ? first.value : Math.round(first.value),
+          'cwv.update.first_rating': first.rating,
+          'cwv.update.rating_changed': first.rating !== metric.rating,
+        },
+      )
+    },
     (metric) => navigations.resolve(metric).key,
   )
 }

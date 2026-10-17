@@ -10,7 +10,33 @@ describe('createLcpGate', () => {
   beforeEach(() => vi.useFakeTimers())
   afterEach(() => vi.useRealTimers())
 
-  it('후보가 3초 동안 바뀌지 않으면 마지막 후보로 확정한다', () => {
+  it('후보가 3초 동안 멈춰도 내보내지 않고, 정식 확정값을 quiet 값과 함께 내보낸다', () => {
+    const emit = vi.fn()
+    const gate = createLcpGate(emit)
+
+    gate.candidate(lcp(800))
+    vi.advanceTimersByTime(3000)
+    expect(emit).not.toHaveBeenCalled()
+
+    gate.candidate(lcp(6000))
+    gate.final(lcp(6000))
+    expect(emit).toHaveBeenCalledExactlyOnceWith(lcp(6000), 800)
+  })
+
+  it('quiet 값은 처음으로 3초 멈춘 후보다', () => {
+    const emit = vi.fn()
+    const gate = createLcpGate(emit)
+
+    gate.candidate(lcp(800))
+    vi.advanceTimersByTime(3000)
+    gate.candidate(lcp(6000))
+    vi.advanceTimersByTime(3000)
+    gate.final(lcp(6000))
+
+    expect(emit).toHaveBeenCalledExactlyOnceWith(lcp(6000), 800)
+  })
+
+  it('후보가 3초 안에 바뀌면 타이머를 다시 건다', () => {
     const emit = vi.fn()
     const gate = createLcpGate(emit)
 
@@ -18,24 +44,12 @@ describe('createLcpGate', () => {
     vi.advanceTimersByTime(2000)
     gate.candidate(lcp(1600))
     vi.advanceTimersByTime(2999)
-    expect(emit).not.toHaveBeenCalled()
+    gate.final(lcp(1600))
 
-    vi.advanceTimersByTime(1)
-    expect(emit).toHaveBeenCalledExactlyOnceWith(lcp(1600), 'quiet')
+    expect(emit).toHaveBeenCalledExactlyOnceWith(lcp(1600), undefined)
   })
 
-  it('quiet 로 확정한 뒤 web-vitals 가 확정해도 다시 내보내지 않는다', () => {
-    const emit = vi.fn()
-    const gate = createLcpGate(emit)
-
-    gate.candidate(lcp(800))
-    vi.advanceTimersByTime(3000)
-    gate.final(lcp(800))
-
-    expect(emit).toHaveBeenCalledExactlyOnceWith(lcp(800), 'quiet')
-  })
-
-  it('web-vitals 가 먼저 확정하면 걸려 있던 quiet 타이머는 아무것도 내보내지 않는다', () => {
+  it('정식 확정이 먼저 오면 걸려 있던 타이머는 아무것도 남기지 않는다', () => {
     const emit = vi.fn()
     const gate = createLcpGate(emit)
 
@@ -43,6 +57,6 @@ describe('createLcpGate', () => {
     gate.final(lcp(800))
     vi.advanceTimersByTime(10_000)
 
-    expect(emit).toHaveBeenCalledExactlyOnceWith(lcp(800), 'web-vitals')
+    expect(emit).toHaveBeenCalledExactlyOnceWith(lcp(800), undefined)
   })
 })

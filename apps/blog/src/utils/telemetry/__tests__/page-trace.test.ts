@@ -56,7 +56,7 @@ describe('createPageTrace', () => {
     const base = {'page.route': 'home'}
 
     record(HARD, base, 'cwv.fcp', 120, {})
-    record(HARD, base, 'cwv.lcp', 2400, {'cwv.lcp.finalized_by': 'quiet'})
+    record(HARD, base, 'cwv.lcp', 2400, {'cwv.lcp.quiet': 'same'})
     await provider.forceFlush()
 
     const spans = exporter.getFinishedSpans()

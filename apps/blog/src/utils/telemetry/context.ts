@@ -1,9 +1,11 @@
 import type {Attributes} from '@opentelemetry/api'
+import {detectBot} from '@yceffort/shared/utils'
 
+import type {NavigationRef} from './navigation'
 import {routeOf} from './routes'
 
 /**
- * 페이지 로드 하나에 한 번 정하는 맥락. 모두 span 속성으로 싣고,
+ * 내비게이션 하나에 한 번 정하는 맥락. 모두 span 속성으로 싣고,
  * 값의 종류가 몇 개로 정해진 것(`labels`)만 메트릭 라벨로도 쓴다.
  */
 export interface PageContext {
@@ -81,33 +83,28 @@ type NavigatorExtras = Navigator & {
   deviceMemory?: number
 }
 
-/** 브라우저에서 지금 페이지의 맥락을 읽는다. 없는 값은 `unknown` 이나 -1 로 채운다. */
-export function readPageContext(): PageContext {
+/** 탭 하나 동안 바뀌지 않는 값. SDK 를 시작할 때 한 번 읽는다. */
+export interface DeviceContext {
+  deviceClass: DeviceClass
+  browserEngine: BrowserEngine
+  /** 첫 로드의 유입 경로. SPA 이동과 bfcache 복원은 internal 로 본다. */
+  referrerType: ReferrerType
+  /** 첫 로드의 내비게이션 요청이 서비스 워커를 거쳤는지. 보고 시점의 controller 와 달리 첫 방문에도 맞다. */
+  swControlled: 'yes' | 'no'
+  attributes: Attributes
+}
+
+export function readDeviceContext(): DeviceContext {
   const nav = navigator as NavigatorExtras
-  const [navigation] = performance.getEntriesByType(
-    'navigation',
-  )
-  const {pathname} = window.location
+  const [navigation] = performance.getEntriesByType('navigation')
   const width = window.innerWidth
 
-  const labels = {
-    'page.route': routeOf(pathname),
-    'page.lang': langOf(pathname),
-    'device.class': deviceClassOf(width),
-    'browser.engine': browserEngineOf(nav.userAgent),
-  }
-
   return {
-    labels,
+    deviceClass: deviceClassOf(width),
+    browserEngine: browserEngineOf(nav.userAgent),
+    referrerType: referrerTypeOf(document.referrer, window.location.hostname),
+    swControlled: (navigation?.workerStart ?? 0) > 0 ? 'yes' : 'no',
     attributes: {
-      ...labels,
-      'page.path': pathname.slice(0, 200),
-      'page.referrer_type': referrerTypeOf(
-        document.referrer,
-        window.location.hostname,
-      ),
-      // 내비게이션 자체가 서비스 워커를 거쳤는지. 보고 시점의 controller 와 달리 첫 방문에도 맞다.
-      'page.sw_controlled': (navigation?.workerStart ?? 0) > 0 ? 'yes' : 'no',
       'viewport.width': width,
       'network.effective_type': nav.connection?.effectiveType ?? 'unknown',
       'network.rtt': nav.connection?.rtt ?? -1,
@@ -117,4 +114,39 @@ export function readPageContext(): PageContext {
       'device.cores': nav.hardwareConcurrency ?? -1,
     },
   }
+}
+
+/** 내비게이션 하나의 맥락. 경로에 따라 화면과 언어가 정해진다. */
+export function pageContextFor(
+  navigation: NavigationRef,
+  device: DeviceContext,
+): PageContext {
+  const {pathname, kind} = navigation
+  const labels = {
+    'page.route': routeOf(pathname),
+    'page.lang': langOf(pathname),
+    'device.class': device.deviceClass,
+    'browser.engine': device.browserEngine,
+  }
+
+  return {
+    labels,
+    attributes: {
+      ...labels,
+      ...device.attributes,
+      'page.path': pathname.slice(0, 200),
+      'page.navigation': kind,
+      'page.referrer_type': kind === 'hard' ? device.referrerType : 'internal',
+      // SPA 이동과 bfcache 복원에는 내비게이션 요청이 없다.
+      ...(kind === 'hard' ? {'page.sw_controlled': device.swControlled} : {}),
+    },
+  }
+}
+
+/** 자동화 브라우저와 알려진 봇. PageSpeed Insights(Chrome-Lighthouse), HeadlessChrome, 검색 엔진 렌더러가 여기 걸린다. */
+export function isAutomatedVisit(
+  userAgent: string,
+  webdriver: boolean,
+): boolean {
+  return webdriver || detectBot(userAgent).isBot
 }

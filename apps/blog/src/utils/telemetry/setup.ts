@@ -17,8 +17,9 @@ import type {Metric} from 'web-vitals'
 
 import {toAttributes} from './attributes'
 import {BUCKETS} from './buckets'
-import {readPageContext} from './context'
+import {pageContextFor, type PageContext, readDeviceContext} from './context'
 import {toLabels} from './labels'
+import {createNavigationTracker, type NavigationRef} from './navigation'
 import {createPageTrace} from './page-trace'
 import {observeVitals} from './vitals'
 
@@ -32,7 +33,22 @@ function spanDurationMs(metric: {name: Metric['name']; value: number}): number {
 }
 
 export function startTelemetry({collectorUrl}: Options): void {
-  const context = readPageContext()
+  const device = readDeviceContext()
+  const navigations = createNavigationTracker(window.location.pathname)
+  // web-vitals 의 bfcache 처리보다 먼저 복원을 센다. web-vitals 는 복원 뒤 다음 프레임에 보고한다.
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted)
+      navigations.restored(event.timeStamp, window.location.pathname)
+  })
+  const contexts = new Map<string, PageContext>()
+  const contextOf = (navigation: NavigationRef) => {
+    let context = contexts.get(navigation.key)
+    if (!context) {
+      context = pageContextFor(navigation, device)
+      contexts.set(navigation.key, context)
+    }
+    return context
+  }
   const resource = resourceFromAttributes({'service.name': 'yceffort-blog'})
 
   const tracerProvider = new BasicTracerProvider({
@@ -68,10 +84,7 @@ export function startTelemetry({collectorUrl}: Options): void {
     ]),
   ) as Record<Metric['name'], Histogram>
 
-  const record = createPageTrace(
-    tracerProvider.getTracer('yceffort-blog/cwv'),
-    () => context.attributes,
-  )
+  const record = createPageTrace(tracerProvider.getTracer('yceffort-blog/cwv'))
 
   const flush = () => {
     void tracerProvider.forceFlush()
@@ -87,14 +100,23 @@ export function startTelemetry({collectorUrl}: Options): void {
     if (document.visibilityState === 'hidden') flush()
   })
 
-  observeVitals((metric, extra) => {
-    record(`cwv.${metric.name.toLowerCase()}`, spanDurationMs(metric), {
-      ...toAttributes(metric),
-      ...extra,
-    })
-    histograms[metric.name].record(
-      metric.value,
-      toLabels(metric, context.labels),
-    )
-  }, flush)
+  observeVitals(
+    (metric, extra) => {
+      const navigation = navigations.resolve(metric)
+      const context = contextOf(navigation)
+      record(
+        navigation,
+        context.attributes,
+        `cwv.${metric.name.toLowerCase()}`,
+        spanDurationMs(metric),
+        {...toAttributes(metric), ...extra},
+      )
+      histograms[metric.name].record(
+        metric.value,
+        toLabels(metric, context.labels),
+      )
+    },
+    flush,
+    (metric) => navigations.resolve(metric).key,
+  )
 }

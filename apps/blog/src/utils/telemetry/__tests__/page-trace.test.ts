@@ -8,6 +8,7 @@ import {
 } from '@opentelemetry/sdk-trace-base'
 import {describe, expect, it} from 'vitest'
 
+import type {NavigationRef} from '../navigation'
 import {createPageTrace} from '../page-trace'
 
 /** export 호출 하나가 collector 로 가는 요청 하나다. 호출별로 span 을 모은다. */
@@ -21,6 +22,12 @@ class BatchRecorder implements SpanExporter {
 }
 
 const toMs = ([s, ns]: [number, number]) => s * 1000 + ns / 1e6
+const HARD: NavigationRef = {
+  key: 'hard',
+  kind: 'hard',
+  startTime: 0,
+  pathname: '/',
+}
 
 describe('createPageTrace', () => {
   it('root 와 첫 지표 span 이 같은 export 호출로 나간다', async () => {
@@ -28,9 +35,9 @@ describe('createPageTrace', () => {
     const provider = new BasicTracerProvider({
       spanProcessors: [new BatchSpanProcessor(exporter)],
     })
-    const record = createPageTrace(provider.getTracer('test'), () => ({}))
+    const record = createPageTrace(provider.getTracer('test'))
 
-    record('cwv.fcp', 120, {})
+    record(HARD, {}, 'cwv.fcp', 120, {})
     await provider.forceFlush()
 
     expect(exporter.batches).toHaveLength(1)
@@ -45,12 +52,11 @@ describe('createPageTrace', () => {
     const provider = new BasicTracerProvider({
       spanProcessors: [new BatchSpanProcessor(exporter)],
     })
-    const record = createPageTrace(provider.getTracer('test'), () => ({
-      'page.route': 'home',
-    }))
+    const record = createPageTrace(provider.getTracer('test'))
+    const base = {'page.route': 'home'}
 
-    record('cwv.fcp', 120, {})
-    record('cwv.lcp', 2400, {'cwv.lcp.finalized_by': 'quiet'})
+    record(HARD, base, 'cwv.fcp', 120, {})
+    record(HARD, base, 'cwv.lcp', 2400, {'cwv.lcp.finalized_by': 'quiet'})
     await provider.forceFlush()
 
     const spans = exporter.getFinishedSpans()
@@ -65,5 +71,45 @@ describe('createPageTrace', () => {
     }
     const lcp = children.find((s) => s.name === 'cwv.lcp')!
     expect(toMs(lcp.duration)).toBeCloseTo(2400, 0)
+  })
+
+  it('내비게이션마다 trace 를 따로 만들고 root 는 그 내비게이션 시작에서 시작한다', async () => {
+    const exporter = new InMemorySpanExporter()
+    const provider = new BasicTracerProvider({
+      spanProcessors: [new BatchSpanProcessor(exporter)],
+    })
+    const record = createPageTrace(provider.getTracer('test'))
+    const soft: NavigationRef = {
+      key: 'soft:2',
+      kind: 'soft',
+      startTime: 5000,
+      pathname: '/2026/10/post',
+    }
+
+    record(HARD, {'page.route': 'home'}, 'cwv.lcp', 900, {})
+    record(soft, {'page.route': 'post'}, 'cwv.lcp', 300, {})
+    record(soft, {'page.route': 'post'}, 'cwv.inp', 40, {})
+    await provider.forceFlush()
+
+    const spans = exporter.getFinishedSpans()
+    const roots = spans.filter((s) => s.name === 'cwv.page')
+    expect(roots).toHaveLength(2)
+    const softRoot = roots.find(
+      (r) => r.attributes['page.navigation'] === 'soft',
+    )!
+    expect(toMs(softRoot.startTime) - performance.timeOrigin).toBeCloseTo(
+      5000,
+      0,
+    )
+    const softChildren = spans.filter(
+      (s) => s.parentSpanContext?.spanId === softRoot.spanContext().spanId,
+    )
+    expect(softChildren.map((s) => s.name).toSorted()).toEqual([
+      'cwv.inp',
+      'cwv.lcp',
+    ])
+    expect(
+      softChildren.every((s) => s.attributes['page.route'] === 'post'),
+    ).toBe(true)
   })
 })

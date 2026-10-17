@@ -1,5 +1,6 @@
 import type {Attributes} from '@opentelemetry/api'
 import {
+  type LCPMetricWithAttribution,
   type MetricWithAttribution,
   onCLS,
   onFCP,
@@ -27,19 +28,42 @@ export function oncePerId(report: Report): Report {
   }
 }
 
-/** quiet 로 확정한 LCP 는 곧바로 flush 한다. 기다리는 동안 앱이 닫히면 유실된다. */
-export function observeVitals(report: Report, flush: () => void): void {
+// SPA 안의 이동도 따로 잰다(Chromium 151 부터 기본으로 켜진 Soft Navigations API). 다른 브라우저에서는 효과가 없다.
+const SOFT = {reportSoftNavs: true}
+
+/**
+ * quiet 로 확정한 LCP 는 곧바로 flush 한다. 기다리는 동안 앱이 닫히면 유실된다.
+ * LCP 확정은 내비게이션마다 따로다. `navigationKey` 가 같은 지표끼리 한 gate 를 쓴다.
+ */
+export function observeVitals(
+  report: Report,
+  flush: () => void,
+  navigationKey: (metric: MetricWithAttribution) => string,
+): void {
   const once = oncePerId(report)
 
+  // SPA 이동의 TTFB 는 0 으로 보고되므로(web-vitals README) 첫 로드만 잰다.
   onTTFB(once)
-  onFCP(once)
-  onCLS(once)
-  onINP(once)
+  onFCP(once, SOFT)
+  onCLS(once, SOFT)
+  onINP(once, SOFT)
 
-  const lcp = createLcpGate((metric, by) => {
-    report(metric, {'cwv.lcp.finalized_by': by})
-    if (by === 'quiet') flush()
+  const gates = new Map<string, ReturnType<typeof createLcpGate>>()
+  const gateFor = (metric: LCPMetricWithAttribution) => {
+    const key = navigationKey(metric)
+    let gate = gates.get(key)
+    if (!gate) {
+      gate = createLcpGate((settled, by) => {
+        report(settled, {'cwv.lcp.finalized_by': by})
+        if (by === 'quiet') flush()
+      })
+      gates.set(key, gate)
+    }
+    return gate
+  }
+  onLCP((metric) => gateFor(metric).final(metric), SOFT)
+  onLCP((metric) => gateFor(metric).candidate(metric), {
+    ...SOFT,
+    reportAllChanges: true,
   })
-  onLCP(lcp.final)
-  onLCP(lcp.candidate, {reportAllChanges: true})
 }

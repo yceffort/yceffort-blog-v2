@@ -3,8 +3,10 @@ import {afterEach, describe, expect, it, vi} from 'vitest'
 import {
   browserEngineOf,
   deviceClassOf,
+  isAutomatedVisit,
   langOf,
-  readPageContext,
+  pageContextFor,
+  readDeviceContext,
   referrerTypeOf,
 } from '../context'
 
@@ -84,10 +86,10 @@ describe('referrerTypeOf', () => {
   })
 })
 
-describe('readPageContext', () => {
+describe('pageContextFor', () => {
   afterEach(() => vi.unstubAllGlobals())
 
-  it('글 경로처럼 값이 끝없이 늘어나는 것은 메트릭 라벨에 넣지 않는다', () => {
+  function stubBrowser() {
     vi.stubGlobal('window', {
       location: {pathname: '/en/2026/10/post', hostname: 'yceffort.kr'},
       innerWidth: 390,
@@ -100,8 +102,15 @@ describe('readPageContext', () => {
     vi.stubGlobal('performance', {
       getEntriesByType: () => [{workerStart: 12}],
     })
+  }
 
-    const {labels, attributes} = readPageContext()
+  it('글 경로처럼 값이 끝없이 늘어나는 것은 메트릭 라벨에 넣지 않는다', () => {
+    stubBrowser()
+    const device = readDeviceContext()
+    const {labels, attributes} = pageContextFor(
+      {key: 'hard', kind: 'hard', startTime: 0, pathname: '/en/2026/10/post'},
+      device,
+    )
 
     expect(labels).toEqual({
       'page.route': 'post',
@@ -112,10 +121,56 @@ describe('readPageContext', () => {
     expect(attributes).toMatchObject({
       ...labels,
       'page.path': '/en/2026/10/post',
+      'page.navigation': 'hard',
       'page.referrer_type': 'search',
       'page.sw_controlled': 'yes',
       'network.effective_type': 'unknown',
       'device.cores': 6,
     })
+  })
+
+  it('SPA 이동은 그 이동의 경로로 화면을 정하고 유입은 internal 이다', () => {
+    stubBrowser()
+    const {labels, attributes} = pageContextFor(
+      {key: 'soft:3', kind: 'soft', startTime: 4000, pathname: '/tags/react'},
+      readDeviceContext(),
+    )
+
+    expect(labels['page.route']).toBe('tag')
+    expect(labels['page.lang']).toBe('ko')
+    expect(attributes['page.referrer_type']).toBe('internal')
+    expect(attributes).not.toHaveProperty('page.sw_controlled')
+  })
+})
+
+describe('isAutomatedVisit', () => {
+  it.each([
+    [
+      'Mozilla/5.0 (Linux; Android 11) AppleWebKit/537.36 Chrome/156.0.0.0 Mobile Safari/537.36 Chrome-Lighthouse',
+      false,
+      true,
+    ],
+    [
+      'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 HeadlessChrome/156.0.0.0 Safari/537.36',
+      false,
+      true,
+    ],
+    [
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36',
+      true,
+      true,
+    ],
+    [
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36',
+      false,
+      false,
+    ],
+    [
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 26_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.1 Mobile/15E148 Safari/604.1',
+      false,
+      false,
+    ],
+  ])('%s (webdriver %s) 는 %s', (userAgent, webdriver, automated) => {
+    expect(isAutomatedVisit(userAgent, webdriver)).toBe(automated)
   })
 })

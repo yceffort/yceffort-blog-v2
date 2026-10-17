@@ -45,7 +45,7 @@ art:
 
 <!-- _header: FECONF 2026 / PROLOGUE -->
 
-## 사용자가 처음 만나는 화면을 만듭니다
+## 소스와 빌드 결과물을 읽고, 직접 재현하고 측정합니다
 
 ![김용찬의 블로그 favicon](/feconf-2026/blog-favicon.svg)
 

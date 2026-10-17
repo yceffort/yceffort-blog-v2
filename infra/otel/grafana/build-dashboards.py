@@ -23,7 +23,7 @@ METRICS = [
     ("FCP", "cwv_fcp_milliseconds", 1800, 3000, "ms"),
     ("TTFB", "cwv_ttfb_milliseconds", 800, 1800, "ms"),
 ]
-SEL = 'page_route=~"$route", page_lang=~"$lang", device_class=~"$device", browser_engine=~"$engine"'
+SEL = 'job="yceffort-blog", page_route=~"$route", page_lang=~"$lang", device_class=~"$device", browser_engine=~"$engine"'
 WIDTHS = [5, 5, 5, 5, 4]
 
 
@@ -132,8 +132,8 @@ def label_variable(name, label, title):
         "label": title,
         "type": "query",
         "datasource": MIMIR,
-        "query": {"query": f"label_values(cwv_ttfb_milliseconds_count, {label})", "refId": name},
-        "definition": f"label_values(cwv_ttfb_milliseconds_count, {label})",
+        "query": {"query": f'label_values(cwv_ttfb_milliseconds_count{{job="yceffort-blog"}}, {label})', "refId": name},
+        "definition": f'label_values(cwv_ttfb_milliseconds_count{{job="yceffort-blog"}}, {label})',
         "includeAll": True,
         "allValue": ".*",
         "multi": True,

@@ -17,7 +17,10 @@ pre-commit:
             stage_fixed: true
           - name: oxfmt
             glob: '*.{ts,cts,mts,tsx,js,cjs,mjs,jsx,json,md,yaml,yml,toml}'
-            exclude: 'labs/**'
+            # 생성한 대시보드 JSON 은 .oxfmtrc.json 에서도 뺐다. 그것만 staged 면 oxfmt 가 대상 없음으로 실패한다.
+            exclude:
+              - 'labs/**'
+              - 'infra/otel/grafana/dashboards/**'
             run: pnpm exec oxfmt {staged_files}
             stage_fixed: true
           - name: stylelint

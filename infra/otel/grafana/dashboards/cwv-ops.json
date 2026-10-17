@@ -22,10 +22,10 @@
           "uid": "mimir"
         },
         "query": {
-          "query": "label_values(cwv_ttfb_milliseconds_count, page_route)",
+          "query": "label_values(cwv_ttfb_milliseconds_count{job=\"yceffort-blog\"}, page_route)",
           "refId": "route"
         },
-        "definition": "label_values(cwv_ttfb_milliseconds_count, page_route)",
+        "definition": "label_values(cwv_ttfb_milliseconds_count{job=\"yceffort-blog\"}, page_route)",
         "includeAll": true,
         "allValue": ".*",
         "multi": true,
@@ -44,10 +44,10 @@
           "uid": "mimir"
         },
         "query": {
-          "query": "label_values(cwv_ttfb_milliseconds_count, page_lang)",
+          "query": "label_values(cwv_ttfb_milliseconds_count{job=\"yceffort-blog\"}, page_lang)",
           "refId": "lang"
         },
-        "definition": "label_values(cwv_ttfb_milliseconds_count, page_lang)",
+        "definition": "label_values(cwv_ttfb_milliseconds_count{job=\"yceffort-blog\"}, page_lang)",
         "includeAll": true,
         "allValue": ".*",
         "multi": true,
@@ -66,10 +66,10 @@
           "uid": "mimir"
         },
         "query": {
-          "query": "label_values(cwv_ttfb_milliseconds_count, device_class)",
+          "query": "label_values(cwv_ttfb_milliseconds_count{job=\"yceffort-blog\"}, device_class)",
           "refId": "device"
         },
-        "definition": "label_values(cwv_ttfb_milliseconds_count, device_class)",
+        "definition": "label_values(cwv_ttfb_milliseconds_count{job=\"yceffort-blog\"}, device_class)",
         "includeAll": true,
         "allValue": ".*",
         "multi": true,
@@ -88,10 +88,10 @@
           "uid": "mimir"
         },
         "query": {
-          "query": "label_values(cwv_ttfb_milliseconds_count, browser_engine)",
+          "query": "label_values(cwv_ttfb_milliseconds_count{job=\"yceffort-blog\"}, browser_engine)",
           "refId": "engine"
         },
-        "definition": "label_values(cwv_ttfb_milliseconds_count, browser_engine)",
+        "definition": "label_values(cwv_ttfb_milliseconds_count{job=\"yceffort-blog\"}, browser_engine)",
         "includeAll": true,
         "allValue": ".*",
         "multi": true,
@@ -158,7 +158,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_lcp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
+          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_lcp_milliseconds_bucket{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
           "legendFormat": "",
           "instant": true,
           "range": false,
@@ -222,7 +222,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_inp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
+          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_inp_milliseconds_bucket{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
           "legendFormat": "",
           "instant": true,
           "range": false,
@@ -286,7 +286,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_cls_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
+          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_cls_bucket{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
           "legendFormat": "",
           "instant": true,
           "range": false,
@@ -351,7 +351,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_fcp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
+          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_fcp_milliseconds_bucket{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
           "legendFormat": "",
           "instant": true,
           "range": false,
@@ -415,7 +415,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_ttfb_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
+          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_ttfb_milliseconds_bucket{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
           "legendFormat": "",
           "instant": true,
           "range": false,
@@ -492,7 +492,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "sum(sum_over_time(cwv_lcp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\",le=\"2500\"}[$__range])) / sum(sum_over_time(cwv_lcp_milliseconds_count{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range]))",
+          "expr": "sum(sum_over_time(cwv_lcp_milliseconds_bucket{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\",le=\"2500\"}[$__range])) / sum(sum_over_time(cwv_lcp_milliseconds_count{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range]))",
           "legendFormat": "",
           "instant": true,
           "range": false,
@@ -556,7 +556,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "sum(sum_over_time(cwv_inp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\",le=\"200\"}[$__range])) / sum(sum_over_time(cwv_inp_milliseconds_count{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range]))",
+          "expr": "sum(sum_over_time(cwv_inp_milliseconds_bucket{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\",le=\"200\"}[$__range])) / sum(sum_over_time(cwv_inp_milliseconds_count{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range]))",
           "legendFormat": "",
           "instant": true,
           "range": false,
@@ -620,7 +620,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "sum(sum_over_time(cwv_cls_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\",le=\"0.1\"}[$__range])) / sum(sum_over_time(cwv_cls_count{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range]))",
+          "expr": "sum(sum_over_time(cwv_cls_bucket{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\",le=\"0.1\"}[$__range])) / sum(sum_over_time(cwv_cls_count{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range]))",
           "legendFormat": "",
           "instant": true,
           "range": false,
@@ -684,7 +684,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "sum(sum_over_time(cwv_fcp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\",le=\"1800\"}[$__range])) / sum(sum_over_time(cwv_fcp_milliseconds_count{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range]))",
+          "expr": "sum(sum_over_time(cwv_fcp_milliseconds_bucket{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\",le=\"1800\"}[$__range])) / sum(sum_over_time(cwv_fcp_milliseconds_count{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range]))",
           "legendFormat": "",
           "instant": true,
           "range": false,
@@ -748,7 +748,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "sum(sum_over_time(cwv_ttfb_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\",le=\"800\"}[$__range])) / sum(sum_over_time(cwv_ttfb_milliseconds_count{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range]))",
+          "expr": "sum(sum_over_time(cwv_ttfb_milliseconds_bucket{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\",le=\"800\"}[$__range])) / sum(sum_over_time(cwv_ttfb_milliseconds_count{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range]))",
           "legendFormat": "",
           "instant": true,
           "range": false,
@@ -825,7 +825,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_lcp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$window])))",
+          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_lcp_milliseconds_bucket{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$window])))",
           "legendFormat": "p75",
           "instant": false,
           "range": true,
@@ -894,7 +894,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_inp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$window])))",
+          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_inp_milliseconds_bucket{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$window])))",
           "legendFormat": "p75",
           "instant": false,
           "range": true,
@@ -963,7 +963,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_cls_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$window])))",
+          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_cls_bucket{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$window])))",
           "legendFormat": "p75",
           "instant": false,
           "range": true,
@@ -1032,7 +1032,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_fcp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$window])))",
+          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_fcp_milliseconds_bucket{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$window])))",
           "legendFormat": "p75",
           "instant": false,
           "range": true,
@@ -1101,7 +1101,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_ttfb_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$window])))",
+          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_ttfb_milliseconds_bucket{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$window])))",
           "legendFormat": "p75",
           "instant": false,
           "range": true,
@@ -1183,7 +1183,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le, device_class) (sum_over_time(cwv_lcp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
+          "expr": "histogram_quantile(0.75, sum by (le, device_class) (sum_over_time(cwv_lcp_milliseconds_bucket{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
           "legendFormat": "{{device_class}}",
           "instant": true,
           "range": false,
@@ -1248,7 +1248,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le, browser_engine) (sum_over_time(cwv_lcp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
+          "expr": "histogram_quantile(0.75, sum by (le, browser_engine) (sum_over_time(cwv_lcp_milliseconds_bucket{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
           "legendFormat": "{{browser_engine}}",
           "instant": true,
           "range": false,
@@ -1313,7 +1313,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le, page_lang) (sum_over_time(cwv_lcp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
+          "expr": "histogram_quantile(0.75, sum by (le, page_lang) (sum_over_time(cwv_lcp_milliseconds_bucket{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
           "legendFormat": "{{page_lang}}",
           "instant": true,
           "range": false,
@@ -1378,7 +1378,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le, device_class) (sum_over_time(cwv_inp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
+          "expr": "histogram_quantile(0.75, sum by (le, device_class) (sum_over_time(cwv_inp_milliseconds_bucket{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
           "legendFormat": "{{device_class}}",
           "instant": true,
           "range": false,
@@ -1443,7 +1443,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le, browser_engine) (sum_over_time(cwv_inp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
+          "expr": "histogram_quantile(0.75, sum by (le, browser_engine) (sum_over_time(cwv_inp_milliseconds_bucket{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
           "legendFormat": "{{browser_engine}}",
           "instant": true,
           "range": false,
@@ -1508,7 +1508,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le, page_lang) (sum_over_time(cwv_inp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
+          "expr": "histogram_quantile(0.75, sum by (le, page_lang) (sum_over_time(cwv_inp_milliseconds_bucket{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
           "legendFormat": "{{page_lang}}",
           "instant": true,
           "range": false,
@@ -1586,7 +1586,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le, page_route) (sum_over_time(cwv_lcp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
+          "expr": "histogram_quantile(0.75, sum by (le, page_route) (sum_over_time(cwv_lcp_milliseconds_bucket{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
           "legendFormat": "{{page_route}}",
           "instant": true,
           "range": false,
@@ -1651,7 +1651,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le, page_route) (sum_over_time(cwv_inp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
+          "expr": "histogram_quantile(0.75, sum by (le, page_route) (sum_over_time(cwv_inp_milliseconds_bucket{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
           "legendFormat": "{{page_route}}",
           "instant": true,
           "range": false,
@@ -1716,7 +1716,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le, interaction_type) (sum_over_time(cwv_inp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
+          "expr": "histogram_quantile(0.75, sum by (le, interaction_type) (sum_over_time(cwv_inp_milliseconds_bucket{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
           "legendFormat": "{{interaction_type}}",
           "instant": true,
           "range": false,
@@ -1794,7 +1794,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "sum by (page_route) (sum_over_time(cwv_ttfb_milliseconds_count{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__interval]))",
+          "expr": "sum by (page_route) (sum_over_time(cwv_ttfb_milliseconds_count{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__interval]))",
           "legendFormat": "{{page_route}}",
           "instant": false,
           "range": true,
@@ -1847,7 +1847,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "sum by (rating) (sum_over_time(cwv_lcp_milliseconds_count{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__interval]))",
+          "expr": "sum by (rating) (sum_over_time(cwv_lcp_milliseconds_count{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__interval]))",
           "legendFormat": "{{rating}}",
           "instant": false,
           "range": true,
@@ -1900,7 +1900,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "sum(sum_over_time(cwv_lcp_milliseconds_count{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__interval]))",
+          "expr": "sum(sum_over_time(cwv_lcp_milliseconds_count{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__interval]))",
           "legendFormat": "LCP",
           "instant": false,
           "range": true,
@@ -1911,7 +1911,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "sum(sum_over_time(cwv_inp_milliseconds_count{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__interval]))",
+          "expr": "sum(sum_over_time(cwv_inp_milliseconds_count{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__interval]))",
           "legendFormat": "INP",
           "instant": false,
           "range": true,
@@ -1922,7 +1922,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "sum(sum_over_time(cwv_cls_count{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__interval]))",
+          "expr": "sum(sum_over_time(cwv_cls_count{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__interval]))",
           "legendFormat": "CLS",
           "instant": false,
           "range": true,
@@ -1933,7 +1933,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "sum(sum_over_time(cwv_fcp_milliseconds_count{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__interval]))",
+          "expr": "sum(sum_over_time(cwv_fcp_milliseconds_count{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__interval]))",
           "legendFormat": "FCP",
           "instant": false,
           "range": true,
@@ -1944,7 +1944,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "sum(sum_over_time(cwv_ttfb_milliseconds_count{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__interval]))",
+          "expr": "sum(sum_over_time(cwv_ttfb_milliseconds_count{job=\"yceffort-blog\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__interval]))",
           "legendFormat": "TTFB",
           "instant": false,
           "range": true,

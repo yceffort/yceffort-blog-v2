@@ -81,6 +81,9 @@ class Layout:
             self.newline()
         panel["id"] = self.next_id
         panel["gridPos"] = {"x": self.x, "y": self.y, "w": w, "h": h}
+        # 한 패널 안의 쿼리는 refId 가 달라야 한다. 같으면 Grafana 가 query.duplicateRefId 로 거부한다.
+        for i, target in enumerate(panel.get("targets", [])):
+            target["refId"] = chr(ord("A") + i)
         self.next_id += 1
         self.panels.append(panel)
         self.x += w
@@ -233,22 +236,30 @@ def ops_dashboard():
         24, 7,
     )
     loss = ("위쪽 필터와 상관없다. collector 가 1분마다 Mimir 와 자기 지표를 긁어 넣는다. 버리는 일이 드물어 처음 생긴 시리즈의 첫 값을 "
-            "increase() 가 세지 못하므로(blog-experiments 의 E8 과 같은 이유) 다시 시작한 뒤의 누적값을 그대로 보여 준다.")
-    lay.add(
-        bargauge("Mimir 가 버린 표본 (Mimir 시작 뒤 누적)", 'max by (reason) (max_over_time(cortex_discarded_samples_total{job="mimir", user="blog"}[$__range])) or on() label_replace(vector(0), "reason", "없음", "", "")',
-                 "{{reason}}", "short", {"mode": "absolute", "steps": [{"color": "green", "value": None}, {"color": "red", "value": 1}]},
-                 description="표본은 시리즈 하나의 값이다. 페이지 로드 하나의 지표 값은 버킷과 count, sum 을 합쳐 표본 11~13개다. sample_duplicate_timestamp 는 같은 시리즈의 값이 같은 밀리초에 두 번 들어와 하나를 버린 것이다. " + loss),
-        12, 6,
+            "increase() 가 세지 못하므로(blog-experiments 의 E8 과 같은 이유) 카운터의 최신값, 즉 지금 프로세스가 시작한 뒤의 누적값을 보여 준다. "
+            "값은 그 대상을 3분 안에 정상으로 긁었을 때만 표시하고, 긁지 못했거나 3분 넘게 새 값이 없으면 '수집 안 됨' 이다.")
+
+    def scraped(job):
+        # 값을 믿어도 되는 상태: 마지막 수집이 성공했고(up == 1) 3분(수집 주기의 3배) 안이다.
+        # 이 조건이 아니면 마지막으로 긁은 0 도 숨긴다. 조회 범위(5분) 안에 남은 옛 값이 정상처럼 보이지 않게 한다.
+        return f'max((up{{job="{job}"}} == 1) and (time() - timestamp(up{{job="{job}"}}) < 180))'
+
+    red_from_one = {"mode": "absolute", "steps": [{"color": "green", "value": None}, {"color": "red", "value": 1}]}
+    discarded = bargauge(
+        "Mimir 가 버린 표본 (Mimir 시작 뒤 누적)",
+        f'(max by (reason) (cortex_discarded_samples_total{{job="mimir", user="blog"}}) or on() label_replace(vector(0), "reason", "없음", "", "")) and on() {scraped("mimir")}',
+        "{{reason}}", "short", red_from_one,
+        description="표본은 시리즈 하나의 값이다. 페이지 로드 하나의 지표 값은 버킷과 count, sum 을 합쳐 표본 11~13개다. sample_duplicate_timestamp 는 같은 시리즈의 값이 같은 밀리초에 두 번 들어와 하나를 버린 것이다. " + loss,
     )
-    lay.add(
-        stat("collector 가 받지 못하거나 내보내지 못한 수 (collector 시작 뒤 누적)",
-             'sum(max_over_time({__name__=~"otelcol_(receiver_refused|exporter_send_failed)_(metric_points|spans)_total", job="collector"}[$__range])) or vector(0)',
-             "short", {"mode": "absolute", "steps": [{"color": "green", "value": None}, {"color": "red", "value": 1}]},
-             description="metric 데이터 포인트와 span 의 합이다. " + loss),
-        12, 6,
+    failed = stat(
+        "collector 가 받지 못하거나 내보내지 못한 수 (collector 시작 뒤 누적)",
+        f'(sum({{__name__=~"otelcol_(receiver_refused|exporter_send_failed)_(metric_points|spans)_total", job="collector"}}) or on() vector(0)) and on() {scraped("collector")}',
+        "short", red_from_one,
+        description="metric 데이터 포인트와 span 의 합이다. " + loss,
     )
-    for i, t in enumerate(lay.panels[-1]["targets"]):
-        t["refId"] = chr(ord("A") + i)
+    for panel in (discarded, failed):
+        panel["fieldConfig"]["defaults"]["noValue"] = "수집 안 됨"
+        lay.add(panel, 12, 6)
     return {
         "uid": "cwv-ops",
         "title": "CWV 운영 (Mimir)",

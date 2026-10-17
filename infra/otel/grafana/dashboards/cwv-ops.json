@@ -1995,7 +1995,7 @@
           "legendFormat": "INP",
           "instant": false,
           "range": true,
-          "refId": "A"
+          "refId": "B"
         },
         {
           "datasource": {
@@ -2006,7 +2006,7 @@
           "legendFormat": "CLS",
           "instant": false,
           "range": true,
-          "refId": "A"
+          "refId": "C"
         },
         {
           "datasource": {
@@ -2017,7 +2017,7 @@
           "legendFormat": "FCP",
           "instant": false,
           "range": true,
-          "refId": "A"
+          "refId": "D"
         },
         {
           "datasource": {
@@ -2028,7 +2028,7 @@
           "legendFormat": "TTFB",
           "instant": false,
           "range": true,
-          "refId": "A"
+          "refId": "E"
         }
       ],
       "fieldConfig": {
@@ -2062,7 +2062,7 @@
     {
       "type": "bargauge",
       "title": "Mimir 가 버린 표본 (Mimir 시작 뒤 누적)",
-      "description": "표본은 시리즈 하나의 값이다. 페이지 로드 하나의 지표 값은 버킷과 count, sum 을 합쳐 표본 11~13개다. sample_duplicate_timestamp 는 같은 시리즈의 값이 같은 밀리초에 두 번 들어와 하나를 버린 것이다. 위쪽 필터와 상관없다. collector 가 1분마다 Mimir 와 자기 지표를 긁어 넣는다. 버리는 일이 드물어 처음 생긴 시리즈의 첫 값을 increase() 가 세지 못하므로(blog-experiments 의 E8 과 같은 이유) 다시 시작한 뒤의 누적값을 그대로 보여 준다.",
+      "description": "표본은 시리즈 하나의 값이다. 페이지 로드 하나의 지표 값은 버킷과 count, sum 을 합쳐 표본 11~13개다. sample_duplicate_timestamp 는 같은 시리즈의 값이 같은 밀리초에 두 번 들어와 하나를 버린 것이다. 위쪽 필터와 상관없다. collector 가 1분마다 Mimir 와 자기 지표를 긁어 넣는다. 버리는 일이 드물어 처음 생긴 시리즈의 첫 값을 increase() 가 세지 못하므로(blog-experiments 의 E8 과 같은 이유) 카운터의 최신값, 즉 지금 프로세스가 시작한 뒤의 누적값을 보여 준다. 값은 그 대상을 3분 안에 정상으로 긁었을 때만 표시하고, 긁지 못했거나 3분 넘게 새 값이 없으면 '수집 안 됨' 이다.",
       "datasource": {
         "type": "prometheus",
         "uid": "mimir"
@@ -2073,7 +2073,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "max by (reason) (max_over_time(cortex_discarded_samples_total{job=\"mimir\", user=\"blog\"}[$__range])) or on() label_replace(vector(0), \"reason\", \"없음\", \"\", \"\")",
+          "expr": "(max by (reason) (cortex_discarded_samples_total{job=\"mimir\", user=\"blog\"}) or on() label_replace(vector(0), \"reason\", \"없음\", \"\", \"\")) and on() max((up{job=\"mimir\"} == 1) and (time() - timestamp(up{job=\"mimir\"}) < 180))",
           "legendFormat": "{{reason}}",
           "instant": true,
           "range": false,
@@ -2099,7 +2099,8 @@
           "color": {
             "mode": "thresholds"
           },
-          "displayName": "${__field.labels.reason}"
+          "displayName": "${__field.labels.reason}",
+          "noValue": "수집 안 됨"
         },
         "overrides": []
       },
@@ -2123,7 +2124,7 @@
     {
       "type": "stat",
       "title": "collector 가 받지 못하거나 내보내지 못한 수 (collector 시작 뒤 누적)",
-      "description": "metric 데이터 포인트와 span 의 합이다. 위쪽 필터와 상관없다. collector 가 1분마다 Mimir 와 자기 지표를 긁어 넣는다. 버리는 일이 드물어 처음 생긴 시리즈의 첫 값을 increase() 가 세지 못하므로(blog-experiments 의 E8 과 같은 이유) 다시 시작한 뒤의 누적값을 그대로 보여 준다.",
+      "description": "metric 데이터 포인트와 span 의 합이다. 위쪽 필터와 상관없다. collector 가 1분마다 Mimir 와 자기 지표를 긁어 넣는다. 버리는 일이 드물어 처음 생긴 시리즈의 첫 값을 increase() 가 세지 못하므로(blog-experiments 의 E8 과 같은 이유) 카운터의 최신값, 즉 지금 프로세스가 시작한 뒤의 누적값을 보여 준다. 값은 그 대상을 3분 안에 정상으로 긁었을 때만 표시하고, 긁지 못했거나 3분 넘게 새 값이 없으면 '수집 안 됨' 이다.",
       "datasource": {
         "type": "prometheus",
         "uid": "mimir"
@@ -2134,7 +2135,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "sum(max_over_time({__name__=~\"otelcol_(receiver_refused|exporter_send_failed)_(metric_points|spans)_total\", job=\"collector\"}[$__range])) or vector(0)",
+          "expr": "(sum({__name__=~\"otelcol_(receiver_refused|exporter_send_failed)_(metric_points|spans)_total\", job=\"collector\"}) or on() vector(0)) and on() max((up{job=\"collector\"} == 1) and (time() - timestamp(up{job=\"collector\"}) < 180))",
           "legendFormat": "",
           "instant": true,
           "range": false,
@@ -2159,7 +2160,8 @@
           },
           "color": {
             "mode": "thresholds"
-          }
+          },
+          "noValue": "수집 안 됨"
         },
         "overrides": []
       },

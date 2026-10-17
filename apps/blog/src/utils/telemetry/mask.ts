@@ -9,6 +9,9 @@ export function maskSelector(selector: string | undefined): string | undefined {
   if (!selector) return undefined
 
   const masked = selector
+    // StyleX 원자 클래스(`x1j9s4mx`)는 스타일 하나씩이라 요소를 구분하지 못하고, 스타일을 고치면 이름이 바뀐다.
+    // 남겨 두면 같은 요소가 배포마다 다른 값으로 갈린다. 숫자가 많으면 아래 규칙에 걸려 `x{n}` 이 되기도 한다.
+    .replace(/\.x[0-9a-z]{5,8}(?![\w-])/g, '')
     // selector 에서 `.` 은 class 구분자라 local part 에 넣지 않는다. 넣으면 앞의 태그 이름까지 지운다.
     .replace(/[\w+-]+@[\w-]+(\.[\w-]+)+/g, '{email}')
     .replace(/\d{5,}/g, '{n}')

@@ -34,6 +34,9 @@ export function toAttributes(metric: MetricWithAttribution): Attributes {
         'cwv.lcp.resource_load_delay': ms(a.resourceLoadDelay),
         'cwv.lcp.resource_load_duration': ms(a.resourceLoadDuration),
         'cwv.lcp.element_render_delay': ms(a.elementRenderDelay),
+        // 리소스 URL 이 있으면 이미지(또는 배경 이미지), 없으면 글자 블록이다.
+        'cwv.lcp.kind': a.url ? 'image' : 'text',
+        'cwv.lcp.size': a.lcpEntry?.size,
       }
     }
     case 'CLS': {

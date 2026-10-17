@@ -7,10 +7,10 @@ import type {MetricWithAttribution} from 'web-vitals/attribution'
  */
 export function toLabels(
   metric: MetricWithAttribution,
-  route: string,
+  pageLabels: Attributes,
 ): Attributes {
   const labels: Attributes = {
-    'page.route': route,
+    ...pageLabels,
     'navigation.type': metric.navigationType,
     rating: metric.rating,
   }

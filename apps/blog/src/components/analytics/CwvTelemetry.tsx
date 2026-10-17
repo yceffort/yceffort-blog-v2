@@ -3,7 +3,6 @@
 import {useEffect} from 'react'
 
 import {SiteConfig} from '@/config'
-import {routeOf} from '@/utils/telemetry/routes'
 
 /**
  * CWV 를 OpenTelemetry 로 infra/otel 수집 서버에 보낸다. 페이지 로드(하드 내비게이션) 하나가 trace 하나다.
@@ -13,10 +12,7 @@ import {routeOf} from '@/utils/telemetry/routes'
 export function CwvTelemetry() {
   useEffect(() => {
     void import('@/utils/telemetry/setup').then(({startTelemetry}) =>
-      startTelemetry({
-        collectorUrl: SiteConfig.otelCollectorUrl,
-        route: routeOf(window.location.pathname),
-      }),
+      startTelemetry({collectorUrl: SiteConfig.otelCollectorUrl}),
     )
   }, [])
 

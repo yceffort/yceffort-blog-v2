@@ -9,6 +9,22 @@ describe('maskSelector', () => {
     )
   })
 
+  it('StyleX 원자 클래스를 지우고 이름 있는 클래스만 남긴다', () => {
+    expect(
+      maskSelector(
+        'div.post-author.x1j9s4mx.x1pokpl6.xtvlv45>img.x8ufqv0.xau0sxb.xt1nusk',
+      ),
+    ).toBe('div.post-author>img')
+    expect(maskSelector('div.thumb.x1234567.x18g2nej>img.x1pc235d')).toBe(
+      'div.thumb>img',
+    )
+    expect(maskSelector('a.x19x9tm7.x1oov6x2.xqx2hci')).toBe('a')
+  })
+
+  it('x 로 시작해도 원자 클래스 모양이 아니면 남긴다', () => {
+    expect(maskSelector('div.x-scroll>span.xl')).toBe('div.x-scroll>span.xl')
+  })
+
   it('짧은 숫자는 남긴다', () => {
     expect(maskSelector('li.item-3>img')).toBe('li.item-3>img')
   })

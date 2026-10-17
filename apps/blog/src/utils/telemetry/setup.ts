@@ -17,30 +17,13 @@ import type {Metric} from 'web-vitals'
 
 import {toAttributes} from './attributes'
 import {BUCKETS} from './buckets'
+import {readPageContext} from './context'
 import {toLabels} from './labels'
 import {createPageTrace} from './page-trace'
-import type {Route} from './routes'
 import {observeVitals} from './vitals'
 
 interface Options {
   collectorUrl: string
-  /** 메트릭 라벨에 쓰는 화면 이름. URL 을 그대로 쓰지 않고 `routeOf` 로 줄여서 넘긴다. */
-  route: Route
-}
-
-type NavigatorExtras = Navigator & {
-  connection?: {effectiveType?: string}
-  deviceMemory?: number
-}
-
-function baseAttributes(route: Route) {
-  const nav = navigator as NavigatorExtras
-  return {
-    'page.route': route,
-    'network.effective_type': nav.connection?.effectiveType ?? 'unknown',
-    'device.memory': nav.deviceMemory ?? -1,
-    'device.cores': nav.hardwareConcurrency ?? -1,
-  }
 }
 
 /** CLS 는 점수라서 span 길이로 넣을 때 1000 을 곱한다. TraceQL 의 초 단위 결과가 그대로 CLS 가 된다. */
@@ -48,7 +31,8 @@ function spanDurationMs(metric: {name: Metric['name']; value: number}): number {
   return metric.name === 'CLS' ? metric.value * 1000 : metric.value
 }
 
-export function startTelemetry({collectorUrl, route}: Options): void {
+export function startTelemetry({collectorUrl}: Options): void {
+  const context = readPageContext()
   const resource = resourceFromAttributes({'service.name': 'yceffort-blog'})
 
   const tracerProvider = new BasicTracerProvider({
@@ -86,7 +70,7 @@ export function startTelemetry({collectorUrl, route}: Options): void {
 
   const record = createPageTrace(
     tracerProvider.getTracer('yceffort-blog/cwv'),
-    () => baseAttributes(route),
+    () => context.attributes,
   )
 
   const flush = () => {
@@ -108,6 +92,9 @@ export function startTelemetry({collectorUrl, route}: Options): void {
       ...toAttributes(metric),
       ...extra,
     })
-    histograms[metric.name].record(metric.value, toLabels(metric, route))
+    histograms[metric.name].record(
+      metric.value,
+      toLabels(metric, context.labels),
+    )
   }, flush)
 }

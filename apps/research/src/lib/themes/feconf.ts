@@ -187,12 +187,13 @@ section.chapter > ol > li { border-top: 1px solid var(--rule); padding-top: 16px
 section.chapter > ol > li:has(strong) { border-top: 4px solid var(--blue); padding-top: 13px; color: var(--ink); }
 section.chapter > ol strong { background: var(--blue); color: #fff; padding: 3px 9px; }
 
-section.profile { --marp-slide-padding: 130px 100px 80px 320px; justify-content: center; align-content: center; }
+section.profile { --marp-slide-padding: 130px 68px 80px 320px; justify-content: center; align-content: center; }
 section.profile > p:has(img) { position: absolute; left: 68px; top: 218px; width: 190px; margin: 0; border-bottom: 8px solid var(--yellow); }
 section.profile h2 { font-size: 30px; font-weight: 400; margin-bottom: 45px; }
 section.profile h3 { font-size: 72px; margin: 0 0 12px; }
 section.profile > p { font-size: 24px; }
 section.profile > ul { font-size: 22px; line-height: 1.7; margin: 24px 0; }
+section.profile > ul > li { white-space: nowrap; }
 section.profile > p:has(> em:only-child) { font-size: 18px; }
 
 section.home { --marp-slide-padding: 96px 68px 64px 400px; }

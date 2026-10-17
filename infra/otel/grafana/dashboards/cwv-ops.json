@@ -238,7 +238,7 @@
     {
       "type": "stat",
       "title": "INP p75",
-      "description": "",
+      "description": "페이지가 처음 숨겨진 시점의 값이다. 다시 보였다가 숨겨지며 바뀐 값은 넣지 않는다(CWV 원인 분석 대시보드의 'CLS, INP 갱신' 패널).",
       "datasource": {
         "type": "prometheus",
         "uid": "mimir"
@@ -302,7 +302,7 @@
     {
       "type": "stat",
       "title": "CLS p75",
-      "description": "",
+      "description": "페이지가 처음 숨겨진 시점의 값이다. 다시 보였다가 숨겨지며 바뀐 값은 넣지 않는다(CWV 원인 분석 대시보드의 'CLS, INP 갱신' 패널).",
       "datasource": {
         "type": "prometheus",
         "uid": "mimir"
@@ -1874,7 +1874,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "sum by (page_route) (sum_over_time(cwv_fcp_milliseconds_count{job=\"yceffort-blog\", navigation_type=\"soft-navigation\"}[$__interval]))",
+          "expr": "sum by (page_route) (sum_over_time(cwv_fcp_milliseconds_count{job=\"yceffort-blog\", navigation_type=\"soft-navigation\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__interval]))",
           "legendFormat": "{{page_route}}",
           "instant": false,
           "range": true,
@@ -1995,7 +1995,7 @@
           "legendFormat": "INP",
           "instant": false,
           "range": true,
-          "refId": "B"
+          "refId": "A"
         },
         {
           "datasource": {
@@ -2006,7 +2006,7 @@
           "legendFormat": "CLS",
           "instant": false,
           "range": true,
-          "refId": "C"
+          "refId": "A"
         },
         {
           "datasource": {
@@ -2017,7 +2017,7 @@
           "legendFormat": "FCP",
           "instant": false,
           "range": true,
-          "refId": "D"
+          "refId": "A"
         },
         {
           "datasource": {
@@ -2028,7 +2028,7 @@
           "legendFormat": "TTFB",
           "instant": false,
           "range": true,
-          "refId": "E"
+          "refId": "A"
         }
       ],
       "fieldConfig": {
@@ -2057,6 +2057,127 @@
         "y": 60,
         "w": 24,
         "h": 7
+      }
+    },
+    {
+      "type": "bargauge",
+      "title": "Mimir 가 버린 표본 (Mimir 시작 뒤 누적)",
+      "description": "표본은 시리즈 하나의 값이다. 페이지 로드 하나의 지표 값은 버킷과 count, sum 을 합쳐 표본 11~13개다. sample_duplicate_timestamp 는 같은 시리즈의 값이 같은 밀리초에 두 번 들어와 하나를 버린 것이다. 위쪽 필터와 상관없다. collector 가 1분마다 Mimir 와 자기 지표를 긁어 넣는다. 버리는 일이 드물어 처음 생긴 시리즈의 첫 값을 increase() 가 세지 못하므로(blog-experiments 의 E8 과 같은 이유) 다시 시작한 뒤의 누적값을 그대로 보여 준다.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "mimir"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "mimir"
+          },
+          "expr": "max by (reason) (max_over_time(cortex_discarded_samples_total{job=\"mimir\", user=\"blog\"}[$__range])) or on() label_replace(vector(0), \"reason\", \"없음\", \"\", \"\")",
+          "legendFormat": "{{reason}}",
+          "instant": true,
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          },
+          "displayName": "${__field.labels.reason}"
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "basic",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        }
+      },
+      "id": 35,
+      "gridPos": {
+        "x": 0,
+        "y": 67,
+        "w": 12,
+        "h": 6
+      }
+    },
+    {
+      "type": "stat",
+      "title": "collector 가 받지 못하거나 내보내지 못한 수 (collector 시작 뒤 누적)",
+      "description": "metric 데이터 포인트와 span 의 합이다. 위쪽 필터와 상관없다. collector 가 1분마다 Mimir 와 자기 지표를 긁어 넣는다. 버리는 일이 드물어 처음 생긴 시리즈의 첫 값을 increase() 가 세지 못하므로(blog-experiments 의 E8 과 같은 이유) 다시 시작한 뒤의 누적값을 그대로 보여 준다.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "mimir"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "mimir"
+          },
+          "expr": "sum(max_over_time({__name__=~\"otelcol_(receiver_refused|exporter_send_failed)_(metric_points|spans)_total\", job=\"collector\"}[$__range])) or vector(0)",
+          "legendFormat": "",
+          "instant": true,
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none"
+      },
+      "id": 36,
+      "gridPos": {
+        "x": 12,
+        "y": 67,
+        "w": 12,
+        "h": 6
       }
     }
   ]

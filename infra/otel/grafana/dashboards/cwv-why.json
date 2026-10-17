@@ -1114,8 +1114,8 @@
     },
     {
       "type": "timeseries",
-      "title": "LCP 확정 방식",
-      "description": "web-vitals 는 첫 입력이나 hidden 에서 확정한다. quiet 는 후보가 3초 동안 바뀌지 않아 이 코드가 확정한 것이다.",
+      "title": "quiet 3초 값과 정식 LCP",
+      "description": "LCP 는 web-vitals 가 첫 입력이나 hidden 에서 확정한 값만 기록한다. 후보가 처음으로 3초 동안 바뀌지 않았던 때의 값을 비교용으로 남긴다. lower 는 그 값을 최종값으로 썼다면 LCP 를 작게 기록했을 페이지 로드, same 은 같은 값, none 은 3초 멈춘 적 없이 확정된 것이다.",
       "datasource": {
         "type": "tempo",
         "uid": "tempo"
@@ -1127,7 +1127,7 @@
             "uid": "tempo"
           },
           "queryType": "traceql",
-          "query": "{resource.service.name=\"yceffort-blog\" && span.cwv.navigation_type=~\"$nav\" && span.page.route=~\"$route\" && name=\"cwv.lcp\"} | count_over_time() by (span.cwv.lcp.finalized_by)",
+          "query": "{resource.service.name=\"yceffort-blog\" && span.cwv.navigation_type=~\"$nav\" && span.page.route=~\"$route\" && name=\"cwv.lcp\"} | count_over_time() by (span.cwv.lcp.quiet)",
           "metricsQueryType": "range",
           "step": "5m",
           "refId": "A"
@@ -1160,6 +1160,59 @@
       "id": 23,
       "gridPos": {
         "x": 0,
+        "y": 49,
+        "w": 8,
+        "h": 8
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "CLS, INP 갱신",
+      "description": "같은 id 로 다시 보고된 CLS, INP. Mimir 에는 처음 숨겨진 시점의 값만 넣고 이 갱신은 넣지 않는다. rating_changed 가 true 면 등급이 바뀐 갱신이다.",
+      "datasource": {
+        "type": "tempo",
+        "uid": "tempo"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "tempo",
+            "uid": "tempo"
+          },
+          "queryType": "traceql",
+          "query": "{resource.service.name=\"yceffort-blog\" && span.cwv.navigation_type=~\"$nav\" && span.page.route=~\"$route\" && name=~\"cwv.(cls|inp).update\"} | count_over_time() by (name, span.cwv.update.rating_changed)",
+          "metricsQueryType": "range",
+          "step": "5m",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 80,
+            "spanNulls": true,
+            "stacking": {
+              "mode": "normal"
+            },
+            "drawStyle": "bars"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "id": 24,
+      "gridPos": {
+        "x": 8,
         "y": 49,
         "w": 8,
         "h": 8
@@ -1205,10 +1258,10 @@
       "options": {
         "showHeader": true
       },
-      "id": 24,
+      "id": 25,
       "gridPos": {
-        "x": 8,
-        "y": 49,
+        "x": 0,
+        "y": 57,
         "w": 16,
         "h": 8
       }

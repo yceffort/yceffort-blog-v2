@@ -12,7 +12,9 @@ MIMIR = {"type": "prometheus", "uid": "mimir"}
 TEMPO = {"type": "tempo", "uid": "tempo"}
 
 # Mimir 는 브라우저가 보낸 delta 를 그대로 저장한다(native delta ingestion). 샘플 하나가 페이지 로드 하나의 값이라
-# 구간 안의 샘플을 더하면(sum_over_time) 건수와 버킷이 정확히 나온다. increase() 는 쓰지 않는다.
+# 구간 안의 샘플을 더하면(sum_over_time) 건수와 버킷이 나온다. increase() 는 쓰지 않는다.
+# 다만 같은 시리즈의 값 두 개가 collector 에 같은 밀리초에 들어오면 Mimir 가 하나를 버린다(blog-experiments 의 E10).
+# 버린 수는 '저장되지 못한 값' 패널에 나온다.
 AGG = "sum_over_time"
 
 # (이름, 시리즈 접두사, good 경계, poor 경계, 단위)
@@ -23,7 +25,11 @@ METRICS = [
     ("FCP", "cwv_fcp_milliseconds", 1800, 3000, "ms"),
     ("TTFB", "cwv_ttfb_milliseconds", 800, 1800, "ms"),
 ]
-SEL = 'job="yceffort-blog", navigation_type=~"$nav", page_route=~"$route", page_lang=~"$lang", device_class=~"$device", browser_engine=~"$engine"'
+def selector(nav='navigation_type=~"$nav"'):
+    return f'job="yceffort-blog", {nav}, page_route=~"$route", page_lang=~"$lang", device_class=~"$device", browser_engine=~"$engine"'
+
+
+SEL = selector()
 # 이동 변수. web-vitals 의 navigationType 값이다. SPA 이동은 Chromium 151 이상에서만 잡힌다.
 NAV_OPTIONS = [
     ("첫 로드", "navigate|reload|back-forward|back-forward-cache|prerender|restore"),
@@ -164,7 +170,8 @@ def ops_dashboard():
     lay = Layout()
     lay.row("지금 얼마나 느린가 (선택 구간 전체의 p75)")
     for (name, series, good, poor, unit), w in zip(METRICS, WIDTHS):
-        lay.add(stat(f"{name} p75", p75(series, "$__range"), unit, thresholds(good, poor), decimals=3 if unit == "none" else None), w, 4)
+        first_hidden = "페이지가 처음 숨겨진 시점의 값이다. 다시 보였다가 숨겨지며 바뀐 값은 넣지 않는다(CWV 원인 분석 대시보드의 'CLS, INP 갱신' 패널)." if name in ("CLS", "INP") else ""
+        lay.add(stat(f"{name} p75", p75(series, "$__range"), unit, thresholds(good, poor), description=first_hidden, decimals=3 if unit == "none" else None), w, 4)
     lay.row("good 비율 (good 경계 버킷 / 전체)")
     ratio_th = {"mode": "absolute", "steps": [{"color": "red", "value": None}, {"color": "orange", "value": 0.5}, {"color": "green", "value": 0.75}]}
     for (name, series, good, poor, unit), w in zip(METRICS, WIDTHS):
@@ -206,7 +213,7 @@ def ops_dashboard():
     lay.add(
         timeseries(
             "화면별 SPA 이동",
-            [prom('sum by (page_route) (' + AGG + '(cwv_fcp_milliseconds_count{job="yceffort-blog", navigation_type="soft-navigation"}[$__interval]))', "{{page_route}}")],
+            [prom(f"sum by (page_route) ({AGG}(cwv_fcp_milliseconds_count{{{selector('navigation_type=\"soft-navigation\"')}}}[$__interval]))", "{{page_route}}")],
             "short", MIMIR, stack=True,
             description="블로그 안에서 링크로 옮겨 간 횟수. SPA 이동 뒤 첫 contentful paint(FCP)가 보고된 수로 센다. Chromium 151 이상만 보고하고, 이동 변수와 상관없이 SPA 이동만 센다.",
         ),
@@ -224,6 +231,21 @@ def ops_dashboard():
             description="지표마다 보고 조건이 달라 건수가 다르다. INP 는 입력이 있어야, CLS 는 배치가 바뀌거나 페이지가 숨겨져야 나온다.",
         ),
         24, 7,
+    )
+    loss = ("위쪽 필터와 상관없다. collector 가 1분마다 Mimir 와 자기 지표를 긁어 넣는다. 버리는 일이 드물어 처음 생긴 시리즈의 첫 값을 "
+            "increase() 가 세지 못하므로(blog-experiments 의 E8 과 같은 이유) 다시 시작한 뒤의 누적값을 그대로 보여 준다.")
+    lay.add(
+        bargauge("Mimir 가 버린 표본 (Mimir 시작 뒤 누적)", 'max by (reason) (max_over_time(cortex_discarded_samples_total{job="mimir", user="blog"}[$__range])) or on() label_replace(vector(0), "reason", "없음", "", "")',
+                 "{{reason}}", "short", {"mode": "absolute", "steps": [{"color": "green", "value": None}, {"color": "red", "value": 1}]},
+                 description="표본은 시리즈 하나의 값이다. 페이지 로드 하나의 지표 값은 버킷과 count, sum 을 합쳐 표본 11~13개다. sample_duplicate_timestamp 는 같은 시리즈의 값이 같은 밀리초에 두 번 들어와 하나를 버린 것이다. " + loss),
+        12, 6,
+    )
+    lay.add(
+        stat("collector 가 받지 못하거나 내보내지 못한 수 (collector 시작 뒤 누적)",
+             'sum(max_over_time({__name__=~"otelcol_(receiver_refused|exporter_send_failed)_(metric_points|spans)_total", job="collector"}[$__range])) or vector(0)',
+             "short", {"mode": "absolute", "steps": [{"color": "green", "value": None}, {"color": "red", "value": 1}]},
+             description="metric 데이터 포인트와 span 의 합이다. " + loss),
+        12, 6,
     )
     for i, t in enumerate(lay.panels[-1]["targets"]):
         t["refId"] = chr(ord("A") + i)
@@ -317,8 +339,13 @@ def why_dashboard():
     lay.add(tempo_ts("CLS 를 만든 요소", f'{{{FILTER} && name="cwv.cls" && duration > 0ms}} | count_over_time() by (span.cwv.cls.largest_shift_target)', "short", stack=True), 12, 7)
     lay.row("확정 방식과 느린 페이지 로드")
     lay.add(
-        tempo_ts("LCP 확정 방식", f'{{{FILTER} && name="cwv.lcp"}} | count_over_time() by (span.cwv.lcp.finalized_by)', "short", stack=True,
-                 description="web-vitals 는 첫 입력이나 hidden 에서 확정한다. quiet 는 후보가 3초 동안 바뀌지 않아 이 코드가 확정한 것이다."),
+        tempo_ts("quiet 3초 값과 정식 LCP", f'{{{FILTER} && name="cwv.lcp"}} | count_over_time() by (span.cwv.lcp.quiet)', "short", stack=True,
+                 description="LCP 는 web-vitals 가 첫 입력이나 hidden 에서 확정한 값만 기록한다. 후보가 처음으로 3초 동안 바뀌지 않았던 때의 값을 비교용으로 남긴다. lower 는 그 값을 최종값으로 썼다면 LCP 를 작게 기록했을 페이지 로드, same 은 같은 값, none 은 3초 멈춘 적 없이 확정된 것이다."),
+        8, 8,
+    )
+    lay.add(
+        tempo_ts("CLS, INP 갱신", f'{{{FILTER} && name=~"cwv.(cls|inp).update"}} | count_over_time() by (name, span.cwv.update.rating_changed)', "short", stack=True,
+                 description="같은 id 로 다시 보고된 CLS, INP. Mimir 에는 처음 숨겨진 시점의 값만 넣고 이 갱신은 넣지 않는다. rating_changed 가 true 면 등급이 바뀐 갱신이다."),
         8, 8,
     )
     lay.add(

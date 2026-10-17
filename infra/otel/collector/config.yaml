@@ -7,6 +7,28 @@ receivers:
           allowed_origins:
             - ${env:ALLOWED_ORIGIN}
 
+  # 값이 저장되지 못하고 사라진 수를 Mimir 에 같이 남긴다. Mimir 가 버린 표본(같은 시리즈에 같은 밀리초의
+  # 값이 두 개 오면 하나를 버린다, blog-experiments 의 E10)과 collector 가 받은 수, 내보내지 못한 수다.
+  prometheus/loss:
+    config:
+      scrape_configs:
+        - job_name: mimir
+          scrape_interval: 60s
+          static_configs:
+            - targets: ['mimir:9009']
+          metric_relabel_configs:
+            - source_labels: [__name__]
+              regex: cortex_discarded_samples_total
+              action: keep
+        - job_name: collector
+          scrape_interval: 60s
+          static_configs:
+            - targets: ['localhost:8888']
+          metric_relabel_configs:
+            - source_labels: [__name__]
+              regex: otelcol_(receiver_accepted|receiver_refused|exporter_send_failed)_(metric_points|spans)(_total)?
+              action: keep
+
 processors:
   memory_limiter:
     check_interval: 1s
@@ -55,6 +77,10 @@ service:
     metrics:
       receivers: [otlp]
       processors: [memory_limiter, transform/receive_time, batch]
+      exporters: [otlp_http/mimir]
+    metrics/loss:
+      receivers: [prometheus/loss]
+      processors: [batch]
       exporters: [otlp_http/mimir]
   telemetry:
     metrics:

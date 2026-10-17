@@ -1,0 +1,7 @@
+apiVersion: 1
+
+providers:
+  - name: cwv
+    type: file
+    options:
+      path: /var/lib/grafana/dashboards

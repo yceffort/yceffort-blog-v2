@@ -1,0 +1,12 @@
+# OTLP/HTTP 두 경로만 collector 로 넘긴다. CORS 는 collector 가 처리한다.
+{$OTEL_DOMAIN} {
+	@otlp path /v1/traces /v1/metrics
+	handle @otlp {
+		# 떠날 때의 keepalive fetch 는 본문 합계가 64KiB 로 제한된다(fetch 명세).
+		request_body {
+			max_size 256KB
+		}
+		reverse_proxy collector:4318
+	}
+	respond 404
+}

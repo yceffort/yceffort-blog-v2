@@ -22,7 +22,8 @@
     "packages/markdown-rs/vendor/**",
     "**/*.css",
     "**/*.scss",
-    "**/*.html"
+    "**/*.html",
+    "infra/otel/grafana/dashboards/**"
   ],
   "overrides": [
     {

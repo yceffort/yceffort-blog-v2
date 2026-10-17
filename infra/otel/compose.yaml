@@ -1,0 +1,72 @@
+# 블로그의 Core Web Vitals 를 받는 수집 서버. 구성과 버전은 blog-experiments 의 cwv-otel-grafana lab 과 같다.
+# 사용: cp env.example .env 로 값을 채운 뒤 docker compose up -d
+name: blog-otel
+services:
+  caddy:
+    image: caddy:2.11.7
+    restart: unless-stopped
+    environment:
+      - OTEL_DOMAIN=${OTEL_DOMAIN:?}
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+    ports:
+      - '80:80' # 인증서 발급(HTTP-01)
+      - '443:443'
+    depends_on:
+      - collector
+
+  collector:
+    image: otel/opentelemetry-collector-contrib:0.163.1
+    restart: unless-stopped
+    command: ['--config=/etc/otelcol/config.yaml']
+    environment:
+      - ALLOWED_ORIGIN=${ALLOWED_ORIGIN:?}
+    volumes:
+      - ./collector/config.yaml:/etc/otelcol/config.yaml:ro
+    depends_on:
+      - tempo
+      - mimir
+
+  tempo:
+    image: grafana/tempo:3.1.0
+    restart: unless-stopped
+    command:
+      ['-target=all', '-config.file=/etc/tempo.yaml', '-config.expand-env=true']
+    environment:
+      - TEMPO_RETENTION=${TEMPO_RETENTION:-8760h}
+      - TEMPO_QUERY_RANGE=${TEMPO_QUERY_RANGE:-8760h}
+    volumes:
+      - ./tempo/tempo.yaml:/etc/tempo.yaml:ro
+      - tempo-data:/var/tempo
+
+  mimir:
+    image: grafana/mimir:3.2.2
+    restart: unless-stopped
+    command:
+      [
+        '-config.file=/etc/mimir.yaml',
+        '-compactor.blocks-retention-period=${MIMIR_RETENTION:-0}',
+      ]
+    volumes:
+      - ./mimir/mimir.yaml:/etc/mimir.yaml:ro
+      - mimir-data:/data
+
+  grafana:
+    image: grafana/grafana:13.2.4
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:?}
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+    ports:
+      - '127.0.0.1:3000:3000' # SSH 터널로만 연다
+    depends_on:
+      - tempo
+      - mimir
+
+volumes:
+  caddy-data:
+  tempo-data:
+  mimir-data:

@@ -1,0 +1,59 @@
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: 0.0.0.0:4318
+        cors:
+          allowed_origins:
+            - ${env:ALLOWED_ORIGIN}
+
+processors:
+  memory_limiter:
+    check_interval: 1s
+    limit_percentage: 80
+    spike_limit_percentage: 20
+
+  # 글에서 재현한 공용 관측 인프라와 같은 조건을 그대로 둔다. 판정 시점에 span 이 2개 미만인 trace 는 버린다.
+  tail_sampling:
+    decision_wait: 15s
+    policies:
+      - name: at-least-two-spans
+        type: span_count
+        span_count:
+          min_spans: 2
+
+  # 브라우저는 delta 로 보내고 Prometheus 계열 저장소는 cumulative 를 받는다.
+  # max_stale 기본값은 5분이다. 그보다 오래 샘플이 없는 시리즈는 누적값을 버린다.
+  delta_to_cumulative: {}
+
+  batch: {}
+
+exporters:
+  otlp_grpc/tempo:
+    endpoint: tempo:4317
+    tls:
+      insecure: true
+
+  prometheus_remote_write/mimir:
+    endpoint: http://mimir:9009/api/v1/push
+    headers:
+      X-Scope-OrgID: blog
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, tail_sampling, batch]
+      exporters: [otlp_grpc/tempo]
+    metrics:
+      receivers: [otlp]
+      processors: [memory_limiter, delta_to_cumulative, batch]
+      exporters: [prometheus_remote_write/mimir]
+  telemetry:
+    metrics:
+      readers:
+        - pull:
+            exporter:
+              prometheus:
+                host: 0.0.0.0
+                port: 8888

@@ -1,0 +1,34 @@
+# 단일 프로세스 Tempo. 보존 기간과 조회 범위는 .env 에서 받는다(-config.expand-env).
+stream_over_http_enabled: true
+
+server:
+  http_listen_port: 3200
+  log_level: info
+
+distributor:
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: 0.0.0.0:4317
+
+storage:
+  trace:
+    backend: local
+    wal:
+      path: /var/tempo/wal
+    local:
+      path: /var/tempo/blocks
+
+usage_report:
+  reporting_enabled: false
+
+overrides:
+  defaults:
+    read:
+      # 기본값은 trace 검색 168h, TraceQL metrics 24h 다(query_frontend 의 max_duration).
+      max_search_duration: ${TEMPO_QUERY_RANGE}
+      max_metrics_duration: ${TEMPO_QUERY_RANGE}
+    compaction:
+      # 기본값은 336h(14일)다.
+      block_retention: ${TEMPO_RETENTION}

@@ -13,11 +13,18 @@
     "test:styles:pages": "node scripts/check-page-style-parity.mjs",
     "test:styles:motion": "node scripts/check-page-motion-parity.mjs",
     "test:performance": "node scripts/compare-performance.mjs",
+    "test:telemetry": "vitest run src/utils/telemetry",
     "start": "next start"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "catalog:",
     "@google-analytics/data": "^7.0.0",
+    "@opentelemetry/api": "1.9.1",
+    "@opentelemetry/exporter-metrics-otlp-http": "0.223.0",
+    "@opentelemetry/exporter-trace-otlp-http": "0.223.0",
+    "@opentelemetry/resources": "2.12.0",
+    "@opentelemetry/sdk-metrics": "2.12.0",
+    "@opentelemetry/sdk-trace-base": "2.12.0",
     "@panzoom/panzoom": "^4.6.2",
     "@react-three/fiber": "^9.8.1",
     "@stylexjs/stylex": "catalog:",
@@ -37,11 +44,12 @@
     "reading-time": "^1.5.0",
     "sharp": "catalog:",
     "three": "^0.186.0",
-    "web-vitals": "^6.1.1"
+    "web-vitals": "6.2.3"
   },
   "devDependencies": {
     "@babel/core": "catalog:",
     "@naverpay/stylelint-config": "^1.0.0",
+    "@opentelemetry/core": "2.12.0",
     "@playwright/test": "catalog:",
     "@stylexjs/babel-plugin": "catalog:",
     "@stylexjs/postcss-plugin": "catalog:",
@@ -59,6 +67,7 @@
     "stylelint": "^17.14.1",
     "typescript": "catalog:",
     "undraw-svg": "catalog:",
-    "unified": "catalog:"
+    "unified": "catalog:",
+    "vitest": "5.0.5"
   }
 }

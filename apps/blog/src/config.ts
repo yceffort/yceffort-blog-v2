@@ -11,6 +11,8 @@ export const SiteConfig = {
   disqusShortname: '',
   postsPerPage: 5,
   googleAnalyticsId: 'G-ND58S24JBX',
+  // infra/otel 의 수집 서버. CWV 를 OpenTelemetry 로 보낸다.
+  otelCollectorUrl: 'https://otel.yceffort.kr',
   useKatex: false,
   menu: [
     {

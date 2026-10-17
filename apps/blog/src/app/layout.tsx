@@ -15,6 +15,7 @@ import '@/styles/tokens.stylex'
 
 import {Suspense, type ReactNode} from 'react'
 
+import {CwvTelemetry} from '@/components/analytics/CwvTelemetry'
 import {GoogleAnalyticsWebVitalsTracker} from '@/components/analytics/GoogleAnalyticsWebVitalsTracker'
 import {InternalNavTracker} from '@/components/analytics/InternalNavTracker'
 import * as ambientStyles from '@/components/layout/ambient.styles'
@@ -168,6 +169,7 @@ export default async function Layout({children}: {children: ReactNode}) {
           {process.env.NODE_ENV === 'production' && (
             <>
               <GoogleAnalyticsWebVitalsTracker />
+              <CwvTelemetry />
               <BotTracker />
               <ServiceWorkerRegistration />
             </>

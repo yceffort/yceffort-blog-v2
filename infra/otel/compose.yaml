@@ -61,8 +61,9 @@ services:
     restart: unless-stopped
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:?}
-      # 기본 설치로는 쓰지 않는 앱 플러그인을 받고 내장 데이터소스 플러그인마다 프로세스를 띄워 2GB 서버에서
-      # 600MiB 넘게 쓴다. Mimir(prometheus)와 Tempo 만 남기면 200MiB 안쪽이다.
+      # 기본 설치는 쓰지 않는 앱 플러그인 5개를 받고 데이터소스 플러그인 프로세스를 13개 띄운다. Mimir(prometheus)와
+      # Tempo 만 남기면 프로세스가 2개로 줄고, 같은 조건에서 메모리가 60MiB 쯤 적다(2026-10-17 로컬 측정, 기본 222~261MiB,
+      # 줄임 159~201MiB). 운영 서버에서는 줄인 상태로 240~290MiB 였다.
       - GF_PLUGINS_PREINSTALL_DISABLED=true
       - GF_PLUGINS_DISABLE_PLUGINS=elasticsearch,grafana-postgresql-datasource,grafana-pyroscope-datasource,influxdb,jaeger,loki,mssql,mysql,opentsdb,stackdriver,zipkin
     volumes:

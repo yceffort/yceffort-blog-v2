@@ -10,7 +10,7 @@
 | OpenTelemetry Collector contrib | 0.163.1 | CORS(`ALLOWED_ORIGIN`). trace 는 tail sampling(span 2개 이상, 판정 대기 15초) 뒤 Tempo 로, metric 은 받은 시각으로 바꾼 뒤 Mimir OTLP 엔드포인트로. Mimir 와 자기 지표 중 손실 수를 1분마다 긁어 Mimir 에 넣는다 |
 | Grafana Tempo                   | 3.1.0   | trace 저장. 보존 기간 `TEMPO_RETENTION`, 조회 범위 `TEMPO_QUERY_RANGE`                                                                                                                                           |
 | Grafana Mimir                   | 3.2.2   | metric 저장(테넌트 `blog`). delta 를 그대로 저장한다(native delta ingestion, 실험 기능). 보존 기간 `MIMIR_RETENTION`                                                                                             |
-| Grafana                         | 13.2.4  | 대시보드 `CWV 운영 (Mimir)`, `CWV 원인 분석 (Tempo)`. 로그인이 필요하고 `127.0.0.1:3000` 에만 붙는다. 쓰지 않는 플러그인을 꺼서 200MiB 안쪽으로 돈다                                                             |
+| Grafana                         | 13.2.4  | 대시보드 `CWV 운영 (Mimir)`, `CWV 원인 분석 (Tempo)`. 로그인이 필요하고 `127.0.0.1:3000` 에만 붙는다. 쓰지 않는 플러그인을 꺼서 플러그인 프로세스를 13개에서 2개로 줄였다(운영에서 240~290MiB)                   |
 
 밖으로 열리는 포트는 Caddy 의 80, 443 뿐이다. Tempo 3.1 은 기본값으로 TraceQL metrics 를 24시간, trace 검색을 7일까지만 조회하므로 보존 기간을 늘릴 때는 조회 범위도 같이 늘린다.
 

@@ -195,6 +195,16 @@ section.profile > p { font-size: 24px; }
 section.profile > ul { font-size: 22px; line-height: 1.7; margin: 24px 0; }
 section.profile > p:has(> em:only-child) { font-size: 18px; }
 
+section.home { --marp-slide-padding: 96px 68px 64px 520px; }
+section.home > p:has(img) { position: absolute; left: 68px; top: 96px; margin: 0; line-height: 0; }
+section.home > p:has(img) img { height: 560px; border: 1px solid var(--rule); border-radius: 24px; }
+section.home > ul { list-style: none; padding: 0; margin: 12px 0 0; }
+section.home > ul > li { border-top: 2px solid var(--blue); padding-top: 14px; margin: 0 0 24px; font-size: 23px; color: var(--muted); }
+section.home > ul > li strong { display: block; font-size: 27px; color: var(--ink); margin-bottom: 4px; }
+section.home > ul > li strong + br { display: none; }
+section.home > p { font-size: 25px; }
+section.home > p strong { background: var(--yellow); padding: 0 6px; }
+
 /* Open columns use rules and whitespace instead of filled cards. */
 section.columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 52px; align-content: start; }
 section.columns > h2, section.columns > p, section.columns > pre { grid-column: 1 / -1; }

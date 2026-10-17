@@ -18,7 +18,7 @@ description: 'web-vitals의 원인 분해 값을 OpenTelemetry로 trace는 Tempo
 
 작업에는 처음부터 몇 가지 제약이 있었다. 먼저 collector 이후의 관측 인프라는 여러 팀이 같이 쓰는 공용 인프라라서 내가 설정을 바꿀 수 없었다. 이 인프라의 collector 끝단에는 tail sampling이 걸려 있고, trace에서 metric을 만들어 주는 spanmetrics는 리소스 부담 때문에 받지 않는다. 운영 metric의 라벨은 정해진 몇 개만 허용되고, 요소 selector처럼 값의 종류가 끝없이 늘어나는 라벨은 금지다. 사내 공용 RUM 라이브러리도 다른 서비스가 함께 쓰고 있어서 고칠 수 없었고, 기존 대시보드를 위해 같은 값을 계속 보내야 했다. 그리고 화면은 iOS와 Android 앱의 웹뷰 안에서 열린다. 이 글에 나오는 판단은 대부분 이 제약 중 하나에서 나왔다.
 
-> 사내 작업은 2026년 8월 말부터 10월 중순까지 사내 검증 환경(sandbox)에서 했다. 글의 수치는 공개 재현 환경([blog-experiments/cwv-otel-grafana](https://github.com/yceffort/blog-experiments/tree/main/cwv-otel-grafana))에서 다시 잰 값을 기본으로 하고, 재현할 수 없는 iOS 웹뷰의 동작만 사내 검증 환경에서 잰 값을 출처를 밝혀 인용한다.
+> 사내 작업은 2026년 8월 말부터 10월 중순까지 사내 검증 환경(sandbox)에서 했다. 글의 수치는 공개 재현 환경([blog-experiments/cwv-otel-grafana](https://github.com/yceffort/blog-experiments/tree/cwv-otel-grafana-v1/cwv-otel-grafana))에서 다시 잰 값을 기본으로 하고, 재현할 수 없는 iOS 웹뷰의 동작만 사내 검증 환경에서 잰 값을 출처를 밝혀 인용한다.
 >
 > 재현 환경의 버전은 web-vitals 6.2.3, OTel JS 2.12.0(OTLP exporter 0.223.0), OpenTelemetry Collector contrib 0.162.0, Tempo 3.1.0, Mimir 3.2.2, Grafana 13.2.4다. 브라우저는 Playwright 1.64.1의 Chromium 156을 썼다. 버전 차이를 확인할 때는 OTel JS 1.30.1(exporter 0.57.2)과 Tempo 2.10.8을 함께 띄웠다. 인용한 소스는 모두 이 버전의 태그로 고정했다.
 

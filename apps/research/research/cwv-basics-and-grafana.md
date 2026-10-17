@@ -37,7 +37,7 @@ published: false
 | Grafana Tempo / Mimir / Grafana | 3.1.0 / 3.2.2 / 13.2.4            |
 | 브라우저                        | Playwright 1.64.1의 Chromium 156  |
 
-실험 코드와 대시보드 JSON은 [blog-experiments/cwv-otel-grafana](https://github.com/yceffort/blog-experiments/tree/main/cwv-otel-grafana)에 있다.
+실험 코드와 대시보드 JSON은 [blog-experiments/cwv-otel-grafana](https://github.com/yceffort/blog-experiments/tree/cwv-otel-grafana-v1/cwv-otel-grafana)에 있다.
 
 ---
 
@@ -559,4 +559,4 @@ INP도 같다(`input_delay`, `processing_duration`, `presentation_delay`). 느�
 - [web-vitals v6.2.3](https://github.com/GoogleChrome/web-vitals/tree/v6.2.3): `src/onLCP.ts`, `src/lib/InteractionManager.ts`, `src/lib/LayoutShiftManager.ts`, `src/attribution/onLCP.ts`
 - [Grafana Tempo: Configure TraceQL metrics](https://grafana.com/docs/tempo/latest/metrics-from-traces/metrics-queries/configure-traceql-metrics/)
 - [OpenTelemetry Collector contrib v0.162.0: deltatocumulativeprocessor](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/v0.162.0/processor/deltatocumulativeprocessor)
-- 재현 환경: [blog-experiments/cwv-otel-grafana](https://github.com/yceffort/blog-experiments/tree/main/cwv-otel-grafana)
+- 재현 환경: [blog-experiments/cwv-otel-grafana](https://github.com/yceffort/blog-experiments/tree/cwv-otel-grafana-v1/cwv-otel-grafana)

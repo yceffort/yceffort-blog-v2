@@ -64,7 +64,7 @@
     "remark-cjk-friendly": "catalog:",
     "remark-gfm": "catalog:",
     "remark-parse": "catalog:",
-    "stylelint": "^17.14.1",
+    "stylelint": "^17.16.0",
     "typescript": "catalog:",
     "undraw-svg": "catalog:",
     "unified": "catalog:",

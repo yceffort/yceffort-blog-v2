@@ -7,10 +7,10 @@
   "timezone": "browser",
   "schemaVersion": 41,
   "time": {
-    "from": "now-1h",
+    "from": "now-24h",
     "to": "now"
   },
-  "refresh": "1m",
+  "refresh": "5m",
   "templating": {
     "list": [
       {
@@ -22,10 +22,10 @@
           "uid": "mimir"
         },
         "query": {
-          "query": "label_values(cwv_lcp_milliseconds_count, page_route)",
+          "query": "label_values(cwv_ttfb_milliseconds_count, page_route)",
           "refId": "route"
         },
-        "definition": "label_values(cwv_lcp_milliseconds_count, page_route)",
+        "definition": "label_values(cwv_ttfb_milliseconds_count, page_route)",
         "includeAll": true,
         "allValue": ".*",
         "multi": true,
@@ -34,6 +34,99 @@
           "value": "$__all"
         },
         "refresh": 2
+      },
+      {
+        "name": "lang",
+        "label": "언어",
+        "type": "query",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "mimir"
+        },
+        "query": {
+          "query": "label_values(cwv_ttfb_milliseconds_count, page_lang)",
+          "refId": "lang"
+        },
+        "definition": "label_values(cwv_ttfb_milliseconds_count, page_lang)",
+        "includeAll": true,
+        "allValue": ".*",
+        "multi": true,
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "refresh": 2
+      },
+      {
+        "name": "device",
+        "label": "기기",
+        "type": "query",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "mimir"
+        },
+        "query": {
+          "query": "label_values(cwv_ttfb_milliseconds_count, device_class)",
+          "refId": "device"
+        },
+        "definition": "label_values(cwv_ttfb_milliseconds_count, device_class)",
+        "includeAll": true,
+        "allValue": ".*",
+        "multi": true,
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "refresh": 2
+      },
+      {
+        "name": "engine",
+        "label": "엔진",
+        "type": "query",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "mimir"
+        },
+        "query": {
+          "query": "label_values(cwv_ttfb_milliseconds_count, browser_engine)",
+          "refId": "engine"
+        },
+        "definition": "label_values(cwv_ttfb_milliseconds_count, browser_engine)",
+        "includeAll": true,
+        "allValue": ".*",
+        "multi": true,
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "refresh": 2
+      },
+      {
+        "name": "window",
+        "label": "추이 창",
+        "type": "custom",
+        "query": "1h,6h,1d",
+        "current": {
+          "text": "1h",
+          "value": "1h"
+        },
+        "options": [
+          {
+            "text": "1h",
+            "value": "1h",
+            "selected": true
+          },
+          {
+            "text": "6h",
+            "value": "6h",
+            "selected": false
+          },
+          {
+            "text": "1d",
+            "value": "1d",
+            "selected": false
+          }
+        ]
       }
     ]
   },
@@ -65,7 +158,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le) (increase(cwv_lcp_milliseconds_bucket{page_route=~\"$route\"}[$__range])))",
+          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_lcp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
           "legendFormat": "",
           "instant": true,
           "range": false,
@@ -129,7 +222,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le) (increase(cwv_inp_milliseconds_bucket{page_route=~\"$route\"}[$__range])))",
+          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_inp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
           "legendFormat": "",
           "instant": true,
           "range": false,
@@ -193,7 +286,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le) (increase(cwv_cls_bucket{page_route=~\"$route\"}[$__range])))",
+          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_cls_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
           "legendFormat": "",
           "instant": true,
           "range": false,
@@ -258,7 +351,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le) (increase(cwv_fcp_milliseconds_bucket{page_route=~\"$route\"}[$__range])))",
+          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_fcp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
           "legendFormat": "",
           "instant": true,
           "range": false,
@@ -322,7 +415,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le) (increase(cwv_ttfb_milliseconds_bucket{page_route=~\"$route\"}[$__range])))",
+          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_ttfb_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
           "legendFormat": "",
           "instant": true,
           "range": false,
@@ -399,7 +492,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "sum(increase(cwv_lcp_milliseconds_bucket{page_route=~\"$route\",le=\"2500\"}[$__range])) / sum(increase(cwv_lcp_milliseconds_count{page_route=~\"$route\"}[$__range]))",
+          "expr": "sum(sum_over_time(cwv_lcp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\",le=\"2500\"}[$__range])) / sum(sum_over_time(cwv_lcp_milliseconds_count{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range]))",
           "legendFormat": "",
           "instant": true,
           "range": false,
@@ -463,7 +556,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "sum(increase(cwv_inp_milliseconds_bucket{page_route=~\"$route\",le=\"200\"}[$__range])) / sum(increase(cwv_inp_milliseconds_count{page_route=~\"$route\"}[$__range]))",
+          "expr": "sum(sum_over_time(cwv_inp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\",le=\"200\"}[$__range])) / sum(sum_over_time(cwv_inp_milliseconds_count{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range]))",
           "legendFormat": "",
           "instant": true,
           "range": false,
@@ -527,7 +620,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "sum(increase(cwv_cls_bucket{page_route=~\"$route\",le=\"0.1\"}[$__range])) / sum(increase(cwv_cls_count{page_route=~\"$route\"}[$__range]))",
+          "expr": "sum(sum_over_time(cwv_cls_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\",le=\"0.1\"}[$__range])) / sum(sum_over_time(cwv_cls_count{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range]))",
           "legendFormat": "",
           "instant": true,
           "range": false,
@@ -591,7 +684,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "sum(increase(cwv_fcp_milliseconds_bucket{page_route=~\"$route\",le=\"1800\"}[$__range])) / sum(increase(cwv_fcp_milliseconds_count{page_route=~\"$route\"}[$__range]))",
+          "expr": "sum(sum_over_time(cwv_fcp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\",le=\"1800\"}[$__range])) / sum(sum_over_time(cwv_fcp_milliseconds_count{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range]))",
           "legendFormat": "",
           "instant": true,
           "range": false,
@@ -655,7 +748,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "sum(increase(cwv_ttfb_milliseconds_bucket{page_route=~\"$route\",le=\"800\"}[$__range])) / sum(increase(cwv_ttfb_milliseconds_count{page_route=~\"$route\"}[$__range]))",
+          "expr": "sum(sum_over_time(cwv_ttfb_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\",le=\"800\"}[$__range])) / sum(sum_over_time(cwv_ttfb_milliseconds_count{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range]))",
           "legendFormat": "",
           "instant": true,
           "range": false,
@@ -707,7 +800,7 @@
     },
     {
       "type": "row",
-      "title": "나빠졌는가 (10분 창 p75 추이)",
+      "title": "나빠졌는가 (p75 추이)",
       "collapsed": false,
       "panels": [],
       "id": 13,
@@ -721,7 +814,7 @@
     {
       "type": "timeseries",
       "title": "LCP p75 추이",
-      "description": "",
+      "description": "방문이 드문 블로그라 짧은 창은 비어 있는 구간이 많다. 위쪽의 '추이 창' 으로 창 길이를 바꾼다.",
       "datasource": {
         "type": "prometheus",
         "uid": "mimir"
@@ -732,7 +825,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le) (increase(cwv_lcp_milliseconds_bucket{page_route=~\"$route\"}[10m])))",
+          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_lcp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$window])))",
           "legendFormat": "p75",
           "instant": false,
           "range": true,
@@ -790,7 +883,7 @@
     {
       "type": "timeseries",
       "title": "INP p75 추이",
-      "description": "",
+      "description": "방문이 드문 블로그라 짧은 창은 비어 있는 구간이 많다. 위쪽의 '추이 창' 으로 창 길이를 바꾼다.",
       "datasource": {
         "type": "prometheus",
         "uid": "mimir"
@@ -801,7 +894,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le) (increase(cwv_inp_milliseconds_bucket{page_route=~\"$route\"}[10m])))",
+          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_inp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$window])))",
           "legendFormat": "p75",
           "instant": false,
           "range": true,
@@ -859,7 +952,7 @@
     {
       "type": "timeseries",
       "title": "CLS p75 추이",
-      "description": "",
+      "description": "방문이 드문 블로그라 짧은 창은 비어 있는 구간이 많다. 위쪽의 '추이 창' 으로 창 길이를 바꾼다.",
       "datasource": {
         "type": "prometheus",
         "uid": "mimir"
@@ -870,7 +963,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le) (increase(cwv_cls_bucket{page_route=~\"$route\"}[10m])))",
+          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_cls_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$window])))",
           "legendFormat": "p75",
           "instant": false,
           "range": true,
@@ -928,7 +1021,7 @@
     {
       "type": "timeseries",
       "title": "FCP p75 추이",
-      "description": "",
+      "description": "방문이 드문 블로그라 짧은 창은 비어 있는 구간이 많다. 위쪽의 '추이 창' 으로 창 길이를 바꾼다.",
       "datasource": {
         "type": "prometheus",
         "uid": "mimir"
@@ -939,7 +1032,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le) (increase(cwv_fcp_milliseconds_bucket{page_route=~\"$route\"}[10m])))",
+          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_fcp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$window])))",
           "legendFormat": "p75",
           "instant": false,
           "range": true,
@@ -997,7 +1090,7 @@
     {
       "type": "timeseries",
       "title": "TTFB p75 추이",
-      "description": "",
+      "description": "방문이 드문 블로그라 짧은 창은 비어 있는 구간이 많다. 위쪽의 '추이 창' 으로 창 길이를 바꾼다.",
       "datasource": {
         "type": "prometheus",
         "uid": "mimir"
@@ -1008,7 +1101,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le) (increase(cwv_ttfb_milliseconds_bucket{page_route=~\"$route\"}[10m])))",
+          "expr": "histogram_quantile(0.75, sum by (le) (sum_over_time(cwv_ttfb_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$window])))",
           "legendFormat": "p75",
           "instant": false,
           "range": true,
@@ -1065,7 +1158,7 @@
     },
     {
       "type": "row",
-      "title": "어디가 느린가",
+      "title": "누구에게 느린가",
       "collapsed": false,
       "panels": [],
       "id": 19,
@@ -1078,7 +1171,8 @@
     },
     {
       "type": "bargauge",
-      "title": "화면별 LCP p75",
+      "title": "기기별 LCP p75",
+      "description": "",
       "datasource": {
         "type": "prometheus",
         "uid": "mimir"
@@ -1089,7 +1183,410 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le, page_route) (increase(cwv_lcp_milliseconds_bucket{page_route=~\"$route\"}[$__range])))",
+          "expr": "histogram_quantile(0.75, sum by (le, device_class) (sum_over_time(cwv_lcp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
+          "legendFormat": "{{device_class}}",
+          "instant": true,
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 2500
+              },
+              {
+                "color": "red",
+                "value": 4000
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          },
+          "displayName": "${__field.labels.device_class}"
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "basic",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        }
+      },
+      "id": 20,
+      "gridPos": {
+        "x": 0,
+        "y": 26,
+        "w": 8,
+        "h": 6
+      }
+    },
+    {
+      "type": "bargauge",
+      "title": "브라우저 엔진별 LCP p75",
+      "description": "",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "mimir"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "mimir"
+          },
+          "expr": "histogram_quantile(0.75, sum by (le, browser_engine) (sum_over_time(cwv_lcp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
+          "legendFormat": "{{browser_engine}}",
+          "instant": true,
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 2500
+              },
+              {
+                "color": "red",
+                "value": 4000
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          },
+          "displayName": "${__field.labels.browser_engine}"
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "basic",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        }
+      },
+      "id": 21,
+      "gridPos": {
+        "x": 8,
+        "y": 26,
+        "w": 8,
+        "h": 6
+      }
+    },
+    {
+      "type": "bargauge",
+      "title": "언어별 LCP p75",
+      "description": "",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "mimir"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "mimir"
+          },
+          "expr": "histogram_quantile(0.75, sum by (le, page_lang) (sum_over_time(cwv_lcp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
+          "legendFormat": "{{page_lang}}",
+          "instant": true,
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 2500
+              },
+              {
+                "color": "red",
+                "value": 4000
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          },
+          "displayName": "${__field.labels.page_lang}"
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "basic",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        }
+      },
+      "id": 22,
+      "gridPos": {
+        "x": 16,
+        "y": 26,
+        "w": 8,
+        "h": 6
+      }
+    },
+    {
+      "type": "bargauge",
+      "title": "기기별 INP p75",
+      "description": "",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "mimir"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "mimir"
+          },
+          "expr": "histogram_quantile(0.75, sum by (le, device_class) (sum_over_time(cwv_inp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
+          "legendFormat": "{{device_class}}",
+          "instant": true,
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 200
+              },
+              {
+                "color": "red",
+                "value": 500
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          },
+          "displayName": "${__field.labels.device_class}"
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "basic",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        }
+      },
+      "id": 23,
+      "gridPos": {
+        "x": 0,
+        "y": 32,
+        "w": 8,
+        "h": 6
+      }
+    },
+    {
+      "type": "bargauge",
+      "title": "브라우저 엔진별 INP p75",
+      "description": "엔진마다 지원하는 지표가 달라 엔진별 건수가 다를 수 있다.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "mimir"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "mimir"
+          },
+          "expr": "histogram_quantile(0.75, sum by (le, browser_engine) (sum_over_time(cwv_inp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
+          "legendFormat": "{{browser_engine}}",
+          "instant": true,
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 200
+              },
+              {
+                "color": "red",
+                "value": 500
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          },
+          "displayName": "${__field.labels.browser_engine}"
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "basic",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        }
+      },
+      "id": 24,
+      "gridPos": {
+        "x": 8,
+        "y": 32,
+        "w": 8,
+        "h": 6
+      }
+    },
+    {
+      "type": "bargauge",
+      "title": "언어별 INP p75",
+      "description": "",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "mimir"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "mimir"
+          },
+          "expr": "histogram_quantile(0.75, sum by (le, page_lang) (sum_over_time(cwv_inp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
+          "legendFormat": "{{page_lang}}",
+          "instant": true,
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 200
+              },
+              {
+                "color": "red",
+                "value": 500
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          },
+          "displayName": "${__field.labels.page_lang}"
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "basic",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        }
+      },
+      "id": 25,
+      "gridPos": {
+        "x": 16,
+        "y": 32,
+        "w": 8,
+        "h": 6
+      }
+    },
+    {
+      "type": "row",
+      "title": "어디가 느린가",
+      "collapsed": false,
+      "panels": [],
+      "id": 26,
+      "gridPos": {
+        "x": 0,
+        "y": 38,
+        "w": 24,
+        "h": 1
+      }
+    },
+    {
+      "type": "bargauge",
+      "title": "화면별 LCP p75",
+      "description": "",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "mimir"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "mimir"
+          },
+          "expr": "histogram_quantile(0.75, sum by (le, page_route) (sum_over_time(cwv_lcp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
           "legendFormat": "{{page_route}}",
           "instant": true,
           "range": false,
@@ -1132,10 +1629,10 @@
           ]
         }
       },
-      "id": 20,
+      "id": 27,
       "gridPos": {
         "x": 0,
-        "y": 26,
+        "y": 39,
         "w": 8,
         "h": 6
       }
@@ -1143,6 +1640,7 @@
     {
       "type": "bargauge",
       "title": "화면별 INP p75",
+      "description": "",
       "datasource": {
         "type": "prometheus",
         "uid": "mimir"
@@ -1153,7 +1651,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le, page_route) (increase(cwv_inp_milliseconds_bucket{page_route=~\"$route\"}[$__range])))",
+          "expr": "histogram_quantile(0.75, sum by (le, page_route) (sum_over_time(cwv_inp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
           "legendFormat": "{{page_route}}",
           "instant": true,
           "range": false,
@@ -1196,10 +1694,10 @@
           ]
         }
       },
-      "id": 21,
+      "id": 28,
       "gridPos": {
         "x": 8,
-        "y": 26,
+        "y": 39,
         "w": 8,
         "h": 6
       }
@@ -1207,6 +1705,7 @@
     {
       "type": "bargauge",
       "title": "입력 종류별 INP p75",
+      "description": "",
       "datasource": {
         "type": "prometheus",
         "uid": "mimir"
@@ -1217,7 +1716,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "histogram_quantile(0.75, sum by (le, interaction_type) (increase(cwv_inp_milliseconds_bucket{page_route=~\"$route\"}[$__range])))",
+          "expr": "histogram_quantile(0.75, sum by (le, interaction_type) (sum_over_time(cwv_inp_milliseconds_bucket{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__range])))",
           "legendFormat": "{{interaction_type}}",
           "instant": true,
           "range": false,
@@ -1260,25 +1759,78 @@
           ]
         }
       },
-      "id": 22,
+      "id": 29,
       "gridPos": {
         "x": 16,
-        "y": 26,
+        "y": 39,
         "w": 8,
         "h": 6
       }
     },
     {
       "type": "row",
-      "title": "등급 분포와 표본 수",
+      "title": "얼마나 왔나",
       "collapsed": false,
       "panels": [],
-      "id": 23,
+      "id": 30,
       "gridPos": {
         "x": 0,
-        "y": 32,
+        "y": 45,
         "w": 24,
         "h": 1
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "화면별 페이지 로드",
+      "description": "TTFB 는 페이지 로드마다 한 번 보고되므로 TTFB 건수를 페이지 로드 수로 쓴다. 블로그 안의 클라이언트 이동은 세지 않는다.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "mimir"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "mimir"
+          },
+          "expr": "sum by (page_route) (sum_over_time(cwv_ttfb_milliseconds_count{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__interval]))",
+          "legendFormat": "{{page_route}}",
+          "instant": false,
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 80,
+            "spanNulls": true,
+            "stacking": {
+              "mode": "normal"
+            },
+            "drawStyle": "bars"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "id": 31,
+      "gridPos": {
+        "x": 0,
+        "y": 46,
+        "w": 12,
+        "h": 7
       }
     },
     {
@@ -1295,7 +1847,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "sum by (rating) (increase(cwv_lcp_milliseconds_count{page_route=~\"$route\"}[$__interval]))",
+          "expr": "sum by (rating) (sum_over_time(cwv_lcp_milliseconds_count{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__interval]))",
           "legendFormat": "{{rating}}",
           "instant": false,
           "range": true,
@@ -1326,18 +1878,18 @@
           "mode": "multi"
         }
       },
-      "id": 24,
+      "id": 32,
       "gridPos": {
-        "x": 0,
-        "y": 33,
+        "x": 12,
+        "y": 46,
         "w": 12,
         "h": 7
       }
     },
     {
       "type": "timeseries",
-      "title": "지표별 표본 수(하한)",
-      "description": "collector 의 delta_to_cumulative 는 5분(만료 검사는 1분마다) 넘게 샘플이 없는 시리즈를 지운다. 다시 1부터 쌓인 값을 Prometheus 는 증가 0 으로 본다. 드문 라벨 조합일수록 이 값은 실제보다 작다. 페이지 로드 수로 읽지 않는다.",
+      "title": "지표별 표본 수",
+      "description": "지표마다 보고 조건이 달라 건수가 다르다. INP 는 입력이 있어야, CLS 는 배치가 바뀌거나 페이지가 숨겨져야 나온다.",
       "datasource": {
         "type": "prometheus",
         "uid": "mimir"
@@ -1348,7 +1900,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "sum(increase(cwv_lcp_milliseconds_count{page_route=~\"$route\"}[$__interval]))",
+          "expr": "sum(sum_over_time(cwv_lcp_milliseconds_count{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__interval]))",
           "legendFormat": "LCP",
           "instant": false,
           "range": true,
@@ -1359,7 +1911,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "sum(increase(cwv_inp_milliseconds_count{page_route=~\"$route\"}[$__interval]))",
+          "expr": "sum(sum_over_time(cwv_inp_milliseconds_count{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__interval]))",
           "legendFormat": "INP",
           "instant": false,
           "range": true,
@@ -1370,7 +1922,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "sum(increase(cwv_cls_count{page_route=~\"$route\"}[$__interval]))",
+          "expr": "sum(sum_over_time(cwv_cls_count{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__interval]))",
           "legendFormat": "CLS",
           "instant": false,
           "range": true,
@@ -1381,7 +1933,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "sum(increase(cwv_fcp_milliseconds_count{page_route=~\"$route\"}[$__interval]))",
+          "expr": "sum(sum_over_time(cwv_fcp_milliseconds_count{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__interval]))",
           "legendFormat": "FCP",
           "instant": false,
           "range": true,
@@ -1392,7 +1944,7 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "expr": "sum(increase(cwv_ttfb_milliseconds_count{page_route=~\"$route\"}[$__interval]))",
+          "expr": "sum(sum_over_time(cwv_ttfb_milliseconds_count{page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__interval]))",
           "legendFormat": "TTFB",
           "instant": false,
           "range": true,
@@ -1419,11 +1971,11 @@
           "mode": "multi"
         }
       },
-      "id": 25,
+      "id": 33,
       "gridPos": {
-        "x": 12,
-        "y": 33,
-        "w": 12,
+        "x": 0,
+        "y": 53,
+        "w": 24,
         "h": 7
       }
     }

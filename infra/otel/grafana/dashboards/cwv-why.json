@@ -7,10 +7,10 @@
   "timezone": "browser",
   "schemaVersion": 41,
   "time": {
-    "from": "now-1h",
+    "from": "now-24h",
     "to": "now"
   },
-  "refresh": "1m",
+  "refresh": "5m",
   "templating": {
     "list": [
       {
@@ -195,13 +195,401 @@
     },
     {
       "type": "row",
-      "title": "LCP 는 어느 단계에서 늦었나 (평균 ms)",
+      "title": "어느 글이 느린가 (선택 구간 전체)",
       "collapsed": false,
       "panels": [],
       "id": 4,
       "gridPos": {
         "x": 0,
         "y": 9,
+        "w": 24,
+        "h": 1
+      }
+    },
+    {
+      "type": "bargauge",
+      "title": "글별 LCP p75 (느린 10개)",
+      "description": "Tempo 의 분위수는 2 의 거듭제곱 버킷 사이를 보간한 근사값이다. 표본이 적은 글은 값이 크게 흔들린다.",
+      "datasource": {
+        "type": "tempo",
+        "uid": "tempo"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "tempo",
+            "uid": "tempo"
+          },
+          "queryType": "traceql",
+          "query": "{resource.service.name=\"yceffort-blog\" && span.page.route=~\"$route\" && span.page.route=\"post\" && name=\"cwv.lcp\"} | quantile_over_time(duration, .75) by (span.page.path) | topk(10)",
+          "metricsQueryType": "instant",
+          "step": "5m",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 2.5
+              },
+              {
+                "color": "red",
+                "value": 4
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "basic",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "valueMode": "color"
+      },
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": ".*span.page.path=\"([^\"]*)\".*",
+            "renamePattern": "$1"
+          }
+        }
+      ],
+      "id": 5,
+      "gridPos": {
+        "x": 0,
+        "y": 10,
+        "w": 12,
+        "h": 9
+      }
+    },
+    {
+      "type": "bargauge",
+      "title": "글별 페이지 로드 (많은 10개)",
+      "description": "",
+      "datasource": {
+        "type": "tempo",
+        "uid": "tempo"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "tempo",
+            "uid": "tempo"
+          },
+          "queryType": "traceql",
+          "query": "{resource.service.name=\"yceffort-blog\" && span.page.route=~\"$route\" && span.page.route=\"post\" && name=\"cwv.lcp\"} | count_over_time() by (span.page.path) | topk(10)",
+          "metricsQueryType": "instant",
+          "step": "5m",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "basic",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "valueMode": "color"
+      },
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": ".*span.page.path=\"([^\"]*)\".*",
+            "renamePattern": "$1"
+          }
+        }
+      ],
+      "id": 6,
+      "gridPos": {
+        "x": 12,
+        "y": 10,
+        "w": 12,
+        "h": 9
+      }
+    },
+    {
+      "type": "row",
+      "title": "유입과 캐시",
+      "collapsed": false,
+      "panels": [],
+      "id": 7,
+      "gridPos": {
+        "x": 0,
+        "y": 19,
+        "w": 24,
+        "h": 1
+      }
+    },
+    {
+      "type": "bargauge",
+      "title": "유입 경로별 LCP p75",
+      "description": "",
+      "datasource": {
+        "type": "tempo",
+        "uid": "tempo"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "tempo",
+            "uid": "tempo"
+          },
+          "queryType": "traceql",
+          "query": "{resource.service.name=\"yceffort-blog\" && span.page.route=~\"$route\" && name=\"cwv.lcp\"} | quantile_over_time(duration, .75) by (span.page.referrer_type)",
+          "metricsQueryType": "instant",
+          "step": "5m",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 2.5
+              },
+              {
+                "color": "red",
+                "value": 4
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "basic",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "valueMode": "color"
+      },
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": ".*span.page.referrer_type=\"([^\"]*)\".*",
+            "renamePattern": "$1"
+          }
+        }
+      ],
+      "id": 8,
+      "gridPos": {
+        "x": 0,
+        "y": 20,
+        "w": 8,
+        "h": 7
+      }
+    },
+    {
+      "type": "bargauge",
+      "title": "서비스 워커 경유별 TTFB p75",
+      "description": "yes 는 내비게이션 요청 자체가 서비스 워커를 거친 페이지 로드다(workerStart > 0).",
+      "datasource": {
+        "type": "tempo",
+        "uid": "tempo"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "tempo",
+            "uid": "tempo"
+          },
+          "queryType": "traceql",
+          "query": "{resource.service.name=\"yceffort-blog\" && span.page.route=~\"$route\" && name=\"cwv.ttfb\"} | quantile_over_time(duration, .75) by (span.page.sw_controlled)",
+          "metricsQueryType": "instant",
+          "step": "5m",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.8
+              },
+              {
+                "color": "red",
+                "value": 1.8
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "basic",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "valueMode": "color"
+      },
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": ".*span.page.sw_controlled=\"([^\"]*)\".*",
+            "renamePattern": "$1"
+          }
+        }
+      ],
+      "id": 9,
+      "gridPos": {
+        "x": 8,
+        "y": 20,
+        "w": 8,
+        "h": 7
+      }
+    },
+    {
+      "type": "bargauge",
+      "title": "LCP 종류별 p75",
+      "description": "image 는 LCP 요소에 리소스 URL 이 있는 경우(이미지, 배경 이미지), text 는 글자 블록이다.",
+      "datasource": {
+        "type": "tempo",
+        "uid": "tempo"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "tempo",
+            "uid": "tempo"
+          },
+          "queryType": "traceql",
+          "query": "{resource.service.name=\"yceffort-blog\" && span.page.route=~\"$route\" && name=\"cwv.lcp\"} | quantile_over_time(duration, .75) by (span.cwv.lcp.kind)",
+          "metricsQueryType": "instant",
+          "step": "5m",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 2.5
+              },
+              {
+                "color": "red",
+                "value": 4
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "basic",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "valueMode": "color"
+      },
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": ".*span.cwv.lcp.kind=\"([^\"]*)\".*",
+            "renamePattern": "$1"
+          }
+        }
+      ],
+      "id": 10,
+      "gridPos": {
+        "x": 16,
+        "y": 20,
+        "w": 8,
+        "h": 7
+      }
+    },
+    {
+      "type": "row",
+      "title": "LCP 는 어느 단계에서 늦었나 (평균 ms)",
+      "collapsed": false,
+      "panels": [],
+      "id": 11,
+      "gridPos": {
+        "x": 0,
+        "y": 27,
         "w": 24,
         "h": 1
       }
@@ -247,10 +635,10 @@
           "mode": "multi"
         }
       },
-      "id": 5,
+      "id": 12,
       "gridPos": {
         "x": 0,
-        "y": 10,
+        "y": 28,
         "w": 6,
         "h": 6
       }
@@ -296,10 +684,10 @@
           "mode": "multi"
         }
       },
-      "id": 6,
+      "id": 13,
       "gridPos": {
         "x": 6,
-        "y": 10,
+        "y": 28,
         "w": 6,
         "h": 6
       }
@@ -345,10 +733,10 @@
           "mode": "multi"
         }
       },
-      "id": 7,
+      "id": 14,
       "gridPos": {
         "x": 12,
-        "y": 10,
+        "y": 28,
         "w": 6,
         "h": 6
       }
@@ -394,10 +782,10 @@
           "mode": "multi"
         }
       },
-      "id": 8,
+      "id": 15,
       "gridPos": {
         "x": 18,
-        "y": 10,
+        "y": 28,
         "w": 6,
         "h": 6
       }
@@ -407,10 +795,10 @@
       "title": "INP 는 어느 단계에서 늦었나 (평균 ms)",
       "collapsed": false,
       "panels": [],
-      "id": 9,
+      "id": 16,
       "gridPos": {
         "x": 0,
-        "y": 16,
+        "y": 34,
         "w": 24,
         "h": 1
       }
@@ -456,10 +844,10 @@
           "mode": "multi"
         }
       },
-      "id": 10,
+      "id": 17,
       "gridPos": {
         "x": 0,
-        "y": 17,
+        "y": 35,
         "w": 8,
         "h": 6
       }
@@ -505,10 +893,10 @@
           "mode": "multi"
         }
       },
-      "id": 11,
+      "id": 18,
       "gridPos": {
         "x": 8,
-        "y": 17,
+        "y": 35,
         "w": 8,
         "h": 6
       }
@@ -554,10 +942,10 @@
           "mode": "multi"
         }
       },
-      "id": 12,
+      "id": 19,
       "gridPos": {
         "x": 16,
-        "y": 17,
+        "y": 35,
         "w": 8,
         "h": 6
       }
@@ -565,7 +953,7 @@
     {
       "type": "timeseries",
       "title": "INP 대상별 p75",
-      "description": "표본이 없는 구간은 0 으로 그려진다.",
+      "description": "Tempo 는 표본이 없는 구간의 분위수를 0 으로 돌려주므로 0 은 값이 아니라 빈 구간이다.",
       "datasource": {
         "type": "tempo",
         "uid": "tempo"
@@ -623,10 +1011,10 @@
           "mode": "multi"
         }
       },
-      "id": 13,
+      "id": 20,
       "gridPos": {
         "x": 0,
-        "y": 23,
+        "y": 41,
         "w": 12,
         "h": 7
       }
@@ -676,10 +1064,10 @@
           "mode": "multi"
         }
       },
-      "id": 14,
+      "id": 21,
       "gridPos": {
         "x": 12,
-        "y": 23,
+        "y": 41,
         "w": 12,
         "h": 7
       }
@@ -689,10 +1077,10 @@
       "title": "확정 방식과 느린 페이지 로드",
       "collapsed": false,
       "panels": [],
-      "id": 15,
+      "id": 22,
       "gridPos": {
         "x": 0,
-        "y": 30,
+        "y": 48,
         "w": 24,
         "h": 1
       }
@@ -742,10 +1130,10 @@
           "mode": "multi"
         }
       },
-      "id": 16,
+      "id": 23,
       "gridPos": {
         "x": 0,
-        "y": 31,
+        "y": 49,
         "w": 8,
         "h": 8
       }
@@ -768,7 +1156,7 @@
           "limit": 50,
           "spss": 1,
           "refId": "A",
-          "query": "{resource.service.name=\"yceffort-blog\" && span.page.route=~\"$route\" && name=\"cwv.lcp\" && duration > 2.5s} | select(span.cwv.lcp.target, span.cwv.lcp.element_render_delay, span.cwv.lcp.time_to_first_byte)"
+          "query": "{resource.service.name=\"yceffort-blog\" && span.page.route=~\"$route\" && name=\"cwv.lcp\" && duration > 2.5s} | select(span.page.path, span.cwv.lcp.target, span.cwv.lcp.kind, span.device.class, span.browser.engine, span.network.effective_type, span.cwv.lcp.time_to_first_byte, span.cwv.lcp.element_render_delay)"
         }
       ],
       "fieldConfig": {
@@ -790,10 +1178,10 @@
       "options": {
         "showHeader": true
       },
-      "id": 17,
+      "id": 24,
       "gridPos": {
         "x": 8,
-        "y": 31,
+        "y": 49,
         "w": 16,
         "h": 8
       }

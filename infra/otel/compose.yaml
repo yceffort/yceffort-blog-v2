@@ -43,10 +43,13 @@ services:
   mimir:
     image: grafana/mimir:3.2.2
     restart: unless-stopped
+    # collector 가 OTLP 로 보내는 delta 를 그대로 저장하고, 이름에 단위 접미사(_milliseconds)를 붙인다.
     command:
       [
         '-config.file=/etc/mimir.yaml',
         '-compactor.blocks-retention-period=${MIMIR_RETENTION:-0}',
+        '-distributor.otel-native-delta-ingestion=true',
+        '-distributor.otel-metric-suffixes-enabled=true',
       ]
     volumes:
       - ./mimir/mimir.yaml:/etc/mimir.yaml:ro
@@ -57,6 +60,10 @@ services:
     restart: unless-stopped
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:?}
+      # 기본 설치로는 쓰지 않는 앱 플러그인을 받고 내장 데이터소스 플러그인마다 프로세스를 띄워 2GB 서버에서
+      # 600MiB 넘게 쓴다. Mimir(prometheus)와 Tempo 만 남기면 200MiB 안쪽이다.
+      - GF_PLUGINS_PREINSTALL_DISABLED=true
+      - GF_PLUGINS_DISABLE_PLUGINS=elasticsearch,grafana-postgresql-datasource,grafana-pyroscope-datasource,influxdb,jaeger,loki,mssql,mysql,opentsdb,stackdriver,zipkin
     volumes:
       - ./grafana/provisioning:/etc/grafana/provisioning:ro
       - ./grafana/dashboards:/var/lib/grafana/dashboards:ro

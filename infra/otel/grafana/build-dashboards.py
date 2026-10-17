@@ -1,7 +1,7 @@
 """grafana/dashboards 의 대시보드 JSON 두 개를 만든다. 사용: python3 grafana/build-dashboards.py
 
-- cwv-ops.json (Mimir): 지금 얼마나 느린가, 나빠졌는가, 어디가 느린가
-- cwv-why.json (Tempo): 왜 느린가(LCP 요소, 단계별 시간, 밀린 요소)
+- cwv-ops.json (Mimir): 지금 얼마나 느린가, 나빠졌는가, 누구에게 느린가, 어디가 느린가, 얼마나 왔나
+- cwv-why.json (Tempo): 왜 느린가(LCP 요소, 단계별 시간), 어느 글이 느린가, 유입과 캐시, 느린 페이지 로드
 """
 
 import json
@@ -11,6 +11,10 @@ OUT = Path(__file__).parent / "dashboards"
 MIMIR = {"type": "prometheus", "uid": "mimir"}
 TEMPO = {"type": "tempo", "uid": "tempo"}
 
+# Mimir 는 브라우저가 보낸 delta 를 그대로 저장한다(native delta ingestion). 샘플 하나가 페이지 로드 하나의 값이라
+# 구간 안의 샘플을 더하면(sum_over_time) 건수와 버킷이 정확히 나온다. increase() 는 쓰지 않는다.
+AGG = "sum_over_time"
+
 # (이름, 시리즈 접두사, good 경계, poor 경계, 단위)
 METRICS = [
     ("LCP", "cwv_lcp_milliseconds", 2500, 4000, "ms"),
@@ -19,7 +23,7 @@ METRICS = [
     ("FCP", "cwv_fcp_milliseconds", 1800, 3000, "ms"),
     ("TTFB", "cwv_ttfb_milliseconds", 800, 1800, "ms"),
 ]
-ROUTE = 'page_route=~"$route"'
+SEL = 'page_route=~"$route", page_lang=~"$lang", device_class=~"$device", browser_engine=~"$engine"'
 WIDTHS = [5, 5, 5, 5, 4]
 
 
@@ -98,11 +102,12 @@ def timeseries(title, targets, unit, datasource, th=None, description="", stack=
     }
 
 
-def bargauge(title, expr, legend, unit, th):
+def bargauge(title, expr, legend, unit, th, description=""):
     label = legend.strip("{}")
     return {
         "type": "bargauge",
         "title": title,
+        "description": description,
         "datasource": MIMIR,
         "targets": [prom(expr, legend, instant=True)],
         "fieldConfig": {"defaults": {"unit": unit, "thresholds": th, "color": {"mode": "thresholds"}, "displayName": f"${{__field.labels.{label}}}"}, "overrides": []},
@@ -111,14 +116,30 @@ def bargauge(title, expr, legend, unit, th):
 
 
 def p75(series, window, by="le"):
-    return f"histogram_quantile(0.75, sum by ({by}) (increase({series}_bucket{{{ROUTE}}}[{window}])))"
+    return f"histogram_quantile(0.75, sum by ({by}) ({AGG}({series}_bucket{{{SEL}}}[{window}])))"
 
 
 def good_ratio(series, good, window):
     return (
-        f'sum(increase({series}_bucket{{{ROUTE},le="{good}"}}[{window}]))'
-        f" / sum(increase({series}_count{{{ROUTE}}}[{window}]))"
+        f'sum({AGG}({series}_bucket{{{SEL},le="{good}"}}[{window}]))'
+        f" / sum({AGG}({series}_count{{{SEL}}}[{window}]))"
     )
+
+
+def label_variable(name, label, title):
+    return {
+        "name": name,
+        "label": title,
+        "type": "query",
+        "datasource": MIMIR,
+        "query": {"query": f"label_values(cwv_ttfb_milliseconds_count, {label})", "refId": name},
+        "definition": f"label_values(cwv_ttfb_milliseconds_count, {label})",
+        "includeAll": True,
+        "allValue": ".*",
+        "multi": True,
+        "current": {"text": "All", "value": "$__all"},
+        "refresh": 2,
+    }
 
 
 def ops_dashboard():
@@ -134,26 +155,48 @@ def ops_dashboard():
                  description=f"le=\"{good}\" 버킷이 good 경계와 정확히 같아서 보간 없이 나온다."),
             w, 4,
         )
-    lay.row("나빠졌는가 (10분 창 p75 추이)")
+    lay.row("나빠졌는가 (p75 추이)")
+    trend = "방문이 드문 블로그라 짧은 창은 비어 있는 구간이 많다. 위쪽의 '추이 창' 으로 창 길이를 바꾼다."
     for name, series, good, poor, unit in METRICS:
-        lay.add(timeseries(f"{name} p75 추이", [prom(p75(series, "10m"), "p75")], unit, MIMIR, thresholds(good, poor)), 12 if name in ("LCP", "INP") else 8, 7)
+        lay.add(
+            timeseries(f"{name} p75 추이", [prom(p75(series, "$window"), "p75")], unit, MIMIR, thresholds(good, poor), description=trend),
+            12 if name in ("LCP", "INP") else 8, 7,
+        )
+    lay.row("누구에게 느린가")
+    for title, label in [("기기", "device_class"), ("브라우저 엔진", "browser_engine"), ("언어", "page_lang")]:
+        lay.add(bargauge(f"{title}별 LCP p75", p75("cwv_lcp_milliseconds", "$__range", f"le, {label}"), f"{{{{{label}}}}}", "ms", thresholds(2500, 4000)), 8, 6)
+    for title, label in [("기기", "device_class"), ("브라우저 엔진", "browser_engine"), ("언어", "page_lang")]:
+        lay.add(
+            bargauge(f"{title}별 INP p75", p75("cwv_inp_milliseconds", "$__range", f"le, {label}"), f"{{{{{label}}}}}", "ms", thresholds(200, 500),
+                     description="엔진마다 지원하는 지표가 달라 엔진별 건수가 다를 수 있다." if label == "browser_engine" else ""),
+            8, 6,
+        )
     lay.row("어디가 느린가")
     lay.add(bargauge("화면별 LCP p75", p75("cwv_lcp_milliseconds", "$__range", "le, page_route"), "{{page_route}}", "ms", thresholds(2500, 4000)), 8, 6)
     lay.add(bargauge("화면별 INP p75", p75("cwv_inp_milliseconds", "$__range", "le, page_route"), "{{page_route}}", "ms", thresholds(200, 500)), 8, 6)
     lay.add(bargauge("입력 종류별 INP p75", p75("cwv_inp_milliseconds", "$__range", "le, interaction_type"), "{{interaction_type}}", "ms", thresholds(200, 500)), 8, 6)
-    lay.row("등급 분포와 표본 수")
+    lay.row("얼마나 왔나")
     lay.add(
-        timeseries("LCP 등급별 건수", [prom(f"sum by (rating) (increase(cwv_lcp_milliseconds_count{{{ROUTE}}}[$__interval]))", "{{rating}}")], "short", MIMIR, stack=True),
+        timeseries(
+            "화면별 페이지 로드",
+            [prom(f"sum by (page_route) ({AGG}(cwv_ttfb_milliseconds_count{{{SEL}}}[$__interval]))", "{{page_route}}")],
+            "short", MIMIR, stack=True,
+            description="TTFB 는 페이지 로드마다 한 번 보고되므로 TTFB 건수를 페이지 로드 수로 쓴다. 블로그 안의 클라이언트 이동은 세지 않는다.",
+        ),
+        12, 7,
+    )
+    lay.add(
+        timeseries("LCP 등급별 건수", [prom(f"sum by (rating) ({AGG}(cwv_lcp_milliseconds_count{{{SEL}}}[$__interval]))", "{{rating}}")], "short", MIMIR, stack=True),
         12, 7,
     )
     lay.add(
         timeseries(
-            "지표별 표본 수(하한)",
-            [prom(f"sum(increase({series}_count{{{ROUTE}}}[$__interval]))", name) for name, series, *_ in METRICS],
+            "지표별 표본 수",
+            [prom(f"sum({AGG}({series}_count{{{SEL}}}[$__interval]))", name) for name, series, *_ in METRICS],
             "short", MIMIR,
-            description="collector 의 delta_to_cumulative 는 5분(만료 검사는 1분마다) 넘게 샘플이 없는 시리즈를 지운다. 다시 1부터 쌓인 값을 Prometheus 는 증가 0 으로 본다. 드문 라벨 조합일수록 이 값은 실제보다 작다. 페이지 로드 수로 읽지 않는다.",
+            description="지표마다 보고 조건이 달라 건수가 다르다. INP 는 입력이 있어야, CLS 는 배치가 바뀌거나 페이지가 숨겨져야 나온다.",
         ),
-        12, 7,
+        24, 7,
     )
     for i, t in enumerate(lay.panels[-1]["targets"]):
         t["refId"] = chr(ord("A") + i)
@@ -163,23 +206,22 @@ def ops_dashboard():
         "tags": ["cwv"],
         "timezone": "browser",
         "schemaVersion": 41,
-        "time": {"from": "now-1h", "to": "now"},
-        "refresh": "1m",
+        "time": {"from": "now-24h", "to": "now"},
+        "refresh": "5m",
         "templating": {
             "list": [
+                label_variable("route", "page_route", "화면"),
+                label_variable("lang", "page_lang", "언어"),
+                label_variable("device", "device_class", "기기"),
+                label_variable("engine", "browser_engine", "엔진"),
                 {
-                    "name": "route",
-                    "label": "화면",
-                    "type": "query",
-                    "datasource": MIMIR,
-                    "query": {"query": "label_values(cwv_lcp_milliseconds_count, page_route)", "refId": "route"},
-                    "definition": "label_values(cwv_lcp_milliseconds_count, page_route)",
-                    "includeAll": True,
-                    "allValue": ".*",
-                    "multi": True,
-                    "current": {"text": "All", "value": "$__all"},
-                    "refresh": 2,
-                }
+                    "name": "window",
+                    "label": "추이 창",
+                    "type": "custom",
+                    "query": "1h,6h,1d",
+                    "current": {"text": "1h", "value": "1h"},
+                    "options": [{"text": v, "value": v, "selected": v == "1h"} for v in ["1h", "6h", "1d"]],
+                },
             ]
         },
         "panels": lay.panels,
@@ -189,23 +231,53 @@ def ops_dashboard():
 FILTER = 'resource.service.name="yceffort-blog" && span.page.route=~"$route"'
 
 
-def traceql(query, step="5m"):
-    return {"datasource": TEMPO, "queryType": "traceql", "query": query, "metricsQueryType": "range", "step": step, "refId": "A"}
+def traceql(query, step="5m", instant=False):
+    return {
+        "datasource": TEMPO, "queryType": "traceql", "query": query,
+        "metricsQueryType": "instant" if instant else "range", "step": step, "refId": "A",
+    }
 
 
 def tempo_ts(title, query, unit, description="", stack=False, th=None):
     return timeseries(title, [traceql(query)], unit, TEMPO, th=th, description=description, stack=stack)
 
 
+def tempo_bar(title, query, attr, unit, th, description=""):
+    """TraceQL instant 조회 결과를 막대로. 범례는 `{span.x="..."}` 꼴이라 값만 남긴다."""
+    return {
+        "type": "bargauge",
+        "title": title,
+        "description": description,
+        "datasource": TEMPO,
+        "targets": [traceql(query, instant=True)],
+        "fieldConfig": {"defaults": {"unit": unit, "thresholds": th, "color": {"mode": "thresholds"}}, "overrides": []},
+        "options": {"orientation": "horizontal", "displayMode": "basic", "reduceOptions": {"calcs": ["lastNotNull"]}, "valueMode": "color"},
+        "transformations": [{"id": "renameByRegex", "options": {"regex": f'.*{attr}="([^"]*)".*', "renamePattern": "$1"}}],
+    }
+
+
 def why_dashboard():
     lay = Layout()
+    zero = "Tempo 는 표본이 없는 구간의 분위수를 0 으로 돌려주므로 0 은 값이 아니라 빈 구간이다."
     lay.row("무엇이 LCP 인가")
     lay.add(tempo_ts("LCP 요소별 건수", f'{{{FILTER} && name="cwv.lcp"}} | count_over_time() by (span.cwv.lcp.target)', "short", stack=True), 12, 8)
     lay.add(
         tempo_ts("LCP 요소별 p75", f'{{{FILTER} && name="cwv.lcp"}} | quantile_over_time(duration, .75) by (span.cwv.lcp.target)', "s",
-                 description="span 길이가 곧 LCP 값이라 duration 분위수가 LCP 분위수다. Tempo 는 표본이 없는 구간의 분위수를 0 으로 돌려주므로 0 은 값이 아니라 빈 구간이다.", th=thresholds(2.5, 4)),
+                 description=f"span 길이가 곧 LCP 값이라 duration 분위수가 LCP 분위수다. {zero}", th=thresholds(2.5, 4)),
         12, 8,
     )
+    lay.row("어느 글이 느린가 (선택 구간 전체)")
+    post = f'{{{FILTER} && span.page.route="post" && name="cwv.lcp"}}'
+    lay.add(tempo_bar("글별 LCP p75 (느린 10개)", f"{post} | quantile_over_time(duration, .75) by (span.page.path) | topk(10)", "span.page.path", "s", thresholds(2.5, 4),
+                      description="Tempo 의 분위수는 2 의 거듭제곱 버킷 사이를 보간한 근사값이다. 표본이 적은 글은 값이 크게 흔들린다."), 12, 9)
+    lay.add(tempo_bar("글별 페이지 로드 (많은 10개)", f"{post} | count_over_time() by (span.page.path) | topk(10)", "span.page.path", "short",
+                      {"mode": "absolute", "steps": [{"color": "blue", "value": None}]}), 12, 9)
+    lay.row("유입과 캐시")
+    lay.add(tempo_bar("유입 경로별 LCP p75", f'{{{FILTER} && name="cwv.lcp"}} | quantile_over_time(duration, .75) by (span.page.referrer_type)', "span.page.referrer_type", "s", thresholds(2.5, 4)), 8, 7)
+    lay.add(tempo_bar("서비스 워커 경유별 TTFB p75", f'{{{FILTER} && name="cwv.ttfb"}} | quantile_over_time(duration, .75) by (span.page.sw_controlled)', "span.page.sw_controlled", "s", thresholds(0.8, 1.8),
+                      description="yes 는 내비게이션 요청 자체가 서비스 워커를 거친 페이지 로드다(workerStart > 0)."), 8, 7)
+    lay.add(tempo_bar("LCP 종류별 p75", f'{{{FILTER} && name="cwv.lcp"}} | quantile_over_time(duration, .75) by (span.cwv.lcp.kind)', "span.cwv.lcp.kind", "s", thresholds(2.5, 4),
+                      description="image 는 LCP 요소에 리소스 URL 이 있는 경우(이미지, 배경 이미지), text 는 글자 블록이다."), 8, 7)
     lay.row("LCP 는 어느 단계에서 늦었나 (평균 ms)")
     note = "Tempo 데이터소스가 쿼리마다 frame refId 를 함수 이름으로 덮어써서 한 패널에 여러 쿼리를 넣으면 범례를 구분할 수 없다. 단계마다 패널을 나눴다."
     for label, attr in [("TTFB", "time_to_first_byte"), ("리소스 요청 지연", "resource_load_delay"), ("리소스 다운로드", "resource_load_duration"), ("렌더링 지연", "element_render_delay")]:
@@ -213,8 +285,7 @@ def why_dashboard():
     lay.row("INP 는 어느 단계에서 늦었나 (평균 ms)")
     for label, attr in [("입력 지연", "input_delay"), ("처리 시간", "processing_duration"), ("다음 화면까지", "presentation_delay")]:
         lay.add(tempo_ts(label, f'{{{FILTER} && name="cwv.inp"}} | avg_over_time(span.cwv.inp.{attr})', "ms", description=note), 8, 6)
-    lay.add(tempo_ts("INP 대상별 p75", f'{{{FILTER} && name="cwv.inp"}} | quantile_over_time(duration, .75) by (span.cwv.inp.target)', "s", th=thresholds(0.2, 0.5),
-                     description="표본이 없는 구간은 0 으로 그려진다."), 12, 7)
+    lay.add(tempo_ts("INP 대상별 p75", f'{{{FILTER} && name="cwv.inp"}} | quantile_over_time(duration, .75) by (span.cwv.inp.target)', "s", th=thresholds(0.2, 0.5), description=zero), 12, 7)
     lay.add(tempo_ts("CLS 를 만든 요소", f'{{{FILTER} && name="cwv.cls" && duration > 0ms}} | count_over_time() by (span.cwv.cls.largest_shift_target)', "short", stack=True), 12, 7)
     lay.row("확정 방식과 느린 페이지 로드")
     lay.add(
@@ -229,7 +300,7 @@ def why_dashboard():
             "datasource": TEMPO,
             "targets": [{
                 "datasource": TEMPO, "queryType": "traceql", "tableType": "spans", "limit": 50, "spss": 1, "refId": "A",
-                "query": f'{{{FILTER} && name="cwv.lcp" && duration > 2.5s}} | select(span.cwv.lcp.target, span.cwv.lcp.element_render_delay, span.cwv.lcp.time_to_first_byte)',
+                "query": f'{{{FILTER} && name="cwv.lcp" && duration > 2.5s}} | select(span.page.path, span.cwv.lcp.target, span.cwv.lcp.kind, span.device.class, span.browser.engine, span.network.effective_type, span.cwv.lcp.time_to_first_byte, span.cwv.lcp.element_render_delay)',
             }],
             "fieldConfig": {"defaults": {}, "overrides": []},
             "transformations": [{"id": "organize", "options": {"excludeByName": {"traceService": True, "traceName": True, "service.name": True}}}],
@@ -237,23 +308,24 @@ def why_dashboard():
         },
         16, 8,
     )
+    routes = [".*", "home", "post", "tag", "series", "other"]
     return {
         "uid": "cwv-why",
         "title": "CWV 원인 분석 (Tempo)",
         "tags": ["cwv"],
         "timezone": "browser",
         "schemaVersion": 41,
-        "time": {"from": "now-1h", "to": "now"},
-        "refresh": "1m",
+        "time": {"from": "now-24h", "to": "now"},
+        "refresh": "5m",
         "templating": {
             "list": [
                 {
                     "name": "route",
                     "label": "화면",
                     "type": "custom",
-                    "query": ".*,home,post,tag,series,other",
+                    "query": ",".join(routes),
                     "current": {"text": ".*", "value": ".*"},
-                    "options": [{"text": v, "value": v, "selected": v == ".*"} for v in [".*", "home", "post", "tag", "series", "other"]],
+                    "options": [{"text": v, "value": v, "selected": v == ".*"} for v in routes],
                 }
             ]
         },

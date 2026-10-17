@@ -22,9 +22,16 @@ processors:
         span_count:
           min_spans: 2
 
-  # 브라우저는 delta 로 보내고 Prometheus 계열 저장소는 cumulative 를 받는다.
-  # max_stale 기본값은 5분이다. 그보다 오래 샘플이 없는 시리즈는 누적값을 버린다.
-  delta_to_cumulative: {}
+  # 브라우저가 보낸 delta 를 누적으로 바꾸지 않고 Mimir 에 그대로 저장한다(native delta ingestion).
+  # 누적으로 바꾸면(delta_to_cumulative) 방문이 드문 라벨 조합은 샘플이 하나뿐이라 increase() 가 0 을 돌려주고,
+  # 5분 넘게 조용한 시리즈는 지워져 다시 1부터 쌓인다(blog-experiments 의 E4, E8).
+  # 시각은 collector 가 받은 시각으로 바꾼다. 브라우저마다 시계가 달라 같은 시리즈에 순서가 뒤바뀐 샘플이 쌓이지 않게 한다.
+  transform/receive_time:
+    metric_statements:
+      - context: datapoint
+        statements:
+          - set(start_time, Now())
+          - set(time, Now())
 
   batch: {}
 
@@ -34,8 +41,8 @@ exporters:
     tls:
       insecure: true
 
-  prometheus_remote_write/mimir:
-    endpoint: http://mimir:9009/api/v1/push
+  otlp_http/mimir:
+    endpoint: http://mimir:9009/otlp
     headers:
       X-Scope-OrgID: blog
 
@@ -47,8 +54,8 @@ service:
       exporters: [otlp_grpc/tempo]
     metrics:
       receivers: [otlp]
-      processors: [memory_limiter, delta_to_cumulative, batch]
-      exporters: [prometheus_remote_write/mimir]
+      processors: [memory_limiter, transform/receive_time, batch]
+      exporters: [otlp_http/mimir]
   telemetry:
     metrics:
       readers:

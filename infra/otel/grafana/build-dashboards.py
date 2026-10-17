@@ -23,7 +23,25 @@ METRICS = [
     ("FCP", "cwv_fcp_milliseconds", 1800, 3000, "ms"),
     ("TTFB", "cwv_ttfb_milliseconds", 800, 1800, "ms"),
 ]
-SEL = 'job="yceffort-blog", page_route=~"$route", page_lang=~"$lang", device_class=~"$device", browser_engine=~"$engine"'
+SEL = 'job="yceffort-blog", navigation_type=~"$nav", page_route=~"$route", page_lang=~"$lang", device_class=~"$device", browser_engine=~"$engine"'
+# 이동 변수. web-vitals 의 navigationType 값이다. SPA 이동은 Chromium 151 이상에서만 잡힌다.
+NAV_OPTIONS = [
+    ("첫 로드", "navigate|reload|back-forward|back-forward-cache|prerender|restore"),
+    ("SPA 이동", "soft-navigation"),
+    ("전체", ".*"),
+]
+
+
+def nav_variable():
+    first_text, first_value = NAV_OPTIONS[0]
+    return {
+        "name": "nav",
+        "label": "이동",
+        "type": "custom",
+        "query": ",".join(f"{text} : {value}" for text, value in NAV_OPTIONS),
+        "current": {"text": first_text, "value": first_value},
+        "options": [{"text": text, "value": value, "selected": i == 0} for i, (text, value) in enumerate(NAV_OPTIONS)],
+    }
 WIDTHS = [5, 5, 5, 5, 4]
 
 
@@ -186,6 +204,15 @@ def ops_dashboard():
         12, 7,
     )
     lay.add(
+        timeseries(
+            "화면별 SPA 이동",
+            [prom('sum by (page_route) (' + AGG + '(cwv_fcp_milliseconds_count{job="yceffort-blog", navigation_type="soft-navigation"}[$__interval]))', "{{page_route}}")],
+            "short", MIMIR, stack=True,
+            description="블로그 안에서 링크로 옮겨 간 횟수. SPA 이동 뒤 첫 contentful paint(FCP)가 보고된 수로 센다. Chromium 151 이상만 보고하고, 이동 변수와 상관없이 SPA 이동만 센다.",
+        ),
+        12, 7,
+    )
+    lay.add(
         timeseries("LCP 등급별 건수", [prom(f"sum by (rating) ({AGG}(cwv_lcp_milliseconds_count{{{SEL}}}[$__interval]))", "{{rating}}")], "short", MIMIR, stack=True),
         12, 7,
     )
@@ -210,6 +237,7 @@ def ops_dashboard():
         "refresh": "5m",
         "templating": {
             "list": [
+                nav_variable(),
                 label_variable("route", "page_route", "화면"),
                 label_variable("lang", "page_lang", "언어"),
                 label_variable("device", "device_class", "기기"),
@@ -228,7 +256,7 @@ def ops_dashboard():
     }
 
 
-FILTER = 'resource.service.name="yceffort-blog" && span.page.route=~"$route"'
+FILTER = 'resource.service.name="yceffort-blog" && span.cwv.navigation_type=~"$nav" && span.page.route=~"$route"'
 
 
 def traceql(query, step="5m", instant=False):
@@ -319,6 +347,7 @@ def why_dashboard():
         "refresh": "5m",
         "templating": {
             "list": [
+                nav_variable(),
                 {
                     "name": "route",
                     "label": "화면",

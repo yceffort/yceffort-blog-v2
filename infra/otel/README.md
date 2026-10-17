@@ -30,7 +30,7 @@ cp env.example .env          # 값을 채운다
 docker compose up -d
 ```
 
-바꾼 설정을 반영할 때는 `git pull && docker compose up -d` 를 한다.
+바꾼 설정을 반영할 때는 `git pull && docker compose up -d` 를 한다. 이미지 버전은 Dependabot(docker-compose)이 주마다 PR 을 연다. Mimir 의 delta 저장은 실험 기능이라 Mimir 판은 릴리스 노트를 확인하고 합친다.
 
 ## Grafana 보기
 

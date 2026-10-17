@@ -9,3 +9,8 @@ updates:
     directory: '/' # Location of package manifests
     schedule:
       interval: 'weekly'
+  # infra/otel 의 이미지 버전. Mimir 의 delta 저장은 실험 기능이라 Mimir 판은 릴리스 노트를 보고 합친다.
+  - package-ecosystem: 'docker-compose'
+    directory: '/infra/otel'
+    schedule:
+      interval: 'weekly'

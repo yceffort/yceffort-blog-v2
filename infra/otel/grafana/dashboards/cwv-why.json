@@ -14,6 +14,33 @@
   "templating": {
     "list": [
       {
+        "name": "nav",
+        "label": "이동",
+        "type": "custom",
+        "query": "첫 로드 : navigate|reload|back-forward|back-forward-cache|prerender|restore,SPA 이동 : soft-navigation,전체 : .*",
+        "current": {
+          "text": "첫 로드",
+          "value": "navigate|reload|back-forward|back-forward-cache|prerender|restore"
+        },
+        "options": [
+          {
+            "text": "첫 로드",
+            "value": "navigate|reload|back-forward|back-forward-cache|prerender|restore",
+            "selected": true
+          },
+          {
+            "text": "SPA 이동",
+            "value": "soft-navigation",
+            "selected": false
+          },
+          {
+            "text": "전체",
+            "value": ".*",
+            "selected": false
+          }
+        ]
+      },
+      {
         "name": "route",
         "label": "화면",
         "type": "custom",
@@ -86,7 +113,7 @@
             "uid": "tempo"
           },
           "queryType": "traceql",
-          "query": "{resource.service.name=\"yceffort-blog\" && span.page.route=~\"$route\" && name=\"cwv.lcp\"} | count_over_time() by (span.cwv.lcp.target)",
+          "query": "{resource.service.name=\"yceffort-blog\" && span.cwv.navigation_type=~\"$nav\" && span.page.route=~\"$route\" && name=\"cwv.lcp\"} | count_over_time() by (span.cwv.lcp.target)",
           "metricsQueryType": "range",
           "step": "5m",
           "refId": "A"
@@ -139,7 +166,7 @@
             "uid": "tempo"
           },
           "queryType": "traceql",
-          "query": "{resource.service.name=\"yceffort-blog\" && span.page.route=~\"$route\" && name=\"cwv.lcp\"} | quantile_over_time(duration, .75) by (span.cwv.lcp.target)",
+          "query": "{resource.service.name=\"yceffort-blog\" && span.cwv.navigation_type=~\"$nav\" && span.page.route=~\"$route\" && name=\"cwv.lcp\"} | quantile_over_time(duration, .75) by (span.cwv.lcp.target)",
           "metricsQueryType": "range",
           "step": "5m",
           "refId": "A"
@@ -221,7 +248,7 @@
             "uid": "tempo"
           },
           "queryType": "traceql",
-          "query": "{resource.service.name=\"yceffort-blog\" && span.page.route=~\"$route\" && span.page.route=\"post\" && name=\"cwv.lcp\"} | quantile_over_time(duration, .75) by (span.page.path) | topk(10)",
+          "query": "{resource.service.name=\"yceffort-blog\" && span.cwv.navigation_type=~\"$nav\" && span.page.route=~\"$route\" && span.page.route=\"post\" && name=\"cwv.lcp\"} | quantile_over_time(duration, .75) by (span.page.path) | topk(10)",
           "metricsQueryType": "instant",
           "step": "5m",
           "refId": "A"
@@ -295,7 +322,7 @@
             "uid": "tempo"
           },
           "queryType": "traceql",
-          "query": "{resource.service.name=\"yceffort-blog\" && span.page.route=~\"$route\" && span.page.route=\"post\" && name=\"cwv.lcp\"} | count_over_time() by (span.page.path) | topk(10)",
+          "query": "{resource.service.name=\"yceffort-blog\" && span.cwv.navigation_type=~\"$nav\" && span.page.route=~\"$route\" && span.page.route=\"post\" && name=\"cwv.lcp\"} | count_over_time() by (span.page.path) | topk(10)",
           "metricsQueryType": "instant",
           "step": "5m",
           "refId": "A"
@@ -374,7 +401,7 @@
             "uid": "tempo"
           },
           "queryType": "traceql",
-          "query": "{resource.service.name=\"yceffort-blog\" && span.page.route=~\"$route\" && name=\"cwv.lcp\"} | quantile_over_time(duration, .75) by (span.page.referrer_type)",
+          "query": "{resource.service.name=\"yceffort-blog\" && span.cwv.navigation_type=~\"$nav\" && span.page.route=~\"$route\" && name=\"cwv.lcp\"} | quantile_over_time(duration, .75) by (span.page.referrer_type)",
           "metricsQueryType": "instant",
           "step": "5m",
           "refId": "A"
@@ -448,7 +475,7 @@
             "uid": "tempo"
           },
           "queryType": "traceql",
-          "query": "{resource.service.name=\"yceffort-blog\" && span.page.route=~\"$route\" && name=\"cwv.ttfb\"} | quantile_over_time(duration, .75) by (span.page.sw_controlled)",
+          "query": "{resource.service.name=\"yceffort-blog\" && span.cwv.navigation_type=~\"$nav\" && span.page.route=~\"$route\" && name=\"cwv.ttfb\"} | quantile_over_time(duration, .75) by (span.page.sw_controlled)",
           "metricsQueryType": "instant",
           "step": "5m",
           "refId": "A"
@@ -522,7 +549,7 @@
             "uid": "tempo"
           },
           "queryType": "traceql",
-          "query": "{resource.service.name=\"yceffort-blog\" && span.page.route=~\"$route\" && name=\"cwv.lcp\"} | quantile_over_time(duration, .75) by (span.cwv.lcp.kind)",
+          "query": "{resource.service.name=\"yceffort-blog\" && span.cwv.navigation_type=~\"$nav\" && span.page.route=~\"$route\" && name=\"cwv.lcp\"} | quantile_over_time(duration, .75) by (span.cwv.lcp.kind)",
           "metricsQueryType": "instant",
           "step": "5m",
           "refId": "A"
@@ -609,7 +636,7 @@
             "uid": "tempo"
           },
           "queryType": "traceql",
-          "query": "{resource.service.name=\"yceffort-blog\" && span.page.route=~\"$route\" && name=\"cwv.lcp\"} | avg_over_time(span.cwv.lcp.time_to_first_byte)",
+          "query": "{resource.service.name=\"yceffort-blog\" && span.cwv.navigation_type=~\"$nav\" && span.page.route=~\"$route\" && name=\"cwv.lcp\"} | avg_over_time(span.cwv.lcp.time_to_first_byte)",
           "metricsQueryType": "range",
           "step": "5m",
           "refId": "A"
@@ -658,7 +685,7 @@
             "uid": "tempo"
           },
           "queryType": "traceql",
-          "query": "{resource.service.name=\"yceffort-blog\" && span.page.route=~\"$route\" && name=\"cwv.lcp\"} | avg_over_time(span.cwv.lcp.resource_load_delay)",
+          "query": "{resource.service.name=\"yceffort-blog\" && span.cwv.navigation_type=~\"$nav\" && span.page.route=~\"$route\" && name=\"cwv.lcp\"} | avg_over_time(span.cwv.lcp.resource_load_delay)",
           "metricsQueryType": "range",
           "step": "5m",
           "refId": "A"
@@ -707,7 +734,7 @@
             "uid": "tempo"
           },
           "queryType": "traceql",
-          "query": "{resource.service.name=\"yceffort-blog\" && span.page.route=~\"$route\" && name=\"cwv.lcp\"} | avg_over_time(span.cwv.lcp.resource_load_duration)",
+          "query": "{resource.service.name=\"yceffort-blog\" && span.cwv.navigation_type=~\"$nav\" && span.page.route=~\"$route\" && name=\"cwv.lcp\"} | avg_over_time(span.cwv.lcp.resource_load_duration)",
           "metricsQueryType": "range",
           "step": "5m",
           "refId": "A"
@@ -756,7 +783,7 @@
             "uid": "tempo"
           },
           "queryType": "traceql",
-          "query": "{resource.service.name=\"yceffort-blog\" && span.page.route=~\"$route\" && name=\"cwv.lcp\"} | avg_over_time(span.cwv.lcp.element_render_delay)",
+          "query": "{resource.service.name=\"yceffort-blog\" && span.cwv.navigation_type=~\"$nav\" && span.page.route=~\"$route\" && name=\"cwv.lcp\"} | avg_over_time(span.cwv.lcp.element_render_delay)",
           "metricsQueryType": "range",
           "step": "5m",
           "refId": "A"
@@ -818,7 +845,7 @@
             "uid": "tempo"
           },
           "queryType": "traceql",
-          "query": "{resource.service.name=\"yceffort-blog\" && span.page.route=~\"$route\" && name=\"cwv.inp\"} | avg_over_time(span.cwv.inp.input_delay)",
+          "query": "{resource.service.name=\"yceffort-blog\" && span.cwv.navigation_type=~\"$nav\" && span.page.route=~\"$route\" && name=\"cwv.inp\"} | avg_over_time(span.cwv.inp.input_delay)",
           "metricsQueryType": "range",
           "step": "5m",
           "refId": "A"
@@ -867,7 +894,7 @@
             "uid": "tempo"
           },
           "queryType": "traceql",
-          "query": "{resource.service.name=\"yceffort-blog\" && span.page.route=~\"$route\" && name=\"cwv.inp\"} | avg_over_time(span.cwv.inp.processing_duration)",
+          "query": "{resource.service.name=\"yceffort-blog\" && span.cwv.navigation_type=~\"$nav\" && span.page.route=~\"$route\" && name=\"cwv.inp\"} | avg_over_time(span.cwv.inp.processing_duration)",
           "metricsQueryType": "range",
           "step": "5m",
           "refId": "A"
@@ -916,7 +943,7 @@
             "uid": "tempo"
           },
           "queryType": "traceql",
-          "query": "{resource.service.name=\"yceffort-blog\" && span.page.route=~\"$route\" && name=\"cwv.inp\"} | avg_over_time(span.cwv.inp.presentation_delay)",
+          "query": "{resource.service.name=\"yceffort-blog\" && span.cwv.navigation_type=~\"$nav\" && span.page.route=~\"$route\" && name=\"cwv.inp\"} | avg_over_time(span.cwv.inp.presentation_delay)",
           "metricsQueryType": "range",
           "step": "5m",
           "refId": "A"
@@ -965,7 +992,7 @@
             "uid": "tempo"
           },
           "queryType": "traceql",
-          "query": "{resource.service.name=\"yceffort-blog\" && span.page.route=~\"$route\" && name=\"cwv.inp\"} | quantile_over_time(duration, .75) by (span.cwv.inp.target)",
+          "query": "{resource.service.name=\"yceffort-blog\" && span.cwv.navigation_type=~\"$nav\" && span.page.route=~\"$route\" && name=\"cwv.inp\"} | quantile_over_time(duration, .75) by (span.cwv.inp.target)",
           "metricsQueryType": "range",
           "step": "5m",
           "refId": "A"
@@ -1034,7 +1061,7 @@
             "uid": "tempo"
           },
           "queryType": "traceql",
-          "query": "{resource.service.name=\"yceffort-blog\" && span.page.route=~\"$route\" && name=\"cwv.cls\" && duration > 0ms} | count_over_time() by (span.cwv.cls.largest_shift_target)",
+          "query": "{resource.service.name=\"yceffort-blog\" && span.cwv.navigation_type=~\"$nav\" && span.page.route=~\"$route\" && name=\"cwv.cls\" && duration > 0ms} | count_over_time() by (span.cwv.cls.largest_shift_target)",
           "metricsQueryType": "range",
           "step": "5m",
           "refId": "A"
@@ -1100,7 +1127,7 @@
             "uid": "tempo"
           },
           "queryType": "traceql",
-          "query": "{resource.service.name=\"yceffort-blog\" && span.page.route=~\"$route\" && name=\"cwv.lcp\"} | count_over_time() by (span.cwv.lcp.finalized_by)",
+          "query": "{resource.service.name=\"yceffort-blog\" && span.cwv.navigation_type=~\"$nav\" && span.page.route=~\"$route\" && name=\"cwv.lcp\"} | count_over_time() by (span.cwv.lcp.finalized_by)",
           "metricsQueryType": "range",
           "step": "5m",
           "refId": "A"
@@ -1156,7 +1183,7 @@
           "limit": 50,
           "spss": 1,
           "refId": "A",
-          "query": "{resource.service.name=\"yceffort-blog\" && span.page.route=~\"$route\" && name=\"cwv.lcp\" && duration > 2.5s} | select(span.page.path, span.cwv.lcp.target, span.cwv.lcp.kind, span.device.class, span.browser.engine, span.network.effective_type, span.cwv.lcp.time_to_first_byte, span.cwv.lcp.element_render_delay)"
+          "query": "{resource.service.name=\"yceffort-blog\" && span.cwv.navigation_type=~\"$nav\" && span.page.route=~\"$route\" && name=\"cwv.lcp\" && duration > 2.5s} | select(span.page.path, span.cwv.lcp.target, span.cwv.lcp.kind, span.device.class, span.browser.engine, span.network.effective_type, span.cwv.lcp.time_to_first_byte, span.cwv.lcp.element_render_delay)"
         }
       ],
       "fieldConfig": {

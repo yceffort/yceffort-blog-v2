@@ -1,11 +1,13 @@
 ---
-title: '<em>Core Web Vitals</em>를 OpenTelemetry로 Tempo와 Mimir에 나눠 수집하기'
+title: '앱 웹뷰의 <em>CWV</em>를 공용 관측 인프라로 보내기'
 tags:
   - web-performance
   - browser
 published: false
 date: 2026-10-17 09:00:00
-description: 'web-vitals의 원인 분해 값을 OpenTelemetry로 trace는 Tempo에, metric은 Mimir에 나눠 보냈다. LCP 값 하나가 브라우저에서 Grafana 패널까지 가는 동안 오류 없이 사라진 지점들을 재현 환경에서 다시 재고 기록했다.'
+description: '앱 웹뷰에서 잰 CWV를 여러 팀이 같이 쓰는 관측 인프라로 보냈다. 웹뷰는 떠날 때 신호를 보내지 않았고, tail sampling과 누적 변환과 Tempo 조회는 각자의 방식으로 값을 오류 없이 버렸다. 바꿀 수 없는 설정마다 무엇을 잃었는지 재현 환경에서 다시 쟀다.'
+series: 'Core Web Vitals 직접 수집하기'
+seriesOrder: 3
 ---
 
 ## Table of Contents
@@ -14,13 +16,13 @@ description: 'web-vitals의 원인 분해 값을 OpenTelemetry로 trace는 Tempo
 
 앱 웹뷰 안에서 열리는 홈 화면의 LCP p75가 나빠졌다는 것은 대시보드로 알 수 있었다. 그런데 어떤 요소가 LCP였는지는 어디에도 남아 있지 않았다. 사내 공용 RUM 라이브러리는 web-vitals의 `onLCP` 콜백에서 `rating`, `value`, `id`만 꺼내 보내고 `entries[].element`는 버리고 있었다. 기존 대시보드는 Prometheus 라벨로 미리 집계한 값이라 요소 이름을 담을 자리 자체가 없었다. 느리다는 것까지는 알 수 있어도, 무엇이 느린지는 직접 재현해 보기 전에는 알 수 없는 상태였다.
 
-그래서 web-vitals의 attribution 빌드로 Core Web Vitals(이하 CWV) 다섯 지표의 원인 분해 값을 직접 재고, OpenTelemetry(이하 OTel)로 두 곳에 나눠 보내기로 했다. 원인 분석용 trace는 Grafana Tempo로, 운영 모니터링용 metric은 Grafana Mimir로 보낸다. 측정 자체는 어렵지 않았다. 어려웠던 것은 측정한 값이 대시보드까지 가는 길이었다. 값은 브라우저 안에서, 브라우저를 떠나는 순간에, collector에서, 저장소에서 조회할 때 사라졌고, 그 어느 지점에서도 오류는 나지 않았다. 이 글은 LCP 값 하나가 브라우저에서 Grafana 패널까지 가는 경로를 따라가며 값이 사라진 지점을 하나씩 기록한 것이다.
+그래서 web-vitals의 attribution 빌드로 Core Web Vitals(이하 CWV) 다섯 지표의 원인 분해 값을 직접 재고, OpenTelemetry(이하 OTel)로 두 곳에 나눠 보내기로 했다. 원인 분석용 trace는 Grafana Tempo로, 운영 모니터링용 metric은 Grafana Mimir로 보낸다. 수집 코드의 모양과 페이지를 떠나는 순간의 전송은 [2편](/2026/10/cwv-send-on-page-leave)에서 다뤘다. 이 글은 그렇게 보낸 값이 앱 웹뷰와 공용 관측 인프라를 지나는 동안 사라진 지점을 다룬다.
 
-작업에는 처음부터 몇 가지 제약이 있었다. 먼저 collector 이후의 관측 인프라는 여러 팀이 같이 쓰는 공용 인프라라서 내가 설정을 바꿀 수 없었다. 이 인프라의 collector 끝단에는 tail sampling이 걸려 있고, trace에서 metric을 만들어 주는 spanmetrics는 리소스 부담 때문에 받지 않는다. 운영 metric의 라벨은 정해진 몇 개만 허용되고, 요소 selector처럼 값의 종류가 끝없이 늘어나는 라벨은 금지다. 사내 공용 RUM 라이브러리도 다른 서비스가 함께 쓰고 있어서 고칠 수 없었고, 기존 대시보드를 위해 같은 값을 계속 보내야 했다. 그리고 화면은 iOS와 Android 앱의 웹뷰 안에서 열린다. 이 글에 나오는 판단은 대부분 이 제약 중 하나에서 나왔다.
+작업에는 처음부터 몇 가지 제약이 있었다. 먼저 collector 이후의 관측 인프라는 여러 팀이 같이 쓰는 공용 인프라라서 내가 설정을 바꿀 수 없었다. 이 인프라의 collector 끝단에는 tail sampling이 걸려 있고, trace에서 metric을 만들어 주는 spanmetrics는 리소스 부담 때문에 받지 않는다. 운영 metric의 라벨은 정해진 몇 개만 허용되고, 요소 selector처럼 값의 종류가 끝없이 늘어나는 라벨은 금지다. 사내 공용 RUM 라이브러리도 다른 서비스가 함께 쓰고 있어서 고칠 수 없었고, 기존 대시보드를 위해 같은 값을 계속 보내야 했다. 그리고 화면은 iOS와 Android 앱의 웹뷰 안에서 열린다. 이 글의 절은 대부분 이 제약 중 하나에서 나왔다.
 
-> 사내 작업은 2026년 8월 말부터 10월 중순까지 사내 검증 환경(sandbox)에서 했다. 글의 수치는 공개 재현 환경([blog-experiments/cwv-otel-grafana](https://github.com/yceffort/blog-experiments/tree/cwv-otel-grafana-v1/cwv-otel-grafana))에서 다시 잰 값을 기본으로 하고, 재현할 수 없는 iOS 웹뷰의 동작만 사내 검증 환경에서 잰 값을 출처를 밝혀 인용한다.
+> 사내 작업은 2026년 8월 말부터 10월 중순까지 사내 검증 환경(sandbox)에서 했다. 글의 수치는 공개 재현 환경([blog-experiments/cwv-otel-grafana](https://github.com/yceffort/blog-experiments/tree/main/cwv-otel-grafana))에서 다시 잰 값을 기본으로 하고, 재현할 수 없는 iOS 웹뷰의 동작만 사내 검증 환경에서 잰 값을 출처를 밝혀 인용한다.
 >
-> 재현 환경의 버전은 web-vitals 6.2.3, OTel JS 2.12.0(OTLP exporter 0.223.0), OpenTelemetry Collector contrib 0.162.0, Tempo 3.1.0, Mimir 3.2.2, Grafana 13.2.4다. 브라우저는 Playwright 1.64.1의 Chromium 156을 썼다. 버전 차이를 확인할 때는 OTel JS 1.30.1(exporter 0.57.2)과 Tempo 2.10.8을 함께 띄웠다. 인용한 소스는 모두 이 버전의 태그로 고정했다.
+> 재현 환경의 버전은 web-vitals 6.2.3, OTel JS 2.12.0(OTLP exporter 0.223.0), OpenTelemetry Collector contrib 0.162.0, Tempo 3.1.0, Mimir 3.2.2, Grafana 13.2.4다. 여러 브라우저가 한 시리즈에 쓰는 실험(E9, E10)은 collector contrib 0.163.1에서 쟀고, 0.162.0에서 잰 E1과 E4도 0.163.1에서 다시 돌려 같은 결과를 얻었다. 브라우저는 Playwright 1.64.1의 Chromium 156을 썼다. 버전 차이를 확인할 때는 Tempo 2.10.8을 함께 띄웠다. 인용한 소스는 모두 이 버전의 태그로 고정했다.
 
 ## 두 갈래로 나눈 이유
 
@@ -34,61 +36,13 @@ flowchart LR
   M --> DC["collector<br/>delta_to_cumulative"] --> MIMIR["Mimir<br/>얼마나 느린가"]
 ```
 
-두 경로는 같은 측정 소스에서 나온다. Next.js의 `useReportWebVitals`는 Next.js가 자체 번들한 web-vitals 사본으로 값을 재기 때문에, 이 훅과 직접 설치한 web-vitals를 섞어 쓰면 같은 페이지 로드라도 값과 `id`가 어긋난다. 두 저장소의 값을 `id`로 이어 붙이려면 측정 소스가 하나여야 해서, web-vitals 콜백 하나에서 trace와 metric을 함께 기록하도록 했다.
+metric은 미리 집계해서 보내는 방식이라, 어떤 질문을 던질 수 있는지가 수집하는 시점에 정해진다는 점은 감수해야 한다. Mimir로는 "어느 화면의 LCP p75가 얼마이고 나빠졌는가"에 답할 수 있지만, "그 화면의 LCP 요소가 무엇이었나"에는 답할 수 없다. 그 질문은 검증 환경에서 재현한 다음 Tempo로 좁혀야 한다. 처음 문제였던 "무엇이 LCP인가"가 운영 데이터만으로는 여전히 답할 수 없는 질문으로 남는다는 뜻이고, 이것이 이 인프라에서 낼 수 있는 최선이라고 판단했다.
 
-trace는 페이지 로드 하나가 trace 하나다. 지표 span의 길이를 지표 값으로 맞췄는데, 이렇게 해 두면 TraceQL의 `quantile_over_time(duration, .75)`가 그대로 지표의 p75가 된다. CLS는 점수라서 1000을 곱해 ms로 넣었다. 그러면 TraceQL이 초 단위로 돌려주는 값이 그대로 CLS 점수로 읽힌다. 속성에는 attribution 값을 모두 싣는다. LCP라면 요소 selector, 리소스 URL, 그리고 LCP를 네 단계로 나눈 시간이다.
+## 웹뷰는 떠났다고 알려 주지 않는다
 
-metric은 지표마다 히스토그램 하나다. 브라우저는 수명이 짧고 탭마다 따로 세기 때문에 누적값을 들고 있을 주체가 없다. 그래서 delta temporality로 보내고, 누적으로 바꾸는 일은 collector에 맡긴다. 버킷 경계에는 web-vitals의 good, poor 기준값을 반드시 넣었다.
+2편에서 본 것처럼 CLS는 항상, INP는 상호작용이 있었던 경우에, LCP는 입력 없이 떠나는 경우에 페이지를 떠나는 순간 처음으로 값이 생긴다. web-vitals가 그 순간을 알아채는 신호는 `visibilitychange`의 hidden이다. 그런데 앱 웹뷰에서는 이 신호가 오지 않는 경우가 있었다.
 
-```ts
-// cwv-otel-grafana/demo-web/src/telemetry/buckets.ts
-export const BUCKETS: Record<Metric['name'], number[]> = {
-  TTFB: [100, 200, 400, 600, 800, 1000, 1400, 1800, 2500, 4000],
-  FCP: [400, 800, 1200, 1500, 1800, 2400, 3000, 4000, 6000],
-  LCP: [500, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 7000, 10000],
-  INP: [50, 100, 150, 200, 300, 400, 500, 750, 1000, 2000],
-  CLS: [0.01, 0.025, 0.05, 0.1, 0.15, 0.25, 0.5, 1],
-};
-```
-
-경계에 2500이 있으면 `le="2500"` 버킷 하나를 전체 건수로 나눈 값이 보간 없이 정확한 good 비율이 된다. 경계 사이 값은 버킷 안에서 선형 보간으로 추정되므로, p75가 자주 걸리는 구간은 촘촘하게 두었다. 라벨은 화면 이름(`page.route`), 탐색 종류, 등급, INP의 입력 종류처럼 값의 종류가 정해진 것만 쓴다. 라벨 조합 하나가 시리즈 하나라서, selector를 라벨로 넣으면 시리즈 수가 화면 요소 수만큼 늘어난다.
-
-다만 metric은 미리 집계해서 보내는 방식이라, 어떤 질문을 던질 수 있는지가 수집하는 시점에 정해진다는 점은 감수해야 한다. Mimir로는 "어느 화면의 LCP p75가 얼마이고 나빠졌는가"에 답할 수 있지만, "그 화면의 LCP 요소가 무엇이었나"에는 답할 수 없다. 그 질문은 검증 환경에서 재현한 다음 Tempo로 좁혀야 한다. 처음 문제였던 "무엇이 LCP인가"가 운영 데이터만으로는 여전히 답할 수 없는 질문으로 남는다는 뜻이고, 이것이 이 인프라에서 낼 수 있는 최선이라고 판단했다.
-
-## 브라우저 안: 지표의 절반은 떠날 때 확정된다
-
-web-vitals는 다섯 지표를 같은 시점에 보고하지 않는다. `reportAllChanges` 없이 쓸 때 보고 시점은 다음과 같다.
-
-| 지표 | 보고 시점                             | 근거 (v6.2.3)   |
-| ---- | ------------------------------------- | --------------- |
-| TTFB | `load` 뒤 한 번                       | `src/onTTFB.ts` |
-| FCP  | 첫 contentful paint 때 한 번          | `src/onFCP.ts`  |
-| LCP  | 첫 `keydown`이나 `click`, 또는 hidden | `src/onLCP.ts`  |
-| CLS  | hidden 때                             | `src/onCLS.ts`  |
-| INP  | hidden 때                             | `src/onINP.ts`  |
-
-LCP는 브라우저가 입력이 들어오면 후보 기록을 멈추기 때문에 그 시점에 확정한다. web-vitals 6.2.3의 코드는 다음과 같다[^1].
-
-```ts
-// web-vitals v6.2.3 src/onLCP.ts
-const finalizeEventTypes = ['keydown', 'click', 'visibilitychange'];
-
-const finalizeLCP = (event: Event) => {
-  if (event.isTrusted && !isFinalized) {
-    // Wrap the listener in an idle callback so it's run in a separate
-    // task to reduce potential INP impact.
-    // https://github.com/GoogleChrome/web-vitals/issues/383
-    const metricIdToFinalize = metric.id;
-    whenIdleOrHidden(() => {
-```
-
-스크롤도 LCP 기록을 멈추는 입력이지만, 같은 파일의 주석에 따르면 프로그램으로 만들어 낼 수 있어서 확정 근거에서 뺐다. CLS는 페이지가 숨겨질 때까지 layout shift를 모은다. 직전 shift와 1초 미만, 세션의 첫 shift와 5초 미만이면 같은 세션 창으로 묶고, 가장 큰 세션 창의 합이 CLS가 된다(`src/lib/LayoutShiftManager.ts`). INP는 가장 긴 상호작용 10개만 들고 있다가, 상호작용 50개마다 가장 긴 것을 하나씩 건너뛴 값을 고른다(`src/lib/InteractionManager.ts`의 `_estimateP98LongestInteraction`). 이 두 지표도 hidden에서 보고한다.
-
-이 표에서 눈여겨볼 것은 보고 시점이다. 다섯 지표 중 CLS는 항상, INP는 상호작용이 있었던 경우에, LCP는 입력 없이 떠나는 경우에 페이지를 떠나는 순간 처음으로 값이 생긴다(상호작용이 한 번도 없으면 INP는 초기값 -1에서 바뀌지 않아 보고되지 않는다). 그러니 "떠나는 순간"에 무엇이 일어나는지가 데이터 품질을 정한다. 그리고 앱 웹뷰에서는 이 순간이 오지 않는 경우가 있었다.
-
-### iOS 웹뷰에서는 hidden이 오지 않는다
-
-사내 검증 환경에서 iOS 앱 웹뷰로 홈 화면에 들어간 뒤 5초 동안 아무것도 누르지 않고 네 가지 방법으로 떠나 봤다. 앱 브릿지가 웹뷰에 알려 주는 일시정지 이벤트(아래 표의 pause)도 함께 기록했다.
+사내 검증 환경에서 iOS 앱 웹뷰로 홈 화면에 들어간 뒤 5초 동안 아무것도 누르지 않고 네 가지 방법으로 떠나 봤다. 앱이 웹뷰에 알려 주는 일시정지 이벤트(아래 표의 pause)도 함께 기록했다.
 
 | 떠나는 방법           | 받은 신호                            | LCP         |
 | --------------------- | ------------------------------------ | ----------- |
@@ -144,109 +98,9 @@ export function createLcpGate(
 
 후보는 `onLCP(gate.candidate, { reportAllChanges: true })`로, 정식 확정값은 `onLCP(gate.final)`로 받는다. 구독을 두 번 하는 이유는 `reportAllChanges`를 켜면 확정 시점에 값이 바뀌지 않았을 때 콜백이 다시 불리지 않아서(`src/lib/bindReporter.ts`는 delta가 0이면 보고하지 않는다), 한 구독만으로는 확정 시점을 알 수 없기 때문이다. quiet로 확정하면 곧바로 flush한다. BatchSpanProcessor의 기본 지연이 5초라서 그대로 두면 8초 이탈 전에 나가지 못할 수 있다.
 
-사내 검증 환경의 trace 714개 중 quiet 확정과 정식 확정이 둘 다 있는 327개(Android 294, iOS 33)는 두 값이 모두 같았다. iOS에서 quiet로만 LCP가 생긴 trace는 135개였다. 이 방식에도 한계는 남는다. 후보가 3초 넘게 멈춘 뒤에 더 큰 요소가 그려지면 작은 값이 먼저 확정된다. 검증 환경에서는 관측되지 않았지만 구조상 일어날 수 있다. 마지막 후보 뒤 3초 안에 입력 없이 떠나면 여전히 LCP가 없다.
+사내 검증 환경의 trace 714개 중 quiet 확정과 정식 확정이 둘 다 있는 327개(Android 294, iOS 33)는 두 값이 모두 같았다. iOS에서 quiet로만 LCP가 생긴 trace는 135개였다. 이 방식에도 한계는 남는다. 후보가 3초 넘게 멈춘 뒤에 더 큰 요소가 그려지면 작은 값이 먼저 확정된다. 검증 환경에서는 관측되지 않았지만 구조상 일어날 수 있다. 그리고 quiet로 확정한 값도 정식값과 같은 histogram에 들어가므로, Mimir에서는 둘을 구분할 수 없다. 어느 쪽이 확정했는지는 trace의 `cwv.lcp.finalized_by` 속성에만 남는다. 마지막 후보 뒤 3초 안에 입력 없이 떠나면 여전히 LCP가 없다.
 
-## 브라우저를 떠나는 순간
-
-이제 값이 생겼으니 보내야 한다. 앞의 표대로라면 CLS와 INP는 떠나는 순간에 생기므로, 떠나는 순간의 전송이 실패하면 이 두 지표가 통째로 빠진다.
-
-### 1.x의 sendBeacon은 실패를 성공으로 보고한다
-
-사내 코드는 OTel JS 1.30.1과 OTLP exporter 0.57.2를 쓰고 있었다. 이 버전의 브라우저 exporter는 `headers` 옵션이 없으면 `navigator.sendBeacon`으로, 있으면 XHR로 보낸다. 재현 환경에서 다른 origin에 가짜 collector를 띄우고 응답을 바꿔 가며 exporter가 보고하는 결과를 봤다.
-
-| exporter                           | collector가 200 | 400         | CORS 거부                  |
-| ---------------------------------- | --------------- | ----------- | -------------------------- |
-| 0.57.2, `headers` 없음(sendBeacon) | success         | **success** | **success**(서버 수신 0건) |
-| 0.57.2, `headers: {}`(XHR)         | success         | failed      | failed                     |
-| 0.223.0(keepalive fetch)           | success         | failed      | 5번 시도 후 failed(약 8초) |
-
-> 각 조합을 두 번 돌려 같은 결과를 얻었다. 측정 코드는 `cwv-otel-grafana/experiments/e2-exporter`에 남겼다.
-
-sendBeacon은 요청을 브라우저 큐에 넣었는지만 알려 준다. 0.57.2는 그 값을 그대로 성공으로 보고해서, CORS에 막혀 서버가 한 건도 받지 못해도 exporter에서는 아무 일도 없었던 것처럼 보인다. 사내에서는 평소에는 XHR로 보내 실패가 보이게 하고, 페이지가 숨겨졌을 때만 sendBeacon으로 바꿨다.
-
-최신 버전에서는 이 분기가 사라졌다. 0.204.0부터 `headers`가 있으면 XHR보다 fetch를 먼저 쓰고, 0.211.0에서 XHR 전송이 없어졌고, 0.213.0에서 sendBeacon도 keepalive fetch로 바뀌었다[^2]. 0.223.0의 fetch 전송은 keepalive 요청의 누적 크기(60KiB)와 동시 개수(9개)를 직접 세다가 넘으면 keepalive를 끈다. 실패도 제대로 보고한다. 그런데 떠나는 순간의 함정은 전송 방식이 아니라 flush에 남아 있었다.
-
-### pagehide는 visibilitychange보다 먼저 온다
-
-OTel JS의 BatchSpanProcessor는 페이지가 숨겨질 때 남은 span을 내보내려고 리스너 두 개를 건다. 2.12.0의 코드는 다음과 같다[^3].
-
-```ts
-// opentelemetry-js v2.12.0 packages/sdk-trace/src/platform/browser/export/BatchSpanProcessor.ts
-document.addEventListener(
-  'visibilitychange',
-  this._visibilityChangeListener
-);
-
-// use 'pagehide' event as a fallback for Safari; see https://bugs.webkit.org/show_bug.cgi?id=116769
-document.addEventListener('pagehide', this._pageHideListener);
-```
-
-주석의 WebKit 버그는 Safari가 문서를 떠날 때 `visibilitychange`를 보내지 않던 문제다. BCD에도 iOS Safari 14.5 이전에는 그랬다고 적혀 있다. 그런데 `pagehide`는 Window에서 발생하는 이벤트다. 같은 탭에서 링크로 이동할 때 어떤 리스너가 어떤 순서로 불리는지 sessionStorage에 기록해 다음 문서에서 읽어 봤다.
-
-```text
-window.capture.beforeunload:visible
-window.beforeunload:visible
-window.capture.pagehide:visible
-window.pagehide:visible
-window.capture.visibilitychange:hidden
-document.visibilitychange:hidden
-window.visibilitychange:hidden
-window.capture.unload:hidden
-window.unload:hidden
-```
-
-> Chromium 156에서 두 번 실행해 같은 결과를 얻었다. `cwv-otel-grafana/experiments/e3-lifecycle`.
-
-`document`에 건 `pagehide` 리스너는 한 번도 불리지 않았다. pagehide는 document를 거치지 않으니 BatchSpanProcessor의 Safari 대비책은 적어도 Chromium에서는 동작하지 않는다. 그리고 순서가 `pagehide`, `visibilitychange` 순이다. pagehide가 올 때 문서는 아직 visible이고, web-vitals는 그다음 `visibilitychange`에서 CLS와 INP를 보고한다.
-
-여기까지는 trace에 별 영향이 없다. 문제는 metric이었다. BatchSpanProcessor처럼 hidden과 pagehide 두 이벤트 모두에서 metric도 flush하자, 떠날 때 보고되는 CLS와 INP가 Mimir에 한 건도 도착하지 않았다. 10초 주기 export가 오기 전에 떠나는 방문을 만들고 방문마다 Mimir의 지표별 건수가 얼마나 늘었는지 셌다.
-
-| flush 시점                  | TTFB | FCP | LCP | INP   | CLS   |
-| --------------------------- | ---- | --- | --- | ----- | ----- |
-| visibilitychange만          | 1    | 1   | 1   | 1     | 1     |
-| pagehide와 visibilitychange | 1    | 1   | 1   | **0** | **0** |
-
-> 모드마다 두 번 실행해 같은 결과를 얻었다. `cwv-otel-grafana/experiments/e7-unload-flush`.
-
-원인은 sdk-metrics의 `forceFlush`가 진행 중인 export를 기다린다는 데 있었다[^4].
-
-```ts
-// opentelemetry-js v2.12.0 packages/sdk-metrics/src/export/PeriodicExportingMetricReader.ts
-protected async onForceFlush(): Promise<void> {
-  // Wait for any in-progress export to finish first so that we never run
-  // collect + export concurrently with it.
-  await this._awaitOngoingExport();
-  // forceFlush SHOULD collect and export the latest metrics. If a concurrent
-  // caller already started a fresh export while we were waiting above, await
-  // that one instead of starting yet another collect + export cycle;
-  // otherwise run our own.
-  if (this._ongoingExportPromise) {
-    await this._awaitOngoingExport();
-  } else {
-    await this._runOnce();
-  }
-  await this._exporter.forceFlush();
-}
-```
-
-pagehide에서 부른 flush가 TTFB, FCP, LCP를 담은 요청을 먼저 보낸다. 이어서 visibilitychange에서 web-vitals가 CLS와 INP를 기록하고 다시 flush를 부르는데, 이 호출은 첫 요청의 응답이 올 때까지 기다린다. 페이지를 살려 둔 채 두 이벤트를 다른 task로 보내 보면, CLS와 INP를 담은 두 번째 요청은 첫 요청의 응답이 도착한 직후에야 나간다. 실제로 떠나는 문서는 그 응답이 오기 전에 사라지므로, 두 번째 collect가 일어나지 못한다고 보는 것이 E7 결과와 맞는다.
-
-이 대기는 2.9.0에서 들어왔다(#6655). 사내 코드가 쓰던 sdk-metrics 1.30.1의 `onForceFlush`에는 이 대기가 없다. 같은 flush 코드라도 sdk-metrics를 2.9.0 이상으로 올리면 CLS와 INP를 오류 없이 잃게 된다는 뜻이다. trace는 BatchSpanProcessor의 `forceFlush`가 이렇게 기다리지 않아서 같은 조건에서도 도착한다. 재현 환경은 `visibilitychange`에서만 flush하도록 바꿨다.
-
-```ts
-// cwv-otel-grafana/demo-web/src/telemetry/setup.ts
-// pagehide 에서는 flush 하지 않는다. 문서를 떠날 때 pagehide 가 visibilitychange 보다 먼저 온다.
-// sdk-metrics 2.9.0 부터 forceFlush 는 진행 중인 export 의 응답을 기다린 뒤에 다시 collect 한다.
-// pagehide 에서 보낸 요청의 응답이 오기 전에 문서가 사라지므로, visibilitychange 에서 막 기록한
-// CLS, INP 는 나가지 못한다.
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'hidden') flush();
-});
-```
-
-pagehide를 빼면 iOS Safari 14.5 이전처럼 떠날 때 `visibilitychange`가 오지 않는 브라우저에서는 주기 export를 기다리던 값이 빠진다. 다만 그런 브라우저에서는 web-vitals도 hidden을 받지 못해 CLS와 INP를 보고하지 않으므로, 잃는 것은 TTFB, FCP, LCP 중 아직 나가지 않은 값이다. CLS와 INP를 매번 잃는 것보다는 이 손실이 작다고 판단했다.
-
-## collector: 혼자 도착한 root는 버려진다
+## tail sampling: 혼자 도착한 root는 버려진다
 
 사내 검증 환경에서 처음 trace를 보냈을 때 collector는 `200 {"partialSuccess":{}}`로 응답했는데 Tempo에는 CWV span이 없었다. 같은 페이지 로드에서 자동 계측이 만든 span은 저장되어 있었다. 원인은 공용 collector 끝단의 tail sampling이었다. 판정 시점에 span이 2개 미만인 trace를 버리는 정책이 걸려 있었고, 판정 대기는 15초였다.
 
@@ -262,7 +116,7 @@ pagehide를 빼면 iOS Safari 14.5 이전처럼 떠날 때 `visibilitychange`가
 
 > 두 번 실행해 같은 결과를 얻었다. D와 E는 `num_traces`를 5로 줄인 collector에서 다른 trace 10개를 먼저 보내 앞의 trace를 밀어냈다. `cwv-otel-grafana/experiments/e1-tail-sampling`.
 
-A에서 보듯이 판정 대기가 15초라도, 판정 때 살아남은 trace는 90초 뒤에 온 span도 저장된다. 사내 검증 환경에서는 판정 486초 뒤에 도착한 iOS INP span까지 저장됐다. 판정 대기 15초만으로는 설명되지 않는 동작이다. collector 0.162.0의 소스를 보면, 판정 결과를 따로 기억하는 캐시(`decision_cache`)는 기본 크기가 0이라 쓰이지 않는다. 대신 판정이 끝난 trace는 판정 결과를 들고 메모리(`idToTrace`)에 계속 남고, 늦게 온 span은 그 판정대로 처리된다[^5].
+A에서 보듯이 판정 대기가 15초라도, 판정 때 살아남은 trace는 90초 뒤에 온 span도 저장된다. 사내 검증 환경에서는 판정 486초 뒤에 도착한 iOS INP span까지 저장됐다. 판정 대기 15초만으로는 설명되지 않는 동작이다. collector 0.162.0의 소스를 보면, 판정 결과를 따로 기억하는 캐시(`decision_cache`)는 기본 크기가 0이라 쓰이지 않는다. 대신 판정이 끝난 trace는 판정 결과를 들고 메모리(`idToTrace`)에 계속 남고, 늦게 온 span은 그 판정대로 처리된다[^1].
 
 ```go
 // opentelemetry-collector-contrib v0.162.0 processor/tailsamplingprocessor/processor.go (processTrace)
@@ -300,9 +154,9 @@ return function record(name: string, durationMs: number, attributes: Attributes)
 
 root의 시작은 `performance.timeOrigin`이라 페이지 시작부터 첫 지표까지의 구간이 된다. 단위 테스트에서 이 규칙을 빼면(root를 끝내지 않으면) root와 첫 span이 같은 export 호출로 나가는지 확인하는 테스트가 실패한다.
 
-## collector: 5분 동안 조용한 시리즈는 누적값을 잊는다
+## 누적 변환: 5분 동안 조용한 시리즈는 누적값을 잊는다
 
-metric에서는 값이 사라지는 대신 덜 세어졌다. 브라우저가 보낸 delta를 collector의 `delta_to_cumulative`가 누적으로 바꿔 Mimir에 쓰는데, 이 프로세서는 일정 시간 샘플이 없는 시리즈의 누적값을 지운다.
+metric에서는 값이 사라지는 대신 덜 세어졌다. 브라우저가 보낸 delta를 공용 collector의 `delta_to_cumulative`가 누적으로 바꿔 Mimir에 쓰는데, 이 프로세서는 일정 시간 샘플이 없는 시리즈의 누적값을 지운다.
 
 ```go
 // opentelemetry-collector-contrib v0.162.0 processor/deltatocumulativeprocessor/processor.go
@@ -334,7 +188,74 @@ case <-tick.C:
 
 사내 검증 환경에서도 같은 모양이 나왔다. 연속 샘플 쌍 981개 중 간격이 5분 이하인 760쌍은 리셋이 한 번도 없었고, 5분을 넘는 쌍에서 136번 리셋됐다. 나머지 85쌍은 1에서 다시 시작해 값이 같아 보이는 경우와 만료 검사 주기 안쪽에 걸린 경우였다. 같은 라벨이 여러 collector 파드에 나뉘어 따로 누적되므로, 파드 하나가 보는 스트림의 샘플 간격은 전체 트래픽으로 짐작하는 것보다 넓다.
 
-Prometheus의 `increase()`는 8에서 1로 줄어드는 것은 리셋으로 보고 보정하지만, 1에서 다시 1이 되는 것은 증가 0으로 센다. 트래픽이 드문 라벨 조합일수록 이 경우가 많아서 건수가 실제보다 작게 나온다. 분위수와 good 비율은 버킷끼리의 비율이라 영향이 작지만 건수는 크게 틀린다. 사내 검증 환경에서 원본 샘플을 "간격이 320초를 넘으면 값 전체를 새 증가분으로, 이하면 차이를"이라는 규칙으로 다시 더하자, 같은 구간의 Tempo 건수와 맞았다(INP 26과 29, CLS 23과 23, FCP 83과 81, TTFB 84와 82, LCP 71과 68). 그래서 대시보드의 건수 패널에는 "하한값이며 페이지 로드 수로 읽지 않는다"는 설명을 붙였다.
+Prometheus의 `increase()`는 8에서 1로 줄어드는 것은 리셋으로 보고 보정하지만, 1에서 다시 1이 되는 것은 증가 0으로 센다. 트래픽이 드문 라벨 조합일수록 이 경우가 많아서 건수가 실제보다 작게 나온다. 라벨 조합마다 샘플이 하나뿐이면 `increase()`가 짝을 찾지 못해 아예 0이 되는데, 방문이 드문 블로그에 이 구성을 올렸다가 대시보드가 통째로 빈 이야기는 4편에서 다룬다. 분위수와 good 비율은 버킷끼리의 비율이라 영향이 작지만 건수는 크게 틀린다. 사내 검증 환경에서 원본 샘플을 "간격이 320초를 넘으면 값 전체를 새 증가분으로, 이하면 차이를"이라는 규칙으로 다시 더하자, 같은 구간의 Tempo 건수와 맞았다(INP 26과 29, CLS 23과 23, FCP 83과 81, TTFB 84와 82, LCP 71과 68). 그래서 대시보드의 건수 패널에는 "하한값이며 페이지 로드 수로 읽지 않는다"는 설명을 붙였다.
+
+## 검증 환경에서 맞았던 건수
+
+다시 더한 건수가 Tempo와 맞았을 때는 metric 경로의 손실을 다 설명했다고 생각했다. 그런데 이 대조는 검증 환경에서 한 것이다. 검증 환경은 트래픽이 적어서, 같은 라벨 조합에 여러 브라우저가 동시에 쓰는 일이 드물었을 것이다. 운영에서는 같은 화면, 같은 탐색 종류, 같은 등급의 값을 수많은 브라우저가 동시에 보낸다. `delta_to_cumulative`가 delta를 누적값에 더하는 코드를 보면 이 차이가 중요해진다[^2].
+
+```go
+// opentelemetry-collector-contrib v0.162.0 processor/deltatocumulativeprocessor/internal/delta/delta.go
+func Aggregate[T Type[T]](state, dp T, aggregate func(state, dp T) error) error {
+    switch {
+    case state.Timestamp() == 0:
+        // first sample of series, no state to aggregate with
+        dp.CopyTo(state)
+        return nil
+    case dp.StartTimestamp() < state.StartTimestamp():
+        // belongs to older series
+        return ErrOlderStart{Start: state.StartTimestamp(), Sample: dp.StartTimestamp()}
+    case dp.Timestamp() <= state.Timestamp():
+        // out of order
+        return ErrOutOfOrder{Last: state.Timestamp(), Sample: dp.Timestamp()}
+    }
+```
+
+시리즈의 시작 시각은 처음 받은 값의 시작 시각으로 정해지고, 그 뒤로 받는 값은 시작 시각이 그보다 이르면 안 되고, 시각은 지금까지 받은 가장 늦은 시각보다 늦어야 한다. 이 규칙을 어긴 값은 버린다. 한 프로세스가 자기 시리즈를 차례로 보내는 서버라면 당연히 지켜지는 규칙이다. `ErrOlderStart`의 오류 메시지도 "같은 시리즈를 보내는 프로세스가 여러 개인지 확인하라(consider checking for multiple processes sending the exact same series)"고 안내한다. 브라우저에서는 이 가정이 맞지 않는다. 시리즈는 라벨 조합과 resource 속성으로 정해지는데, 재현 환경의 수집 코드는 resource 속성이 `service.name` 하나뿐이라 같은 라벨 조합의 값을 보내는 브라우저가 모두 한 시리즈에 쓴다. 그리고 값의 시각은 각 브라우저가 자기 시계로 찍는다.
+
+먼저 시계가 어긋난 브라우저 3개가 같은 라벨 조합으로 LCP를 한 건씩, 3초 간격으로 보내 봤다. 시계는 첫째가 맞고, 둘째가 2분 늦고, 셋째가 30초 빠르다. 재현 환경의 collector는 둘째 값을 버렸다. collector 로그에는 아무것도 남지 않았고, 버린 건수는 collector 자체 메트릭 `otelcol_deltatocumulative_datapoints{error="delta.ErrOlderStart"}`에만 남았다.
+
+> 두 번 실행해 같은 결과를 얻었다. `cwv-otel-grafana/experiments/e9-client-clock`.
+
+그렇다면 트래픽이 많을 때는 얼마나 버릴까. 브라우저 대신 OTLP 요청을 직접 만들어, 여러 브라우저가 한 시리즈에 LCP를 한 건씩 보내는 상황을 흉내 냈다. 페이지 로드는 무작위로(Poisson 과정으로) 일어나고, 각 값은 50~550ms 사이의 네트워크 지연을 거쳐 도착한다. 먼저 모든 브라우저의 시계가 정확히 맞는 경우를 봤다.
+
+| 시리즈 하나에 초당 | 보낸 건수  | `delta_to_cumulative`(재현 환경 구성) | 받은 시각으로 바꿔 delta 그대로 저장 |
+| ------------------ | ---------- | ------------------------------------- | ------------------------------------ |
+| 1건                | 69, 66     | 14.5%, 9.1%                           | 0%, 0%                               |
+| 10건               | 603, 539   | 43.8%, 40.6%                          | 1.5%, 1.3%                           |
+| 50건               | 3056, 3023 | 75.4%, 75.1%                          | 7.5%, 6.7%                           |
+
+> 보낸 건수 중 Mimir에서 조회되지 않은 비율이다. 두 번 실행한 값을 차례로 적었다. 네트워크 지연의 분포는 실측이 아니라 가정이다. `cwv-otel-grafana/experiments/e10-concurrent-writers`.
+
+시계가 모두 맞아도 값을 잃는다. 늦게 수집된 값이 지연이 짧아 먼저 도착하면 시리즈의 시각이 그 값으로 올라가고, 그보다 일찍 수집됐지만 늦게 도착한 값은 `ErrOutOfOrder`로 버려진다. 같은 입력에 위의 두 규칙만 도착 순서대로 적용해 계산하면, 초당 1건에서 남는 값 59건, 시작 시각으로 버리는 값 1건, 순서로 버리는 값 9건이 나온다. collector 자체 메트릭으로 센 실측과 정확히 같았고, 초당 10건과 50건도 몇 건 차이였다. 손실이 이 두 규칙만으로 설명된다는 뜻이다. 오른쪽 열은 `delta_to_cumulative`를 빼고 Mimir에 delta를 그대로 저장하면서 시각을 collector가 받은 시각으로 바꾼 구성이다. 순서 문제는 사라지지만 초당 10건부터 같은 밀리초에 받은 값끼리 같은 시각의 표본이 되어 Mimir가 버린다. 공용 collector에서는 고를 수 없었던 구성이고, 직접 운영하는 블로그에서 이 구성을 고른 이야기는 4편에서 다룬다.
+
+시계가 어긋나면 손실은 훨씬 커진다. 초당 2건이 들어오는 시리즈에 시계가 60초 빠른 브라우저 하나를 섞자, 그 값이 시리즈의 시각을 60초 앞으로 옮겼고 그 뒤 60초 동안 들어온 값은 모두 버려졌다. Mimir에 남은 누적 시리즈에는 두 번 모두 60초 남짓의 공백이 생겼다(60.2초, 60.1초, 잃은 비율 57.1%, 58.1%). 시계가 2시간 빠른 브라우저 하나를 섞으면 그 뒤 7분 동안 한 건도 남지 않았다(98.9%, 98.5%). 그 2시간 빠른 값 자체도 Mimir에 남지 않았는데, Mimir는 기본적으로 10분보다 먼 미래의 표본을 받지 않기 때문이다(`-validation.create-grace-period`).
+
+7분은 앞 절의 만료 시간(5분)보다 길다. 그런데도 시리즈가 지워지고 새로 시작하지 않은 것은, 버린 값도 만료 타이머를 갱신하기 때문이다[^3].
+
+```go
+// opentelemetry-collector-contrib v0.162.0 processor/deltatocumulativeprocessor/processor.go (ConsumeMetrics)
+// stream is ok and active, update stale tracker
+p.stale.Store(id, now)
+
+if !loaded {
+    // cached zero was stored, alloc new one
+    zero.hist = guard(pmetric.NewHistogramDataPoint())
+}
+
+last.use(func(last pmetric.HistogramDataPoint) {
+    err = p.aggr.Histograms(last, dp)
+    last.CopyTo(dp)
+})
+```
+
+집계하기 전에 마지막으로 값을 받은 시각을 기록하므로, 값이 계속 들어오는 동안에는 모두 버려지더라도 시리즈가 살아 있다. 앞선 시계가 만든 공백은 트래픽이 있는 한 그 시계가 앞선 만큼 그대로 이어진다.
+
+그렇다면 실제 브라우저의 시계는 얼마나 어긋나 있을까. 찾을 수 있었던 공개 자료는 2014년에 하루 3억 페이지 로드에서 브라우저의 `Date()`와 서버 시각을 비교한 것이었다[^4]. 5분 단위로 묶은 절댓값으로 90%가 5분 미만, 99%가 115분 미만, 99.9%가 25.5시간 미만이었고, 어긋난 시계의 약 57%가 앞서 있었다. 이 분포에서 편차를 뽑아 같은 실험을 하자 초당 1건에서 92.0%, 95.6%를, 초당 10건에서 두 번 모두 99.9%를 잃었다. 5분 미만의 90%는 분포가 공개되지 않아 편차를 0으로 두었으니, 이 값은 이 분포에서의 하한이다. 처음으로 앞선 시계가 들어오면 그 뒤로는 그보다 더 앞선 시계만 통과하고, 그런 값은 대부분 10분 유예를 넘어 Mimir가 다시 거부한다. 결과적으로 Mimir에는 앞선 시계가 들어오기 전의 몇 건만 남았다. 초당 1건에서는 앞선 시계가 언제, 얼마나 앞서 들어오느냐에 따라 잃는 비율이 크게 달라지고, 초당 10건에서는 두 번 모두 시리즈가 처음 몇 초 뒤부터 멈춰 있었다.
+
+2014년 자료는 미국, 캐나다, EU 사이트에 치우쳐 있고, 시계를 네트워크로 맞추는 지금의 휴대폰보다 시계가 틀린 PC가 많던 시절의 값일 것이다. 앱 웹뷰의 실제 분포는 이보다 훨씬 좁을 가능성이 높다. 다만 앞의 실험에서 보듯이 분포가 좁더라도 몇 분 앞선 시계 하나가 섞이면 그 몇 분 동안 시리즈 전체가 멈추고, 그 사이에 남는 값은 시계가 더 앞선 브라우저의 값뿐이다.
+
+이 결과가 사내 운영에서도 그대로 일어났는지는 확인하지 못했다. 운영 데이터로 보낸 건수와 받은 건수를 대조한 적이 없고, 운영 collector가 스트림을 어떻게 나누는지(resource 속성, 파드 구성)도 확인하지 않았다. 확실하게 말할 수 있는 것은, 검증 환경에서 건수가 맞았다는 사실이 이 손실이 없다는 근거는 되지 못한다는 점이다. 이 손실은 같은 시리즈에 동시에 쓰는 브라우저가 많을수록 커지는데, 검증 환경은 그 조건을 만들지 못한다.
 
 ## Tempo: 조회할 때 사라지는 값
 
@@ -351,7 +272,7 @@ Prometheus의 `increase()`는 8에서 1로 줄어드는 것은 리셋으로 보�
 
 > 5분 구간마다 보낸 span은 30개다. 16:00과 16:23(UTC)에 두 번 조회해 같은 모양을 얻었고, 세 번째 줄은 두 번 모두 조회 시각에서 정확히 30분 전을 경계로 값이 끊겼다. `cwv-otel-grafana/experiments/e5-tempo-metrics`.
 
-`flush_to_storage: false`인 세 번째 줄이 사내에서 본 모양과 같다. 2.10.8의 query-frontend는 조회 구간을 `query_backend_after`(기본 30분)를 기준으로 둘로 나눈다[^6].
+`flush_to_storage: false`인 세 번째 줄이 사내에서 본 모양과 같다. 2.10.8의 query-frontend는 조회 구간을 `query_backend_after`(기본 30분)를 기준으로 둘로 나눈다[^5].
 
 ```go
 // grafana/tempo v2.10.8 modules/frontend/metrics_query_range_sharder.go
@@ -376,7 +297,7 @@ if len(blocks) == 0 {
 
 span 길이를 지표 값으로 맞춰 두면 `quantile_over_time(duration, .75)`가 곧 p75다. 다만 Tempo의 분위수는 정확한 값이 아니다. 분포를 아는 span을 보내 확인했다. 10초마다 100, 300, 1000, 2500, 4000ms 길이의 span을 돌아가며 보내면 5분 구간에 30개가 쌓이고, 30개 중 23번째인 정확한 p75는 2500ms다. Tempo 3.1.0과 2.10.8 모두 이 구간의 p75를 **1.913초**로 돌려줬다. 표본이 15개뿐인 마지막 구간은 2.147초였다.
 
-계산 방식은 `pkg/traceql/engine_metrics.go`에 있다[^7].
+계산 방식은 `pkg/traceql/engine_metrics.go`에 있다[^6].
 
 ```go
 // grafana/tempo v3.1.0 pkg/traceql/engine_metrics.go
@@ -410,7 +331,7 @@ span 길이(ns)를 다음 2의 거듭제곱으로 올려 버킷에 넣는다. 10
 
 ### 분위수에서 빠지는 값
 
-숫자 속성의 분위수는 duration과 다른 함수로 버킷을 만든다[^8].
+숫자 속성의 분위수는 duration과 다른 함수로 버킷을 만든다[^7].
 
 ```go
 // grafana/tempo v3.1.0 pkg/traceql/ast_metrics.go
@@ -455,7 +376,7 @@ default:
 
 > Tempo 3.1.0에서 같은 30분 구간을 조건만 바꿔 셌다.
 
-OTel JS는 숫자 속성을 OTLP로 바꿀 때 정수면 `intValue`, 아니면 `doubleValue`로 보낸다[^9].
+OTel JS는 숫자 속성을 OTLP로 바꿀 때 정수면 `intValue`, 아니면 `doubleValue`로 보낸다[^8].
 
 ```ts
 // opentelemetry-js experimental/v0.223.0 experimental/packages/otlp-transformer/src/common/internal.ts
@@ -491,7 +412,7 @@ sum(increase(cwv_lcp_milliseconds_bucket{page_route=~"$route", le="2500"}[$__ran
 sum(increase(cwv_lcp_milliseconds_count{page_route=~"$route"}[$__range]))
 ```
 
-p75와 good 비율을 같이 두는 이유는 두 값이 다른 것을 말해 주기 때문이다. p75가 경계 근처에서 흔들릴 때, good 비율을 보면 그 흔들림이 얼마나 많은 페이지 로드에 걸친 문제인지 알 수 있다. 추이는 10분 창으로 고정하고, 화면별과 입력 종류별은 `sum by (le, page_route)`처럼 `by`에 라벨을 더해 나눈다. 맨 아래 표본 수 패널에는 앞 절의 이유로 "하한값이며 페이지 로드 수로 읽지 않는다"는 설명을 붙였다.
+p75와 good 비율을 같이 두는 이유는 두 값이 다른 것을 말해 주기 때문이다. p75가 경계 근처에서 흔들릴 때, good 비율을 보면 그 흔들림이 얼마나 많은 페이지 로드에 걸친 문제인지 알 수 있다. 추이는 10분 창으로 고정하고, 화면별과 입력 종류별은 `sum by (le, page_route)`처럼 `by`에 라벨을 더해 나눈다. 맨 아래 표본 수 패널에는 앞의 두 절의 이유로 "하한값이며 페이지 로드 수로 읽지 않는다"는 설명을 붙였다.
 
 ![Tempo 대시보드. LCP 요소별 건수와 p75, LCP와 INP의 단계별 평균, CLS를 만든 요소, LCP 확정 방식, 느린 LCP 표가 있다](./images/cwv-to-tempo-and-mimir/why-dashboard.png)
 
@@ -506,26 +427,24 @@ Tempo 대시보드 맨 위의 두 패널이 처음 질문에 대한 답이다.
 
 쓰는 순서는 정해 두었다. Mimir에서 나빠진 지표와 화면을 찾고, 검증 환경에서 같은 조건을 재현하며 Tempo로 원인을 좁히고, 고친 뒤 Mimir의 추이로 돌아와 확인한다. 운영 데이터만으로 원인까지 가지 못하는 것은 아쉽지만, 각 저장소가 답할 수 있는 질문을 미리 나눠 두면 무엇을 어디에 실을지도 함께 정해진다.
 
-## 값을 재는 것보다 값이 도착하는 것을 확인하는 일
+## 바꿀 수 없는 기본값 앞에서
 
-돌아보면 이 작업에서 측정 자체가 문제였던 적은 거의 없었다. web-vitals는 원인 분해 값까지 정확하게 계산해 주었고, attribution 빌드 하나로 다섯 지표가 모두 나왔다. 값을 잃은 곳은 매번 그 뒤였다. iOS 웹뷰는 확정 신호를 보내지 않았고, exporter는 실패를 성공으로 보고했고, pagehide에도 건 flush는 새 버전에서 CLS와 INP를 버렸고, tail sampling은 혼자 온 root를 버렸고, 누적 변환은 5분 동안 조용한 시리즈를 잊었다. 어느 단계도 오류를 내지 않았다. 각 단계의 기본값은 서버 트래픽에서는 합리적인 선택이었을 것이다. 다만 브라우저가 보내는 데이터는 짧게 살다 떠나는 순간에 몰리고, 라벨 조합마다 드문드문 오기 때문에, 서버를 기준으로 정한 기본값이 맞지 않는 지점이 생긴다고 생각한다.
+돌아보면 이 작업에서 측정 자체가 문제였던 적은 거의 없었다. 값을 잃은 곳은 매번 그 뒤였고, 대부분 내가 바꿀 수 없는 설정의 기본값에서였다. tail sampling은 혼자 온 root를 버렸고, 누적 변환은 5분 동안 조용한 시리즈를 잊었고, 같은 시리즈에 여러 브라우저가 쓰면 순서가 어긋난 값을 버렸고, Tempo는 30분보다 오래된 구간과 0인 값을 분위수에서 뺐다. 어느 단계도 오류를 내지 않았다. 각 기본값은 서버 트래픽에서는 합리적인 선택이었을 것이다. 다만 브라우저가 보내는 데이터는 짧게 살다 떠나는 순간에 몰리고, 라벨 조합마다 드문드문 오면서도, 한 시리즈에 셀 수 없이 많은 브라우저가 각자의 시계로 쓴다. 서버를 기준으로 정한 기본값이 맞지 않는 지점은 거기서 생긴다고 생각한다.
 
-그래서 각 단계에서 쓸 수 있었던 확인 방법은 하나였다. 보낸 건수와 도착한 건수를 단계마다 세는 것이다. 브라우저에서 기록한 span 수와 Tempo에 저장된 span 수, Mimir의 건수와 Tempo의 건수를 나란히 놓고 어긋나는 곳부터 의심했다. 이 글의 실험도 대부분 그 숫자가 맞지 않는 데서 시작했다. CWV를 직접 수집하려 한다면 대시보드를 먼저 만들기보다, 지표마다 보낸 수와 받은 수를 대조할 수단을 먼저 만들어 두는 편이 결과적으로 시간을 덜 쓰는 길일 가능성이 높다.
+설정을 바꿀 수 없을 때 쓸 수 있었던 확인 방법은 보낸 건수와 도착한 건수를 단계마다 세는 것 하나였다. 이 글의 실험도 대부분 그 숫자가 맞지 않는 데서 시작했다. 다만 앞의 절에서 보았듯이, 숫자가 맞았다는 결과도 그 숫자를 센 조건에서만 유효하다. 검증 환경에서 맞은 건수는 쓰는 브라우저가 적은 조건의 결과였다. 운영과 같은 조건, 즉 많은 브라우저가 같은 시리즈에 동시에 쓰는 부하를 흉내 내어 한 번 더 세어 보기 전에는, metric 경로가 운영 트래픽을 온전히 센다고 말하기 어렵다고 생각한다.
 
-[^1]: [web-vitals v6.2.3 `src/onLCP.ts`](https://github.com/GoogleChrome/web-vitals/blob/v6.2.3/src/onLCP.ts#L210-L249)
+[^1]: [opentelemetry-collector-contrib v0.162.0 `processor/tailsamplingprocessor/processor.go`](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/v0.162.0/processor/tailsamplingprocessor/processor.go#L1191-L1199)
 
-[^2]: [opentelemetry-js experimental/v0.223.0 `experimental/CHANGELOG.md`](https://github.com/open-telemetry/opentelemetry-js/blob/experimental/v0.223.0/experimental/CHANGELOG.md)의 #5807, #6317, #6391 항목
+[^2]: [opentelemetry-collector-contrib v0.162.0 `processor/deltatocumulativeprocessor/internal/delta/delta.go`](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/v0.162.0/processor/deltatocumulativeprocessor/internal/delta/delta.go#L46-L66). E9와 E10을 잰 0.163.x의 소스(v0.163.0 태그)도 이 파일과 `processor.go`가 0.162.0과 같다.
 
-[^3]: [opentelemetry-js v2.12.0 `packages/sdk-trace/src/platform/browser/export/BatchSpanProcessor.ts`](https://github.com/open-telemetry/opentelemetry-js/blob/v2.12.0/packages/sdk-trace/src/platform/browser/export/BatchSpanProcessor.ts#L36-L42)
+[^3]: [opentelemetry-collector-contrib v0.162.0 `processor/deltatocumulativeprocessor/processor.go`](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/v0.162.0/processor/deltatocumulativeprocessor/processor.go#L124-L143)
 
-[^4]: [opentelemetry-js v2.12.0 `packages/sdk-metrics/src/export/PeriodicExportingMetricReader.ts`](https://github.com/open-telemetry/opentelemetry-js/blob/v2.12.0/packages/sdk-metrics/src/export/PeriodicExportingMetricReader.ts#L259-L273). 이 동작은 [`CHANGELOG.md`](https://github.com/open-telemetry/opentelemetry-js/blob/v2.12.0/CHANGELOG.md)의 2.9.0 항목(#6655)에서 들어왔다.
+[^4]: Gervase Markham, ["[cabfpub] Clock skew data"](https://lists.cabforum.org/pipermail/public/2014-November/020810.html), CA/B Forum public 메일링 리스트, 2014-11-03. 익명의 제보자가 측정한 자료를 전달한 글이고, 원 사이트가 응답하지 않으면 [웹 아카이브 사본](https://web.archive.org/web/20240723215943/https://lists.cabforum.org/pipermail/public/2014-November/020810.html)으로 볼 수 있다.
 
-[^5]: [opentelemetry-collector-contrib v0.162.0 `processor/tailsamplingprocessor/processor.go`](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/v0.162.0/processor/tailsamplingprocessor/processor.go#L1191-L1199)
+[^5]: [grafana/tempo v2.10.8 `modules/frontend/metrics_query_range_sharder.go`](https://github.com/grafana/tempo/blob/v2.10.8/modules/frontend/metrics_query_range_sharder.go#L127-L205)
 
-[^6]: [grafana/tempo v2.10.8 `modules/frontend/metrics_query_range_sharder.go`](https://github.com/grafana/tempo/blob/v2.10.8/modules/frontend/metrics_query_range_sharder.go#L127-L205)
+[^6]: [grafana/tempo v3.1.0 `pkg/traceql/engine_metrics.go`](https://github.com/grafana/tempo/blob/v3.1.0/pkg/traceql/engine_metrics.go#L2323-L2409)
 
-[^7]: [grafana/tempo v3.1.0 `pkg/traceql/engine_metrics.go`](https://github.com/grafana/tempo/blob/v3.1.0/pkg/traceql/engine_metrics.go#L2323-L2409)
+[^7]: [grafana/tempo v3.1.0 `pkg/traceql/ast_metrics.go`](https://github.com/grafana/tempo/blob/v3.1.0/pkg/traceql/ast_metrics.go#L282-L314)
 
-[^8]: [grafana/tempo v3.1.0 `pkg/traceql/ast_metrics.go`](https://github.com/grafana/tempo/blob/v3.1.0/pkg/traceql/ast_metrics.go#L282-L314)
-
-[^9]: [opentelemetry-js experimental/v0.223.0 `otlp-transformer/src/common/internal.ts`](https://github.com/open-telemetry/opentelemetry-js/blob/experimental/v0.223.0/experimental/packages/otlp-transformer/src/common/internal.ts#L74-L77)
+[^8]: [opentelemetry-js experimental/v0.223.0 `otlp-transformer/src/common/internal.ts`](https://github.com/open-telemetry/opentelemetry-js/blob/experimental/v0.223.0/experimental/packages/otlp-transformer/src/common/internal.ts#L74-L77)

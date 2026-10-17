@@ -1,4 +1,5 @@
-# 블로그의 Core Web Vitals 를 받는 수집 서버. 구성과 버전은 blog-experiments 의 cwv-otel-grafana lab 과 같다.
+# 블로그의 Core Web Vitals 를 받는 수집 서버. 버전은 blog-experiments 의 cwv-otel-grafana lab 과 같고, metric 경로는 다르다
+# (README 의 'metric 경로가 lab 과 다른 이유').
 # 사용: cp env.example .env 로 값을 채운 뒤 docker compose up -d
 name: blog-otel
 services:

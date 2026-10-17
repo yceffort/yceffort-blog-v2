@@ -20,9 +20,9 @@ seriesOrder: 3
 
 작업에는 처음부터 몇 가지 제약이 있었다. 먼저 collector 이후의 관측 인프라는 여러 팀이 같이 쓰는 공용 인프라라서 내가 설정을 바꿀 수 없었다. 이 인프라의 collector 끝단에는 tail sampling이 걸려 있고, trace에서 metric을 만들어 주는 spanmetrics는 리소스 부담 때문에 받지 않는다. 운영 metric의 라벨은 정해진 몇 개만 허용되고, 요소 selector처럼 값의 종류가 끝없이 늘어나는 라벨은 금지다. 사내 공용 RUM 라이브러리도 다른 서비스가 함께 쓰고 있어서 고칠 수 없었고, 기존 대시보드를 위해 같은 값을 계속 보내야 했다. 그리고 화면은 iOS와 Android 앱의 웹뷰 안에서 열린다. 이 글의 절은 대부분 이 제약 중 하나에서 나왔다.
 
-> 사내 작업은 2026년 8월 말부터 10월 중순까지 사내 검증 환경(sandbox)에서 했다. 글의 수치는 공개 재현 환경([blog-experiments/cwv-otel-grafana](https://github.com/yceffort/blog-experiments/tree/main/cwv-otel-grafana))에서 다시 잰 값을 기본으로 하고, 재현할 수 없는 iOS 웹뷰의 동작만 사내 검증 환경에서 잰 값을 출처를 밝혀 인용한다.
+> 사내 작업은 2026년 8월 말부터 10월 중순까지 사내 검증 환경(sandbox)에서 했다. 글의 수치는 공개 재현 환경([blog-experiments/cwv-otel-grafana](https://github.com/yceffort/blog-experiments/tree/a855b62c575f053ea9d4fb1bfe2fa2ead53d7df8/cwv-otel-grafana), 커밋 `a855b62` 기준)에서 다시 잰 값을 기본으로 하고, 재현할 수 없는 iOS 웹뷰의 동작만 사내 검증 환경에서 잰 값을 출처를 밝혀 인용한다.
 >
-> 재현 환경의 버전은 web-vitals 6.2.3, OTel JS 2.12.0(OTLP exporter 0.223.0), OpenTelemetry Collector contrib 0.162.0, Tempo 3.1.0, Mimir 3.2.2, Grafana 13.2.4다. 여러 브라우저가 한 시리즈에 쓰는 실험(E9, E10)은 collector contrib 0.163.1에서 쟀고, 0.162.0에서 잰 E1과 E4도 0.163.1에서 다시 돌려 같은 결과를 얻었다. 브라우저는 Playwright 1.64.1의 Chromium 156을 썼다. 버전 차이를 확인할 때는 Tempo 2.10.8을 함께 띄웠다. 인용한 소스는 모두 이 버전의 태그로 고정했다.
+> 재현 환경의 버전은 web-vitals 6.2.3, OTel JS 2.12.0(OTLP exporter 0.223.0), OpenTelemetry Collector contrib 0.162.0, Tempo 3.1.0, Mimir 3.2.2, Grafana 13.2.4다. 여러 브라우저가 한 시리즈에 쓰는 실험(E9, E10)은 collector contrib 0.163.1에서 쟀고, 0.162.0에서 잰 E1과 E4도 0.163.1에서 다시 돌려 같은 결과를 얻었다. gateway를 둔 실험(E11)은 Node.js 24.20.0에서 돌렸다. 브라우저는 Playwright 1.64.1의 Chromium 156을 썼다. 버전 차이를 확인할 때는 Tempo 2.10.8을 함께 띄웠다. 인용한 소스는 모두 이 버전의 태그로 고정했다.
 
 ## 두 갈래로 나눈 이유
 
@@ -65,10 +65,10 @@ metric은 미리 집계해서 보내는 방식이라, 어떤 질문을 던질 �
 | 누락을 받아들임              | 빨리 떠나는 세션이 빠져 iOS 수치가 좋게 치우칠 수 있다                                                     |
 | 네트워크 idle 1초, 상한 30초 | 웹소켓과 주기 조회가 있는 화면이라 idle이 잘 오지 않을 것으로 보았고, 상한 30초로는 8초 이탈을 잡지 못한다 |
 
-고른 방법은 후보가 3초 동안 바뀌지 않으면 그 후보로 확정하는 것이다. 새 후보가 오면 타이머를 다시 건다. web-vitals가 먼저 확정하면 그 값을, quiet 타이머가 먼저 끝나면 그 값을 쓰고, 어느 쪽이든 페이지당 한 번만 내보낸다.
+고른 방법은 후보가 3초 동안 바뀌지 않으면 그 후보로 확정하는 것이다. 새 후보가 오면 타이머를 다시 건다. web-vitals가 먼저 확정하면 그 값을, quiet 타이머가 먼저 끝나면 그 값을 쓰고, 어느 쪽이든 페이지당 한 번만 내보낸다. 재현 환경에서 이 방식을 옮긴 코드는 태그 `cwv-otel-grafana-v1`에 있다.
 
 ```ts
-// cwv-otel-grafana/demo-web/src/telemetry/lcp-gate.ts
+// cwv-otel-grafana/demo-web/src/telemetry/lcp-gate.ts (태그 cwv-otel-grafana-v1)
 export function createLcpGate(
   emit: (metric: LCPMetricWithAttribution, finalizedBy: LcpFinalizer) => void,
   quietMs = 3000,
@@ -84,11 +84,13 @@ export function createLcpGate(
   };
 
   return {
+    /** `onLCP(..., { reportAllChanges: true })` 의 후보 */
     candidate(metric: LCPMetricWithAttribution) {
       if (settled) return;
       clearTimeout(timer);
       timer = setTimeout(() => settle(metric, 'quiet'), quietMs);
     },
+    /** `onLCP(...)` 의 정식 확정값 */
     final(metric: LCPMetricWithAttribution) {
       settle(metric, 'web-vitals');
     },
@@ -98,7 +100,44 @@ export function createLcpGate(
 
 후보는 `onLCP(gate.candidate, { reportAllChanges: true })`로, 정식 확정값은 `onLCP(gate.final)`로 받는다. 구독을 두 번 하는 이유는 `reportAllChanges`를 켜면 확정 시점에 값이 바뀌지 않았을 때 콜백이 다시 불리지 않아서(`src/lib/bindReporter.ts`는 delta가 0이면 보고하지 않는다), 한 구독만으로는 확정 시점을 알 수 없기 때문이다. quiet로 확정하면 곧바로 flush한다. BatchSpanProcessor의 기본 지연이 5초라서 그대로 두면 8초 이탈 전에 나가지 못할 수 있다.
 
-사내 검증 환경의 trace 714개 중 quiet 확정과 정식 확정이 둘 다 있는 327개(Android 294, iOS 33)는 두 값이 모두 같았다. iOS에서 quiet로만 LCP가 생긴 trace는 135개였다. 이 방식에도 한계는 남는다. 후보가 3초 넘게 멈춘 뒤에 더 큰 요소가 그려지면 작은 값이 먼저 확정된다. 검증 환경에서는 관측되지 않았지만 구조상 일어날 수 있다. 그리고 quiet로 확정한 값도 정식값과 같은 histogram에 들어가므로, Mimir에서는 둘을 구분할 수 없다. 어느 쪽이 확정했는지는 trace의 `cwv.lcp.finalized_by` 속성에만 남는다. 마지막 후보 뒤 3초 안에 입력 없이 떠나면 여전히 LCP가 없다.
+사내 검증 환경의 trace 714개 중 quiet 확정과 정식 확정이 둘 다 있는 327개(Android 294, iOS 33)는 두 값이 모두 같았다. iOS에서 quiet로만 LCP가 생긴 trace는 135개였다. 이 검증 뒤로 사내 코드는 먼저 확정된 쪽 하나만 보냈다.
+
+### 3초 멈춘 후보는 끝난 LCP가 아니다
+
+검증에서 두 값이 모두 같았던 것은, 그 화면에서 후보가 3초 넘게 멈춘 뒤 더 큰 요소가 그려진 일이 없었기 때문이다. 구조상으로는 충분히 일어날 수 있어서, 재현 환경에서 본문을 5초 뒤에 그리는 페이지(`?lcp=5000`)에 입력 없이 7초 머물러 봤다. 사내 방식을 옮긴 코드는 LCP를 56ms로 기록했다. 먼저 그려진 제목이 3초 동안 바뀌지 않자 quiet 타이머가 그 값으로 확정했고, 본문이 그려진 뒤 web-vitals가 확정한 정식값은 이미 확정됐다는 이유로 버렸다. quiet로 확정한 값도 정식값과 같은 histogram에 들어가므로, Mimir에서는 이 56ms가 제대로 확정된 값과 구분되지 않는다.
+
+> Playwright 1.64.1의 Chromium 156에서 확인했다. `cwv-otel-grafana/experiments/e12-browser-lifecycle`.
+
+3초 동안 새 후보가 없었다는 것은 LCP가 끝났다는 근거가 되지 못한다. 그래서 재현 환경은 quiet 값을 잠정값으로만 내보내고, 정식 확정은 막지 않도록 고쳤다.
+
+```ts
+// cwv-otel-grafana/demo-web/src/telemetry/lcp-gate.ts
+export function createLcpGate(
+  emit: (metric: LCPMetricWithAttribution, finalizedBy: LcpFinalizer) => void,
+  quietMs = 3000,
+) {
+  let finalized = false;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+
+  return {
+    /** `onLCP(..., { reportAllChanges: true })` 의 후보 */
+    candidate(metric: LCPMetricWithAttribution) {
+      if (finalized) return;
+      clearTimeout(timer);
+      timer = setTimeout(() => emit(metric, 'quiet'), quietMs);
+    },
+    /** `onLCP(...)` 의 정식 확정값 */
+    final(metric: LCPMetricWithAttribution) {
+      if (finalized) return;
+      finalized = true;
+      clearTimeout(timer);
+      emit(metric, 'web-vitals');
+    },
+  };
+}
+```
+
+잠정값은 `cwv.lcp.quiet`라는 별도 span으로만 남기고 histogram에는 넣지 않는다. 같은 페이지에서 고친 코드는 잠정값 72ms와 정식값 5080ms를 따로 남겼고, histogram에는 5080ms가 들어갔다. 대가는 처음 문제였던 웹뷰로 돌아온다. hidden이 오지 않아 web-vitals가 확정하지 못한 방문에는 잠정값만 있으므로, histogram에서는 그 방문의 LCP가 빠진다. 잠정값을 버리지 않으면서 집계에도 쓰려면 나중에 정식값이 오면 바꿔 쓸 수 있는 집계가 필요한데, 이 이야기는 뒤의 gateway에서 다시 나온다. 마지막 후보 뒤 3초 안에 입력 없이 떠나면 잠정값조차 없다는 점은 그대로다.
 
 ## tail sampling: 혼자 도착한 root는 버려진다
 
@@ -137,22 +176,23 @@ C가 이 정책의 핵심이다. 페이지 시작 시점에 root를 만들어 �
 
 ```ts
 // cwv-otel-grafana/demo-web/src/telemetry/page-trace.ts
-return function record(name: string, durationMs: number, attributes: Attributes): void {
-  if (!parent) {
-    const root = tracer.startSpan('cwv.page', { startTime: performance.timeOrigin });
+return function record(name: string, durationMs: number, attributes: Attributes, visitStart = 0): void {
+  let visit = visits.get(visitStart);
+  if (!visit) {
+    const root = tracer.startSpan('cwv.page', { startTime: performance.timeOrigin + visitStart });
     root.end();
-    parent = trace.setSpan(ROOT_CONTEXT, root);
-    base = getBaseAttributes();
+    visit = { parent: trace.setSpan(ROOT_CONTEXT, root), base: getBaseAttributes() };
+    visits.set(visitStart, visit);
   }
 
   const end = performance.timeOrigin + performance.now();
   tracer
-    .startSpan(name, { startTime: end - durationMs, attributes: { ...base, ...attributes } }, parent)
+    .startSpan(name, { startTime: end - durationMs, attributes: { ...visit.base, ...attributes } }, visit.parent)
     .end(end);
 };
 ```
 
-root의 시작은 `performance.timeOrigin`이라 페이지 시작부터 첫 지표까지의 구간이 된다. 단위 테스트에서 이 규칙을 빼면(root를 끝내지 않으면) root와 첫 span이 같은 export 호출로 나가는지 확인하는 테스트가 실패한다.
+root는 방문마다 하나다. 방문은 처음 로드와 bfcache 복원이고, root의 시작은 그 방문이 시작된 시각(web-vitals가 주는 `navigationStartTime`)이다. 복원된 페이지에서도 web-vitals는 지표를 새로 재는데, 문서 하나에 root 하나만 두면 복원 뒤의 지표가 처음 로드의 trace에 섞이고, LCP처럼 방문마다 하나여야 하는 값은 버려진다. 재현 환경에서 두 페이지를 오가며 뒤로, 앞으로 가기로 복원을 세 번 일으키자, 문서마다 root를 두던 코드는 root가 2개였고 복원 세 번의 LCP를 버렸다. 방문마다 root를 두도록 고친 뒤에는 root가 5개였다(E12). 단위 테스트에서 이 규칙을 빼면(root를 끝내지 않으면) root와 첫 span이 같은 export 호출로 나가는지 확인하는 테스트가 실패한다.
 
 ## 누적 변환: 5분 동안 조용한 시리즈는 누적값을 잊는다
 
@@ -227,7 +267,7 @@ func Aggregate[T Type[T]](state, dp T, aggregate func(state, dp T) error) error 
 
 > 보낸 건수 중 Mimir에서 조회되지 않은 비율이다. 두 번 실행한 값을 차례로 적었다. 네트워크 지연의 분포는 실측이 아니라 가정이다. `cwv-otel-grafana/experiments/e10-concurrent-writers`.
 
-시계가 모두 맞아도 값을 잃는다. 늦게 수집된 값이 지연이 짧아 먼저 도착하면 시리즈의 시각이 그 값으로 올라가고, 그보다 일찍 수집됐지만 늦게 도착한 값은 `ErrOutOfOrder`로 버려진다. 같은 입력에 위의 두 규칙만 도착 순서대로 적용해 계산하면, 초당 1건에서 남는 값 59건, 시작 시각으로 버리는 값 1건, 순서로 버리는 값 9건이 나온다. collector 자체 메트릭으로 센 실측과 정확히 같았고, 초당 10건과 50건도 몇 건 차이였다. 손실이 이 두 규칙만으로 설명된다는 뜻이다. 오른쪽 열은 `delta_to_cumulative`를 빼고 Mimir에 delta를 그대로 저장하면서 시각을 collector가 받은 시각으로 바꾼 구성이다. 순서 문제는 사라지지만 초당 10건부터 같은 밀리초에 받은 값끼리 같은 시각의 표본이 되어 Mimir가 버린다. 공용 collector에서는 고를 수 없었던 구성이고, 직접 운영하는 블로그에서 이 구성을 고른 이야기는 4편에서 다룬다.
+시계가 모두 맞아도 값을 잃는다. 늦게 수집된 값이 지연이 짧아 먼저 도착하면 시리즈의 시각이 그 값으로 올라가고, 그보다 일찍 수집됐지만 늦게 도착한 값은 `ErrOutOfOrder`로 버려진다. 같은 입력에 위의 두 규칙만 도착 순서대로 적용해 계산하면, 초당 1건에서 남는 값 59건, 시작 시각으로 버리는 값 1건, 순서로 버리는 값 9건이 나온다. collector 자체 메트릭으로 센 실측과 같았다. 시나리오 일곱 개를 두 번씩 돌린 14개 실행 중 12개가 이렇게 정확히 같았고, 나머지 2개도 1건씩만 달랐다. 손실이 이 두 규칙으로 거의 전부 설명된다는 뜻이다. 오른쪽 열은 `delta_to_cumulative`를 빼고 Mimir에 delta를 그대로 저장하면서 시각을 collector가 받은 시각으로 바꾼 구성이다. 순서 문제는 사라지지만 초당 10건부터 같은 밀리초에 받은 값끼리 같은 시각의 표본이 되어 Mimir가 버린다. 공용 collector에서는 고를 수 없었던 구성이고, 직접 운영하는 블로그에서 이 구성을 고른 이야기는 4편에서 다룬다.
 
 시계가 어긋나면 손실은 훨씬 커진다. 초당 2건이 들어오는 시리즈에 시계가 60초 빠른 브라우저 하나를 섞자, 그 값이 시리즈의 시각을 60초 앞으로 옮겼고 그 뒤 60초 동안 들어온 값은 모두 버려졌다. Mimir에 남은 누적 시리즈에는 두 번 모두 60초 남짓의 공백이 생겼다(60.2초, 60.1초, 잃은 비율 57.1%, 58.1%). 시계가 2시간 빠른 브라우저 하나를 섞으면 그 뒤 7분 동안 한 건도 남지 않았다(98.9%, 98.5%). 그 2시간 빠른 값 자체도 Mimir에 남지 않았는데, Mimir는 기본적으로 10분보다 먼 미래의 표본을 받지 않기 때문이다(`-validation.create-grace-period`).
 
@@ -256,6 +296,24 @@ last.use(func(last pmetric.HistogramDataPoint) {
 2014년 자료는 미국, 캐나다, EU 사이트에 치우쳐 있고, 시계를 네트워크로 맞추는 지금의 휴대폰보다 시계가 틀린 PC가 많던 시절의 값일 것이다. 앱 웹뷰의 실제 분포는 이보다 훨씬 좁을 가능성이 높다. 다만 앞의 실험에서 보듯이 분포가 좁더라도 몇 분 앞선 시계 하나가 섞이면 그 몇 분 동안 시리즈 전체가 멈추고, 그 사이에 남는 값은 시계가 더 앞선 브라우저의 값뿐이다.
 
 이 결과가 사내 운영에서도 그대로 일어났는지는 확인하지 못했다. 운영 데이터로 보낸 건수와 받은 건수를 대조한 적이 없고, 운영 collector가 스트림을 어떻게 나누는지(resource 속성, 파드 구성)도 확인하지 않았다. 확실하게 말할 수 있는 것은, 검증 환경에서 건수가 맞았다는 사실이 이 손실이 없다는 근거는 되지 못한다는 점이다. 이 손실은 같은 시리즈에 동시에 쓰는 브라우저가 많을수록 커지는데, 검증 환경은 그 조건을 만들지 못한다.
+
+### 공용 collector 앞에 writer를 하나 두기
+
+손실의 원인이 시리즈 하나에 writer가 여럿인 데 있다면, writer를 하나로 모으면 된다. 공용 collector의 설정은 바꿀 수 없어도, 그 앞에 직접 운영하는 집계 서버를 두는 것은 가능하다. 사내에서는 이 구성을 쓰지 않았고, 재현 환경에 gateway를 만들어 효과와 대가를 확인했다.
+
+gateway는 브라우저의 보고를 측정 단위(문서, 방문, 지표 이름)로 받는다. 보고마다 revision이 붙어 있어서, 받은 것보다 큰 revision이면 값을 바꾸고 같거나 작으면 버린다. 마지막 갱신 뒤 30분 동안 새 보고가 없으면 그 측정을 확정해 시리즈별 누적 히스토그램에 더하고, 주기마다 collector로 내보낸다. 시리즈의 writer는 gateway 하나이고 시각도 gateway가 정한다. 시리즈를 처음 내보낼 때는 값이 0인 샘플을 먼저 한 번 내보내서, 라벨 조합마다 샘플이 하나뿐이면 `increase()`가 세지 못하는 문제도 피한다. 같은 보고를 재현 환경의 delta 경로에도 보내 비교했다.
+
+| 경우                                  | 보낸 측정 | gateway가 저장 | delta 경로가 저장 |
+| ------------------------------------- | --------- | -------------- | ----------------- |
+| 같은 라벨 조합 30개를 동시에          | 30        | 30             | 1                 |
+| 앞 실험의 초당 50건 입력              | 3056      | 3056           | 1199              |
+| 앞 실험의 2014년 분포, 초당 10건 입력 | 1219      | 1219           | 35                |
+
+> 확정 시간을 2초로 줄여 한 번 실행했고, 버킷 합계도 입력에서 계산한 값과 같았다. 값을 여러 버킷에 섞어 등급 라벨로 시리즈가 셋으로 나뉜 만큼, delta 경로의 손실은 앞의 표보다 작게 나온 것으로 본다. `cwv-otel-grafana/experiments/e11-server-aggregation`.
+
+revision으로 풀리는 문제가 두 가지 더 있다. 하나는 같은 id로 다시 오는 보고다. CLS와 INP는 페이지가 다시 보였다가 숨겨지면 같은 id로 다시 보고되는데, histogram은 보고마다 표본을 더하므로 사내 가이드와 재현 환경의 delta 경로는 같은 id의 첫 보고만 셌다. 그러면 탭에 돌아온 뒤에 생긴 나쁜 경험은 통계에 들어가지 않는다. 재현 환경에서 페이지를 숨겼다가 다시 보이게 하고, 위쪽에 요소를 끼운 뒤 다시 숨기자, delta 경로의 CLS는 첫 보고의 0으로 남았고 gateway는 같은 측정의 revision 1(0)과 revision 2(0.1124)를 받아 마지막 값으로 셌다(E12, 탭 전환은 `visibilityState`를 덮어써 흉내 냈다). 다른 하나는 quiet 잠정값이다. 잠정값을 revision 1로, 정식값을 revision 2로 보내면, 정식값이 오지 않은 방문은 잠정값으로 확정되고 정식값이 온 방문은 정식값으로 확정된다.
+
+대가도 분명하다. 확정을 30분 기다리므로 대시보드에는 30분 늦게 보이고, 그보다 늦게 온 갱신은 반영하지 못한다. 확정하기 전의 측정은 메모리에만 있어서, 그 사이 gateway가 재시작하면 잃는다(재시작 실험에서 230건 중 확정 전이던 30건). gateway를 여러 대로 늘리면 같은 시리즈의 writer가 다시 여럿이 되므로 측정 단위로 나눠 보내야 한다(재지 않았다). 그리고 브라우저는 보고 묶음마다 요청을 보내므로, gateway의 응답이 늦어지면 HTTP/1.1에서 origin당 연결 6개가 차서 나머지 요청이 줄을 섰다가 사라졌다(E12). 공용 인프라의 제약은 피했지만, 그 대신 상태를 들고 있는 서버 하나를 직접 운영해야 한다.
 
 ## Tempo: 조회할 때 사라지는 값
 
@@ -394,27 +452,27 @@ LCP의 네 단계를 한 패널에 그리려고 `avg_over_time(span.cwv.lcp.time
 
 ## 대시보드 두 개
 
-대시보드는 저장소마다 하나씩 만들었다. Mimir 대시보드는 "지금 얼마나 느리고, 나빠졌고, 어디가 느린가"를, Tempo 대시보드는 "왜 느린가"를 본다. 재현 환경의 대시보드 JSON은 패널을 코드로 만드는 스크립트(`cwv-otel-grafana/grafana/build-dashboards.py`)에서 나온다.
+대시보드는 저장소마다 하나씩 만들었다. Mimir 대시보드는 "지금 얼마나 느리고, 나빠졌고, 어디가 느린가"를, Tempo 대시보드는 "왜 느린가"를 본다. 재현 환경의 대시보드 JSON은 패널을 코드로 만드는 스크립트(`cwv-otel-grafana/grafana/build-dashboards.py`)에서 나온다. Mimir 대시보드에는 수집 경로 변수가 있어서 gateway가 모은 값(`cwv-gateway`, 기본값)과 delta 경로의 값(`demo-web`)을 고른다. 아래 두 화면은 gateway를 넣기 전, 사내 구성을 재현하던 시점(태그 `cwv-otel-grafana-v1`)의 대시보드다.
 
-![Mimir 대시보드. 지표별 p75와 good 비율, 10분 창 p75 추이, 화면별 p75, 등급별 건수와 표본 수 패널이 있다](./images/cwv-to-tempo-and-mimir/ops-dashboard.png)
+![태그 cwv-otel-grafana-v1 시점의 Mimir 대시보드. 지표별 p75와 good 비율, 10분 창 p75 추이, 화면별 p75, 등급별 건수와 표본 수 패널이 있다](./images/cwv-to-tempo-and-mimir/ops-dashboard.png)
 
 위의 두 줄은 선택한 구간 전체를 하나로 본 값이다. p75는 구간 동안 늘어난 버킷 건수를 합쳐 계산한다.
 
 ```promql
-histogram_quantile(0.75, sum by (le) (increase(cwv_lcp_milliseconds_bucket{page_route=~"$route"}[$__range])))
+histogram_quantile(0.75, sum by (le) (increase(cwv_lcp_milliseconds_bucket{job="$source", page_route=~"$route"}[$__range])))
 ```
 
 good 비율은 good 경계 버킷을 전체 건수로 나눈다. 경계를 버킷에 넣어 두었기 때문에 이 값은 보간 없이 정확하다.
 
 ```promql
-sum(increase(cwv_lcp_milliseconds_bucket{page_route=~"$route", le="2500"}[$__range]))
+sum(increase(cwv_lcp_milliseconds_bucket{job="$source", page_route=~"$route", le="2500"}[$__range]))
 /
-sum(increase(cwv_lcp_milliseconds_count{page_route=~"$route"}[$__range]))
+sum(increase(cwv_lcp_milliseconds_count{job="$source", page_route=~"$route"}[$__range]))
 ```
 
-p75와 good 비율을 같이 두는 이유는 두 값이 다른 것을 말해 주기 때문이다. p75가 경계 근처에서 흔들릴 때, good 비율을 보면 그 흔들림이 얼마나 많은 페이지 로드에 걸친 문제인지 알 수 있다. 추이는 10분 창으로 고정하고, 화면별과 입력 종류별은 `sum by (le, page_route)`처럼 `by`에 라벨을 더해 나눈다. 맨 아래 표본 수 패널에는 앞의 두 절의 이유로 "하한값이며 페이지 로드 수로 읽지 않는다"는 설명을 붙였다.
+p75와 good 비율을 같이 두는 이유는 두 값이 다른 것을 말해 주기 때문이다. p75가 경계 근처에서 흔들릴 때, good 비율을 보면 그 흔들림이 얼마나 많은 페이지 로드에 걸친 문제인지 알 수 있다. 추이는 10분 창으로 고정하고, 화면별과 입력 종류별은 `sum by (le, page_route)`처럼 `by`에 라벨을 더해 나눈다. 맨 아래 표본 수 패널에는 "하한값이며 페이지 로드 수로 읽지 않는다"는 설명을 붙였다. delta 경로에서는 앞의 두 절의 이유로 실제보다 작게 센다. gateway 경로에서는 빠지는 값이 없지만, `increase()`가 마지막 샘플부터 조회 시각까지 외삽해 조금 크게 센다(동시 30건에서 30.65, E11).
 
-![Tempo 대시보드. LCP 요소별 건수와 p75, LCP와 INP의 단계별 평균, CLS를 만든 요소, LCP 확정 방식, 느린 LCP 표가 있다](./images/cwv-to-tempo-and-mimir/why-dashboard.png)
+![태그 cwv-otel-grafana-v1 시점의 Tempo 대시보드. LCP 요소별 건수와 p75, LCP와 INP의 단계별 평균, CLS를 만든 요소, LCP 확정 방식, 느린 LCP 표가 있다](./images/cwv-to-tempo-and-mimir/why-dashboard.png)
 
 Tempo 대시보드 맨 위의 두 패널이 처음 질문에 대한 답이다.
 
@@ -423,7 +481,7 @@ Tempo 대시보드 맨 위의 두 패널이 처음 질문에 대한 답이다.
 {resource.service.name="demo-web" && name="cwv.lcp"} | quantile_over_time(duration, .75) by (span.cwv.lcp.target)
 ```
 
-요소별 건수로 어떤 요소가 자주 LCP가 되는지, 요소별 p75로 그중 어느 것이 느린지 본다. 재현 환경에서는 제목(`#app>h1`), 늦게 그려지는 본문(`#app>p.hero`), 이미지(`#app>img.hero-image`) 셋으로 갈린다. 데모는 첫 클릭에서 LCP가 확정되므로, 본문이 그려지기 전에 누르면 제목이 LCP가 된다. 그 아래 패널은 LCP와 INP를 단계별 평균으로 나눈 것이고, 단계마다 패널을 따로 둔 것은 앞에서 본 범례 문제 때문이다. "LCP 확정 방식" 패널은 web-vitals와 quiet 타이머 중 어느 쪽이 먼저 확정했는지 보여 준다. quiet는 입력 없이 3초 넘게 머물기만 해도 먼저 확정하므로 이 비율만으로 hidden 누락을 알 수는 없지만, 사내 검증 환경에서는 iOS가 74건 중 43건, Android가 25건 중 19건으로 OS마다 차이가 컸다.
+요소별 건수로 어떤 요소가 자주 LCP가 되는지, 요소별 p75로 그중 어느 것이 느린지 본다. 재현 환경에서는 제목(`#app>h1`), 늦게 그려지는 본문(`#app>p.hero`), 이미지(`#app>img.hero-image`) 셋으로 갈린다. 데모는 첫 클릭에서 LCP가 확정되므로, 본문이 그려지기 전에 누르면 제목이 LCP가 된다. 그 아래 패널은 LCP와 INP를 단계별 평균으로 나눈 것이고, 단계마다 패널을 따로 둔 것은 앞에서 본 범례 문제 때문이다. 화면의 "LCP 확정 방식" 패널은 web-vitals와 quiet 타이머 중 어느 쪽이 먼저 확정했는지 보여 준다. quiet는 입력 없이 3초 넘게 머물기만 해도 먼저 확정하므로 이 비율만으로 hidden 누락을 알 수는 없지만, 사내 검증 환경에서는 quiet 쪽이 iOS 74건 중 43건, Android 25건 중 19건으로 OS마다 차이가 컸다. quiet를 잠정값으로 바꾼 지금의 재현 환경에서는 이 패널이 "LCP 정식값과 quiet 잠정값"으로 바뀌어, 두 span의 건수를 나란히 보여 준다.
 
 쓰는 순서는 정해 두었다. Mimir에서 나빠진 지표와 화면을 찾고, 검증 환경에서 같은 조건을 재현하며 Tempo로 원인을 좁히고, 고친 뒤 Mimir의 추이로 돌아와 확인한다. 운영 데이터만으로 원인까지 가지 못하는 것은 아쉽지만, 각 저장소가 답할 수 있는 질문을 미리 나눠 두면 무엇을 어디에 실을지도 함께 정해진다.
 
@@ -431,7 +489,7 @@ Tempo 대시보드 맨 위의 두 패널이 처음 질문에 대한 답이다.
 
 돌아보면 이 작업에서 측정 자체가 문제였던 적은 거의 없었다. 값을 잃은 곳은 매번 그 뒤였고, 대부분 내가 바꿀 수 없는 설정의 기본값에서였다. tail sampling은 혼자 온 root를 버렸고, 누적 변환은 5분 동안 조용한 시리즈를 잊었고, 같은 시리즈에 여러 브라우저가 쓰면 순서가 어긋난 값을 버렸고, Tempo는 30분보다 오래된 구간과 0인 값을 분위수에서 뺐다. 어느 단계도 오류를 내지 않았다. 각 기본값은 서버 트래픽에서는 합리적인 선택이었을 것이다. 다만 브라우저가 보내는 데이터는 짧게 살다 떠나는 순간에 몰리고, 라벨 조합마다 드문드문 오면서도, 한 시리즈에 셀 수 없이 많은 브라우저가 각자의 시계로 쓴다. 서버를 기준으로 정한 기본값이 맞지 않는 지점은 거기서 생긴다고 생각한다.
 
-설정을 바꿀 수 없을 때 쓸 수 있었던 확인 방법은 보낸 건수와 도착한 건수를 단계마다 세는 것 하나였다. 이 글의 실험도 대부분 그 숫자가 맞지 않는 데서 시작했다. 다만 앞의 절에서 보았듯이, 숫자가 맞았다는 결과도 그 숫자를 센 조건에서만 유효하다. 검증 환경에서 맞은 건수는 쓰는 브라우저가 적은 조건의 결과였다. 운영과 같은 조건, 즉 많은 브라우저가 같은 시리즈에 동시에 쓰는 부하를 흉내 내어 한 번 더 세어 보기 전에는, metric 경로가 운영 트래픽을 온전히 센다고 말하기 어렵다고 생각한다.
+설정을 바꿀 수 없을 때 쓸 수 있었던 확인 방법은 보낸 건수와 도착한 건수를 단계마다 세는 것 하나였다. 이 글의 실험도 대부분 그 숫자가 맞지 않는 데서 시작했다. 다만 앞의 절에서 보았듯이, 숫자가 맞았다는 결과도 그 숫자를 센 조건에서만 유효하다. 검증 환경에서 맞은 건수는 쓰는 브라우저가 적은 조건의 결과였다. 운영과 같은 조건, 즉 많은 브라우저가 같은 시리즈에 동시에 쓰는 부하를 흉내 내어 한 번 더 세어 보기 전에는, metric 경로가 운영 트래픽을 온전히 센다고 말하기 어렵다고 생각한다. 그렇게 세어서 손실이 드러났을 때, 공용 인프라의 설정을 바꿀 수 없다면 고칠 수 있는 자리는 그 앞이다. 재현 환경에서는 시리즈의 writer를 직접 운영하는 gateway 하나로 모아 손실을 없앴고, 그 대가로 상태를 들고 있는 서버를 하나 더 맡게 됐다.
 
 [^1]: [opentelemetry-collector-contrib v0.162.0 `processor/tailsamplingprocessor/processor.go`](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/v0.162.0/processor/tailsamplingprocessor/processor.go#L1191-L1199)
 

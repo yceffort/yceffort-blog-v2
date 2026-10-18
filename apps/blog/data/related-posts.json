@@ -10106,6 +10106,10 @@
         "score": 0.11
       },
       {
+        "slug": "2026/08/k8s-for-frontend-1",
+        "score": 0.11
+      },
+      {
         "slug": "2026/02/nodejs-deep-dive-beta-reader",
         "score": 0.1
       },
@@ -10127,10 +10131,6 @@
       },
       {
         "slug": "2025/12/nextjs-react-security-vulnerability",
-        "score": 0.07
-      },
-      {
-        "slug": "2026/08/k8s-for-frontend-4",
         "score": 0.07
       }
     ],
@@ -10292,16 +10292,16 @@
         "score": 0.09
       },
       {
+        "slug": "2026/03/react-server-functions-deep-dive",
+        "score": 0.09
+      },
+      {
         "slug": "2026/08/rebuilding-a-vendor-sdk",
         "score": 0.08
       },
       {
         "slug": "2026/08/service-worker-caching-1",
         "score": 0.08
-      },
-      {
-        "slug": "2026/10/cwv-send-on-page-leave",
-        "score": 0.07
       }
     ],
     "2026/08/k8s-for-frontend-3": [
@@ -11368,6 +11368,10 @@
         "score": 0.18
       },
       {
+        "slug": "2021/05/ast-for-javascript",
+        "score": 0.14
+      },
+      {
         "slug": "2026/10/web-vitals-report-timing",
         "score": 0.13
       },
@@ -11385,10 +11389,6 @@
       },
       {
         "slug": "2025/05/web-performance-analysis-2",
-        "score": 0.12
-      },
-      {
-        "slug": "2025/06/web-performance-analysis-3",
         "score": 0.12
       }
     ],

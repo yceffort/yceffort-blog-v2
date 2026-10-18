@@ -103,7 +103,7 @@ export const BUCKETS: Record<Metric['name'], number[]> = {
   ) as Record<Metric['name'], Histogram>;
 ```
 
-버킷 경계는 히스토그램을 만들 때 `advice`로 넘긴다. 이 값이 없으면 SDK의 기본 경계가 쓰이는데, 기본 경계에는 CWV의 기준값이 없다. web-vitals의 콜백은 두 기록을 한 번에 한다.
+버킷 경계는 히스토그램을 만들 때 `advice`로 넘긴다. 이 값이 없으면 sdk-metrics의 기본 경계(0부터 10000까지 15개, 지표와 상관없이 같다)가 쓰이는데, 거기에는 INP의 200과 CLS의 0.1 같은 기준값이 없다. web-vitals의 콜백은 두 기록을 한 번에 한다.
 
 ```ts
 // cwv-otel-grafana/demo-web/src/telemetry/setup.ts

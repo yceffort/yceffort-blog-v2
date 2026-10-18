@@ -33,11 +33,17 @@ function spanDurationMs(metric: {name: Metric['name']; value: number}): number {
 export function startTelemetry({collectorUrl}: Options): void {
   const device = readDeviceContext()
   const navigations = createNavigationTracker(window.location.pathname)
-  // web-vitals 의 bfcache 처리보다 먼저 복원을 센다. web-vitals 는 복원 뒤 다음 프레임에 보고한다.
-  window.addEventListener('pageshow', (event) => {
-    if (event.persisted)
-      navigations.restored(event.timeStamp, window.location.pathname)
-  })
+  // 복원 지표의 키와 시작 시각은 web-vitals 가 넣어 주는 navigationStartTime(pageshow 의 timeStamp)에서 읽고,
+  // 경로만 여기서 같은 timeStamp 로 저장한다. web-vitals 도 window 에 capture 로 pageshow 를 걸고 TTFB 는 그 안에서
+  // 바로 보고하므로, 먼저 등록하는 이 리스너도 capture 로 걸어 같은 타깃에서 먼저 돌게 한다.
+  window.addEventListener(
+    'pageshow',
+    (event) => {
+      if (event.persisted)
+        navigations.restored(event.timeStamp, window.location.pathname)
+    },
+    true,
+  )
   const contexts = new Map<string, PageContext>()
   const contextOf = (navigation: NavigationRef) => {
     let context = contexts.get(navigation.key)

@@ -24,21 +24,17 @@ function pathnameOf(url: string | undefined, fallback: string): string {
  * 지표마다 어느 내비게이션의 것인지 정한다.
  *
  * SPA 안의 이동(soft navigation)은 web-vitals 가 `navigationId` 와 `navigationURL` 을 새로 준다.
- * bfcache 복원은 첫 로드의 `navigationId` 를 그대로 쓰므로(web-vitals 6.2.3 `initMetric`),
- * `pageshow`(persisted) 를 센 값으로 가른다. 복원된 문서는 SPA 이동 뒤의 URL 일 수 있어
- * 경로도 복원 시점의 `location` 에서 읽는다.
+ * bfcache 복원은 첫 로드의 `navigationId` 를 그대로 쓰지만(web-vitals 6.2.3 `initMetric`),
+ * `navigationStartTime` 에 복원 시각(`pageshow` 의 `timeStamp`)이 들어 있어 그 값으로 가른다.
+ * 복원된 문서는 SPA 이동 뒤의 URL 일 수 있어 경로는 `pageshow` 에서 읽어 같은 `timeStamp` 로 저장한다.
  */
 export function createNavigationTracker(initialPathname: string) {
-  let restores = 0
-  let restoreStart = 0
-  let restorePathname = initialPathname
+  const restorePathnames = new Map<number, string>()
 
   return {
-    /** `pageshow` 에서 `event.persisted` 일 때 부른다. web-vitals 보다 먼저 등록해야 한다. */
+    /** `pageshow` 에서 `event.persisted` 일 때 `event.timeStamp` 와 그때의 경로를 넘긴다. */
     restored(timeStamp: number, pathname: string) {
-      restores += 1
-      restoreStart = timeStamp
-      restorePathname = pathname
+      restorePathnames.set(timeStamp, pathname)
     },
 
     resolve(metric: MetricWithAttribution): NavigationRef {
@@ -51,11 +47,12 @@ export function createNavigationTracker(initialPathname: string) {
         }
       }
       if (metric.navigationType === 'back-forward-cache') {
+        const start = metric.navigationStartTime ?? 0
         return {
-          key: `restore:${restores}`,
+          key: `restore:${start}`,
           kind: 'restore',
-          startTime: restoreStart,
-          pathname: restorePathname,
+          startTime: start,
+          pathname: restorePathnames.get(start) ?? initialPathname,
         }
       }
       return {

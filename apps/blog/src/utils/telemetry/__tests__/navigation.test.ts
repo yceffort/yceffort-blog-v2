@@ -41,22 +41,43 @@ describe('createNavigationTracker', () => {
     })
   })
 
-  it('bfcache 복원은 navigationId 가 같아도 복원할 때마다 다른 키가 된다', () => {
+  it('bfcache 복원은 navigationStartTime 으로 가르고 경로는 pageshow 에서 저장한 값을 쓴다', () => {
     const tracker = createNavigationTracker('/')
-    const restored = metric({navigationType: 'back-forward-cache'})
+    const restored = (navigationStartTime: number) =>
+      metric({navigationType: 'back-forward-cache', navigationStartTime})
 
     tracker.restored(9000, '/tags')
-    const first = tracker.resolve(restored)
     tracker.restored(15000, '/series')
-    const second = tracker.resolve(restored)
 
-    expect(first).toEqual({
-      key: 'restore:1',
+    expect(tracker.resolve(restored(9000))).toEqual({
+      key: 'restore:9000',
       kind: 'restore',
       startTime: 9000,
       pathname: '/tags',
     })
-    expect(second.key).toBe('restore:2')
-    expect(second.pathname).toBe('/series')
+    expect(tracker.resolve(restored(15000))).toEqual({
+      key: 'restore:15000',
+      kind: 'restore',
+      startTime: 15000,
+      pathname: '/series',
+    })
+    expect(tracker.resolve(restored(9000)).pathname).toBe('/tags')
+  })
+
+  it('복원 경로를 아직 저장하지 않았으면 첫 로드 경로로 둔다', () => {
+    const tracker = createNavigationTracker('/')
+    expect(
+      tracker.resolve(
+        metric({
+          navigationType: 'back-forward-cache',
+          navigationStartTime: 4000,
+        }),
+      ),
+    ).toEqual({
+      key: 'restore:4000',
+      kind: 'restore',
+      startTime: 4000,
+      pathname: '/',
+    })
   })
 })

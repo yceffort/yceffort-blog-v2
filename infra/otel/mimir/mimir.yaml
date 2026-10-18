@@ -23,6 +23,12 @@ distributor:
     kvstore:
       store: memberlist
 
+# 단일 프로세스라 쿼리를 24시간 단위로 쪼개고 16조각으로 샤딩해도 병렬 이득이 없고 대기 큐만 는다.
+# 대시보드 패널 하나가 수십 요청이 되어 테넌트 대기 상한(100)을 넘기면 429 가 나므로 패널 하나를 요청 하나로 둔다.
+frontend:
+  split_queries_by_interval: 0
+  parallelize_shardable_queries: false
+
 ingester:
   ring:
     instance_addr: 127.0.0.1

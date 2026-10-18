@@ -65,8 +65,22 @@ const ko: ResumeContent = {
   experience: {
     title: '경력',
     sub: 'Experience',
-    note: '이전에 근무한 곳에서의 경험입니다.',
+    note: '재직 중인 곳과 이전에 근무한 곳에서의 경험입니다.',
     jobs: [
+      {
+        company: '카카오페이증권',
+        role: '홈팀 Frontend Engineer',
+        period: '2026.03 ~ 현재',
+        description: '증권 홈 화면 개발과 성능 개선',
+        contributions: [
+          '카카오페이앱 증권홈, 카카오뱅크앱 주식홈 개발',
+          '웹소켓 라이브러리 작성',
+          '외부 SDK 재조립, 번들 정리, 렌더링 개선으로 홈의 FCP 44%, 내려받는 JS 38%, 초기 5초 CPU 30% 감소(모바일 랩 측정)',
+          '반드시 써야 하는 외부 SDK를 소스맵에서 복원해 로직은 그대로 두고 다시 조립, 이벤트 전송 엔트리 기준 72%(gzip) 감소',
+          'framer-motion 배너의 프레임 드랍을 없애고, number-flow를 구형 브라우저로 이식한 뒤 애니메이션을 합성 스레드로 이동',
+        ],
+        stack: 'React, TypeScript, Next.js, Turbopack',
+      },
       {
         company: '네이버 파이낸셜',
         role: 'Frontend Engineer, 내자산&회원FE 리더 → 카드FE 리더/공통개발TF 리더',
@@ -241,8 +255,22 @@ const en: ResumeContent = {
   ],
   experience: {
     title: 'Experience',
-    note: 'Experience from the places I have worked.',
+    note: 'Experience from where I work now and the places I have worked before.',
     jobs: [
+      {
+        company: 'KakaoPay Securities',
+        role: 'Frontend Engineer, Home team',
+        period: '2026.03 to present',
+        description: 'Building the stock home screens and making them faster',
+        contributions: [
+          'Built the securities home in the KakaoPay app and the stock home in the KakaoBank app',
+          'Wrote a WebSocket library',
+          'Cut FCP by 44%, downloaded JS by 38%, and CPU time in the first 5 seconds by 30% on the home screen (mobile lab measurement) by reassembling an external SDK, cleaning up bundles, and improving rendering',
+          'Restored a required external SDK from its source maps and reassembled it without touching its logic, cutting the event sending entry by 72% (gzip)',
+          'Removed frame drops from a framer-motion banner, ported number-flow to older browsers, and moved its animation to the compositor thread',
+        ],
+        stack: 'React, TypeScript, Next.js, Turbopack',
+      },
       {
         company: 'NAVER Financial',
         role: 'Frontend Engineer, Assets & Membership FE Lead → Card FE Lead / Shared Development TF Lead',

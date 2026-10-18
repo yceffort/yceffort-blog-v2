@@ -33,7 +33,7 @@ CWV 전송 코드는 값을 모아 주기적으로 내보내는 부분과, 페�
 
 > 사내 작업은 2026년 8월 말부터 10월 중순까지 사내 검증 환경에서 했다. 이 글의 수치는 모두 공개 재현 환경([blog-experiments/cwv-otel-grafana](https://github.com/yceffort/blog-experiments/tree/cwv-otel-grafana-v1/cwv-otel-grafana))에서 다시 잰 값이다.
 >
-> exporter와 이벤트 순서의 측정 코드(`e2-exporter`, `e3-lifecycle`)는 태그 `cwv-otel-grafana-v1`에 있고, 처음 표의 측정 코드(`e7-unload-flush`)는 떠나는 시점을 클릭 1.5초 뒤로 늘리고 Tempo 도착까지 세도록 고쳐 커밋 [`e4e48c6`](https://github.com/yceffort/blog-experiments/tree/e4e48c6de625e90ff3c9b8931e2f40381481d996/cwv-otel-grafana/experiments/e7-unload-flush)에서 2026-10-18에 다시 쟀다. 주기 export와 겹치는 경우의 측정 코드(`e14-inflight-export`)는 커밋 [`c52fbff`](https://github.com/yceffort/blog-experiments/tree/c52fbfffc428b173bf4406406b667b6f64f2c03d/cwv-otel-grafana/experiments/e14-inflight-export)에 있고 같은 날 쟀다.
+> exporter와 이벤트 순서의 측정 코드(`e2-exporter`, `e3-lifecycle`)는 태그 `cwv-otel-grafana-v1`에 있고, 처음 표의 측정 코드(`e7-unload-flush`)는 떠나는 시점을 클릭 1.5초 뒤로 늘리고 Tempo 도착까지 세도록 고쳐 커밋 [`e4e48c6`](https://github.com/yceffort/blog-experiments/tree/e4e48c6de625e90ff3c9b8931e2f40381481d996/cwv-otel-grafana/experiments/e7-unload-flush)에서 2026-10-18에 다시 쟀다. 주기 export와 겹치는 경우의 측정 코드(`e14-inflight-export`)는 커밋 [`6cafea7`](https://github.com/yceffort/blog-experiments/tree/6cafea7dc5a1fbb6dc45fbce2d9393d2c65785ed/cwv-otel-grafana/experiments/e14-inflight-export)에 있고 같은 날 쟀다.
 >
 > 재현 환경의 버전은 web-vitals 6.2.3, OTel JS 2.12.0(OTLP exporter 0.223.0), OpenTelemetry Collector contrib 0.162.0(e7 재측정은 0.163.1), Mimir 3.2.2, Tempo 3.1.0이다. 비교할 때는 OTel JS 1.30.1(exporter 0.57.2)을 함께 썼고, 브라우저는 Playwright 1.64.1의 Chromium 156이다. 인용한 소스는 모두 이 버전의 태그로 고정했다.
 

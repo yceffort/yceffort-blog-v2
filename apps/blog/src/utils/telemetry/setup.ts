@@ -60,6 +60,9 @@ export function startTelemetry({collectorUrl}: Options): void {
     spanProcessors: [
       new BatchSpanProcessor(
         new OTLPTraceExporter({url: `${collectorUrl}/v1/traces`}),
+        // 브라우저용 processor 는 기본으로 document 의 visibilitychange 와 pagehide 에 자기 flush 를 건다.
+        // flush 시점은 아래 visibilitychange 리스너 하나에서만 정하도록 끈다. 주기 export(5초)는 그대로다.
+        {disableAutoFlushOnDocumentHide: true},
       ),
     ],
   })
@@ -94,7 +97,7 @@ export function startTelemetry({collectorUrl}: Options): void {
     void meterProvider.forceFlush()
   }
   // web-vitals 는 window 에서 capture 로 받아 CLS, INP 를 먼저 보고한다. 여기는 그 뒤에 불린다.
-  // metric 은 이 flush 에서만 나간다(FlushOnlyMetricReader).
+  // metric 은 이 flush 에서만 나간다(FlushOnlyMetricReader). span 은 주기 export 와 이 flush 로 나간다.
   //
   // pagehide 에서는 flush 하지 않는다. 문서를 떠날 때 pagehide 가 visibilitychange 보다 먼저 와서,
   // pagehide 에서 보내면 visibilitychange 에서 막 기록한 CLS, INP 가 빠진다

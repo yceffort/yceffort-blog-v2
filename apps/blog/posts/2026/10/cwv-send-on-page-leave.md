@@ -5,20 +5,18 @@ tags:
   - browser
 published: false
 date: 2026-10-17 09:00:00
-description: 'CLS와 INP는 페이지를 떠나는 순간에야 보고되므로, 그 순간의 전송이 실패하면 통째로 빠진다. OTel JS 1.30.1의 sendBeacon, 최신 exporter의 fetch keepalive, pagehide와 visibilitychange의 순서, sdk-metrics 2.9.0의 forceFlush 대기를 재현 환경에서 재고 정리했다.'
+description: '페이지를 떠날 때 CLS와 INP가 누락되는 원인을 OTel JS의 전송 방식과 flush 순서에서 찾았다.'
 series: 'Core Web Vitals 직접 수집하기'
 seriesOrder: 2
 ---
 
 ## Table of Contents
 
-## 페이지를 떠나는 순간 값은 어떻게 나가는가
+## pagehide에서 flush했더니 CLS와 INP가 빠졌다
 
-브라우저에서 잰 핵심 웹 지표(Core Web Vitals, 이하 CWV)를 서버로 보내는 코드는 대개 두 부분으로 되어 있다. 값을 모아 두었다가 주기적으로 내보내는 부분과, 페이지를 떠나는 순간 남은 값을 밀어내는 부분이다. OpenTelemetry JS(이하 OTel JS)에서는 앞의 일을 metric의 `PeriodicExportingMetricReader`와 trace의 `BatchSpanProcessor`가 맡고, 뒤의 일은 수집 코드가 `forceFlush`를 불러서 한다.
+핵심 웹 지표(Core Web Vitals, 이하 CWV)를 수집하는 재현 환경을 OpenTelemetry JS(이하 OTel JS) 2.12.0으로 만들었다. 사내 가이드에 따라 페이지가 숨겨질 때(`visibilitychange`의 hidden)와 `pagehide` 두 곳에서 남은 metric을 즉시 전송하도록 flush를 호출했다. 그런데 TTFB, FCP, LCP는 도착했지만 CLS와 INP는 도착하지 않았다. 브라우저 콘솔과 collector 로그에도 오류는 없었다.
 
-떠나는 순간의 전송에는 일반 요청과 다른 조건이 두 가지 있다. 문서가 사라진 뒤에도 요청이 끝까지 가야 하므로 [`navigator.sendBeacon`](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/sendBeacon)이나 `fetch`의 [`keepalive`](https://developer.mozilla.org/en-US/docs/Web/API/RequestInit#keepalive) 같은 수단으로 보내야 하고, 떠난다는 사실을 알려 주는 이벤트([`pagehide`](https://developer.mozilla.org/en-US/docs/Web/API/Window/pagehide_event), [`visibilitychange`](https://developer.mozilla.org/en-US/docs/Web/API/Document/visibilitychange_event)의 hidden)를 골라 그 안에서 flush를 불러야 한다. 어느 수단으로 보내는지는 OTel JS exporter의 버전이 정하고, 어느 이벤트에서 부르는지는 수집 코드가 정한다.
-
-재현 환경의 수집 코드를 OTel JS 2.12.0으로 만들고, 사내 가이드에 적혀 있던 대로 페이지가 숨겨질 때(`visibilitychange`의 hidden)와 `pagehide` 두 곳에서 metric을 flush하게 했다. 그다음 10초 주기 export가 오기 전에 떠나는 페이지 로드를 만들고, 페이지 로드마다 Mimir의 지표별 건수가 얼마나 늘었는지 셌다. 버튼을 한 번 누르고 1.5초 뒤에 떠났다. [1편](/2026/10/web-vitals-report-timing)에서 본 대로 web-vitals 6.2.3은 상호작용 항목의 처리를 idle이나 1초 timeout까지 미루고 그 전에 떠나면 INP를 보고하지 않으므로, 그 손실과 섞이지 않게 timeout을 지나서 떠났다.
+건수를 확인할 때는 버튼을 한 번 누르고 1.5초 뒤에 떠나도록 했다. 10초 주기 export가 실행되기 전에 떠난 뒤, 페이지 로드마다 Mimir의 지표별 건수가 얼마나 늘었는지 셌다. [1편](/2026/10/web-vitals-report-timing)에서 본 대로 web-vitals 6.2.3은 상호작용 항목의 처리를 idle이나 1초 timeout까지 미룬다. 그 전에 떠나면 INP가 보고되지 않으므로, 이 문제와 전송 중 누락을 구별하려고 timeout이 지난 뒤에 떠났다.
 
 | flush 시점                  | TTFB | FCP | LCP | INP   | CLS   |
 | --------------------------- | ---- | --- | --- | ----- | ----- |
@@ -27,9 +25,11 @@ seriesOrder: 2
 
 > 모드마다 2번 실행해 같은 결과를 얻었다. 같은 페이지 로드의 trace는 두 모드 모두 다섯 span이 Tempo에 도착했다. 측정 코드는 `cwv-otel-grafana/experiments/e7-unload-flush`의 `run.mjs`다.
 
-TTFB, FCP, LCP는 한 건씩 늘었는데 CLS와 INP는 한 건도 오지 않았다. 브라우저 콘솔에도, collector 로그에도 오류는 없었다. pagehide에서 flush하는 줄 하나를 지우자 다섯 지표가 모두 도착했다. 사내 코드가 쓰던 OTel JS 1.30.1에서는 같은 flush 코드로 이런 일이 생기지 않는다. 대신 1.30.1에는 떠나는 순간의 전송 실패를 성공으로 보고하는 문제가 있고, 최신 버전은 그 문제를 고쳤다. 전송의 문제를 고친 버전에서 flush에 새 손실이 생긴 것이다.
+pagehide에서 flush하는 줄 하나를 지우자 다섯 지표가 모두 도착했다. 사내 코드가 쓰던 OTel JS 1.30.1에서는 같은 flush 코드로 이런 누락이 생기지 않는다. 다만 1.30.1에는 전송 실패를 성공으로 보고하는 문제가 있었다. 버전별 전송 방식과 flush 동작을 함께 확인해야 했다.
 
-이 글은 페이지를 떠나는 순간에 CWV 값이 어떻게 나가는지를 두 버전에서 따라가며, 이 표가 나온 이유를 찾아간 기록이다.
+CWV 전송 코드는 값을 모아 주기적으로 내보내는 부분과, 페이지를 떠날 때 남은 값을 보내는 부분으로 나뉜다. OTel JS에서는 metric의 `PeriodicExportingMetricReader`와 trace의 `BatchSpanProcessor`가 값을 모아 내보내고, 수집 코드는 떠나는 시점에 `forceFlush`를 호출한다.
+
+페이지를 떠날 때는 문서가 사라진 뒤에도 요청이 계속되어야 하므로 [`navigator.sendBeacon`](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/sendBeacon)이나 `fetch`의 [`keepalive`](https://developer.mozilla.org/en-US/docs/Web/API/RequestInit#keepalive)를 쓴다. 전송 방식은 OTel JS exporter 버전에 따라 달라진다. 수집 코드에서는 [`pagehide`](https://developer.mozilla.org/en-US/docs/Web/API/Window/pagehide_event)나 [`visibilitychange`](https://developer.mozilla.org/en-US/docs/Web/API/Document/visibilitychange_event)의 hidden 중 어느 이벤트에서 flush할지 정해야 한다. 이 두 가지가 앞의 결과에 어떤 영향을 주는지 확인했다.
 
 > 사내 작업은 2026년 8월 말부터 10월 중순까지 사내 검증 환경에서 했다. 이 글의 수치는 모두 공개 재현 환경([blog-experiments/cwv-otel-grafana](https://github.com/yceffort/blog-experiments/tree/cwv-otel-grafana-v1/cwv-otel-grafana))에서 다시 잰 값이다.
 >
@@ -37,13 +37,13 @@ TTFB, FCP, LCP는 한 건씩 늘었는데 CLS와 INP는 한 건도 오지 않았
 >
 > 재현 환경의 버전은 web-vitals 6.2.3, OTel JS 2.12.0(OTLP exporter 0.223.0), OpenTelemetry Collector contrib 0.162.0(e7 재측정은 0.163.1), Mimir 3.2.2, Tempo 3.1.0이다. 비교할 때는 OTel JS 1.30.1(exporter 0.57.2)을 함께 썼고, 브라우저는 Playwright 1.64.1의 Chromium 156이다. 인용한 소스는 모두 이 버전의 태그로 고정했다.
 
-## 수집 코드의 모양
+## 같은 측정값을 trace와 metric으로 기록하기
 
-수집 코드는 web-vitals의 attribution 빌드 콜백 하나에서 trace와 metric을 함께 기록한다. Next.js의 [`useReportWebVitals`](https://nextjs.org/docs/app/api-reference/functions/use-report-web-vitals)는 Next.js가 자체 번들한 web-vitals 사본(16.3.5 기준 4.2.1)으로 값을 재기 때문에, 이 훅과 직접 설치한 web-vitals를 섞어 쓰면 같은 페이지 로드라도 값과 `id`가 어긋난다. 두 저장소의 값을 `id`로 이어 붙이려면 측정 소스가 하나여야 했다.
+수집 코드는 지표의 원인 분석 정보를 제공하는 web-vitals attribution 빌드의 콜백 하나에서 trace와 metric을 함께 기록한다. Next.js의 [`useReportWebVitals`](https://nextjs.org/docs/app/api-reference/functions/use-report-web-vitals)는 Next.js가 자체 번들한 web-vitals 사본(16.3.5 기준 4.2.1)으로 값을 잰다. 이 훅과 직접 설치한 web-vitals를 섞어 쓰면 같은 페이지 로드라도 값과 `id`가 어긋난다. 두 저장소의 값을 `id`로 연결하려면 같은 측정 결과를 사용해야 했다.
 
-trace는 페이지 로드 하나가 trace 하나이고, 지표마다 span이 하나씩 달린다. span의 길이를 지표 값으로 맞췄기 때문에 TraceQL의 `quantile_over_time(duration, .75)`가 그대로 지표의 p75가 된다. CLS는 점수라서 1000을 곱해 ms로 넣었고, TraceQL이 초 단위로 돌려주는 값이 그대로 CLS 점수로 읽힌다. 속성에는 attribution 값을 모두 싣는다. LCP라면 요소 selector, 리소스 URL, 그리고 LCP를 네 단계로 나눈 시간이다.
+페이지 로드 하나를 trace 하나로 기록하고, 지표마다 span을 하나씩 추가한다. span의 길이를 지표 값에 맞췄기 때문에 TraceQL의 `quantile_over_time(duration, .75)`로 지표의 p75를 구할 수 있다. CLS는 점수에 1000을 곱한 값을 ms 단위로 넣었으므로, TraceQL이 초 단위로 반환한 값이 원래 CLS 점수와 같다. span 속성에는 attribution 값을 모두 넣는다. LCP라면 요소 selector, 리소스 URL, LCP를 네 단계로 나눈 시간이 포함된다.
 
-metric은 지표마다 히스토그램 하나다. 브라우저는 수명이 짧고 탭마다 따로 세기 때문에 누적값을 들고 있을 주체가 없다. 그래서 delta temporality로 보내고, 누적으로 바꾸는 일은 collector에 맡긴다. 버킷 경계에는 web-vitals의 good, poor 기준값을 반드시 넣었다.
+metric은 지표마다 히스토그램 하나로 기록한다. 브라우저에서는 탭마다 따로 집계하고 페이지를 떠나면 수집 코드도 종료되므로, 누적값을 계속 유지하기 어렵다. 그래서 직전 전송 이후의 증분을 보내는 delta temporality를 쓰고, 누적값으로 바꾸는 일은 collector에 맡긴다. 버킷 경계에는 web-vitals의 good, poor 기준값을 넣었다.
 
 ```ts
 // cwv-otel-grafana/demo-web/src/telemetry/buckets.ts
@@ -60,7 +60,7 @@ export const BUCKETS: Record<Metric['name'], number[]> = {
 
 metric은 `PeriodicExportingMetricReader`가 10초마다 내보내고, trace는 `BatchSpanProcessor`가 모았다가 내보낸다. 둘 다 주기를 기다리는 동안 페이지를 떠나면 남은 값을 직접 flush해야 한다.
 
-## 값의 절반은 떠날 때 보고된다
+## CLS와 INP는 hidden에서 보고된다
 
 web-vitals는 다섯 지표를 같은 시점에 보고하지 않는다. `reportAllChanges` 없이 쓸 때 보고 시점은 다음과 같다.
 
@@ -72,7 +72,7 @@ web-vitals는 다섯 지표를 같은 시점에 보고하지 않는다. `reportA
 | CLS  | hidden 때                                     | `src/onCLS.ts`  |
 | INP  | hidden 때                                     | `src/onINP.ts`  |
 
-각 지표가 왜 그 시점에 보고되는지는 1편에서 소스로 따라갔다. 이 글에서 필요한 것은 결과다. 다섯 지표 중 CLS는 FCP가 보고된 페이지 로드면 항상, INP는 처리된 상호작용이 있었던 경우에, LCP는 입력 없이 떠나는 경우에 페이지를 떠나는 순간 처음으로 보고된다. 상호작용이 한 번도 없으면 INP는 초기값 -1에서 바뀌지 않아 보고되지 않고, 6.2.3에서는 마지막 상호작용 뒤 1초 안에 떠나도 보고되지 않는다. 주기 export에 실려 미리 나가 있을 수가 없는 값들이니, 떠나는 순간의 전송이 실패하면 이 지표들은 통째로 빠진다.
+각 지표의 보고 시점은 1편에서 소스로 확인했다. 전송 코드에서 고려할 점은 CLS와 INP가 hidden을 받아야 보고된다는 것이다. FCP가 보고된 페이지에서는 CLS가, 처리된 상호작용이 있었던 페이지에서는 INP가 이때 보고된다. 입력 없이 떠나는 페이지에서는 LCP도 떠나는 순간 처음 보고된다. 상호작용이 한 번도 없으면 INP는 초기값 -1에서 바뀌지 않아 보고되지 않고, 6.2.3에서는 마지막 상호작용 뒤 1초 안에 떠나도 보고되지 않는다. 이렇게 떠날 때 처음 보고된 값은 앞선 주기 export로 보낼 수 없으므로, 마지막 전송이 실패하면 수집 결과에서 빠진다.
 
 ## 1.30.1의 sendBeacon은 실패를 성공으로 보고한다
 
@@ -86,15 +86,17 @@ web-vitals는 다섯 지표를 같은 시점에 보고하지 않는다. `reportA
 
 > 각 조합을 2번 돌려 같은 결과를 얻었다. 측정 코드는 `cwv-otel-grafana/experiments/e2-exporter`에 남겼다.
 
-sendBeacon은 요청을 브라우저 큐에 넣었는지만 알려 준다. 0.57.2는 그 값을 그대로 성공으로 보고해서, CORS에 막혀 서버가 한 건도 받지 못해도 exporter에서는 아무 일도 없었던 것처럼 보인다. 사내에서는 평소에는 XHR로 보내 실패가 보이게 하고, 페이지가 숨겨졌을 때만 sendBeacon으로 바꿨다. 떠나는 순간의 전송만큼은 결과를 알 수 없는 채로 둔 것이다.
+sendBeacon의 반환값으로 알 수 있는 것은 요청이 브라우저 큐에 들어갔는지까지다. 0.57.2는 큐에 들어간 요청을 성공으로 보고하므로, CORS에 막혀 서버가 한 건도 받지 못해도 exporter는 success를 반환한다. 사내에서는 평소에 XHR로 보내 실패를 확인하고, 페이지가 숨겨졌을 때만 sendBeacon으로 전환했다. 이 구성에서도 떠나는 순간의 전송 결과는 확인할 수 없었다.
 
 ## 최신 exporter는 fetch keepalive로 보낸다
 
-최신 버전에서는 이 분기가 사라졌다. 0.204.0부터 `headers`가 있으면 XHR보다 fetch를 먼저 쓰고, 0.211.0에서 XHR 전송이 없어졌고, 0.213.0에서 sendBeacon도 keepalive fetch로 바뀌었다[^1]. keepalive fetch는 문서가 사라진 뒤에도 요청을 끝까지 보내 주는 fetch라서 sendBeacon이 하던 일을 그대로 하면서, 응답 상태를 돌려준다. 앞의 표에서 0.223.0이 400을 바로 failed로 보고한 것이 그 결과다. CORS 거부는 네트워크 오류로 보여 재시도 대상이 되고, 1초에서 시작해 1.5배씩 늘어나는 간격으로 4번 다시 시도한 뒤 다음 재시도가 10초 export 제한을 넘기면 failed가 된다[^5]. 표의 5번 시도와 약 8초가 그 결과다.
+최신 버전에서는 이 분기가 사라졌다. 0.204.0부터 `headers`가 있으면 XHR보다 fetch를 먼저 사용했고, 0.211.0에서 XHR 전송을 제거했다. 0.213.0에서는 sendBeacon도 keepalive fetch로 바꿨다[^1]. keepalive fetch는 문서가 사라진 뒤에도 요청을 계속하며 응답 상태도 반환한다. 앞의 표에서 0.223.0이 400을 바로 failed로 보고한 이유다.
 
-[Fetch 명세](https://fetch.spec.whatwg.org/#http-network-or-cache-fetch)는 진행 중인 keepalive 요청의 본문을 모두 합쳐 64KiB까지만 허용한다. 0.223.0의 fetch 전송 소스는 여기에 더해 Chrome이 렌더러 프로세스당 keepalive 요청을 9개까지만 받는다고 적고 있는데, [whatwg/fetch#679](https://github.com/whatwg/fetch/issues/679)의 Chromium 쪽 설명을 인용한 것이고 Chromium 소스에서 확인하지는 못했다. 이 전송은 두 한도에 걸리지 않도록 진행 중인 keepalive 요청의 누적 크기(헤더를 위한 여유를 남긴 60KiB)와 개수(9개)를 직접 세다가, 넘으면 그 요청은 keepalive 없이 보낸다[^5]. keepalive 없이 보낸 요청은 문서가 사라지면 함께 취소되므로, 떠나는 순간에 요청이 몰리면 이 한도가 다시 손실 지점이 될 수 있다.
+CORS 거부는 네트워크 오류로 처리해 재시도한다. 1초에서 시작해 1.5배씩 늘어나는 간격으로 4번 재시도한 뒤, 다음 재시도가 10초 export 제한을 넘기면 failed로 처리한다[^5]. 그래서 표에서는 최초 요청까지 총 5번 시도하고 약 8초 뒤에 failed를 반환했다.
 
-전송 방식만 보면 최신 버전으로 가는 편이 확실히 낫다. 실패가 보이고, 떠나는 순간에도 요청이 끝까지 간다. 남은 것은 언제 flush하느냐였고, 처음 표의 손실도 여기서 생겼다.
+[Fetch 명세](https://fetch.spec.whatwg.org/#http-network-or-cache-fetch)는 진행 중인 keepalive 요청의 본문을 모두 합쳐 64KiB까지만 허용한다. 0.223.0의 fetch 전송 소스에는 Chrome이 렌더러 프로세스당 keepalive 요청을 9개까지만 받는다는 설명도 있다. [whatwg/fetch#679](https://github.com/whatwg/fetch/issues/679)에 있는 Chromium 개발자의 설명을 인용한 것으로, Chromium 소스에서 직접 확인하지는 못했다. exporter는 진행 중인 keepalive 요청의 누적 크기와 개수를 세고, 헤더를 위한 여유를 남긴 60KiB 또는 9개 한도를 넘으면 keepalive 없이 보낸다[^5]. keepalive 없이 보낸 요청은 문서가 사라지면 함께 취소되므로, 떠나는 순간에 요청이 몰리면 전송이 누락될 수 있다.
+
+이 한도 안에서는 문서가 사라진 뒤에도 요청을 이어 가면서 실패 여부를 확인할 수 있다는 장점이 있다. 다만 최신 exporter를 쓴 재현 환경에서도 CLS와 INP가 도착하지 않았으므로, 다음으로 flush가 실행되는 순서를 확인했다.
 
 ## pagehide는 visibilitychange보다 먼저 온다
 
@@ -127,11 +129,13 @@ window.unload:hidden
 
 > Chromium 156에서 2번 실행해 같은 결과를 얻었다. `cwv-otel-grafana/experiments/e3-lifecycle`.
 
-`document`에 건 `pagehide` 리스너는 한 번도 불리지 않았다. pagehide는 명세상 Window에서 발생하고 document를 거치지 않으므로, BatchSpanProcessor의 Safari 대비책은 어느 브라우저에서도 동작하지 않을 것이다(잰 것은 Chromium뿐이다). 그리고 순서가 `pagehide`, `visibilitychange` 순이다. pagehide가 올 때 문서는 아직 visible이고, web-vitals는 그다음 `visibilitychange`에서 CLS와 INP를 보고한다. pagehide에서 flush하면 CLS와 INP가 기록되기 전에 한 번, visibilitychange에서 기록된 뒤에 또 한 번, 이렇게 flush가 두 번 일어난다.
+`document`에 등록한 `pagehide` 리스너는 한 번도 불리지 않았다. pagehide는 명세상 Window에서 발생하고 document를 거치지 않는다. 따라서 BatchSpanProcessor의 Safari 대응 리스너는 다른 브라우저에서도 동작하지 않을 것으로 보이지만, 직접 측정한 것은 Chromium뿐이다.
+
+이벤트는 `pagehide`, `visibilitychange` 순서로 발생했다. pagehide 시점에는 문서가 아직 visible이고, web-vitals는 그다음 `visibilitychange`에서 CLS와 INP를 보고한다. 두 이벤트에서 각각 flush하면 CLS와 INP를 기록하기 전에 한 번, 기록한 뒤에 다시 한 번 전송을 시도하게 된다.
 
 ## 2.9.0부터 forceFlush는 진행 중인 export를 기다린다
 
-flush가 두 번 일어나는 것 자체는 문제가 아니어야 한다. 두 번째 flush가 CLS와 INP를 담아 보내면 된다. 처음 표의 결과는 두 번째 flush가 아무것도 보내지 못했다는 뜻이고, 원인은 sdk-metrics의 `forceFlush`가 진행 중인 export를 기다린다는 데 있었다[^3].
+두 번째 flush가 CLS와 INP를 보내면 될 것 같지만, sdk-metrics의 `forceFlush`는 이미 진행 중인 export가 끝날 때까지 기다린다[^3]. 페이지를 떠나는 순간에는 이 대기 때문에 새로 기록한 값을 보내지 못할 수 있다.
 
 ```ts
 // opentelemetry-js v2.12.0 packages/sdk-metrics/src/export/PeriodicExportingMetricReader.ts
@@ -154,9 +158,11 @@ protected async onForceFlush(): Promise<void> {
 
 pagehide에서 부른 flush가 TTFB, FCP, LCP를 담은 요청을 먼저 보낸다. 이어서 visibilitychange에서 web-vitals가 CLS와 INP를 기록하고 다시 flush를 부르는데, 이 호출은 첫 요청의 응답이 올 때까지 `_awaitOngoingExport()`에서 기다린다. 기다리는 동안에는 collect가 일어나지 않으니 CLS와 INP는 아직 어떤 요청에도 실려 있지 않다.
 
-이 대기를 직접 보려고 페이지를 살려 둔 채 `pagehide`와 `visibilitychange`를 50ms 간격의 다른 task로 보내고, Playwright로 첫 metric 요청의 응답을 2초 늦췄다(`split-task.mjs`). `pagehide`에서 나간 첫 요청에는 TTFB, FCP, LCP가, 두 번째 요청에는 CLS와 INP가 실려 있었고, 두 번째 요청은 첫 요청의 응답이 도착하고 2ms 뒤에야 나갔다(2번 실행해 2.0ms, 1.9ms). 같은 `visibilitychange`에서 부른 trace flush는 기다리지 않아서, CLS와 INP span을 담은 요청은 이벤트 3ms 뒤에 나갔다. 실제로 떠나는 문서는 그 응답이 오기 전에 사라지므로, 두 번째 collect가 일어날 기회가 없다고 보는 것이 처음 표의 결과와 맞는다. 첫 요청은 keepalive fetch라서 문서가 사라진 뒤에도 끝까지 가고, 그래서 TTFB, FCP, LCP만 도착한다.
+대기 시간을 확인하려고 페이지를 유지한 채 `pagehide`와 `visibilitychange`를 50ms 간격의 서로 다른 task에서 보내고, Playwright로 첫 metric 요청의 응답을 2초 늦췄다(`split-task.mjs`). `pagehide`에서 나간 첫 요청에는 TTFB, FCP, LCP가, 두 번째 요청에는 CLS와 INP가 들어 있었다. 두 번째 요청은 첫 요청의 응답이 도착하고 약 2ms 뒤에야 나갔다(2번 실행해 2.0ms, 1.9ms). 같은 `visibilitychange`에서 부른 trace flush는 기다리지 않았고, CLS와 INP span을 담은 요청은 이벤트 3ms 뒤에 나갔다.
 
-이 대기는 2.9.0에서 들어왔다(#6655). 사내 코드가 쓰던 sdk-metrics 1.30.1의 `onForceFlush`에는 이 대기가 없다. 같은 flush 코드라도 sdk-metrics를 2.9.0 이상으로 올리면 CLS와 INP를 오류 없이 잃게 된다. 대기가 들어온 이유인 "collect와 export를 동시에 돌리지 않는다"는 서버 프로세스에서는 자연스러운 보장이라고 생각한다. 다만 떠나는 문서에는 응답을 기다릴 시간이 없다. trace는 `BatchSpanProcessor`의 `forceFlush`가 진행 중인 export를 기다리지 않고 바로 내보내므로, 처음 표의 두 모드 모두 다섯 span이 Tempo에 도착했다.
+실제로 페이지를 떠날 때는 첫 응답을 기다리는 동안 문서가 사라져 두 번째 collect를 실행하지 못한 것으로 보인다. 이미 시작한 첫 요청은 keepalive fetch로 계속 전송되므로 TTFB, FCP, LCP만 도착한다. 앞의 표에서 metric은 일부만 도착하고 trace는 모두 도착한 결과도 이 차이로 설명할 수 있다.
+
+이 대기는 2.9.0에서 추가됐다(#6655). 사내 코드가 쓰던 sdk-metrics 1.30.1의 `onForceFlush`에는 없던 동작이다. 따라서 같은 flush 코드라도 sdk-metrics를 2.9.0 이상으로 올리면 앞에서 재현한 조건에서 CLS와 INP가 누락된다. "collect와 export를 동시에 돌리지 않는다"는 보장은 서버 프로세스에서는 자연스럽다고 생각한다. 하지만 종료를 앞둔 문서에서는 응답을 기다리는 동안 다음 수집과 전송을 실행하지 못할 수 있다. trace는 `BatchSpanProcessor`의 `forceFlush`가 진행 중인 export를 기다리지 않고 바로 내보내므로, 처음 표의 두 모드 모두 다섯 span이 Tempo에 도착했다.
 
 ## visibilitychange에서만 flush한다
 
@@ -175,17 +181,25 @@ document.addEventListener('visibilitychange', () => {
 
 이렇게 하면 떠나는 순간에 부르는 flush가 한 번이 되고, 그 한 번이 CLS와 INP까지 담는다. 리스너를 `document`에 걸어도 되는 것은 visibilitychange가 document에서 발생하는 이벤트이기 때문이다. web-vitals는 window에서 capture 단계로 visibilitychange를 받으므로, 앞의 순서대로라면 web-vitals가 CLS와 INP를 기록한 뒤에 이 리스너가 불린다.
 
-대가도 있다. pagehide를 빼면 Safari 14.1(iOS 14.5) 이전처럼 떠날 때 `visibilitychange`가 오지 않는 브라우저에서는 주기 export를 기다리던 값이 빠진다. 다만 그런 브라우저에서는 web-vitals도 hidden을 받지 못해 CLS와 INP를 보고하지 않으므로, 잃는 것은 TTFB, FCP, LCP 중 아직 나가지 않은 값이다. CLS와 INP를 매번 잃는 것보다는 이 손실이 작다고 판단했다. 떠날 때 hidden이 오지 않는 환경이 오래된 Safari만은 아니라는 점은 3편의 앱 웹뷰에서 다시 나온다.
+다만 trace는 수집 코드의 리스너가 실행되기 전에 전송된다. 앞에서 본 대로 `BatchSpanProcessor`는 생성될 때 document의 visibilitychange에 flush 리스너를 등록한다. 수집 코드의 리스너는 그 뒤에 등록되므로 SDK가 먼저 큐에 있는 span을 내보낸다. 이후 수집 코드에서 trace의 `forceFlush`를 호출할 때는 큐가 비어 있어 결과는 같지만, 실제 span 전송 시점은 SDK의 리스너가 정한다. 2.12.0에서는 `disableAutoFlushOnDocumentHide` 옵션으로 이 리스너를 끌 수 있다(같은 파일의 `onInit`[^2]). 블로그에서는 이 옵션을 사용해 수집 코드의 리스너 하나에서 span과 metric을 함께 flush하도록 했다. 그 과정은 4편에서 다룬다.
 
-이 판단은 web-vitals 6.2.3이 CLS와 INP를 `visibilitychange`에서 보고한다는 전제 위에 있다. 1편에서 본 대로 main에 들어간 수정([#809](https://github.com/GoogleChrome/web-vitals/pull/809))은 가시성 감시가 `pagehide`에서도 `onHidden` 함수를 부르게 해서, 다음 버전부터 문서를 떠날 때 CLS와 INP는 `visibilitychange`보다 앞선 `pagehide` 시점에 보고된다. Chromium에서는 `pagehide` 뒤에 `visibilitychange`가 오므로 visibilitychange에서만 flush하는 코드도 그 값을 그대로 싣지만, 떠날 때 `visibilitychange`가 오지 않는 브라우저에서는 web-vitals가 `pagehide`에서 보고한 CLS와 INP를 이 코드가 내보내지 못한다. 위의 손실 비교는 그때 반대가 되므로, web-vitals를 올리면 flush 시점을 다시 고르고 떠나는 페이지 로드를 만들어 지표별 건수를 다시 세야 한다.
+pagehide에서 flush하지 않으면 Safari 14.1(iOS 14.5) 이전처럼 떠날 때 `visibilitychange`가 오지 않는 브라우저에서는 주기 export를 기다리던 값이 누락된다. 다만 이런 브라우저에서는 web-vitals도 hidden을 받지 못해 CLS와 INP를 보고하지 않으므로, 추가로 잃는 것은 TTFB, FCP, LCP 중 아직 전송하지 않은 값이다. CLS와 INP를 매번 잃는 것보다는 이 손실이 작다고 판단했다. 떠날 때 hidden이 오지 않는 앱 웹뷰의 문제는 3편에서 다룬다.
 
-다만 이 수정으로 없앤 것은 pagehide에서 시작한 export와의 경쟁뿐이다. `onForceFlush`는 누가 시작한 export든 진행 중이면 먼저 기다리므로, hidden이 오는 순간 10초 주기 export가 나가 있거나, LCP 후보가 3초 동안 바뀌지 않았을 때 잠정값을 내보내며 부르는 flush(3편)가 응답을 받지 못했거나, 탭을 숨겼다가 돌아와 다시 떠나는 경우처럼 앞선 hidden의 flush가 아직 진행 중이면 같은 대기가 걸린다. 그 사이 문서가 사라지면 CLS와 INP는 같은 방식으로 빠진다. 처음 표의 실험은 첫 주기 export 전에 떠나는 페이지 로드만 만들었으므로, 이 경우가 얼마나 자주 일어나는지는 재지 않았다. 주기 export를 끄면 주기 전송과의 경쟁은 없앨 수 있지만 앞선 flush와의 경쟁은 남는다. 떠날 때 hidden이 오지 않는 앱 웹뷰에서는 주기 export가 값을 내보낼 유일한 기회라서 끄는 것부터 할 수 없었다. 같은 수집을 일반 브라우저가 찾아오는 블로그에 올렸을 때는 주기 export를 없애고, 앞선 export의 응답을 기다리지 않는 reader로 바꿨다. 그 구현은 4편에서 다룬다.
+이 판단은 web-vitals 6.2.3이 CLS와 INP를 `visibilitychange`에서 보고하는 동작을 기준으로 했다. 1편에서 살펴본 main의 수정([#809](https://github.com/GoogleChrome/web-vitals/pull/809))은 가시성 감시가 `pagehide`에서도 `onHidden` 함수를 부르도록 바꿨다. 다음 버전부터는 문서를 떠날 때 CLS와 INP가 `visibilitychange`보다 앞선 `pagehide` 시점에 보고된다.
+
+Chromium에서는 `pagehide` 뒤에 `visibilitychange`가 오므로 현재 코드로도 그 값을 전송할 수 있다. 하지만 떠날 때 `visibilitychange`가 오지 않는 브라우저에서는 web-vitals가 `pagehide`에서 보고한 CLS와 INP를 내보내지 못한다. pagehide를 제외하면 오히려 이 두 지표를 잃게 되므로, web-vitals를 올릴 때는 flush 시점을 다시 검토하고 지표별 도착 건수를 확인해야 한다.
+
+pagehide에서 flush하지 않아도 다른 export가 진행 중이면 `onForceFlush`는 여전히 기다린다. hidden이 오는 순간 10초 주기 export가 진행 중일 수 있고, LCP 후보가 3초 동안 바뀌지 않아 잠정값을 내보내는 flush(3편)가 응답을 기다리고 있을 수도 있다. 탭을 숨겼다가 돌아와 다시 떠날 때 앞선 hidden의 flush가 끝나지 않은 경우도 같다. 그사이 문서가 사라지면 CLS와 INP가 누락된다. 처음 표의 실험은 첫 주기 export 전에 떠나는 조건에서만 했으므로, 이 문제가 얼마나 자주 발생하는지는 측정하지 않았다.
+
+주기 export를 끄면 주기 전송과 겹치는 경우는 없앨 수 있지만, 앞선 flush를 기다리는 문제는 남는다. 떠날 때 hidden이 오지 않는 앱 웹뷰에서는 주기 export가 값을 보낼 유일한 기회라서 이를 끄기도 어려웠다. 일반 브라우저로 방문하는 이 블로그에 같은 수집 코드를 적용할 때는 주기 export를 없애고, 앞선 export의 응답을 기다리지 않는 reader로 바꿨다. 그 구현은 4편에서 다룬다.
 
 ## 버전을 올릴 때 다시 세야 하는 것
 
-이 글의 두 변화는 모두 각자의 자리에서 옳은 변경이었다. exporter는 실패를 숨기던 sendBeacon을 버리고 결과를 알려 주는 keepalive fetch로 바꿨고, sdk-metrics는 collect와 export가 겹치지 않도록 flush가 앞선 export를 기다리게 했다. 그런데 두 번째 변경이 들어오자, 떠나기 직전에 두 번 부르던 flush의 의미가 바뀌었다. 바뀐 결과는 오류가 아니라 도착하지 않은 값으로만 나타났다.
+exporter가 keepalive fetch를 사용하면서 전송 결과를 확인할 수 있게 됐고, sdk-metrics는 collect와 export가 겹치지 않도록 앞선 export를 기다리게 됐다. 각각 필요한 변경이지만, 페이지를 떠나기 직전에 flush를 두 번 호출하는 코드에서는 두 번째 전송을 시작하지 못하는 원인이 됐다. 이 누락은 오류 로그로 확인할 수 없었다.
 
-떠나는 순간의 전송은 결과를 페이지 안에서 확인할 방법이 사실상 없다. 응답이 오기 전에 문서가 사라지기 때문이다. 그래서 수집 코드나 OTel 버전을 바꿀 때는, 떠나는 페이지 로드를 만들어 지표별로 보낸 건수와 저장소에 도착한 건수를 세어 보는 것이 가장 확실한 확인 방법이라고 생각한다. 처음 표도 그렇게 세다가 나왔다. 그 표에서 TTFB, FCP, LCP만 보고 있었다면 이 손실은 꽤 오래 보이지 않았을 가능성이 높다.
+페이지를 떠날 때 보낸 요청은 응답이 오기 전에 문서가 사라지므로, 페이지 안에서 전송 결과까지 확인하기 어렵다. 수집 코드나 OTel 버전을 바꿀 때는 실제로 페이지를 떠나게 하고, 지표별로 보낸 건수와 저장소에 도착한 건수를 비교할 필요가 있다. 이번에도 그렇게 세면서 CLS와 INP의 누락을 발견했다. TTFB, FCP, LCP만 확인했다면 전송이 정상이라고 판단했을 것이다.
+
+같은 비교를 운영 중에도 계속할 수 있다. span은 주기 export로도 나가고 metric은 떠나는 순간의 flush로만 나가게 해 두면, Tempo에 저장된 첫 로드의 trace 수와 Mimir에 저장된 첫 로드의 표본 수를 나란히 놓는 것만으로 떠나는 순간의 전송이 오지 않은 페이지 로드가 그 차이로 드러난다. 블로그는 이 두 수를 대시보드에 상시로 두었고, 수집 이틀째의 48시간은 56건 대 40건이었다. 그 차이의 내역은 4편에서 본다. 보내는 쪽에서는 끝내 알 수 없는 결과를, 받는 쪽의 두 저장소가 서로 세어 주는 셈이다.
 
 [^1]: [opentelemetry-js experimental/v0.223.0 `experimental/CHANGELOG.md`](https://github.com/open-telemetry/opentelemetry-js/blob/experimental/v0.223.0/experimental/CHANGELOG.md)의 #5807, #6317, #6391 항목
 

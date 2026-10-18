@@ -14,9 +14,14 @@ export function CwvTelemetry() {
   useEffect(() => {
     // PageSpeed Insights 와 크롤러의 렌더링이 실제 방문자 값에 섞이지 않게 SDK 를 받기 전에 거른다.
     if (isAutomatedVisit(navigator.userAgent, navigator.webdriver)) return
-    void import('@/utils/telemetry/setup').then(({startTelemetry}) =>
-      startTelemetry({collectorUrl: SiteConfig.otelCollectorUrl}),
-    )
+    // preview 배포도 production 빌드라 여기까지 온다. collector 는 블로그 origin 만 받으므로 보내지 않는다.
+    if (window.location.origin !== SiteConfig.url) return
+    import('@/utils/telemetry/setup')
+      .then(({startTelemetry}) =>
+        startTelemetry({collectorUrl: SiteConfig.otelCollectorUrl}),
+      )
+      // 계측이 실패해도 독자에게 오류로 보이지 않게 한다.
+      .catch(() => undefined)
   }, [])
 
   return null

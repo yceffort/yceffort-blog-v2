@@ -71,7 +71,8 @@ const ko: ResumeContent = {
         company: '네이버 파이낸셜',
         role: 'Frontend Engineer · 내자산&회원FE 리더 → 카드FE 리더/공통개발TF 리더',
         period: '2020.09 — 2026.03',
-        description: '금융 서비스 개발과 프론트엔드 조직의 공통 기반 구축',
+        description:
+          '최대 14명 규모의 프론트엔드 팀을 이끌며 금융 서비스 개발과 프론트엔드 조직의 공통 기반 구축',
         contributions: [
           'CRA 단일 서비스를 Koa와 Next.js 기반 20여 개 SSR 서비스로 분리하는 전환을 주도해, 장애가 서비스 단위로 격리되고 서비스마다 더 자주 배포할 수 있는 구조로 개선',
           '20여 개 서비스가 함께 쓰는 공통 패키지(@mydata, @financial, @financial-auth, @pie) 개발을 이끌고 레지스트리 배포 체계 마련',
@@ -80,7 +81,7 @@ const ko: ResumeContent = {
           'lodash를 대체하는 유틸리티 라이브러리 hidash 개발',
           '마이데이터, 회원 인증, 카드탭 등 모바일 금융 서비스 개발',
           '상태 관리 라이브러리, 디자인 시스템, 프로젝트 생성 도구, Node.js CLI, 업무용 MCP 개발과 운영',
-          '팀의 코드 리뷰와 멘토링 주도',
+          '팀의 코드 리뷰와 멘토링을 주도하고 인턴 채용 면접과 채용 과제, 실습 과제 출제 및 운영',
         ],
         stack:
           'React · TypeScript · Next.js · Node.js · Kubernetes · pnpm · Turborepo',
@@ -247,7 +248,7 @@ const en: ResumeContent = {
         role: 'Frontend Engineer, Assets & Membership FE Lead → Card FE Lead / Shared Development TF Lead',
         period: '2020.09 to 2026.03',
         description:
-          'Built financial services and the shared foundation of the frontend organization',
+          'Led a frontend team of up to 14 people, building financial services and the shared foundation of the frontend organization',
         contributions: [
           'Led the move from a single CRA app to 20-plus SSR services on Koa and Next.js, so a failure stays inside one service and each service can deploy on its own, more often',
           'Led the shared packages used by those 20-plus services (@mydata, @financial, @financial-auth, @pie) and set up how they are published to the registry',
@@ -256,7 +257,7 @@ const en: ResumeContent = {
           'Built hidash, a lodash replacement',
           'Built mobile financial services including MyData, member authentication, and the card tab',
           'Built and maintained a state management library, the design system, a project scaffolding tool, Node.js CLIs, and MCP servers for everyday productivity',
-          'Led code review and mentoring on the team',
+          'Led code review and mentoring on the team, ran intern hiring interviews, and created and ran hiring assignments and intern practice assignments',
         ],
         stack:
           'React, TypeScript, Next.js, Node.js, Kubernetes, pnpm, Turborepo',

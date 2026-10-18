@@ -16,7 +16,7 @@ seriesOrder: 2
 
 핵심 웹 지표(Core Web Vitals, 이하 CWV)를 수집하는 재현 환경을 OpenTelemetry JS(이하 OTel JS) 2.12.0으로 만들었다. 사내 가이드에 따라 페이지가 숨겨질 때(`visibilitychange`의 hidden)와 `pagehide` 두 곳에서 남은 metric을 즉시 전송하도록 flush를 호출했다. 그런데 TTFB, FCP, LCP는 도착했지만 CLS와 INP는 도착하지 않았다. 브라우저 콘솔과 collector 로그에도 오류는 없었다.
 
-건수를 확인할 때는 버튼을 한 번 누르고 1.5초 뒤에 떠나도록 했다. 10초 주기 export가 실행되기 전에 떠난 뒤, 페이지 로드마다 Mimir의 지표별 건수가 얼마나 늘었는지 셌다. [1편](/2026/10/web-vitals-report-timing)에서 본 대로 web-vitals 6.2.3은 상호작용 항목의 처리를 idle이나 1초 timeout까지 미룬다. 그 전에 떠나면 INP가 보고되지 않으므로, 이 문제와 전송 중 누락을 구별하려고 timeout이 지난 뒤에 떠났다.
+건수는 10초 주기 export가 실행되기 전에 떠나는 페이지 로드를 만들어 셌다. 버튼을 한 번 누르고 1.5초 뒤에 떠나게 하고, 페이지 로드마다 Mimir의 지표별 건수가 얼마나 늘었는지 봤다. [1편](/2026/10/web-vitals-report-timing)에서 본 대로 web-vitals 6.2.3은 상호작용 항목의 처리를 idle이나 1초 timeout까지 미룬다. 그 전에 떠나면 INP가 보고되지 않으므로, 이 문제와 전송 중 누락을 구별하려고 timeout이 지난 뒤에 떠났다.
 
 | flush 시점                  | TTFB | FCP | LCP | INP   | CLS   |
 | --------------------------- | ---- | --- | --- | ----- | ----- |
@@ -181,7 +181,7 @@ document.addEventListener('visibilitychange', () => {
 
 이렇게 하면 떠나는 순간에 부르는 flush가 한 번이 되고, 그 한 번이 CLS와 INP까지 담는다. 리스너를 `document`에 걸어도 되는 것은 visibilitychange가 document에서 발생하는 이벤트이기 때문이다. web-vitals는 window에서 capture 단계로 visibilitychange를 받으므로, 앞의 순서대로라면 web-vitals가 CLS와 INP를 기록한 뒤에 이 리스너가 불린다.
 
-다만 trace는 수집 코드의 리스너가 실행되기 전에 전송된다. 앞에서 본 대로 `BatchSpanProcessor`는 생성될 때 document의 visibilitychange에 flush 리스너를 등록한다. 수집 코드의 리스너는 그 뒤에 등록되므로 SDK가 먼저 큐에 있는 span을 내보낸다. 이후 수집 코드에서 trace의 `forceFlush`를 호출할 때는 큐가 비어 있어 결과는 같지만, 실제 span 전송 시점은 SDK의 리스너가 정한다. 2.12.0에서는 `disableAutoFlushOnDocumentHide` 옵션으로 이 리스너를 끌 수 있다(같은 파일의 `onInit`[^2]). 블로그에서는 이 옵션을 사용해 수집 코드의 리스너 하나에서 span과 metric을 함께 flush하도록 했다. 그 과정은 4편에서 다룬다.
+다만 trace는 수집 코드의 리스너가 실행되기 전에 전송된다. 앞에서 본 대로 `BatchSpanProcessor`는 생성될 때 document의 visibilitychange에 flush 리스너를 등록한다. 수집 코드의 리스너는 그 뒤에 등록되므로 SDK가 먼저 큐에 있는 span을 내보낸다. 이후 수집 코드에서 trace의 `forceFlush`를 호출할 때는 큐가 비어 있어 결과는 같지만, 실제 span 전송 시점은 SDK의 리스너가 정한다. 2.12.0에서는 `disableAutoFlushOnDocumentHide` 옵션으로 이 리스너를 끌 수 있다(같은 파일의 `onInit`[^2]). 블로그에서는 이 옵션으로 끄고, 수집 코드의 리스너 하나가 span과 metric을 함께 flush하게 했다(4편).
 
 pagehide에서 flush하지 않으면 Safari 14.1(iOS 14.5) 이전처럼 떠날 때 `visibilitychange`가 오지 않는 브라우저에서는 주기 export를 기다리던 값이 누락된다. 다만 이런 브라우저에서는 web-vitals도 hidden을 받지 못해 CLS와 INP를 보고하지 않으므로, 추가로 잃는 것은 TTFB, FCP, LCP 중 아직 전송하지 않은 값이다. CLS와 INP를 매번 잃는 것보다는 이 손실이 작다고 판단했다. 떠날 때 hidden이 오지 않는 앱 웹뷰의 문제는 3편에서 다룬다.
 
@@ -199,7 +199,7 @@ exporter가 keepalive fetch를 사용하면서 전송 결과를 확인할 수 �
 
 페이지를 떠날 때 보낸 요청은 응답이 오기 전에 문서가 사라지므로, 페이지 안에서 전송 결과까지 확인하기 어렵다. 수집 코드나 OTel 버전을 바꿀 때는 실제로 페이지를 떠나게 하고, 지표별로 보낸 건수와 저장소에 도착한 건수를 비교할 필요가 있다. 이번에도 그렇게 세면서 CLS와 INP의 누락을 발견했다. TTFB, FCP, LCP만 확인했다면 전송이 정상이라고 판단했을 것이다.
 
-같은 비교를 운영 중에도 계속할 수 있다. span은 주기 export로도 나가고 metric은 떠나는 순간의 flush로만 나가게 해 두면, Tempo에 저장된 첫 로드의 trace 수와 Mimir에 저장된 첫 로드의 표본 수를 나란히 놓는 것만으로 떠나는 순간의 전송이 오지 않은 페이지 로드가 그 차이로 드러난다. 블로그는 이 두 수를 대시보드에 상시로 두었고, 수집 이틀째의 48시간은 56건 대 40건이었다. 그 차이의 내역은 4편에서 본다. 보내는 쪽에서는 끝내 알 수 없는 결과를, 받는 쪽의 두 저장소가 서로 세어 주는 셈이다.
+같은 비교를 운영 중에도 계속할 수 있다. span은 주기 export로도 나가고 metric은 떠나는 순간의 flush로만 나가게 해 두면, Tempo에 저장된 첫 로드의 trace 수와 Mimir에 저장된 첫 로드의 표본 수를 나란히 놓는 것만으로 떠나는 순간의 전송이 오지 않은 페이지 로드가 그 차이로 드러난다. 블로그는 이 두 수를 대시보드에 나란히 두었고, 수집 이틀째의 48시간은 56건 대 40건이었다. 그 내역은 4편에 있다. 브라우저 안에서는 끝내 알 수 없는 결과가, 두 저장소의 건수 차이로는 보인다.
 
 [^1]: [opentelemetry-js experimental/v0.223.0 `experimental/CHANGELOG.md`](https://github.com/open-telemetry/opentelemetry-js/blob/experimental/v0.223.0/experimental/CHANGELOG.md)의 #5807, #6317, #6391 항목
 

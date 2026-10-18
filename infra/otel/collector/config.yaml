@@ -6,6 +6,9 @@ receivers:
         cors:
           allowed_origins:
             - ${env:ALLOWED_ORIGIN}
+          # 브라우저 exporter 는 Content-Type: application/json 의 cross-origin fetch 라 preflight 가 필수다.
+          # 이 헤더가 없으면 브라우저가 5초만 기억해 export 마다 OPTIONS 가 붙는다. Chromium 상한인 2시간으로 둔다.
+          max_age: 7200
 
   # 값이 저장되지 못하고 사라진 수를 Mimir 에 같이 남긴다. Mimir 가 버린 표본(같은 시리즈에 같은 밀리초의
   # 값이 두 개 오면 하나를 버린다, blog-experiments 의 E10)과 collector 가 받은 수, 내보내지 못한 수다.
@@ -30,6 +33,7 @@ receivers:
               action: keep
 
 processors:
+  # limit_percentage 는 cgroup 메모리 상한 기준이라 compose 의 collector 메모리 상한이 있어야 뜻이 있다.
   memory_limiter:
     check_interval: 1s
     limit_percentage: 80

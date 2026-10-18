@@ -2,10 +2,17 @@
 # (README 의 'metric 경로가 lab 과 다른 이유').
 # 사용: cp env.example .env 로 값을 채운 뒤 docker compose up -d
 name: blog-otel
+# json-file 로그는 기본으로 회전하지 않아 오래 두면 디스크를 채운다. 컨테이너마다 10MB 3개로 돌린다.
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: 10m
+    max-file: '3'
 services:
   caddy:
     image: caddy:2.11.7
     restart: unless-stopped
+    logging: *logging
     environment:
       - OTEL_DOMAIN=${OTEL_DOMAIN:?}
     volumes:
@@ -20,7 +27,13 @@ services:
   collector:
     image: otel/opentelemetry-collector-contrib:0.163.1
     restart: unless-stopped
+    logging: *logging
     command: ['--config=/etc/otelcol/config.yaml']
+    # memory_limiter 의 limit_percentage 가 이 상한을 기준으로 계산된다. 없으면 호스트 전체 메모리 기준이 된다.
+    deploy:
+      resources:
+        limits:
+          memory: 512M
     environment:
       - ALLOWED_ORIGIN=${ALLOWED_ORIGIN:?}
     volumes:
@@ -32,6 +45,7 @@ services:
   tempo:
     image: grafana/tempo:3.1.0
     restart: unless-stopped
+    logging: *logging
     command:
       ['-target=all', '-config.file=/etc/tempo.yaml', '-config.expand-env=true']
     environment:
@@ -44,6 +58,7 @@ services:
   mimir:
     image: grafana/mimir:3.2.2
     restart: unless-stopped
+    logging: *logging
     # collector 가 OTLP 로 보내는 delta 를 그대로 저장하고, 이름에 단위 접미사(_milliseconds)를 붙인다.
     command:
       [
@@ -59,6 +74,7 @@ services:
   grafana:
     image: grafana/grafana:13.2.4
     restart: unless-stopped
+    logging: *logging
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:?}
       # 기본 설치는 쓰지 않는 앱 플러그인 5개를 받고 데이터소스 플러그인 프로세스를 13개 띄운다. Mimir(prometheus)와

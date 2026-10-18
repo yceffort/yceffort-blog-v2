@@ -33,7 +33,7 @@ CWV 전송 코드는 값을 모아 주기적으로 내보내는 부분과, 페�
 
 > 사내 작업은 2026년 8월 말부터 10월 중순까지 사내 검증 환경에서 했다. 이 글의 수치는 모두 공개 재현 환경([blog-experiments/cwv-otel-grafana](https://github.com/yceffort/blog-experiments/tree/cwv-otel-grafana-v1/cwv-otel-grafana))에서 다시 잰 값이다.
 >
-> exporter와 이벤트 순서의 측정 코드(`e2-exporter`, `e3-lifecycle`)는 태그 `cwv-otel-grafana-v1`에 있고, 처음 표의 측정 코드(`e7-unload-flush`)는 떠나는 시점을 클릭 1.5초 뒤로 늘리고 Tempo 도착까지 세도록 고쳐 커밋 [`e4e48c6`](https://github.com/yceffort/blog-experiments/tree/e4e48c6de625e90ff3c9b8931e2f40381481d996/cwv-otel-grafana/experiments/e7-unload-flush)에서 2026-10-18에 다시 쟀다.
+> exporter와 이벤트 순서의 측정 코드(`e2-exporter`, `e3-lifecycle`)는 태그 `cwv-otel-grafana-v1`에 있고, 처음 표의 측정 코드(`e7-unload-flush`)는 떠나는 시점을 클릭 1.5초 뒤로 늘리고 Tempo 도착까지 세도록 고쳐 커밋 [`e4e48c6`](https://github.com/yceffort/blog-experiments/tree/e4e48c6de625e90ff3c9b8931e2f40381481d996/cwv-otel-grafana/experiments/e7-unload-flush)에서 2026-10-18에 다시 쟀다. 주기 export와 겹치는 경우의 측정 코드(`e14-inflight-export`)는 커밋 [`c52fbff`](https://github.com/yceffort/blog-experiments/tree/c52fbfffc428b173bf4406406b667b6f64f2c03d/cwv-otel-grafana/experiments/e14-inflight-export)에 있고 같은 날 쟀다.
 >
 > 재현 환경의 버전은 web-vitals 6.2.3, OTel JS 2.12.0(OTLP exporter 0.223.0), OpenTelemetry Collector contrib 0.162.0(e7 재측정은 0.163.1), Mimir 3.2.2, Tempo 3.1.0이다. 비교할 때는 OTel JS 1.30.1(exporter 0.57.2)을 함께 썼고, 브라우저는 Playwright 1.64.1의 Chromium 156이다. 인용한 소스는 모두 이 버전의 태그로 고정했다.
 
@@ -264,7 +264,7 @@ const MAX_KEEPALIVE_REQUESTS = 9;
     const useKeepalive = !wouldExceedSize && !wouldExceedCount;
 ```
 
-두 변수 `pendingBodySize`와 `pendingKeepaliveCount`는 모듈 수준에 있어서, 같은 페이지의 trace exporter와 metric exporter가 한도를 함께 쓴다. 한도를 넘긴 요청은 오류 없이 keepalive만 빠진 채 나간다. keepalive 없이 보낸 요청은 문서가 사라지면 함께 취소되므로, 떠나는 순간에 요청이 몰리면 전송이 누락될 수 있다. 재현 환경과 블로그의 떠나는 순간 요청은 trace 하나와 metric 하나라 개수 한도와는 멀고, 크기는 span 속성에 실리는 selector와 URL의 길이에 달려 있다. 이 글에서는 크기 한도에 걸리는 경우를 만들지 않았다.
+두 변수 `pendingBodySize`와 `pendingKeepaliveCount`는 모듈 수준에 있어서, 같은 페이지의 trace exporter와 metric exporter가 한도를 함께 쓴다. 한도를 넘긴 요청은 오류 없이 keepalive만 빠진 채 나간다. keepalive 없이 보낸 요청은 문서가 사라지면 함께 취소되므로, 떠나는 순간에 요청이 몰리면 전송이 누락될 수 있다. 재현 환경에서 떠나는 순간의 요청은 trace 하나(2,987B)와 metric 하나(1,327B)로, 합쳐 약 4.3KB다. 60KiB의 7%이고 개수 한도와도 멀다(뒤의 겹침 실험에서 함께 쟀다). 크기는 span 속성에 실리는 selector와 URL의 길이에 달려 있어 사이트마다 다르다.
 
 이 한도 안에서는 문서가 사라진 뒤에도 요청을 이어 가면서 실패 여부를 확인할 수 있다는 장점이 있다. 다만 최신 exporter를 쓴 재현 환경에서도 CLS와 INP가 도착하지 않았으므로, 다음으로 flush가 실행되는 순서를 확인했다.
 
@@ -410,9 +410,28 @@ pagehide에서 flush하지 않으면 Safari 14.1(iOS 14.5) 이전처럼 떠날 �
 
 Chromium에서는 `pagehide` 뒤에 `visibilitychange`가 오므로 현재 코드로도 그 값을 전송할 수 있다. 하지만 떠날 때 `visibilitychange`가 오지 않는 브라우저에서는 web-vitals가 `pagehide`에서 보고한 CLS와 INP를 내보내지 못한다. pagehide를 제외하면 오히려 이 두 지표를 잃게 되므로, web-vitals를 올릴 때는 flush 시점을 다시 검토하고 지표별 도착 건수를 확인해야 한다.
 
-pagehide에서 flush하지 않아도 다른 export가 진행 중이면 `onForceFlush`는 여전히 기다린다. hidden이 오는 순간 10초 주기 export가 진행 중일 수 있고, LCP 후보가 3초 동안 바뀌지 않아 잠정값을 내보내는 flush(3편)가 응답을 기다리고 있을 수도 있다. 탭을 숨겼다가 돌아와 다시 떠날 때 앞선 hidden의 flush가 끝나지 않은 경우도 같다. 그사이 문서가 사라지면 CLS와 INP가 누락된다. 처음 표의 실험은 첫 주기 export 전에 떠나는 조건에서만 했으므로, 이 문제가 얼마나 자주 발생하는지는 측정하지 않았다.
+pagehide에서 flush하지 않아도 다른 export가 진행 중이면 `onForceFlush`는 여전히 기다린다. hidden이 오는 순간 10초 주기 export가 진행 중일 수 있고, LCP 후보가 3초 동안 바뀌지 않아 잠정값을 내보내는 flush(3편)가 응답을 기다리고 있을 수도 있다. 탭을 숨겼다가 돌아와 다시 떠날 때 앞선 hidden의 flush가 끝나지 않은 경우도 같다. 그사이 문서가 사라지면 CLS와 INP가 누락된다. 처음 표의 실험은 첫 주기 export 전에 떠나는 조건에서만 했다. 주기 export와 겹치는 조건은 다음 절에서 따로 쟀다.
 
 주기 export를 끄면 주기 전송과 겹치는 경우는 없앨 수 있지만, 앞선 flush를 기다리는 문제는 남는다. 떠날 때 hidden이 오지 않는 앱 웹뷰에서는 주기 export가 값을 보낼 유일한 기회라서 이를 끄기도 어려웠다. 일반 브라우저로 방문하는 이 블로그에 같은 수집 코드를 적용할 때는 주기 export를 없애고, 앞선 export의 응답을 기다리지 않는 reader로 바꿨다. 그 구현은 4편에서 다룬다.
+
+## 주기 export의 응답을 기다리는 동안 떠나면
+
+pagehide의 flush를 뺀 뒤에도 남는 경쟁을 재현 환경에서 만들어 봤다. collector 앞에 프록시를 두고 방문마다 첫 10초 주기 metric export의 응답만 D만큼 늦춘 뒤, 그 export가 나간 시각으로부터 L 뒤에 떠나게 했다. 브라우저의 요청은 가로채지 않았다. 페이지 로드 1초 뒤에 버튼을 누르고, 떠난 뒤 Mimir의 지표별 건수가 얼마나 늘었는지 셌다.
+
+| 응답 지연 D | export 뒤 떠난 시각 L | TTFB | FCP | LCP | INP   | CLS   | 떠날 때 나간 요청 |
+| ----------- | --------------------- | ---- | --- | --- | ----- | ----- | ----------------- |
+| 2000ms      | 500ms                 | 1    | 1   | 1   | **0** | **0** | trace만           |
+| 2000ms      | 1500ms                | 1    | 1   | 1   | **0** | **0** | trace만           |
+| 2000ms      | 2500ms                | 1    | 1   | 1   | 1     | 1     | trace, metric     |
+| 2000ms      | 3500ms                | 1    | 1   | 1   | 1     | 1     | trace, metric     |
+| 300ms       | 100ms                 | 1    | 1   | 1   | **0** | **0** | trace만           |
+| 0           | 100ms                 | 1    | 1   | 1   | 1     | 1     | trace, metric     |
+
+> 조건마다 2번 실행해 같은 결과를 얻었다. `cwv-otel-grafana/experiments/e14-inflight-export`. Playwright의 `route`로 응답을 늦추는 방법은 쓰지 않았다. 핸들러 안에서 `unroute`를 부르자 요청이 그대로 나가 지연이 걸리지 않았다.
+
+경계는 떠나는 시각이 아니라 응답이 도착한 시각이다. 응답이 오기 전에 떠난 방문은 떠날 때 trace 요청만 나갔고 metric 요청은 끝내 나가지 않았다. INP와 CLS span은 Tempo에 있는데 같은 값의 histogram은 Mimir에 없다. 응답이 온 뒤에 떠난 방문은 떠나는 순간 trace와 metric 요청이 10ms 안에 함께 나갔고 다섯 지표가 모두 도착했다. 응답 지연이 300ms뿐이어도 그 안에 떠나면 같은 결과다.
+
+이 손실이 얼마나 되는지는 떠나는 순간에 export가 진행 중일 확률로 정해진다. 떠나는 시각이 10초 주기 안에 고르게 퍼져 있다고 보면, 그 확률은 주기 export의 응답 지연을 10초로 나눈 값이다. 응답이 50ms면 0.5%, 2초면 20%다. 실제 응답 지연의 분포는 재지 않았으므로 블로그의 값은 알 수 없고, 느린 네트워크일수록 커지는 손실이라는 것만 말할 수 있다.
 
 ## 버전을 올릴 때 다시 세야 하는 것
 

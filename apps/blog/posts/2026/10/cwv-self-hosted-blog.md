@@ -5,7 +5,7 @@ tags:
   - browser
 published: false
 date: 2026-10-17 09:00:00
-description: '사내에서 공용 관측 인프라로 보내던 핵심 웹 지표 수집을 개인 블로그에 올리고, 수집 서버도 직접 띄웠다. 설정을 모두 바꿀 수 있게 되자 방문이 드물다는 것과 바꾼 설정을 모두 직접 확인해야 한다는 것이 새 제약이 됐다. 하루 동안의 커밋 순서로 기록했다.'
+description: '사내에서 공용 관측 인프라로 보내던 핵심 웹 지표 수집을 개인 블로그에 올리고, 수집 서버도 직접 띄웠다. 설정을 모두 바꿀 수 있게 되자 방문이 드물다는 것과 바꾼 설정을 모두 직접 확인해야 한다는 것이 새 제약이 됐다. 이틀 동안의 커밋 순서로 기록했다.'
 series: 'Core Web Vitals 직접 수집하기'
 seriesOrder: 4
 ---
@@ -18,9 +18,9 @@ seriesOrder: 4
 
 3편까지의 제약은 바꿀 수 없는 공용 관측 인프라와 떠날 때 신호를 주지 않는 앱 웹뷰였다. 이번에는 반대다. 수집 서버는 월 $12짜리 서버 한 대에 직접 띄웠고, 방문자는 일반 브라우저로 들어오고, collector부터 대시보드까지 모든 설정을 바꿀 수 있다. 그러자 다른 종류의 제약이 드러났다. 방문이 드물면 서버 트래픽을 기준으로 정한 기본값이 값을 세지 못했고, 설정을 모두 바꿀 수 있는 만큼 바꾼 설정이 맞는지도 모두 직접 확인해야 했다.
 
-이 글은 2026년 10월 17일 하루 동안 수집 서버를 띄우고 블로그에 붙이면서 바꾼 것을, 그날의 커밋 순서대로 적은 기록이다. 절 제목의 시각은 커밋 시각이다. 마지막 절은 몇 주 동안 쌓인 값으로 채운다.
+이 글은 2026년 10월 17일과 18일 이틀 동안 수집 서버를 띄우고 블로그에 붙이면서 바꾼 것을, 커밋 순서대로 적은 기록이다. 절 제목의 시각은 커밋 시각이고, 둘째 날의 절에는 날짜를 함께 적었다. 마지막 절은 몇 주 동안 쌓인 값으로 채운다.
 
-> 수집 서버의 구성은 블로그 저장소의 [`infra/otel`](https://github.com/yceffort/blog/tree/4cc783fd4bae927e6732dc91188e96f711abb422/infra/otel)에, 브라우저 쪽 수집 코드는 [`apps/blog/src/utils/telemetry`](https://github.com/yceffort/blog/tree/4cc783fd4bae927e6732dc91188e96f711abb422/apps/blog/src/utils/telemetry)에 있다. 링크는 이 글을 쓴 시점의 커밋으로 고정했다.
+> 수집 서버의 구성은 블로그 저장소의 [`infra/otel`](https://github.com/yceffort/blog/tree/e02c600a7ff73eaf8d507d153a3a21d26a3670c8/infra/otel)에, 브라우저 쪽 수집 코드는 [`apps/blog/src/utils/telemetry`](https://github.com/yceffort/blog/tree/e02c600a7ff73eaf8d507d153a3a21d26a3670c8/apps/blog/src/utils/telemetry)에 있다. 링크는 둘째 날 마지막 커밋으로 고정했다.
 >
 > 버전은 web-vitals 6.2.3, OTel JS 2.12.0(OTLP exporter 0.223.0), OpenTelemetry Collector contrib 0.163.1, Tempo 3.1.0, Mimir 3.2.2, Grafana 13.2.4, Caddy 2.11.7이다. 서버는 Amazon Lightsail 서울 리전의 Debian 13 인스턴스(2GB 메모리)다.
 
@@ -186,7 +186,7 @@ delta라서 flush가 겹쳐도 같은 값을 두 번 보내지 않는다. 블로
 
 > Playwright 1.64.1의 Chromium 156에서 두 번 실행해 같았다. 첫 hidden은 `visibilityState`를 덮어써 만들었다. headless Chromium에서는 탭을 바꿔도 hidden이 되지 않았다. [측정 스크립트 공개 위치 필요]
 
-대가는 hidden이 끝내 오지 않는 페이지 로드다. 그런 페이지 로드는 값이 하나도 나가지 않는다. 일반 브라우저에서는 탭을 닫거나 앱을 바꿀 때도 hidden이 오므로 드물 것으로 보지만, 비율을 잴 방법은 없다.
+대가는 hidden이 끝내 오지 않는 페이지 로드다. 그런 페이지 로드는 값이 하나도 나가지 않는다. 일반 브라우저에서는 탭을 닫거나 앱을 바꿀 때도 hidden이 오므로 드물 것으로 보았다. 비율은 다음 날 trace와 metric의 건수를 맞대어 세어 보았다(10월 18일 16:29).
 
 ### 같은 id의 갱신과 같은 밀리초의 중복은 재기만 했다
 
@@ -221,11 +221,97 @@ max by (reason) (max_over_time(cortex_discarded_samples_total{job="mimir", user=
 
 > 실제 Grafana 13.2.4의 `/api/ds/query`로 패널 쿼리를 보내 확인했고, 고친 뒤에는 Mimir 패널 30개가 모두 200이었다. 운영 서버의 Grafana에서도 같았다.
 
+## 10월 18일 13:50 복원된 페이지의 TTFB가 첫 로드로 세어졌다
+
+다음 날 수집 코드와 서버 구성을 다시 리뷰받았다. 처음 나온 것은 14:17에 넣은 bfcache 복원의 키였다. 복원의 TTFB는 web-vitals가 `pageshow` 리스너 안에서 바로 보고한다(1편의 `onBFCacheRestore`). 수집 코드도 window의 `pageshow`에서 복원 횟수를 세고 그 횟수를 키로 썼는데, web-vitals는 capture로 걸었고 수집 코드는 bubble로 걸었다. 현행 DOM 명세에서는 같은 타깃이라도 capture 리스너가 등록 순서와 상관없이 먼저 돌므로, 복원의 TTFB는 횟수가 늘기 전에 보고되어 다른 지표와 다른 키를 받았다. 프레임 두 개 뒤에 보고되는 FCP와 LCP는 늘어난 횟수로 갔다. 복원 하나가 trace 둘로 갈라진 것이다.
+
+키는 web-vitals가 복원 지표에 넣어 주는 `navigationStartTime`으로 바꿨다. 1편의 코드에서 본 대로 이 값은 복원 `pageshow`의 `timeStamp`라, 같은 복원의 지표가 모두 같은 값을 들고 온다. 수집 코드는 경로만 저장한다. 복원된 문서는 SPA 이동 뒤의 URL일 수 있어서, 같은 `timeStamp`를 키로 그때의 경로를 적어 두고 지표가 올 때 찾는다.
+
+```ts
+// apps/blog/src/utils/telemetry/navigation.ts
+      if (metric.navigationType === 'back-forward-cache') {
+        const start = metric.navigationStartTime ?? 0
+        return {
+          key: `restore:${start}`,
+          kind: 'restore',
+          startTime: start,
+          pathname: restorePathnames.get(start) ?? initialPathname,
+        }
+      }
+```
+
+키를 고치고 나니 다른 문제가 보였다. 복원의 TTFB는 1편에서 본 대로 web-vitals가 재지 않고 0을 넣는 값인데, 대시보드의 "첫 로드" 변수가 `back-forward-cache`를 포함하고 있었다. 복원의 FCP와 LCP도 처음 로드와 다른 것을 잰 값이다. 48시간 범위에서 복원 2건을 첫 로드에 넣고 뺀 차이는 이랬다.
+
+| 48시간, 첫 로드 p75 | 복원 포함 | 복원 제외 |
+| ------------------- | --------- | --------- |
+| TTFB                | 375ms     | 383ms     |
+| LCP                 | 2.50s     | 2.75s     |
+| FCP                 | 1.65s     | 1.80s     |
+
+> 운영 Grafana에서 같은 시각에 변수만 바꿔 읽은 값이다. 첫 로드 TTFB 표본이 40건 안팎이라 복원 2건으로도 p75가 이만큼 움직인다.
+
+그래서 복원의 TTFB는 아예 기록하지 않고(SPA 이동의 TTFB를 재지 않는 것과 같은 이유다), 변수를 첫 로드, SPA 이동, bfcache 복원, 전체의 네 가지로 나눴다. 복원이 얼마나 되는지는 복원마다 보고되는 FCP의 건수로 센다. 1편의 결론을 대시보드에서 다시 밟은 셈이다. `navigationType`이 다른 값을 한 분포에 섞으면 같은 이름의 지표가 다른 것을 잰 값끼리 섞인다.
+
+## 10월 18일 13:50 preview 배포도 production 빌드다
+
+두 번째는 Vercel의 preview 배포였다. 수집 코드는 `NODE_ENV`가 production일 때만 켜지는데, preview 배포도 production 빌드라 그대로 켜졌다. collector는 블로그 origin만 허용하므로 브라우저가 요청을 막고, 2편의 표대로 exporter는 CORS 거부를 네트워크 오류로 보고 약 8초 동안 5번 다시 시도한다. 값이 잘못 들어가지는 않았지만, preview에서 글을 확인할 때마다 SDK를 받고 실패할 요청을 보내고 있었다. SDK를 받기 전에 origin을 비교해 거른다. 같은 자리에서 동적 import의 실패도 잡았다. 청크를 받지 못하면 `unhandledrejection`으로 새던 것을 삼켜서, 계측이 실패해도 독자에게 오류로 보이지 않게 했다.
+
+```tsx
+// apps/blog/src/components/analytics/CwvTelemetry.tsx
+    // preview 배포도 production 빌드라 여기까지 온다. collector 는 블로그 origin 만 받으므로 보내지 않는다.
+    if (window.location.origin !== SiteConfig.url) return
+```
+
+## 10월 18일 13:51 export마다 preflight가 붙어 있었다
+
+서버 쪽에서는 세 가지를 고쳤다. 첫째는 CORS preflight다. exporter는 `Content-Type: application/json`으로 다른 origin에 보내므로 요청마다 preflight(OPTIONS)가 먼저 간다. collector의 CORS 응답에 `Access-Control-Max-Age`가 없으면 브라우저는 preflight 결과를 기본값인 5초만 기억한다[^3]. span은 5초 주기로 나가니 export마다 OPTIONS가 하나씩 붙고 있었던 셈이다. collector의 `cors.max_age`를 Chromium의 상한인 2시간으로 두었다. 고친 뒤 서버에서 OPTIONS를 보내 `access-control-max-age: 7200`을 확인했다.
+
+둘째는 collector의 메모리 상한이다. `memory_limiter`는 `limit_percentage: 80`으로 두었는데, README는 이 값을 컨테이너 환경에서 호스트가 정한 메모리 제한을 기준으로 쓰라고 적는다[^4]. compose에는 collector의 메모리 제한이 없었다. 제한이 없으면 컨테이너가 쓸 수 있는 메모리는 서버 전체라 80%는 2GB의 80%가 되고, 그 선에 닿기 전에 Grafana와 Tempo와 Mimir가 먼저 밀린다. 전날 오후의 collector가 86MiB였으므로 상한을 512MiB로 두었다. `memory_limiter`가 받기를 멈추는 선은 80%에서 `spike_limit_percentage` 20%를 뺀 약 307MiB다. 넘으면 17:05의 손실 패널에 받지 못한 수로 보인다.
+
+셋째는 컨테이너 로그다. Docker의 `json-file` 로그는 기본으로 회전하지 않는다. 1년 보존으로 둔 서버라 로그가 디스크를 채울 수 있어, 컨테이너마다 10MB 파일 3개로 돌린다.
+
+## 10월 18일 13:54 flush 시점은 수집 코드 하나가 정한다
+
+2편에서 `BatchSpanProcessor`가 document의 `pagehide`에 건 리스너는 불리지 않는다고 썼다. 같은 자리에서 document의 `visibilitychange`에 건 리스너는 불린다. 이 리스너는 SDK를 만들 때 등록되므로 수집 코드의 리스너보다 먼저 돌고, 수집 코드가 뒤이어 부르는 trace의 `forceFlush`는 빈 큐에 대고 부르는 셈이었다. 나가는 값은 같지만, flush 시점을 수집 코드가 정한다는 주석이 span에는 맞지 않았다. 2.12.0의 `disableAutoFlushOnDocumentHide` 옵션으로 SDK의 리스너를 끄고, 수집 코드의 리스너 하나가 span과 metric의 flush를 함께 부르게 했다.
+
+```ts
+// apps/blog/src/utils/telemetry/setup.ts
+      new BatchSpanProcessor(
+        new OTLPTraceExporter({url: `${collectorUrl}/v1/traces`}),
+        // 브라우저용 processor 는 기본으로 document 의 visibilitychange 와 pagehide 에 자기 flush 를 건다.
+        // flush 시점은 아래 visibilitychange 리스너 하나에서만 정하도록 끈다. 주기 export(5초)는 그대로다.
+        {disableAutoFlushOnDocumentHide: true},
+      ),
+```
+
+이날 리뷰 지적 중 하나는 틀렸다. 값이 없는 속성(`undefined`)이 OTLP에서 빈 값으로 나가 Tempo에 키만 남는다는 지적이었는데, sdk-trace 2.12.0의 `Span.setAttribute`는 `null`과 `undefined`를 exporter에 넘기기 전에 버린다. core의 속성 정리 함수와 변환기만 보고 Span을 보지 않은 지적이었다. 코드로 확인하고 반영하지 않았다.
+
+## 10월 18일 16:29 대시보드를 열자 429가 났다
+
+17:05에서 대시보드를 화면으로 열어 보지 않아 놓친 버그가 있었으므로, 이번에는 고친 대시보드를 운영 Grafana에서 열었다. 처음 열고 맨 아래로 바로 스크롤하자 패널 3개가 `too many outstanding requests`로 깨졌다. Mimir가 429를 돌려준 것이다. Mimir 로그에는 15:51:03에 10ms 사이 16건의 요청을 버렸다고 남았고, 그 전 48시간에는 한 건도 없었다. 다시 열거나 천천히 스크롤하면, 7일이나 30일 범위에서도 나지 않았다.
+
+원인은 Mimir의 기본값이었다. 운영 Mimir의 `/config`로 확인한 값은 쿼리를 24시간 단위로 쪼개고(`split_queries_by_interval`), 쪼갠 조각을 다시 16개로 샤딩하고(`parallelize_shardable_queries`, `query_sharding_total_shards`), 테넌트당 대기 요청을 100개까지만 받는다(`max_outstanding_requests_per_tenant`). 48시간 범위면 패널 쿼리 하나가 최대 48개 하위 요청이 되고, 쿼리 다섯 개를 가진 "지표별 표본 수" 패널 하나가 240개다. 여러 querier에 일을 나누려는 설계인데, 이 Mimir는 프로세스 하나에 querier 하나(`max_concurrent: 8`)이고 결과 캐시도 꺼져 있어 나누는 만큼 큐만 길어진다.
+
+```yaml
+# infra/otel/mimir/mimir.yaml
+frontend:
+  split_queries_by_interval: 0
+  parallelize_shardable_queries: false
+```
+
+패널 하나를 요청 하나로 둔 뒤, 서버 안에서 운영 대시보드의 Mimir 쿼리 36개를 한꺼번에 보내는 것을 48시간 범위로 한 번, 30일 범위로 두 번 돌렸다. 108개 요청이 모두 200이었고 Mimir가 버린 요청은 0건이었다. 고치기 전의 같은 실험은 돌리지 않았다. 근거는 실제로 난 429와 기본값의 계산이다.
+
+### trace는 왔는데 metric이 없다
+
+같은 날 넣은 패널 두 개가 처음 보여 준 값은 Tempo의 첫 로드 trace 56건, Mimir의 첫 로드 표본 40건이었다. 둘은 같은 페이지 로드를 세는 패널이다. span은 5초 주기로도 나가고 metric은 hidden의 flush로만 나가므로, 차이는 떠나는 순간의 flush가 오지 않은 페이지 로드다. 16건을 라벨과 시각으로 하나씩 맞춰 보았다. 6건은 17일 13:43 배포 전의 trace였다. Mimir의 첫 표본이 13:56이라 그 전에는 metric 경로가 없었다. 나머지 10건은 17일 저녁부터 18일 오후까지 고르게 퍼져 있었고, 대부분 데스크톱 Chromium에서 글을 연 페이지 로드였다. Mimir가 버린 표본과 collector가 받지 못한 수는 모두 0이었으므로, 남는 후보는 탭이 아직 hidden이 되지 않았거나(열어 둔 탭), 떠나는 순간의 keepalive 요청이 끝까지 가지 못한 경우다. 서버의 데이터로는 둘을 가를 수 없다. 16:17에서 비율을 잴 방법이 없다고 적었는데, 이틀째 48시간의 비율은 50건 중 10건이었다. 몇 주 뒤의 값은 마지막 절에서 다시 본다.
+
 ## 몇 주 동안 쌓인 값
 
 [측정값 필요: 2026-11-07 이후에 채운다]
 
 - 페이지 로드 수와 지표별 표본 수, 라벨 조합당 하루 표본 수
+- Tempo의 첫 로드 trace 수와 Mimir의 첫 로드 표본 수의 차이, 즉 hidden의 flush가 오지 않은 페이지 로드의 비율
+- bfcache 복원의 비율
 - `cwv.lcp.quiet`가 `lower`였던 비율, 즉 quiet로 확정했다면 LCP를 작게 기록했을 페이지 로드
 - `cwv.cls.update`, `cwv.inp.update`의 빈도와 등급이 바뀐 비율
 - Mimir가 버린 표본과 collector가 내보내지 못한 수
@@ -234,10 +320,14 @@ max by (reason) (max_over_time(cortex_discarded_samples_total{job="mimir", user=
 
 ## 바꿀 수 있는 곳의 제약
 
-3편에서는 바꿀 수 없는 기본값이 값을 버렸다. 블로그에서는 같은 기본값을 모두 바꿀 수 있었고, 실제로 하루 동안 대부분을 바꿨다. 누적 변환을 빼고, 시각을 받은 시각으로 바꾸고, quiet 확정을 진단으로 내리고, 주기 export를 없앴다. 그런데 바꾼 설정마다 새 기본값을 내가 정한 셈이 됐고, 그 기본값이 맞는지 확인하는 일도 함께 내 몫이 됐다. 손실을 보이려고 만든 패널이 손실을 가린 것이 그 예다.
+3편에서는 바꿀 수 없는 기본값이 값을 버렸다. 블로그에서는 같은 기본값을 모두 바꿀 수 있었고, 실제로 이틀 동안 대부분을 바꿨다. 누적 변환을 빼고, 시각을 받은 시각으로 바꾸고, quiet 확정을 진단으로 내리고, 주기 export를 없애고, 대시보드 쿼리를 쪼개던 Mimir의 분할과 샤딩을 껐다. 그런데 바꾼 설정마다 새 기본값을 내가 정한 셈이 됐고, 그 기본값이 맞는지 확인하는 일도 함께 내 몫이 됐다. 손실을 보이려고 만든 패널이 손실을 가린 것이 그 예다.
 
 그래서 설정을 바꿀 때마다 쓴 확인 방법은 3편과 같았다. 보낸 수와 받은 수를 세는 것이다. 다만 대상이 하나 늘었다. 값이 사라지는 경로뿐 아니라, 사라진 것을 알려 주는 경로도 그 상황을 일부러 만들어 세어 봐야 했다. 방문이 드물어 운영 데이터로는 그런 상황이 좀처럼 생기지 않으니, 재시작이나 수집 중단 같은 상황을 직접 만들어 보는 것이 가장 확실한 방법이라고 생각한다.
 
 [^1]: [Oracle Cloud Infrastructure, Always Free Resources](https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier_topic-Always_Free_Resources.htm)의 "Reclamation of Idle Compute Instances"
 
 [^2]: [Amazon VPC pricing](https://aws.amazon.com/vpc/pricing/)의 Public IPv4 Address 항목
+
+[^3]: [MDN, Access-Control-Max-Age](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Access-Control-Max-Age). 기본값은 5초이고, Chromium은 76부터 2시간(7200초), Firefox는 24시간을 상한으로 둔다고 적는다.
+
+[^4]: [opentelemetry-collector v0.163.0 `processor/memorylimiterprocessor/README.md`](https://github.com/open-telemetry/opentelemetry-collector/blob/v0.163.0/processor/memorylimiterprocessor/README.md)의 "For containerized environments or other similar environments that support setting memory restrictions on the Collector, `limit_percentage` should generally be used, which allows the host environment to determine the Collector's max memory allocation"

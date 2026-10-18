@@ -1034,6 +1034,10 @@
         "score": 0.13
       },
       {
+        "slug": "2021/09/critical-request-and-prioritise-requests",
+        "score": 0.11
+      },
+      {
         "slug": "2021/05/review-of-vercel-cs",
         "score": 0.1
       },
@@ -1048,10 +1052,6 @@
       {
         "slug": "2022/02/dockerfile-instructions",
         "score": 0.1
-      },
-      {
-        "slug": "2021/01/from-github-workflow-to-firebase-functions",
-        "score": 0.09
       }
     ],
     "2026/08/k8s-for-frontend-3": [
@@ -9304,16 +9304,16 @@
         "score": 0.07
       },
       {
-        "slug": "2021/05/http1-vs-http2",
-        "score": 0.07
-      },
-      {
         "slug": "2021/08/event-loop-deep-dive",
         "score": 0.06
       },
       {
         "slug": "2021/10/get-absolute-url-in-nextjs",
         "score": 0.06
+      },
+      {
+        "slug": "2026/08/og-scraping-server-1",
+        "score": 0.05
       }
     ],
     "2018/11/05/web-crwaling-for-naver-movie": [

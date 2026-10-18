@@ -2,12 +2,15 @@
 title: '<em>페이지를 떠나는 순간</em> 핵심 웹 지표를 보내기'
 tags:
   - web-performance
+  - debugging
   - browser
-published: false
-date: 2026-10-17 09:00:00
+published: true
+date: 2026-10-18 18:10:00
 description: '페이지를 떠날 때 CLS와 INP가 누락되는 원인을 OTel JS의 전송 방식과 flush 순서에서 찾았다.'
 series: 'Core Web Vitals 직접 수집하기'
 seriesOrder: 2
+art:
+  undraw: mail-sent
 ---
 
 ## Table of Contents

@@ -69,8 +69,11 @@ export function observeVitals(
 ): void {
   const once = oncePerId(report, reportUpdate)
 
-  // SPA 이동의 TTFB 는 0 으로 보고되므로(web-vitals README) 첫 로드만 잰다.
-  onTTFB(once)
+  // SPA 이동의 TTFB 는 0 으로 보고되므로(web-vitals README) 첫 로드만 잰다. bfcache 복원의 TTFB 도 web-vitals 가
+  // 재지 않고 0 을 넣는 값이라(onTTFB 의 onBFCacheRestore) 넘기지 않는다.
+  onTTFB((metric) => {
+    if (metric.navigationType !== 'back-forward-cache') once(metric)
+  })
   onFCP(once, SOFT)
   onCLS(once, SOFT)
   onINP(once, SOFT)

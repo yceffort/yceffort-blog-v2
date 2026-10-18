@@ -17,20 +17,25 @@
         "name": "nav",
         "label": "이동",
         "type": "custom",
-        "query": "첫 로드 : navigate|reload|back-forward|back-forward-cache|prerender|restore,SPA 이동 : soft-navigation,전체 : .*",
+        "query": "첫 로드 : navigate|reload|back-forward|prerender|restore,SPA 이동 : soft-navigation,bfcache 복원 : back-forward-cache,전체 : .*",
         "current": {
           "text": "첫 로드",
-          "value": "navigate|reload|back-forward|back-forward-cache|prerender|restore"
+          "value": "navigate|reload|back-forward|prerender|restore"
         },
         "options": [
           {
             "text": "첫 로드",
-            "value": "navigate|reload|back-forward|back-forward-cache|prerender|restore",
+            "value": "navigate|reload|back-forward|prerender|restore",
             "selected": true
           },
           {
             "text": "SPA 이동",
             "value": "soft-navigation",
+            "selected": false
+          },
+          {
+            "text": "bfcache 복원",
+            "value": "back-forward-cache",
             "selected": false
           },
           {

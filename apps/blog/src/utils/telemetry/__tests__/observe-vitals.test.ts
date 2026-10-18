@@ -6,9 +6,10 @@ import type {
 
 type Callback = (metric: MetricWithAttribution) => void
 const lcpSubscriptions: Array<{callback: Callback; allChanges: boolean}> = []
+const ttfbSubscriptions: Callback[] = []
 
 vi.mock('web-vitals/attribution', () => ({
-  onTTFB: vi.fn(),
+  onTTFB: (callback: Callback) => ttfbSubscriptions.push(callback),
   onFCP: vi.fn(),
   onCLS: vi.fn(),
   onINP: vi.fn(),
@@ -58,5 +59,38 @@ describe('observeVitals 의 LCP', () => {
       [2, 1200, {'cwv.lcp.quiet': 'none'}],
       [1, 6000, {'cwv.lcp.quiet': 'lower', 'cwv.lcp.quiet_value': 800}],
     ])
+  })
+})
+
+describe('observeVitals 의 TTFB', () => {
+  beforeEach(() => {
+    ttfbSubscriptions.length = 0
+  })
+
+  it('bfcache 복원의 TTFB 는 넘기지 않고 첫 로드의 TTFB 만 넘긴다', () => {
+    const report = vi.fn()
+    observeVitals(report, vi.fn(), () => 'hard')
+
+    const navigate = {
+      name: 'TTFB',
+      id: 'ttfb-1',
+      navigationType: 'navigate',
+      value: 300,
+      rating: 'good',
+    } as MetricWithAttribution
+    const restore = {
+      name: 'TTFB',
+      id: 'ttfb-2',
+      navigationType: 'back-forward-cache',
+      value: 0,
+      rating: 'good',
+    } as MetricWithAttribution
+    ttfbSubscriptions.forEach((s) => {
+      s(navigate)
+      s(restore)
+    })
+
+    expect(report).toHaveBeenCalledTimes(1)
+    expect(report.mock.calls[0][0]).toBe(navigate)
   })
 })

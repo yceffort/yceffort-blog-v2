@@ -31,9 +31,11 @@ def selector(nav='navigation_type=~"$nav"'):
 
 SEL = selector()
 # 이동 변수. web-vitals 의 navigationType 값이다. SPA 이동은 Chromium 151 이상에서만 잡힌다.
+# bfcache 복원은 첫 로드와 다른 것을 잰 값(pageshow 부터 두 프레임까지)이라 따로 둔다. 복원 TTFB 는 기록하지 않는다.
 NAV_OPTIONS = [
-    ("첫 로드", "navigate|reload|back-forward|back-forward-cache|prerender|restore"),
+    ("첫 로드", "navigate|reload|back-forward|prerender|restore"),
     ("SPA 이동", "soft-navigation"),
+    ("bfcache 복원", "back-forward-cache"),
     ("전체", ".*"),
 ]
 
@@ -94,7 +96,7 @@ def prom(expr, legend="", instant=False):
     return {"datasource": MIMIR, "expr": expr, "legendFormat": legend, "instant": instant, "range": not instant, "refId": "A"}
 
 
-def stat(title, expr, unit, th, description="", decimals=None):
+def stat(title, expr, unit, th, description="", decimals=None, datasource=MIMIR, targets=None):
     defaults = {"unit": unit, "thresholds": th, "color": {"mode": "thresholds"}}
     if decimals is not None:
         defaults["decimals"] = decimals
@@ -102,8 +104,8 @@ def stat(title, expr, unit, th, description="", decimals=None):
         "type": "stat",
         "title": title,
         "description": description,
-        "datasource": MIMIR,
-        "targets": [prom(expr, instant=True)],
+        "datasource": datasource,
+        "targets": targets or [prom(expr, instant=True)],
         "fieldConfig": {"defaults": defaults, "overrides": []},
         "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "background", "graphMode": "none"},
     }
@@ -174,6 +176,8 @@ def ops_dashboard():
     lay.row("지금 얼마나 느린가 (선택 구간 전체의 p75)")
     for (name, series, good, poor, unit), w in zip(METRICS, WIDTHS):
         first_hidden = "페이지가 처음 숨겨진 시점의 값이다. 다시 보였다가 숨겨지며 바뀐 값은 넣지 않는다(CWV 원인 분석 대시보드의 'CLS, INP 갱신' 패널)." if name in ("CLS", "INP") else ""
+        if name == "TTFB":
+            first_hidden = "bfcache 복원은 TTFB 를 기록하지 않는다. web-vitals 가 재지 않고 0 을 넣기 때문이다."
         lay.add(stat(f"{name} p75", p75(series, "$__range"), unit, thresholds(good, poor), description=first_hidden, decimals=3 if unit == "none" else None), w, 4)
     lay.row("good 비율 (good 경계 버킷 / 전체)")
     ratio_th = {"mode": "absolute", "steps": [{"color": "red", "value": None}, {"color": "orange", "value": 0.5}, {"color": "green", "value": 0.75}]}
@@ -209,7 +213,7 @@ def ops_dashboard():
             "화면별 페이지 로드",
             [prom(f"sum by (page_route) ({AGG}(cwv_ttfb_milliseconds_count{{{SEL}}}[$__interval]))", "{{page_route}}")],
             "short", MIMIR, stack=True,
-            description="TTFB 는 페이지 로드마다 한 번 보고되므로 TTFB 건수를 페이지 로드 수로 쓴다. 블로그 안의 클라이언트 이동은 세지 않는다.",
+            description="TTFB 는 페이지 로드마다 한 번 보고되므로 TTFB 건수를 페이지 로드 수로 쓴다. 블로그 안의 클라이언트 이동과 bfcache 복원은 세지 않는다.",
         ),
         12, 7,
     )
@@ -219,6 +223,15 @@ def ops_dashboard():
             [prom(f"sum by (page_route) ({AGG}(cwv_fcp_milliseconds_count{{{selector('navigation_type=\"soft-navigation\"')}}}[$__interval]))", "{{page_route}}")],
             "short", MIMIR, stack=True,
             description="블로그 안에서 링크로 옮겨 간 횟수. SPA 이동 뒤 첫 contentful paint(FCP)가 보고된 수로 센다. Chromium 151 이상만 보고하고, 이동 변수와 상관없이 SPA 이동만 센다.",
+        ),
+        12, 7,
+    )
+    lay.add(
+        timeseries(
+            "화면별 bfcache 복원",
+            [prom(f"sum by (page_route) ({AGG}(cwv_fcp_milliseconds_count{{{selector('navigation_type=\"back-forward-cache\"')}}}[$__interval]))", "{{page_route}}")],
+            "short", MIMIR, stack=True,
+            description="뒤로, 앞으로 가기로 bfcache 에서 복원된 횟수. 복원 뒤 첫 contentful paint(FCP)가 보고된 수로 센다. 복원 TTFB 는 기록하지 않으므로 '화면별 페이지 로드' 에는 들어가지 않는다. 이동 변수와 상관없이 복원만 센다.",
         ),
         12, 7,
     )
@@ -256,6 +269,20 @@ def ops_dashboard():
         f'(sum({{__name__=~"otelcol_(receiver_refused|exporter_send_failed)_(metric_points|spans)_total", job="collector"}}) or on() vector(0)) and on() {scraped("collector")}',
         "short", red_from_one,
         description="metric 데이터 포인트와 span 의 합이다. " + loss,
+    )
+    first_load = "navigate|reload|back-forward|prerender|restore"
+    stored_th = {"mode": "absolute", "steps": [{"color": "blue", "value": None}]}
+    stored_note = "trace 는 TTFB 가 나온 뒤 5초 안에 나가고 metric 은 페이지가 숨겨질 때만 나간다. 두 수의 차이가 hidden 이 오지 않은 채 끝난 세션의 metric 손실에 tail sampling 과 같은 밀리초 중복 손실을 더한 어림값이다. 위쪽 필터와 상관없다."
+    lay.add(
+        stat("Tempo 에 저장된 첫 로드 (선택 구간)", None, "short", stored_th, description=stored_note, datasource=TEMPO,
+             targets=[traceql(f'{{resource.service.name="yceffort-blog" && name="cwv.ttfb" && span.cwv.navigation_type=~"{first_load}"}} | count_over_time()', instant=True)]),
+        12, 4,
+    )
+    lay.add(
+        stat("Mimir 에 저장된 첫 로드 (선택 구간)",
+             f'sum({AGG}(cwv_ttfb_milliseconds_count{{job="yceffort-blog", navigation_type=~"{first_load}"}}[$__range]))',
+             "short", stored_th, description=stored_note),
+        12, 4,
     )
     for panel in (discarded, failed):
         panel["fieldConfig"]["defaults"]["noValue"] = "수집 안 됨"

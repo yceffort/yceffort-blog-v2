@@ -17,20 +17,25 @@
         "name": "nav",
         "label": "이동",
         "type": "custom",
-        "query": "첫 로드 : navigate|reload|back-forward|back-forward-cache|prerender|restore,SPA 이동 : soft-navigation,전체 : .*",
+        "query": "첫 로드 : navigate|reload|back-forward|prerender|restore,SPA 이동 : soft-navigation,bfcache 복원 : back-forward-cache,전체 : .*",
         "current": {
           "text": "첫 로드",
-          "value": "navigate|reload|back-forward|back-forward-cache|prerender|restore"
+          "value": "navigate|reload|back-forward|prerender|restore"
         },
         "options": [
           {
             "text": "첫 로드",
-            "value": "navigate|reload|back-forward|back-forward-cache|prerender|restore",
+            "value": "navigate|reload|back-forward|prerender|restore",
             "selected": true
           },
           {
             "text": "SPA 이동",
             "value": "soft-navigation",
+            "selected": false
+          },
+          {
+            "text": "bfcache 복원",
+            "value": "back-forward-cache",
             "selected": false
           },
           {
@@ -431,7 +436,7 @@
     {
       "type": "stat",
       "title": "TTFB p75",
-      "description": "",
+      "description": "bfcache 복원은 TTFB 를 기록하지 않는다. web-vitals 가 재지 않고 0 을 넣기 때문이다.",
       "datasource": {
         "type": "prometheus",
         "uid": "mimir"
@@ -1810,7 +1815,7 @@
     {
       "type": "timeseries",
       "title": "화면별 페이지 로드",
-      "description": "TTFB 는 페이지 로드마다 한 번 보고되므로 TTFB 건수를 페이지 로드 수로 쓴다. 블로그 안의 클라이언트 이동은 세지 않는다.",
+      "description": "TTFB 는 페이지 로드마다 한 번 보고되므로 TTFB 건수를 페이지 로드 수로 쓴다. 블로그 안의 클라이언트 이동과 bfcache 복원은 세지 않는다.",
       "datasource": {
         "type": "prometheus",
         "uid": "mimir"
@@ -1915,6 +1920,59 @@
     },
     {
       "type": "timeseries",
+      "title": "화면별 bfcache 복원",
+      "description": "뒤로, 앞으로 가기로 bfcache 에서 복원된 횟수. 복원 뒤 첫 contentful paint(FCP)가 보고된 수로 센다. 복원 TTFB 는 기록하지 않으므로 '화면별 페이지 로드' 에는 들어가지 않는다. 이동 변수와 상관없이 복원만 센다.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "mimir"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "mimir"
+          },
+          "expr": "sum by (page_route) (sum_over_time(cwv_fcp_milliseconds_count{job=\"yceffort-blog\", navigation_type=\"back-forward-cache\", page_route=~\"$route\", page_lang=~\"$lang\", device_class=~\"$device\", browser_engine=~\"$engine\"}[$__interval]))",
+          "legendFormat": "{{page_route}}",
+          "instant": false,
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 80,
+            "spanNulls": true,
+            "stacking": {
+              "mode": "normal"
+            },
+            "drawStyle": "bars"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "id": 33,
+      "gridPos": {
+        "x": 0,
+        "y": 53,
+        "w": 12,
+        "h": 7
+      }
+    },
+    {
+      "type": "timeseries",
       "title": "LCP 등급별 건수",
       "description": "",
       "datasource": {
@@ -1958,9 +2016,9 @@
           "mode": "multi"
         }
       },
-      "id": 33,
+      "id": 34,
       "gridPos": {
-        "x": 0,
+        "x": 12,
         "y": 53,
         "w": 12,
         "h": 7
@@ -2051,12 +2109,124 @@
           "mode": "multi"
         }
       },
-      "id": 34,
+      "id": 35,
       "gridPos": {
         "x": 0,
         "y": 60,
         "w": 24,
         "h": 7
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Tempo 에 저장된 첫 로드 (선택 구간)",
+      "description": "trace 는 TTFB 가 나온 뒤 5초 안에 나가고 metric 은 페이지가 숨겨질 때만 나간다. 두 수의 차이가 hidden 이 오지 않은 채 끝난 세션의 metric 손실에 tail sampling 과 같은 밀리초 중복 손실을 더한 어림값이다. 위쪽 필터와 상관없다.",
+      "datasource": {
+        "type": "tempo",
+        "uid": "tempo"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "tempo",
+            "uid": "tempo"
+          },
+          "queryType": "traceql",
+          "query": "{resource.service.name=\"yceffort-blog\" && name=\"cwv.ttfb\" && span.cwv.navigation_type=~\"navigate|reload|back-forward|prerender|restore\"} | count_over_time()",
+          "metricsQueryType": "instant",
+          "step": "5m",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none"
+      },
+      "id": 36,
+      "gridPos": {
+        "x": 0,
+        "y": 67,
+        "w": 12,
+        "h": 4
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Mimir 에 저장된 첫 로드 (선택 구간)",
+      "description": "trace 는 TTFB 가 나온 뒤 5초 안에 나가고 metric 은 페이지가 숨겨질 때만 나간다. 두 수의 차이가 hidden 이 오지 않은 채 끝난 세션의 metric 손실에 tail sampling 과 같은 밀리초 중복 손실을 더한 어림값이다. 위쪽 필터와 상관없다.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "mimir"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "mimir"
+          },
+          "expr": "sum(sum_over_time(cwv_ttfb_milliseconds_count{job=\"yceffort-blog\", navigation_type=~\"navigate|reload|back-forward|prerender|restore\"}[$__range]))",
+          "legendFormat": "",
+          "instant": true,
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none"
+      },
+      "id": 37,
+      "gridPos": {
+        "x": 12,
+        "y": 67,
+        "w": 12,
+        "h": 4
       }
     },
     {
@@ -2113,10 +2283,10 @@
           ]
         }
       },
-      "id": 35,
+      "id": 38,
       "gridPos": {
         "x": 0,
-        "y": 67,
+        "y": 71,
         "w": 12,
         "h": 6
       }
@@ -2174,10 +2344,10 @@
         "colorMode": "background",
         "graphMode": "none"
       },
-      "id": 36,
+      "id": 39,
       "gridPos": {
         "x": 12,
-        "y": 67,
+        "y": 71,
         "w": 12,
         "h": 6
       }

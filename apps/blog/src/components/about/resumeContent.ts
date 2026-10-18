@@ -69,15 +69,18 @@ const ko: ResumeContent = {
     jobs: [
       {
         company: '네이버 파이낸셜',
-        role: 'Frontend Engineer · 카드FE 리더',
+        role: 'Frontend Engineer · 내자산&회원FE 리더 → 카드FE 리더/공통개발TF 리더',
         period: '2020.09 — 2026.03',
         description: '금융 서비스 개발과 프론트엔드 조직의 공통 기반 구축',
         contributions: [
+          'CRA 단일 서비스를 Koa와 Next.js 기반 20여 개 SSR 서비스로 분리하는 전환을 주도해, 장애가 서비스 단위로 격리되고 서비스마다 더 자주 배포할 수 있는 구조로 개선',
+          '20여 개 서비스가 함께 쓰는 공통 패키지(@mydata, @financial, @financial-auth, @pie) 개발을 이끌고 레지스트리 배포 체계 마련',
+          '번들 크기 최적화를 주도해 모든 페이지가 공유하는 _app 청크 345kB(51%), 110개 페이지 합계 1.17MB를 줄이고 초기 로딩 평균을 2.6초에서 1.4초로 단축',
+          'NaverPayDev 오픈소스 공개 체계를 만들고 팀의 공통 패키지 공개와 운영을 주도',
+          'lodash를 대체하는 유틸리티 라이브러리 hidash 개발',
           '마이데이터, 회원 인증, 카드탭 등 모바일 금융 서비스 개발',
-          'SPA에서 SSR로 전환하고, Next.js·Koa·쿠버네티스 기반 서비스 설계·배포·운영',
-          '공통 ESLint 설정과 플러그인, 상태 관리 라이브러리, 디자인 시스템 개발·운영',
-          '프로젝트 생성 도구와 Node.js CLI, 업무 생산성을 위한 MCP 제작',
-          '팀의 코드 리뷰와 멘토링을 주도하고 공통 npm 패키지를 개발·공개',
+          '상태 관리 라이브러리, 디자인 시스템, 프로젝트 생성 도구, Node.js CLI, 업무용 MCP 개발과 운영',
+          '팀의 코드 리뷰와 멘토링 주도',
         ],
         stack:
           'React · TypeScript · Next.js · Node.js · Kubernetes · pnpm · Turborepo',
@@ -241,16 +244,19 @@ const en: ResumeContent = {
     jobs: [
       {
         company: 'NAVER Financial',
-        role: 'Frontend Engineer, Card FE Lead',
+        role: 'Frontend Engineer, Assets & Membership FE Lead → Card FE Lead / Shared Development TF Lead',
         period: '2020.09 to 2026.03',
         description:
           'Built financial services and the shared foundation of the frontend organization',
         contributions: [
+          'Led the move from a single CRA app to 20-plus SSR services on Koa and Next.js, so a failure stays inside one service and each service can deploy on its own, more often',
+          'Led the shared packages used by those 20-plus services (@mydata, @financial, @financial-auth, @pie) and set up how they are published to the registry',
+          'Led bundle size work that cut the _app chunk shared by every page by 345 kB (51%) and 110 pages by 1.17 MB in total, bringing the average initial load from 2.6 s to 1.4 s',
+          "Started the NaverPayDev open source program and led publishing and maintaining the team's shared packages",
+          'Built hidash, a lodash replacement',
           'Built mobile financial services including MyData, member authentication, and the card tab',
-          'Moved services from SPA to SSR, and designed, deployed, and operated them on Next.js, Koa, and Kubernetes',
-          'Built and maintained the shared ESLint config and plugins, a state management library, and the design system',
-          'Made a project scaffolding tool, Node.js CLIs, and MCP servers for everyday productivity',
-          'Led code review and mentoring on the team, and built and published shared npm packages',
+          'Built and maintained a state management library, the design system, a project scaffolding tool, Node.js CLIs, and MCP servers for everyday productivity',
+          'Led code review and mentoring on the team',
         ],
         stack:
           'React, TypeScript, Next.js, Node.js, Kubernetes, pnpm, Turborepo',

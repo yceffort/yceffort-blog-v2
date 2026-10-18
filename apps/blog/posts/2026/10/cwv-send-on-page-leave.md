@@ -86,15 +86,112 @@ web-vitals는 다섯 지표를 같은 시점에 보고하지 않는다. `reportA
 
 > 각 조합을 2번 돌려 같은 결과를 얻었다. 측정 코드는 `cwv-otel-grafana/experiments/e2-exporter`에 남겼다.
 
-sendBeacon의 반환값으로 알 수 있는 것은 요청이 브라우저 큐에 들어갔는지까지다. 0.57.2는 큐에 들어간 요청을 성공으로 보고하므로, CORS에 막혀 서버가 한 건도 받지 못해도 exporter는 success를 반환한다. 사내에서는 평소에 XHR로 보내 실패를 확인하고, 페이지가 숨겨졌을 때만 sendBeacon으로 전환했다. 이 구성에서도 떠나는 순간의 전송 결과는 확인할 수 없었다.
+첫 줄의 결과는 exporter의 전송 코드에 그대로 적혀 있다[^4].
+
+```ts
+// opentelemetry-js experimental/v0.57.2 experimental/packages/otlp-exporter-base/src/transport/send-beacon-transport.ts
+  send(data: Uint8Array): Promise<ExportResponse> {
+    return new Promise<ExportResponse>(resolve => {
+      if (
+        navigator.sendBeacon(
+          this._params.url,
+          new Blob([data], { type: this._params.blobType })
+        )
+      ) {
+        // no way to signal retry, treat everything as success
+        diag.debug('SendBeacon success');
+        resolve({
+          status: 'success',
+        });
+      } else {
+        resolve({
+          status: 'failure',
+          error: new Error('SendBeacon failed'),
+        });
+      }
+    });
+  }
+```
+
+sendBeacon의 반환값으로 알 수 있는 것은 요청이 브라우저 큐에 들어갔는지까지다. 응답은 돌려받지 못하므로 주석대로 재시도할 근거가 없고, 큐에 들어간 요청은 모두 success가 된다. 400 응답도, CORS 거부도 큐에는 들어가므로 표의 첫 줄처럼 성공으로 보인다. 0.57.2는 큐에 들어간 요청을 성공으로 보고하므로, CORS에 막혀 서버가 한 건도 받지 못해도 exporter는 success를 반환한다. 사내에서는 평소에 XHR로 보내 실패를 확인하고, 페이지가 숨겨졌을 때만 sendBeacon으로 전환했다. 이 구성에서도 떠나는 순간의 전송 결과는 확인할 수 없었다.
 
 ## 최신 exporter는 fetch keepalive로 보낸다
 
 최신 버전에서는 이 분기가 사라졌다. 0.204.0부터 `headers`가 있으면 XHR보다 fetch를 먼저 사용했고, 0.211.0에서 XHR 전송을 제거했다. 0.213.0에서는 sendBeacon도 keepalive fetch로 바꿨다[^1]. keepalive fetch는 문서가 사라진 뒤에도 요청을 계속하며 응답 상태도 반환한다. 앞의 표에서 0.223.0이 400을 바로 failed로 보고한 이유다.
 
-CORS 거부는 네트워크 오류로 처리해 재시도한다. 1초에서 시작해 1.5배씩 늘어나는 간격으로 4번 재시도한 뒤, 다음 재시도가 10초 export 제한을 넘기면 failed로 처리한다[^5]. 그래서 표에서는 최초 요청까지 총 5번 시도하고 약 8초 뒤에 failed를 반환했다.
+CORS 거부는 네트워크 오류로 처리해 재시도한다. 재시도 간격과 횟수는 전송 코드의 상수와 반복문에서 정해진다[^5].
 
-[Fetch 명세](https://fetch.spec.whatwg.org/#http-network-or-cache-fetch)는 진행 중인 keepalive 요청의 본문을 모두 합쳐 64KiB까지만 허용한다. 0.223.0의 fetch 전송 소스에는 Chrome이 렌더러 프로세스당 keepalive 요청을 9개까지만 받는다는 설명도 있다. [whatwg/fetch#679](https://github.com/whatwg/fetch/issues/679)에 있는 Chromium 개발자의 설명을 인용한 것으로, Chromium 소스에서 직접 확인하지는 못했다. exporter는 진행 중인 keepalive 요청의 누적 크기와 개수를 세고, 헤더를 위한 여유를 남긴 60KiB 또는 9개 한도를 넘으면 keepalive 없이 보낸다[^5]. keepalive 없이 보낸 요청은 문서가 사라지면 함께 취소되므로, 떠나는 순간에 요청이 몰리면 전송이 누락될 수 있다.
+```ts
+// opentelemetry-js experimental/v0.223.0 experimental/packages/otlp-exporter-base/src/retrying-transport.ts
+const MAX_ATTEMPTS = 5;
+const INITIAL_BACKOFF = 1000;
+const MAX_BACKOFF = 5000;
+const BACKOFF_MULTIPLIER = 1.5;
+const JITTER = 0.2;
+```
+
+```ts
+// opentelemetry-js experimental/v0.223.0 experimental/packages/otlp-exporter-base/src/retrying-transport.ts
+    while (result.status === 'retryable' && attempts > 0) {
+      attempts--;
+
+      // use maximum of computed backoff and 0 to avoid negative timeouts
+      const backoff = Math.max(
+        Math.min(nextBackoff * (1 + getJitter()), MAX_BACKOFF),
+        0
+      );
+      nextBackoff = nextBackoff * BACKOFF_MULTIPLIER;
+      const retryInMillis = result.retryInMillis ?? backoff;
+
+      // return when expected retry time is after the export deadline.
+      const remainingTimeoutMillis = deadline - Date.now();
+      if (retryInMillis > remainingTimeoutMillis) {
+        diag.info(
+          `Export retry time ${Math.round(retryInMillis)}ms exceeds remaining timeout ${Math.round(
+            remainingTimeoutMillis
+          )}ms, not retrying further.`
+        );
+        return result;
+      }
+```
+
+간격은 1초에서 시작해 1.5배씩 늘고 ±20% 흔들리며, 상한은 5초다. 1초, 1.5초, 2.25초, 3.375초를 기다리며 4번 다시 보내면 약 8.1초가 지나고, 다섯 번째 간격 5초는 export 제한 10초에서 남은 시간보다 길어 반복문이 거기서 끝난다. 표의 최초 요청까지 총 5번 시도와 약 8초는 이 계산과 맞는다. 재시도를 끝내는 조건은 횟수보다 export 제한 쪽이 먼저 온다.
+
+[Fetch 명세](https://fetch.spec.whatwg.org/#http-network-or-cache-fetch)는 진행 중인 keepalive 요청의 본문을 모두 합쳐 64KiB까지만 허용한다. 0.223.0의 fetch 전송 소스에는 Chrome이 렌더러 프로세스당 keepalive 요청을 9개까지만 받는다는 설명도 있다. [whatwg/fetch#679](https://github.com/whatwg/fetch/issues/679)에 있는 Chromium 개발자의 설명을 인용한 것으로, Chromium 소스에서 직접 확인하지는 못했다. exporter는 진행 중인 keepalive 요청의 누적 크기와 개수를 세고, 헤더를 위한 여유를 남긴 60KiB 또는 9개 한도를 넘으면 keepalive 없이 보낸다[^5].
+
+```ts
+// opentelemetry-js experimental/v0.223.0 experimental/packages/otlp-exporter-base/src/transport/fetch-transport.ts
+/**
+ * Maximum total body size for concurrent keepalive requests.
+ * Browsers enforce a 64KiB cumulative limit across all pending keepalive requests.
+ * We use 60KB to leave headroom for headers.
+ * @see https://github.com/whatwg/fetch/issues/679
+ * @see https://blog.huli.tw/2025/01/06/en/navigator-sendbeacon-64kib-and-source-code/
+ */
+const MAX_KEEPALIVE_BODY_SIZE = 60 * 1024;
+
+/**
+ * Maximum concurrent keepalive requests.
+ * Chrome enforces 9 concurrent keepalive fetch requests per renderer process.
+ * @see https://github.com/whatwg/fetch/issues/679
+ * Quote: "If the renderer process is processing more than 9 requests with keepalive set, we reject a new request"
+ */
+const MAX_KEEPALIVE_REQUESTS = 9;
+```
+
+```ts
+// opentelemetry-js experimental/v0.223.0 experimental/packages/otlp-exporter-base/src/transport/fetch-transport.ts
+    const requestSize = data.byteLength;
+
+    // Determine if we can use keepalive based on cumulative browser limits.
+    // We must check BEFORE adding to pending totals to avoid exceeding limits.
+    const wouldExceedSize =
+      pendingBodySize + requestSize > MAX_KEEPALIVE_BODY_SIZE;
+    const wouldExceedCount = pendingKeepaliveCount >= MAX_KEEPALIVE_REQUESTS;
+    const useKeepalive = !wouldExceedSize && !wouldExceedCount;
+```
+
+두 변수 `pendingBodySize`와 `pendingKeepaliveCount`는 모듈 수준에 있어서, 같은 페이지의 trace exporter와 metric exporter가 한도를 함께 쓴다. 한도를 넘긴 요청은 오류 없이 keepalive만 빠진 채 나간다. keepalive 없이 보낸 요청은 문서가 사라지면 함께 취소되므로, 떠나는 순간에 요청이 몰리면 전송이 누락될 수 있다. 재현 환경과 블로그의 떠나는 순간 요청은 trace 하나와 metric 하나라 개수 한도와는 멀고, 크기는 span 속성에 실리는 selector와 URL의 길이에 달려 있다. 이 글에서는 크기 한도에 걸리는 경우를 만들지 않았다.
 
 이 한도 안에서는 문서가 사라진 뒤에도 요청을 이어 가면서 실패 여부를 확인할 수 있다는 장점이 있다. 다만 최신 exporter를 쓴 재현 환경에서도 CLS와 INP가 도착하지 않았으므로, 다음으로 flush가 실행되는 순서를 확인했다.
 
@@ -162,7 +259,58 @@ pagehide에서 부른 flush가 TTFB, FCP, LCP를 담은 요청을 먼저 보낸�
 
 실제로 페이지를 떠날 때는 첫 응답을 기다리는 동안 문서가 사라져 두 번째 collect를 실행하지 못한 것으로 보인다. 이미 시작한 첫 요청은 keepalive fetch로 계속 전송되므로 TTFB, FCP, LCP만 도착한다. 앞의 표에서 metric은 일부만 도착하고 trace는 모두 도착한 결과도 이 차이로 설명할 수 있다.
 
-이 대기는 2.9.0에서 추가됐다(#6655). 사내 코드가 쓰던 sdk-metrics 1.30.1의 `onForceFlush`에는 없던 동작이다. 따라서 같은 flush 코드라도 sdk-metrics를 2.9.0 이상으로 올리면 앞에서 재현한 조건에서 CLS와 INP가 누락된다. "collect와 export를 동시에 돌리지 않는다"는 보장은 서버 프로세스에서는 자연스럽다고 생각한다. 하지만 종료를 앞둔 문서에서는 응답을 기다리는 동안 다음 수집과 전송을 실행하지 못할 수 있다. trace는 `BatchSpanProcessor`의 `forceFlush`가 진행 중인 export를 기다리지 않고 바로 내보내므로, 처음 표의 두 모드 모두 다섯 span이 Tempo에 도착했다.
+이 대기는 2.9.0에서 추가됐다(#6655). 바로 앞 버전인 2.8.0의 `onForceFlush`는 세 줄이다[^8].
+
+```ts
+// opentelemetry-js v2.8.0 packages/sdk-metrics/src/export/PeriodicExportingMetricReader.ts
+  protected async onForceFlush(): Promise<void> {
+    await this._runOnce();
+    await this._exporter.forceFlush();
+  }
+```
+
+사내 코드가 쓰던 sdk-metrics 1.30.1의 `onForceFlush`에도 이 대기는 없다. 따라서 같은 flush 코드라도 sdk-metrics를 2.9.0 이상으로 올리면 앞에서 재현한 조건에서 CLS와 INP가 누락된다. 2.12.0은 주기 export 경로에서도 같은 보장을 지키는데, 방식이 다르다. 진행 중인 export가 있으면 그 주기의 실행을 건너뛴다[^3].
+
+```ts
+// opentelemetry-js v2.12.0 packages/sdk-metrics/src/export/PeriodicExportingMetricReader.ts
+  private async _doRun(): Promise<void> {
+    if (this._ongoingExportPromise) {
+      api.diag.debug(
+        'PeriodicExportingMetricReader: export already in progress, skipping'
+      );
+      return;
+    }
+```
+
+주기 export는 건너뛰고 `forceFlush`는 기다린다. "collect와 export를 동시에 돌리지 않는다"는 보장은 서버 프로세스에서는 자연스럽다고 생각한다. 주기 실행은 다음 주기에 다시 오고, forceFlush는 기다렸다가 최신 값을 모으면 된다. 하지만 종료를 앞둔 문서에는 다음 주기도, 기다릴 시간도 없다. 응답을 기다리는 동안 다음 수집과 전송을 실행하지 못한다.
+
+trace는 다르다. `BatchSpanProcessor`의 `forceFlush`는 큐에 남은 span을 배치 크기로 나눠 바로 내보낼 뿐, 진행 중인 export를 보지 않는다[^7].
+
+```ts
+// opentelemetry-js v2.12.0 packages/sdk-trace/src/export/BatchSpanProcessorBase.ts
+  forceFlush(): Promise<void> {
+    if (this._shutdownOnce.isCalled) {
+      return this._shutdownOnce.promise;
+    }
+    return this._flushAll();
+  }
+```
+
+```ts
+// opentelemetry-js v2.12.0 packages/sdk-trace/src/export/BatchSpanProcessorBase.ts
+  private _flushAll(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const promises = [];
+      // calculate number of batches
+      const count = Math.ceil(
+        this._finishedSpans.length / this._maxExportBatchSize
+      );
+      for (let i = 0, j = count; i < j; i++) {
+        promises.push(this._flushOneBatch());
+      }
+```
+
+그래서 처음 표의 두 모드 모두 다섯 span이 Tempo에 도착했다. 같은 페이지에서 같은 이벤트에 같은 방식으로 부른 flush인데, trace와 metric이 다른 결과를 낸 이유는 SDK 두 패키지의 `forceFlush`가 진행 중인 export를 다르게 다루기 때문이었다.
 
 ## visibilitychange에서만 flush한다
 
@@ -205,10 +353,14 @@ exporter가 keepalive fetch를 사용하면서 전송 결과를 확인할 수 �
 
 [^2]: [opentelemetry-js v2.12.0 `packages/sdk-trace/src/platform/browser/export/BatchSpanProcessor.ts`](https://github.com/open-telemetry/opentelemetry-js/blob/v2.12.0/packages/sdk-trace/src/platform/browser/export/BatchSpanProcessor.ts#L36-L42)
 
-[^3]: [opentelemetry-js v2.12.0 `packages/sdk-metrics/src/export/PeriodicExportingMetricReader.ts`](https://github.com/open-telemetry/opentelemetry-js/blob/v2.12.0/packages/sdk-metrics/src/export/PeriodicExportingMetricReader.ts#L259-L273). 이 동작은 [`CHANGELOG.md`](https://github.com/open-telemetry/opentelemetry-js/blob/v2.12.0/CHANGELOG.md)의 2.9.0 항목(#6655)에서 들어왔다. 2.8.0의 같은 파일에는 `_awaitOngoingExport`가 없다.
+[^3]: [opentelemetry-js v2.12.0 `packages/sdk-metrics/src/export/PeriodicExportingMetricReader.ts`](https://github.com/open-telemetry/opentelemetry-js/blob/v2.12.0/packages/sdk-metrics/src/export/PeriodicExportingMetricReader.ts#L259-L273). 이 동작은 [`CHANGELOG.md`](https://github.com/open-telemetry/opentelemetry-js/blob/v2.12.0/CHANGELOG.md)의 2.9.0 항목(#6655)에서 들어왔다. 2.8.0의 같은 파일에는 `_awaitOngoingExport`가 없다. 주기 실행을 건너뛰는 `_doRun`은 [같은 파일의 L165-L171](https://github.com/open-telemetry/opentelemetry-js/blob/v2.12.0/packages/sdk-metrics/src/export/PeriodicExportingMetricReader.ts#L165-L171)
 
 [^4]: [opentelemetry-js experimental/v0.57.2 `experimental/packages/otlp-exporter-base/src/configuration/create-legacy-browser-delegate.ts`](https://github.com/open-telemetry/opentelemetry-js/blob/experimental/v0.57.2/experimental/packages/otlp-exporter-base/src/configuration/create-legacy-browser-delegate.ts#L38-L50)가 `headers`가 있거나 `sendBeacon`이 없으면 XHR을 고른다. sendBeacon의 반환값을 success로 보고하는 자리는 [`src/transport/send-beacon-transport.ts`](https://github.com/open-telemetry/opentelemetry-js/blob/experimental/v0.57.2/experimental/packages/otlp-exporter-base/src/transport/send-beacon-transport.ts#L30-L49)
 
-[^5]: [opentelemetry-js experimental/v0.223.0 `experimental/packages/otlp-exporter-base/src/transport/fetch-transport.ts`](https://github.com/open-telemetry/opentelemetry-js/blob/experimental/v0.223.0/experimental/packages/otlp-exporter-base/src/transport/fetch-transport.ts#L16-L30)의 keepalive 한도와 [`src/retrying-transport.ts`](https://github.com/open-telemetry/opentelemetry-js/blob/experimental/v0.223.0/experimental/packages/otlp-exporter-base/src/retrying-transport.ts#L10-L14)의 재시도 상수(5회, 1000ms부터 1.5배, 최대 5000ms)
+[^5]: [opentelemetry-js experimental/v0.223.0 `experimental/packages/otlp-exporter-base/src/transport/fetch-transport.ts`](https://github.com/open-telemetry/opentelemetry-js/blob/experimental/v0.223.0/experimental/packages/otlp-exporter-base/src/transport/fetch-transport.ts#L16-L30)의 keepalive 한도와 [L71-L88](https://github.com/open-telemetry/opentelemetry-js/blob/experimental/v0.223.0/experimental/packages/otlp-exporter-base/src/transport/fetch-transport.ts#L71-L88)의 keepalive 판정, [`src/retrying-transport.ts`](https://github.com/open-telemetry/opentelemetry-js/blob/experimental/v0.223.0/experimental/packages/otlp-exporter-base/src/retrying-transport.ts#L10-L14)의 재시도 상수(5회, 1000ms부터 1.5배, 최대 5000ms)와 [L42-L69](https://github.com/open-telemetry/opentelemetry-js/blob/experimental/v0.223.0/experimental/packages/otlp-exporter-base/src/retrying-transport.ts#L42-L69)의 재시도 반복문
+
+[^7]: [opentelemetry-js v2.12.0 `packages/sdk-trace/src/export/BatchSpanProcessorBase.ts`](https://github.com/open-telemetry/opentelemetry-js/blob/v2.12.0/packages/sdk-trace/src/export/BatchSpanProcessorBase.ts#L72-L77)의 `forceFlush`와 [L143-L157](https://github.com/open-telemetry/opentelemetry-js/blob/v2.12.0/packages/sdk-trace/src/export/BatchSpanProcessorBase.ts#L143-L157)의 `_flushAll`
+
+[^8]: [opentelemetry-js v2.8.0 `packages/sdk-metrics/src/export/PeriodicExportingMetricReader.ts`](https://github.com/open-telemetry/opentelemetry-js/blob/v2.8.0/packages/sdk-metrics/src/export/PeriodicExportingMetricReader.ts#L201-L204)
 
 [^6]: [MDN browser-compat-data v8.1.6 `api/Document.json`](https://github.com/mdn/browser-compat-data/blob/v8.1.6/api/Document.json)의 `visibilitychange_event`. Safari 14.1 이전 항목에 "Doesn't fire the `visibilitychange` event when navigating away from a document, so also include code to check for the `pagehide` event"라고 적혀 있고 근거로 WebKit 버그 116769, 151234, 151610, 194897을 든다. iOS Safari는 이 데이터를 mirror로 받아 14.5가 경계다.

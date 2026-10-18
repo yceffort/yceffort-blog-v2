@@ -43,6 +43,38 @@ CWV 전송 코드는 값을 모아 주기적으로 내보내는 부분과, 페�
 
 페이지 로드 하나를 trace 하나로 기록하고, 지표마다 span을 하나씩 추가한다. span의 길이를 지표 값에 맞췄기 때문에 TraceQL의 `quantile_over_time(duration, .75)`로 지표의 p75를 구할 수 있다. CLS는 점수에 1000을 곱한 값을 ms 단위로 넣었으므로, TraceQL이 초 단위로 반환한 값이 원래 CLS 점수와 같다. span 속성에는 attribution 값을 모두 넣는다. LCP라면 요소 selector, 리소스 URL, LCP를 네 단계로 나눈 시간이 포함된다.
 
+```ts
+// cwv-otel-grafana/demo-web/src/telemetry/page-trace.ts
+export function createPageTrace(tracer: Tracer, getBaseAttributes: () => Attributes) {
+  let parent: Context | undefined;
+  let base: Attributes = {};
+
+  return function record(name: string, durationMs: number, attributes: Attributes): void {
+    if (!parent) {
+      const root = tracer.startSpan('cwv.page', { startTime: performance.timeOrigin });
+      root.end();
+      parent = trace.setSpan(ROOT_CONTEXT, root);
+      base = getBaseAttributes();
+    }
+
+    const end = performance.timeOrigin + performance.now();
+    tracer
+      .startSpan(name, { startTime: end - durationMs, attributes: { ...base, ...attributes } }, parent)
+      .end(end);
+  };
+}
+```
+
+```ts
+// cwv-otel-grafana/demo-web/src/telemetry/setup.ts
+/** CLS 는 점수라서 span 길이로 넣을 때 1000 을 곱한다. TraceQL 의 초 단위 결과가 그대로 CLS 가 된다. */
+function spanDurationMs(metric: { name: Metric['name']; value: number }): number {
+  return metric.name === 'CLS' ? metric.value * 1000 : metric.value;
+}
+```
+
+지표 span은 보고된 시각에서 값만큼 거슬러 올라간 시각에 시작해 보고된 시각에 끝난다. 그래서 길이는 지표 값과 같지만, 시작 시각은 지표가 실제로 시작된 시각이 아니다. 이 trace에서 믿을 수 있는 것은 span의 길이와 속성이고, 타임라인 위의 위치는 보지 않는다. root인 `cwv.page`는 첫 지표가 올 때 만들어 그 자리에서 끝내는데, 페이지가 열릴 때 따로 보내지 않는 이유는 3편의 tail sampling에서 나온다.
+
 metric은 지표마다 히스토그램 하나로 기록한다. 브라우저에서는 탭마다 따로 집계하고 페이지를 떠나면 수집 코드도 종료되므로, 누적값을 계속 유지하기 어렵다. 그래서 직전 전송 이후의 증분을 보내는 delta temporality를 쓰고, 누적값으로 바꾸는 일은 collector에 맡긴다. 버킷 경계에는 web-vitals의 good, poor 기준값을 넣었다.
 
 ```ts
@@ -57,6 +89,47 @@ export const BUCKETS: Record<Metric['name'], number[]> = {
 ```
 
 경계에 2500이 있으면 `le="2500"` 버킷 하나를 전체 건수로 나눈 값이 보간 없이 정확한 good 비율이 된다. 경계 사이 값은 버킷 안에서 선형 보간으로 추정되므로, p75가 자주 걸리는 구간은 촘촘하게 두었다. 라벨은 화면 이름(`page.route`), 탐색 종류, 등급, INP의 입력 종류처럼 값의 종류가 정해진 것만 쓴다. 라벨 조합 하나가 시리즈 하나라서, selector를 라벨로 넣으면 시리즈 수가 화면 요소 수만큼 늘어난다.
+
+```ts
+// cwv-otel-grafana/demo-web/src/telemetry/setup.ts
+  const histograms = Object.fromEntries(
+    (Object.keys(BUCKETS) as Metric['name'][]).map((name) => [
+      name,
+      meter.createHistogram(`cwv.${name.toLowerCase()}`, {
+        unit: name === 'CLS' ? '1' : 'ms',
+        advice: { explicitBucketBoundaries: BUCKETS[name] },
+      }),
+    ]),
+  ) as Record<Metric['name'], Histogram>;
+```
+
+버킷 경계는 히스토그램을 만들 때 `advice`로 넘긴다. 이 값이 없으면 SDK의 기본 경계가 쓰이는데, 기본 경계에는 CWV의 기준값이 없다. web-vitals의 콜백은 두 기록을 한 번에 한다.
+
+```ts
+// cwv-otel-grafana/demo-web/src/telemetry/setup.ts
+  observeVitals((metric, extra) => {
+    record(`cwv.${metric.name.toLowerCase()}`, spanDurationMs(metric), { ...toAttributes(metric), ...extra });
+    histograms[metric.name].record(metric.value, toLabels(metric, route));
+  }, flush);
+```
+
+`observeVitals`는 지표별 `on*` 함수에 이 콜백을 거는데, 같은 `id`는 처음 한 번만 넘긴다.
+
+```ts
+// cwv-otel-grafana/demo-web/src/telemetry/vitals.ts
+export function oncePerId(report: Report): Report {
+  const seen = new Set<string>();
+
+  return (metric, extra) => {
+    const key = `${metric.name}:${metric.id}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    report(metric, extra);
+  };
+}
+```
+
+1편에서 본 대로 CLS와 INP는 페이지가 다시 보였다가 숨겨질 때마다 같은 `id`로 다시 보고된다. 히스토그램은 `record`를 부른 횟수를 세므로, 그대로 두면 페이지 로드 하나가 건수 둘이 된다. 그래서 첫 보고만 세고, 나중에 나빠진 값은 들어가지 않는다. 이 선택의 대가를 재는 이야기는 4편에 있다.
 
 metric은 `PeriodicExportingMetricReader`가 10초마다 내보내고, trace는 `BatchSpanProcessor`가 모았다가 내보낸다. 둘 다 주기를 기다리는 동안 페이지를 떠나면 남은 값을 직접 flush해야 한다.
 
@@ -155,7 +228,7 @@ const JITTER = 0.2;
       }
 ```
 
-간격은 1초에서 시작해 1.5배씩 늘고 ±20% 흔들리며, 상한은 5초다. 1초, 1.5초, 2.25초, 3.375초를 기다리며 4번 다시 보내면 약 8.1초가 지나고, 다섯 번째 간격 5초는 export 제한 10초에서 남은 시간보다 길어 반복문이 거기서 끝난다. 표의 최초 요청까지 총 5번 시도와 약 8초는 이 계산과 맞는다. 재시도를 끝내는 조건은 횟수보다 export 제한 쪽이 먼저 온다.
+간격은 1초에서 시작해 1.5배씩 늘고 ±20% 흔들리며, 상한은 5초다. 1초, 1.5초, 2.25초, 3.375초를 기다리며 4번 다시 보내면 약 8.1초가 지나고, 다섯 번째 간격 5초는 export 제한 10초에서 남은 시간보다 길어 반복문이 거기서 끝난다. 표의 최초 요청까지 총 5번 시도와 약 8초는 이 계산과 맞는다. 재시도를 끝내는 조건은 횟수보다 export 제한이 먼저 온다. 10초는 exporter 공통 설정의 기본값 `timeoutMillis: 10000`이다[^9].
 
 [Fetch 명세](https://fetch.spec.whatwg.org/#http-network-or-cache-fetch)는 진행 중인 keepalive 요청의 본문을 모두 합쳐 64KiB까지만 허용한다. 0.223.0의 fetch 전송 소스에는 Chrome이 렌더러 프로세스당 keepalive 요청을 9개까지만 받는다는 설명도 있다. [whatwg/fetch#679](https://github.com/whatwg/fetch/issues/679)에 있는 Chromium 개발자의 설명을 인용한 것으로, Chromium 소스에서 직접 확인하지는 못했다. exporter는 진행 중인 keepalive 요청의 누적 크기와 개수를 세고, 헤더를 위한 여유를 남긴 60KiB 또는 9개 한도를 넘으면 keepalive 없이 보낸다[^5].
 
@@ -362,5 +435,7 @@ exporter가 keepalive fetch를 사용하면서 전송 결과를 확인할 수 �
 [^7]: [opentelemetry-js v2.12.0 `packages/sdk-trace/src/export/BatchSpanProcessorBase.ts`](https://github.com/open-telemetry/opentelemetry-js/blob/v2.12.0/packages/sdk-trace/src/export/BatchSpanProcessorBase.ts#L72-L77)의 `forceFlush`와 [L143-L157](https://github.com/open-telemetry/opentelemetry-js/blob/v2.12.0/packages/sdk-trace/src/export/BatchSpanProcessorBase.ts#L143-L157)의 `_flushAll`
 
 [^8]: [opentelemetry-js v2.8.0 `packages/sdk-metrics/src/export/PeriodicExportingMetricReader.ts`](https://github.com/open-telemetry/opentelemetry-js/blob/v2.8.0/packages/sdk-metrics/src/export/PeriodicExportingMetricReader.ts#L201-L204)
+
+[^9]: [opentelemetry-js experimental/v0.223.0 `experimental/packages/otlp-exporter-base/src/configuration/shared-configuration.ts`](https://github.com/open-telemetry/opentelemetry-js/blob/experimental/v0.223.0/experimental/packages/otlp-exporter-base/src/configuration/shared-configuration.ts#L68-L74)의 `getSharedConfigurationDefaults`
 
 [^6]: [MDN browser-compat-data v8.1.6 `api/Document.json`](https://github.com/mdn/browser-compat-data/blob/v8.1.6/api/Document.json)의 `visibilitychange_event`. Safari 14.1 이전 항목에 "Doesn't fire the `visibilitychange` event when navigating away from a document, so also include code to check for the `pagehide` event"라고 적혀 있고 근거로 WebKit 버그 116769, 151234, 151610, 194897을 든다. iOS Safari는 이 데이터를 mirror로 받아 14.5가 경계다.

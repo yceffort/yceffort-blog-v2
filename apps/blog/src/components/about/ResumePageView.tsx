@@ -9,7 +9,7 @@ import type {Locale} from '@/utils/postPaths'
 
 const header = {
   ko: {
-    eyebrow: 'FRONTEND ENGINEER · WRITER',
+    eyebrow: 'FRONTEND ENGINEER / WRITER',
     note: '만들고 운영하며 쌓아 온 경험을 기록합니다.',
   },
   en: {

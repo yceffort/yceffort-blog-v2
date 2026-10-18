@@ -15,7 +15,7 @@ const pages = {
   resume: {
     title: 'Resume',
     description: {
-      ko: '프론트엔드 엔지니어 yceffort의 경력과 기여. 서비스 개발과 운영, 팀의 공통 개발 기반 구축, 저술·번역과 오픈소스 활동을 소개합니다.',
+      ko: '프론트엔드 엔지니어 yceffort의 경력과 기여. 서비스 개발과 운영, 팀의 공통 개발 기반 구축, 저술, 번역과 오픈소스 활동을 소개합니다.',
       en: 'Career and contributions of frontend engineer yceffort: building and running services, shared foundations for teams, books, translation, and open source.',
     },
   },

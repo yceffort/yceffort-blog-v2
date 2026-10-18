@@ -48,18 +48,18 @@ const ko: ResumeContent = {
   eyebrow: 'EXPERIENCE & CONTRIBUTIONS',
   title: '서비스 개발부터 팀이 일하는 기반까지.',
   lead: '2014년부터 다양한 도메인의 소프트웨어를 만들고 운영해 왔습니다. 프론트엔드 팀을 이끌고, 여러 서비스가 함께 쓰는 라이브러리와 도구를 만들었습니다. 그 과정에서 얻은 경험을 책과 글, 오픈소스로 나눕니다.',
-  status: '프론트엔드 엔지니어 · 재직 중',
+  status: '프론트엔드 엔지니어, 재직 중',
   expertise: [
-    {term: '서비스 개발', detail: 'React · TypeScript · Next.js'},
-    {term: '운영과 성능', detail: 'Node.js · Kubernetes · 웹 성능'},
-    {term: '팀의 개발 기반', detail: '공통 라이브러리 · CLI · 코드 리뷰'},
+    {term: '서비스 개발', detail: 'React, TypeScript, Next.js'},
+    {term: '운영과 성능', detail: 'Node.js, Kubernetes, 웹 성능'},
+    {term: '팀의 개발 기반', detail: '공통 라이브러리, CLI, 코드 리뷰'},
   ],
   navLabel: '이력서 목차',
   sections: [
     {id: 'experience', label: '경력'},
-    {id: 'publications', label: '저술·번역'},
+    {id: 'publications', label: '저술과 번역'},
     {id: 'open-source', label: '오픈소스'},
-    {id: 'activities', label: '발표·활동'},
+    {id: 'activities', label: '발표와 활동'},
     {id: 'education', label: '학력'},
   ],
   experience: {
@@ -69,8 +69,8 @@ const ko: ResumeContent = {
     jobs: [
       {
         company: '네이버 파이낸셜',
-        role: 'Frontend Engineer · 내자산&회원FE 리더 → 카드FE 리더/공통개발TF 리더',
-        period: '2020.09 — 2026.03',
+        role: 'Frontend Engineer, 내자산&회원FE 리더 → 카드FE 리더/공통개발TF 리더',
+        period: '2020.09 ~ 2026.03',
         description:
           '최대 14명 규모의 프론트엔드 팀을 이끌며 금융 서비스 개발과 프론트엔드 조직의 공통 기반 구축',
         contributions: [
@@ -84,7 +84,7 @@ const ko: ResumeContent = {
           '팀의 코드 리뷰와 멘토링을 주도하고 인턴 채용 면접과 채용 과제, 실습 과제 출제 및 운영',
         ],
         stack:
-          'React · TypeScript · Next.js · Node.js · Kubernetes · pnpm · Turborepo',
+          'React, TypeScript, Next.js, Node.js, Kubernetes, pnpm, Turborepo',
         link: {
           href: 'https://github.com/orgs/NaverPayDev/repositories',
           label: '공개 패키지 보기',
@@ -93,42 +93,42 @@ const ko: ResumeContent = {
       {
         company: '트리플',
         role: 'Frontend Engineer',
-        period: '2019.05 — 2020.08',
-        description: '여행의 탐색부터 예약·결제까지 이어지는 웹 서비스 개발',
+        period: '2019.05 ~ 2020.08',
+        description: '여행의 탐색부터 예약과 결제까지 이어지는 웹 서비스 개발',
         contributions: [
-          '글로벌 도시 검색과 항공권 판매 서비스 개발·운영',
+          '글로벌 도시 검색과 항공권 판매 서비스 개발과 운영',
           '결제 서비스와 공통 컴포넌트를 JavaScript에서 TypeScript로 전환',
           '판매자와 사용자 간 1:1 문의 채팅 서비스 개발',
         ],
-        stack: 'React · TypeScript · Next.js · Koa · Docker · Amazon ECS',
+        stack: 'React, TypeScript, Next.js, Koa, Docker, Amazon ECS',
       },
       {
         company: '카카오',
         role: 'Software Engineer',
-        period: '2016.09 — 2019.05',
-        description: '카카오 같이가치의 프론트엔드와 서버 개발·운영',
+        period: '2016.09 ~ 2019.05',
+        description: '카카오 같이가치의 프론트엔드와 서버 개발, 운영',
         contributions: [
           'AngularJS 기반 레거시 애플리케이션을 Angular로 전환',
           '관리자 도구를 개발하고 Ruby on Rails 기반 서버를 함께 운영',
         ],
-        stack: 'Angular · TypeScript · Ruby on Rails · MySQL · Redis',
+        stack: 'Angular, TypeScript, Ruby on Rails, MySQL, Redis',
       },
       {
         company: '삼성SDS',
         role: 'Software Engineer',
-        period: '2014.03 — 2016.06',
+        period: '2014.03 ~ 2016.06',
         description: '글로벌 의료 솔루션 개발과 신기술 개념 검증',
         contributions: [
           '해외 병원용 EHR 솔루션과 간호 병동 서비스 개발',
           'iOS 비콘 기반 실내 내비게이션과 금융 고객사 블록체인 PoC 개발',
-          'Python을 활용한 데이터 정합성·유효성 검증',
+          'Python을 활용한 데이터 정합성과 유효성 검증',
         ],
-        stack: 'Delphi · Oracle DB · Spring · JavaScript · Python',
+        stack: 'Delphi, Oracle DB, Spring, JavaScript, Python',
       },
     ],
   },
   publications: {
-    title: '저술·번역',
+    title: '저술과 번역',
     sub: 'Publications',
     books: [
       {
@@ -161,12 +161,12 @@ const ko: ResumeContent = {
       eyebrow: 'WRITING NOW',
       title: '남은 판단은 누가 배우는가',
       href: '/2026/09/who-learns-to-judge-beta-reader',
-      note: 'AI 시대의 개발자, 판단과 학습에 관한 에세이 · 가제, 집필 중',
+      note: 'AI 시대의 개발자, 판단과 학습에 관한 에세이(가제, 집필 중)',
     },
   },
   openSource: {title: '오픈소스', sub: 'Open source'},
   activities: {
-    title: '발표·활동',
+    title: '발표와 활동',
     sub: 'Beyond work',
     entries: [
       {
@@ -175,20 +175,20 @@ const ko: ResumeContent = {
         description: '웹 서비스 번들 사이즈 최적화를 주제로 발표했습니다.',
       },
       {
-        period: '2021.01 — 2021.12',
+        period: '2021.01 ~ 2021.12',
         title: 'SSAFY 멘토',
         description:
           '삼성 청년 소프트웨어 아카데미에서 프로그래밍 질의응답과 칼럼 작성으로 청년 개발자들의 학습을 도왔습니다.',
       },
       {
-        period: '2018 — 현재',
+        period: '2018 ~ 현재',
         title: '기술 블로그 yceffort.kr',
         href: '/',
         description:
-          '블로그를 직접 개발·운영하며 프레임워크 내부 동작, 성능과 운영, 개발 도구, AI와 함께 일하는 경험을 기록합니다.',
+          '블로그를 직접 개발하고 운영하며 프레임워크 내부 동작, 성능과 운영, 개발 도구, AI와 함께 일하는 경험을 기록합니다.',
       },
       {
-        period: '2016.03 — 현재',
+        period: '2016.03 ~ 현재',
         title: '사단법인 점프 이사',
         href: 'https://jumpsp.org/',
         description:
@@ -201,15 +201,15 @@ const ko: ResumeContent = {
     sub: 'Education',
     entries: [
       {
-        period: '2018.03 — 2020.02',
+        period: '2018.03 ~ 2020.02',
         title: '한국과학기술원 (KAIST)',
         description: '기술경영전문대학원 석사',
-        honor: 'Highest Honor · GPA 4.23 / 4.3',
+        honor: 'Highest Honor, GPA 4.23 / 4.3',
       },
       {
-        period: '2007.03 — 2014.02',
+        period: '2007.03 ~ 2014.02',
         title: '동국대학교',
-        description: '국제통상학 전공 · 영어통번역학 복수전공 학사',
+        description: '국제통상학 전공, 영어통번역학 복수전공 학사',
       },
     ],
   },

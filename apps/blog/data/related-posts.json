@@ -7452,10 +7452,6 @@
         "score": 0.34
       },
       {
-        "slug": "2019/08/13/reactjs-interview-questions-1",
-        "score": 0.12
-      },
-      {
         "slug": "2026/06/do-you-need-to-read-code",
         "score": 0.11
       },
@@ -7477,6 +7473,10 @@
       },
       {
         "slug": "2026/09/nextjs-cache-components-activity",
+        "score": 0.08
+      },
+      {
+        "slug": "2021/06/reduce-spread-anti-pattern",
         "score": 0.08
       }
     ],

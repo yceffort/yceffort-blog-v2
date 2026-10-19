@@ -7,6 +7,7 @@ tags:
   - career
 published: true
 date: 2026-07-22 10:00:00
+updated: 2026-10-19 13:52:52
 description: 'Why the layers piled up, why we returned to the server, and why the stack survives even after agents. And why the survival of a stack and the value of the people who know it are two separate things'
 art:
   undraw: launch-day
@@ -21,16 +22,7 @@ If I had to summarize the most advanced frontend practice of 2026 in one line, i
 
 Look closer, though, and it isn't the same spot. At the exact moment the pendulum returned, a more fundamental variable started to change: the hand that writes the code. Just as the twenty-year argument over client versus server was winding down, the very premise that a human writes the code began to wobble. So in this essay I want to work through three questions in order. Why did all those layers pile up (the past)? Where are we standing now (the present)? And what happens to this stack when agents write most of the code (the future)?
 
-## The Conclusion First
-
-The body of this essay runs long, so let me summarize the core up front.
-
-- The complexity of the last twenty years was not arbitrary. Most of it is layers stacked on problems people were actually living with. But those same twenty years were also a history of deskilling: every new layer bred a generation that no longer needed to know what lay beneath it. I don't think those two readings contradict each other.
-- The prediction that agents will replace the stack has to clear three barriers: training data inertia, **review accountability**, and **the accumulated troubleshooting record**. Only the first usually gets talked about, but the sturdier two are the latter.
-- And yet "which stack wins" may matter less than we think. SQL won just about completely, but that victory didn't protect the job title of the people who knew it. **The survival of a stack and the value of the people who know it move independently.**
-- So where do the people go? I suspect the job title gets absorbed into product engineer, and frontend expertise condenses into a few remaining habitats. The problem is that the ladder for growing that condensed layer back is hard to see.
-
-The reasoning behind each of these follows below, one by one.
+The body runs long, so here is the conclusion up front. Most of the last twenty years of layers were stacked on problems people were actually living with, yet those same years were also a history of deskilling, with every new layer breeding a generation that no longer needed to know what lay beneath it, and I don't think those two readings contradict each other. The stack is likely to survive agents, and I think the sturdier reasons are not the usual training data inertia but **review accountability** and **the accumulated troubleshooting record**. Still, just as SQL won almost completely without protecting the job title of the people who knew it, **the survival of a stack and the value of the people who know it move independently.** The job title will likely be absorbed into product engineer while frontend expertise condenses into a few habitats, and what remains a problem is that the ladder for growing that condensed layer back is hard to see.
 
 ## The Past: Why the Layers Piled Up
 
@@ -136,15 +128,13 @@ There is one unstable corner in this picture, though. The ability to catch edge 
 
 To sum up, the remaining 10% will be a job reconstituted around judgment, specification, and ownership, with fewer people and a higher unit price for those who remain. And whether that seat stays a "profession" or becomes a small niche the way type design did will, in the end, be decided by the direction of demand.
 
-## Wrapping Up
+## The Stack's Victory and My Survival
 
-- **The past's layers piled up because they were needed.** And once piled, they made it unnecessary to know the expertise beneath them. Evolution and deskilling are the front and back of the same history.
-- **The present is the moment where the return to the origin overlaps with the change of author.** At exactly the point of returning to server rendering and minimal JavaScript, the hand writing the code is shifting from human to agent.
-- **The stack is likely to remain.** Not because of training data inertia, but because of review accountability and the troubleshooting record. Review can be skipped, but code that doesn't work cannot be skipped. There is only one path by which this structure collapses, debugging shifting from retrieval to reasoning, and that signal still looks weak.
-- **The job title will be absorbed and the expertise will condense.** The convergence on product engineer, the three habitats of vendors, platform teams, and the on-call market, and the problem that the ladder for growing that layer back is cut: these come as one bundle.
-- **But the stack's victory does not guarantee a person's seat.** I think the more likely path is the SQL one, winning and then turning transparent. So what to prepare for is not knowing the stack better, but being [the side that designs and owns the verification](https://yceffort.kr/2026/06/do-you-need-to-read-code) when the verification interface moves from code to behavior. Not confusing the stack's victory with my own survival. That, in the end, is what I wanted to say in this essay.
+Looking back, the layers of the past piled up because they were needed, and once piled, they made it unnecessary to know the expertise beneath them. Evolution and deskilling are the front and back of the same history. We are now at the moment when, having just returned to server rendering and minimal JavaScript, the hand writing the code is shifting from human to agent. I think the stack is likely to remain, less because of training data inertia than because of review accountability and the troubleshooting record. Review can be skipped, but code that doesn't work cannot, and the only path by which this structure collapses is debugging shifting from retrieval to reasoning, a signal that still looks weak.
 
-> Related essays: [If the Code Meets Spec and the Bugs Get Fixed, Does It Matter That You Can't Read It?](https://yceffort.kr/2026/06/do-you-need-to-read-code), [When AI Erases the Boundaries Between Planning, Development, and Design, What Remains?](https://yceffort.kr/2026/06/when-job-titles-blur), [When Was the Last Time You Read Code Seriously?](https://yceffort.kr/2026/06/learning-what-ai-cant-do). They share the concerns of the "Judgment in the AI Era" series.
+But the stack's victory does not guarantee a person's seat. The SQL path, winning and then turning transparent, looks more likely: the job title gets absorbed into product engineer, and expertise condenses into three habitats, namely vendors, platform teams, and the on-call market. The problem that the ladder for growing that layer back is cut remains as well. So what to prepare for, I think, is less knowing the stack better than [designing and owning the verification](https://yceffort.kr/2026/06/do-you-need-to-read-code) when the verification interface moves from code to behavior. What I wanted to say in this essay comes down to this: the stack's victory and my own survival are separate questions.
+
+> Related essays: [If the Code Meets Spec and the Bugs Get Fixed, Does It Matter That You Can't Read It?](https://yceffort.kr/2026/06/do-you-need-to-read-code), [If AI Erases the Boundaries Between Planning, Development, and Design, What Remains?](https://yceffort.kr/2026/06/when-job-titles-blur), [When Was the Last Time You Read Code Seriously?](https://yceffort.kr/2026/06/learning-what-ai-cant-do). They share the concerns of the "Judgment in the AI Era" series.
 
 ## References
 

@@ -3,7 +3,7 @@ name: 'Core Web Vitals 직접 수집하기'
 title: '<em>Core Web Vitals</em> 직접 수집하기'
 description: 'web-vitals로 잰 CWV를 OpenTelemetry로 trace와 metric에 나눠 모으면서, 값이 브라우저에서 Grafana 패널까지 가는 동안 오류 없이 사라진 지점을 재현 환경에서 다시 재고 기록한 시리즈'
 art:
-  undraw: browser-stats
+  undraw: financial-data
   hue: blue
   tone: light
 ---

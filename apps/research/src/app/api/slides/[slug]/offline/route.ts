@@ -14,8 +14,6 @@ export async function GET(
     return new Response('Not Found', {status: 404})
   }
   const entry = getSlideBySlug(slug)
-  // published controls listing, not direct access. Match the viewer/raw route
-  // so an unlisted presentation can also be downloaded from its own page.
   if (!entry) {
     return new Response('Not Found', {status: 404})
   }

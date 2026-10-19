@@ -369,34 +369,17 @@ test('a cancelled download is never listed as saved', async ({
   await expect(page.getByText('아직 저장한 자료가 없습니다')).toBeVisible()
 })
 
-test('directly accessible unlisted decks can be saved and presented offline', async ({
-  page,
-  context,
-}) => {
-  const unlistedSlug = 'feconf-2026-vendor-sdk'
-  await page.goto(`/slides/${unlistedSlug}`, {waitUntil: 'domcontentloaded'})
-  await page
-    .locator('.marp-slides')
-    .click({button: 'right', position: {x: 350, y: 250}})
-  await page
-    .getByRole('button', {name: `${unlistedSlug} 오프라인 저장`, exact: true})
-    .click()
-  await expect(page.locator('.offline-toast')).toContainText('저장 완료:')
-  await context.setOffline(true)
-  await page.goto(`/offline/${unlistedSlug}`, {
-    waitUntil: 'domcontentloaded',
-  })
-  await expect(page.locator('.marp-slides')).toHaveAttribute(
-    'data-transition',
-    'glide',
-  )
-  const presenterPromise = context.waitForEvent('page')
-  await page.keyboard.press('p')
-  const presenter = await presenterPromise
-  await expect(presenter.locator('.marp-presenter-notes')).toBeVisible()
-  await expect(
-    presenter.locator('.marp-presenter-notes-content').last(),
-  ).not.toHaveText('노트 없음')
+test('unpublished decks are not served in production', async ({request}) => {
+  const draftSlug = 'example'
+  for (const url of [
+    `/slides/${draftSlug}`,
+    `/slides/${draftSlug}/presenter`,
+    `/slides/${draftSlug}.md`,
+    `/api/slides/${draftSlug}/raw`,
+    `/api/slides/${draftSlug}/offline`,
+  ]) {
+    expect((await request.get(url)).status(), url).toBe(404)
+  }
 })
 
 test('download API rejects invalid and missing slugs', async ({request}) => {

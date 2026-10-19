@@ -70,9 +70,14 @@ export const getAllSlides = cache(
   },
 )
 
-// 목록, 피드, 사이트맵, llms에 싣는 덱. published는 목록 노출만 정하고 직접 접근은 막지 않는다
+// 목록, 피드, 사이트맵, llms에 싣는 덱
 export function getPublishedSlides() {
   return getAllSlides().filter((slide) => slide.published)
+}
+
+// published: false 덱은 프로덕션에서 직접 접근(뷰어, 발표자, raw, offline)도 막는다. dev에서는 초안 확인용으로 연다
+function isAccessible(slide: SlideIndexEntry) {
+  return process.env.NODE_ENV !== 'production' || slide.published
 }
 
 export const getSlideBySlug = cache(function getSlideBySlugImpl(
@@ -82,11 +87,14 @@ export const getSlideBySlug = cache(function getSlideBySlugImpl(
   if (!fs.existsSync(filePath)) {
     return null
   }
-  return toEntry(slug, fs.readFileSync(filePath, 'utf-8'))
+  const entry = toEntry(slug, fs.readFileSync(filePath, 'utf-8'))
+  return isAccessible(entry) ? entry : null
 })
 
 export function getSlideStaticParams() {
-  return getAllSlides().map(({slug}) => ({slug}))
+  return getAllSlides()
+    .filter(isAccessible)
+    .map(({slug}) => ({slug}))
 }
 
 const THUMB_DIR = path.join(process.cwd(), 'public/thumbnails')

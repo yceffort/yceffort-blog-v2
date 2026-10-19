@@ -53,7 +53,10 @@ async function getCachedHomeData(locale: Locale) {
   return getHomeData(locale)
 }
 async function getHomeData(locale: Locale) {
-  const popularSeries = await getPopularSeries(locale)
+  const topSeries = await getPopularSeries(locale)
+  // 썸네일이 없으면 시리즈 카드를 그리지 않으므로 인기 글 자리도 비워 두지 않는다
+  const popularSeries =
+    topSeries && resolveThumbnail(`series/${topSeries.slug}`) ? topSeries : null
   const [{popular: posts, recent: recentPosts}, allPosts, tags, series] =
     await Promise.all([
       getFeaturedPosts(locale, popularSeries ? 1 : 0),

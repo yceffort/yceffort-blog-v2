@@ -5,11 +5,14 @@ paginate: true
 theme: default
 tags:
   - web-performance
-  - browser
   - observability
-date: 2026-10-19
+  - browser
+date: 2026-10-20
 description: 'LCP, INP, CLS가 무엇을 재는지에서 시작해 왜 실제 사용자에게서 재야 하는지, 브라우저와 web-vitals가 값을 어떻게 만들고 언제 넘겨주는지까지 따라간다. 값이 서버에 도착하지 않는 다섯 가지 경우를 직접 측정한 수치로 확인한다.'
-published: false
+published: true
+art:
+  undraw: data-points
+  hue: blue
 ---
 
 <style>

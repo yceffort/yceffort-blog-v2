@@ -11,7 +11,8 @@ tags:
   - career
 date: 2026-11-26
 description: 'AI가 만드는 일을 맡으면서 기획, 개발, 디자인의 경계가 흐려집니다. 무엇이 맞는지 판단하고 책임지는 일은 여전히 남지만, 그 판단을 배우던 과정은 건너뛸 수 있게 됐습니다. 답이 질문보다 먼저 오는 시대에 판단은 누가 어디서 배우는지, 제 경험과 다른 사람들의 기록을 바탕으로 살펴봅니다.'
-published: false
+published: true
+featured: true
 art:
   undraw: ai-generated-document
 ---

@@ -57,12 +57,32 @@ const weekRange = {
     startDate: ymd(addDays(thisMonday, -14 * WEEKS)),
     endDate: ymd(addDays(thisMonday, -7 * WEEKS - 1)),
   },
-  trend: {startDate: ymd(addDays(thisMonday, -7 * TREND_WEEKS)), endDate: 'today'},
+  trend: {
+    startDate: ymd(addDays(thisMonday, -7 * TREND_WEEKS)),
+    endDate: 'today',
+  },
 }
 // research.yceffort.kr도 같은 측정 ID를 쓰므로 블로그 호스트로 한정한다 (발표 연습 같은 저자 방문이 research에 몰린다).
 const blogHost = {
   filter: {fieldName: 'hostName', stringFilter: {value: 'yceffort.kr'}},
 }
+const krBlog = {
+  andGroup: {
+    expressions: [
+      {filter: {fieldName: 'country', stringFilter: {value: 'South Korea'}}},
+      blogHost,
+    ],
+  },
+}
+// 다음 주까지 끝난 최근 여덟 주. 이번 주와 지난주에 처음 온 사람은 아직 다음 주가 없다.
+const weeklyCohorts = Array.from({length: 8}, (_, i) => {
+  const start = addDays(thisMonday, -7 * (i + 2))
+  return {
+    name: ymd(start),
+    dimension: 'firstSessionDate',
+    dateRange: {startDate: ymd(start), endDate: ymd(addDays(start, 6))},
+  }
+})
 const humanOnly = {
   andGroup: {
     expressions: [
@@ -356,26 +376,32 @@ async function main() {
     run('cohorts', {
       dimensions: [{name: 'cohort'}, {name: 'cohortNthWeek'}],
       metrics: [{name: 'cohortActiveUsers'}],
-      dimensionFilter: {
-        andGroup: {
-          expressions: [
-            {filter: {fieldName: 'country', stringFilter: {value: 'South Korea'}}},
-            blogHost,
-          ],
-        },
-      },
+      dimensionFilter: krBlog,
       cohortSpec: {
-        cohorts: Array.from({length: 8}, (_, i) => {
-          const start = addDays(thisMonday, -7 * (i + 2))
-          return {
-            name: ymd(start),
-            dimension: 'firstSessionDate',
-            dateRange: {startDate: ymd(start), endDate: ymd(addDays(start, 6))},
-          }
-        }),
+        cohorts: weeklyCohorts,
         cohortsRange: {granularity: 'WEEKLY', endOffset: 4},
       },
     }),
+    // 같은 여덟 코호트를 처음 들어온 경로로 나눈 다음 주 재방문. 경로별 막대와 비중 비교에 쓴다.
+    ...[
+      ['cohortsBySource', 'firstUserSource'],
+      ['cohortsByChannel', 'firstUserDefaultChannelGroup'],
+    ].map(([name, dimension]) =>
+      run(name, {
+        dimensions: [
+          {name: 'cohort'},
+          {name: 'cohortNthWeek'},
+          {name: dimension},
+        ],
+        metrics: [{name: 'cohortActiveUsers'}],
+        dimensionFilter: krBlog,
+        cohortSpec: {
+          cohorts: weeklyCohorts,
+          cohortsRange: {granularity: 'WEEKLY', endOffset: 1},
+        },
+        limit: 500,
+      }),
+    ),
     // 글별 신규/재방문 독자. "고정 독자가 읽은 글"까지만 말해 준다.
     run('postReaders', {
       dateRanges: [weekRange.current],

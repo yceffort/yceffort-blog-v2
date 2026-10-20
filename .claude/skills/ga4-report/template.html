@@ -1,6 +1,8 @@
 <title>yceffort 성과 리포트</title>
+<meta name="claude:viewport-fit-sides" content="cover">
 
 <style>
+  /* 960px 단일 칼럼. 첫 화면은 고정 독자 KPI, 트래픽 진단은 맨 아래 접힌 부록 */
   :root {
     color-scheme: light;
     --page: #f9f9f7;
@@ -18,9 +20,10 @@
     --bad: #d03b3b;
     --warn: #b97e00;
     --warn-bg: rgba(250, 178, 25, 0.14);
+    --chip-bg: rgba(11, 11, 11, 0.05);
   }
   @media (prefers-color-scheme: dark) {
-    :root:where(:not([data-theme="light"])) {
+    :root:not([data-theme="light"]) {
       color-scheme: dark;
       --page: #0d0d0d;
       --surface: #1a1a19;
@@ -37,6 +40,7 @@
       --bad: #e66767;
       --warn: #fab219;
       --warn-bg: rgba(250, 178, 25, 0.12);
+      --chip-bg: rgba(255, 255, 255, 0.07);
     }
   }
   :root[data-theme="dark"] {
@@ -56,6 +60,7 @@
     --bad: #e66767;
     --warn: #fab219;
     --warn-bg: rgba(250, 178, 25, 0.12);
+    --chip-bg: rgba(255, 255, 255, 0.07);
   }
 
   * { box-sizing: border-box; }
@@ -65,9 +70,17 @@
     color: var(--ink);
     font-family: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
     line-height: 1.6;
+    word-break: keep-all;
+    overflow-wrap: break-word;
     -webkit-font-smoothing: antialiased;
   }
-  .wrap { max-width: 960px; margin: 0 auto; padding: 40px 20px 72px; }
+  .wrap {
+    max-width: 960px;
+    margin: 0 auto;
+    padding-block: 40px 72px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
 
   header.masthead { margin-bottom: 28px; }
   .eyebrow {
@@ -79,14 +92,15 @@
     margin: 0 0 6px;
   }
   h1 {
-    font-size: clamp(26px, 4.5vw, 34px);
+    font-size: clamp(24px, 4.2vw, 32px);
     font-weight: 800;
     letter-spacing: -0.02em;
-    line-height: 1.25;
-    margin: 0 0 8px;
+    line-height: 1.3;
+    margin: 0 0 10px;
     text-wrap: balance;
+    word-break: keep-all;
   }
-  .period { font-size: 14px; color: var(--ink-2); margin: 0; }
+  .period { font-size: 14px; color: var(--ink-2); margin: 0; display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; }
   .period b { font-weight: 650; color: var(--ink); }
 
   .badge {
@@ -99,24 +113,27 @@
     border-radius: 999px;
     background: var(--warn-bg);
     color: var(--warn);
-    vertical-align: 2px;
   }
+  .badge.plain { background: var(--chip-bg); color: var(--ink-2); }
 
-  section { margin-top: 44px; }
+  section { margin-top: 48px; }
   h2 {
     font-size: 19px;
     font-weight: 750;
     letter-spacing: -0.01em;
     margin: 0 0 4px;
+    text-wrap: balance;
   }
-  .sub { font-size: 13.5px; color: var(--ink-2); margin: 0 0 16px; }
+  .sub { font-size: 13.5px; color: var(--ink-2); margin: 0 0 16px; max-width: 72ch; }
 
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 20px;
+    min-width: 0;
   }
+  .stack-gap { display: flex; flex-direction: column; gap: 14px; }
 
   /* KPI tiles */
   .kpis {
@@ -125,27 +142,29 @@
     gap: 12px;
     margin-top: 24px;
   }
-  @media (max-width: 720px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 760px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
   .kpi { padding: 16px 18px; }
   .kpi .label { font-size: 13px; color: var(--ink-2); margin: 0 0 4px; }
-  .kpi .value { font-size: 30px; font-weight: 650; letter-spacing: -0.01em; line-height: 1.15; }
+  .kpi .value { font-size: 30px; font-weight: 650; letter-spacing: -0.01em; line-height: 1.15; font-variant-numeric: tabular-nums; }
+  .kpi .value small { font-size: 15px; font-weight: 600; color: var(--ink-2); margin-left: 2px; }
   .kpi .delta { font-size: 12.5px; margin-top: 6px; font-weight: 650; }
   .delta.up { color: var(--good); }
   .delta.down { color: var(--bad); }
-  .delta.flagged { color: var(--warn); font-weight: 600; }
-  .kpi .note { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+  .delta.flat { color: var(--ink-2); }
+  .kpi .note { font-size: 11.5px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
 
-  /* summary */
   .lede { margin-top: 24px; padding: 18px 20px; }
-  .lede ul { margin: 0; padding-left: 18px; }
-  .lede li { margin: 4px 0; font-size: 14.5px; }
+  .lede ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; }
+  .lede li { font-size: 14.5px; }
   .lede b { font-weight: 700; }
 
-  /* chart shell */
+  /* charts */
   .chart-shell { position: relative; }
   .legend { display: flex; gap: 18px; align-items: center; margin: 2px 0 10px; flex-wrap: wrap; }
   .legend .key { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--ink-2); }
+  .key .swatch-bar { width: 10px; height: 12px; border-radius: 2px; background: var(--s1); }
   .key .swatch-line { width: 16px; height: 0; border-top: 2.5px solid; border-radius: 2px; }
+  .key .swatch-dash { width: 18px; height: 0; border-top: 2px dashed; }
   .key .swatch-tri {
     width: 0; height: 0;
     border-left: 5px solid transparent;
@@ -154,6 +173,7 @@
   }
   svg { display: block; width: 100%; height: auto; }
   svg text { font-family: inherit; }
+  svg:focus-visible { outline: 2px solid var(--s1); outline-offset: 4px; border-radius: 4px; }
 
   .viz-tip {
     position: absolute;
@@ -173,7 +193,7 @@
   .viz-tip .t-date { font-weight: 750; margin-bottom: 3px; }
   .viz-tip .t-row { display: flex; align-items: baseline; gap: 7px; }
   .viz-tip .t-key { width: 14px; border-top: 2.5px solid; border-radius: 2px; align-self: center; flex: none; }
-  .viz-tip .t-val { font-weight: 750; }
+  .viz-tip .t-val { font-weight: 750; font-variant-numeric: tabular-nums; }
   .viz-tip .t-name { color: var(--ink-2); }
   .viz-tip .t-event { margin-top: 5px; padding-top: 5px; border-top: 1px solid var(--grid); color: var(--ink-2); font-size: 12px; }
 
@@ -181,77 +201,43 @@
   .bars { display: flex; flex-direction: column; gap: 14px; }
   .bar-row { outline: none; border-radius: 6px; }
   .bar-row:focus-visible { outline: 2px solid var(--s1); outline-offset: 3px; }
-  .bar-title {
-    font-size: 13.5px;
-    display: flex;
-    gap: 8px;
-    align-items: baseline;
-    min-width: 0;
-  }
-  .bar-title .name {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-weight: 600;
-  }
+  .bar-title { font-size: 13.5px; display: flex; gap: 8px; align-items: baseline; min-width: 0; }
+  .bar-title .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
   .bar-title .meta { color: var(--muted); font-size: 12px; flex: none; }
-  .evergreen {
-    flex: none;
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--good);
-    border: 1px solid currentColor;
-    border-radius: 999px;
-    padding: 0 7px;
-    line-height: 1.6;
-  }
   .bar-track { display: flex; align-items: center; gap: 8px; margin-top: 3px; }
-  .bar-fill {
-    height: 14px;
-    background: var(--s1);
-    border-radius: 0 4px 4px 0;
-    min-width: 2px;
-    transition: filter 0.12s ease;
-  }
+  .bar-fill { height: 14px; background: var(--s1); border-radius: 0 4px 4px 0; min-width: 2px; transition: filter 0.12s ease; }
+  .bar-fill.alt { background: var(--muted); }
   .bar-row:hover .bar-fill, .bar-row:focus-visible .bar-fill { filter: brightness(1.15); }
   .bar-val { font-size: 12.5px; font-weight: 700; font-variant-numeric: tabular-nums; flex: none; }
   .bar-pct { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; flex: none; }
 
-  .warn-inline {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 11.5px;
-    font-weight: 650;
-    color: var(--warn);
+  .warn-inline { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 650; color: var(--warn); }
+  .tag {
+    flex: none;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--s1);
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    padding: 0 7px;
+    line-height: 1.6;
+    white-space: nowrap;
   }
 
   .split { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  @media (max-width: 720px) { .split { grid-template-columns: 1fr; } }
+  @media (max-width: 760px) { .split { grid-template-columns: 1fr; } }
 
-  /* stacked bar */
-  .stack { display: flex; height: 18px; border-radius: 4px; overflow: hidden; gap: 2px; margin: 10px 0 10px; }
-  .stack > div:first-child { border-radius: 4px 0 0 4px; }
-  .stack > div:last-child { border-radius: 0 4px 4px 0; }
-  .chips { display: flex; gap: 16px; flex-wrap: wrap; }
+  /* share comparison */
+  .share-row { display: grid; grid-template-columns: 9.5em 1fr; gap: 10px; align-items: center; font-size: 13px; }
+  .share-row + .share-row { margin-top: 8px; }
+  .share-row .lbl { color: var(--ink-2); }
+  .shares { display: flex; height: 18px; border-radius: 4px; overflow: hidden; gap: 2px; }
+  .shares > div { display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; min-width: 0; overflow: hidden; white-space: nowrap; }
+  .chips { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 12px; }
   .chip { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--ink-2); }
   .chip .sw { width: 10px; height: 10px; border-radius: 3px; flex: none; }
-  .chip b { color: var(--ink); font-weight: 700; }
 
-  .ref-list { list-style: none; margin: 10px 0 0; padding: 0; }
-  .ref-list li {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 7px 0;
-    border-bottom: 1px solid var(--grid);
-    font-size: 13.5px;
-  }
-  .ref-list li:last-child { border-bottom: none; }
-  .ref-list .n { font-variant-numeric: tabular-nums; font-weight: 700; }
-  .ref-list .d { color: var(--ink-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-  /* table */
+  /* tables */
   .tbl-wrap { overflow-x: auto; }
   table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
   th {
@@ -263,36 +249,30 @@
     padding: 6px 10px;
     border-bottom: 1px solid var(--baseline);
     white-space: nowrap;
+    vertical-align: bottom;
   }
   td { padding: 7px 10px; border-bottom: 1px solid var(--grid); vertical-align: middle; }
   tr:last-child td { border-bottom: none; }
   td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
   td.num { font-weight: 600; }
   .cell-bar { display: inline-block; height: 10px; background: var(--s1); border-radius: 0 3px 3px 0; vertical-align: middle; min-width: 2px; }
-  .t-title { max-width: 340px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .series-tag { color: var(--muted); font-size: 12px; }
+  .t-title { max-width: 360px; }
+  #oneoff-table .t-title { max-width: 240px; }
+  .t-title .tt { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .t-title .tg { display: flex; gap: 6px; margin-top: 2px; }
+  .muted { color: var(--muted); }
+  tr.dim td { color: var(--muted); }
 
   details { margin-top: 14px; }
-  summary {
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: 650;
-    color: var(--ink-2);
-  }
+  summary { cursor: pointer; font-size: 13px; font-weight: 650; color: var(--ink-2); }
   summary:focus-visible { outline: 2px solid var(--s1); outline-offset: 2px; border-radius: 4px; }
 
-  /* insights */
-  .insights { display: flex; flex-direction: column; gap: 14px; }
-  .insight { padding: 16px 18px; }
-  .insight h3 { margin: 0 0 4px; font-size: 15px; font-weight: 750; }
-  .insight p { margin: 0; font-size: 14px; color: var(--ink-2); }
-  .insight p b { color: var(--ink); font-weight: 650; }
-
-  /* callout + inline code + de-emphasised rows */
   .callout { border-left: 3px solid var(--warn); }
-  .callout h3 { margin: 0 0 6px; font-size: 15px; font-weight: 750; }
+  .callout h3 { margin: 0 0 6px; font-size: 15px; font-weight: 750; text-wrap: balance; }
   .callout p { margin: 0; font-size: 14px; color: var(--ink-2); }
+  .callout p + p { margin-top: 8px; }
   .callout p b { color: var(--ink); font-weight: 650; }
+  .callout.info { border-left-color: var(--s1); }
   code {
     font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     font-size: 0.9em;
@@ -301,19 +281,35 @@
     border-radius: 4px;
     word-break: break-all;
   }
-  tr.dim td { color: var(--muted); }
-  tr.dim td code { background: transparent; padding: 1px 0; }
-  .muted { color: var(--muted); }
 
-  /* mermaid */
-  pre.mermaid {
-    margin: 0;
-    overflow-x: auto;
-    text-align: center;
-    font-family: inherit;
-    line-height: normal;
+  /* candidates */
+  .cands { display: flex; flex-direction: column; gap: 14px; }
+  .cand h3 { margin: 0 0 2px; font-size: 16px; font-weight: 750; text-wrap: balance; }
+  .cand .kind { font-size: 12.5px; color: var(--muted); margin: 0 0 12px; }
+  .cand dl { margin: 0; display: grid; grid-template-columns: 7.5em 1fr; gap: 10px 14px; }
+  .cand dt { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: 0.02em; padding-top: 2px; }
+  .cand dd { margin: 0; font-size: 14px; color: var(--ink-2); min-width: 0; }
+  .cand dd b { color: var(--ink); font-weight: 650; }
+  @media (max-width: 560px) {
+    .cand dl { grid-template-columns: 1fr; gap: 2px; }
+    .cand dd + dt { margin-top: 10px; }
   }
-  pre.mermaid svg { max-width: 100%; height: auto; }
+  .avoid { font-size: 13.5px; color: var(--ink-2); margin: 14px 0 0; }
+
+  /* appendix */
+  details.appendix { margin-top: 0; }
+  details.appendix > summary {
+    font-size: 17px;
+    font-weight: 750;
+    color: var(--ink);
+    padding: 14px 18px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+  }
+  details.appendix[open] > summary { border-radius: 12px 12px 0 0; }
+  .appendix-body { display: flex; flex-direction: column; gap: 28px; padding-top: 22px; }
+  .appendix-body h3 { font-size: 15px; font-weight: 750; margin: 0 0 4px; }
 
   footer.notes { margin-top: 48px; font-size: 12.5px; color: var(--muted); border-top: 1px solid var(--grid); padding-top: 16px; }
   footer.notes p { margin: 4px 0; }
@@ -323,700 +319,792 @@
   }
 </style>
 
+
 <div class="wrap">
   <header class="masthead">
-    <p class="eyebrow">yceffort.kr · GA4 성과 리포트</p>
-    <h1>서피트가 실제로는 GA4가 말하는 것보다 1.7배 큽니다</h1>
+    <p class="eyebrow">yceffort.kr 독자 리포트</p>
+    <h1>고정 독자는 주 141명으로 직전 4주보다 13% 적었지만 흔들림 안쪽이고, 마지막 주에 156명으로 돌아왔습니다</h1>
     <p class="period">
-      <b>2026-07-26 ~ 08-23</b> (직전 4주 06-28 ~ 07-25와 비교) ·
-      <span class="badge">⚠ 8/10 SPA 계측 변경</span>
-      <span class="badge">⚠ 크롤러 트래픽 포함</span>
-      <span class="badge">⚠ 로컬 dev 유입 혼입</span>
+      <span><b>2026-09-21 ~ 10-18</b> (ISO 4주, 직전 4주 08-24 ~ 09-20과 비교)</span>
+      <span class="badge">⚠ 9/21 주는 추석, 10/5 주는 한글날</span>
+      <span class="badge">⚠ 10/19 주는 집계 전이라 뺌</span>
+      <span class="badge">⚠ 직전 리포트와 17일 겹침</span>
     </p>
   </header>
 
   <div class="kpis">
     <div class="card kpi">
-      <p class="label">사용자</p>
-      <div class="value">2,618</div>
-      <div class="delta down">▼ 19.2%</div>
-      <div class="note">직전 3,240에 7/1 버스트 1,251 포함</div>
+      <p class="label">주간 재방문 독자</p>
+      <div class="value">141<small>명</small></div>
+      <div class="delta flat">▼ 12.7%, 흔들림 안쪽</div>
+      <div class="note">직전 4주 162명. 봄(4/13 ~ 6/14) 평균 104명의 1.4배</div>
     </div>
     <div class="card kpi">
-      <p class="label">세션</p>
-      <div class="value">4,810</div>
-      <div class="delta up">▲ 1.7%</div>
-      <div class="note">직전 4,730</div>
+      <p class="label">재방문 비율</p>
+      <div class="value">32.3<small>%</small></div>
+      <div class="delta flat">-0.3%p</div>
+      <div class="note">주간 신규 297명, 직전 334명</div>
     </div>
     <div class="card kpi">
-      <p class="label">페이지뷰</p>
-      <div class="value">7,629</div>
-      <div class="delta flagged">▲ 59.2% · ⚠ 계측 변경</div>
-      <div class="note">직전 기간은 SPA 미집계 상태</div>
+      <p class="label">새 독자의 다음 주 재방문</p>
+      <div class="value">5.8<small>%</small></div>
+      <div class="delta flat">-0.6%p (직전 6.4%)</div>
+      <div class="note">한국 독자 코호트. 9/21 ~ 10/5 주에 처음 온 669명 중 39명</div>
     </div>
     <div class="card kpi">
-      <p class="label">참여율</p>
-      <div class="value">53.9%</div>
-      <div class="delta flagged">+12.9%p · ⚠ 계측 영향</div>
-      <div class="note">평균 세션 6분 13초</div>
+      <p class="label">웹 푸시 구독자</p>
+      <div class="value">10<small>명</small></div>
+      <div class="delta up">▲ 4명 (한 달)</div>
+      <div class="note">10/18 발송 기준. 9/17 6명, 10/10 8명</div>
     </div>
   </div>
 
   <div class="card lede">
     <ul>
-      <li><b>서피트 유입은 채널 리포트의 229세션이 아니라 약 400세션으로 보입니다.</b> <code>?ref=surfit.io</code>가 붙은 세션 중 254개가 레퍼러 없이 Direct로 잡히고 있어, 실제 규모가 1.7배가량 과소 집계되는 것으로 추정됩니다.</li>
-      <li><b>홈으로 들어온 세션은 3.49페이지를 읽고, 글로 바로 떨어진 세션은 1.43페이지를 읽습니다.</b> 검색과 공유로 유입되는 대부분이 한 편만 읽고 떠나고 있어, 글 안에서 다음 글로 잇는 도선에 여지가 있어 보입니다.</li>
-      <li><b>사용자 19% 감소는 기저효과로 보입니다.</b> 직전 기간의 7/1 하루 1,251명은 사용자·세션·페이지뷰가 1:1:1이라 크롤러 버스트로 추정되며, 이를 걷어내면 오히려 증가에 가깝습니다.</li>
+      <li><b>고정 독자는 줄었다고 보기 어려운 범위에서 내려왔다가 돌아왔습니다.</b> 주간 재방문 독자가 직전 4주 평균 162명에서 141명이 됐지만, 주별 흔들림(표준편차 18명)으로 보면 우연과 가르기 어려운 크기입니다(z ≈ -1.6). 두 기간 모두 11편을 냈고, 추석 주(138명)와 한글날 주(125명)가 평균을 끌어내렸습니다. 마지막 10/12 주는 156명이고, 봄 평균(104명)의 1.4배를 지키고 있습니다.</li>
+      <li><b>처음 들어온 경로가 재방문을 가르는 모양은 한 주가 더 쌓여도 그대로입니다.</b> 8/17 ~ 10/5 주에 처음 온 한국 독자의 다음 주 재방문율이 서피트 11.3%, GitHub 10.5%, 직접 유입 6.9%, 구글 검색 3.2%입니다. 검색은 새 독자의 54%를 데려오지만, 다음 주에 돌아온 사람 중에서는 33%입니다.</li>
+      <li><b>고정 독자가 가장 많이 읽은 새 글은 토스증권 추적(68명)이고, Rails 에세이는 독자의 82%가 재방문 독자였습니다.</b> SWE-bench 글(45명)과 number-flow 2편(38명)이 뒤를 잇습니다. 한편 사이트 전체 사용자는 19% 늘었는데, 늘어난 몫은 중국과 싱가포르의 1:1:1 크롤러와 스팸입니다(진단 부록).</li>
     </ul>
   </div>
 
   <section>
-    <h2>일별 트렌드 (92일)</h2>
-    <p class="sub">스파이크는 대부분 발행일과 일치합니다. 8/10 세로선 이후 페이지뷰가 사용자와 벌어지는 구간이 계측 변경 효과입니다.</p>
+    <h2>고정 독자 추세 (26주)</h2>
+    <p class="sub">사람 판별(<code>human_visit</code>) 기준으로 yceffort.kr에 다시 온 독자를 주 단위(월요일 시작)로 셌습니다. 막대 아래 숫자는 그 주에 발행한 글 수입니다. 점선은 10/14에 고정한 봄 평균(4/13 ~ 6/14 아홉 주, 104명)과 최근 여덟 주 평균(152명)입니다.</p>
     <div class="card">
       <div class="legend">
-        <span class="key"><span class="swatch-line" style="border-color: var(--s1)"></span>사용자</span>
-        <span class="key"><span class="swatch-line" style="border-color: var(--s2)"></span>페이지뷰</span>
-        <span class="key"><span class="swatch-tri"></span>글 발행일</span>
+        <span class="key"><span class="swatch-bar"></span>재방문 독자 (주)</span>
+        <span class="key"><span class="swatch-dash" style="border-color: var(--muted)"></span>봄 평균</span>
+        <span class="key"><span class="swatch-dash" style="border-color: var(--ink-2)"></span>최근 8주 평균</span>
       </div>
-      <div class="chart-shell" id="trend-shell">
-        <svg id="trend" role="img" aria-label="92일간 일별 사용자와 페이지뷰 추이 라인 차트" tabindex="0"></svg>
-        <div class="viz-tip" id="trend-tip"></div>
+      <div class="chart-shell" id="weekly-shell">
+        <svg id="weekly" role="img" aria-label="26주간 주별 재방문 독자 막대 차트. 봄 평균 104명, 최근 8주 평균 152명" tabindex="0"></svg>
+        <div class="viz-tip" id="weekly-tip"></div>
       </div>
       <details>
-        <summary>표로 보기 (일별 수치 전체)</summary>
+        <summary>표로 보기 (주별 신규, 재방문, 발행)</summary>
         <div class="tbl-wrap" style="max-height: 320px; overflow-y: auto; margin-top: 10px;">
-          <table id="trend-table">
-            <thead><tr><th>날짜</th><th class="num">사용자</th><th class="num">페이지뷰</th><th>메모</th></tr></thead>
+          <table id="weekly-table">
+            <thead><tr><th>주 (월요일)</th><th class="num">재방문</th><th class="num">신규</th><th class="num">발행</th><th>메모</th></tr></thead>
             <tbody></tbody>
           </table>
         </div>
       </details>
     </div>
-  </section>
-
-  <section>
-    <h2>인기 글 TOP 10</h2>
-    <p class="sub">최근 4주 페이지뷰 기준. 괄호는 사용자당 평균 체류 시간입니다.</p>
-    <div class="card">
-      <div class="bars" id="top-posts"></div>
-    </div>
-  </section>
-
-  <section>
-    <h2>유입 경로</h2>
-    <div class="split">
-      <div class="card">
-        <p class="sub" style="margin-bottom: 12px;"><b style="color: var(--ink);">채널별 세션</b> · 4,730 세션 기준</p>
-        <div class="bars" id="channels" style="gap: 11px;"></div>
-        <p class="sub" style="margin: 14px 0 0;">Direct가 절반이지만, 그중 상당수는 레퍼러가 지워진 서피트 유입으로 보입니다. 아래 보정 항목을 함께 보시는 편이 정확합니다.</p>
-      </div>
-      <div class="card">
-        <p class="sub" style="margin-bottom: 2px;"><b style="color: var(--ink);">외부 레퍼러</b> · 세션 (source 기준)</p>
-        <ul class="ref-list">
-          <li><span class="d">google (검색)</span><span class="n">1,474</span></li>
-          <li><span class="d">surfit.io</span><span class="n">229</span></li>
-          <li><span class="d">github.com</span><span class="n">205</span></li>
-          <li><span class="d">teams.microsoft (사내 공유)</span><span class="n">33</span></li>
-          <li><span class="d">maeil-mail.kr (뉴스레터)</span><span class="n">22</span></li>
-          <li><span class="d">vercel.com</span><span class="n">21</span></li>
-          <li><span class="d">naver (검색)</span><span class="n">24</span></li>
-          <li><span class="d">gemini · chatgpt · claude</span><span class="n">17</span></li>
-        </ul>
-        <p class="sub" style="margin: 14px 0 0;">AI Assistant 채널은 18세션입니다. 아직 작지만 gemini, chatgpt, claude가 각각 잡히기 시작했습니다.</p>
-      </div>
-    </div>
-
-    <div class="card" style="margin-top: 14px;">
-      <p class="sub" style="margin-bottom: 10px;"><b style="color: var(--ink);">레퍼러 URL 원본</b> · 페이지뷰 기준. 채널 분류가 아니라 실제로 링크가 걸려 있던 페이지입니다.</p>
-      <div class="tbl-wrap">
-        <table>
-          <thead><tr><th>레퍼러</th><th class="num">PV</th><th class="num">사용자</th><th>해석</th></tr></thead>
-          <tbody>
-            <tr><td><code>https://www.google.com/</code></td><td class="num">1,503</td><td class="num">841</td><td>검색 유입의 대부분</td></tr>
-            <tr><td><code>https://github.com/</code></td><td class="num">242</td><td class="num">52</td><td>PV/사용자 4.7 · 이슈·PR 인용 추정</td></tr>
-            <tr><td><code>https://www.surfit.io/</code></td><td class="num">170</td><td class="num">94</td><td>레퍼러가 남은 절반만 해당</td></tr>
-            <tr><td><code>https://search.naver.com/</code> <span class="muted">+ m.</span></td><td class="num">36</td><td class="num">13</td><td>네이버 검색</td></tr>
-            <tr><td><code>https://github.com/byhhh2/fe-article</code></td><td class="num">20</td><td class="num">1</td><td>FE 아티클 큐레이션 저장소</td></tr>
-            <tr><td><code>https://teams.public.onecdn…microsoft/</code></td><td class="num">20</td><td class="num">11</td><td>사내 Teams 공유</td></tr>
-            <tr><td><code>https://internal.surfit.io/</code></td><td class="num">15</td><td class="num">1</td><td>서피트 내부 도구</td></tr>
-            <tr><td><code>android-app://com.slack/</code></td><td class="num">9</td><td class="num">7</td><td>Slack 모바일 공유</td></tr>
-            <tr class="dim"><td><code>https://yceffort.kr/…</code> (내부 이동)</td><td class="num">495</td><td class="num">-</td><td>사이트 안에서 다음 글로 넘어간 흐름</td></tr>
-            <tr class="dim"><td><code>http://localhost:3000·3001/…</code></td><td class="num">283</td><td class="num">-</td><td>⚠ 로컬 개발 트래픽이 운영 GA4에 집계됨</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
 
     <div class="card callout" style="margin-top: 14px;">
-      <h3>서피트 유입은 채널 리포트보다 큽니다</h3>
-      <p>서피트는 링크에 <code>?ref=surfit.io</code>를 붙여 보냅니다. 이 쿼리스트링을 지문 삼아 세면 <b>400세션</b>이 나오는데, GA4가 Referral로 분류한 서피트 세션은 <b>229</b>뿐입니다. 나머지는 레퍼러 헤더가 없어 Direct(254)나 Organic Search(23)로 흩어졌습니다. 인앱 브라우저나 앱에서 열 때 레퍼러가 전달되지 않아 생기는 현상으로 추정됩니다.</p>
-      <div class="chips" style="margin-top: 10px;">
-        <span class="chip">Direct로 잡힘 <b>254</b></span>
-        <span class="chip">Referral로 잡힘 <b>130</b></span>
-        <span class="chip">Organic Search로 잡힘 <b>23</b></span>
-        <span class="chip">보정 합계 <b>400세션</b></span>
-      </div>
+      <h3>발행 수는 같았고, 낮았던 두 주는 휴일 주였습니다</h3>
+      <p>이번 4주 주간 재방문 독자는 138, 146, 125, 156명이고, 직전 4주는 160, 138, 181, 168명입니다. 발행은 두 기간 모두 11편으로 같습니다(frontmatter 날짜 기준). 낮았던 두 주는 추석 연휴(9/24 ~ 9/26)와 한글날(10/9)이 낀 주이고, 휴일이 없던 두 주(146, 156명)만 보면 평균 151명입니다.</p>
+      <p>다만 휴일 주를 빼고 보는 것은 결과를 본 뒤의 해석이라 판정에는 쓰지 않습니다. 직전 4주에는 서피트 수록이 여섯 번, 이번 4주에는 세 번이었다는 차이도 함께 있어, 무엇이 얼마나 끌어내렸는지는 가르지 못했습니다(0/2). 10/14에 적어 둔 기준(10/12 ~ 11/8 네 주 평균이 117명 아래면 감소, 171명 위면 증가)은 그대로 둡니다.</p>
     </div>
   </section>
 
   <section>
-    <h2>어디서 어느 글로 오는가</h2>
-    <p class="sub"><code>?ref=surfit.io</code> 지문으로 서피트를 보정한 뒤, 소스별 대표 랜딩 글을 세션 기준으로 이었습니다. 굵은 선일수록 세션이 많습니다.</p>
-    <div class="card">
-      <pre class="mermaid">
-flowchart LR
-  G(["google 검색<br/>1,474세션"])
-  S(["surfit.io 보정<br/>400세션"])
-  H(["github.com<br/>205세션"])
-  M(["maeil-mail.kr<br/>22세션"])
-  T(["teams · slack<br/>사내 공유 42세션"])
-
-  P1["에이전트 이후 어디로 가는가"]
-  P2["k8s 1편 개념 지도"]
-  P3["k8s 2편 파드 뜯어보기"]
-  P4["Effect-TS 딥다이브 (EN)"]
-  P5["AST 이해하기 (2021)"]
-  P6["set-state-in-effect (EN)"]
-  P7["코드를 읽을 줄 몰라도"]
-  HOME["홈 · 목록"]
-
-  G ==>|"136"| HOME
-  G ==>|"105"| P4
-  G ==>|"64"| P6
-  G ==>|"58"| P5
-  G -->|"23"| P1
-  S ==>|"135"| P1
-  S ==>|"132"| P2
-  S ==>|"101"| P3
-  H ==>|"57"| HOME
-  H -->|"10"| P5
-  M -->|"21"| P7
-  T -->|"15"| HOME
-      </pre>
-      <p class="sub" style="margin-top: 12px;">서피트는 최신 글 3편으로만 들어오고, 구글은 홈과 <b>영문 딥다이브</b>로 들어옵니다. 검색 유입 상위 두 개가 <code>/en</code> 경로(Effect-TS 105, set-state-in-effect 64)라는 점은 영문 번역이 실제로 검색 유입을 만들고 있다는 신호로 보입니다.</p>
-    </div>
-  </section>
-
-  <section>
-    <h2>사용자 흐름</h2>
-    <p class="sub">상위 40개 랜딩 페이지(전체 세션의 75.8%)를 랜딩 유형별로 묶고, 참여 세션과 세션당 페이지뷰를 이었습니다.</p>
-    <div class="card">
-      <pre class="mermaid">
-flowchart TD
-  IN(["유입 4,810세션"])
-
-  IN --> L1["글 상세로 바로 랜딩<br/>2,060세션"]
-  IN --> L2["홈 · /en 랜딩<br/>703세션"]
-  IN --> L3["목록 · 태그 · 시리즈<br/>69세션"]
-  IN --> L4["랜딩 미상 (not set)<br/>749세션"]
-  IN -.-> L5["집계 밖 나머지<br/>1,229세션"]
-
-  L1 --> E1["참여 1,357 (65.9%)"]
-  L1 --> X1["이탈 703"]
-  L2 --> E2["참여 475 (67.6%)"]
-  L2 --> X2["이탈 228"]
-  L3 --> E3["참여 46 (66.7%)"]
-  L4 --> X4["참여 127 (17.0%)<br/>PV 0 · 봇 추정"]
-
-  E1 --> D1{{"1.43 PV/세션<br/>한 편만 읽고 이탈"}}
-  E2 --> D2{{"3.49 PV/세션<br/>홈에서 글을 골라 읽음"}}
-  E3 --> D3{{"1.99 PV/세션"}}
-
-  D1 --> NEXT["내부 이동 495 PV<br/>(yceffort.kr 레퍼러)"]
-  D2 --> NEXT
-  D3 --> NEXT
-      </pre>
-      <p class="sub" style="margin-top: 12px;">홈으로 들어온 세션이 글에 바로 떨어진 세션보다 <b>2.4배 많은 페이지</b>를 읽습니다. 참여율 자체는 두 경로가 거의 같으므로(65.9% 대 67.6%), 차이는 관심도가 아니라 <b>다음에 읽을 것이 눈에 보이는가</b>에서 오는 것으로 추정됩니다. 랜딩 미상 749세션은 페이지뷰가 0이고 참여율이 17%라 대부분 봇으로 보입니다.</p>
-    </div>
-  </section>
-
-  <section>
-    <h2>독자</h2>
+    <h2>처음 어디서 온 사람이 돌아오나</h2>
+    <p class="sub">8/17 ~ 10/5 여덟 주 동안 처음 온 한국 독자를 처음 들어온 경로로 나누고, 다음 주에 다시 온 비율을 셌습니다(주 단위 코호트). 크롤러가 분모를 키우지 않도록 한국으로 한정했습니다.</p>
     <div class="split">
       <div class="card">
-        <p class="sub" style="margin-bottom: 12px;"><b style="color: var(--ink);">국가별 사용자</b> · 2,618명 기준</p>
-        <div class="bars" id="countries" style="gap: 11px;"></div>
+        <p class="sub" style="margin-bottom: 12px;"><b style="color: var(--ink);">다음 주 재방문율</b>, 처음 들어온 경로별</p>
+        <div class="bars" id="cohort-ch"></div>
       </div>
       <div class="card">
-        <p class="sub" style="margin-bottom: 4px;"><b style="color: var(--ink);">신규 vs 재방문</b></p>
-        <div class="stack" role="img" aria-label="신규 사용자 77.3%, 재방문 사용자 22.7%">
-          <div style="width: 77.3%; background: var(--s1);"></div>
-          <div style="width: 22.7%; background: var(--s2);"></div>
+        <p class="sub" style="margin-bottom: 12px;"><b style="color: var(--ink);">누가 데려오고, 누가 남나</b>, 채널 그룹 기준</p>
+        <div class="share-row">
+          <span class="lbl">새 독자 2,016명</span>
+          <div class="shares" role="img" aria-label="새 독자 중 검색 54%, 직접 38%, 리퍼럴 8%">
+            <div style="width: 54.0%; background: var(--muted);">검색 54%</div>
+            <div style="width: 37.5%; background: var(--s1);">직접 38%</div>
+            <div style="width: 8.5%; background: var(--s2);">8%</div>
+          </div>
+        </div>
+        <div class="share-row">
+          <span class="lbl">다음 주 재방문 104명</span>
+          <div class="shares" role="img" aria-label="다음 주에 돌아온 사람 중 검색 33%, 직접 50%, 리퍼럴 17%">
+            <div style="width: 32.7%; background: var(--muted);">검색 33%</div>
+            <div style="width: 50.0%; background: var(--s1);">직접 50%</div>
+            <div style="width: 17.3%; background: var(--s2);">17%</div>
+          </div>
         </div>
         <div class="chips">
-          <span class="chip"><span class="sw" style="background: var(--s1)"></span>신규 <b>2,310</b> (77.3%)</span>
-          <span class="chip"><span class="sw" style="background: var(--s2)"></span>재방문 <b>680</b> (22.7%)</span>
+          <span class="chip"><span class="sw" style="background: var(--muted)"></span>Organic Search</span>
+          <span class="chip"><span class="sw" style="background: var(--s1)"></span>Direct</span>
+          <span class="chip"><span class="sw" style="background: var(--s2)"></span>Referral (서피트, GitHub 등)</span>
         </div>
-        <p class="sub" style="margin: 18px 0 4px;"><b style="color: var(--ink);">기기</b></p>
-        <div class="chips">
-          <span class="chip">데스크톱 <b>2,226</b> (84.9%)</span>
-          <span class="chip">모바일 <b>392</b> (15.0%)</span>
-          <span class="chip">태블릿 <b>4</b></span>
-        </div>
-        <p class="sub" style="margin: 14px 0 0;">데스크톱 85%는 업무 시간대에 읽는 개발자 독자층과 부합합니다. 재방문 22.7%는 직전 기간과 거의 같습니다.</p>
+        <p class="sub" style="margin: 14px 0 0;">리퍼럴로 온 171명 중 18명(10.5%)과 검색으로 온 1,088명 중 34명(3.1%)의 차이는 우연으로 보기 어려운 크기입니다(z ≈ 4.5). AI Assistant(11명)와 소셜(6명)은 다음 주 재방문이 0이라 막대에서 뺐습니다.</p>
       </div>
+    </div>
+
+    <div class="card callout info" style="margin-top: 14px;">
+      <h3>10/14 시안과 같은 방향이지만, 여덟 코호트 중 일곱이 겹친 같은 데이터입니다</h3>
+      <p>10/14 시안(8/10 ~ 9/28 주 코호트)은 서피트 10.4%, GitHub 8.3%, 직접 7.3%, 구글 2.8%였고, 이번(8/17 ~ 10/5 주)은 11.3%, 10.5%, 6.9%, 3.2%입니다. 창이 한 주 밀렸을 뿐이라 새로운 확인이라기보다 같은 결과가 유지된 정도로 읽는 편이 맞습니다. 서피트와 GitHub는 다음 주 재방문이 9명, 6명뿐이라 두 경로의 순서는 의미가 없습니다.</p>
+      <p>직접 유입에는 레퍼러가 지워진 서피트 유입과 메신저 공유가 섞여 있어 실제 서피트 몫은 더 클 수 있고, 같은 글을 다시 검색해 오는 검색 독자는 재방문으로 잡히지 않을 수 있습니다. 두 방향 모두 크기는 재지 못했습니다.</p>
     </div>
   </section>
 
   <section>
-    <h2>신규 글 성과 (7~8월 발행)</h2>
-    <p class="sub">발행일 순. 조회수는 최근 4주 누적이라 발행이 늦을수록 집계 기간이 짧습니다.</p>
+    <h2>고정 독자는 어떤 글을 읽나</h2>
+    <p class="sub">이번 4주 동안 글을 읽은 재방문 독자 수 순서입니다. 새 글은 푸시와 홈을 거쳐 고정 독자에게 먼저 닿으므로 재방문 비율이 높게 나오기 쉬워서, 이번 4주에 나온 글을 따로 표시했습니다. 이 표는 고정 독자가 읽은 글을 보여 줄 뿐이고, 그 글 때문에 돌아왔다는 뜻은 아닙니다.</p>
     <div class="card tbl-wrap">
-      <table id="recent-table">
-        <thead>
-          <tr><th>발행</th><th>제목</th><th class="num">조회</th><th class="num">사용자</th><th></th></tr>
-        </thead>
+      <table id="loyal-table">
+        <thead><tr><th>글</th><th>발행</th><th class="num">재방문</th><th class="num">신규</th><th>재방문 비율</th><th class="num">독자당 체류</th></tr></thead>
         <tbody></tbody>
       </table>
     </div>
-  </section>
 
-  <section>
-    <h2>인사이트</h2>
-    <div class="insights">
-      <div class="card insight">
-        <h3>서피트가 최신 글 3편을 실어 나르고 있습니다</h3>
-        <p>보정된 서피트 400세션 중 368세션이 <b>에이전트 글(135), k8s 1편(132), k8s 2편(101)</b> 세 편에 몰려 있습니다. 서피트는 아카이브가 아니라 발행 직후에만 작동하는 채널로 보이며, 이 세 편이 이번 기간 상위권을 차지한 것도 대부분 여기서 설명됩니다.</p>
+    <div class="card callout info" style="margin-top: 14px;">
+      <h3>새 글에서는 직접 잰 글과 에세이가 고정 독자에게 읽혔고, 번들러 글은 덜 닿았습니다</h3>
+      <p>이번 4주에 나온 글 중에서는 토스증권 추적(68명), Rails 에세이(47명), SWE-bench 글(45명), number-flow 2편(38명) 순입니다. Rails 에세이는 재방문 47명에 신규 10명이라 거의 고정 독자에게만 읽혔고, number-flow 2편은 독자당 체류가 2분 04초로 새 글 중 가장 깁니다.</p>
+      <p>반대로 10/8 번들러 글은 재방문 16명, 신규 10명, 독자당 체류 15초로 같은 시리즈 앞 편들보다 적게, 짧게 읽혔습니다. 오래된 글 가운데서는 6월 에세이(59명, 9/26 ~ 10/3 급등이 창에 들어 있음), k8s 개념 지도(46명), 베타리더 마감 공지(42명)가 계속 읽힙니다.</p>
+    </div>
+
+    <div class="split" style="margin-top: 14px;">
+      <div class="card">
+        <p class="sub" style="margin-bottom: 10px;"><b style="color: var(--ink);">신규만 데려오는 글</b>, 독자 40명 이상 중 재방문 35% 이하</p>
+        <div class="tbl-wrap">
+          <table id="oneoff-table">
+            <thead><tr><th>글</th><th class="num">독자</th><th class="num">재방문</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="sub" style="margin: 12px 0 0;">검색 유입이 중심인 글입니다. 새 독자를 데려오는 역할은 크지만, 위 코호트대로라면 검색 독자는 다음 주에 3.2%만 돌아옵니다.</p>
       </div>
-      <div class="card insight">
-        <h3>글로 바로 떨어진 독자는 한 편만 읽고 떠납니다</h3>
-        <p>글 상세 랜딩은 1.43 PV/세션, 홈 랜딩은 3.49 PV/세션입니다. 참여율은 65.9%와 67.6%로 거의 같으므로 <b>차이는 관심도가 아니라 다음 글이 눈에 보이는지</b>에서 오는 것으로 추정됩니다. 글 하단 관련 글이나 시리즈 도선이 실제로 노출되고 있는지 점검할 여지가 있습니다.</p>
-      </div>
-      <div class="card insight">
-        <h3>영문 번역이 검색 유입을 실제로 만들고 있습니다</h3>
-        <p>구글 검색 랜딩 상위가 <code>/en/2026/02/effect-ts-deep-dive</code>(105세션)와 <code>/en/2025/12/react-set-state-in-effect-lint-rule</code>(64세션)입니다. 한국어 원문보다 영문판이 더 많이 검색되는 글이 있다는 뜻이라, <b>번역 대상을 감이 아니라 이 데이터로 고르는 편</b>이 나아 보입니다. 다만 <code>/en</code> 홈 랜딩은 이탈률 77%라 영문 진입점 자체는 약합니다.</p>
-      </div>
-      <div class="card insight">
-        <h3>k8s 시리즈는 1편 이후로 갈수록 얇아집니다</h3>
-        <p>1편 278 → 2편 161(58% 유지) → 3편 33 → 4편 23 → 5편 45입니다. 서피트가 1·2편만 실어 나른 것과 정확히 겹치므로, <b>외부 채널이 닿지 않는 3편부터는 자력 유입이 거의 없다</b>고 볼 수 있습니다. 시리즈물은 편수보다 1편의 도선 설계가 결정적으로 보입니다.</p>
-      </div>
-      <div class="card insight">
-        <h3>세 종류의 오염이 지표에 섞여 있습니다</h3>
-        <p>싱가포르 396명과 중국 139명은 사용자와 세션이 1:1이라 크롤러로 추정되고(합쳐서 전체의 20%), 랜딩 미상 749세션은 페이지뷰가 0입니다. 여기에 <b>로컬 개발 트래픽 283 PV</b>가 운영 GA4에 그대로 들어오고 있습니다(<code>localhost:3000</code>·<code>3001</code> 레퍼러). 크롤러를 걷어낸 실사용자는 <b>약 2,080명</b>으로 추정되며, 로컬 계측 차단은 바로 조치할 수 있는 항목입니다.</p>
+      <div class="card">
+        <p class="sub" style="margin-bottom: 10px;"><b style="color: var(--ink);">이어 읽기</b>, 본 사람 중 누른 사람 (주별 합)</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>블록</th><th class="num">이번 4주</th><th class="num">직전 4주</th></tr></thead>
+            <tbody>
+              <tr><td>관련 글</td><td class="num">15.9% <span class="muted">(484명 중 77)</span></td><td class="num">17.7% <span class="muted">(621명 중 110)</span></td></tr>
+              <tr><td>시리즈 목차</td><td class="num">11.8% <span class="muted">(382명 중 45)</span></td><td class="num">10.3% <span class="muted">(582명 중 60)</span></td></tr>
+              <tr><td>이전/다음 편</td><td class="num">11.2% <span class="muted">(169명 중 19)</span></td><td class="num">6.1% <span class="muted">(198명 중 12)</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="sub" style="margin: 12px 0 0;">주별 사람 수를 더한 값이라 여러 주에 걸친 사람은 중복으로 셉니다. 10/16부터 알림 버튼 영역(<code>subscribe</code>)도 같은 이벤트로 잡혀 이 표에서는 뺐습니다.</p>
       </div>
     </div>
   </section>
 
   <section>
-    <h2>다음 글, 다음 방향</h2>
-    <p class="sub">이번 4주 데이터에서 도출한 제안입니다.</p>
-    <div class="insights">
-      <div class="card insight">
-        <h3>가장 값싼 개선은 글 하단의 다음 글 도선입니다</h3>
-        <p>글 상세 랜딩 2,060세션이 1.43 PV/세션에 머물러 있습니다. 홈 랜딩 수준(3.49)의 절반만 따라가도 페이지뷰가 크게 달라지는 구간이라, <b>새 글을 한 편 더 쓰는 것보다 기존 글의 도선을 손보는 편</b>이 효율이 높아 보입니다. 서피트로 들어온 368세션이 정확히 이 경로에 있습니다.</p>
-      </div>
-      <div class="card insight">
-        <h3>번역 대상은 검색 데이터로 고르는 편이 나아 보입니다</h3>
-        <p>영문 랜딩 상위 두 편(Effect-TS, set-state-in-effect)이 구글 검색 유입의 상당 부분을 만들고 있습니다. 반면 <code>/en</code> 홈은 이탈률 77%입니다. 번역을 넓게 늘리기보다 <b>검색 수요가 확인된 딥다이브부터 영문화하고, <code>/en</code> 진입점을 목록이 아닌 대표 글로 바꾸는 것</b>을 제안드립니다.</p>
-      </div>
-      <div class="card insight">
-        <h3>다음 글감: 멀티 웹뷰 후속과 SSR 로깅 딥다이브</h3>
-        <p>보류 중인 멀티 웹뷰 후속(인증, 키보드, capability, 관측)과 SSR 로깅 성능 딥다이브가 우선순위입니다. 둘 다 <b>실측·장애 경험 기반이라 AI가 대체하기 어려운 유형</b>이고, 이번 기간 상위 글도 정확히 그 유형이었습니다. 다만 k8s 시리즈의 3편 이후 급감을 볼 때 <b>5편 시리즈보다 1~2편 완결형</b>이 데이터와 맞습니다.</p>
-      </div>
-      <div class="card insight">
-        <h3>GitHub 인용은 사용자당 4.7 PV로 가장 깊게 읽힙니다</h3>
-        <p>github.com 레퍼러는 242 PV에 사용자 52명입니다. 사용자당 4.7페이지로, 모든 채널 중 가장 깊습니다. <code>github.com/byhhh2/fe-article</code> 같은 큐레이션 저장소 인용도 잡혔습니다. <b>"AI가 이 글을 참고해야 답할 수 있는 글" 전략이 PR·이슈 인용으로 나타나는 신호</b>로 보이며, 실측 수치와 재현 절차가 있는 레퍼런스형 글의 근거가 됩니다.</p>
-      </div>
-      <div class="card insight">
-        <h3>다음 리포트 전에 로컬 계측부터 막는 것을 권합니다</h3>
-        <p>운영 GA4에 로컬 개발 트래픽 283 PV가 들어와 있습니다. 지금은 3.7% 수준이라 결론을 바꾸지 않지만, <b>발행 직후 초동 지표를 볼 때는 오차가 커지는 구간</b>입니다. 측정 ID를 <code>NODE_ENV === 'production'</code>이나 호스트명으로 가드하면 다음 기간부터 깨끗한 비교가 가능합니다.</p>
-      </div>
+    <h2>다음 글 후보</h2>
+    <p class="sub">고정 독자 데이터, 메모리에 남아 있는 보류 글감, 집필 중인 두 책(Node.js Deep Dive, 웹 성능 Deep Dive)을 엮었습니다. 후보마다 데이터 근거와 흥미 기준을 따로 적고, 사실과 추정을 나눴습니다.</p>
+    <div class="cands">
+      <article class="card cand">
+        <h3>SWE-bench 2편: 실제로 모델을 바꿔 재 보기 (가제)</h3>
+        <p class="kind">AI와 프론트엔드 실전, 1편의 실측 후속</p>
+        <dl>
+          <dt>데이터 근거</dt>
+          <dd>1편은 9일 동안 재방문 <b>45명</b>(독자의 64%)으로 이번 창 새 글 중 세 번째이고, 10/13 서피트에 실렸으며 영문판도 16회를 따로 받았습니다. 서피트로 처음 온 독자의 다음 주 재방문율은 11.3%로 검색(3.2%)의 세 배 남짓입니다.</dd>
+          <dt>흥미 기준</dt>
+          <dd>1편이 "어떻게 비교하는가"였다면 2편은 "바꿔 보니 무엇이 달라졌나"입니다. 1편에서 직접 센 흔들리는 테스트(f2p 31개)가 실제 측정에서 점수를 얼마나 흔드는지 보이는 것이 이 글만의 몫입니다.</dd>
+          <dt>출처</dt>
+          <dd>메모리의 SWE-bench 글 기록("2편은 사용자 실측 후"). 루트 전략의 "AI와 프론트엔드 실전" 축입니다.</dd>
+          <dt>사실과 추정</dt>
+          <dd>1편 수치는 사실입니다. 2편은 저자의 실측이 먼저 필요하고, 결과가 글이 될 만큼 흥미로울지는 재기 전까지 모릅니다.</dd>
+        </dl>
+      </article>
+      <article class="card cand">
+        <h3>SSR에서 로깅이 렌더링을 붙잡고 있었다 (가제)</h3>
+        <p class="kind">성능 딥다이브, 직접 겪은 장애의 재현</p>
+        <dl>
+          <dt>데이터 근거</dt>
+          <dd>이번 4주 고정 독자가 가장 많이 읽은 새 글이 직접 잰 토스증권 추적(<b>68명</b>)이고, 측정이 중심인 number-flow 2편은 독자당 체류가 <b>2분 04초</b>로 새 글 중 가장 깁니다. 10/14 시안에서도 고정 독자 상위 새 글 세 편이 모두 성능 실측 글이었습니다.</dd>
+          <dt>흥미 기준</dt>
+          <dd>회사 코드를 그대로 쓸 수 없으니 같은 블로킹을 재현 앱에서 다시 만들어야 합니다. 이 금지 조항이 매 절을 "무엇을 재현했고 무엇을 포기했나"로 만듭니다. 잴 값(TTFB, 이벤트 루프 지연)도 분명합니다.</dd>
+          <dt>출처</dt>
+          <dd>메모리의 보류 글감("AI와 프롬프트를 빼고 순수 성능 딥다이브로"). 『웹 성능 Deep Dive』, 『Node.js Deep Dive』 주제와 겹칩니다.</dd>
+          <dt>사실과 추정</dt>
+          <dd>독자 수치는 사실입니다. 이 글도 같은 독자에게 닿으리라는 것은 추정이고, 로깅이 렌더를 막은 메커니즘은 저자 검수가 필요하다고 메모리에 적혀 있습니다.</dd>
+        </dl>
+      </article>
+      <article class="card cand">
+        <h3>CWV 직접 수집 시리즈의 남은 두 편 (초안 있음)</h3>
+        <p class="kind">직접 운영하는 수집기 실측, 이미 쓴 글 먼저 내기</p>
+        <dl>
+          <dt>데이터 근거</dt>
+          <dd>고정 독자가 직접 잰 글을 읽는다는 점은 위 두 후보와 같습니다. 다만 10/18에 공개한 같은 시리즈 두 편은 아직 하루치(재방문 4명, 3명)라, 이 시리즈 자체의 반응을 말할 근거는 <b>아직 없습니다</b>.</dd>
+          <dt>흥미 기준</dt>
+          <dd>Tempo와 Mimir에 직접 보낸 값의 유실과 지연을 잰 기록이라, 남이 대신 쓸 수 없는 글입니다. 남은 두 편(<code>cwv-self-hosted-blog</code>, <code>cwv-to-tempo-and-mimir</code>)은 초안이 있어 가장 적은 비용으로 낼 수 있습니다.</dd>
+          <dt>출처</dt>
+          <dd>메모리의 CWV 시리즈 계획(<code>notes/series-plan.md</code>). 블로그 저장소에 <code>published: false</code>로 들어 있습니다.</dd>
+          <dt>사실과 추정</dt>
+          <dd>초안이 있다는 것은 사실입니다. 앞의 두 편이 고정 독자에게 닿았는지는 다음 리포트에서 처음 볼 수 있습니다.</dd>
+        </dl>
+      </article>
     </div>
+    <p class="avoid">우선순위를 낮출 쪽: 설명형 가이드는 이번에도 신규만 데려오는 쪽입니다(「코딩 에이전트 핵심 개념 완전 가이드」, 독자 41명 중 재방문 11명). coldpath 후속(CommonJS 래퍼와 소스맵)은 시리즈 3편이 고정 독자 1위였지만, 바로 이어 나온 번들러 글이 재방문 16명에 그쳐 후보에서 한 칸 뒤로 뺐습니다.</p>
+  </section>
+
+  <section>
+    <h2>미뤄 둔 판정</h2>
+    <p class="sub">10/7 리포트, 10/14 시안, 10/16 배포 때 적어 둔 기준입니다. 기준은 그때 적은 그대로 썼고, 이번에 기한이 온 판정은 없습니다.</p>
+    <div class="card tbl-wrap">
+      <table>
+        <thead><tr><th>항목</th><th>사전 기준</th><th>지금까지</th><th>판정</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>관련 글 Jev 순위 (9/25)</td>
+            <td>10/12 주와 10/19 주 합산 사람 기준 클릭률이 14.5% 미만이면 하락</td>
+            <td>10/12 주 <b>19.8%</b> <span class="muted">(116명 중 23)</span>. 10/19 주에 본 사람이 110명이면 누른 사람이 9명 이하일 때만 기준 아래</td>
+            <td>10/26 이후</td>
+          </tr>
+          <tr>
+            <td>글 끝 알림 버튼 (10/16)</td>
+            <td>4주(10/16 ~ 11/12) 구독 10건 이상이면 효과 <span class="muted">(직전 4주 4건)</span></td>
+            <td>사흘 동안 <code>push_subscribe</code> 1건(12시대), 권한 거부 2명. 저장된 구독자는 10/10 8명에서 10/18 10명</td>
+            <td>11/13 이후</td>
+          </tr>
+          <tr>
+            <td>고정 독자 (10/14 등록)</td>
+            <td>10/12 ~ 11/8 네 주 평균이 117명 아래면 감소, 171명 위면 증가</td>
+            <td>10/12 주 156명 <span class="muted">(네 주 중 한 주)</span></td>
+            <td>11/9 이후</td>
+          </tr>
+          <tr class="dim">
+            <td>홈 개편 (9/28)</td>
+            <td>평일 홈 랜딩 하루 33.9세션, 4.62 PV/세션</td>
+            <td>평일 10일 31.4세션, 4.21 PV/세션 (10/14 집계)</td>
+            <td>늘었다는 근거 없음 (10/14 확정)</td>
+          </tr>
+          <tr class="dim">
+            <td>서피트 (기록만)</td>
+            <td>예측하지 않고 기록</td>
+            <td>10/8 number-flow 2편(지문 24세션), 10/13 SWE-bench 글(지문 19세션) 수록 추정. 9/21 이후 17일 공백이 끝남</td>
+            <td>기록</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card callout" style="margin-top: 14px;">
+      <h3>알림 버튼 이벤트의 <code>source</code> 파라미터가 세션 소스를 바꿉니다</h3>
+      <p>10/16에 넣은 <code>push_*</code> 이벤트는 <code>gtag('event', name, {source})</code>로 <code>post_end</code> 또는 <code>tweaks</code>를 보냅니다. 10/16 12시대에 <code>push_subscribe</code>를 보낸 사용자의 이후 세션 6개가 모두 세션 소스 <code>post_end</code>, 매체 <code>(not set)</code>으로 잡혔습니다. GA4가 이벤트의 <code>source</code>를 수동 캠페인 소스로 읽는 것으로 보입니다(관측에 근거한 판단이고, 공식 문서는 확인하지 않았습니다).</p>
+      <p>이대로면 버튼으로 구독한 고정 독자의 재방문이 Direct나 Google 대신 <code>post_end</code>로 분류되어, 위 "처음 어디서 온 사람이 돌아오나"의 경로 분석도 조금씩 흐려질 수 있습니다. 구독 판정은 이벤트 수로 세므로 영향을 받지 않습니다. <code>usePushSubscription.ts</code>의 파라미터 이름을 <code>placement</code>처럼 겹치지 않는 이름으로 바꾸는 편이 안전해 보입니다(코드는 바꾸지 않았습니다).</p>
+    </div>
+  </section>
+
+  <section>
+    <details class="appendix">
+      <summary>진단 부록: 트래픽 KPI, 크롤러, 일별 트렌드, 인기 글, 유입 경로, 도선</summary>
+      <div class="appendix-body">
+        <div>
+          <h3>트래픽 KPI (ISO 4주)</h3>
+          <p class="sub">고정 독자 지표와 달리 크롤러와 스팸, 저자 방문이 모두 섞인 총량입니다.</p>
+          <div class="card tbl-wrap">
+            <table>
+              <thead><tr><th>지표</th><th class="num">9/21 ~ 10/18</th><th class="num">8/24 ~ 9/20</th><th class="num">변화</th><th>주의</th></tr></thead>
+              <tbody>
+                <tr><td>사용자</td><td class="num">2,627</td><td class="num">2,203</td><td class="num">+19.2%</td><td class="muted">중국, 싱가포르 1:1 사용자와 스팸 1,025명 포함</td></tr>
+                <tr><td>사람 판별 사용자</td><td class="num">1,474</td><td class="num">1,641</td><td class="num">-10.2%</td><td class="muted">한국만 1,039 대 1,251 (-16.9%)</td></tr>
+                <tr><td>세션</td><td class="num">4,779</td><td class="num">4,425</td><td class="num">+8.0%</td><td class="muted">세 곳을 빼면 3,750 대 3,990 (-6.0%)</td></tr>
+                <tr><td>페이지뷰</td><td class="num">9,996</td><td class="num">9,070</td><td class="num">+10.2%</td><td class="muted">직전 기간 중 8/24 ~ 9/11은 9/11 계측 수정(bfcache 복원 page_view) 전</td></tr>
+                <tr><td>참여율</td><td class="num">44.7%</td><td class="num">51.7%</td><td class="num">-7.1%p</td><td class="muted">세 곳을 빼면 53.5% 대 56.3% (-2.7%p), 한국만 56.0% 대 58.6%</td></tr>
+                <tr><td>평균 세션 시간</td><td class="num">3분 58초</td><td class="num">5분 28초</td><td class="num">-1분 30초</td><td class="muted">크롤러 세션이 분모에 들어감</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card callout">
+          <h3>늘어난 사용자는 크롤러 쪽이었고, 사람 판별도 그 일부를 통과시킵니다</h3>
+          <p>중국발 사용자가 146명에서 448명(참여 세션 5), 싱가포르가 285명에서 381명(참여 세션 15)으로 늘었고, 9/27 ~ 9/28 세이셸 스팸 196명이 더해졌습니다. 세 곳의 증가분(594명)이 전체 증가분(424명)보다 큽니다. 중국은 10/7부터 하루 20 ~ 30명, 싱가포르는 10/10부터 하루 15 ~ 33명이 날마다 사용자, 세션, 페이지뷰가 거의 같은 모양으로 들어옵니다.</p>
+          <p>그런데 싱가포르 381명 중 104명, 중국 448명 중 73명이 <code>human_visit</code>을 보내 사람으로 판별됐습니다(직전 4주 77명, 68명). 이 사용자들은 대부분 신규로 잡히므로 위 주간 재방문 독자에는 영향이 작아 보이지만, 주간 신규 독자와 사람 판별 총량에는 섞여 있습니다.</p>
+        </div>
+
+        <div>
+          <h3>일별 트렌드 (92일)</h3>
+          <p class="sub">8/10 세로선 이후 페이지뷰가 사용자와 벌어지는 것은 SPA 계측이 켜진 효과이고, 9/11 세로선은 세션 재개와 bfcache 복원 page_view가 들어간 시점입니다. 10/19는 13시 30분 조회라 아직 처리되지 않은 몫이 많습니다.</p>
+          <div class="card">
+            <div class="legend">
+              <span class="key"><span class="swatch-line" style="border-color: var(--s1)"></span>사용자</span>
+              <span class="key"><span class="swatch-line" style="border-color: var(--s2)"></span>페이지뷰</span>
+              <span class="key"><span class="swatch-tri"></span>글 발행일</span>
+            </div>
+            <div class="chart-shell" id="trend-shell">
+              <svg id="trend" role="img" aria-label="92일간 일별 사용자와 페이지뷰 추이 라인 차트" tabindex="0"></svg>
+              <div class="viz-tip" id="trend-tip"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="split">
+          <div class="card">
+            <p class="sub" style="margin-bottom: 12px;"><b style="color: var(--ink);">인기 글 TOP 10</b>, 페이지뷰 (9/21 ~ 10/19)</p>
+            <div class="bars" id="top-posts"></div>
+          </div>
+          <div class="card">
+            <p class="sub" style="margin-bottom: 12px;"><b style="color: var(--ink);">채널별 세션</b>, 4,734세션 기준</p>
+            <div class="bars" id="channels" style="gap: 11px;"></div>
+            <p class="sub" style="margin: 14px 0 0;">서피트는 지문(<code>?ref=surfit.io</code>)이나 레퍼러가 남은 세션을 합치면 <b>312세션</b>(6.5%, 직전 4주 569세션 12.9%)이고, 지문만 남은 108세션은 대부분 Direct로 잡혔습니다. Referral 689세션에는 스팸 196세션이 들어 있습니다. 세션 소스 <code>post_end</code> 6세션은 외부 사이트가 아니라 알림 버튼 이벤트의 파라미터 값입니다.</p>
+          </div>
+        </div>
+
+        <div>
+          <h3>도선 주별 (사람 기준)</h3>
+          <p class="sub">한 번이라도 누른 사람을 한 번이라도 본 사람으로 나눈 값입니다. 8/23에 계측을 시작했고, 8/24 ~ 10/4 여섯 주는 직전 리포트 값과 같음을 확인했습니다.</p>
+          <div class="card tbl-wrap">
+            <table id="nav-table">
+              <thead><tr><th>주 (월요일)</th><th class="num">관련 글</th><th class="num">시리즈 목차</th><th class="num">이전/다음 편</th><th>메모</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div>
+          <h3>이번 기간의 계측과 사이트 변경</h3>
+          <div class="card tbl-wrap">
+            <table>
+              <thead><tr><th>날짜</th><th>변경</th><th>지표 영향</th></tr></thead>
+              <tbody>
+                <tr><td>9/25</td><td>관련 글을 Jev 순위로 교체, 오래된 글 일괄 비공개</td><td class="muted">관련 글 클릭률 판정 대상</td></tr>
+                <tr><td>9/28</td><td>홈 개편, 본문 폭 920px</td><td class="muted">홈 랜딩 판정 대상 (10/14 확정)</td></tr>
+                <tr><td>10/8</td><td>research GA hostname 가드 (<code>ebb74337</code>, 12:01), GA 스크립트와 트래커를 공유 패키지로 이동 (<code>28af74da</code>, <code>e0a2ae11</code>, 16:19와 17:37)</td><td class="muted">localhost 세션은 이후 0. 랜딩 미상은 주 2.4%, 2.8%, 3.3%로 이전 범위</td></tr>
+                <tr><td>10/16</td><td>글 끝 알림 버튼, 첫 방문 툴팁 삭제 (<code>46fbf81d</code>, 12:02)</td><td><span class="warn-inline">⚠ <code>source</code> 파라미터가 세션 소스로 잡힘</span></td></tr>
+                <tr><td>10/17</td><td>CWV를 자체 OTel 수집기로 전송 (<code>f719e19a</code> 외, 12:42 이후)</td><td class="muted">GA와 별도 경로. GA 지표에는 영향 없음</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </details>
   </section>
 
   <footer class="notes">
-    <p>데이터: GA4 Data API (yceffort.kr, G-ND58S24JBX) · 생성 2026-08-23 · 8/23은 집계 중이라 수치가 낮습니다.</p>
-    <p>8/10 이전 페이지뷰는 SPA 라우팅 미집계 상태라 이후와 직접 비교할 수 없습니다. 참여율·평균 세션 시간도 같은 영향을 받습니다.</p>
-    <p>사용자 흐름의 랜딩 유형 집계는 상위 40개 랜딩 페이지(3,646세션, 전체의 75.8%)만 포함합니다. 나머지 1,229세션은 롱테일이라 분류에서 빠져 있습니다.</p>
-    <p>존재하지 않는 경로 유입(<code>/2026/08/this-post-does-not-exist</code> 2회, <code>/2026/08/how-traffic-reaches-pod</code> 1회)은 LLM·크롤러의 추측 링크로 추정되어 본문 표에서 제외했습니다. <code>/2026/08/service-worker-caching-pwa</code>(14회)는 분할 전 초안의 구 슬러그이고, 서비스 워커 캐싱 1·2편(15회)과 멀티 웹뷰 글은 아직 <code>published: false</code>인 초안이라 신규 글 표에서 뺐습니다. 이들 조회는 대부분 로컬 개발 중 접근으로 추정됩니다.</p>
-    <p>서피트 보정치 400세션은 <code>?ref=surfit.io</code> 쿼리스트링이 남은 세션만 센 값이라, 파라미터가 지워진 유입이 있다면 실제로는 더 클 수 있습니다.</p>
+    <p>데이터: GA4 Data API (G-ND58S24JBX), 생성 2026-10-19 14:01 KST. 기간은 ISO 주(월요일 시작)로 끊었고, 오늘 시작한 10/19 주는 추세 차트와 KPI에서 뺐습니다. 인기 글과 채널은 9/21 ~ 10/19(마지막 날 집계 중) 기준입니다.</p>
+    <p>고정 독자 지표는 <code>hostName</code>이 yceffort.kr이고 <code>human_visit</code>을 보낸 활성 사용자의 <code>newVsReturning</code> 값입니다. research.yceffort.kr은 같은 측정 ID를 쓰지만 발표 연습 같은 저자 방문이 몰려 뺐습니다. <code>human_visit</code>은 두 판별 이벤트를 모두 보내지 않는 사람을 놓치는 한편, 이번 창의 싱가포르 104명과 중국 73명처럼 1:1 크롤러 일부를 사람으로 판별하므로 하한이 아니라 근사치입니다. 봄 평균 104명은 10/14에 4/13 ~ 6/14 아홉 주로 고정한 값이고, 추세 창이 밀려도 다시 계산하지 않습니다.</p>
+    <p>"흔들림 안쪽"은 최근 여덟 주 주간 재방문 독자의 표준편차(18.25명)로 4주 평균 두 개의 차이를 본 값입니다(z ≈ -1.6). 발행 수는 frontmatter의 <code>date</code>로 셌습니다(서비스 워커 시리즈처럼 공개가 늦은 글은 실제 공개 주와 다를 수 있습니다).</p>
+    <p>코호트는 <code>firstSessionDate</code> 기준 주 단위이고, <code>country</code>가 South Korea, <code>hostName</code>이 yceffort.kr인 사용자입니다. KPI의 "새 독자의 다음 주 재방문"은 처음 온 주가 이번 기간 안이고 다음 주가 끝난 코호트(9/21, 9/28, 10/5 주)만 썼고, 직전 값은 8/24 ~ 9/14 네 코호트(1,132명 중 72명)입니다. 경로별 막대는 <code>firstUserSource</code>, 비중 비교는 <code>firstUserDefaultChannelGroup</code>이라 검색 인원이 1,067명과 1,088명으로 조금 다릅니다. z는 두 비율 차이의 정규 근사입니다.</p>
+    <p>글별 재방문과 신규는 <code>pagePath</code> x <code>newVsReturning</code>이라, 한 사람이 같은 기간에 처음 오고 다시 오면 양쪽에 모두 잡힐 수 있습니다. 독자당 체류는 <code>userEngagementDuration</code>을 두 행의 사용자 합으로 나눈 값입니다.</p>
+    <p>웹 푸시 구독자는 notify-push 워크플로 로그의 <code>done: N sent</code> 줄입니다(10/18 실행 39054533589, 39114987054에서 10명). 로컬 <code>.env.local</code>의 Upstash 토큰은 401이라 구독 저장소를 직접 읽지 못했습니다. 알림 버튼 판정의 직전 4주 4건은 9/17, 9/19, 9/22, 10/9의 <code>push_subscribe</code>이고, 10/12 1건은 배포 전이라 어느 쪽에도 넣지 않았습니다.</p>
+    <p>관련 글 판정의 사람 기준은 블록을 본 활성 사용자 중 누른 활성 사용자의 비율입니다. 홈 개편 값은 10/14 시안에서 같은 정의로 집계한 것을 옮겼고, 이번에 다시 질의하지 않았습니다. 서피트 수록일은 지문이 하루 10세션 이상 처음 생긴 날로 판정한 추정입니다.</p>
+    <p><code>totalsWeeks</code>는 행 순서가 아니라 dateRange 이름으로 골랐고, 두 기간의 페이지뷰가 일별 합계(9,996, 9,070)와 정확히 일치하는 것으로 검증했습니다. 크롤러 제외 값은 중국, 싱가포르, 세이셸 세션과 참여 세션을 단순히 뺀 것입니다.</p>
   </footer>
 </div>
 
 <script>
-  // ── data ──────────────────────────────────────────────
-  // [MM/DD, users, pageviews]
-  const DAILY = [
-    ["5/24",40,61],["5/25",43,102],["5/26",94,174],["5/27",159,212],["5/28",81,103],
-    ["5/29",72,102],["5/30",35,72],["5/31",30,53],["6/1",59,104],["6/2",44,92],
-    ["6/3",44,70],["6/4",75,107],["6/5",91,135],["6/6",65,78],["6/7",39,60],
-    ["6/8",80,122],["6/9",117,196],["6/10",72,124],["6/11",90,135],["6/12",70,142],
-    ["6/13",72,94],["6/14",35,50],["6/15",322,409],["6/16",445,614],["6/17",282,375],
-    ["6/18",176,241],["6/19",132,152],["6/20",64,93],["6/21",87,129],["6/22",179,254],
-    ["6/23",175,266],["6/24",143,212],["6/25",468,528],["6/26",108,173],["6/27",66,78],
-    ["6/28",56,85],["6/29",90,137],["6/30",104,154],["7/1",1251,1299],["7/2",97,140],
-    ["7/3",90,121],["7/4",48,69],["7/5",60,82],["7/6",109,167],["7/7",117,174],
-    ["7/8",119,149],["7/9",121,153],["7/10",111,149],["7/11",72,94],["7/12",63,85],
-    ["7/13",86,128],["7/14",108,147],["7/15",100,133],["7/16",75,138],["7/17",37,64],
-    ["7/18",35,55],["7/19",34,52],["7/20",72,101],["7/21",75,100],["7/22",100,165],
-    ["7/23",95,154],["7/24",262,367],["7/25",99,129],["7/26",134,185],["7/27",361,533],
-    ["7/28",168,219],["7/29",139,242],["7/30",150,203],["7/31",116,147],["8/1",64,85],
-    ["8/2",47,72],["8/3",117,182],["8/4",149,204],["8/5",124,281],["8/6",86,219],
-    ["8/7",174,238],["8/8",60,81],["8/9",60,150],["8/10",178,577],["8/11",126,605],
-    ["8/12",115,408],["8/13",118,438],["8/14",104,518],["8/15",50,100],["8/16",55,234],
-    ["8/17",71,229],["8/18",108,258],["8/19",101,311],["8/20",103,312],["8/21",108,345],
-    ["8/22",52,192],["8/23",41,61]
+  const WEEKLY = [{"w":"202617","mon":"4/20","ret":113,"neu":317,"pub":1},{"w":"202618","mon":"4/27","ret":111,"neu":276,"pub":3},{"w":"202619","mon":"5/4","ret":98,"neu":294,"pub":1},{"w":"202620","mon":"5/11","ret":130,"neu":336,"pub":2},{"w":"202621","mon":"5/18","ret":95,"neu":320,"pub":0},{"w":"202622","mon":"5/25","ret":104,"neu":315,"pub":1},{"w":"202623","mon":"6/1","ret":77,"neu":166,"pub":0},{"w":"202624","mon":"6/8","ret":98,"neu":265,"pub":2},{"w":"202625","mon":"6/15","ret":256,"neu":969,"pub":1},{"w":"202626","mon":"6/22","ret":161,"neu":468,"pub":0},{"w":"202627","mon":"6/29","ret":144,"neu":1434,"pub":0},{"w":"202628","mon":"7/6","ret":134,"neu":467,"pub":0},{"w":"202629","mon":"7/13","ret":105,"neu":258,"pub":0},{"w":"202630","mon":"7/20","ret":193,"neu":553,"pub":2},{"w":"202631","mon":"7/27","ret":190,"neu":694,"pub":0},{"w":"202632","mon":"8/3","ret":177,"neu":435,"pub":5},{"w":"202633","mon":"8/10","ret":211,"neu":339,"pub":6},{"w":"202634","mon":"8/17","ret":137,"neu":266,"pub":3},{"w":"202635","mon":"8/24","ret":160,"neu":298,"pub":2},{"w":"202636","mon":"8/31","ret":138,"neu":306,"pub":1},{"w":"202637","mon":"9/7","ret":181,"neu":372,"pub":4},{"w":"202638","mon":"9/14","ret":168,"neu":359,"pub":4},{"w":"202639","mon":"9/21","ret":138,"neu":268,"pub":4},{"w":"202640","mon":"9/28","ret":146,"neu":339,"pub":2},{"w":"202641","mon":"10/5","ret":125,"neu":282,"pub":3},{"w":"202642","mon":"10/12","ret":156,"neu":297,"pub":2}];
+  const LOYAL = [{"t":"소스맵 없이 토스증권의 JavaScript 추적해보기","d":"9/26","y":"2026","inWin":true,"ret":68,"neu":35,"eng":50,"pv":189,"u":103},{"t":"코드를 읽거나 설명할 줄 몰라도, 스펙을 만족하고 버그를 고칠 수 있다면 상관없을까","d":"6/12","y":"2026","inWin":false,"ret":59,"neu":92,"eng":44,"pv":251,"u":151},{"t":"실행하지 않는 JavaScript를 10MiB까지 늘려봤다","d":"9/16","y":"2026","inWin":false,"ret":53,"neu":29,"eng":82,"pv":138,"u":82},{"t":"Rails가 왜 좋았는지는, 만든 사람이 내려놓고 나서야 보였다","d":"9/28","y":"2026","inWin":true,"ret":47,"neu":10,"eng":67,"pv":91,"u":57},{"t":"프론트엔드 개발자를 위한 쿠버네티스 개념 지도: 파드에서 오토스케일러까지","d":"8/5","y":"2026","inWin":false,"ret":46,"neu":26,"eng":64,"pv":161,"u":72},{"t":"SWE-bench로 코딩 에이전트의 모델을 비교하는 방법","d":"10/10","y":"2026","inWin":true,"ret":45,"neu":25,"eng":64,"pv":126,"u":70},{"t":"『남은 판단은 누가 배우는가』 베타리더 모집이 마감되었습니다","d":"9/9","y":"2026","inWin":false,"ret":42,"neu":18,"eng":51,"pv":81,"u":60},{"t":"number-flow 성능 개선기: 애니메이션을 합성 스레드로 옮기기","d":"10/7","y":"2026","inWin":true,"ret":38,"neu":23,"eng":124,"pv":96,"u":61},{"t":"떠난 페이지는 죽지 않고 숨는다: Next.js cacheComponents와 React Activity","d":"9/26","y":"2026","inWin":true,"ret":32,"neu":10,"eng":20,"pv":76,"u":42},{"t":"Next.js 앱의 Marp 슬라이드를 오프라인에 저장하기","d":"9/30","y":"2026","inWin":true,"ret":30,"neu":13,"eng":52,"pv":75,"u":43},{"t":"블로그를 고친 뒤 첫 화면을 다시 재봤다","d":"9/14","y":"2026","inWin":false,"ret":28,"neu":15,"eng":33,"pv":71,"u":43},{"t":"블로그의 JavaScript가 언제 실행되는지 추적해보기","d":"9/22","y":"2026","inWin":true,"ret":27,"neu":13,"eng":22,"pv":71,"u":40}];
+  const ONEOFF = [{"t":"Deep Dive into Effect Systems: From Monads to Algebraic Effects, and Effect-TS's Choices","d":"2/20","y":"2026","inWin":false,"ret":25,"neu":89,"eng":117,"pv":174,"u":114,"en":true},{"t":"React's New Lint Rule: set-state-in-effect","d":"12/16","y":"2025","inWin":false,"ret":10,"neu":48,"eng":74,"pv":72,"u":58,"en":true},{"t":"GitHub Actions cron이 제시간에 실행되지 않는 이유와 대안","d":"1/24","y":"2021","inWin":false,"ret":8,"neu":37,"eng":63,"pv":52,"u":45},{"t":"코딩 에이전트 핵심 개념 완전 가이드","d":"1/17","y":"2026","inWin":false,"ret":11,"neu":30,"eng":94,"pv":46,"u":41}];
+  const TOP_POSTS = [{"t":"코드를 읽거나 설명할 줄 몰라도, 스펙을 만족하고 버그를 고칠 수 있다면 상관없을까","pv":280,"u":135,"eng":50},{"t":"Deep Dive into Effect Systems: From Monads to Algebraic Effects, and Effect-TS's Choices (영문판)","pv":204,"u":97,"eng":138},{"t":"프론트엔드 개발자를 위한 쿠버네티스 개념 지도: 파드에서 오토스케일러까지","pv":198,"u":67,"eng":69},{"t":"소스맵 없이 토스증권의 JavaScript 추적해보기","pv":197,"u":100,"eng":52},{"t":"실행하지 않는 JavaScript를 10MiB까지 늘려봤다","pv":148,"u":76,"eng":89},{"t":"SWE-bench로 코딩 에이전트의 모델을 비교하는 방법","pv":138,"u":65,"eng":69},{"t":"number-flow 성능 개선기: 애니메이션을 합성 스레드로 옮기기","pv":100,"u":58,"eng":130},{"t":"Rails가 왜 좋았는지는, 만든 사람이 내려놓고 나서야 보였다","pv":94,"u":56,"eng":69},{"t":"프론트엔드는 어디서 왔고, 에이전트 이후 어디로 가는가","pv":85,"u":38,"eng":124},{"t":"『남은 판단은 누가 배우는가』 베타리더 모집이 마감되었습니다","pv":82,"u":57,"eng":54}];
+  const DAILY = [["7/20",72,101],["7/21",75,100],["7/22",100,165],["7/23",95,154],["7/24",262,367],["7/25",99,129],["7/26",134,185],["7/27",361,533],["7/28",168,219],["7/29",139,242],["7/30",150,203],["7/31",116,147],["8/1",64,85],["8/2",47,72],["8/3",117,182],["8/4",149,204],["8/5",124,281],["8/6",86,219],["8/7",174,238],["8/8",60,81],["8/9",60,150],["8/10",178,577],["8/11",126,605],["8/12",115,408],["8/13",118,438],["8/14",104,518],["8/15",50,100],["8/16",55,234],["8/17",71,229],["8/18",108,258],["8/19",101,311],["8/20",103,312],["8/21",108,345],["8/22",52,192],["8/23",66,122],["8/24",113,389],["8/25",99,284],["8/26",119,359],["8/27",104,256],["8/28",114,288],["8/29",54,146],["8/30",44,127],["8/31",106,367],["9/1",123,320],["9/2",117,339],["9/3",104,327],["9/4",97,338],["9/5",37,64],["9/6",65,180],["9/7",124,358],["9/8",177,512],["9/9",151,615],["9/10",151,441],["9/11",106,216],["9/12",38,72],["9/13",54,237],["9/14",111,490],["9/15",124,630],["9/16",162,552],["9/17",143,449],["9/18",129,421],["9/19",54,161],["9/20",71,132],["9/21",137,629],["9/22",116,597],["9/23",116,423],["9/24",53,102],["9/25",45,141],["9/26",69,204],["9/27",98,203],["9/28",280,719],["9/29",200,545],["9/30",153,446],["10/1",151,610],["10/2",104,455],["10/3",64,174],["10/4",77,253],["10/5",80,267],["10/6",115,439],["10/7",123,266],["10/8",141,428],["10/9",77,221],["10/10",90,187],["10/11",93,200],["10/12",144,441],["10/13",159,478],["10/14",168,449],["10/15",135,455],["10/16",108,418],["10/17",68,123],["10/18",61,123],["10/19",7,22]];
+  const SPRING_AVG = 104;
+  const WEEK_NOTES = {
+    "6/15": "「코드를 읽거나 설명할 줄 몰라도」(6/12)가 퍼진 주",
+    "6/29": "7/1 크롤러 버스트가 사람으로 잡혀 신규가 부풀었음",
+    "7/20": "「프론트엔드는 어디서 왔고」, 성능 Deep Dive 출간 글 (7/22), 7/24 서피트 수록",
+    "8/3": "k8s 시리즈 시작",
+    "8/10": "k8s 시리즈, TS7 글, 8/11 웹 푸시 시작",
+    "8/24": "직전 비교 기간 시작",
+    "9/7": "멀티 웹뷰 글, 베타리더 모집, 서피트 수록 2건",
+    "9/14": "성능 개선 시리즈, 실행하지 않는 JavaScript, 9/16 서피트 수록",
+    "9/21": "이번 비교 기간 시작, 추석 연휴, 9/21 서피트 수록, 9/25 관련 글 교체",
+    "9/28": "홈 개편, 스팸 196세션 (사람 판별에는 안 잡힘)",
+    "10/5": "한글날 (10/9), 10/8 서피트가 number-flow 2편 수록, 이 주부터 중국발 1:1 크롤러 증가",
+    "10/12": "10/13 서피트가 SWE-bench 글 수록, 10/16 글 끝 알림 버튼, 10/18 CWV 시리즈 두 편"
+  };
+  const COHORT_CH = [
+    {t: "서피트", rate: 11.3, n: 80, r: 9},
+    {t: "GitHub", rate: 10.5, n: 57, r: 6},
+    {t: "직접 유입", rate: 6.9, n: 757, r: 52},
+    {t: "구글 검색", rate: 3.2, n: 1067, r: 34, alt: true}
+  ];
+  const CHANNELS = [
+    {t: "Direct", v: 2390, pct: "50.5%"},
+    {t: "Organic Search", v: 1594, pct: "33.7%"},
+    {t: "Referral", v: 689, pct: "14.6%", warn: "스팸 196 포함"},
+    {t: "Unassigned", v: 44, pct: "0.9%"},
+    {t: "AI Assistant", v: 10, pct: "0.2%"},
+    {t: "Organic Social", v: 7, pct: "0.1%"}
+  ];
+  // [주, 관련 글 [누른, 본], 목차, 이전/다음, 메모]
+  const NAV = [
+    ["8/24", [21, 145], [7, 118], [3, 32], "8/28 목차 펼침, 8/31 도선 계측 수정"],
+    ["8/31", [19, 126], [18, 107], [0, 33], ""],
+    ["9/7", [35, 170], [14, 176], [3, 65], ""],
+    ["9/14", [35, 180], [21, 181], [6, 68], ""],
+    ["9/21", [23, 134], [11, 94], [6, 40], "9/25 관련 글 교체, 추석"],
+    ["9/28", [21, 138], [17, 105], [3, 52], "홈 개편"],
+    ["10/5", [10, 96], [9, 79], [5, 33], "한글날"],
+    ["10/12", [23, 116], [8, 104], [5, 44], "10/16 알림 버튼 (subscribe는 표에서 뺌)"]
   ];
   const EVENTS = {
-    "6/12": "발행: 코드를 읽거나 설명할 줄 몰라도… · AI가 경계를 지운다면",
-    "6/21": "발행: 마지막으로 코드를 진지하게 읽은 게 언제인가",
-    "6/25": "스파이크 468명 (직전 기간 밖)",
-    "7/1": "크롤러 버스트 추정 (사용자 1,251 ≈ 세션 1,284 ≈ PV 1,299)",
-    "7/22": "발행: 프론트엔드는 어디서 왔고… · 성능 Deep Dive 출간 소식",
-    "7/27": "서피트 확산 추정 (361명, 발행 5일 뒤 최고점)",
-    "8/3": "발행: Node.js 파드 사이징",
-    "8/5": "발행: k8s 시리즈 1·2편",
-    "8/6": "발행: k8s 시리즈 3편",
-    "8/8": "발행: k8s 시리즈 4편",
-    "8/10": "발행: k8s 5편 · 인터뷰 모집 · TS7 마이그레이션 / SPA page_view 계측 시작",
-    "8/11": "발행: number-flow 이식기",
-    "8/15": "발행: framer-motion 프레임드랍",
-    "8/19": "발행: turbopack 싱글톤 분리 버그",
-    "8/22": "발행: OG 스크래핑 서버 1·2편",
-    "8/23": "집계 중"
+    "7/22": "발행: 프론트엔드는 어디서 왔고, 성능 Deep Dive 출간 소식 (수 20:53)",
+    "7/24": "서피트가 '프론트엔드는 어디서 왔고' 수록 (지문 192세션)",
+    "7/27": "사용자 361명, 사람 판별 314명 (지문 45세션뿐이라 출처 미확인)",
+    "8/3": "발행: Node.js 파드 사이징 (월 22:53)",
+    "8/5": "발행: k8s 시리즈 1편, 2편 (18:35)",
+    "8/7": "발행: k8s 시리즈 3편 (21:30) / 서피트가 k8s 2편 수록 (지문 56세션)",
+    "8/9": "발행: k8s 시리즈 4편, 5편",
+    "8/10": "발행: TS7 마이그레이션, 인터뷰 공지 / SPA page_view 계측 시작 / 서피트가 k8s 1편 수록 (지문 76세션)",
+    "8/12": "발행: number-flow 이식기",
+    "8/15": "블로그 dev GA 프로덕션 게이트",
+    "8/16": "발행: framer-motion 프레임드랍 (일 11:51)",
+    "8/19": "발행: turbopack 싱글톤 분리 버그 (00:32) / 서피트가 framer-motion 글 수록 (지문 16세션)",
+    "8/21": "서피트가 k8s 5편 수록 (지문 17세션)",
+    "8/22": "발행: OG 스크래핑 서버 1편, 2편 (토 13:10)",
+    "8/23": "도선 노출, 클릭 계측 시작",
+    "8/24": "직전 비교 기간 시작 (ISO 주)",
+    "8/25": "서피트가 OG 2편 수록 (지문 10세션)",
+    "8/26": "서피트가 OG 1편 수록 (지문 10세션)",
+    "8/28": "시리즈 목차 기본 펼침 배포 (18:59)",
+    "8/31": "발행: 외부 SDK 재빌드 (월 13:28) / 도선 계측 수정, hostname 가드 배포 (18:59)",
+    "9/3": "발행: 서비스 워커 캐싱 시리즈 1, 2, 3편 (목 11:21)",
+    "9/7": "서피트가 서비스 워커 3편 수록 (지문 11세션)",
+    "9/8": "발행: markdownlint-cli2 Rust 이식기 (20:38) / 서피트가 서비스 워커 1편 수록 (지문 47세션)",
+    "9/9": "발행: 여러 웹뷰에서 하나의 웹 운영하기 (수 12:33), 베타리더 모집 (푸시 5명 발송)",
+    "9/10": "서피트가 멀티 웹뷰 글 수록 (지문 51세션)",
+    "9/11": "세션 재개, bfcache 복원 때 page_view를 보내는 계측 수정 푸시 (23:50). 이후 랜딩 미상 급감",
+    "9/13": "발행: npm Deep Dive 세종도서 선정 (13:30)",
+    "9/14": "이 주부터 사이트 전체 랜딩 미상 비율이 12.8%에서 5.0%로 (주 단위)",
+    "9/15": "발행: 성능 개선 시리즈 3편 (화 11:47, 한 커밋) / 성능 개편 PR 병합 (11:34, StyleX, markdown-rs, 웹 폰트 제거) / 푸시 수동 발송 20건",
+    "9/16": "서피트가 '블로그를 고친 뒤 첫 화면을 다시 재봤다' 수록 (지문 67세션) / 한국 참여율 하락 구간 시작 (9/23까지 52.4%)",
+    "9/17": "발행: 실행하지 않는 JavaScript를 10MiB까지 (목 16:55, 푸시 6명 자동 발송)",
+    "9/21": "이번 비교 기간 시작 (ISO 주) / 서피트가 '실행하지 않는 JavaScript' 수록 (지문 43세션). 이후 10/8까지 17일 공백",
+    "9/24": "추석 연휴 (9/24 ~ 9/26)",
+    "9/25": "추석 / 오래된 글 일괄 비공개, 관련 글을 Jev 순위로 교체 (14:54 ~ 15:25)",
+    "9/26": "발행: coldpath 시리즈 1, 2, 3편 (토 22:03), cacheComponents와 Activity (23:48)",
+    "9/27": "trafficheap.cc 스팸 시작 (세이셸 32세션)",
+    "9/28": "발행: Rails World 에세이 (월 10:50) / 스팸 164세션 (9/29부터 0) / 홈 개편, 본문 폭 920px, 베타리더 배너 제거 (11:28 ~ 11:42) / research에 FEConf 덱 공개 (17:38)",
+    "9/29": "중국발 크롤러 추정 59명 (사용자 59, 세션 60, 페이지뷰 59)",
+    "9/30": "발행: Next.js 앱의 Marp 슬라이드를 오프라인에 저장하기 (수 11:23, 푸시 11:44 수동 발송) / 미국발 크롤러 추정 28명 / AI 에이전트용 마크다운 제공 (커밋 13:32) / research 로컬 시험 27세션 (localhost)",
+    "10/3": "개천절 (토)",
+    "10/5": "베타리더 글을 모집 마감 공지로 수정 / 중국발 크롤러 추정 22명 (사용자, 세션, 페이지뷰 모두 22)",
+    "10/7": "발행: number-flow 성능 개선기 (수 16:08) / 이날부터 중국발 1:1:1 사용자가 하루 20 ~ 30명",
+    "10/8": "발행: 번들러는 import를 어떻게 기억하는가 (목 23:07, 푸시 7명) / 서피트가 number-flow 2편 수록 (지문 24세션) / research GA hostname 가드 (12:01), 추적 코드와 GA 스크립트 shared 이전 (16:19, 17:37)",
+    "10/9": "한글날 (금)",
+    "10/10": "발행: SWE-bench로 코딩 에이전트의 모델을 비교하는 방법 (토 12:07, 푸시 8명) / research에 useQuery suspend 덱 공개 / 이날부터 싱가포르 1:1:1 사용자가 하루 15 ~ 33명",
+    "10/13": "서피트가 SWE-bench 글 수록 (지문 19세션)",
+    "10/14": "미국발 23명 (참여 세션 15, 크롤러로 묶지 않음)",
+    "10/16": "글 끝 알림 받기 버튼 배포, 첫 방문 툴팁 삭제 (12:02) / 구독 1건 (12시대) / 이후 push 이벤트의 source 값이 세션 소스로 잡힘",
+    "10/17": "CWV를 자체 OTel 수집기로 보내기 시작 (12:42, GA와 별도 경로)",
+    "10/18": "발행: web-vitals는 언제 핵심 웹 지표를 보고하는가 (일 02:36), 페이지를 떠나는 순간 핵심 웹 지표를 보내기 (일 18:21)",
+    "10/19": "13:30까지만 처리된 값 (집계 중)"
   };
   const PUB_DATES = Object.keys(EVENTS).filter((d) => EVENTS[d].startsWith("발행"));
 
-  const TOP_POSTS = [
-    {t: "프론트엔드는 어디서 왔고, 에이전트 이후 어디로 가는가", pv: 675, u: 527, eng: 96},
-    {t: "프론트엔드 개발자를 위한 쿠버네티스 개념 지도 (k8s 1편)", pv: 278, u: 170, eng: 106},
-    {t: "코드를 읽거나 설명할 줄 몰라도, 스펙을 만족하면 상관없을까", pv: 276, u: 204, eng: 87},
-    {t: "내 Next.js 앱은 어떻게 파드가 되는가 (k8s 2편)", pv: 161, u: 136, eng: 89},
-    {t: "『프런트엔드 성능 최적화 Deep Dive』 출간 소식", pv: 129, u: 168, eng: 29},
-    {t: "책을 쓰고 있습니다: 인터뷰이 모집", pv: 124, u: 79, eng: 27},
-    {t: "typescript@7을 설치하면 벌어지는 일들", pv: 113, u: 62, eng: 49},
-    {t: "자바스크립트 개발자를 위한 AST 이해하기", pv: 109, u: 88, eng: 129, evergreen: "2021"},
-    {t: "코딩 에이전트 핵심 개념 완전 가이드", pv: 88, u: 42, eng: 61},
-    {t: "마지막으로 코드를 진지하게 읽은 게 언제인가", pv: 88, u: 107, eng: 76}
-  ];
-
-  const CHANNELS = [
-    {t: "Direct", v: 2568, pct: "54.3%"},
-    {t: "Organic Search", v: 1508, pct: "31.9%"},
-    {t: "Referral", v: 556, pct: "11.8%"},
-    {t: "Unassigned", v: 77, pct: "1.6%"},
-    {t: "AI Assistant", v: 18, pct: "0.4%"},
-    {t: "Organic Social", v: 3, pct: "0.1%"}
-  ];
-
-  const COUNTRIES = [
-    {t: "한국", v: 1777, pct: "67.9%"},
-    {t: "싱가포르", v: 396, pct: "15.1%", warn: "크롤러 추정"},
-    {t: "중국", v: 139, pct: "5.3%", warn: "크롤러 추정"},
-    {t: "미국", v: 71, pct: "2.7%"},
-    {t: "독일", v: 48, pct: "1.8%"}
-  ];
-
-  const RECENT = [
-    {d: "7/22", t: "프론트엔드는 어디서 왔고, 에이전트 이후 어디로 가는가", pv: 675, u: 527},
-    {d: "7/22", t: "『프런트엔드 성능 최적화 Deep Dive』 출간 소식", pv: 129, u: 168},
-    {d: "8/3", t: "Node.js 파드는 왜 그 크기인가: 파드 사이징 실측", pv: 59, u: 42},
-    {d: "8/5", t: "쿠버네티스 개념 지도", series: "k8s 1편", pv: 278, u: 170},
-    {d: "8/5", t: "내 Next.js 앱은 어떻게 파드가 되는가", series: "k8s 2편", pv: 161, u: 136},
-    {d: "8/6", t: "트래픽은 어떻게 내 파드에 도착하는가", series: "k8s 3편", pv: 33, u: 18},
-    {d: "8/8", t: "파드는 어떻게 종료되는가", series: "k8s 4편", pv: 23, u: 15},
-    {d: "8/10", t: "오토스케일링은 자동이지만 즉시가 아니다", series: "k8s 5편", pv: 45, u: 33},
-    {d: "8/10", t: "책을 쓰고 있습니다: 인터뷰이 모집", pv: 124, u: 79},
-    {d: "8/10", t: "typescript@7을 설치하면 벌어지는 일들", pv: 113, u: 62},
-    {d: "8/11", t: "number-flow를 구형 브라우저로 이식하기", pv: 66, u: 21},
-    {d: "8/15", t: "framer-motion 배너에서 프레임드랍 없애기", pv: 57, u: 40},
-    {d: "8/19", t: "turbopack에서 싱글톤이 두 개가 됐다", pv: 43, u: 21},
-    {d: "8/22", t: "OG 스크래핑 서버를 Node.js로 짓는다면", series: "OG 1편", pv: 6, u: 3},
-    {d: "8/22", t: "SSRF는 어떻게 뚫리는가", series: "OG 2편", pv: 5, u: 2}
-  ];
   const fmt = (n) => n.toLocaleString("en-US");
-  const fmtEng = (s) => `${Math.floor(s / 60)}분 ${String(s % 60).padStart(2, "0")}초`;
+  const fmtEng = (s) => s < 60 ? `${s}초` : `${Math.floor(s / 60)}분 ${String(s % 60).padStart(2, "0")}초`;
   const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-
-  // ── trend chart ───────────────────────────────────────
-  const shell = document.getElementById("trend-shell");
-  const svg = document.getElementById("trend");
-  const tip = document.getElementById("trend-tip");
   const NS = "http://www.w3.org/2000/svg";
-  const YMAX = 1300;
-  const M = {l: 46, r: 14, t: 18, b: 40};
-  let geom = null;
-
   function el(name, attrs, parent) {
     const node = document.createElementNS(NS, name);
     for (const k in attrs) node.setAttribute(k, attrs[k]);
     parent.appendChild(node);
     return node;
   }
-
-  function renderTrend() {
-    const W = Math.max(shell.clientWidth, 320);
-    const H = W < 560 ? 240 : 300;
-    svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
-    svg.setAttribute("width", W);
-    svg.setAttribute("height", H);
-    svg.textContent = "";
-
-    const iw = W - M.l - M.r;
-    const ih = H - M.t - M.b;
-    const x = (i) => M.l + (i / (DAILY.length - 1)) * iw;
-    const y = (v) => M.t + ih - (v / YMAX) * ih;
-    geom = {x, y, W, H};
-
-    const grid = css("--grid"), baseline = css("--baseline"), muted = css("--muted");
-    const s1 = css("--s1"), s2 = css("--s2"), surface = css("--surface"), ink2 = css("--ink-2");
-
-    // y grid + ticks
-    for (const v of [0, 250, 500, 750, 1000, 1250]) {
-      el("line", {x1: M.l, x2: W - M.r, y1: y(v), y2: y(v), stroke: v === 0 ? baseline : grid, "stroke-width": 1}, svg);
-      if (v > 0) el("text", {x: M.l - 8, y: y(v) + 4, "text-anchor": "end", "font-size": 10.5, fill: muted}, svg).textContent = fmt(v);
+  function h(tag, props, ...kids) {
+    const node = document.createElement(tag);
+    if (props) for (const k in props) {
+      if (k === "style") node.style.cssText = props[k];
+      else node[k] = props[k];
     }
-
-    // x ticks: 월 시작 + 양 끝
-    DAILY.forEach((d, i) => {
-      const isTick = d[0] === "6/1" || d[0] === "7/1" || d[0] === "8/1" || i === 0 || i === DAILY.length - 1;
-      if (isTick) el("text", {x: x(i), y: H - M.b + 16, "text-anchor": "middle", "font-size": 10.5, fill: muted}, svg).textContent = d[0];
-    });
-
-    // 8/10 계측 변경 세로선
-    const narrow = W < 560;
-    const i810 = DAILY.findIndex((d) => d[0] === "8/10");
-    el("line", {x1: x(i810), x2: x(i810), y1: M.t - 4, y2: M.t + ih, stroke: muted, "stroke-width": 1}, svg);
-    el("text", {x: x(i810) - 6, y: M.t + 6, "text-anchor": "end", "font-size": 10.5, "font-weight": 650, fill: ink2}, svg).textContent = narrow ? "계측 시작" : "8/10 SPA 계측 시작";
-
-    // 발행 플래그 (베이스라인 위 삼각형)
-    for (const d of PUB_DATES) {
-      const i = DAILY.findIndex((r) => r[0] === d);
-      if (i < 0) continue;
-      const cx = x(i), cy = M.t + ih;
-      el("path", {d: `M ${cx} ${cy - 7} L ${cx - 4.5} ${cy} L ${cx + 4.5} ${cy} Z`, fill: muted}, svg);
-    }
-
-    // 라인 (pv 먼저, users 위에)
-    const path = (idx) => DAILY.map((d, i) => `${i ? "L" : "M"} ${x(i).toFixed(1)} ${y(d[idx]).toFixed(1)}`).join(" ");
-    el("path", {d: path(2), fill: "none", stroke: s2, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round"}, svg);
-    el("path", {d: path(1), fill: "none", stroke: s1, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round"}, svg);
-
-    // 7/1 주석 (좁은 화면에서는 툴팁으로만 제공)
-    if (!narrow) {
-      const i701 = DAILY.findIndex((d) => d[0] === "7/1");
-      el("line", {x1: x(i701) + 4, y1: y(1251) - 4, x2: x(i701) + 30, y2: y(1251) - 18, stroke: muted, "stroke-width": 1}, svg);
-      el("text", {x: x(i701) + 34, y: y(1251) - 14, "font-size": 10.5, "font-weight": 650, fill: ink2}, svg).textContent = "7/1 크롤러 버스트 추정 (1,251)";
-    }
-
-    // 끝점 마커 (서피스 링)
-    const last = DAILY.length - 1;
-    for (const [idx, color] of [[2, s2], [1, s1]]) {
-      el("circle", {cx: x(last), cy: y(DAILY[last][idx]), r: 6, fill: surface}, svg);
-      el("circle", {cx: x(last), cy: y(DAILY[last][idx]), r: 4, fill: color}, svg);
-    }
-
-    // 크로스헤어 (숨김 상태로 준비)
-    el("line", {id: "xhair", x1: 0, x2: 0, y1: M.t, y2: M.t + ih, stroke: baseline, "stroke-width": 1, visibility: "hidden"}, svg);
+    for (const kid of kids) if (kid != null) node.append(kid);
+    return node;
   }
-
-  let tipIdx = -1;
-  function showTip(i) {
-    tipIdx = i;
-    const d = DAILY[i];
-    const xh = svg.querySelector("#xhair");
-    xh.setAttribute("x1", geom.x(i));
-    xh.setAttribute("x2", geom.x(i));
-    xh.setAttribute("visibility", "visible");
-
-    tip.textContent = "";
-    const dt = document.createElement("div");
-    dt.className = "t-date";
-    dt.textContent = `2026년 ${d[0].replace("/", "월 ")}일` + (i === DAILY.length - 1 ? " (집계 중)" : "");
-    tip.appendChild(dt);
-    for (const [label, v, colorVar] of [["사용자", d[1], "--s1"], ["페이지뷰", d[2], "--s2"]]) {
-      const row = document.createElement("div");
-      row.className = "t-row";
-      const key = document.createElement("span");
-      key.className = "t-key";
-      key.style.borderColor = css(colorVar);
-      const val = document.createElement("span");
-      val.className = "t-val";
-      val.textContent = fmt(v);
-      const name = document.createElement("span");
-      name.className = "t-name";
-      name.textContent = label;
-      row.append(key, val, name);
-      tip.appendChild(row);
-    }
-    if (EVENTS[d[0]]) {
-      const ev = document.createElement("div");
-      ev.className = "t-event";
-      ev.textContent = EVENTS[d[0]];
-      tip.appendChild(ev);
-    }
+  function tipRow(label, value, colorVar) {
+    const row = h("div", {className: "t-row"});
+    const key = h("span", {className: "t-key"});
+    key.style.borderColor = css(colorVar);
+    row.append(key, h("span", {className: "t-val"}, value), h("span", {className: "t-name"}, label));
+    return row;
+  }
+  function placeTip(tip, shell, px) {
     tip.style.display = "block";
-    const shellRect = shell.getBoundingClientRect();
-    const px = geom.x(i);
-    const flip = px > shellRect.width * 0.62;
+    const w = shell.getBoundingClientRect().width;
+    const flip = px > w * 0.62;
     tip.style.left = flip ? "" : `${px + 14}px`;
-    tip.style.right = flip ? `${shellRect.width - px + 14}px` : "";
+    tip.style.right = flip ? `${w - px + 14}px` : "";
     tip.style.top = "24px";
   }
-  function hideTip() {
-    tipIdx = -1;
-    tip.style.display = "none";
-    const xh = svg.querySelector("#xhair");
-    if (xh) xh.setAttribute("visibility", "hidden");
-  }
-  svg.addEventListener("pointermove", (e) => {
-    const rect = svg.getBoundingClientRect();
-    const px = e.clientX - rect.left;
-    const ratio = (px - M.l) / (rect.width - M.l - M.r);
-    const i = Math.round(ratio * (DAILY.length - 1));
-    if (i < 0 || i > DAILY.length - 1) return hideTip();
-    showTip(i);
-  });
-  svg.addEventListener("pointerleave", hideTip);
-  svg.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowRight") { e.preventDefault(); showTip(Math.min(DAILY.length - 1, tipIdx < 0 ? DAILY.length - 1 : tipIdx + 1)); }
-    else if (e.key === "ArrowLeft") { e.preventDefault(); showTip(Math.max(0, tipIdx < 0 ? DAILY.length - 1 : tipIdx - 1)); }
-    else if (e.key === "Escape") hideTip();
-  });
-  svg.addEventListener("blur", hideTip);
 
-  new ResizeObserver(() => { hideTip(); renderTrend(); }).observe(shell);
-  const mq = window.matchMedia("(prefers-color-scheme: dark)");
-  if (mq.addEventListener) mq.addEventListener("change", renderTrend);
-  renderTrend();
-
-  // trend table
+  // ── weekly returning readers ─────────────────────────
   {
-    const tbody = document.querySelector("#trend-table tbody");
-    for (const d of DAILY) {
-      const tr = document.createElement("tr");
-      const cells = [d[0], fmt(d[1]), fmt(d[2]), EVENTS[d[0]] || ""];
-      cells.forEach((c, ci) => {
-        const td = document.createElement("td");
-        if (ci === 1 || ci === 2) td.className = "num";
-        if (ci === 3) td.style.color = "var(--muted)";
-        td.textContent = c;
-        tr.appendChild(td);
+    const shell = document.getElementById("weekly-shell");
+    const svg = document.getElementById("weekly");
+    const tip = document.getElementById("weekly-tip");
+    const YMAX = 280;
+    // 봄 기준선은 고정값(SPRING_AVG)이고, 선은 추세 창에 남아 있는 봄 주(6/14까지)에만 긋는다.
+    const SPRING = [0, WEEKLY.filter((w) => w.w <= "202624").length - 1], RECENT = [WEEKLY.length - 8, WEEKLY.length - 1];
+    const avg = ([a, b]) => WEEKLY.slice(a, b + 1).reduce((s, w) => s + w.ret, 0) / (b - a + 1);
+    const springAvg = SPRING_AVG, recentAvg = avg(RECENT);
+    let geom = null, tipIdx = -1;
+
+    function render() {
+      const W = Math.max(shell.clientWidth, 320);
+      const narrow = W < 560;
+      const H = narrow ? 250 : 290;
+      const M = {l: narrow ? 34 : 40, r: narrow ? 8 : 12, t: 18, b: 48};
+      svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+      svg.setAttribute("width", W);
+      svg.setAttribute("height", H);
+      svg.textContent = "";
+      const iw = W - M.l - M.r, ih = H - M.t - M.b;
+      const band = iw / WEEKLY.length;
+      const bw = Math.max(band * 0.66, 3);
+      const cx = (i) => M.l + band * (i + 0.5);
+      const y = (v) => M.t + ih - (v / YMAX) * ih;
+      geom = {band, M, cx};
+
+      const grid = css("--grid"), baseline = css("--baseline"), muted = css("--muted"), ink2 = css("--ink-2");
+      const s1 = css("--s1"), s1soft = css("--s1-soft");
+      for (const v of [0, 100, 200]) {
+        el("line", {x1: M.l, x2: W - M.r, y1: y(v), y2: y(v), stroke: v === 0 ? baseline : grid, "stroke-width": 1}, svg);
+        if (v > 0) el("text", {x: M.l - 8, y: y(v) + 4, "text-anchor": "end", "font-size": 10.5, fill: muted}, svg).textContent = v;
+      }
+      WEEKLY.forEach((w, i) => {
+        const partial = !!w.partial;
+        el("rect", {
+          x: cx(i) - bw / 2, y: y(w.ret), width: bw, height: Math.max(y(0) - y(w.ret), 1), rx: 2,
+          fill: partial ? s1soft : s1, stroke: partial ? s1 : "none", "stroke-width": partial ? 1 : 0, "stroke-dasharray": partial ? "3 2" : "none"
+        }, svg);
+        el("text", {x: cx(i), y: H - M.b + 14, "text-anchor": "middle", "font-size": narrow ? 9 : 10, fill: w.pub ? ink2 : grid, "font-weight": w.pub >= 4 ? 700 : 400}, svg).textContent = w.pub;
+        if (i % 4 === 0) el("text", {x: cx(i), y: H - M.b + 32, "text-anchor": "middle", "font-size": 10.5, fill: muted}, svg).textContent = w.mon;
       });
-      tbody.appendChild(tr);
+      el("text", {x: M.l - 8, y: H - M.b + 14, "text-anchor": "end", "font-size": narrow ? 9 : 10, fill: muted}, svg).textContent = "발행";
+
+      // 라벨은 구간에서 가장 높은 막대 위에 둔다 (막대와 겹치지 않게)
+      const surface = css("--surface");
+      const ref = ([a, b], v, color, label, anchorEnd) => {
+        const x1 = cx(a) - band / 2, x2 = cx(b) + band / 2;
+        const top = Math.max(...WEEKLY.slice(a, b + 1).map((w) => w.ret));
+        el("line", {x1, x2, y1: y(v), y2: y(v), stroke: color, "stroke-width": 1.5, "stroke-dasharray": "5 4"}, svg);
+        el("text", {x: anchorEnd ? x2 : x1, y: y(Math.max(v, top)) - 7, "text-anchor": anchorEnd ? "end" : "start", "font-size": 10.5, "font-weight": 650, fill: color, stroke: surface, "stroke-width": 3, "paint-order": "stroke"}, svg).textContent = label;
+      };
+      ref(SPRING, springAvg, muted, `봄 평균 ${Math.round(springAvg)}`, false);
+      ref(RECENT, recentAvg, ink2, `최근 8주 ${Math.round(recentAvg)}`, true);
+
+      el("rect", {id: "w-hl", x: 0, y: M.t, width: band, height: ih, fill: grid, opacity: 0.35, visibility: "hidden"}, svg);
+      svg.insertBefore(svg.lastChild, svg.firstChild);
+    }
+
+    function show(i) {
+      tipIdx = i;
+      const w = WEEKLY[i];
+      const hl = svg.querySelector("#w-hl");
+      hl.setAttribute("x", geom.cx(i) - geom.band / 2);
+      hl.setAttribute("visibility", "visible");
+      tip.textContent = "";
+      const [m, d] = w.mon.split("/").map(Number);
+      const end = new Date(2026, m - 1, d + 6);
+      tip.append(h("div", {className: "t-date"}, `${w.mon} ~ ${end.getMonth() + 1}/${end.getDate()} 주`));
+      tip.append(tipRow("재방문 독자", fmt(w.ret), "--s1"), tipRow("신규 독자", fmt(w.neu), "--muted"));
+      tip.append(h("div", {className: "t-row"}, h("span", {className: "t-name"}, `발행 ${w.pub}편`)));
+      if (WEEK_NOTES[w.mon]) tip.append(h("div", {className: "t-event"}, WEEK_NOTES[w.mon]));
+      placeTip(tip, shell, geom.cx(i));
+    }
+    function hide() {
+      tipIdx = -1;
+      tip.style.display = "none";
+      const hl = svg.querySelector("#w-hl");
+      if (hl) hl.setAttribute("visibility", "hidden");
+    }
+    svg.addEventListener("pointermove", (e) => {
+      const rect = svg.getBoundingClientRect();
+      const i = Math.floor((e.clientX - rect.left - geom.M.l) / geom.band);
+      if (i < 0 || i >= WEEKLY.length) return hide();
+      show(i);
+    });
+    svg.addEventListener("pointerleave", hide);
+    svg.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight") { e.preventDefault(); show(Math.min(WEEKLY.length - 1, tipIdx < 0 ? WEEKLY.length - 1 : tipIdx + 1)); }
+      else if (e.key === "ArrowLeft") { e.preventDefault(); show(Math.max(0, tipIdx < 0 ? WEEKLY.length - 1 : tipIdx - 1)); }
+      else if (e.key === "Escape") hide();
+    });
+    svg.addEventListener("blur", hide);
+    new ResizeObserver(() => { hide(); render(); }).observe(shell);
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    if (mq.addEventListener) mq.addEventListener("change", render);
+    render();
+
+    const tbody = document.querySelector("#weekly-table tbody");
+    for (const w of [...WEEKLY].reverse()) {
+      tbody.append(h("tr", null,
+        h("td", {style: "white-space: nowrap"}, w.mon),
+        h("td", {className: "num"}, fmt(w.ret)),
+        h("td", {className: "num", style: "color: var(--ink-2)"}, fmt(w.neu)),
+        h("td", {className: "num", style: "color: var(--ink-2)"}, w.pub),
+        h("td", {style: "color: var(--muted)"}, WEEK_NOTES[w.mon] || "")));
     }
   }
 
   // ── bar lists ─────────────────────────────────────────
-  function barList(rootId, rows, {max, unit, valOf, pctOf, metaOf, warnOf, badgeOf}) {
+  function barList(rootId, rows, {max, unit, valOf, valText, pctOf, metaOf, warnOf, altOf}) {
     const root = document.getElementById(rootId);
     rows.forEach((r) => {
-      const row = document.createElement("div");
-      row.className = "bar-row";
-      row.tabIndex = 0;
-      row.setAttribute("role", "img");
-
-      const titleLine = document.createElement("div");
-      titleLine.className = "bar-title";
-      const name = document.createElement("span");
-      name.className = "name";
-      name.textContent = r.t;
-      name.title = r.t;
-      titleLine.appendChild(name);
-      if (badgeOf && badgeOf(r)) {
-        const b = document.createElement("span");
-        b.className = "evergreen";
-        b.textContent = badgeOf(r);
-        titleLine.appendChild(b);
-      }
-      if (warnOf && warnOf(r)) {
-        const w = document.createElement("span");
-        w.className = "warn-inline";
-        w.textContent = "⚠ " + warnOf(r);
-        titleLine.appendChild(w);
-      }
-      if (metaOf && metaOf(r)) {
-        const m = document.createElement("span");
-        m.className = "meta";
-        m.textContent = metaOf(r);
-        titleLine.appendChild(m);
-      }
-
-      const track = document.createElement("div");
-      track.className = "bar-track";
-      const fill = document.createElement("div");
-      fill.className = "bar-fill";
+      const name = h("span", {className: "name", title: r.t}, r.t);
+      const titleLine = h("div", {className: "bar-title"}, name);
+      if (warnOf && warnOf(r)) titleLine.append(h("span", {className: "warn-inline"}, "⚠ " + warnOf(r)));
+      if (metaOf && metaOf(r)) titleLine.append(h("span", {className: "meta"}, metaOf(r)));
+      const fill = h("div", {className: "bar-fill" + (altOf && altOf(r) ? " alt" : "")});
       fill.style.width = `${Math.max((valOf(r) / max) * 72, 0.5)}%`;
-      const val = document.createElement("span");
-      val.className = "bar-val";
-      val.textContent = fmt(valOf(r));
-      track.append(fill, val);
-      if (pctOf && pctOf(r)) {
-        const p = document.createElement("span");
-        p.className = "bar-pct";
-        p.textContent = pctOf(r);
-        track.appendChild(p);
-      }
-      row.setAttribute("aria-label", `${r.t}: ${fmt(valOf(r))}${unit}${metaOf && metaOf(r) ? ", " + metaOf(r) : ""}`);
-      row.append(titleLine, track);
-      root.appendChild(row);
+      const txt = valText ? valText(r) : fmt(valOf(r));
+      const track = h("div", {className: "bar-track"}, fill, h("span", {className: "bar-val"}, txt));
+      if (pctOf && pctOf(r)) track.append(h("span", {className: "bar-pct"}, pctOf(r)));
+      const row = h("div", {className: "bar-row", tabIndex: 0}, titleLine, track);
+      row.setAttribute("role", "img");
+      row.setAttribute("aria-label", `${r.t}: ${txt}${unit}${metaOf && metaOf(r) ? ", " + metaOf(r) : ""}`);
+      root.append(row);
     });
   }
+  const maxOf = (rows, f) => Math.max(...rows.map(f));
 
+  barList("cohort-ch", COHORT_CH, {
+    max: maxOf(COHORT_CH, (r) => r.rate),
+    unit: "",
+    valOf: (r) => r.rate,
+    valText: (r) => `${r.rate}%`,
+    metaOf: (r) => `${fmt(r.n)}명 중 ${r.r}명`,
+    altOf: (r) => r.alt
+  });
+
+  // ── loyal posts table ─────────────────────────────────
+  {
+    const tbody = document.querySelector("#loyal-table tbody");
+    const rows = LOYAL.slice(0, 12);
+    for (const r of rows) {
+      const share = r.ret / (r.ret + r.neu);
+      const tags = h("span", {className: "tg"});
+      if (r.inWin) tags.append(h("span", {className: "tag"}, "이번 4주 발행"));
+      if (r.en) tags.append(h("span", {className: "tag", style: "color: var(--muted)"}, "영문판"));
+      const title = h("td", {className: "t-title"}, h("span", {className: "tt", title: r.t}, r.t));
+      if (tags.childNodes.length) title.append(tags);
+      const bar = h("span", {className: "cell-bar"});
+      bar.style.width = `${Math.max(share * 90, 2)}px`;
+      tbody.append(h("tr", null,
+        title,
+        h("td", {style: "white-space: nowrap; color: var(--ink-2)"}, r.y === "2026" ? r.d : `${r.y}/${r.d}`),
+        h("td", {className: "num"}, fmt(r.ret)),
+        h("td", {className: "num", style: "color: var(--ink-2)"}, fmt(r.neu)),
+        h("td", {style: "white-space: nowrap"}, bar, h("span", {className: "bar-pct", style: "margin-left: 6px"}, `${Math.round(share * 100)}%`)),
+        h("td", {className: "num", style: "color: var(--ink-2)"}, fmtEng(r.eng))));
+    }
+  }
+  {
+    const tbody = document.querySelector("#oneoff-table tbody");
+    for (const r of ONEOFF) {
+      const title = h("td", {className: "t-title"}, h("span", {className: "tt", title: r.t}, r.t));
+      title.append(h("span", {className: "tg"}, h("span", {className: "muted", style: "font-size: 12px"}, `${r.y === "2026" ? "2026/" : r.y + "/"}${r.d}${r.en ? ", 영문판" : ""}`)));
+      tbody.append(h("tr", null, title,
+        h("td", {className: "num"}, fmt(r.ret + r.neu)),
+        h("td", {className: "num", style: "color: var(--ink-2)"}, `${Math.round(r.ret / (r.ret + r.neu) * 100)}%`)));
+    }
+  }
+
+  // ── appendix: nav table ───────────────────────────────
+  {
+    const tbody = document.querySelector("#nav-table tbody");
+    const cell = ([c, v]) => h("td", {className: "num"}, `${(c / v * 100).toFixed(1)}%`, h("span", {className: "muted", style: "font-weight: 400"}, ` (${v}명)`));
+    for (const [wk, rel, nav, pn, memo] of NAV) {
+      tbody.append(h("tr", null, h("td", null, wk), cell(rel), cell(nav), cell(pn), h("td", {style: "color: var(--muted)"}, memo)));
+    }
+  }
+
+  // ── appendix: top posts, channels ─────────────────────
   barList("top-posts", TOP_POSTS, {
-    max: 675,
+    max: maxOf(TOP_POSTS, (r) => r.pv),
     unit: "회",
     valOf: (r) => r.pv,
-    metaOf: (r) => `사용자 ${fmt(r.u)} · 체류 ${fmtEng(r.eng)}`,
-    badgeOf: (r) => r.evergreen ? `에버그린 ${r.evergreen}` : null
+    metaOf: (r) => `독자 ${fmt(r.u)}, 체류 ${fmtEng(r.eng)}`
   });
-
   barList("channels", CHANNELS, {
-    max: 2568,
+    max: maxOf(CHANNELS, (r) => r.v),
     unit: "세션",
-    valOf: (r) => r.v,
-    pctOf: (r) => r.pct
-  });
-
-  barList("countries", COUNTRIES, {
-    max: 1777,
-    unit: "명",
     valOf: (r) => r.v,
     pctOf: (r) => r.pct,
     warnOf: (r) => r.warn || null
   });
 
-  // ── recent posts table ────────────────────────────────
+  // ── appendix: daily trend ─────────────────────────────
   {
-    const tbody = document.querySelector("#recent-table tbody");
-    RECENT.forEach((r) => {
-      const tr = document.createElement("tr");
+    const shell = document.getElementById("trend-shell");
+    const svg = document.getElementById("trend");
+    const tip = document.getElementById("trend-tip");
+    const YMAX = 900;
+    const M = {l: 46, r: 14, t: 18, b: 40};
+    let geom = null, tipIdx = -1;
 
-      const tdD = document.createElement("td");
-      tdD.textContent = r.d;
-      tdD.style.whiteSpace = "nowrap";
-      tdD.style.color = "var(--ink-2)";
-
-      const tdT = document.createElement("td");
-      tdT.className = "t-title";
-      tdT.title = r.t;
-      tdT.textContent = r.t + " ";
-      if (r.series) {
-        const s = document.createElement("span");
-        s.className = "series-tag";
-        s.textContent = `· ${r.series}`;
-        tdT.appendChild(s);
+    function render() {
+      const W = Math.max(shell.clientWidth, 300);
+      if (!shell.clientWidth) return;
+      const H = W < 560 ? 240 : 300;
+      svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+      svg.setAttribute("width", W);
+      svg.setAttribute("height", H);
+      svg.textContent = "";
+      const iw = W - M.l - M.r, ih = H - M.t - M.b;
+      const x = (i) => M.l + (i / (DAILY.length - 1)) * iw;
+      const y = (v) => M.t + ih - (v / YMAX) * ih;
+      geom = {x};
+      const grid = css("--grid"), baseline = css("--baseline"), muted = css("--muted");
+      const s1 = css("--s1"), s2 = css("--s2"), surface = css("--surface"), ink2 = css("--ink-2");
+      for (const v of [0, 300, 600, 900]) {
+        el("line", {x1: M.l, x2: W - M.r, y1: y(v), y2: y(v), stroke: v === 0 ? baseline : grid, "stroke-width": 1}, svg);
+        if (v > 0) el("text", {x: M.l - 8, y: y(v) + 4, "text-anchor": "end", "font-size": 10.5, fill: muted}, svg).textContent = fmt(v);
       }
-
-      const tdPv = document.createElement("td");
-      tdPv.className = "num";
-      tdPv.textContent = fmt(r.pv);
-
-      const tdU = document.createElement("td");
-      tdU.className = "num";
-      tdU.style.color = "var(--ink-2)";
-      tdU.textContent = fmt(r.u);
-
-      const tdBar = document.createElement("td");
-      tdBar.style.width = "120px";
-      const bar = document.createElement("span");
-      bar.className = "cell-bar";
-      bar.style.width = `${Math.max((r.pv / 675) * 110, 2)}px`;
-      tdBar.appendChild(bar);
-
-      tr.append(tdD, tdT, tdPv, tdU, tdBar);
-      tbody.appendChild(tr);
+      DAILY.forEach((d, i) => {
+        if (i === 0 || d[0] === "8/1" || d[0] === "9/1" || d[0] === "10/1") el("text", {x: x(i), y: H - M.b + 16, "text-anchor": "middle", "font-size": 10.5, fill: muted}, svg).textContent = d[0];
+      });
+      const narrow = W < 560;
+      for (const [day, label, short] of [["8/10", "8/10 SPA 계측 시작", "SPA 계측"], ["9/11", "9/11 재개 page_view", "재개 계측"]]) {
+        const i = DAILY.findIndex((d) => d[0] === day);
+        el("line", {x1: x(i), x2: x(i), y1: M.t - 4, y2: M.t + ih, stroke: muted, "stroke-width": 1}, svg);
+        el("text", {x: x(i) - 6, y: M.t + 6, "text-anchor": "end", "font-size": 10.5, "font-weight": 650, fill: ink2}, svg).textContent = narrow ? short : label;
+      }
+      for (const d of PUB_DATES) {
+        const i = DAILY.findIndex((r) => r[0] === d);
+        if (i < 0) continue;
+        const cx = x(i), cy = M.t + ih;
+        el("path", {d: `M ${cx} ${cy - 7} L ${cx - 4.5} ${cy} L ${cx + 4.5} ${cy} Z`, fill: muted}, svg);
+      }
+      const path = (idx) => DAILY.map((d, i) => `${i ? "L" : "M"} ${x(i).toFixed(1)} ${y(d[idx]).toFixed(1)}`).join(" ");
+      el("path", {d: path(2), fill: "none", stroke: s2, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round"}, svg);
+      el("path", {d: path(1), fill: "none", stroke: s1, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round"}, svg);
+      if (!narrow) {
+        const i = DAILY.findIndex((d) => d[0] === "9/28");
+        el("line", {x1: x(i) - 3, y1: y(DAILY[i][1]) - 6, x2: x(i) - 22, y2: y(845), stroke: muted, "stroke-width": 1}, svg);
+        el("text", {x: x(i) - 26, y: y(845) + 4, "text-anchor": "end", "font-size": 10.5, "font-weight": 650, fill: ink2}, svg).textContent = "9/28 280명 중 164명은 스팸";
+      }
+      const last = DAILY.length - 1;
+      for (const [idx, color] of [[2, s2], [1, s1]]) {
+        el("circle", {cx: x(last), cy: y(DAILY[last][idx]), r: 6, fill: surface}, svg);
+        el("circle", {cx: x(last), cy: y(DAILY[last][idx]), r: 4, fill: color}, svg);
+      }
+      el("line", {id: "xhair", x1: 0, x2: 0, y1: M.t, y2: M.t + ih, stroke: baseline, "stroke-width": 1, visibility: "hidden"}, svg);
+    }
+    function show(i) {
+      tipIdx = i;
+      const d = DAILY[i];
+      const xh = svg.querySelector("#xhair");
+      xh.setAttribute("x1", geom.x(i));
+      xh.setAttribute("x2", geom.x(i));
+      xh.setAttribute("visibility", "visible");
+      tip.textContent = "";
+      tip.append(h("div", {className: "t-date"}, `2026년 ${d[0].replace("/", "월 ")}일${i === DAILY.length - 1 ? " (집계 중)" : ""}`));
+      tip.append(tipRow("사용자", fmt(d[1]), "--s1"), tipRow("페이지뷰", fmt(d[2]), "--s2"));
+      if (EVENTS[d[0]]) tip.append(h("div", {className: "t-event"}, EVENTS[d[0]]));
+      placeTip(tip, shell, geom.x(i));
+    }
+    function hide() {
+      tipIdx = -1;
+      tip.style.display = "none";
+      const xh = svg.querySelector("#xhair");
+      if (xh) xh.setAttribute("visibility", "hidden");
+    }
+    svg.addEventListener("pointermove", (e) => {
+      if (!geom) return;
+      const rect = svg.getBoundingClientRect();
+      const i = Math.round(((e.clientX - rect.left - M.l) / (rect.width - M.l - M.r)) * (DAILY.length - 1));
+      if (i < 0 || i > DAILY.length - 1) return hide();
+      show(i);
     });
+    svg.addEventListener("pointerleave", hide);
+    svg.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight") { e.preventDefault(); show(Math.min(DAILY.length - 1, tipIdx < 0 ? DAILY.length - 1 : tipIdx + 1)); }
+      else if (e.key === "ArrowLeft") { e.preventDefault(); show(Math.max(0, tipIdx < 0 ? DAILY.length - 1 : tipIdx - 1)); }
+      else if (e.key === "Escape") hide();
+    });
+    svg.addEventListener("blur", hide);
+    new ResizeObserver(() => { hide(); render(); }).observe(shell);
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    if (mq.addEventListener) mq.addEventListener("change", render);
+    render();
   }
 </script>

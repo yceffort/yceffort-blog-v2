@@ -5,21 +5,13 @@ const IMAGES_CACHE = `images-${CACHE_VERSION}`
 const RSC_CACHE = `rsc-${CACHE_VERSION}`
 
 const OFFLINE_URL = '/offline'
-const PRECACHE_URLS = [OFFLINE_URL, '/']
-// 프리캐시한 오프라인 폴백과 홈은 가장 먼저 삽입되므로, 그냥 두면 상한
-// 트리밍의 첫 삭제 대상이 된다. 절대 URL로 미리 만들어 두고 제외한다
-const PRECACHE_HREFS = PRECACHE_URLS.map(
-  (url) => new URL(url, self.location.origin).href,
-)
+const PRECACHE_URLS = [OFFLINE_URL]
 const ALL_CACHES = [STATIC_CACHE, PAGES_CACHE, IMAGES_CACHE, RSC_CACHE]
 
-// 배포마다 ?dpl= 쿼리가 바뀌어 엔트리가 계속 쌓이므로 캐시별 상한을 두고
+// 배포마다 ?dpl= 쿼리가 바뀌어 엔트리가 계속 쌓이므로 상한을 두고
 // 오래된 것부터 정리한다 (Cache API의 keys()는 삽입 순서를 보장한다)
 const MAX_ENTRIES = {
   [STATIC_CACHE]: 500,
-  [PAGES_CACHE]: 200,
-  [IMAGES_CACHE]: 300,
-  [RSC_CACHE]: 300,
 }
 
 const FONT_HOSTS = ['fonts.gstatic.com', 'cdn.jsdelivr.net']
@@ -35,10 +27,7 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches
       .open(PAGES_CACHE)
-      .then((cache) => cache.addAll(PRECACHE_URLS).then(() => cache.match('/')))
-      // 페이지 로드 중에 SW가 설치되면 이미 로드된 이미지는 fetch 이벤트를
-      // 거치지 않으므로, 프리캐시한 홈의 이미지를 여기서 직접 저장한다
-      .then((home) => (home ? saveImagesFromHTML(home.clone()) : null))
+      .then((cache) => cache.addAll(PRECACHE_URLS))
       .then(() => self.skipWaiting()),
   )
 })
@@ -84,88 +73,6 @@ function isRSCRequest(request, url) {
   return url.searchParams.has('_rsc') || request.headers.get('rsc') === '1'
 }
 
-function isPrefetchRequest(request) {
-  return (
-    request.headers.has('next-router-prefetch') ||
-    request.headers.has('next-router-segment-prefetch')
-  )
-}
-
-// HTML의 img 태그에서 이미지 URL을 추출한다. 포스트 본문 이미지는 대부분
-// 외부 도메인이므로 절대 URL도 포함한다. next/image의 srcset은 원본당
-// 여러 너비를 포함하므로, 원본(url 파라미터)별로 1080에 가장 가까운 하나만 고른다
-function extractImageUrls(html) {
-  const found = new Set()
-  const tagRe = /<img\b[^>]*>/gi
-  // Next.js는 srcSet으로 렌더하므로 대소문자를 구분하면 srcset 후보를 통째로 놓친다
-  const attrRe = /(?:src|srcset)="([^"]+)"/gi
-  let tag
-  while ((tag = tagRe.exec(html))) {
-    let match
-    while ((match = attrRe.exec(tag[0]))) {
-      for (const candidate of match[1].split(',')) {
-        const u = candidate.trim().split(' ')[0].replaceAll('&amp;', '&')
-        if (
-          u.startsWith('/_next/image?') ||
-          u.startsWith('/api/og/') ||
-          u.startsWith('https://') ||
-          /^\/[^\s"]+\.(?:png|jpe?g|gif|webp|avif|svg)$/.test(u)
-        ) {
-          found.add(u)
-        }
-      }
-    }
-    attrRe.lastIndex = 0
-  }
-
-  const bySource = new Map()
-  const plain = []
-  for (const u of found) {
-    if (!u.startsWith('/_next/image?')) {
-      plain.push(u)
-      continue
-    }
-    const params = new URLSearchParams(u.slice('/_next/image?'.length))
-    const source = params.get('url')
-    const width = Number(params.get('w')) || 0
-    const current = bySource.get(source)
-    if (!current || Math.abs(width - 1080) < Math.abs(current.width - 1080)) {
-      bySource.set(source, {url: u, width})
-    }
-  }
-  return [...plain, ...[...bySource.values()].map((v) => v.url)]
-}
-
-async function saveImagesFromHTML(response) {
-  try {
-    const html = await response.text()
-    const urls = extractImageUrls(html).slice(0, 50)
-    const cache = await caches.open(IMAGES_CACHE)
-    await Promise.all(
-      urls.map(async (url) => {
-        try {
-          if (await cache.match(url)) {
-            return
-          }
-          // 외부 이미지는 no-cors로 가져와 opaque 응답을 그대로 저장한다
-          const external = url.startsWith('https://')
-          const imageResponse = await fetch(
-            url,
-            external ? {mode: 'no-cors'} : undefined,
-          )
-          if (imageResponse.ok || imageResponse.type === 'opaque') {
-            await putWithTrim(IMAGES_CACHE, url, imageResponse)
-          }
-        } catch {
-          // 개별 이미지 실패는 무시한다
-        }
-      }),
-    )
-  } catch {
-    // 오프라인이거나 파싱에 실패하면 저장을 생략한다
-  }
-}
-
 // 오프라인에서 srcset이 캐시에 없는 너비를 요청하면, 같은 원본의
 // 캐시된 다른 변형이라도 찾아서 돌려준다
 async function matchImageVariant(requestUrl) {
@@ -194,9 +101,7 @@ async function putWithTrim(cacheName, request, response) {
   const cache = await caches.open(cacheName)
   await cache.put(request, response)
   const max = MAX_ENTRIES[cacheName]
-  const keys = (await cache.keys()).filter(
-    (key) => !PRECACHE_HREFS.includes(key.url),
-  )
+  const keys = await cache.keys()
   if (max && keys.length > max) {
     await Promise.all(
       keys.slice(0, keys.length - max).map((key) => cache.delete(key)),
@@ -227,11 +132,7 @@ async function networkFirst(event, cacheName) {
   try {
     // 내비게이션이면 preload로 먼저 출발한 응답을 쓴다. 내비게이션이
     // 아니거나 preload 미지원이면 undefined로 resolve되어 fetch로 간다
-    const response = (await event.preloadResponse) ?? (await fetch(request))
-    if (response.ok) {
-      event.waitUntil(putWithTrim(cacheName, request, response.clone()))
-    }
-    return response
+    return (await event.preloadResponse) ?? (await fetch(request))
   } catch {
     const cache = await caches.open(cacheName)
     const cached = await cache.match(request)
@@ -250,43 +151,8 @@ async function networkFirst(event, cacheName) {
   }
 }
 
-// 실제 내비게이션(프리페치 제외)이 일어난 페이지는 HTML도 백그라운드로
-// 저장해서, 소프트 내비게이션으로만 방문한 글도 오프라인 새로고침·직접
-// 진입이 가능하게 한다
-async function savePageHTML(request, clientId) {
-  const url = new URL(request.url)
-  url.searchParams.delete('_rsc')
-  try {
-    const cache = await caches.open(PAGES_CACHE)
-    const alreadySaved = await cache.match(url.href)
-    const response = await fetch(url.href)
-    if (!response.ok) {
-      return
-    }
-    await putWithTrim(PAGES_CACHE, url.href, response.clone())
-    await saveImagesFromHTML(response)
-
-    // 처음 저장된 페이지만 클라이언트에 알린다 (토스트 표시용)
-    if (!alreadySaved && clientId) {
-      const client = await self.clients.get(clientId)
-      client?.postMessage({type: 'page-saved', url: url.pathname})
-    }
-  } catch {
-    // 오프라인이면 저장을 생략한다
-  }
-}
-
-// 하드 내비게이션한 페이지도 본문 이미지(뷰포트 밖 lazy 이미지 포함)를
-// 함께 저장한다
 async function handleNavigation(event) {
-  const response = await networkFirst(event, PAGES_CACHE)
-  if (
-    response.ok &&
-    (response.headers.get('content-type') || '').includes('text/html')
-  ) {
-    event.waitUntil(saveImagesFromHTML(response.clone()))
-  }
-  return response
+  return networkFirst(event, PAGES_CACHE)
 }
 
 async function handleImage(event) {
@@ -297,13 +163,7 @@ async function handleImage(event) {
   }
 
   try {
-    const response = await fetch(event.request)
-    if (response.ok || response.type === 'opaque') {
-      event.waitUntil(
-        putWithTrim(IMAGES_CACHE, event.request, response.clone()),
-      )
-    }
-    return response
+    return await fetch(event.request)
   } catch {
     const fallback = await matchImageVariant(event.request.url)
     if (fallback) {
@@ -318,18 +178,8 @@ async function handleImage(event) {
 // 캐시된 HTML 또는 오프라인 페이지로 응답한다
 async function handleRSC(event) {
   const {request} = event
-  // 프리페치는 캐시하지 않는다: 실제로 방문한 페이지만 저장한다
-  const isVisit = !isPrefetchRequest(request)
-  if (isVisit) {
-    event.waitUntil(savePageHTML(request, event.clientId))
-  }
-
   try {
-    const response = await fetch(request)
-    if (isVisit && response.ok) {
-      event.waitUntil(putWithTrim(RSC_CACHE, request, response.clone()))
-    }
-    return response
+    return await fetch(request)
   } catch {
     const cache = await caches.open(RSC_CACHE)
     const cached = await cache.match(request)

@@ -14,6 +14,7 @@
     "test:styles:motion": "node scripts/check-page-motion-parity.mjs",
     "test:performance": "node scripts/compare-performance.mjs",
     "test:telemetry": "vitest run src/utils/telemetry",
+    "test:offline": "vitest run src/utils/offline",
     "start": "next start"
   },
   "dependencies": {

@@ -1,7 +1,13 @@
 'use client'
 
 import * as stylex from '@stylexjs/stylex'
+import {usePathname} from 'next/navigation'
 import {useEffect, useRef, useState} from 'react'
+
+import {useIsStandalone} from '@/hooks/useIsStandalone'
+import {useLocale} from '@/hooks/useLocale'
+import {browserDeps, recordRead, syncOnLaunch} from '@/utils/offline/sync'
+
 const sx = stylex.create({
   output: {
     '@layer utilities': {
@@ -54,48 +60,82 @@ const sx = stylex.create({
 })
 const EXIT_DURATION = 300
 export function ServiceWorkerRegistration() {
-  const [savedPath, setSavedPath] = useState<string | null>(null)
+  const [message, setMessage] = useState<string | null>(null)
   const [visible, setVisible] = useState(false)
   const timers = useRef<ReturnType<typeof setTimeout>[]>([])
+  const launched = useRef(false)
+  const lastPath = useRef<string | null>(null)
+  const standalone = useIsStandalone()
+  const pathname = usePathname()
+  const {locale} = useLocale()
+  const isEn = locale === 'en'
   useEffect(() => {
-    const clearTimers = () => {
+    if ('serviceWorker' in navigator) {
+      void navigator.serviceWorker.register('/sw.js')
+    }
+    return () => {
       for (const timer of timers.current) {
         clearTimeout(timer)
       }
       timers.current = []
     }
-    const onMessage = (event: MessageEvent) => {
-      if (event.data?.type !== 'page-saved') {
-        return
+  }, [])
+  useEffect(() => {
+    if (!standalone) {
+      return
+    }
+    const show = (text: string) => {
+      for (const timer of timers.current) {
+        clearTimeout(timer)
       }
-      clearTimers()
-      setSavedPath(event.data.url as string)
+      setMessage(text)
       setVisible(false)
       timers.current = [
         // 마운트 직후 한 프레임 뒤에 표시해야 등장 트랜지션이 걸린다
         setTimeout(() => setVisible(true), 30),
         setTimeout(() => {
           setVisible(false)
-          timers.current.push(
-            setTimeout(() => setSavedPath(null), EXIT_DURATION),
-          )
+          timers.current.push(setTimeout(() => setMessage(null), EXIT_DURATION))
         }, 2500),
       ]
     }
-    if ('serviceWorker' in navigator) {
-      void navigator.serviceWorker.register('/sw.js')
-      navigator.serviceWorker.addEventListener('message', onMessage)
-      // addEventListener만으로는 SW가 보낸 메시지가 디스패치되지 않는다
-      navigator.serviceWorker.startMessages()
+    const readText = isEn ? '✓ Saved for offline' : '✓ 오프라인에 저장됨'
+    const deps = browserDeps()
+    if (!launched.current) {
+      launched.current = true
+      lastPath.current = pathname
+      void (async () => {
+        try {
+          const {savedCurrent, announce} = await syncOnLaunch(
+            window.location.pathname,
+            deps,
+          )
+          if (typeof announce === 'number') {
+            show(
+              isEn
+                ? `✓ Saved ${announce} recent posts for offline`
+                : `✓ 최근 글 ${announce}편을 오프라인에 저장했습니다`,
+            )
+          } else if (savedCurrent) {
+            show(readText)
+          }
+        } catch {}
+      })()
+      return
     }
-    return () => {
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.removeEventListener('message', onMessage)
-      }
-      clearTimers()
+    if (pathname === lastPath.current) {
+      return
     }
-  }, [])
-  if (!savedPath) {
+    lastPath.current = pathname
+    void (async () => {
+      try {
+        if (await recordRead(pathname, deps)) {
+          show(readText)
+        }
+      } catch {}
+    })()
+  }, [standalone, pathname, isEn])
+  if (!message) {
     return null
   }
   return (
@@ -104,9 +144,7 @@ export function ServiceWorkerRegistration() {
         stylex.props(sx.output3, visible ? sx.output : sx.output2).className
       }
     >
-      {savedPath.startsWith('/en')
-        ? '✓ Saved for offline'
-        : '✓ 오프라인에 저장됨'}
+      {message}
     </output>
   )
 }

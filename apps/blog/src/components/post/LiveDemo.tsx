@@ -50,7 +50,11 @@ export default function LiveDemo({src, title, height = 480}: LiveDemoProps) {
         src={src}
         title={title}
         loading="lazy"
-        sandbox="allow-scripts"
+        // allow-same-origin이 없으면 서비스 워커가 iframe 문서 요청을 가로채지
+        // 못해 설치된 PWA의 오프라인 저장분이 열리지 않는다. 데모는 전부 public/
+        // 아래 자급자족 파일이라 격리를 풀어도 사이트 스크립트와 같은 신뢰 범위다
+        // oxlint-disable-next-line react/iframe-missing-sandbox
+        sandbox="allow-scripts allow-same-origin"
         style={{
           height,
         }}

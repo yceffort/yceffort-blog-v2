@@ -95,8 +95,8 @@ export default function OfflinePage() {
         </svg>
         <h1 className={stylex.props(sx.h1).className}>오프라인 상태입니다</h1>
         <p className={stylex.props(sx.p).className}>
-          인터넷 연결이 끊어졌습니다. 이전에 방문한 페이지는 오프라인에서도 읽을
-          수 있습니다.
+          인터넷 연결이 끊어졌습니다. 블로그를 앱으로 설치하면 읽은 글과 최근
+          글을 오프라인에서도 읽을 수 있습니다.
         </p>
         {/* oxlint-disable-next-line next/no-html-link-for-pages -- 오프라인 폴백에서는 라우터 없이 전체 리로드가 필요하다 */}
         <a href="/" className={stylex.props(sx.a).className}>

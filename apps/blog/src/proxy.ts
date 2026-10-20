@@ -23,6 +23,7 @@ const EN_PREFIXES = new Set([
   'resume',
   'series',
   'tags',
+  'saved',
 ])
 
 // [year]/[...slug]는 loading.tsx 셸을 먼저 스트리밍하므로 페이지의 notFound()와 리다이렉트가 200이 된다.

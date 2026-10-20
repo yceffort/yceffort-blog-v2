@@ -14,6 +14,7 @@ import {
 
 import * as headerStyles from '@/components/layout/header.styles'
 import {SiteConfig} from '@/config'
+import {useIsStandalone} from '@/hooks/useIsStandalone'
 import {useLocale} from '@/hooks/useLocale'
 import profile from '@/public/profile.jpeg'
 import {skipLink} from '@/styles/accessibility.styles'
@@ -110,7 +111,8 @@ function HeaderLogo() {
 function HeaderNav() {
   const {pathPrefix} = useLocale()
   const pathname = usePathname() ?? '/'
-  const menu = pathPrefix
+  const standalone = useIsStandalone()
+  const baseMenu = pathPrefix
     ? SiteConfig.menu.map((link) =>
         // 영문판이 있는 메뉴만 /en으로 보낸다
         ['/pages/1', '/about', '/series', '/tags'].includes(link.path)
@@ -121,6 +123,9 @@ function HeaderNav() {
           : link,
       )
     : SiteConfig.menu
+  const menu = standalone
+    ? [...baseMenu, {label: 'Saved', path: `${pathPrefix}/saved`}]
+    : baseMenu
   const isActive = (path: string) => {
     if (path.startsWith('http')) {
       return false

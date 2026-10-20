@@ -1,0 +1,7 @@
+SUIT Variable (sun-typeface/SUIT), SIL Open Font License 1.1
+Source: https://cdn.jsdelivr.net/gh/sunn-us/SUIT@2/fonts/variable/woff2/SUIT-Variable.woff2 (downloaded 2026-10-19)
+License text: OFL.txt (copied from the repository LICENSE file)
+Font name table: Version 2.040;Glyphs 3.2.3 (3260) | SUIT Variable Thin | Copyright © 2022 Sun.
+axes: [('wght', 100.0, 900.0)]
+glyphs: 2956
+Used as-is (no subsetting). Only the ink theme of the research app references it.

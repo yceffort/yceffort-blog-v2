@@ -1,5 +1,5 @@
 /**
- * unDraw 일러스트로 썸네일을 만드는 공통 엔진. apps/blog와 apps/research의
+ * unDraw 일러스트로 썸네일을 만드는 공통 엔진. apps/blog의
  * scripts/generate-undraw-thumbnail.mjs가 대상 파일, slug 규칙, 키 위치만 넘겨 쓴다.
  *
  * 1) Claude가 제목/설명을 보고 unDraw 카탈로그(사람 없는 그림만)에서 이름 하나를 고른다

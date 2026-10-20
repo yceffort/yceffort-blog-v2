@@ -99,7 +99,7 @@ export function getSlideStaticParams() {
 
 const THUMB_DIR = path.join(process.cwd(), 'public/thumbnails')
 
-// scripts/generate-undraw-thumbnail.mjs 가 만든 webp 가 있으면 그 경로. 없으면 /api/og 폴백
+// scripts/generate-cover-thumbnail.mjs 가 만든 webp 가 있으면 그 경로. 없으면 /api/og 폴백
 // 재생성해도 파일명이 같아 캐시가 안 깨지므로 수정 시각을 버전으로 붙인다
 function resolveThumbnail(slug: string): string | undefined {
   const file = path.join(THUMB_DIR, `${slug}.webp`)

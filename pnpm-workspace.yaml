@@ -4,7 +4,7 @@ packages:
 
 catalog:
   '@anthropic-ai/sdk': ^0.120.0
-  '@babel/core': ^7.29.7
+  '@babel/core': ^8.0.7
   '@playwright/test': 1.63.0
   '@stylexjs/babel-plugin': ^0.19.1
   '@stylexjs/postcss-plugin': ^0.19.0

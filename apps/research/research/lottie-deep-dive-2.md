@@ -18,7 +18,7 @@ art:
 
 렌더러 안에서: 기본값이 이미 하고 있던 일
 
-<!-- _class: invert -->
+<!-- _class: invert deck-cover -->
 
 @yceffort
 

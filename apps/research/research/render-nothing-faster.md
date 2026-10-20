@@ -17,7 +17,7 @@ art:
 
 `<></>`, `null`, 그리고 훅으로 컴포넌트 없애기
 
-<!-- _class: invert -->
+<!-- _class: invert deck-cover -->
 
 @yceffort
 

@@ -15,7 +15,7 @@ art:
 
 # 패키지 가이드 1탄) 패키지 제작을 위한 package.json 가이드
 
-<!-- _class: invert -->
+<!-- _class: invert deck-cover -->
 
 @yceffort
 

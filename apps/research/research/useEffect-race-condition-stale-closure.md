@@ -17,7 +17,7 @@ art:
 
 안티패턴, race condition, stale closure — 그리고 그 너머
 
-<!-- _class: invert -->
+<!-- _class: invert deck-cover -->
 
 @yceffort
 

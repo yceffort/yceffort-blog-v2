@@ -18,7 +18,7 @@ art:
 
 내부 동작, 실전 함정, SSR
 
-<!-- _class: invert -->
+<!-- _class: invert deck-cover -->
 
 @yceffort
 

@@ -15,6 +15,8 @@ art:
   undraw: responsive
 ---
 
+<!-- _class: deck-cover -->
+
 # `'use client'` 디렉티브 딥다이브 🚪
 
 ## 클라이언트 경계의 끝까지

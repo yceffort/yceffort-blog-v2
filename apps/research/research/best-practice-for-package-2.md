@@ -17,7 +17,7 @@ art:
 
 > with attw cli
 
-<!-- _class: invert -->
+<!-- _class: invert deck-cover -->
 
 @yceffort
 

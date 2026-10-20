@@ -19,7 +19,7 @@ art:
 
 런타임 선택부터 에러율과 지연까지
 
-<!-- _class: invert -->
+<!-- _class: invert deck-cover -->
 
 1부 · 전 2부
 

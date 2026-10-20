@@ -18,7 +18,7 @@ art:
 
 던지는 컴포넌트의 세계 — throw 하나로 이해하는 선언적 로딩과 에러 처리
 
-<!-- _class: invert -->
+<!-- _class: invert deck-cover -->
 
 @yceffort
 

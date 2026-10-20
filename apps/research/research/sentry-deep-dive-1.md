@@ -17,7 +17,7 @@ art:
 
 브라우저에서 서버까지 — 에러 하나가 이슈가 되기까지 ①
 
-<!-- _class: invert -->
+<!-- _class: invert deck-cover -->
 
 @yceffort
 

@@ -18,7 +18,7 @@ art:
 
 전략과 문제 해결: 서비스에 캐시 적용하기
 
-<!-- _class: invert -->
+<!-- _class: invert deck-cover -->
 
 @yceffort
 

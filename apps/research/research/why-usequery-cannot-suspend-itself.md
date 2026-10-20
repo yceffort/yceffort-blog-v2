@@ -18,7 +18,7 @@ art:
 
 렌더가 버려진다는 사실 하나로 따라가기
 
-<!-- _class: invert -->
+<!-- _class: invert deck-cover -->
 
 @yceffort
 

@@ -18,7 +18,7 @@ art:
 
 원리와 규칙: 응답 헤더를 읽는 법
 
-<!-- _class: invert -->
+<!-- _class: invert deck-cover -->
 
 @yceffort
 

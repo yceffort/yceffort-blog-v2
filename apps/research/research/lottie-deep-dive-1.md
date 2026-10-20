@@ -17,7 +17,7 @@ art:
 
 병목을 찾는 법: 배포본을 뜯어 측정하기
 
-<!-- _class: invert -->
+<!-- _class: invert deck-cover -->
 
 @yceffort
 

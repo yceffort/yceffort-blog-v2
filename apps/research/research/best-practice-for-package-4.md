@@ -14,7 +14,7 @@ art:
 
 # 패키지 가이드 4탄) dependencies, devDependencies, peerDependencies
 
-<!-- _class: invert -->
+<!-- _class: invert deck-cover -->
 
 @yceffort
 

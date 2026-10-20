@@ -19,7 +19,7 @@ art:
 
 SSRF는 어떻게 뚫리는가
 
-<!-- _class: invert -->
+<!-- _class: invert deck-cover -->
 
 2부 · 전 2부
 

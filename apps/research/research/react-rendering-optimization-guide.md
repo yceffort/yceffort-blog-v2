@@ -17,7 +17,7 @@ art:
 
 객체 참조, memo, 그리고 "언제 최적화할 것인가"
 
-<!-- _class: invert -->
+<!-- _class: invert deck-cover -->
 
 @yceffort
 

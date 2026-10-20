@@ -16,6 +16,8 @@ art:
   undraw: cloud-files
 ---
 
+<!-- _class: deck-cover -->
+
 # `'use cache'` 디렉티브 딥다이브 ⏱
 
 ## 시간의 경계

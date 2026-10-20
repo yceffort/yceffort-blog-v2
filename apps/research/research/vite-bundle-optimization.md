@@ -17,7 +17,7 @@ art:
 
 내 앱의 번들은 무엇으로 결정되는가
 
-<!-- _class: invert -->
+<!-- _class: invert deck-cover -->
 
 @yceffort
 

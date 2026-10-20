@@ -18,7 +18,7 @@ art:
 
 동작 원리와 실행 순서
 
-<!-- _class: invert -->
+<!-- _class: invert deck-cover -->
 
 @yceffort
 

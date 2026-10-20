@@ -13,6 +13,8 @@ art:
   undraw: web-app
 ---
 
+<!-- _class: deck-cover -->
+
 # `'use client'` & `'use server'` 제대로 이해하기 🚀
 
 [블로그 "What Does 'use client' Do?" (overreacted.io) 요약](https://overreacted.io/what-does-use-client-do/)

@@ -16,7 +16,7 @@ art:
 
 서버에서 이슈까지 — 에러 하나가 이슈가 되기까지 ②
 
-<!-- _class: invert -->
+<!-- _class: invert deck-cover -->
 
 @yceffort
 

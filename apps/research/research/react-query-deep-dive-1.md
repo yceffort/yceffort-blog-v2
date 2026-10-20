@@ -19,7 +19,7 @@ art:
 
 사용법과 캐시의 생명주기
 
-<!-- _class: invert -->
+<!-- _class: invert deck-cover -->
 
 @yceffort
 

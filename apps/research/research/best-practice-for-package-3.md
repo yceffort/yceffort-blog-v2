@@ -16,7 +16,7 @@ art:
 
 # 패키지 가이드 3탄) 패키지 제작을 위한 가이드
 
-<!-- _class: invert -->
+<!-- _class: invert deck-cover -->
 
 @yceffort
 

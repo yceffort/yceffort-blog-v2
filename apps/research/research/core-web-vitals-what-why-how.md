@@ -5,8 +5,8 @@ paginate: true
 theme: default
 tags:
   - web-performance
-  - observability
   - browser
+  - observability
 date: 2026-10-19
 description: 'LCP, INP, CLS가 무엇을 재는지에서 시작해 왜 실제 사용자에게서 재야 하는지, 브라우저와 web-vitals가 값을 어떻게 만들고 언제 넘겨주는지까지 따라간다. 값이 서버에 도착하지 않는 다섯 가지 경우를 직접 측정한 수치로 확인한다.'
 published: false
@@ -379,9 +379,9 @@ web.dev FCP: "measures the time from when the user first navigated to the page t
 <div class="src">web.dev가 제외 이유를 직접 밝히지는 않아, CWV 조건과 지표 문서의 설명을 맞춰 정리했다. 출처: web.dev의 vitals, lcp, ttfb 문서</div>
 
 <!--
-CWV 조건, web.dev/articles/vitals: "Each of the Core Web Vitals represents a distinct facet of the user experience, is measurable in the field, and reflects the real-world experience of a critical user-centric outcome." "The current set focuses on three aspects of the user experience: loading, interactivity, and visual stability."
+CWV 조건, web.dev/articles/vitals: "Each of the Core Web Vitals represents a distinct facet of the user experience, is measurable in the field, and reflects the real-world experience of a critical user-centric outcome." 같은 문서는 현재 세트가 다루는 세 측면을 loading, interactivity, visual stability로 든다.
 같은 문서의 "Other Web Vitals": "the metrics Time to First Byte (TTFB) and First Contentful Paint (FCP) are both vital aspects of the loading experience, and are both useful in diagnosing issues with LCP (slow server response times or render-blocking resources, respectively)."
-FCP, web.dev/articles/lcp: "First Contentful Paint (FCP) only capture[s] the very beginning of the loading experience. If a page shows a splash screen or displays a loading indicator, this moment isn't very relevant to the user."
+FCP, web.dev/articles/lcp: "user-centric performance metrics like First Contentful Paint (FCP) only capture the very beginning of the loading experience. If a page shows a splash screen or displays a loading indicator, this moment isn't very relevant to the user."
 TTFB, web.dev/articles/ttfb: "a foundational metric for measuring connection setup time and web server responsiveness". "Because TTFB isn't a Core Web Vitals metric, it's not absolutely necessary that sites meet the "good" TTFB threshold, provided that it doesn't impede their ability to score well on the metrics that matter." 이어서 SPA처럼 첫 마크업은 빨리 보내도 JS가 내용을 채워야 하는 경우를 예로 든다.
 ②는 두 지표 모두 충족한다. 같은 문서에서 "필드 측정이 안 되고 사용자 결과를 반영하지 않아서" 빠졌다고 명시한 것은 TBT이고, TTFB와 FCP 이야기가 아니다.
 -->
@@ -562,7 +562,7 @@ web-vitals는 40ms 미만의 이벤트는 관찰하지 않는다(durationThresho
 
 <!--
 Vodafone: web.dev/case-studies/vodafone (2021-03-17) "a 31% improvement in LCP led to 8% more sales". 50:50 A/B, 하루 약 10만 클릭. 개선판에는 서버 렌더링과 이미지 최적화가 들어갔다. "Note that DCL actually increased 15%."
-redBus: web.dev/case-studies/redbus-inp (2023-05-10 갱신) "The result was a 7% overall increase in sales." 입력 필드 하나의 INP 72% 개선, 검색 결과를 30개에서 10개씩 불러오게 바꿔 870~900ms를 350~370ms로.
+redBus: web.dev/case-studies/redbus-inp (2023-05-10 갱신) "The result was a 7% overall increase in sales." 입력 필드의 리듀서 호출을 줄여 그 페이지의 INP 72% 개선, 검색 결과를 30개에서 10개씩 불러오게 바꿔 870~900ms를 350~370ms로.
 Yahoo! JAPAN 뉴스: web.dev/case-studies/yahoo-japan-news (2021-03-09) "they correlated the site's improved Cumulative Layout Shift (CLS) score with a 15% increase in page views per session and 13% increase in session duration."
 -->
 

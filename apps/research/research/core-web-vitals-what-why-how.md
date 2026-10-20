@@ -78,7 +78,6 @@ section.cover strong, section.chapter strong { background: none; color: #8ea2ff;
 section.statement { justify-content: center; }
 section.statement h2 { font-size: 54px; line-height: 1.3; margin-bottom: 36px; }
 section.statement h2 strong { background: linear-gradient(transparent 62%, #ffe27a 62%); }
-section.quiz { background: var(--accent-soft); }
 
 .k { font-size: 16px; font-weight: 600; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 6px; }
 .src { position: absolute; left: 72px; right: 130px; bottom: 24px; font-size: 15px; color: var(--muted); line-height: 1.45; }
@@ -246,6 +245,11 @@ section.quiz { background: var(--accent-soft); }
 4장의 수치는 블로그 시리즈 "Core Web Vitals 직접 수집하기" 1, 2편에서 직접 잰 값이다. 45분 안팎.
 -->
 
+<!--
+안녕하세요. 오늘은 Core Web Vitals를 무엇을, 왜, 어떻게 수집하는지 순서대로 따라가 보겠습니다. 이름은 들어 보셨을 텐데, 실제 사용자 브라우저에서 값을 모아 본 분은 많지 않을 겁니다.
+부제가 오늘의 결론입니다. 이 값들은 사용자가 페이지를 떠날 때 확정됩니다. 왜 그런지, 그래서 수집 코드가 어떻게 달라져야 하는지가 오늘 이야기입니다. 45분 정도 걸리고, 중간에 직접 해 보는 장이 하나 있습니다.
+-->
+
 ---
 
 ## 오늘 순서
@@ -281,6 +285,11 @@ LCP, INP, CLS와 p75
 </div>
 </div>
 
+<!--
+네 부분입니다. 1장에서는 세 지표가 각각 무엇을 재는지와 판정 기준을 봅니다. 2장은 왜 이걸 굳이 실제 사용자에게서 재야 하는지입니다. Lighthouse 점수가 있는데 왜 또 재느냐는 질문에 답합니다. 3장은 브라우저가 기록을 어떻게 남기고 web-vitals가 그걸 어떻게 지표로 바꾸는지입니다.
+4장이 오늘의 중심입니다. 수집을 시작하면 반드시 나오는 질문 다섯 가지를 직접 잰 수치로 답합니다. 앞의 세 장은 4장을 이해하기 위한 준비라고 보셔도 됩니다.
+-->
+
 ---
 
 ## 이 덱의 측정 환경
@@ -298,6 +307,11 @@ LCP, INP, CLS와 p75
 
 </div>
 
+<!--
+오늘 나오는 숫자는 모두 이 환경에서 잰 값입니다. web-vitals는 6.2.3으로 발표 준비 시점의 npm 최신이고, Next.js 16.3.5에는 4.2.1이 들어 있습니다. 두 버전이 다르다는 점이 4장 마지막에 중요해집니다. 브라우저는 Playwright의 Chromium 156이고 일부는 Chrome Beta 157로 확인했습니다.
+라이브러리 버전이 바뀌면 결과도 바뀝니다. 특히 web-vitals 다음 배포에서 달라지는 내용이 있어 해당 장에 표시해 두었습니다. 여러분이 나중에 다시 재면 숫자가 다를 수 있다는 뜻입니다.
+-->
+
 ---
 
 ## 먼저 알아 둘 용어
@@ -311,6 +325,11 @@ LCP, INP, CLS와 p75
 <div class="card"><h3>랩 데이터</h3><p>정해진 환경에서 도구로 측정한 값. Lighthouse가 대표적이다</p></div>
 </div>
 
+<!--
+여섯 개 용어만 맞추고 가겠습니다. 페이지 로드는 문서 하나를 새로 여는 일이고, 지표는 페이지 로드마다 따로 잽니다. 성능 기록은 브라우저가 남기는 기록입니다. 언제 무엇을 그렸는지, 클릭 처리에 몇 ms가 걸렸는지 같은 것들입니다.
+숨겨진 상태는 탭을 바꾸거나 앱을 전환하거나 다른 페이지로 가서 화면에서 사라진 상태입니다. 오늘 가장 자주 나올 말입니다. p75는 값을 작은 순서로 줄 세웠을 때 75% 위치의 값입니다. 필드 데이터는 실제 사용자 브라우저에서 잰 값, 랩 데이터는 정해진 환경에서 도구로 잰 값입니다.
+-->
+
 ---
 
 <!-- _class: chapter -->
@@ -321,6 +340,10 @@ LCP, INP, CLS와 p75
 # 무엇을 재나
 
 사용자 경험을 세 가지 숫자로
+
+<!--
+1장입니다. 사용자 경험을 숫자 세 개로 바꾸는 방법부터 보겠습니다.
+-->
 
 ---
 
@@ -335,6 +358,11 @@ LCP, INP, CLS와 p75
 </div>
 
 이 세 지표가 **Core Web Vitals**다. 각각 로딩, 반응성, 시각적 안정성을 측정한다.
+
+<!--
+지표 이름보다 질문으로 기억하는 게 쉽습니다. 사용자는 페이지를 열면 세 가지를 느낍니다. 떴나, 눌렀는데 반응하나, 읽다가 밀리지 않나. 이 셋에 각각 LCP, INP, CLS가 대응합니다.
+LCP는 화면에서 가장 큰 텍스트 블록이나 이미지가 그려진 시점, INP는 클릭이나 탭, 키 입력부터 다음 화면이 그려지기까지, CLS는 요소가 예고 없이 움직인 정도입니다. CLS만 시간이 아니라 단위 없는 점수라는 점을 기억해 두세요. 이 세 개를 묶어 Core Web Vitals라고 부릅니다.
+-->
 
 ---
 
@@ -352,6 +380,11 @@ LCP, INP, CLS와 p75
 </div>
 
 <div class="src">세 지표 모두 탐색 시작부터 측정한다(막대 길이는 예시). TTFB와 FCP가 Core Web Vitals에 들지 않은 이유는 다음 장. web.dev/articles/ttfb, web.dev/articles/fcp</div>
+
+<!--
+Core Web Vitals는 아니지만 같이 수집하는 보조 지표 둘입니다. TTFB는 이동을 시작해서 응답의 첫 바이트가 도착하기까지입니다. 리다이렉트, 서비스 워커 시작, DNS, 연결과 TLS, 그리고 서버가 첫 바이트를 보내기까지를 전부 더한 시간이라, 이 값이 크면 서버나 CDN, 리다이렉트를 의심합니다.
+FCP는 화면에 무언가 처음 그려진 시점입니다. 텍스트든 이미지든 svg든 흰색이 아닌 canvas든, 하나라도 그려지면 그 시각입니다. 빈 화면이 끝났다는 신호입니다. 막대 길이는 예시고, 세 지표 모두 탐색 시작을 0으로 잽니다. 그런데 왜 이 둘은 Core가 아닐까요. 다음 장입니다.
+-->
 
 <!--
 web.dev TTFB: "TTFB is a metric that measures the time between starting navigating to a page and when the first byte of a response begins to arrive." "TTFB is the sum of the following request phases: Redirect time, Service worker startup time (if applicable), DNS lookup, Connection and TLS negotiation, Request, up until the point at which the first byte of the response has arrived."
@@ -382,6 +415,12 @@ web.dev FCP: "measures the time from when the user first navigated to the page t
 <div class="src">web.dev가 제외 이유를 직접 밝히지는 않아, CWV 조건과 지표 문서의 설명을 맞춰 정리했다. 출처: web.dev의 vitals, lcp, ttfb 문서</div>
 
 <!--
+web.dev가 둘을 뺀 이유를 직접 쓰지는 않았습니다. 대신 Core Web Vitals의 조건 세 가지를 밝혔고, 거기에 맞춰 보면 이유가 보입니다. 서로 다른 측면을 하나씩 맡을 것, 필드에서 잴 수 있을 것, 사용자가 느끼는 결과를 반영할 것입니다.
+FCP는 로딩의 시작만 잡습니다. 스플래시 화면이나 로딩 표시만 떠도 FCP는 찍히는데, 사용자에게 그 순간은 별 의미가 없습니다. TTFB는 화면에 보이는 결과가 아닙니다. 서버와 연결의 응답 속도를 재는 기반 지표라서, 첫 바이트가 빨리 와도 SPA처럼 JS가 내용을 채워야 하면 사용자는 한참 기다립니다.
+그래서 로딩이라는 측면은 LCP가 대표하고, TTFB와 FCP는 LCP가 느릴 때 원인을 좁히는 용도로 씁니다. 서버가 느린지, 렌더링을 막는 리소스가 있는지를 각각 가리킵니다.
+-->
+
+<!--
 CWV 조건, web.dev/articles/vitals: "Each of the Core Web Vitals represents a distinct facet of the user experience, is measurable in the field, and reflects the real-world experience of a critical user-centric outcome." 같은 문서는 현재 세트가 다루는 세 측면을 loading, interactivity, visual stability로 든다.
 같은 문서의 "Other Web Vitals": "the metrics Time to First Byte (TTFB) and First Contentful Paint (FCP) are both vital aspects of the loading experience, and are both useful in diagnosing issues with LCP (slow server response times or render-blocking resources, respectively)."
 FCP, web.dev/articles/lcp: "user-centric performance metrics like First Contentful Paint (FCP) only capture the very beginning of the loading experience. If a page shows a splash screen or displays a loading indicator, this moment isn't very relevant to the user."
@@ -402,6 +441,11 @@ TTFB, web.dev/articles/ttfb: "a foundational metric for measuring connection set
 
 <div class="src">기준값은 web-vitals가 내보내는 LCPThresholds 등의 상수와 같다. 판정은 p75로 한다(1장 마지막 장).</div>
 
+<!--
+판정 기준입니다. LCP는 2.5초, INP는 200ms, CLS는 0.1까지가 good이고, 4초, 500ms, 0.25를 넘으면 poor입니다. 그 사이가 개선 필요입니다. 아래 두 줄은 보조 지표입니다.
+이 숫자는 외울 필요가 없습니다. web-vitals가 LCPThresholds 같은 상수로 내보내고, 콜백이 받는 rating에 이미 good, needs-improvement, poor로 판정돼서 옵니다. 중요한 건 이 판정을 사용자 한 명의 값이 아니라 p75로 한다는 점인데, 1장 마지막에 다시 봅니다.
+-->
+
 ---
 
 ## LCP 후보는 계속 바뀐다
@@ -420,6 +464,11 @@ TTFB, web.dev/articles/ttfb: "a foundational metric for measuring connection set
 
 </div>
 </div>
+
+<!--
+LCP가 왜 바로 확정되지 않는지 보여 주는 장입니다. 재현 환경에서 잰 값입니다. 28ms에 제목이 그려지면서 첫 후보가 됩니다. 그런데 0.8초 늦게 온 이미지가 더 커서 1052ms에 후보가 이미지로 바뀝니다. 더 큰 요소가 그려질 때마다 후보가 바뀌는 겁니다.
+브라우저가 후보 기록을 멈추는 때는 사용자가 탭하거나 스크롤하거나 키를 누를 때입니다. 그러니까 LCP는 언제 값을 확정할지 정해야 하는 지표입니다. 이 질문이 4장의 첫 번째 질문으로 이어집니다. 3장 첫 장의 코드를 콘솔에 붙이면 여러분 서비스에서도 후보가 바뀌는 걸 직접 볼 수 있습니다.
+-->
 
 <!--
 재현 환경 demo-web의 ?lcp=200&img=800에서 잰 값이다. 제목(크기 6156)이 먼저 그려지고, 0.8초 늦게 온 이미지(크기 129600)가 더 커서 후보가 바뀌었다. 3장 첫 장의 코드를 콘솔에 붙이면 직접 볼 수 있다.
@@ -443,6 +492,11 @@ TTFB, web.dev/articles/ttfb: "a foundational metric for measuring connection set
 <div class="card hl">네 구간의 <b>합이 곧 LCP</b>다. "지연"이 붙은 ②와 ④는 0에 가까울수록 좋다. LCP가 텍스트면 ②와 ③은 0이다.</div>
 
 <div class="src">비율은 지침이다. LCP가 꾸준히 2.5초 안이면 비율은 크게 상관없다(web.dev/articles/optimize-lcp). web-vitals/attribution으로 네 구간 값을 받을 수 있다.</div>
+
+<!--
+LCP 요소가 이미지일 때 2.5초가 어디서 새는지 보는 방법입니다. 네 구간으로 나눕니다. 첫째, HTML 첫 바이트까지. 앞에서 본 TTFB입니다. 둘째, 브라우저가 HTML을 읽다가 LCP 이미지를 발견해 요청을 시작하기까지. JS로 이미지를 넣거나 lazy 로딩을 걸거나 CSS 배경으로 넣으면 여기가 길어집니다. 셋째, 이미지를 내려받는 시간. 넷째, 다 받은 이미지가 실제로 그려지기까지. 렌더링을 막는 CSS와 JS, 바쁜 메인 스레드가 원인입니다.
+네 구간은 겹치지도 비지도 않아서 합이 곧 LCP입니다. 지연이라는 이름이 붙은 둘째와 넷째는 0에 가까울수록 좋고, web.dev 권장 비율은 각각 10% 아래입니다. LCP가 텍스트면 둘째와 셋째는 0입니다. 비율은 지침이지 규칙이 아니라서, LCP가 꾸준히 2.5초 안이면 신경 쓰지 않아도 됩니다. web-vitals/attribution으로 네 구간 값을 그대로 받을 수 있습니다.
+-->
 
 <!--
 web.dev/articles/optimize-lcp(2025-03-31 갱신)의 정의:
@@ -471,6 +525,11 @@ web-vitals attribution 필드 이름은 timeToFirstByte, resourceLoadDelay, reso
 <div class="card bad"><div class="k">INP</div><div class="big">350ms 이상</div></div>
 </div>
 
+<!--
+INP도 상호작용 하나를 세 구간으로 나눕니다. 입력 지연은 클릭부터 핸들러가 시작되기까지입니다. 메인 스레드가 다른 일을 하고 있으면 길어집니다. 처리 시간은 핸들러 자체가 실행되는 시간이고, 마지막은 핸들러가 끝난 뒤 스타일과 레이아웃을 계산해서 다음 화면을 그리기까지입니다. DOM을 많이 바꾸면 여기가 깁니다.
+오른쪽 예가 중요합니다. 핸들러는 50ms 만에 끝났는데 클릭 순간에 300ms짜리 작업이 돌고 있었다면 INP는 350ms를 넘습니다. 내 핸들러가 가벼워도 INP가 나쁠 수 있다는 뜻입니다. attribution에서는 이 세 값이 그대로 오고, Long Animation Frame을 지원하는 브라우저면 어떤 스크립트가 시간을 썼는지까지 나옵니다.
+-->
+
 <!-- attribution 필드는 inputDelay, processingDuration, presentationDelay다. Long Animation Frame을 지원하는 브라우저에서는 어떤 스크립트가 시간을 썼는지도 나온다. -->
 
 ---
@@ -484,6 +543,11 @@ web-vitals attribution 필드 이름은 timeToFirstByte, resourceLoadDelay, reso
 </div>
 
 페이지에 머무는 동안의 **모든 상호작용**을 대상으로 한다. 오래 머문 페이지에서 한 번 튄 값이 INP가 되지 않도록, 상호작용 50번마다 가장 느린 것부터 하나씩 제외한다.
+
+<!--
+INP는 페이지에 머무는 동안의 모든 상호작용 중 거의 가장 느린 것입니다. 2024년 3월까지는 FID였는데, FID는 첫 상호작용의 입력 지연만 쟀습니다. 첫 클릭만 빠르면 그 뒤가 아무리 느려도 몰랐습니다. INP는 전부를 봅니다.
+다만 오래 머문 페이지에서 한 번 튄 값이 INP가 되지 않도록, 상호작용 50번마다 가장 느린 것부터 하나씩 제외합니다. 50번 미만이면 1위, 50번 이상 100번 미만이면 2위가 INP입니다. web-vitals는 40ms 미만의 이벤트는 아예 관찰하지 않는데, 첫 입력만 길이와 상관없이 받습니다. 모든 상호작용이라는 말을 기억해 두세요. 끝까지 봐야 값이 정해진다는 뜻입니다.
+-->
 
 <!--
 web-vitals 6.2.3 InteractionManager: 가장 긴 상호작용 10개를 들고 있다가 Math.floor(상호작용 수 / 50)번째를 고른다.
@@ -516,6 +580,11 @@ web-vitals는 40ms 미만의 이벤트는 관찰하지 않는다(durationThresho
 </div>
 </div>
 
+<!--
+CLS는 레이아웃 이동을 점수로 매깁니다. 이동 한 번의 점수는 영향 비율 곱하기 거리 비율입니다. 영향 비율은 밀리기 전과 후의 영역을 합친 것이 화면에서 차지하는 비율이고, 거리 비율은 가장 많이 움직인 거리를 화면의 긴 변으로 나눈 값입니다. 왼쪽 그림처럼 화면 절반을 차지한 요소가 화면 높이의 25%만큼 내려가면 0.75 곱하기 0.25로 0.1875입니다. 이 한 번만으로 개선 필요 구간입니다.
+이동이 여러 번이면 간격이 1초 미만인 이동을 한 묶음으로 보고, 묶음은 최대 5초까지입니다. 합이 가장 큰 묶음의 점수가 CLS입니다. 클릭이나 탭, 키 입력 뒤 500ms 안의 이동은 사용자가 예상한 이동이라 제외합니다. 스크롤과 드래그는 이 예외에 들지 않습니다.
+-->
+
 <!-- 공식, 예시, 세션 창, 500ms 규칙 모두 web.dev/articles/cls. 영향 비율은 밀리기 전과 후의 영역을 합친 것이 화면에서 차지하는 비율, 거리 비율은 가장 많이 움직인 거리를 화면의 긴 변으로 나눈 값이다. 예시는 세로가 긴 화면 기준. 스크롤, 드래그는 "입력 직후" 예외에 들지 않는다. -->
 
 ---
@@ -531,6 +600,11 @@ web-vitals는 40ms 미만의 이벤트는 관찰하지 않는다(durationThresho
 
 <div class="src">같은 페이지라도 사용자마다 기기, 네트워크, 캐시 상태가 다르다. p75가 good이면 페이지 로드의 75% 이상이 good이라는 뜻이다. 근거: web.dev "Defining the Core Web Vitals metrics thresholds"</div>
 
+<!--
+같은 페이지라도 사용자마다 기기와 네트워크, 캐시 상태가 다릅니다. 그래서 판정은 한 명의 값이 아니라 p75로 합니다. 페이지 로드의 75%가 good이면 그 페이지는 good입니다. 왜 75인지는 web.dev가 두 가지 기준을 밝혔습니다. 방문 대부분이 목표 성능을 경험했다고 볼 수 있어야 하고, 동시에 이상값 몇 개에 크게 흔들리지 않아야 한다는 겁니다.
+수집하는 입장에서 중요한 결론이 하나 있습니다. 분포를 보존해야 합니다. 평균만 저장하면 p75를 다시 계산할 수 없습니다. 값을 그대로 쌓고 집계는 나중에 해야 합니다.
+-->
+
 <!-- "The 75th percentile was chosen based on two criteria. First, the percentile should ensure that a majority of visits to a page or site experienced the target level of performance. Second, the value at the chosen percentile shouldn't be overly impacted by outliers." -->
 
 ---
@@ -544,6 +618,10 @@ web-vitals는 40ms 미만의 이벤트는 관찰하지 않는다(durationThresho
 # 왜 재나
 
 매출과 검색, 그리고 개발 환경과 다른 실제 사용자
+
+<!--
+2장입니다. 이걸 왜 재야 하는지, 그리고 Lighthouse 점수로는 왜 부족한지입니다.
+-->
 
 ---
 
@@ -564,6 +642,12 @@ web-vitals는 40ms 미만의 이벤트는 관찰하지 않는다(durationThresho
 </div>
 
 <!--
+회사들이 직접 발표한 숫자 세 개입니다. Vodafone은 랜딩 페이지를 50 대 50으로 나눠 A/B 테스트를 했습니다. 서버 렌더링과 이미지 최적화를 넣은 쪽이 LCP가 31% 좋았고 판매가 8% 늘었습니다. redBus는 검색 페이지의 INP를 870ms대에서 350ms대로 줄였고 전체 판매가 7% 늘었다고 했습니다. 다만 기간과 산정 방법은 공개하지 않았습니다. Yahoo! JAPAN 뉴스는 CLS를 0.2 개선한 뒤 세션당 페이지뷰가 15% 늘었는데, 원문도 상관관계라고 표현했습니다.
+인과관계를 보여 준 건 A/B 테스트를 한 Vodafone뿐입니다. 이 숫자를 그대로 우리 서비스에 기대하면 안 됩니다. 우리 서비스에서 어떤지는 우리 값을 직접 재야 압니다. 그게 오늘 주제이기도 합니다.
+-->
+
+<!--
+사례 원문
 Vodafone: web.dev/case-studies/vodafone (2021-03-17) "a 31% improvement in LCP led to 8% more sales". 50:50 A/B, 하루 약 10만 클릭. 개선판에는 서버 렌더링과 이미지 최적화가 들어갔다. "Note that DCL actually increased 15%."
 redBus: web.dev/case-studies/redbus-inp (2023-05-10 갱신) "The result was a 7% overall increase in sales." 입력 필드의 리듀서 호출을 줄여 그 페이지의 INP 72% 개선, 검색 결과를 30개에서 10개씩 불러오게 바꿔 870~900ms를 350~370ms로.
 Yahoo! JAPAN 뉴스: web.dev/case-studies/yahoo-japan-news (2021-03-09) "they correlated the site's improved Cumulative Layout Shift (CLS) score with a 15% increase in page views per session and 13% increase in session duration."
@@ -583,6 +667,11 @@ Yahoo! JAPAN 뉴스: web.dev/case-studies/yahoo-japan-news (2021-03-09) "they co
 검색에서는 콘텐츠의 관련성이 먼저다. CWV는 순위보다 **사용자 경험을 확인하려고** 측정한다.
 
 </div>
+
+<!--
+검색 이야기도 짚고 가겠습니다. Google Search Central은 Core Web Vitals가 순위 시스템에 쓰인다고 분명히 적었습니다. 그런데 바로 이어서, 경험이 좋지 않더라도 가장 관련 있는 콘텐츠를 보여 주려 한다고도 적었습니다. 유용한 콘텐츠가 많은 검색어에서는 좋은 페이지 경험이 도움이 된다는 정도입니다.
+그러니까 검색에서는 콘텐츠의 관련성이 먼저고, CWV는 순위를 올리려고 재는 게 아니라 사용자 경험을 확인하려고 잽니다. SEO 때문에 재자고 하면 순서가 뒤집힌 겁니다.
+-->
 
 <!--
 developers.google.com/search/docs/appearance/page-experience
@@ -621,6 +710,11 @@ developers.google.com/search/docs/appearance/page-experience
 <div class="src">랩 도구에서는 TBT(Total Blocking Time, 로드 중 메인 스레드가 막힌 시간)로 INP 문제를 가늠한다. INP를 대신하지는 못한다.</div>
 
 <!--
+그럼 Lighthouse 점수로 충분하지 않냐는 질문입니다. Lighthouse와 DevTools는 랩 데이터입니다. 기기와 네트워크 조건이 하나로 고정돼 있고, 사용자 입력이 없어서 INP를 아예 잴 수 없습니다. 페이지 로드 구간만 봅니다. 필드 데이터는 반대입니다. 사용자마다 기기와 네트워크가 다르고, 실제 클릭과 탭이 들어오고, 페이지를 떠날 때까지 잽니다.
+둘은 경쟁 관계가 아니라 역할이 다릅니다. 필드에서 나빠진 지표를 찾고, 랩에서 재현해서 고치고, 다시 필드에서 나아졌는지 확인합니다. 랩에서는 TBT, 그러니까 로드 중 메인 스레드가 막힌 시간으로 INP 문제를 가늠하는데, INP를 대신하지는 못합니다.
+-->
+
+<!--
 web.dev/articles/inp: lab tools "won't report a page's INP because they only observe the loading of a page without any interactions".
 web.dev/articles/lab-and-field-data-differences: "The Total Blocking Time (TBT) lab metric is intended to help diagnose issues with INP because it quantifies how much the main thread is blocked during page load."
 Lighthouse에도 클릭을 재현하는 timespan 모드가 있지만, 그때 INP는 내가 한 클릭에 대한 값이다.
@@ -638,6 +732,11 @@ Lighthouse에도 클릭을 재현하는 timespan 모드가 있지만, 그때 INP
 </div>
 
 PageSpeed Insights 상단의 필드 데이터는 **CrUX**(Chrome 사용자 경험 보고서)에서 가져온다. 출발점으로는 좋지만 위와 같은 한계가 있다.
+
+<!--
+필드 데이터라면 PageSpeed Insights 상단에 있지 않냐고 할 수 있습니다. 그 데이터는 CrUX, Chrome 사용자 경험 보고서에서 옵니다. 출발점으로는 좋지만 한계가 넷 있습니다.
+첫째, Chrome만입니다. 데스크톱과 Android Chrome이고, iOS의 Chrome, Android 앱 웹뷰, Edge는 빠집니다. 회사 서비스가 앱 웹뷰 안에서 열린다면 PSI 숫자는 같은 URL을 Chrome으로 직접 연 사람들의 값이지 웹뷰 사용자의 값이 아닙니다. 둘째, 검색 엔진이 색인할 수 있는 공개 페이지이면서 방문자 수가 기준 이상이어야 하는데 기준은 비공개입니다. 셋째, 최근 28일을 합산한 값이라 어제 배포의 영향을 바로 볼 수 없습니다. 넷째, 배포 버전이나 화면, 실험군처럼 우리 기준으로 나눠 볼 수 없습니다.
+-->
 
 <!--
 developer.chrome.com/docs/crux/methodology: "There are a few notable exceptions that don't provide data to the CrUX dataset: Chrome on iOS. Android apps using WebView. Other Chromium browsers (for example Microsoft Edge)." "A page must be publicly discoverable ... using the same indexability criteria as search engines." "An exact number is not disclosed."
@@ -665,6 +764,11 @@ developer.chrome.com/docs/crux/api: "28-day rolling average", "updated daily aro
 
 <div class="card bad">대신 값이 <b>서버에 도착하지 않은 경우</b>도 직접 챙겨야 한다. 4장에서 다룬다.</div>
 
+<!--
+그래서 직접 수집합니다. 흔히 RUM이라고 부르는 방식입니다. 사용자 브라우저에서 web-vitals가 성능 기록을 지표로 바꾸고, 페이지를 떠날 때 우리 서버로 보내고, 대시보드에서 화면별, 버전별 p75를 봅니다.
+얻는 게 셋입니다. 배포 후 나빠진 지표를 다음 날 확인할 수 있고, 화면과 기기, 배포 버전, 실험군으로 나눠 볼 수 있고, LCP 요소가 무엇이었는지, 어떤 클릭이 느렸는지 같은 원인 정보도 같이 받습니다. CrUX에 없는 앱 웹뷰와 iOS, 방문이 적은 페이지도 보입니다. 물론 브라우저가 지원하는 범위 안에서입니다. 대신 값이 서버에 도착하지 않는 경우를 직접 챙겨야 합니다. 그게 4장입니다.
+-->
+
 <!-- 흔히 RUM(Real User Monitoring)이라고 부른다. CrUX에 없는 방문(앱 웹뷰, iOS, 방문이 적은 페이지)도 볼 수 있다. 단 브라우저 지원 범위 안에서다(3장 마지막 장). -->
 
 ---
@@ -678,6 +782,10 @@ developer.chrome.com/docs/crux/api: "28-day rolling average", "updated daily aro
 # 어떻게 재나
 
 브라우저의 성능 기록과 web-vitals
+
+<!--
+3장입니다. 값이 어디서 오는지, 브라우저의 성능 기록부터 web-vitals까지 따라갑니다.
+-->
 
 ---
 
@@ -698,6 +806,11 @@ new PerformanceObserver((list) => {
 | 지표      | TTFB         | FCP     | LCP                        | CLS            | INP                    |
 
 <div class="src">DevTools 콘솔에 붙여 넣으면 LCP 후보가 바뀔 때마다 출력된다. buffered: true를 주면 스크립트가 늦게 실행돼도 그 전에 쌓인 기록을 받을 수 있다.</div>
+
+<!--
+브라우저가 성능 기록을 남기고, JS는 PerformanceObserver로 구독해서 받습니다. 이 다섯 줄을 DevTools 콘솔에 붙여 보세요. LCP 후보가 바뀔 때마다 시각과 요소 태그가 찍힙니다. buffered: true를 주면 스크립트가 늦게 실행돼도 그 전에 쌓인 기록을 받을 수 있습니다.
+아래 표가 기록 종류와 지표의 대응입니다. navigation 기록에서 TTFB, paint에서 FCP, largest-contentful-paint에서 LCP, layout-shift에서 CLS, event와 first-input에서 INP가 나옵니다. 지표는 결국 이 기록들을 규칙에 따라 계산한 값입니다.
+-->
 
 ---
 
@@ -724,6 +837,11 @@ new PerformanceObserver((list) => {
 </div>
 
 <div class="src">JS가 시간을 재는 것이 아니라 엔진이 남긴 기록을 받아 본다. 그래서 스크립트가 늦게 실행돼도 기록된 시각은 그대로다. 표준화 단계는 2026-10-19 w3.org/TR, wicg.github.io 기준</div>
+
+<!--
+강조하고 싶은 점은 JS가 시간을 재는 게 아니라는 겁니다. 브라우저 엔진이 네트워크와 렌더링, 입력을 처리하다가 그 순간의 시각을 timeOrigin 기준 ms로 기록하고, Performance Timeline이 버퍼에 보관하고, PerformanceObserver가 그걸 꺼내 줍니다. 그래서 우리 스크립트가 늦게 실행돼도 기록된 시각은 그대로입니다.
+표는 각 기록을 정의한 명세와 표준화 단계입니다. 공통 틀인 Performance Timeline만 후보 권고안 초안이고 나머지는 작업 초안입니다. 눈여겨볼 건 마지막 줄입니다. layout-shift는 W3C 표준 트랙이 아니라 WICG 커뮤니티 초안이고, 구현도 Chromium 계열뿐입니다. CLS가 Chromium에서만 잡히는 이유가 여기 있습니다.
+-->
 
 <!--
 W3C 표준 트랙은 작업 초안(Working Draft) → 후보 권고안(Candidate Recommendation) → 권고안(Recommendation) 순서로 올라간다. 대부분은 W3C Web Performance 워킹 그룹 명세지만 아직 작업 초안 단계다.
@@ -763,6 +881,11 @@ LCP 확정, INP 선정, CLS 묶음 계산, 숨겨진 뒤의 그리기 제외, �
 
 <div class="src">web-vitals/attribution에서 불러오면 원인 정보(LCP 요소, 느린 구간)가 함께 전달된다.</div>
 
+<!--
+기록을 지표로 바꾸는 계산 규칙은 Google의 web-vitals 라이브러리에 맡깁니다. 코드는 이게 전부입니다. LCP를 언제 확정할지, 여러 상호작용 중 어느 것을 INP로 고를지, CLS 묶음을 어떻게 계산할지, 숨겨진 뒤에 그려진 건 어떻게 뺄지, 뒤로 가기로 복원된 페이지는 어떻게 다룰지를 전부 이 라이브러리가 합니다. 직접 구현하면 이 규칙을 전부 다시 만들어야 합니다.
+콜백이 받는 값 중에 id를 기억해 두세요. 페이지 로드마다 새로 만들어지고, 서버에서 보고를 묶는 기준입니다. navigationType도 4장에서 다시 나옵니다. attribution 진입점으로 불러오면 LCP 요소나 느린 구간 같은 원인 정보가 같이 옵니다.
+-->
+
 ---
 
 ## 직접 해 보기: 로그는 언제 출력될까
@@ -779,6 +902,11 @@ LCP 확정, INP 선정, CLS 묶음 계산, 숨겨진 뒤의 그리기 제외, �
 값은 페이지를 열자마자 나오지 않는다. **사용자가 무언가 하거나 화면을 떠날 때** 나온다. 4장의 내용은 대부분 여기서 출발한다.
 
 </div>
+
+<!--
+여기서 한번 직접 해 보시죠. 앞 장의 세 줄을 콘솔에 넣고 페이지를 새로 엽니다. 아무것도 안 찍힙니다. 아무 곳이나 클릭하면 조금 뒤에 LCP가 찍힙니다. 다른 탭에 갔다 오면 CLS와 INP가 찍힙니다. 밀린 게 없으면 CLS는 0으로 옵니다. 다시 클릭하고 탭을 바꾸면 값이 바뀐 지표만 다시 옵니다.
+느끼셨을 겁니다. 값은 페이지를 열자마자 나오지 않습니다. 사용자가 무언가 하거나 화면을 떠날 때 나옵니다. 4장의 다섯 질문이 전부 여기서 출발합니다. 클릭 뒤 LCP가 찍히기까지 잠깐 뜸을 들이는 것도 4장 다섯 번째 질문에서 다룹니다.
+-->
 
 <!-- 앞 장의 세 줄을 넣고 reportAllChanges 없이 쓴 경우다. 밀린 게 없으면 CLS는 0으로 찍힌다. 클릭 뒤 LCP가 찍히기까지는 브라우저가 한가해질 때까지, 길면 1초 기다린다(4장 질문 5). -->
 
@@ -800,6 +928,11 @@ LCP 확정, INP 선정, CLS 묶음 계산, 숨겨진 뒤의 그리기 제외, �
 
 <div class="src">MDN browser-compat-data 8.1.6</div>
 
+<!--
+브라우저마다 받을 수 있는 지표가 다릅니다. LCP와 INP는 Chromium 77과 96부터, Firefox는 122와 144부터, Safari는 26.2부터입니다. CLS는 Chromium 계열에만 있습니다. 앞 장에서 본 WICG 초안 이야기입니다.
+실무에서 중요한 게 둘입니다. iOS는 Chrome이든 Firefox든 앱 웹뷰든 전부 WebKit이라 Safari 기준이고, 26.2 이전에는 TTFB와 FCP만 모입니다. Android 웹뷰는 Chromium이라 기기에 설치된 WebView 버전의 Chrome과 같습니다. 그래서 CLS 건수가 다른 지표보다 적은 건 정상입니다. web-vitals는 지원하지 않는 브라우저에서 오류 없이 그냥 아무것도 보고하지 않습니다. 건수가 적다고 수집 코드를 의심하기 전에 브라우저 비율부터 보세요.
+-->
+
 <!-- 예외가 하나 있다. Apple은 EU에서만 브라우저 앱과 인앱 브라우저가 WebKit이 아닌 엔진(Chromium의 Blink, Firefox의 Gecko 등)을 쓰도록 허용한다. 별도 권한(Web Browser Engine Entitlement, Embedded Browser Engine Entitlement)을 받아야 하고 iOS 17.4, iPadOS 18 이상에서만 된다(developer.apple.com/support/alternative-browser-engines). EU 디지털 시장법(DMA) 대응으로 생긴 제도다. 실제로 이 방식으로 배포 중인 브라우저가 있는지는 확인하지 않았다. 한국 사용자에게는 해당하지 않으니 iOS는 Safari 기준으로 보면 된다. -->
 
 <!-- 웹뷰: BCD 8.1.6에서 webview_android는 Chrome Android를, webview_ios는 Safari iOS를 그대로 따른다(mirror). 측정 API는 같지만, 앱이 웹뷰를 닫을 때 숨겨짐 신호가 오지 않는 경우가 있어 4장의 "떠나는 순간" 전송이 더 어렵다. 블로그 시리즈 3편의 주제다. -->
@@ -816,6 +949,10 @@ LCP 확정, INP 선정, CLS 묶음 계산, 숨겨진 뒤의 그리기 제외, �
 
 값이 서버에 도착하지 않는 경우
 
+<!--
+4장입니다. 수집을 시작하면 반드시 나오는 질문 다섯 가지입니다. 전부 값이 서버에 도착하지 않는 경우에 대한 이야기입니다.
+-->
+
 ---
 
 <!-- _class: statement -->
@@ -831,6 +968,10 @@ LCP 확정, INP 선정, CLS 묶음 계산, 숨겨진 뒤의 그리기 제외, �
 <div class="card inp"><p><b class="c-inp">INP</b> 더 느린 클릭이 나오면 갱신된다</p></div>
 </div>
 
+<!--
+이 장의 원칙은 하나입니다. CWV 값은 사용자가 페이지를 떠날 때 확정됩니다. LCP는 더 큰 요소가 그려지면 후보가 바뀌고, CLS는 이동 점수가 계속 누적되고, INP는 더 느린 클릭이 나오면 갱신됩니다. 다섯 질문을 전부 이 원칙으로 답할 수 있습니다. 질문마다 원칙으로 돌아오겠습니다.
+-->
+
 <!-- 가게 마감 정산과 같다. 영업 중에는 매출이 계속 바뀌고, 셔터를 내릴 때 확정된다. 그때 보내지 못하면 그날 장부는 없다. 이 장의 다섯 질문은 모두 이 원칙으로 답한다. -->
 
 ---
@@ -844,6 +985,10 @@ LCP 확정, INP 선정, CLS 묶음 계산, 숨겨진 뒤의 그리기 제외, �
 <div><em>4</em><span>"떠날 때 fetch로 보내면 되죠?"</span></div>
 <div><em>5</em><span>"Next.js의 <code>useReportWebVitals</code>면 되죠?"</span></div>
 </div>
+
+<!--
+실제로 들었던 질문들입니다. console.log를 걸었는데 왜 안 찍히냐. CLS가 같은 페이지에서 두 번 왔다. LCP가 FCP보다 적게 모이는데 데이터가 빠진 거 아니냐. 떠날 때 fetch로 보내면 되지 않냐. Next.js의 useReportWebVitals면 되지 않냐. 하나씩 가겠습니다.
+-->
 
 ---
 
@@ -868,6 +1013,11 @@ LCP 확정, INP 선정, CLS 묶음 계산, 숨겨진 뒤의 그리기 제외, �
 <div class="card hl"><h3>CLS, INP</h3><p>원래 <b>숨겨질 때</b> 보고된다</p></div>
 </div>
 
+<!--
+첫 번째 질문입니다. 안 찍히는 건 지표마다 보고 시점이 달라서입니다. 타임라인으로 보면 FCP는 첫 그림 직후, TTFB는 load 다음에 보고됩니다. LCP는 첫 클릭이나 키 입력이 들어오면 조금 뒤에 확정됩니다. CLS와 INP는 원래 숨겨질 때 보고됩니다. 입력이 한 번도 없었다면 LCP도 숨겨질 때 옵니다.
+뒤집어 보면, TTFB는 load 전에 떠나면 보고되지 않고, FCP와 LCP는 그리기 전에 숨겨지면 보고되지 않습니다. 이건 reportAllChanges 없이 쓴 기본 동작입니다. reportAllChanges를 켜면 값이 바뀔 때마다 콜백이 불립니다.
+-->
+
 <!-- reportAllChanges 없이 쓴 경우다. reportAllChanges: true를 주면 값이 바뀔 때마다 콜백이 불린다. 근거는 블로그 시리즈 1편의 지표별 report(true) 위치. -->
 
 ---
@@ -891,6 +1041,11 @@ LCP 확정, INP 선정, CLS 묶음 계산, 숨겨진 뒤의 그리기 제외, �
 </div>
 
 <div class="src">서버에 INP가 없다는 사실만으로는 클릭이 없었던 것인지, 클릭은 있었지만 받지 못한 것인지 구별할 수 없다. web-vitals 6.2.3 src/lib/bindReporter.ts</div>
+
+<!--
+안 찍히는 두 번째 이유입니다. web-vitals의 bindReporter는 세 가지를 확인한 뒤에야 콜백을 부릅니다. 측정한 값이 있는지, 보고 시점인지, 첫 보고이거나 값이 바뀌었는지입니다. 지표 값은 -1에서 시작합니다. 상호작용이 한 번도 없던 페이지 로드는 INP가 0이 아니라 값 자체가 없어서 콜백이 안 불립니다. CLS만 0에서 시작하기 때문에 0도 보고됩니다.
+여기서 서버 쪽 함정이 나옵니다. 서버에 INP가 없다는 사실만으로는 클릭이 없었던 건지, 클릭은 있었는데 받지 못한 건지 구별할 수 없습니다. 이 구별이 안 된다는 점을 뒤에서 계속 쓰게 됩니다.
+-->
 
 <!--
 bindReporter를 줄이면 이렇다.
@@ -918,6 +1073,11 @@ if (metric.value >= 0) { if (forceReport || reportAllChanges) { delta = value - 
 <div class="card"><h3>콜백이 받는 <code>metric</code>은 매번 같은 객체</h3><p>저장해 둔 객체를 나중에 읽으면 그사이 바뀐 값이 보인다</p></div>
 </div>
 
+<!--
+두 번째 질문, CLS가 두 번 왔다는 건 정상입니다. 숨겨질 때마다 다시 보고되기 때문입니다. 탭을 숨기면 CLS 0이 가고, 돌아와서 위쪽에 요소가 끼어들어 밀리면, 다시 숨길 때 0.1124가 같은 id로 갑니다. 다시 보일지 알 수 없으니 숨겨질 때마다 그때까지의 값을 보내는 겁니다. LCP와 FCP, TTFB는 페이지 로드마다 한 번만 옵니다.
+서버에서는 id로 묶어야 합니다. 따로 세면 탭을 오간 페이지 로드만 두 번 집계돼 분포가 틀어집니다. 첫 값과 마지막 값 중 무엇을 쓸지 미리 정해 두세요. 또 하나, 콜백이 받는 metric은 매번 같은 객체입니다. 저장해 둔 객체를 나중에 읽으면 그사이 바뀐 값이 보입니다. 보낼 때 직렬화하거나 복사해야 합니다.
+-->
+
 <!-- 다시 보일지는 알 수 없으니 숨겨질 때마다 그때까지의 값을 보낸다. 블로그 시리즈 3편의 재현 환경(e12-browser-lifecycle) 탭 복귀 시나리오에서 잰 값이다. LCP, FCP, TTFB는 페이지 로드마다 한 번만 보고된다. -->
 
 ---
@@ -942,6 +1102,11 @@ if (metric.value >= 0) { if (forceReport || reportAllChanges) { delta = value - 
 
 <div class="src">Chromium 156, web-vitals 6.2.3. 보고된 페이지 로드 수 / 전체. 포그라운드 탭(대조)은 다섯 지표 모두 5/5</div>
 
+<!--
+세 번째 질문, 왜 적게 모이냐입니다. 첫 번째 경우는 백그라운드 탭으로 열린 페이지입니다. 링크를 새 탭으로 열어 두고 나중에 보는 경우입니다. 다섯 번 재서 TTFB와 INP는 5번 다 왔는데 FCP, LCP, CLS는 한 번도 안 왔습니다. 10ms에서 18ms 만에 화면에 보이게 됐는데도 결과는 같았습니다.
+한 번이라도 숨겨졌다면 그 뒤에 그려진 건 측정하지 않습니다. 사용자가 보지 못한 화면이기 때문입니다. CLS는 FCP가 보고된 뒤부터 측정하므로 같이 빠집니다. 포그라운드 탭은 다섯 지표 모두 5번 다 왔습니다. 그러니까 LCP가 FCP보다 적다고 해서 바로 수집 코드를 의심할 일은 아닙니다. 원래 없는 값입니다.
+-->
+
 <!-- CDP의 Target.createTarget에 background: true를 주고 2초 뒤 앞으로 가져와 100ms짜리 버튼을 누르고 닫았다. Chromium이 왜 10ms 만에 보이게 바꿨는지는 확인하지 못했다. -->
 
 ---
@@ -964,6 +1129,11 @@ if (metric.value >= 0) { if (forceReport || reportAllChanges) { delta = value - 
 </div>
 
 수집된 TTFB는 **`load`까지 머문 페이지 로드에 치우친다.** 서버가 느려 `load`도 늦어지는 페이지일수록 느린 TTFB가 더 많이 빠질 수 있다.
+
+<!--
+두 번째 경우는 TTFB입니다. TTFB 값은 첫 바이트가 도착한 순간 이미 정해지는데, web-vitals는 navigation 기록의 나머지 값이 채워지는 load까지 기다렸다가 그다음 task에 보고합니다. 이미지 하나로 load를 3초 늦춘 페이지에서 1초 뒤에 떠나면 TTFB가 0번 옵니다. FCP, LCP, CLS는 다 왔는데도요. 5초 뒤에 떠나면 다 옵니다.
+함정은 이겁니다. 수집된 TTFB는 load까지 머문 페이지 로드에 치우칩니다. 서버가 느려서 load도 늦어지는 페이지일수록 느린 TTFB가 더 많이 빠질 수 있습니다. 치우침이 실제로 얼마인지는 재지 않았습니다. 그래도 TTFB p75를 볼 때 이 방향의 편향이 있다는 건 알고 봐야 합니다.
+-->
 
 <!-- Chromium 156, web-vitals 6.2.3. 이미지 하나로 load를 3초 늦췄다. 치우침이 실제로 얼마인지는 재지 않았다. -->
 
@@ -997,6 +1167,11 @@ if (metric.value >= 0) { if (forceReport || reportAllChanges) { delta = value - 
 
 <div class="card hl"><code>navigationType</code>이 <code>back-forward-cache</code>인 값은 <b>따로 분리해서 본다.</b> 복원 비율이 늘면 LCP p75가 좋아진 것처럼 보일 수 있다.</div>
 
+<!--
+세 번째 경우는 뒤로 가기입니다. bfcache는 뒤로, 앞으로 가기 때 페이지를 메모리에 통째로 보관했다가 그대로 복원하는 캐시입니다. 복원된 페이지는 측정 기준이 다릅니다. TTFB는 0이고, FCP와 LCP는 프레임 두 개 그리는 시간이라 16ms에서 39ms 정도입니다. INP도 표처럼 40ms 미만 클릭이 8ms로 보고됩니다. 40ms는 web-vitals가 이벤트를 관찰하는 하한입니다.
+이걸 섞어서 보면 복원 비율이 늘기만 해도 LCP p75가 좋아진 것처럼 보입니다. navigationType이 back-forward-cache인 값은 따로 분리해서 보세요. 참고로 Playwright는 기본으로 bfcache를 끄기 때문에 재현하려면 그 플래그를 빼야 합니다.
+-->
+
 <!-- Chromium 156, web-vitals 6.2.3, Playwright가 기본으로 넣는 --disable-back-forward-cache를 뺐다. 15번 모두 복원됐다. 40ms는 web-vitals가 이벤트를 관찰하는 하한(durationThreshold)이다. -->
 
 ---
@@ -1015,6 +1190,11 @@ if (metric.value >= 0) { if (forceReport || reportAllChanges) { delta = value - 
 - 일반 요청은 문서가 사라질 때 **함께 취소될 수 있다**
 - 진행 중인 keepalive 요청의 본문 크기는 **모두 합쳐 64KiB로 제한된다**(Fetch 명세). 원인 정보를 많이 담으면 한도에 가까워진다
 
+<!--
+네 번째 질문, 떠날 때 fetch로 보내면 되냐입니다. 일반 요청은 문서가 사라질 때 함께 취소될 수 있습니다. 페이지가 닫혀도 전송되는 방법은 둘입니다. navigator.sendBeacon은 응답을 확인할 수 없고, 반환값 true는 전송 대기열에 넣었다는 뜻일 뿐입니다. fetch에 keepalive: true를 주면 문서가 아직 남아 있는 동안은 응답을 확인할 수 있습니다.
+둘 다 제한이 있습니다. 진행 중인 keepalive 요청의 본문은 모두 합쳐 64KiB까지입니다. Fetch 명세에 있는 값입니다. attribution으로 원인 정보를 많이 담으면 금방 한도에 가까워집니다.
+-->
+
 ---
 
 <!-- _class: ask -->
@@ -1031,6 +1211,11 @@ if (metric.value >= 0) { if (forceReport || reportAllChanges) { delta = value - 
 <div class="card hl">sendBeacon의 반환값으로 알 수 있는 것은 <b>브라우저 전송 대기열에 들어갔는지</b>까지다. 400 응답이나 CORS 거부도 대기열에는 들어간다.</div>
 
 <div class="src">OpenTelemetry JS OTLP exporter 0.57.2(sendBeacon)와 0.223.0(keepalive fetch)이 보고한 결과, 각 조합 2번. 블로그 시리즈 2편, cwv-otel-grafana/experiments/e2-exporter</div>
+
+<!--
+sendBeacon의 성공이 무슨 뜻인지 실제로 재 봤습니다. OpenTelemetry JS exporter의 sendBeacon 버전과 keepalive fetch 버전으로, 서버가 200일 때, 400일 때, CORS로 거부할 때를 각각 두 번씩 보냈습니다. sendBeacon은 세 경우 모두 성공이라고 보고했습니다. CORS 거부는 서버 수신이 0건인데도요. keepalive fetch는 400과 CORS에서 실패를 알려 줬습니다.
+sendBeacon 반환값으로 알 수 있는 건 브라우저 전송 대기열에 들어갔는지까지입니다. 클라이언트에서 성공을 세는 건 의미가 없다는 결론이 나옵니다. 도착 여부는 서버에서 세야 합니다.
+-->
 
 ---
 
@@ -1050,6 +1235,11 @@ if (metric.value >= 0) { if (forceReport || reportAllChanges) { delta = value - 
 <div class="card bad"><b>pagehide에서만 전송하면</b> CLS와 INP는 아직 보고되기 전이다. <span class="tag ghost">web-vitals 다음 배포부터는 pagehide에서도 보고</span></div>
 
 <div class="src">같은 탭에서 링크로 이동, Chromium 156에서 2번 모두 같은 결과. visibilitychange는 window capture, document, window 순으로 호출됐다. cwv-otel-grafana/experiments/e3-lifecycle</div>
+
+<!--
+그러면 어느 이벤트에서 보내야 하는지가 남습니다. 같은 탭에서 링크로 이동할 때 순서를 쟀습니다. beforeunload, pagehide, visibilitychange, unload 순입니다. 두 가지가 중요합니다. pagehide는 window에서만 발생합니다. document에 등록한 리스너는 호출되지 않았습니다. 그리고 web-vitals는 세 번째인 visibilitychange에서 CLS와 INP를 보고합니다.
+그러니까 pagehide에서만 전송하면 CLS와 INP는 아직 보고되기 전입니다. 큐가 비어 있습니다. 이건 6.2.3 기준이고, web-vitals 다음 배포부터는 pagehide에서도 보고합니다. 그래도 visibilitychange에서 보내는 쪽이 안전합니다.
+-->
 
 ---
 
@@ -1092,6 +1282,11 @@ addEventListener('visibilitychange', () => {
 
 <div class="src">web-vitals README의 "Batch multiple reports together"를 줄인 것</div>
 
+<!--
+권장하는 모양입니다. web-vitals README의 배치 전송 예를 줄인 겁니다. 세 지표의 콜백이 전부 같은 Set에 metric을 넣고, visibilitychange에서 hidden이 되면 큐를 한 번에 sendBeacon으로 보내고 비웁니다.
+왜 visibilitychange인지는 앞 장에서 봤습니다. 여기에 하나 더, web-vitals는 같은 이벤트를 window의 capture 단계에서 먼저 받습니다. 그래서 이 리스너가 실행될 때는 CLS와 INP가 이미 큐에 들어 있습니다. 왜 Set인지도 짚겠습니다. 같은 지표가 다시 보고돼도 같은 객체라서 하나만 남습니다. 두 번째 질문에서 본 그 성질입니다.
+-->
+
 ---
 
 <!-- _class: ask -->
@@ -1111,6 +1306,11 @@ addEventListener('visibilitychange', () => {
 </div>
 
 <div class="src">원인은 OpenTelemetry JS(sdk-metrics 2.9.0 이상)가 두 번째 전송 전에 첫 번째 전송의 응답을 기다린 것이다(블로그 시리즈 2편). 도구가 달라도 확인 방법은 같다</div>
+
+<!--
+도착 여부를 서버에서 세야 한다는 걸 보여 준 사례입니다. pagehide와 visibilitychange 양쪽에서 보내도록 했더니 TTFB, FCP, LCP는 1건씩 왔는데 INP와 CLS가 0건이었습니다. visibilitychange에서만 보내니 다섯 개가 다 왔습니다.
+무서운 건 오류가 어디에도 없었다는 겁니다. 콘솔도 서버 로그도 깨끗했습니다. TTFB, FCP, LCP만 봤다면 정상이라고 판단했을 겁니다. 원인은 OpenTelemetry JS가 두 번째 전송 전에 첫 번째 전송의 응답을 기다린 것이었습니다. 도구가 달라도 확인 방법은 같습니다. 수집 코드를 바꾸면 실제로 페이지를 떠나 보고, 지표별로 보낸 건수와 받은 건수를 비교하세요.
+-->
 
 <!-- README의 sendBeacon 모양은 응답을 기다리지 않으므로 이 문제는 없을 것으로 보지만, 그 조합은 재지 않았다. 측정 코드는 cwv-otel-grafana/experiments/e7-unload-flush. -->
 
@@ -1134,6 +1334,11 @@ addEventListener('visibilitychange', () => {
 <div class="card"><h3>왜 기다리나</h3><p>한 상호작용에 속한 기록이 모두 도착할 때까지 기다리기 위해서다(소스 주석). idle은 브라우저가 할 일이 없는 때다</p></div>
 <div class="card hl"><h3>측정해 보니</h3><p>Chromium에서는 클릭 뒤 <b>다른 입력이 없으면</b> idle 콜백이 호출되지 않았다. 마우스를 움직이면 그때 처리된다</p></div>
 </div>
+
+<!--
+다섯 번째 질문, Next.js의 useReportWebVitals면 되냐입니다. 답하려면 INP가 클릭 직후에 처리되지 않는다는 걸 먼저 알아야 합니다. 클릭하고 다음 화면이 그려지고 기록이 web-vitals에 도착한 다음, web-vitals는 브라우저가 한가해질 때까지 기다립니다. requestIdleCallback입니다. 한 상호작용에 속한 기록이 모두 도착할 때까지 기다리려는 겁니다. 6.2.3은 최대 1초 상한이 있고, 4.2.1은 상한이 없습니다.
+그런데 재 보니 Chromium에서는 클릭 뒤 다른 입력이 없으면 idle 콜백이 호출되지 않았습니다. 마우스를 움직이면 그때 처리됩니다. Chromium 153, 156, Chrome Beta 157에서 같았고, 원인이 스케줄러 어디에 있는지는 확인하지 못했습니다.
+-->
 
 <!-- requestIdleCallback이다. Chromium 153, 156, Chrome Beta 157에서 같았고, 원인이 스케줄러 어디에 있는지는 확인하지 못했다. Safari에는 requestIdleCallback이 없어 setTimeout으로 다음 task에 처리한다(소스로만 확인). -->
 
@@ -1172,6 +1377,11 @@ addEventListener('visibilitychange', () => {
 <div class="card hl"><h3>배포 전까지는</h3><p>INP만 <code>reportAllChanges</code>를 켜고 <code>id</code>별 마지막 값을 보낸다(30번 중 30번 보고)</p></div>
 </div>
 
+<!--
+그 대기 중에 페이지를 떠나면 INP가 보고되지 않습니다. 클릭 핸들러 200ms짜리를 누르고 location.href로 이동하는 페이지에서, 6.2.3은 0.1초, 0.3초, 0.6초 뒤에 떠나면 10번 중 0번에서 1번만 왔고, 1.5초 뒤에 떠나야 10번 다 왔습니다. 1초 상한이 지나야 처리되기 때문입니다. 원인은 숨겨질 때의 보고 처리가 먼저 실행되고, 대기 중이던 클릭 처리는 그 뒤에 실행되는 순서입니다.
+이 문제는 이슈 #805로 올라갔고 수정 #809가 10월 15일 main에 병합됐습니다. 오른쪽이 그 main의 결과인데 전부 10번 다 옵니다. 다만 npm 최신은 아직 6.2.3입니다. 배포 전까지는 INP만 reportAllChanges를 켜고 id별 마지막 값을 보내면 됩니다. 30번 중 30번 왔습니다. 실제 사용자는 클릭 뒤 마우스를 움직이는 경우가 많아 손실은 이 표보다 작을 수 있습니다. 터치 기기에서는 재지 않았습니다.
+-->
+
 <!-- 클릭 핸들러 200ms, 끝난 뒤 location.href로 이동, 메인 스레드가 한가한 페이지, Chromium 156. 바쁜 페이지는 1.5초 전 조건이 전부 0/10이었다. 원인은 window capture 단계에 visibilitychange 리스너 두 개가 등록된 순서다(가시성 감시가 먼저, 대기 중인 처리가 나중). 이슈는 web-vitals #805. 실제 사용자는 클릭 뒤 마우스를 움직이는 경우가 많아 손실은 이 표보다 작을 수 있다. 터치 기기에서는 재지 않았다. -->
 
 ---
@@ -1191,6 +1401,11 @@ addEventListener('visibilitychange', () => {
 - `useReportWebVitals`는 Next.js에 내장된 4.2.1로 측정한다. 4.2.1에는 **대기 시간 1초 상한이 없다**
 - 직접 설치한 web-vitals와 함께 쓰면 같은 페이지 로드라도 값과 `id`가 서로 다르다
 - 프레임워크가 제공하는 도구도 **내장된 web-vitals 버전**이 페이지를 떠나기 직전의 값을 어떻게 처리하는지 확인해야 한다
+
+<!--
+이제 질문에 답할 수 있습니다. Next.js 16.3.5에 내장된 web-vitals는 4.2.1이고, useReportWebVitals는 이 버전으로 잽니다. 4.2.1에는 대기 시간 1초 상한이 없습니다. 그래서 클릭 뒤 다른 입력 없이 1.5초 뒤에 떠나도, 4.5초 뒤에 떠나도 INP가 0번 왔습니다. 6.2.3은 1초 상한 덕에 1.5초면 다 옵니다. 직접 설치한 web-vitals와 같이 쓰면 같은 페이지 로드인데도 값과 id가 서로 다르다는 문제도 있습니다.
+결론은 useReportWebVitals가 나쁘다가 아닙니다. 프레임워크가 제공하는 도구든 뭐든, 내장된 web-vitals 버전이 페이지를 떠나기 직전의 값을 어떻게 처리하는지 확인해야 한다는 겁니다.
+-->
 
 <!-- Next.js v16.3.5 packages/next/package.json의 devDependencies web-vitals: 4.2.1. 4.2.1의 src/lib/whenIdle.ts는 requestIdleCallback을 timeout 없이 부른다. 4.2.1은 한가한 페이지, 바쁜 페이지 모두 0/5. -->
 
@@ -1212,6 +1427,11 @@ addEventListener('visibilitychange', () => {
 - 자동화 도구 때문인지 확인하려고 DevTools를 연결하지 않은 Chrome에 OS 수준 클릭으로 다시 측정했다. 결과는 같았다
 - 확인한 것은 "다른 입력이 없으면 idle 콜백이 호출되지 않는다"까지이고, 원인은 아직 확인하지 못했다
 
+<!--
+측정하면서 겪은 이야기 하나로 4장을 닫겠습니다. 클릭을 1.3초 간격으로 반복했더니 idle이 클릭 후 1.28초에 왔습니다. 클릭 후 1.28초면 idle이 온다고 결론 내릴 뻔했습니다. 그런데 간격을 3.5초로 바꾸니 idle도 3.5초쯤에 왔습니다. 1.28초의 정체는 idle이 아니라 다음 클릭이 들어간 시각이었습니다. 측정 방법 자체가 결과에 영향을 준 겁니다. 조건을 하나 바꿔 다시 재면 드러납니다.
+자동화 도구 때문인지 확인하려고 DevTools를 연결하지 않은 Chrome에 OS 수준 클릭으로도 재 봤는데 결과는 같았습니다. 확인한 건 다른 입력이 없으면 idle 콜백이 호출되지 않는다는 것까지고, 원인은 아직 모릅니다. 모르는 건 모른다고 적어 두는 게 측정의 일부입니다.
+-->
+
 <!-- 자동화 도구는 Chrome DevTools Protocol(CDP)이다. OS 수준 클릭은 macOS의 HID 이벤트 탭(CGEvent)으로 넣었다. -->
 
 ---
@@ -1230,45 +1450,9 @@ addEventListener('visibilitychange', () => {
 <div><span>5. 기본 도구면 돼요?</span><span>내장된 web-vitals 버전이 떠나기 직전의 값을 어떻게 처리하는지 확인한다</span></div>
 </div>
 
----
-
-<!-- _class: quiz -->
-<!-- _header: '종합 퀴즈' -->
-
-## 종합 퀴즈
-
-<div class="cards two">
-<div class="card"><div class="k">Q1</div><p>페이지를 열고 5초 동안 <b>스크롤만</b> 하다가 탭을 닫았다. 탭을 닫을 때 처음 보고되는 지표는?</p></div>
-<div class="card"><div class="k">Q2</div><p>Lighthouse 점수는 100인데, 실제 사용자의 INP p75는 450ms다. 어떻게 가능할까?</p></div>
-<div class="card"><div class="k">Q3</div><p>같은 <code>id</code>의 CLS가 0.02, 0.15로 두 번 도착했다. 둘 다 분포에 넣으면 어떤 문제가 생길까?</p></div>
-<div class="card"><div class="k">Q4</div><p>Next.js 16.3.5 앱에서 "구매하기"를 누르면 곧바로 다른 도메인의 결제 페이지로 간다. 이 클릭의 INP는 서버에 보고될까?</p></div>
-</div>
-
 <!--
-Q1. LCP, CLS. 스크롤은 LCP를 확정하는 신호가 아니라서(프로그램으로도 만들 수 있어 web-vitals가 뺐다) LCP는 숨겨질 때 확정된다. 이 경우는 소스로만 확인했다. CLS는 원래 숨겨질 때 보고한다. 스크롤은 상호작용이 아니라서 INP는 없다. TTFB는 load 뒤, FCP는 그린 직후에 이미 보고됐다.
-Q2. Lighthouse는 클릭하지 않으므로 INP를 재지 않는다. 개발 노트북과 사용자의 휴대폰은 다르다. 무거운 핸들러는 로드가 끝난 뒤 사용자가 누를 때 드러난다.
-Q3. 같은 페이지 로드를 두 번 센다. 탭을 오간 로드만 두 번 들어가 분포가 틀어진다. id로 묶어 마지막 값(또는 처음 값) 하나만 쓴다.
-Q4. 거의 오지 않는다. useReportWebVitals는 web-vitals 4.2.1이라 클릭 뒤 다른 입력이 없으면 클릭을 처리하기 전에 페이지가 사라진다. web-vitals 6.2.3을 직접 써도 1초 안에 떠나면 대부분 빠진다. 다음 배포(#809 포함)부터는 온다.
--->
-
----
-
-<!-- _class: quiz -->
-<!-- _header: '종합 퀴즈' -->
-
-## 종합 퀴즈
-
-<div class="card"><div class="k">Q5</div><p>이 수집 코드의 문제 두 가지는?</p></div>
-
-```js
-document.addEventListener('pagehide', () => {
-  navigator.sendBeacon('/vitals', JSON.stringify([...queue]))
-})
-```
-
-<!--
-1. pagehide는 window에서만 발생하므로 document에 등록한 리스너는 호출되지 않는다.
-2. window에 걸어도 pagehide는 visibilitychange보다 먼저 와서, 6.2.3 기준 CLS와 INP가 아직 큐에 없다. visibilitychange의 hidden에서 보내야 한다.
+원칙 하나로 다섯 질문을 다시 보겠습니다. CWV 값은 사용자가 페이지를 떠날 때 확정됩니다. 왜 안 찍히냐. 값이 확정될 때 보고되고, 값이 없으면 보고되지 않습니다. 왜 두 번 오냐. 숨겨질 때마다 그때까지의 값을 보고하고, 돌아와서 바뀌면 다시 옵니다. 왜 적게 모이냐. 보지 않은 화면, 확정 전에 떠난 페이지, 지원하지 않는 브라우저에서는 값이 원래 없습니다.
+언제 어떻게 보내냐. 숨겨질 때 한 번, 페이지가 닫혀도 전송되는 방법으로 보내고, 도착 여부는 서버에서 셉니다. 기본 도구면 되냐. 내장된 web-vitals 버전이 떠나기 직전의 값을 어떻게 처리하는지 확인합니다. 이 한 장만 기억하셔도 됩니다.
 -->
 
 ---
@@ -1284,3 +1468,7 @@ document.addEventListener('pagehide', () => {
 - 사례: [Vodafone](https://web.dev/case-studies/vodafone), [redBus](https://web.dev/case-studies/redbus-inp), [Yahoo! JAPAN 뉴스](https://web.dev/case-studies/yahoo-japan-news)
 - [Google Search Central: 페이지 경험](https://developers.google.com/search/docs/appearance/page-experience), [CrUX 수집 방법](https://developer.chrome.com/docs/crux/methodology)
 - 측정 코드: [blog-experiments/cwv-otel-grafana](https://github.com/yceffort/blog-experiments/tree/main/cwv-otel-grafana)
+
+<!--
+오늘 수치의 출처입니다. 블로그 1편은 web-vitals가 언제 보고하는지, 2편은 떠나는 순간 보내는 방법입니다. 측정 코드는 전부 공개 저장소에 있어서 직접 돌려 볼 수 있습니다. 여러분 서비스에서 재 보고 숫자가 다르면 알려 주세요. 감사합니다.
+-->

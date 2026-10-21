@@ -1312,6 +1312,35 @@ if (metric.value >= 0) { if (forceReport || reportAllChanges) { delta = value - 
 
 <div class="q"><em>4</em>"fetch로 보내면 되죠?"</div>
 
+## sendBeacon은 페이지를 떠날 때 데이터를 보내려고 만든 API다
+
+<div class="cards two">
+<div class="card bad"><div class="k">예전 방법</div><h3>페이지가 닫히는 시점을 늦췄다</h3><p>동기 XMLHttpRequest, 이미지 요청, 빈 반복문으로 보낼 시간을 벌었다. 그만큼 다음 페이지가 늦게 열린다</p></div>
+<div class="card good"><div class="k">sendBeacon</div><h3>브라우저에 맡기고 바로 돌아온다</h3><p>요청을 브라우저 전송 대기열에 넣고 끝난다. 페이지가 닫힌 뒤에도 브라우저가 보내고, 다음 페이지를 늦추지 않는다</p></div>
+</div>
+
+<div class="cards">
+<div class="card"><h3>POST만 보낸다</h3><p>메서드와 헤더를 바꿀 수 없다</p></div>
+<div class="card"><h3>응답을 볼 수 없다</h3><p><code>true</code>는 대기열에 넣었다는 뜻이다</p></div>
+<div class="card"><h3>64KiB 한도</h3><p>keepalive fetch와 나눠 쓴다. 넘으면 <code>false</code></p></div>
+</div>
+
+<div class="src">W3C Beacon 명세(w3c/beacon 2c9d057), MDN "Navigator: sendBeacon() method"</div>
+
+<!--
+방법 1인 sendBeacon이 뭔지 짚고 갈게요. 분석 데이터를 보내려고 만든 브라우저 API예요. 사용자가 다른 페이지로 갈 때 데이터를 보내고 싶은데, 그 순간 브라우저는 문서를 정리하면서 진행 중인 요청을 안 보낼 수 있어요. 그래서 예전에는 동기 XMLHttpRequest로 보내거나, 이미지를 요청하거나, 몇 초짜리 빈 반복문을 돌려서 페이지가 닫히는 시점을 늦췄어요. 문제는 그동안 다음 페이지가 늦게 열린다는 거예요. 원인은 이전 페이지인데 사용자는 다음 페이지가 느리다고 느끼죠.
+sendBeacon은 요청을 브라우저의 전송 대기열에 넣고 바로 돌아와요. 그 뒤로는 페이지가 닫혀도 브라우저가 보내 줘요. 명세에도 페이지가 hidden이 되면 대기 중인 beacon을 바로 보내도록 정해져 있어요.
+대신 제약이 셋 있어요. POST만 되고 메서드와 헤더를 바꿀 수 없어요. 응답을 볼 수 없어서 반환값 true는 대기열에 넣었다는 뜻일 뿐이에요. 그리고 keepalive fetch와 같은 64KiB 한도를 나눠 쓰고, 넘으면 false를 돌려줘요. 두 번째 제약이 실제로 뭘 뜻하는지 다음 장에서 직접 잰 결과로 볼게요.
+-->
+
+<!-- 명세: "The user agent MUST initiate a fetch with keepalive flag set", "The user agent MUST schedule immediate transmission of all beacon requests when the document visibilityState transitions to hidden", "All requests with this flag set share the same in-flight quota restrictions that is enforced within the Fetch API." 요청은 method POST, credentials mode include. 메서드, 헤더를 바꿀 수 없다는 내용은 명세 1장("does not provide ability to customize the request method, provide custom request headers"). MDN: "The total size of queued data is limited to 64 KiB (65,536 bytes).", 예전 방법 세 가지와 "All these methods block unloading the document, which slows down navigation to the next page." -->
+
+---
+
+<!-- _class: ask -->
+
+<div class="q"><em>4</em>"fetch로 보내면 되죠?"</div>
+
 ## sendBeacon이 성공해도 서버에 도착했다는 뜻은 아니다
 
 | 보내는 방법     | 서버가 200 | 서버가 400 | CORS 거부                |

@@ -5,7 +5,7 @@ paginate: true
 theme: ink
 header: '잡코리아 프로덕트 컨퍼런스 2026 / 흩어진 경계, 흔들리는 기준'
 footer: '김용찬'
-transition: none
+transition: glide
 tags:
   - ai
   - career

@@ -1613,3 +1613,101 @@ addEventListener('visibilitychange', () => {
 <!--
 오늘 수치의 출처예요. 블로그 1편은 web-vitals가 언제 보고하는지, 2편은 떠나는 순간 보내는 방법이에요. 측정 코드는 전부 공개 저장소에 있어서 직접 돌려 볼 수 있어요. 여러분 서비스에서 재 보고 숫자가 다르면 알려 주세요. 감사합니다.
 -->
+
+---
+
+<!-- _class: chapter -->
+<!-- _header: '' -->
+<!-- _paginate: false -->
+
+<div class="num">부록</div>
+
+# 예상 질문
+
+발표 뒤 나올 수 있는 질문 15개
+
+<!--
+부록입니다. 발표 뒤 나올 수 있는 질문 15개와 답변을 주제별로 정리했습니다.
+-->
+
+---
+
+<!-- header: '부록 예상 질문' -->
+
+## 예상 질문: 수집 도구
+
+<div class="card"><div class="ask">Q. web-vitals 없이 PerformanceObserver로 직접 재면 안 되나요?</div><p>가능합니다. 다만 LCP 확정, INP 선택, CLS 묶음, bfcache 복원 규칙을 모두 다시 구현해야 합니다</p></div>
+<div class="card"><div class="ask">Q. GA4로 보내면 안 되나요?</div><p>됩니다. 다만 GA4 기본 보고서는 분포를 보여 주지 않아서 p75는 BigQuery로 내보내 계산해야 합니다</p></div>
+<div class="card"><div class="ask">Q. 상용 RUM 도구를 쓰면 이런 문제가 해결되나요?</div><p>브라우저 동작은 같습니다. 내장된 web-vitals 버전, 전송 시점, 도착 건수를 볼 수 있는지 확인해야 합니다</p></div>
+
+<!--
+첫 번째, web-vitals 없이 PerformanceObserver로 직접 재도 됩니다. 다만 LCP를 언제 확정할지, INP를 어떻게 고를지(상호작용 50번마다 하나 제외), CLS 묶음, 숨겨진 뒤 그린 것 제외, bfcache 복원까지 전부 다시 만들어야 합니다. 그 규칙을 맞추려고 web-vitals를 씁니다.
+두 번째, GA4로 보내도 됩니다. web-vitals README에 GA4 예제가 있습니다. 다만 README도 GA4 기본 보고서는 분포를 보여 주지 못한다고 적었고, p75를 보려면 metric_id를 이벤트 파라미터로 붙여 BigQuery에서 계산하라고 안내합니다. 블로그는 원인 정보를 자유롭게 붙이고 도착 건수까지 보려고 서버를 직접 띄웠습니다.
+세 번째, 상용 RUM을 써도 브라우저가 값을 언제 주는지는 같습니다. 안에 든 web-vitals 버전, visibilitychange에서 보내는지, 도착 건수를 볼 수 있는지 세 가지를 확인하면 됩니다. 다섯 번째 질문과 같은 이야기입니다.
+-->
+
+<!-- 관련 장: 28쪽 계산 규칙은 web-vitals에 맡긴다, 48쪽 Next.js 16.3.5에는 web-vitals 4.2.1이 내장되어 있다. 근거: web-vitals 6.2.3 README "Send the results to Google Analytics"("Google Analytics does not support reporting metric distributions in any of its built-in reports", metric_id 파라미터와 BigQuery 안내). -->
+
+---
+
+## 예상 질문: 수집 범위
+
+<div class="card"><div class="ask">Q. 트래픽이 많은데 샘플링해도 되나요?</div><p>됩니다. 지표별이 아니라 페이지 로드나 세션 단위로 비율을 정해야 같은 로드의 지표를 묶어 볼 수 있습니다</p></div>
+<div class="card"><div class="ask">Q. URL과 요소 선택자를 보내도 개인정보 문제가 없나요?</div><p>블로그는 URL의 쿼리와 해시를 지우고, 선택자에 든 이메일과 긴 숫자를 가립니다. 회사라면 수집 항목을 먼저 합의해야 합니다</p></div>
+<div class="card"><div class="ask">Q. 봇이나 Lighthouse 방문이 섞이지 않나요?</div><p>섞입니다. 블로그는 <code>navigator.webdriver</code>가 켜져 있거나 알려진 봇 UA면 수집 SDK를 불러오지 않습니다</p></div>
+
+<!--
+네 번째, 샘플링해도 됩니다. 페이지 로드 단위로 정한 비율만 보내면 표본이 충분할 때 p75는 그대로 추정됩니다. 지표마다 따로 샘플링하면 같은 페이지 로드의 LCP와 INP를 묶어 볼 수 없으니 페이지 로드나 세션 단위로 정하는 것이 좋습니다. 이 부분은 통계 일반론이고 블로그에서 잰 결과는 아닙니다.
+다섯 번째, 개인정보입니다. 블로그는 두 가지를 합니다. 이미지 URL은 쿼리와 해시를 지우고 origin과 경로만 남깁니다. 요소 선택자는 web-vitals가 태그, id, class로만 만들어 화면 글자는 담기지 않지만, class나 id에 이메일이나 긴 숫자가 들어간 경우에 대비해 한 번 더 가립니다. 회사라면 수집 항목을 개인정보 담당과 먼저 맞추는 것이 좋습니다.
+여섯 번째, 봇과 Lighthouse 방문은 섞입니다. 블로그는 navigator.webdriver가 켜져 있거나 UA가 알려진 봇이면 SDK를 아예 불러오지 않습니다. PageSpeed Insights의 Lighthouse와 HeadlessChrome이 여기서 걸러집니다.
+-->
+
+<!-- 근거: apps/blog/src/utils/telemetry/mask.ts(maskSelector, stripQuery), context.ts(isAutomatedVisit), components/analytics/CwvTelemetry.tsx. -->
+
+---
+
+## 예상 질문: 값 해석
+
+<div class="card"><div class="ask">Q. 같은 id로 여러 번 온 CLS, INP는 첫 값과 마지막 값 중 무엇을 쓰나요?</div><p>정답은 없습니다. 마지막 값은 완전하지만 유실될 수 있고, 첫 값은 잘 도착하지만 이후 변화가 빠집니다</p></div>
+<div class="card"><div class="ask">Q. INP가 없는 페이지 로드가 많은데 버그인가요?</div><p>대부분 상호작용이 없던 정상입니다. 다만 6.2.3은 클릭 직후 떠나면 빠질 수 있어 서버만으로는 구별할 수 없습니다</p></div>
+<div class="card"><div class="ask">Q. p75 대신 평균이나 p95를 보면 안 되나요?</div><p>판정은 p75로 합니다. 평균은 소수의 느린 값에 끌려갑니다. p95는 꼬리를 볼 때 따로 봅니다</p></div>
+
+<!--
+일곱 번째, 같은 id로 여러 번 온 값은 정답이 하나가 아닙니다. 마지막 값은 페이지 로드 전체를 반영하지만 마지막 전송이 빠질 위험이 있고, 첫 값은 잘 도착하지만 그 뒤의 이동이나 느린 클릭이 빠집니다. 블로그는 metric에는 처음 숨겨질 때의 값만 넣고, 다시 온 값은 trace에 따로 남겨 얼마나 자주, 얼마나 바뀌는지 잽니다.
+여덟 번째, INP가 없는 페이지 로드는 대부분 정상입니다. 상호작용이 없으면 값이 없고 콜백도 불리지 않습니다. 다만 6.2.3은 클릭 직후 1초 안에 떠나면 INP가 빠질 수 있어서, 서버에 INP가 없다는 것만으로는 둘을 구별할 수 없습니다.
+아홉 번째, good과 poor 판정은 p75로 합니다. web.dev가 기준값을 정한 방식입니다. 평균은 느린 몇 건에 끌려가고 분포도 잃습니다. 꼬리가 궁금하면 p95를 따로 봐도 되지만 판정은 p75로 해야 다른 곳의 숫자와 비교할 수 있습니다.
+-->
+
+<!-- 관련 장: 15쪽 p75 판정, 35쪽 값이 없으면 콜백도 불리지 않는다, 36쪽 숨겨질 때마다 다시 보고된다, 47쪽 대기 중에 떠나면 INP가 보고되지 않는다. 근거: apps/blog/src/utils/telemetry/vitals.ts의 oncePerId(같은 id는 처음 한 번만 histogram, 다시 온 보고는 cwv.{cls,inp}.update span). -->
+
+---
+
+## 예상 질문: 브라우저와 화면
+
+<div class="card"><div class="ask">Q. iOS 사용자 값은 모을 수 없나요?</div><p>Safari 26.2부터 LCP와 INP를 받습니다. CLS는 Chromium 계열에만 있고, iOS는 모든 브라우저가 WebKit입니다</p></div>
+<div class="card"><div class="ask">Q. SPA에서 화면을 옮기면 지표는 어떻게 되나요?</div><p>기본은 첫 로드 하나로 계속 잽니다. <code>reportSoftNavs</code>를 켜면 Chrome 151부터 이동마다 따로 잽니다</p></div>
+<div class="card"><div class="ask">Q. 그럼 Lighthouse는 보지 않아도 되나요?</div><p>봐야 합니다. 필드에서 찾고, 랩에서 재현해 고치고, 다시 필드에서 확인합니다. 배포 전 CI 검사도 랩의 역할입니다</p></div>
+
+<!--
+열 번째, iOS도 Safari 26.2부터 LCP와 INP가 잡힙니다. CLS는 여전히 Chromium 계열에만 있습니다. iOS는 Chrome이든 앱 웹뷰든 전부 WebKit이라 26.2 이전 기기에서는 TTFB와 FCP만 옵니다.
+열한 번째, SPA는 기본으로 첫 로드 하나로 계속 잽니다. 그래서 오래 머문 SPA는 INP와 CLS가 여러 화면의 것을 합친 값이 됩니다. web-vitals의 reportSoftNavs 옵션을 켜면 Chrome 151부터 라우트 이동마다 따로 잴 수 있고, 이동 뒤 TTFB는 0으로 옵니다. 블로그는 이 옵션을 켜 두었습니다.
+열두 번째, Lighthouse는 계속 봐야 합니다. 역할이 다릅니다. 필드에서 나빠진 지표를 찾고, 랩에서 재현해 고치고, 다시 필드에서 확인합니다. 배포 전에 CI에서 막는 것도 랩이 맡습니다.
+-->
+
+<!-- 관련 장: 19쪽 Lighthouse 점수로는 왜 부족한가, 30쪽 브라우저마다 받을 수 있는 지표가 다르다. 근거: web-vitals 6.2.3 README "Report metrics for soft navigations"("The Chrome team have added a feature from Chrome 151", "TTFB is reported as 0"). apps/blog/src/utils/telemetry/vitals.ts의 SOFT 옵션. -->
+
+---
+
+## 예상 질문: 전송과 운영
+
+<div class="card"><div class="ask">Q. sendBeacon 대신 fetch keepalive만 쓰면 되나요?</div><p>됩니다. 실패를 알려 줘 디버깅이 쉽습니다. 다만 응답을 기다렸다 다음 것을 보내는 구현은 떠날 때 뒤쪽 전송이 빠집니다</p></div>
+<div class="card"><div class="ask">Q. unload나 beforeunload에서 보내면 안 되나요?</div><p>권장하지 않습니다. Safari와 Android Chrome은 unload를 부르지 않을 수 있고, Firefox는 bfcache에서 뺍니다</p></div>
+<div class="card"><div class="ask">Q. 수집 서버의 비용과 운영 부담은 어느 정도인가요?</div><p>블로그는 메모리 2GB 서버 한 대에 컨테이너 다섯 개를 띄우고, Grafana가 240~290MiB를 씁니다</p></div>
+
+<!--
+열세 번째, keepalive fetch만 써도 됩니다. 400이나 CORS 거부를 실패로 알려 줘서 디버깅이 쉽습니다. 다만 응답을 기다렸다가 다음 것을 보내는 구현이면 떠나는 순간 뒤쪽 전송이 빠질 수 있습니다. OpenTelemetry JS 2.9.0 이상이 그랬습니다. 어느 쪽이든 64KiB 한도를 같이 쓰고, 도착 건수는 서버에서 세야 합니다.
+열네 번째, unload와 beforeunload는 권장하지 않습니다. MDN에 따르면 Safari와 Android Chrome은 같은 탭에서 다른 페이지로 갈 때 unload를 부르지 않는 경우가 있고, Firefox는 unload나 beforeunload 리스너가 있는 페이지를 bfcache에서 제외합니다. pagehide도 신뢰성 문제가 같아서 MDN은 visibilitychange를 권합니다.
+열다섯 번째, 블로그는 메모리 2GB 서버 한 대에 Collector, Tempo, Mimir, Grafana, Caddy를 띄웁니다. Grafana가 240~290MiB 정도를 씁니다. 방문이 적은 블로그 기준이라 회사 규모에 그대로 옮길 수는 없습니다.
+-->
+
+<!-- 관련 장: 42쪽 sendBeacon이 성공해도 서버에 도착했다는 뜻은 아니다, 45쪽 도착 여부는 서버에서 센다. 근거: MDN "Navigator: sendBeacon() method"("Safari and Chrome on Android handle it by not firing the unload event when the user navigates to another page in the same tab", "Firefox will also exclude pages from the bfcache if they contain beforeunload handlers"). infra/otel/README.md(메모리 2GB 이상, Grafana 240~290MiB). OTel 응답 대기는 cwv-otel-grafana/experiments/e7-unload-flush. -->

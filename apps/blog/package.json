@@ -54,7 +54,7 @@
     "@playwright/test": "catalog:",
     "@stylexjs/babel-plugin": "catalog:",
     "@stylexjs/postcss-plugin": "catalog:",
-    "@stylistic/stylelint-plugin": "^5.3.0",
+    "@stylistic/stylelint-plugin": "^5.3.1",
     "@types/hast": "^3.0.5",
     "@types/node": "catalog:",
     "@types/react": "catalog:",

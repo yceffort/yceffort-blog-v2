@@ -124,7 +124,7 @@ catalogs:
       version: 0.19.0
     '@stylexjs/stylex':
       specifier: ^0.19.0
-      version: 0.19.0
+      version: 0.19.1
     '@types/node':
       specifier: ^26.2.0
       version: 26.2.0
@@ -132,8 +132,8 @@ catalogs:
       specifier: ^19.2.18
       version: 19.2.18
     '@types/react-dom':
-      specifier: ^19.2.4
-      version: 19.2.4
+      specifier: ^19.3.0
+      version: 19.3.0
     date-fns:
       specifier: ^4.4.0
       version: 4.4.0
@@ -162,8 +162,8 @@ catalogs:
       specifier: ^19.2.8
       version: 19.2.8
     react-dom:
-      specifier: ^19.2.8
-      version: 19.2.8
+      specifier: ^19.3.1
+      version: 19.3.1
     remark-cjk-friendly:
       specifier: ^2.3.1
       version: 2.3.1
@@ -243,10 +243,10 @@ importers:
         version: 4.6.2
       '@react-three/fiber':
         specifier: ^9.8.1
-        version: 9.8.1(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(three@0.186.0)
+        version: 9.8.1(@types/react@19.2.18)(react-dom@19.3.1(react@19.2.8))(react@19.2.8)(three@0.186.0)
       '@stylexjs/stylex':
         specifier: 'catalog:'
-        version: 0.19.0
+        version: 0.19.1
       '@yceffort/markdown-rs':
         specifier: workspace:*
         version: link:../../packages/markdown-rs
@@ -273,10 +273,10 @@ importers:
         version: 7.2.0
       next:
         specifier: 'catalog:'
-        version: 16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@26.2.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(sass@1.104.0)
+        version: 16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@26.2.0)(react-dom@19.3.1(react@19.2.8))(react@19.2.8)(sass@1.104.0)
       next-themes:
         specifier: 'catalog:'
-        version: 0.4.6(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 0.4.6(react-dom@19.3.1(react@19.2.8))(react@19.2.8)
       postcss:
         specifier: 'catalog:'
         version: 8.5.30
@@ -285,7 +285,7 @@ importers:
         version: 19.2.8
       react-dom:
         specifier: 'catalog:'
-        version: 19.2.8(react@19.2.8)
+        version: 19.3.1(react@19.2.8)
       reading-time:
         specifier: ^1.5.0
         version: 1.5.0
@@ -331,7 +331,7 @@ importers:
         version: 19.2.18
       '@types/react-dom':
         specifier: 'catalog:'
-        version: 19.2.4(@types/react@19.2.18)
+        version: 19.3.0(@types/react@19.2.18)
       '@types/three':
         specifier: ^0.186.0
         version: 0.186.0
@@ -373,7 +373,7 @@ importers:
         version: 4.4.0
       '@stylexjs/stylex':
         specifier: 'catalog:'
-        version: 0.19.0
+        version: 0.19.1
       '@yceffort/shared':
         specifier: workspace:*
         version: link:../../packages/shared
@@ -388,10 +388,10 @@ importers:
         version: 12.0.0
       next:
         specifier: 'catalog:'
-        version: 16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@26.2.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(sass@1.104.0)
+        version: 16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@26.2.0)(react-dom@19.3.1(react@19.2.8))(react@19.2.8)(sass@1.104.0)
       next-themes:
         specifier: 'catalog:'
-        version: 0.4.6(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 0.4.6(react-dom@19.3.1(react@19.2.8))(react@19.2.8)
       postcss:
         specifier: 'catalog:'
         version: 8.5.30
@@ -406,7 +406,7 @@ importers:
         version: 19.2.8
       react-dom:
         specifier: 'catalog:'
-        version: 19.2.8(react@19.2.8)
+        version: 19.3.1(react@19.2.8)
       swiper:
         specifier: ^14.3.0
         version: 14.3.0
@@ -434,7 +434,7 @@ importers:
         version: 19.2.18
       '@types/react-dom':
         specifier: 'catalog:'
-        version: 19.2.4(@types/react@19.2.18)
+        version: 19.3.0(@types/react@19.2.18)
       sharp:
         specifier: 'catalog:'
         version: 0.35.4(@types/node@26.2.0)
@@ -461,7 +461,7 @@ importers:
         version: 2.0.0
       next-mdx-remote-client:
         specifier: 2.1.12
-        version: 2.1.12(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(supports-color@10.2.2)(unified@11.0.5)
+        version: 2.1.12(@types/react@19.2.18)(react-dom@19.3.1(react@19.2.8))(react@19.2.8)(supports-color@10.2.2)(unified@11.0.5)
       rehype-autolink-headings:
         specifier: ^7.1.0
         version: 7.1.0
@@ -515,13 +515,13 @@ importers:
         version: 5.2.2
       next-themes:
         specifier: 'catalog:'
-        version: 0.4.6(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 0.4.6(react-dom@19.3.1(react@19.2.8))(react@19.2.8)
       react:
         specifier: 'catalog:'
         version: 19.2.8
       react-dom:
         specifier: 'catalog:'
-        version: 19.2.8(react@19.2.8)
+        version: 19.3.1(react@19.2.8)
     devDependencies:
       '@anthropic-ai/sdk':
         specifier: 'catalog:'
@@ -534,10 +534,10 @@ importers:
         version: 19.2.18
       '@types/react-dom':
         specifier: 'catalog:'
-        version: 19.2.4(@types/react@19.2.18)
+        version: 19.3.0(@types/react@19.2.18)
       next:
         specifier: 'catalog:'
-        version: 16.3.5(@playwright/test@1.63.0)(@types/node@26.2.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(sass@1.102.0)
+        version: 16.3.5(@playwright/test@1.63.0)(@types/node@26.2.0)(react-dom@19.3.1(react@19.2.8))(react@19.2.8)(sass@1.102.0)
       sharp:
         specifier: 'catalog:'
         version: 0.35.4(@types/node@26.2.0)
@@ -1837,10 +1837,10 @@ packages:
   '@types/prismjs@1.26.6':
     resolution: {integrity: sha512-vqlvI7qlMvcCBbVe0AKAb4f97//Hy0EBTaiW8AalRnG/xAN5zOiWWyrNqNXeq8+KAuvRewjCVY1+IPxk4RdNYw==}
 
-  '@types/react-dom@19.2.4':
-    resolution: {integrity: sha512-Bsc+QHgp+P/F02XDzNCY9jnZNCUuLki36KT7VKrTXXLdHf+vHMNZnW1rVu5DNW/rCK+fya3DATySbLM4yhtKUw==}
+  '@types/react-dom@19.3.0':
+    resolution: {integrity: sha512-ZI7bU42mZXXKHn/qNLEw2IrbiINU7X5+vfgdixBHkCNpYWXjKgfQ/P+uyGb5CjOLB9UcnTeg3rylQtV2hym44Q==}
     peerDependencies:
-      '@types/react': ^19.2.0
+      '@types/react': ^19.3.0
 
   '@types/react-reconciler@0.28.9':
     resolution: {integrity: sha512-HHM3nxyUZ3zAylX8ZEyrDNd2XZOnQ0D5XfunJF5FLQnZbHHYq4UWvW1QfelQNXv1ICNkwYhfxjwfnqivYB6bFg==}
@@ -3805,10 +3805,10 @@ packages:
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
 
-  react-dom@19.2.8:
-    resolution: {integrity: sha512-rVprimfGBG3DR+Tq0IQG2DT5PxKth1WIGDmj5yPmlzr4YBe7uyE+Du4oVqTDXZSHGGGXRtTJEGSSePyQCMBglQ==}
+  react-dom@19.3.1:
+    resolution: {integrity: sha512-Y0bARz53lhEC1NMCASs0/j+faB/zqt3R8hpvg1e8+61ZVJ4UL0UdC4cBbXfZMcIuhrfgeILTLe+ZeBCavQPtKQ==}
     peerDependencies:
-      react: ^19.2.8
+      react: ^19.3.1
 
   react-use-measure@2.1.7:
     resolution: {integrity: sha512-KrvcAo13I/60HpwGO5jpW7E9DfusKyLPLvuHlUyP5zqnmAPhNc6qTRjUQrdTADl0lpPpDVU2/Gg51UlOGHXbdg==}
@@ -3968,9 +3968,6 @@ packages:
     resolution: {integrity: sha512-btHMApW2bgolvClhRW8AlQJzgI9lUB3pPSofBQQT+E46GWvf9o0TVQ13SYv5riWZVFyPN+JNz3TKW9XhBlc10w==}
     engines: {node: '>=20.19.0'}
     hasBin: true
-
-  scheduler@0.27.0:
-    resolution: {integrity: sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q==}
 
   scheduler@0.28.0:
     resolution: {integrity: sha512-juorfCmIkIw8tT+p5BXSm6PJjQF/ycEYmKyzURCIt/RaZIhL+PulbQ9Yu2z1HdOJDdqDTlxA1+xKBmHXJsczAw==}
@@ -5301,7 +5298,7 @@ snapshots:
 
   '@protobufjs/utf8@1.1.2': {}
 
-  '@react-three/fiber@9.8.1(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(three@0.186.0)':
+  '@react-three/fiber@9.8.1(@types/react@19.2.18)(react-dom@19.3.1(react@19.2.8))(react@19.2.8)(three@0.186.0)':
     dependencies:
       '@babel/runtime': 7.29.7
       '@types/webxr': 0.5.24
@@ -5309,14 +5306,14 @@ snapshots:
       buffer: 6.0.3
       its-fine: 2.1.1(@types/react@19.2.18)(react@19.2.8)
       react: 19.2.8
-      react-use-measure: 2.1.7(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      react-use-measure: 2.1.7(react-dom@19.3.1(react@19.2.8))(react@19.2.8)
       scheduler: 0.28.0
       suspend-react: 0.1.3(react@19.2.8)
       three: 0.186.0
       use-sync-external-store: 1.6.0(react@19.2.8)
       zustand: 5.0.14(@types/react@19.2.18)(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
     optionalDependencies:
-      react-dom: 19.2.8(react@19.2.8)
+      react-dom: 19.3.1(react@19.2.8)
     transitivePeerDependencies:
       - '@types/react'
       - immer
@@ -5598,7 +5595,7 @@ snapshots:
 
   '@types/prismjs@1.26.6': {}
 
-  '@types/react-dom@19.2.4(@types/react@19.2.18)':
+  '@types/react-dom@19.3.0(@types/react@19.2.18)':
     dependencies:
       '@types/react': 19.2.18
 
@@ -7516,14 +7513,14 @@ snapshots:
 
   nanoid@3.3.20: {}
 
-  next-mdx-remote-client@2.1.12(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(supports-color@10.2.2)(unified@11.0.5):
+  next-mdx-remote-client@2.1.12(@types/react@19.2.18)(react-dom@19.3.1(react@19.2.8))(react@19.2.8)(supports-color@10.2.2)(unified@11.0.5):
     dependencies:
       '@babel/code-frame': 7.29.7
       '@mdx-js/mdx': 3.1.1(supports-color@10.2.2)
       '@mdx-js/react': 3.1.1(@types/react@19.2.18)(react@19.2.8)
       '@types/mdx': 2.0.14
       react: 19.2.8
-      react-dom: 19.2.8(react@19.2.8)
+      react-dom: 19.3.1(react@19.2.8)
       remark-mdx-remove-esm: 1.3.2(unified@11.0.5)
       serialize-error: 13.0.1
       vfile: 6.0.3
@@ -7533,12 +7530,12 @@ snapshots:
       - supports-color
       - unified
 
-  next-themes@0.4.6(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
+  next-themes@0.4.6(react-dom@19.3.1(react@19.2.8))(react@19.2.8):
     dependencies:
       react: 19.2.8
-      react-dom: 19.2.8(react@19.2.8)
+      react-dom: 19.3.1(react@19.2.8)
 
-  next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@26.2.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(sass@1.104.0):
+  next@16.3.5(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@26.2.0)(react-dom@19.3.1(react@19.2.8))(react@19.2.8)(sass@1.104.0):
     dependencies:
       '@next/env': 16.3.5
       '@swc/helpers': 0.5.23
@@ -7546,7 +7543,7 @@ snapshots:
       caniuse-lite: 1.0.30001810
       postcss: 8.5.23
       react: 19.2.8
-      react-dom: 19.2.8(react@19.2.8)
+      react-dom: 19.3.1(react@19.2.8)
       styled-jsx: 5.1.6(@babel/core@7.29.7(supports-color@10.2.2))(react@19.2.8)
     optionalDependencies:
       '@next/swc-darwin-arm64': 16.3.5
@@ -7566,7 +7563,7 @@ snapshots:
       - '@types/node'
       - babel-plugin-macros
 
-  next@16.3.5(@playwright/test@1.63.0)(@types/node@26.2.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(sass@1.102.0):
+  next@16.3.5(@playwright/test@1.63.0)(@types/node@26.2.0)(react-dom@19.3.1(react@19.2.8))(react@19.2.8)(sass@1.102.0):
     dependencies:
       '@next/env': 16.3.5
       '@swc/helpers': 0.5.23
@@ -7574,7 +7571,7 @@ snapshots:
       caniuse-lite: 1.0.30001810
       postcss: 8.5.23
       react: 19.2.8
-      react-dom: 19.2.8(react@19.2.8)
+      react-dom: 19.3.1(react@19.2.8)
       styled-jsx: 5.1.6(@babel/core@7.29.7(supports-color@10.2.2))(react@19.2.8)
     optionalDependencies:
       '@next/swc-darwin-arm64': 16.3.5
@@ -7829,16 +7826,16 @@ snapshots:
 
   queue-microtask@1.2.3: {}
 
-  react-dom@19.2.8(react@19.2.8):
+  react-dom@19.3.1(react@19.2.8):
     dependencies:
       react: 19.2.8
-      scheduler: 0.27.0
+      scheduler: 0.28.0
 
-  react-use-measure@2.1.7(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
+  react-use-measure@2.1.7(react-dom@19.3.1(react@19.2.8))(react@19.2.8):
     dependencies:
       react: 19.2.8
     optionalDependencies:
-      react-dom: 19.2.8(react@19.2.8)
+      react-dom: 19.3.1(react@19.2.8)
 
   react@19.2.8: {}
 
@@ -8093,8 +8090,6 @@ snapshots:
     optionalDependencies:
       '@parcel/watcher': 2.6.0
     optional: true
-
-  scheduler@0.27.0: {}
 
   scheduler@0.28.0: {}
 

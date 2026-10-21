@@ -226,6 +226,12 @@ section.statement h2 strong { background: linear-gradient(transparent 62%, #ffe2
 .qa > div { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 18px; align-items: center; }
 .qa > div > span:first-child { padding: 9px 18px; border-radius: 18px 18px 18px 5px; background: var(--card); border: 1px solid var(--line); color: var(--muted); font-size: 21px; font-weight: 600; }
 .qa > div > span:last-child { font-size: 24px; }
+
+.terms { display: grid; gap: 10px; }
+.terms > div { display: grid; grid-template-columns: 76px 250px minmax(0, 1fr); gap: 18px; align-items: center; padding: 10px 22px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; font-size: 21px; line-height: 1.45; }
+.terms b { font-size: 23px; }
+.terms small { display: block; font-size: 15px; font-weight: 400; color: var(--muted); }
+.terms .tag { justify-self: start; }
 </style>
 
 <!-- _class: cover -->
@@ -770,6 +776,111 @@ developer.chrome.com/docs/crux/api: "28-day rolling average", "updated daily aro
 -->
 
 <!-- 흔히 RUM(Real User Monitoring)이라고 부른다. CrUX에 없는 방문(앱 웹뷰, iOS, 방문이 적은 페이지)도 볼 수 있다. 단 브라우저 지원 범위 안에서다(3장 마지막 장). -->
+
+---
+
+## 이 블로그는 OpenTelemetry로 보내고 Grafana로 본다
+
+<div class="cards two">
+<div class="card"><p><b>metric</b> 값을 모아서 센 숫자. 전체 흐름을 본다</p></div>
+<div class="card"><p><b>trace</b> 일어난 일 하나를 그대로 남긴 기록</p></div>
+</div>
+
+<div class="terms">
+<div><span class="tag">페이지</span><b>OpenTelemetry SDK<small>줄여서 OTel</small></b><span>관측 데이터를 만들고 보내는 표준. web-vitals 값을 숨겨질 때 보낸다</span></div>
+<div><span class="tag ghost">서버</span><b>Collector</b><span>받은 데이터를 metric은 Mimir로, trace는 Tempo로 넘기는 중계 서버</span></div>
+<div><span class="tag ghost">서버</span><b>Mimir</b><span>metric을 시간 순서로 저장하는 데이터베이스. Grafana Labs 오픈소스</span></div>
+<div><span class="tag ghost">서버</span><b>Tempo</b><span>trace를 저장하고 찾아보는 데이터베이스. Grafana Labs 오픈소스</span></div>
+<div><span class="tag ghost">서버</span><b>Grafana</b><span>Mimir와 Tempo를 조회해 그래프와 표로 보여 주는 대시보드 도구</span></div>
+</div>
+
+<div class="src">web-vitals 6.2.3, OpenTelemetry JS 2.12.0, Collector contrib 0.163.1, Tempo 3.1.0, Mimir 3.2.2, Grafana 13.2.4. 서버 설정은 yceffort/blog 저장소의 infra/otel, 브라우저 코드는 apps/blog/src/utils/telemetry</div>
+
+<!--
+직접 수집하면 실제로 어떤 모습인지 이 블로그 구성을 예로 볼게요. 먼저 두 단어부터 짚을게요. metric은 값을 모아서 센 숫자예요. 화면별 LCP p75처럼 전체 흐름을 볼 때 써요. trace는 일어난 일 하나를 그대로 남긴 기록이에요. 이 블로그에서는 페이지 로드 한 번이 trace 하나예요. 둘의 차이는 다음 장에서 자세히 볼게요.
+그 아래는 처음 보는 이름 다섯 개고, 위에서 아래로 데이터가 흐르는 순서예요. OpenTelemetry는 줄여서 OTel이라고 부르는데, 관측 데이터를 만들고 보내는 방법을 정한 표준이에요. 언어별 SDK와 전송 형식이 정해져 있어서, 받는 쪽 저장소를 바꿔도 페이지의 수집 코드는 그대로 둘 수 있어요. 페이지에서는 web-vitals가 값을 만들면 OpenTelemetry SDK가 받아 뒀다가 페이지가 숨겨질 때 보내요. Collector는 그 데이터를 받아서 거르고 바꾼 뒤 저장소로 넘기는 중계 서버예요.
+저장소는 둘이에요. Mimir는 metric을 시간 순서로 저장하는 데이터베이스고, Prometheus와 같은 방식으로 조회해요. Tempo는 trace를 저장하고 찾아보는 데이터베이스예요. 둘 다 Grafana Labs가 만든 오픈소스예요. Grafana는 두 저장소를 조회해서 그래프와 표로 보여 주는 대시보드 도구예요. Collector, Mimir, Tempo, Grafana는 서버 한 대에 직접 띄웠어요.
+-->
+
+<!-- 2026-10-21 infra/otel/README.md와 compose.yaml 기준. metric은 visibilitychange hidden의 flush에서만 나가고(FlushOnlyMetricReader), span은 같은 flush와 BatchSpanProcessor의 주기 export(5초)로 나간다. trace는 Collector의 tail sampling(span 2개 이상)을 거친다. metric은 delta를 그대로 Mimir에 저장한다(native delta ingestion, 실험 기능). 서버는 Caddy까지 다섯 컨테이너를 Docker Compose로 띄운다. -->
+
+---
+
+## 같은 값을 metric과 trace 두 가지로 남긴다
+
+<div class="cards two">
+<div class="card"><div class="k">metric → Mimir</div>
+
+### 구간별 건수만 센다
+
+LCP가 2,300ms면 `2000~2500` 구간의 건수가 1 늘어난다(히스토그램). 값 하나하나는 남지 않는다
+
+<p class="fine">구간 경계에 good, poor 기준값(2500, 4000)을 넣어 good 비율을 정확히 센다. p75는 구간 안을 나눠 어림한다</p>
+
+</div>
+<div class="card"><div class="k">trace → Tempo</div>
+
+### 페이지 로드 하나를 그대로 남긴다
+
+trace 하나가 페이지 로드 하나, 그 안의 span 하나가 지표 하나다. span에 LCP 요소, 입력 대상, 구간별 시간을 속성으로 붙인다
+
+<p class="fine">span은 원래 시간이 걸린 작업 하나를 나타낸다. 여기서는 span 길이를 지표 값으로 맞춰 길이의 p75가 곧 지표의 p75가 되게 했다</p>
+
+</div>
+</div>
+
+<div class="card hl">
+
+**metric 라벨은 종류가 정해진 값만** 쓴다. 화면, 언어, 기기, 브라우저 엔진, 등급처럼 몇 가지로 끝나는 값이다. URL과 요소 선택자는 trace에만 싣는다
+
+</div>
+
+<!--
+같은 값을 두 가지 방식으로 남겨요. 먼저 metric이에요. 값 하나하나를 저장하지 않고 구간별로 몇 건인지만 세는 거예요. LCP가 2,300ms면 2,000에서 2,500 사이 구간의 건수가 하나 늘어나요. 이걸 히스토그램이라고 해요. 1장에서 평균만 저장하면 p75를 다시 계산할 수 없다고 했는데, 히스토그램은 분포를 남기니까 p75를 계산할 수 있어요. 다만 구간 안에서는 값이 고르게 퍼져 있다고 보고 계산해서 근삿값이에요. 대신 good과 poor 기준값을 구간 경계에 넣어 둬서 good 비율은 정확하게 셀 수 있어요.
+trace는 반대로 하나하나를 남겨요. 페이지 로드 하나가 trace 하나고, 그 안의 지표 하나가 span 하나예요. span은 원래 서버의 요청 처리처럼 시간이 걸린 작업 하나를 나타내는 단위인데, 여기서는 span 길이를 지표 값으로 맞췄어요. 그래서 Tempo에서 span 길이의 p75를 구하면 그게 곧 지표의 p75예요. 각 span에는 LCP 요소가 뭐였는지, 어떤 입력이 느렸는지, 어느 구간이 길었는지가 속성으로 붙어요.
+둘을 나누는 기준이 하나 있어요. metric은 라벨 조합마다 따로 세거든요. 그래서 라벨에는 화면이나 기기처럼 종류가 몇 가지로 끝나는 값만 써요. URL이나 요소 선택자를 라벨로 넣으면 셀 대상이 끝없이 늘어나요. 그런 값은 trace에만 실어요.
+-->
+
+<!-- LCP 버킷 경계는 500, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 7000, 10000(ms). metric 라벨은 page.route, page.lang, device.class, browser.engine, navigation.type, rating이고 INP만 interaction.type을 더한다(apps/blog/src/utils/telemetry/labels.ts, context.ts). CLS span은 점수에 1000을 곱해 길이로 넣는다. 첫 로드, SPA 안의 이동, bfcache 복원이 각각 trace 하나다. -->
+
+---
+
+## Grafana 대시보드 두 개로 보는 것
+
+<div class="cards two">
+<div class="card"><div class="k">CWV 운영 (Mimir)</div>
+
+- 지금 얼마나 느린가: 지표별 p75
+- good 비율
+- 나빠졌는가: p75 추이
+- 누구에게 느린가: 기기, 브라우저 엔진, 언어별
+- 어디가 느린가: 화면별, 입력 종류별
+
+</div>
+<div class="card"><div class="k">CWV 원인 분석 (Tempo)</div>
+
+- 무엇이 LCP인가: 요소별 건수와 p75
+- 어느 글이 느린가: 글별 LCP p75
+- 어느 구간에서 늦었나: LCP 네 구간, INP 세 구간
+- CLS를 만든 요소
+- 2.5초를 넘은 LCP 목록
+
+</div>
+</div>
+
+<div class="card hl">
+
+**도착 확인**: 같은 첫 로드를 Tempo와 Mimir가 각각 몇 건 받았는지 나란히 둔다. trace는 첫 지표 뒤 5초 안에, metric은 숨겨질 때만 나가므로 차이로 metric 손실을 어림한다(4장)
+
+</div>
+
+<!--
+Grafana에는 대시보드를 두 개 뒀어요. 운영 대시보드는 Mimir를 봐요. 지금 얼마나 느린지, good 비율이 얼마인지, 배포 뒤 나빠졌는지, 어떤 기기와 브라우저에서 느린지, 어느 화면이 느린지를 봐요. 문제가 생겼다는 걸 알아채는 대시보드예요.
+원인 분석 대시보드는 Tempo를 봐요. LCP 요소가 뭐였는지, 어느 글이 느린지, LCP와 INP가 어느 구간에서 늦었는지, CLS를 어떤 요소가 만들었는지를 봐요. 운영 대시보드에서 문제를 찾으면 여기서 원인을 좁혀요.
+운영 대시보드 아래에는 도착 확인 패널을 따로 뒀어요. 같은 첫 로드를 Tempo와 Mimir가 각각 몇 건 받았는지 나란히 보여 줘요. trace는 첫 지표가 나오고 5초 안에 나가고, metric은 페이지가 숨겨질 때만 나가요. 그래서 두 수의 차이로 숨겨지지 않고 끝난 페이지에서 잃은 metric을 어림해요. 이런 손실이 왜 생기는지는 4장에서 다뤄요.
+-->
+
+<!-- infra/otel/grafana/build-dashboards.py의 행 제목 기준. 두 수의 차이에는 tail sampling과 같은 밀리초 중복으로 버린 표본도 섞여 있어 어림값이다(패널 설명 그대로). 운영 대시보드에는 Mimir가 버린 표본 수와 Collector가 받지 못하거나 내보내지 못한 수 패널도 있다. Tempo 대시보드에는 유입 경로별, 서비스 워커 경유별 패널도 있다. -->
 
 ---
 
@@ -1468,6 +1579,7 @@ addEventListener('visibilitychange', () => {
 - 사례: [Vodafone](https://web.dev/case-studies/vodafone), [redBus](https://web.dev/case-studies/redbus-inp), [Yahoo! JAPAN 뉴스](https://web.dev/case-studies/yahoo-japan-news)
 - [Google Search Central: 페이지 경험](https://developers.google.com/search/docs/appearance/page-experience), [CrUX 수집 방법](https://developer.chrome.com/docs/crux/methodology)
 - 측정 코드: [blog-experiments/cwv-otel-grafana](https://github.com/yceffort/blog-experiments/tree/main/cwv-otel-grafana)
+- 이 블로그의 수집 서버 설정: [yceffort/blog/infra/otel](https://github.com/yceffort/blog/tree/main/infra/otel)
 
 <!--
 오늘 수치의 출처예요. 블로그 1편은 web-vitals가 언제 보고하는지, 2편은 떠나는 순간 보내는 방법이에요. 측정 코드는 전부 공개 저장소에 있어서 직접 돌려 볼 수 있어요. 여러분 서비스에서 재 보고 숫자가 다르면 알려 주세요. 감사합니다.

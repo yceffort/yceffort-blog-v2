@@ -6,7 +6,6 @@ import {sync} from 'glob'
 import {cache} from 'react'
 
 import type {Series} from '../type'
-import {getPopularPostViews} from './analytics'
 import {getAllPosts, getSeriesPosts} from './Post'
 import type {Locale} from './postPaths'
 
@@ -77,34 +76,6 @@ export const findSeriesBySlug = cache(async function findSeriesBySlugImpl(
 ): Promise<Series | undefined> {
   const series = await getAllSeries(locale)
   return series.find((s) => s.slug === slug)
-})
-
-export const getPopularSeries = cache(async function getPopularSeriesImpl(
-  locale: Locale = 'ko',
-): Promise<Series | null> {
-  const [series, views] = await Promise.all([
-    getAllSeries(locale),
-    getPopularPostViews(50),
-  ])
-  if (views.length === 0) {
-    return null
-  }
-
-  const viewMap = new Map(views.map((row) => [row.slug, row.views]))
-  let best: Series | null = null
-  let bestAverage = 0
-  for (const s of series) {
-    const total = s.posts.reduce(
-      (sum, post) => sum + (viewMap.get(post.fields.slug) ?? 0),
-      0,
-    )
-    const average = total / s.posts.length
-    if (average > bestAverage) {
-      best = s
-      bestAverage = average
-    }
-  }
-  return best
 })
 
 export const findSeriesByPostSlug = cache(

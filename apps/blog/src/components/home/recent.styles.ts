@@ -104,6 +104,36 @@ const styles = stylex.create({
       },
     },
   },
+  // 홈 글 목록 변형: 순번 뒤에 썸네일 칸이 들어간다
+  thumb_row: {
+    '@layer site': {
+      gridTemplateColumns: {
+        default: '40px 128px 1.2fr 1fr 130px 28px',
+        '@media (max-width: 900px)': '32px 88px 1fr 24px',
+      },
+    },
+  },
+  rthumb: {
+    '@layer site': {
+      position: 'relative',
+      overflow: 'hidden',
+      width: {
+        default: '128px',
+        '@media (max-width: 900px)': '88px',
+      },
+      aspectRatio: '16 / 9',
+      borderWidth: '1px',
+      borderStyle: 'solid',
+      borderColor: 'var(--border)',
+      borderRadius: '8px',
+      backgroundColor: 'var(--surface-2)',
+    },
+  },
+  rthumb_img: {
+    '@layer site': {
+      objectFit: 'cover',
+    },
+  },
   rn: {
     '@layer site': {
       fontFamily: 'var(--font-mono), monospace',
@@ -198,6 +228,12 @@ export const series_row = stylex.props(
   styles.rec_row,
   styles.series_row,
 ).className!
+export const thumb_row = stylex.props(
+  styles.rec_row,
+  styles.thumb_row,
+).className!
+export const rthumb = stylex.props(styles.rthumb).className!
+export const rthumb_img = stylex.props(styles.rthumb_img).className!
 export const rn = stylex.props(styles.rn).className!
 export const element_h4 = stylex.props(styles.element_h4).className!
 export const rtags = stylex.props(styles.rtags).className!

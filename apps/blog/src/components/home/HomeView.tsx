@@ -4,15 +4,14 @@ import Link from 'next/link'
 import {connection} from 'next/server'
 import {Suspense} from 'react'
 
+import FeaturedPost from '@/components/home/FeaturedPost'
 import Hero from '@/components/home/HeroE'
 import * as recentStyles from '@/components/home/recent.styles'
 import RecentRow from '@/components/home/RecentRow'
 import * as ambientStyles from '@/components/layout/ambient.styles'
 import * as sectionStyles from '@/components/layout/section.styles'
-import PostCard from '@/components/post/PostCard'
-import PopularSeriesCard from '@/components/series/PopularSeriesCard'
-import SeriesRow from '@/components/series/SeriesRow'
-import {HOME_RECENT_CARD_COUNT, HOME_SERIES_COUNT} from '@/constants'
+import SeriesCard from '@/components/series/SeriesCard'
+import {HOME_SERIES_COUNT} from '@/constants'
 import {
   resolveThumbnail,
   getAllPosts,
@@ -20,28 +19,24 @@ import {
   getFeaturedPosts,
 } from '@/utils/Post'
 import type {Locale} from '@/utils/Post'
-import {getAllSeries, getPopularSeries} from '@/utils/Series'
+import {getAllSeries} from '@/utils/Series'
 
 const LABELS = {
-  ko: {pathPrefix: '', popularBadge: '인기 포스트'},
-  en: {pathPrefix: '/en', popularBadge: 'Popular post'},
+  ko: {pathPrefix: ''},
+  en: {pathPrefix: '/en'},
 } as const
 
 const sx = stylex.create({
   section: {
     '@layer utilities': {
       display: 'grid',
+      // 시리즈 카드 4장이 어느 폭에서도 빈자리 없이 떨어지도록 1열, 2열, 4열만 쓴다
       gridTemplateColumns: {
         default: 'repeat(1, minmax(0, 1fr))',
         '@media (width >= 48rem)': 'repeat(2, minmax(0, 1fr))',
-        '@media (width >= 64rem)': 'repeat(3, minmax(0, 1fr))',
+        '@media (width >= 80rem)': 'repeat(4, minmax(0, 1fr))',
       },
       gap: 'calc(var(--spacing) * 8)',
-    },
-  },
-  rows: {
-    '@layer utilities': {
-      marginTop: 'calc(var(--spacing) * 8)',
     },
   },
 })
@@ -53,17 +48,22 @@ async function getCachedHomeData(locale: Locale) {
   return getHomeData(locale)
 }
 async function getHomeData(locale: Locale) {
-  const topSeries = await getPopularSeries(locale)
-  // 썸네일이 없으면 시리즈 카드를 그리지 않으므로 인기 글 자리도 비워 두지 않는다
-  const popularSeries =
-    topSeries && resolveThumbnail(`series/${topSeries.slug}`) ? topSeries : null
-  const [{popular: posts, recent: recentPosts}, allPosts, tags, series] =
-    await Promise.all([
-      getFeaturedPosts(locale, popularSeries ? 1 : 0),
-      getAllPosts(locale),
-      getAllTagsFromPosts(locale),
-      getAllSeries(locale),
-    ])
+  const [{popular: posts, recent}, allPosts, tags, series] = await Promise.all([
+    getFeaturedPosts(locale),
+    getAllPosts(locale),
+    getAllTagsFromPosts(locale),
+    getAllSeries(locale),
+  ])
+  // 대표 글은 썸네일이 있는 가장 새 글. 공지처럼 썸네일이 없는 글은 줄 목록으로만 보여준다
+  const featured = recent.find((p) => p.frontMatter.thumbnail) ?? null
+  const recentPosts = recent.filter((p) => p !== featured)
+  // 커버가 없는 시리즈는 카드를 그리지 않는다
+  const seriesCards = series
+    .flatMap((s) => {
+      const thumbnail = resolveThumbnail(`series/${s.slug}`)
+      return thumbnail ? [{series: s, thumbnail}] : []
+    })
+    .slice(0, HOME_SERIES_COUNT)
   const postCount = allPosts.length
   const tagCount = tags.length
   const currentYear = new Date().getFullYear()
@@ -72,10 +72,11 @@ async function getHomeData(locale: Locale) {
     .reduce((a, b) => Math.min(a, b), currentYear)
   const yearsWriting = Math.max(1, currentYear - earliestYear + 1)
   return {
+    featured,
     posts,
     recentPosts,
-    series,
-    popularSeries,
+    seriesCards,
+    seriesCount: series.length,
     postCount,
     tagCount,
     yearsWriting,
@@ -97,17 +98,16 @@ async function HomeContent({locale}: {locale: Locale}) {
       ? await getCachedHomeData(locale)
       : await getHomeData(locale)
   const {
+    featured,
     posts,
     recentPosts,
-    series,
-    popularSeries,
+    seriesCards,
+    seriesCount,
     postCount,
     tagCount,
     yearsWriting,
   } = homeData
-  const {pathPrefix, popularBadge} = LABELS[locale]
-  const popularSeriesThumbnail =
-    popularSeries && resolveThumbnail(`series/${popularSeries.slug}`)
+  const {pathPrefix} = LABELS[locale]
   return (
     <div className={`page-view ${ambientStyles.page_view}`}>
       <Hero
@@ -115,6 +115,51 @@ async function HomeContent({locale}: {locale: Locale}) {
         tagCount={tagCount}
         yearsWriting={yearsWriting}
       />
+
+      {featured && (
+        <>
+          <div className={`sec-head ${sectionStyles.sec_head}`}>
+            <div>
+              <span className={`sec-count ${sectionStyles.sec_count}`}>
+                01 ITEMS
+              </span>
+              <h2 className={sectionStyles.element_h2}>Latest</h2>
+            </div>
+            <div className={`line ${sectionStyles.line}`} />
+            <div className={`hint ${sectionStyles.hint}`}>just published</div>
+          </div>
+          <FeaturedPost post={featured} pathPrefix={pathPrefix} />
+        </>
+      )}
+
+      {posts.length > 0 && (
+        <>
+          <div className={`sec-head ${sectionStyles.sec_head}`}>
+            <div>
+              <span className={`sec-count ${sectionStyles.sec_count}`}>
+                {String(posts.length).padStart(2, '0')} ITEMS
+              </span>
+              <h2 className={sectionStyles.element_h2}>
+                {'Popular '}
+                <em className={sectionStyles.element_em}>this season</em>
+              </h2>
+            </div>
+            <div className={`line ${sectionStyles.line}`} />
+            <div className={`hint ${sectionStyles.hint}`}>30 days</div>
+          </div>
+          <section className={`rec-list ${recentStyles.rec_list}`}>
+            {posts.map((post, i) => (
+              <RecentRow
+                key={post.fields.slug}
+                post={post}
+                index={i}
+                variant="thumb"
+                pathPrefix={pathPrefix}
+              />
+            ))}
+          </section>
+        </>
+      )}
 
       {recentPosts.length > 0 && (
         <>
@@ -128,24 +173,13 @@ async function HomeContent({locale}: {locale: Locale}) {
             <div className={`line ${sectionStyles.line}`} />
             <div className={`hint ${sectionStyles.hint}`}>latest writing</div>
           </div>
-          <section className={stylex.props(sx.section).className}>
-            {recentPosts.slice(0, HOME_RECENT_CARD_COUNT).map((post) => (
-              <PostCard
-                key={post.fields.slug}
-                post={post}
-                pathPrefix={pathPrefix}
-                priority
-              />
-            ))}
-          </section>
-          <section
-            className={`rec-list ${recentStyles.rec_list} ${stylex.props(sx.rows).className}`}
-          >
-            {recentPosts.slice(HOME_RECENT_CARD_COUNT).map((post, i) => (
+          <section className={`rec-list ${recentStyles.rec_list}`}>
+            {recentPosts.map((post, i) => (
               <RecentRow
                 key={post.fields.slug}
                 post={post}
-                index={HOME_RECENT_CARD_COUNT + i}
+                index={i}
+                variant="thumb"
                 pathPrefix={pathPrefix}
               />
             ))}
@@ -153,44 +187,12 @@ async function HomeContent({locale}: {locale: Locale}) {
         </>
       )}
 
-      <div className={`sec-head ${sectionStyles.sec_head}`}>
-        <div>
-          <span className={`sec-count ${sectionStyles.sec_count}`}>
-            {String(posts.length + (popularSeries ? 1 : 0)).padStart(2, '0')}{' '}
-            ITEMS
-          </span>
-          <h2 className={sectionStyles.element_h2}>
-            {'Popular '}
-            <em className={sectionStyles.element_em}>this season</em>
-          </h2>
-        </div>
-        <div className={`line ${sectionStyles.line}`} />
-        <div className={`hint ${sectionStyles.hint}`}>hover · tilt · open</div>
-      </div>
-      <section className={stylex.props(sx.section).className}>
-        {posts.map((post) => (
-          <PostCard
-            key={post.fields.slug}
-            post={post}
-            pathPrefix={pathPrefix}
-            badge={popularBadge}
-          />
-        ))}
-        {popularSeries && popularSeriesThumbnail && (
-          <PopularSeriesCard
-            series={popularSeries}
-            thumbnail={popularSeriesThumbnail}
-            pathPrefix={pathPrefix}
-          />
-        )}
-      </section>
-
-      {series.length > 0 && (
+      {seriesCards.length > 0 && (
         <>
           <div className={`sec-head ${sectionStyles.sec_head}`}>
             <div>
               <span className={`sec-count ${sectionStyles.sec_count}`}>
-                {String(series.length).padStart(2, '0')} ITEMS
+                {String(seriesCount).padStart(2, '0')} ITEMS
               </span>
               <h2 className={sectionStyles.element_h2}>
                 {'Series '}
@@ -202,12 +204,12 @@ async function HomeContent({locale}: {locale: Locale}) {
               <Link href={`${pathPrefix}/series`}>view all →</Link>
             </div>
           </div>
-          <section className={`rec-list ${recentStyles.rec_list}`}>
-            {series.slice(0, HOME_SERIES_COUNT).map((s, i) => (
-              <SeriesRow
-                key={s.slug}
-                series={s}
-                index={i}
+          <section className={stylex.props(sx.section).className}>
+            {seriesCards.map(({series, thumbnail}) => (
+              <SeriesCard
+                key={series.slug}
+                series={series}
+                thumbnail={thumbnail}
                 pathPrefix={pathPrefix}
               />
             ))}

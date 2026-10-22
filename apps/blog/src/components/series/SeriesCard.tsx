@@ -9,7 +9,7 @@ import {EmphasizedTitle} from '@/components/post/EmphasizedTitle'
 import * as listStyles from '@/components/post/list.styles'
 import PostDate from '@/components/post/PostDate'
 import type {Series} from '@/type'
-export default function PopularSeriesCard({
+export default function SeriesCard({
   series,
   thumbnail,
   pathPrefix = '',
@@ -18,7 +18,7 @@ export default function PopularSeriesCard({
   thumbnail: string
   pathPrefix?: string
 }) {
-  const {slug, title, posts} = series
+  const {slug, title, description, posts} = series
   const latest = posts.reduce(
     (acc, p) => (p.frontMatter.date > acc ? p.frontMatter.date : acc),
     posts[0].frontMatter.date,
@@ -72,17 +72,15 @@ export default function PopularSeriesCard({
           src={thumbnail}
           alt=""
           fill
-          sizes="(min-width: 1024px) 33vw, 100vw"
+          sizes="(min-width: 1280px) 25vw, (min-width: 768px) 50vw, 100vw"
           className={listStyles.post_card_thumb_img}
         />
       </div>
       <div className={`body ${listStyles.body}`}>
-        <span className={`series ${listStyles.series}`}>
-          ◆ {pathPrefix ? 'Popular series' : '인기 시리즈'}
-        </span>
         <h3 className={listStyles.element_h3}>
           <EmphasizedTitle title={title} />
         </h3>
+        {description && <p className={listStyles.desc}>{description}</p>}
         <div className={`meta ${listStyles.meta}`}>
           <span>
             {pathPrefix ? `${posts.length} posts` : `${posts.length}편의 글`}

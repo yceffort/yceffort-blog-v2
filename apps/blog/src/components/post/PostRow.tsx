@@ -14,27 +14,6 @@ const sx = stylex.create({
       position: 'relative',
     },
   },
-  span: {
-    '@layer utilities': {
-      position: 'absolute',
-      top: 'calc(var(--spacing) * 2)',
-      right: 'calc(var(--spacing) * 2)',
-      zIndex: '10',
-      borderRadius: 'var(--radius-md)',
-      backgroundColor: 'var(--color-amber-500)',
-      paddingInline: 'calc(var(--spacing) * 2)',
-      paddingBlock: 'calc(var(--spacing) * 0.5)',
-      fontSize: 'var(--text-xs)',
-      lineHeight: 'var(--blog-leading, var(--text-xs--line-height))',
-      fontWeight: 'var(--font-weight-bold)',
-      color: 'var(--color-white)',
-      textTransform: 'uppercase',
-      '--blog-shadow':
-        '0 1px 3px 0 var(--blog-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--blog-shadow-color, rgb(0 0 0 / 0.1))',
-      boxShadow:
-        'var(--blog-inset-shadow), var(--blog-inset-ring-shadow), var(--blog-ring-offset-shadow), var(--blog-ring-shadow), var(--blog-shadow)',
-    },
-  },
 })
 export default function PostRow({
   post,
@@ -70,9 +49,7 @@ export default function PostRow({
         className={`post-row-link ${listStyles.post_row_link}`}
         prefetch={false}
       />
-      {!published && (
-        <span className={stylex.props(sx.span).className}>Draft</span>
-      )}
+      {!published && <span className={listStyles.draft_badge}>Draft</span>}
       {thumbnail ? (
         <ViewTransition name={`${transitionName}-thumbnail`}>
           <div className={`post-row-thumb ${listStyles.post_row_thumb}`}>

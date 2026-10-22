@@ -29,7 +29,7 @@ The one ancestor allowed is the document theme marker: `':is(.dark *)'` (and `':
 Three rules cover what a descendant selector used to do:
 
 - **A parent state changes a child.** The parent sets a custom property under its own state; the child reads it with the value it had before as the fallback. `post_card` sets `'--post-card-thumb-transform'` under `':hover'` and the image uses `transform: 'var(--post-card-thumb-transform, none)'`.
-- **A shared style needs different values per parent.** Split it into one entry per parent, export both, and let each consumer pick. `list.styles.ts` keeps the common `series` entry and adds `series_in_post_row` and `series_in_post_card`.
+- **A shared style needs different values per parent.** Split it into one entry per parent, export both, and let each consumer pick. `list.styles.ts` keeps the common `series` entry and adds `series_in_post_row`.
 - **React owns the state.** Select the style in the component instead of reading the attribute in CSS, the way the header picks the active navigation label.
 
 Style an element with a single `stylex.props` call. When two entries both define a property, compose them (`stylex.props(styles.post_row_thumb, styles.post_row_thumb_empty)`) so StyleX resolves the winner; two class strings joined in JSX leave it to stylesheet order.

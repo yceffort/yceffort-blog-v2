@@ -1,10 +1,17 @@
 import {stripTitleEmphasis} from '@yceffort/shared/utils'
+import Image from 'next/image'
 import Link from 'next/link'
 
 import * as recentStyles from '@/components/home/recent.styles'
 import {EmphasizedTitle} from '@/components/post/EmphasizedTitle'
+import * as listStyles from '@/components/post/list.styles'
 import PostDate from '@/components/post/PostDate'
 import type {Post} from '@/type'
+const ROW_CLASS = {
+  default: recentStyles.rec_row,
+  series: recentStyles.series_row,
+  thumb: recentStyles.thumb_row,
+} as const
 export default function RecentRow({
   post,
   index,
@@ -13,28 +20,51 @@ export default function RecentRow({
 }: {
   post: Post
   index: number
-  variant?: 'default' | 'series'
+  variant?: keyof typeof ROW_CLASS
   pathPrefix?: string
 }) {
   const {
     fields: {slug},
-    frontMatter: {date, updated, title: rawTitle, description, tags},
+    frontMatter: {
+      date,
+      updated,
+      title: rawTitle,
+      description,
+      tags,
+      thumbnail,
+      published,
+    },
     readingTime,
   } = post
   const plainTitle = stripTitleEmphasis(rawTitle)
   return (
-    <div
-      className={`rec-row ${variant === 'series' ? recentStyles.series_row : recentStyles.rec_row}`}
-    >
+    <div className={`rec-row ${ROW_CLASS[variant]}`}>
       <Link
         href={`${pathPrefix}/${slug}`}
         aria-label={plainTitle}
         prefetch={false}
         className={recentStyles.element_a}
       />
+      {!published && variant !== 'thumb' && (
+        <span className={listStyles.draft_badge}>Draft</span>
+      )}
       <div className={`rn ${recentStyles.rn}`}>
         {String(index + 1).padStart(2, '0')}
       </div>
+      {variant === 'thumb' && (
+        <div className={recentStyles.rthumb}>
+          {thumbnail && (
+            <Image
+              src={thumbnail}
+              alt=""
+              fill
+              sizes="(min-width: 901px) 128px, 88px"
+              className={recentStyles.rthumb_img}
+            />
+          )}
+          {!published && <span className={listStyles.draft_badge}>Draft</span>}
+        </div>
+      )}
       <div>
         <h4 className={recentStyles.element_h4}>
           <EmphasizedTitle title={rawTitle} />

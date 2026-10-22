@@ -198,27 +198,6 @@ const styles = stylex.create({
       color: 'var(--ink-3)',
     },
   },
-  series_in_post_card: {
-    '@layer site': {
-      fontSize: '11.5px',
-      color: '#22c55e',
-      display: 'inline-flex',
-      alignItems: 'center',
-      width: 'fit-content',
-      padding: '3px 9px',
-      borderWidth: '1px',
-      borderStyle: 'solid',
-      borderColor: 'color-mix(in oklab, #22c55e 30%, transparent)',
-      borderRadius: '999px',
-      backgroundColor: {
-        default: '#22c55e',
-        '@supports (color: color-mix(in lab, red, red))':
-          'color-mix(in oklab, #22c55e 12%, var(--surface))',
-      },
-      transform: 'translateZ(14px)',
-      gap: '6px',
-    },
-  },
   post_row_tags: {
     '@layer site': {
       display: 'flex',
@@ -496,14 +475,6 @@ const styles = stylex.create({
       gap: '10px',
     },
   },
-  tag_row: {
-    '@layer site': {
-      display: 'flex',
-      flexWrap: 'wrap',
-      gap: '6px',
-      transform: 'translateZ(12px)',
-    },
-  },
   element_h3: {
     '@layer site': {
       overflow: 'hidden',
@@ -541,6 +512,27 @@ const styles = stylex.create({
       color: 'var(--ink-4)',
       transform: 'translateZ(6px)',
       gap: '6px',
+    },
+  },
+  draft_badge: {
+    '@layer site': {
+      position: 'absolute',
+      top: 'calc(var(--spacing) * 2)',
+      right: 'calc(var(--spacing) * 2)',
+      zIndex: '10',
+      borderRadius: 'var(--radius-md)',
+      backgroundColor: 'var(--color-amber-500)',
+      paddingInline: 'calc(var(--spacing) * 2)',
+      paddingBlock: 'calc(var(--spacing) * 0.5)',
+      fontSize: 'var(--text-xs)',
+      lineHeight: 'var(--blog-leading, var(--text-xs--line-height))',
+      fontWeight: 'var(--font-weight-bold)',
+      color: 'var(--color-white)',
+      textTransform: 'uppercase',
+      '--blog-shadow':
+        '0 1px 3px 0 var(--blog-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--blog-shadow-color, rgb(0 0 0 / 0.1))',
+      boxShadow:
+        'var(--blog-inset-shadow), var(--blog-inset-ring-shadow), var(--blog-ring-offset-shadow), var(--blog-ring-shadow), var(--blog-shadow)',
     },
   },
   tag_chip: {
@@ -586,12 +578,6 @@ export const post_row_series = stylex.props(
   styles.series,
   styles.series_in_post_row,
 ).className!
-export const post_card_series = stylex.props(
-  styles.series,
-  styles.series_in_post_card,
-).className!
-// PopularSeriesCard renders its chip inside `.post-card`.
-export const series = post_card_series
 export const post_row_tags = stylex.props(styles.post_row_tags).className!
 export const post_row_title = stylex.props(styles.post_row_title).className!
 export const post_row_desc = stylex.props(styles.post_row_desc).className!
@@ -601,8 +587,8 @@ export const post_card = stylex.props(styles.post_card).className!
 export const element_a = stylex.props(styles.element_a).className!
 export const thumb = stylex.props(styles.thumb).className!
 export const body = stylex.props(styles.body).className!
-export const tag_row = stylex.props(styles.tag_row).className!
 export const element_h3 = stylex.props(styles.element_h3).className!
 export const desc = stylex.props(styles.desc).className!
 export const meta = stylex.props(styles.meta).className!
+export const draft_badge = stylex.props(styles.draft_badge).className!
 export const tag_chip = stylex.props(styles.tag_chip).className!

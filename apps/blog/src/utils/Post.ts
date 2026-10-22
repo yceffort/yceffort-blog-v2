@@ -224,13 +224,12 @@ export async function getRelatedPosts(
 
 export const getFeaturedPosts = cache(async function getFeaturedPostsImpl(
   locale: Locale = 'ko',
-  reservedSlots = 0,
 ): Promise<{popular: Post[]; recent: Post[]}> {
   const allPosts = await getAllPosts(locale)
   // 최근 글을 먼저 확정해야 새 글이 인기에 올라도 홈 맨 위 Recent에서 빠지지 않는다
   const recent = allPosts.slice(0, RECENT_POSTS_COUNT)
   const shown = new Set(recent.map((p) => p.fields.slug))
-  const popularCount = POPULAR_POSTS_COUNT - reservedSlots
+  const popularCount = POPULAR_POSTS_COUNT
   // 번역이 없거나 featured: false이거나 최근 글과 겹치는 글이 걸러지므로 후보를 넉넉히 가져온다
   const popularSlugs = await getPopularPostSlugs(
     POPULAR_POSTS_COUNT * 3 + RECENT_POSTS_COUNT,

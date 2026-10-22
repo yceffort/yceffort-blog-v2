@@ -1,0 +1,36 @@
+name: Deploy otel server
+
+# infra/otel 이 main 에 올라가면 Lightsail 수집 서버에 SSH 로 들어가 반영한다.
+# 서버의 authorized_keys 는 이 키를 forced command(git pull 뒤 infra/otel/deploy.sh)에만 묶어 두므로
+# 키가 새어도 배포 스크립트 말고는 실행할 수 없다. 보낸 명령은 $SSH_ORIGINAL_COMMAND 로 서버에 전달되고,
+# deploy.sh 는 그 값(커밋 해시)과 pull 한 HEAD 가 다르면 경고를 남긴다.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'infra/otel/**'
+      - '.github/workflows/deploy-otel.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-otel
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy infra/otel to Lightsail
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Deploy over SSH
+        env:
+          SSH_KEY: ${{ secrets.OTEL_DEPLOY_SSH_KEY }}
+          KNOWN_HOSTS: ${{ vars.OTEL_DEPLOY_KNOWN_HOSTS }}
+          HOST: ${{ vars.OTEL_DEPLOY_HOST }}
+          USER: ${{ vars.OTEL_DEPLOY_USER }}
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes -o ConnectTimeout=15 "$USER@$HOST" "$GITHUB_SHA"

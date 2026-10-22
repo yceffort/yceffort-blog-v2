@@ -39,7 +39,7 @@ processors:
     limit_percentage: 80
     spike_limit_percentage: 20
 
-  # 수집 주소는 누구나 보낼 수 있으므로 브라우저 쪽 수집 코드가 쓰는 스키마를 서버에서도 강제한다. 다른 service.name,
+  # 수집 주소는 누구나 보낼 수 있으므로 브라우저 쪽 수집 코드가 쓰는 스키마를 서버에서도 강제한다(2026-10-22). 다른 service.name,
   # 모르는 metric 이름, histogram 이 아니거나 delta 가 아닌 metric, 허용 목록 밖의 라벨 값은 버린다. 가짜 값 자체는
   # 막지 못하지만, 라벨 조합 수가 설계값(수천 개)을 넘지 못하게 해서 시리즈 폭증과 메모리 소진을 막는다.
   filter/schema:

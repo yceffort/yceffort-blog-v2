@@ -16,7 +16,8 @@ fi
 
 changed=""
 if [[ -n "$before" && "$before" != "$after" ]]; then
-  changed="$(git diff --name-only "$before" "$after" -- infra/otel)"
+  # pathspec 은 현재 디렉터리(infra/otel) 기준이고 출력 경로는 저장소 루트 기준이다.
+  changed="$(git diff --name-only "$before" "$after" -- .)"
   echo "$changed"
 fi
 

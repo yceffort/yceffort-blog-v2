@@ -2,6 +2,8 @@ import {
   clearSavedPosts,
   deletePage,
   hasPage,
+  listSavedPaths,
+  measureCached,
   saveRedirect,
   savePage,
   type OfflineDeps,
@@ -105,6 +107,16 @@ export async function syncRecent(deps: OfflineDeps) {
     }
     if (result.status === 'new') {
       added.push(path)
+    }
+  }
+
+  // 옛 워커가 남겼거나 기록을 잃은 글은 다시 받지 않고 캐시에 든 만큼만 잰다
+  for (const path of await listSavedPaths(deps)) {
+    if (!meta.sizes[path] && !measured[path]) {
+      const size = await measureCached(path, deps)
+      if (size) {
+        measured[path] = size
+      }
     }
   }
 

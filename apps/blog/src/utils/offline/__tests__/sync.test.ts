@@ -218,6 +218,35 @@ describe('sync', () => {
       expect(readMeta(deps.storage).auto).toContain('/2026/10/a')
     })
 
+    // 옛 워커가 pages-v4에 남긴 글처럼 메타 없이 캐시에만 있는 글은
+    // 다시 받지 않고 캐시에 든 만큼만 잰다
+    it('measures a cached post outside the recent list from the cache alone', async () => {
+      await savePage('/2026/09/z', {images: true}, deps)
+      await savePage('/2026/09/y', {images: false}, deps)
+      deps.fetch.mockClear()
+
+      await syncRecent(deps)
+
+      const {sizes, auto} = readMeta(deps.storage)
+      expect(sizes['/2026/09/z']).toEqual({
+        bytes: postBytes('/2026/09/z'),
+        external: 0,
+      })
+      expect(sizes['/2026/09/y']).toEqual({
+        bytes: new Blob([
+          '<title>/2026/09/y</title><img src="/images/2026/09/y.png">',
+        ]).size,
+        external: 0,
+      })
+      expect(deps.fetch).not.toHaveBeenCalledWith(`${ORIGIN}/2026/09/z`)
+      expect(deps.fetch).not.toHaveBeenCalledWith(`${ORIGIN}/2026/09/y`)
+      expect(deps.fetch).not.toHaveBeenCalledWith(
+        `${ORIGIN}/images/2026/09/y.png`,
+      )
+      expect(auto).not.toContain('/2026/09/z')
+      expect(await isCached('/2026/09/z')).toBe(true)
+    })
+
     it('drops the size of an auto post that left the target list', async () => {
       await savePage('/2026/09/z', {images: false}, deps)
       writeMeta(deps.storage, {

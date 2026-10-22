@@ -295,6 +295,32 @@ export async function listSavedPosts(
   )
 }
 
+export async function listSavedPaths(deps: OfflineDeps) {
+  const cache = await deps.caches.open(PAGES_CACHE)
+  return (await savedPostKeys(cache)).map((key) => new URL(key.url).pathname)
+}
+
+// 캐시에 든 것만 잰다. fetch를 막아 두면 saveImage/saveDocument가 캐시
+// 미스를 실패로 처리하므로 네트워크를 쓰지 않는다
+export async function measureCached(
+  path: string,
+  deps: OfflineDeps,
+): Promise<SavedSize | null> {
+  const cache = await deps.caches.open(PAGES_CACHE)
+  const cached = await cache.match(new URL(path, deps.origin).href)
+  if (!cached) {
+    return null
+  }
+  const blob = await cached.blob()
+  const assets = await saveAssets(await blob.text(), {
+    ...deps,
+    fetch: async () => {
+      throw new Error('cache only')
+    },
+  })
+  return {bytes: blob.size + assets.bytes, external: assets.external}
+}
+
 export async function clearSavedPosts(deps: OfflineDeps) {
   const cache = await deps.caches.open(PAGES_CACHE)
   const keys = [

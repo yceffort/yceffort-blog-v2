@@ -4,7 +4,7 @@ tags:
   - web-performance
   - browser
 published: false
-date: 2026-10-17 09:00:00
+date: 2026-10-22 18:47:00
 description: '사내에서 공용 관측 인프라로 보내던 핵심 웹 지표 수집을 개인 블로그에 올리고, 수집 서버도 직접 띄웠다. 설정을 모두 바꿀 수 있게 되자 방문이 드물다는 것과 바꾼 설정을 모두 직접 확인해야 한다는 것이 새 제약이 됐다. 이틀 동안의 커밋 순서로 기록하고, 닷새 동안 쌓인 값으로 바꾼 것의 효과를 확인했다.'
 series: 'Core Web Vitals 직접 수집하기'
 seriesOrder: 4

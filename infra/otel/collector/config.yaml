@@ -39,6 +39,49 @@ processors:
     limit_percentage: 80
     spike_limit_percentage: 20
 
+  # 수집 주소는 누구나 보낼 수 있으므로 브라우저 쪽 수집 코드가 쓰는 스키마를 서버에서도 강제한다. 다른 service.name,
+  # 모르는 metric 이름, histogram 이 아니거나 delta 가 아닌 metric, 허용 목록 밖의 라벨 값은 버린다. 가짜 값 자체는
+  # 막지 못하지만, 라벨 조합 수가 설계값(수천 개)을 넘지 못하게 해서 시리즈 폭증과 메모리 소진을 막는다.
+  filter/schema:
+    error_mode: ignore
+    traces:
+      span:
+        - 'resource.attributes["service.name"] != "yceffort-blog"'
+        - 'not IsMatch(name, "^cwv\\.")'
+    metrics:
+      metric:
+        - 'resource.attributes["service.name"] != "yceffort-blog"'
+        - 'not IsMatch(name, "^cwv\\.(ttfb|fcp|lcp|inp|cls)$")'
+        - 'type != METRIC_DATA_TYPE_HISTOGRAM'
+        - 'aggregation_temporality != AGGREGATION_TEMPORALITY_DELTA'
+      datapoint:
+        - 'not IsString(attributes["page.route"]) or not IsMatch(attributes["page.route"], "^(home|post|tag|series|other)$")'
+        - 'not IsString(attributes["page.lang"]) or not IsMatch(attributes["page.lang"], "^(ko|en)$")'
+        - 'not IsString(attributes["device.class"]) or not IsMatch(attributes["device.class"], "^(mobile|tablet|desktop)$")'
+        - 'not IsString(attributes["browser.engine"]) or not IsMatch(attributes["browser.engine"], "^(chromium|webkit|gecko|other)$")'
+        - 'not IsString(attributes["navigation.type"]) or not IsMatch(attributes["navigation.type"], "^(navigate|reload|back-forward|back-forward-cache|prerender|restore|soft-navigation)$")'
+        - 'not IsString(attributes["rating"]) or not IsMatch(attributes["rating"], "^(good|needs-improvement|poor)$")'
+        - 'attributes["interaction.type"] != nil and (not IsString(attributes["interaction.type"]) or not IsMatch(attributes["interaction.type"], "^(pointer|keyboard)$"))'
+
+  # 검사를 통과한 뒤에도 모르는 라벨 키는 지우고, span 속성은 개수와 길이를 제한한다.
+  transform/schema:
+    error_mode: ignore
+    metric_statements:
+      - context: resource
+        statements:
+          - keep_keys(attributes, ["service.name", "telemetry.sdk.language", "telemetry.sdk.name", "telemetry.sdk.version"])
+      - context: datapoint
+        statements:
+          - keep_keys(attributes, ["page.route", "page.lang", "device.class", "browser.engine", "navigation.type", "rating", "interaction.type"])
+    trace_statements:
+      - context: resource
+        statements:
+          - keep_keys(attributes, ["service.name", "telemetry.sdk.language", "telemetry.sdk.name", "telemetry.sdk.version"])
+      - context: span
+        statements:
+          - limit(attributes, 64, [])
+          - truncate_all(attributes, 512)
+
   # 글에서 재현한 공용 관측 인프라와 같은 조건을 그대로 둔다. 판정 시점에 span 이 2개 미만인 trace 는 버린다.
   tail_sampling:
     decision_wait: 15s
@@ -76,11 +119,19 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [memory_limiter, tail_sampling, batch]
+      processors:
+        [memory_limiter, filter/schema, transform/schema, tail_sampling, batch]
       exporters: [otlp_grpc/tempo]
     metrics:
       receivers: [otlp]
-      processors: [memory_limiter, transform/receive_time, batch]
+      processors:
+        [
+          memory_limiter,
+          filter/schema,
+          transform/schema,
+          transform/receive_time,
+          batch,
+        ]
       exporters: [otlp_http/mimir]
     metrics/loss:
       receivers: [prometheus/loss]

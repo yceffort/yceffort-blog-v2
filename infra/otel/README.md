@@ -12,7 +12,7 @@
 | Grafana Mimir                   | 3.2.2   | metric 저장(테넌트 `blog`). delta 를 그대로 저장한다(native delta ingestion, 실험 기능). 보존 기간 `MIMIR_RETENTION`                                                                                                                          |
 | Grafana                         | 13.2.4  | 대시보드 `CWV 운영 (Mimir)`, `CWV 원인 분석 (Tempo)`. 로그인이 필요하고 `127.0.0.1:3000` 에만 붙는다. 쓰지 않는 플러그인을 꺼서 플러그인 프로세스를 13개에서 2개로 줄였다(운영에서 240~290MiB)                                                |
 
-밖으로 열리는 포트는 Caddy 의 80, 443 뿐이다. Tempo 3.1 은 기본값으로 TraceQL metrics 를 24시간, trace 검색을 7일까지만 조회하므로 보존 기간을 늘릴 때는 조회 범위도 같이 늘린다. collector 는 메모리 상한 512MiB 를 두고(`memory_limiter` 가 이 값을 기준으로 삼는다) 컨테이너 로그는 10MB 3개로 회전한다.
+수집 주소는 인증 없이 누구나 보낼 수 있으므로(브라우저에 실은 비밀은 비밀이 아니다) collector 가 브라우저 쪽 수집 코드의 스키마를 강제한다(`filter/schema`, `transform/schema`). 다른 `service.name`, 모르는 metric 이름, histogram 이 아니거나 delta 가 아닌 metric, 허용 목록 밖의 라벨 값은 버리고, 모르는 라벨 키는 지우며, span 속성은 64개와 512자로 자른다. 가짜 값 자체는 막지 못하고, 라벨 조합 수가 설계값을 넘지 못하게 하는 것이 목적이다. 밖으로 열리는 포트는 Caddy 의 80, 443 뿐이다. Tempo 3.1 은 기본값으로 TraceQL metrics 를 24시간, trace 검색을 7일까지만 조회하므로 보존 기간을 늘릴 때는 조회 범위도 같이 늘린다. collector 는 메모리 상한 512MiB 를 두고(`memory_limiter` 가 이 값을 기준으로 삼는다) 컨테이너 로그는 10MB 3개로 회전한다.
 
 ## metric 경로가 lab 과 다른 이유
 

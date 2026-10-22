@@ -37,7 +37,10 @@ export interface ResumeContent {
   publications: Heading & {
     books: {title: string; role: string; subject: string; href: string}[]
     publisherLink: string
-    writing: {eyebrow: string; title: string; href: string; note: string}
+    writing: {
+      eyebrow: string
+      items: {title: string; href: string; note: string}[]
+    }
   }
   openSource: Heading
   activities: Heading & {entries: Entry[]}
@@ -173,9 +176,18 @@ const ko: ResumeContent = {
     publisherLink: '출판사에서 보기',
     writing: {
       eyebrow: 'WRITING NOW',
-      title: '남은 판단은 누가 배우는가',
-      href: '/2026/09/who-learns-to-judge-beta-reader',
-      note: 'AI 시대의 개발자, 판단과 학습에 관한 에세이(가제, 집필 중)',
+      items: [
+        {
+          title: '남은 판단은 누가 배우는가',
+          href: '/2026/09/who-learns-to-judge-beta-reader',
+          note: 'AI 시대의 개발자, 판단과 학습에 관한 에세이(가제, 집필 중)',
+        },
+        {
+          title: 'Node.js Deep Dive',
+          href: '/2026/02/nodejs-deep-dive-beta-reader',
+          note: 'V8과 libuv부터 모듈 로더, 메모리, 네트워킹, 배포 환경까지 Node.js 내부 동작을 다루는 기술서(가제, 집필 중)',
+        },
+      ],
     },
   },
   openSource: {title: '오픈소스', sub: 'Open source'},
@@ -367,9 +379,18 @@ const en: ResumeContent = {
     publisherLink: 'Publisher page (Korean)',
     writing: {
       eyebrow: 'WRITING NOW',
-      title: 'Who Learns the Judgment That Remains',
-      href: '/2026/09/who-learns-to-judge-beta-reader',
-      note: 'An essay on developers, judgment, and learning in the age of AI. Working title, in progress (Korean).',
+      items: [
+        {
+          title: 'Who Learns the Judgment That Remains',
+          href: '/2026/09/who-learns-to-judge-beta-reader',
+          note: 'An essay on developers, judgment, and learning in the age of AI. Working title, in progress (Korean).',
+        },
+        {
+          title: 'Node.js Deep Dive',
+          href: '/2026/02/nodejs-deep-dive-beta-reader',
+          note: 'A technical book on how Node.js works inside, from V8 and libuv to module loaders, memory, networking, and production environments. Working title, in progress (Korean).',
+        },
+      ],
     },
   },
   openSource: {title: 'Open source'},

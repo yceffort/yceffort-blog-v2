@@ -39,6 +39,14 @@ const styles = stylex.create({
       color: 'var(--ink-3)',
     },
   },
+  resume_writing_item: {
+    '@layer site': {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '4px',
+      margin: 0,
+    },
+  },
   resume_writing_span: {
     '@layer site': {
       fontSize: '12px',
@@ -743,6 +751,9 @@ export const resume_pageHeader_span = stylex.props(
 export const resume_nav_span = stylex.props(styles.resume_nav_span).className!
 export const resume_sectionHeading_span = stylex.props(
   styles.resume_sectionHeading_span,
+).className!
+export const resume_writing_item = stylex.props(
+  styles.resume_writing_item,
 ).className!
 export const resume_writing_span = stylex.props(
   styles.resume_writing_span,

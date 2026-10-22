@@ -217,20 +217,24 @@ export function Resume({locale = 'ko'}: {locale?: Locale}) {
                 </li>
               ))}
             </ul>
-            <p className={`resume-writing ${resumeStyles.resume_writing}`}>
+            <div className={`resume-writing ${resumeStyles.resume_writing}`}>
               <span className={`resume-eyebrow ${resumeStyles.resume_eyebrow}`}>
                 {c.publications.writing.eyebrow}
               </span>
-              <Link
-                href={c.publications.writing.href}
-                className={resumeStyles.resume_writing_link}
-              >
-                {c.publications.writing.title} <span aria-hidden="true">↗</span>
-              </Link>
-              <span className={resumeStyles.resume_writing_span}>
-                {c.publications.writing.note}
-              </span>
-            </p>
+              {c.publications.writing.items.map((item) => (
+                <p key={item.href} className={resumeStyles.resume_writing_item}>
+                  <Link
+                    href={item.href}
+                    className={resumeStyles.resume_writing_link}
+                  >
+                    {item.title} <span aria-hidden="true">↗</span>
+                  </Link>
+                  <span className={resumeStyles.resume_writing_span}>
+                    {item.note}
+                  </span>
+                </p>
+              ))}
+            </div>
           </section>
 
           <section

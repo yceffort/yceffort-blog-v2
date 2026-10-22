@@ -136,6 +136,40 @@
         "score": 0.15
       }
     ],
+    "2026/10/cwv-to-tempo-and-mimir": [
+      {
+        "slug": "2020/07/critical-rendering-path",
+        "score": 0.22
+      },
+      {
+        "slug": "2026/09/blog-performance-after-migrations",
+        "score": 0.21
+      },
+      {
+        "slug": "2022/01/javascript-self-profiling",
+        "score": 0.2
+      },
+      {
+        "slug": "2026/08/rebuilding-a-vendor-sdk",
+        "score": 0.19
+      },
+      {
+        "slug": "2026/09/tracing-third-party-javascript-without-sourcemaps",
+        "score": 0.17
+      },
+      {
+        "slug": "2026/09/unused-javascript-cost",
+        "score": 0.16
+      },
+      {
+        "slug": "2026/08/service-worker-caching-3",
+        "score": 0.15
+      },
+      {
+        "slug": "2026/08/k8s-for-frontend-5",
+        "score": 0.15
+      }
+    ],
     "2026/10/cwv-send-on-page-leave": [
       {
         "slug": "2021/08/requestIdlecallback",
@@ -248,10 +282,6 @@
         "score": 0.72
       },
       {
-        "slug": "2020/07/the-cost-of-javascript-2019",
-        "score": 0.46
-      },
-      {
         "slug": "2022/01/javascript-self-profiling",
         "score": 0.4
       },
@@ -260,16 +290,20 @@
         "score": 0.39
       },
       {
-        "slug": "2026/08/turbopack-scope-hoisting-singleton-split",
-        "score": 0.36
-      },
-      {
         "slug": "2020/07/critical-rendering-path",
         "score": 0.34
       },
       {
         "slug": "2026/10/web-vitals-report-timing",
         "score": 0.29
+      },
+      {
+        "slug": "2022/04/chrome-memory-profiler",
+        "score": 0.29
+      },
+      {
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.28
       }
     ],
     "2026/09/tracing-bundle-waste-with-v8-coverage-and-sourcemaps": [
@@ -380,6 +414,10 @@
         "score": 0.31
       },
       {
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.2
+      },
+      {
         "slug": "2021/02/css-and-webpage-performance",
         "score": 0.15
       },
@@ -402,10 +440,6 @@
       {
         "slug": "2020/07/the-cost-of-javascript-2019",
         "score": 0.13
-      },
-      {
-        "slug": "2026/01/intersection-observer-singleton-weakmap",
-        "score": 0.12
       }
     ],
     "2026/09/offline-marp-slides-in-nextjs": [
@@ -774,12 +808,12 @@
         "score": 0.28
       },
       {
-        "slug": "2020/07/critical-rendering-path",
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
         "score": 0.18
       },
       {
-        "slug": "2026/10/cwv-send-on-page-leave",
-        "score": 0.17
+        "slug": "2020/07/critical-rendering-path",
+        "score": 0.18
       }
     ],
     "2026/08/service-worker-caching-2": [
@@ -1016,15 +1050,11 @@
         "score": 0.3
       },
       {
-        "slug": "2026/01/handling-large-json-responses",
-        "score": 0.21
+        "slug": "2026/09/building-coldpath-v8-coverage-analyzer",
+        "score": 0.18
       }
     ],
     "2026/08/k8s-for-frontend-5": [
-      {
-        "slug": "2019/08/07/haproxy",
-        "score": 0.15
-      },
       {
         "slug": "2021/03/Lighthouse-CI-with-github-actions",
         "score": 0.14
@@ -1032,6 +1062,10 @@
       {
         "slug": "2026/10/web-vitals-report-timing",
         "score": 0.13
+      },
+      {
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.11
       },
       {
         "slug": "2026/03/nextjs-edge-runtime-rise-and-fall",
@@ -1068,8 +1102,8 @@
         "score": 0.13
       },
       {
-        "slug": "2021/09/critical-request-and-prioritise-requests",
-        "score": 0.11
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.1
       },
       {
         "slug": "2021/05/review-of-vercel-cs",
@@ -1102,12 +1136,12 @@
         "score": 0.12
       },
       {
-        "slug": "2021/09/critical-request-and-prioritise-requests",
-        "score": 0.11
-      },
-      {
         "slug": "2021/01/brotli-better-html-compression",
         "score": 0.09
+      },
+      {
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.07
       },
       {
         "slug": "2021/10/get-absolute-url-in-nextjs",
@@ -1220,8 +1254,8 @@
         "score": 0.23
       },
       {
-        "slug": "2026/09/unused-javascript-cost",
-        "score": 0.2
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.21
       }
     ],
     "2026/07/frontend-performance-deep-dive-is-out-now": [
@@ -1884,10 +1918,6 @@
         "score": 0.38
       },
       {
-        "slug": "2026/01/react-server-components-history-repeating",
-        "score": 0.35
-      },
-      {
         "slug": "2026/05/use-cache-deep-dive",
         "score": 0.33
       },
@@ -1902,6 +1932,10 @@
       {
         "slug": "2022/02/new-react-framework-remix",
         "score": 0.28
+      },
+      {
+        "slug": "2026/02/react-compiler-deep-dive",
+        "score": 0.26
       }
     ],
     "2026/02/react-compiler-deep-dive": [
@@ -2016,16 +2050,16 @@
         "score": 0.22
       },
       {
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.19
+      },
+      {
         "slug": "2025/11/web-performance-deep-dive-beta-reader",
         "score": 0.19
       },
       {
         "slug": "2026/10/cwv-send-on-page-leave",
         "score": 0.18
-      },
-      {
-        "slug": "2026/09/tracing-third-party-javascript-without-sourcemaps",
-        "score": 0.16
       },
       {
         "slug": "2020/10/defer-than-async",
@@ -3490,16 +3524,16 @@
         "score": 0.63
       },
       {
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.55
+      },
+      {
         "slug": "2020/10/http-cache",
         "score": 0.52
       },
       {
         "slug": "2021/08/core-web-vital",
         "score": 0.52
-      },
-      {
-        "slug": "2026/09/unused-javascript-cost",
-        "score": 0.47
       }
     ],
     "2022/06/how-to-write-my-own-eslint-rules": [
@@ -5058,11 +5092,11 @@
         "score": 0.13
       },
       {
-        "slug": "2026/10/cwv-send-on-page-leave",
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
         "score": 0.11
       },
       {
-        "slug": "2022/04/chrome-memory-profiler",
+        "slug": "2026/10/cwv-send-on-page-leave",
         "score": 0.11
       }
     ],
@@ -5224,16 +5258,16 @@
         "score": 0.42
       },
       {
-        "slug": "2022/06/optimize-LCP",
-        "score": 0.41
-      },
-      {
         "slug": "2020/10/http-cache",
         "score": 0.38
       },
       {
         "slug": "2020/12/partitioning-cache",
         "score": 0.32
+      },
+      {
+        "slug": "2026/09/unused-javascript-cost",
+        "score": 0.31
       }
     ],
     "2021/08/uncaught-async-error": [
@@ -5398,12 +5432,12 @@
         "score": 0.71
       },
       {
-        "slug": "2026/09/unused-javascript-cost",
-        "score": 0.67
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.7
       },
       {
-        "slug": "2026/08/framer-motion-banner-frame-drop",
-        "score": 0.6
+        "slug": "2026/09/unused-javascript-cost",
+        "score": 0.67
       }
     ],
     "2021/08/browser-nodejs-event-loop": [
@@ -5980,8 +6014,8 @@
         "score": 0.17
       },
       {
-        "slug": "2026/03/react-server-functions-deep-dive",
-        "score": 0.17
+        "slug": "2020/12/side-project-diary-2020",
+        "score": 0.16
       }
     ],
     "2021/05/http1-vs-http2": [
@@ -6452,11 +6486,11 @@
         "score": 0.14
       },
       {
-        "slug": "2026/02/nodejs-deep-dive-beta-reader",
-        "score": 0.12
+        "slug": "2026/03/why-still-nextjs",
+        "score": 0.11
       },
       {
-        "slug": "2026/03/why-still-nextjs",
+        "slug": "2026/03/react-server-functions-deep-dive",
         "score": 0.11
       }
     ],
@@ -6728,7 +6762,7 @@
         "score": 0.09
       },
       {
-        "slug": "2026/10/cwv-send-on-page-leave",
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
         "score": 0.08
       }
     ],
@@ -6898,7 +6932,7 @@
         "score": 0.19
       },
       {
-        "slug": "2026/09/building-coldpath-v8-coverage-analyzer",
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
         "score": 0.18
       }
     ],
@@ -7380,10 +7414,6 @@
     ],
     "2020/11/back-forward-cache": [
       {
-        "slug": "2026/10/cwv-send-on-page-leave",
-        "score": 0.47
-      },
-      {
         "slug": "2026/07/frontend-performance-deep-dive-is-out-now",
         "score": 0.41
       },
@@ -7410,6 +7440,10 @@
       {
         "slug": "2020/10/defer-than-async",
         "score": 0.22
+      },
+      {
+        "slug": "2026/08/service-worker-caching-3",
+        "score": 0.21
       }
     ],
     "2020/11/avoid-default-export": [
@@ -9540,12 +9574,12 @@
         "score": 0.18
       },
       {
-        "slug": "2026/09/building-coldpath-v8-coverage-analyzer",
-        "score": 0.15
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.16
       },
       {
-        "slug": "2026/09/tracing-bundle-waste-with-v8-coverage-and-sourcemaps",
-        "score": 0.13
+        "slug": "2026/09/building-coldpath-v8-coverage-analyzer",
+        "score": 0.15
       },
       {
         "slug": "2026/10/cwv-send-on-page-leave",
@@ -9582,12 +9616,46 @@
         "score": 0.11
       },
       {
-        "slug": "2026/03/react-server-functions-deep-dive",
-        "score": 0.1
-      },
-      {
         "slug": "2026/09/porting-markdownlint-cli2-to-rust",
         "score": 0.09
+      },
+      {
+        "slug": "2026/08/typescript-7-oxc-migration",
+        "score": 0.08
+      }
+    ],
+    "2026/10/cwv-to-tempo-and-mimir": [
+      {
+        "slug": "2026/08/framer-motion-banner-frame-drop",
+        "score": 0.2
+      },
+      {
+        "slug": "2026/09/one-web-on-multiple-webviews",
+        "score": 0.2
+      },
+      {
+        "slug": "2026/09/unused-javascript-cost",
+        "score": 0.19
+      },
+      {
+        "slug": "2026/09/tracing-third-party-javascript-without-sourcemaps",
+        "score": 0.18
+      },
+      {
+        "slug": "2026/08/rebuilding-a-vendor-sdk",
+        "score": 0.18
+      },
+      {
+        "slug": "2026/09/tracing-bundle-waste-with-v8-coverage-and-sourcemaps",
+        "score": 0.17
+      },
+      {
+        "slug": "2026/08/service-worker-caching-3",
+        "score": 0.16
+      },
+      {
+        "slug": "2026/09/building-coldpath-v8-coverage-analyzer",
+        "score": 0.14
       }
     ],
     "2026/10/cwv-send-on-page-leave": [
@@ -9668,6 +9736,10 @@
         "score": 0.68
       },
       {
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.35
+      },
+      {
         "slug": "2026/10/cwv-send-on-page-leave",
         "score": 0.32
       },
@@ -9686,10 +9758,6 @@
       {
         "slug": "2025/06/web-performance-analysis-3",
         "score": 0.24
-      },
-      {
-        "slug": "2026/08/framer-motion-banner-frame-drop",
-        "score": 0.22
       }
     ],
     "2026/09/tracing-bundle-waste-with-v8-coverage-and-sourcemaps": [
@@ -9714,16 +9782,16 @@
         "score": 0.41
       },
       {
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.3
+      },
+      {
         "slug": "2026/10/web-vitals-report-timing",
         "score": 0.27
       },
       {
         "slug": "2026/08/framer-motion-banner-frame-drop",
         "score": 0.24
-      },
-      {
-        "slug": "2026/10/cwv-send-on-page-leave",
-        "score": 0.22
       }
     ],
     "2026/09/porting-markdownlint-cli2-to-rust": [
@@ -9762,6 +9830,10 @@
     ],
     "2026/09/one-web-on-multiple-webviews": [
       {
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.2
+      },
+      {
         "slug": "2026/10/number-flow-compositor-performance",
         "score": 0.13
       },
@@ -9788,10 +9860,6 @@
       {
         "slug": "2026/07/frontend-past-present-after-agents",
         "score": 0.1
-      },
-      {
-        "slug": "2026/08/service-worker-caching-3",
-        "score": 0.09
       }
     ],
     "2026/09/offline-marp-slides-in-nextjs": [
@@ -9854,8 +9922,8 @@
         "score": 0.18
       },
       {
-        "slug": "2026/10/cwv-send-on-page-leave",
-        "score": 0.17
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.15
       },
       {
         "slug": "2026/09/offline-marp-slides-in-nextjs",
@@ -9880,12 +9948,12 @@
         "score": 0.2
       },
       {
-        "slug": "2026/02/nodejs-deep-dive-beta-reader",
-        "score": 0.19
-      },
-      {
         "slug": "2026/08/turbopack-scope-hoisting-singleton-split",
         "score": 0.18
+      },
+      {
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.17
       },
       {
         "slug": "2021/12/nodejs-memory-limit",
@@ -9978,6 +10046,10 @@
         "score": 0.23
       },
       {
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.19
+      },
+      {
         "slug": "2026/05/pr-diff-vs-bundle",
         "score": 0.19
       },
@@ -9992,10 +10064,6 @@
       {
         "slug": "2026/05/use-cache-deep-dive",
         "score": 0.13
-      },
-      {
-        "slug": "2026/08/rebuilding-a-vendor-sdk",
-        "score": 0.12
       }
     ],
     "2026/08/service-worker-caching-2": [
@@ -10020,15 +10088,15 @@
         "score": 0.23
       },
       {
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.22
+      },
+      {
         "slug": "2026/10/cwv-send-on-page-leave",
         "score": 0.21
       },
       {
         "slug": "2026/05/use-client-deep-dive",
-        "score": 0.18
-      },
-      {
-        "slug": "2026/09/tracing-bundle-waste-with-v8-coverage-and-sourcemaps",
         "score": 0.18
       }
     ],
@@ -10050,6 +10118,10 @@
         "score": 0.14
       },
       {
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.13
+      },
+      {
         "slug": "2026/05/use-cache-deep-dive",
         "score": 0.12
       },
@@ -10059,10 +10131,6 @@
       },
       {
         "slug": "2026/02/react-compiler-deep-dive",
-        "score": 0.1
-      },
-      {
-        "slug": "2026/09/tracing-third-party-javascript-without-sourcemaps",
         "score": 0.1
       }
     ],
@@ -10096,17 +10164,13 @@
         "score": 0.29
       },
       {
-        "slug": "2026/10/cwv-send-on-page-leave",
-        "score": 0.19
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.2
       }
     ],
     "2026/08/og-scraping-server-2": [
       {
         "slug": "2026/02/nodejs-deep-dive-sample",
-        "score": 0.11
-      },
-      {
-        "slug": "2026/08/k8s-for-frontend-1",
         "score": 0.11
       },
       {
@@ -10131,6 +10195,10 @@
       },
       {
         "slug": "2025/12/nextjs-react-security-vulnerability",
+        "score": 0.07
+      },
+      {
+        "slug": "2026/08/k8s-for-frontend-4",
         "score": 0.07
       }
     ],
@@ -10186,6 +10254,10 @@
         "score": 0.13
       },
       {
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.1
+      },
+      {
         "slug": "2026/10/web-vitals-report-timing",
         "score": 0.1
       },
@@ -10196,10 +10268,6 @@
       {
         "slug": "2026/09/porting-markdownlint-cli2-to-rust",
         "score": 0.08
-      },
-      {
-        "slug": "2026/10/cwv-send-on-page-leave",
-        "score": 0.07
       }
     ],
     "2026/08/nodejs-k8s-pod-sizing": [
@@ -10238,6 +10306,10 @@
     ],
     "2026/08/k8s-for-frontend-5": [
       {
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.14
+      },
+      {
         "slug": "2026/10/web-vitals-report-timing",
         "score": 0.13
       },
@@ -10264,16 +10336,16 @@
       {
         "slug": "2026/03/why-cloudflare-rebuilt-nextjs",
         "score": 0.08
-      },
-      {
-        "slug": "2026/03/nextjs-edge-runtime-rise-and-fall",
-        "score": 0.08
       }
     ],
     "2026/08/k8s-for-frontend-4": [
       {
         "slug": "2021/08/uncaught-async-error",
         "score": 0.12
+      },
+      {
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.1
       },
       {
         "slug": "2026/08/og-scraping-server-1",
@@ -10292,10 +10364,6 @@
         "score": 0.09
       },
       {
-        "slug": "2026/03/react-server-functions-deep-dive",
-        "score": 0.09
-      },
-      {
         "slug": "2026/08/rebuilding-a-vendor-sdk",
         "score": 0.08
       },
@@ -10308,6 +10376,10 @@
       {
         "slug": "2026/08/og-scraping-server-2",
         "score": 0.1
+      },
+      {
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.07
       },
       {
         "slug": "2026/08/og-scraping-server-1",
@@ -10331,10 +10403,6 @@
       },
       {
         "slug": "2026/08/turbopack-scope-hoisting-singleton-split",
-        "score": 0.05
-      },
-      {
-        "slug": "2026/06/do-you-need-to-read-code",
         "score": 0.05
       }
     ],
@@ -10368,7 +10436,7 @@
         "score": 0.09
       },
       {
-        "slug": "2026/09/nextjs-cache-components-activity",
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
         "score": 0.08
       }
     ],
@@ -10376,6 +10444,10 @@
       {
         "slug": "2026/03/why-cloudflare-rebuilt-nextjs",
         "score": 0.16
+      },
+      {
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.11
       },
       {
         "slug": "2026/02/nodejs-deep-dive-sample",
@@ -10400,10 +10472,6 @@
       {
         "slug": "2026/05/react-cache-function-deep-dive",
         "score": 0.07
-      },
-      {
-        "slug": "2021/05/ast-for-javascript",
-        "score": 0.06
       }
     ],
     "2026/08/framer-motion-banner-frame-drop": [
@@ -10428,16 +10496,16 @@
         "score": 0.22
       },
       {
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.2
+      },
+      {
         "slug": "2026/10/cwv-send-on-page-leave",
         "score": 0.16
       },
       {
         "slug": "2026/09/tracing-bundle-waste-with-v8-coverage-and-sourcemaps",
         "score": 0.16
-      },
-      {
-        "slug": "2026/09/tracing-third-party-javascript-without-sourcemaps",
-        "score": 0.15
       }
     ],
     "2026/07/frontend-past-present-after-agents": [
@@ -10628,10 +10696,6 @@
         "score": 0.23
       },
       {
-        "slug": "2026/03/why-cloudflare-rebuilt-nextjs",
-        "score": 0.2
-      },
-      {
         "slug": "2026/03/nextjs-edge-runtime-rise-and-fall",
         "score": 0.18
       },
@@ -10641,6 +10705,10 @@
       },
       {
         "slug": "2026/08/service-worker-caching-1",
+        "score": 0.15
+      },
+      {
+        "slug": "2026/08/og-scraping-server-1",
         "score": 0.15
       }
     ],
@@ -10730,10 +10798,6 @@
         "score": 0.71
       },
       {
-        "slug": "2026/09/tracing-third-party-javascript-without-sourcemaps",
-        "score": 0.63
-      },
-      {
         "slug": "2026/10/how-bundlers-remember-imports",
         "score": 0.62
       },
@@ -10744,6 +10808,10 @@
       {
         "slug": "2025/05/web-performance-analysis-2",
         "score": 0.33
+      },
+      {
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.28
       }
     ],
     "2026/05/good-package-for-long-term-users": [
@@ -10904,15 +10972,15 @@
         "score": 0.17
       },
       {
-        "slug": "2026/08/k8s-for-frontend-4",
-        "score": 0.15
-      },
-      {
         "slug": "2025/12/nextjs-react-security-vulnerability",
         "score": 0.13
       },
       {
         "slug": "2026/09/porting-markdownlint-cli2-to-rust",
+        "score": 0.13
+      },
+      {
+        "slug": "2026/08/turbopack-scope-hoisting-singleton-split",
         "score": 0.13
       }
     ],
@@ -11048,7 +11116,7 @@
         "score": 0.18
       },
       {
-        "slug": "2026/08/service-worker-caching-2",
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
         "score": 0.14
       }
     ],
@@ -11112,12 +11180,12 @@
         "score": 0.2
       },
       {
-        "slug": "2026/10/how-bundlers-remember-imports",
-        "score": 0.2
-      },
-      {
         "slug": "2026/09/nextjs-cache-components-activity",
         "score": 0.19
+      },
+      {
+        "slug": "2026/08/service-worker-caching-2",
+        "score": 0.16
       }
     ],
     "2026/02/nodejs-deep-dive-sample": [
@@ -11198,6 +11266,10 @@
         "score": 0.27
       },
       {
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.21
+      },
+      {
         "slug": "2026/10/web-vitals-report-timing",
         "score": 0.21
       },
@@ -11211,10 +11283,6 @@
       },
       {
         "slug": "2026/09/tracing-bundle-waste-with-v8-coverage-and-sourcemaps",
-        "score": 0.15
-      },
-      {
-        "slug": "2026/08/service-worker-caching-2",
         "score": 0.15
       },
       {
@@ -11334,6 +11402,10 @@
         "score": 0.18
       },
       {
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.15
+      },
+      {
         "slug": "2021/12/nodejs-memory-limit",
         "score": 0.15
       },
@@ -11352,10 +11424,6 @@
       {
         "slug": "2026/09/tracing-bundle-waste-with-v8-coverage-and-sourcemaps",
         "score": 0.11
-      },
-      {
-        "slug": "2026/08/framer-motion-banner-frame-drop",
-        "score": 0.1
       }
     ],
     "2026/01/handling-large-json-responses": [
@@ -11368,7 +11436,7 @@
         "score": 0.18
       },
       {
-        "slug": "2021/05/ast-for-javascript",
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
         "score": 0.14
       },
       {
@@ -11428,12 +11496,12 @@
     ],
     "2025/12/webgpu-all-browsers": [
       {
-        "slug": "2026/10/number-flow-compositor-performance",
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
         "score": 0.12
       },
       {
-        "slug": "2026/09/nextjs-cache-components-activity",
-        "score": 0.11
+        "slug": "2026/10/number-flow-compositor-performance",
+        "score": 0.12
       },
       {
         "slug": "2026/10/web-vitals-report-timing",
@@ -11508,6 +11576,10 @@
         "score": 0.11
       },
       {
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.11
+      },
+      {
         "slug": "2026/10/web-vitals-report-timing",
         "score": 0.11
       },
@@ -11521,10 +11593,6 @@
       },
       {
         "slug": "2025/06/web-performance-analysis-3",
-        "score": 0.1
-      },
-      {
-        "slug": "2026/09/nextjs-cache-components-activity",
         "score": 0.1
       }
     ],
@@ -11598,10 +11666,6 @@
     ],
     "2025/06/web-performance-analysis-4": [
       {
-        "slug": "2026/08/rebuilding-a-vendor-sdk",
-        "score": 0.66
-      },
-      {
         "slug": "2026/09/unused-javascript-cost",
         "score": 0.65
       },
@@ -11624,6 +11688,10 @@
       {
         "slug": "2026/10/number-flow-compositor-performance",
         "score": 0.47
+      },
+      {
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.45
       },
       {
         "slug": "2026/10/web-vitals-report-timing",
@@ -11920,6 +11988,10 @@
         "score": 0.09
       },
       {
+        "slug": "2026/10/cwv-to-tempo-and-mimir",
+        "score": 0.07
+      },
+      {
         "slug": "2026/03/why-cloudflare-rebuilt-nextjs",
         "score": 0.07
       },
@@ -11930,10 +12002,6 @@
       {
         "slug": "2026/08/og-scraping-server-1",
         "score": 0.06
-      },
-      {
-        "slug": "2026/08/k8s-for-frontend-3",
-        "score": 0.05
       }
     ]
   }

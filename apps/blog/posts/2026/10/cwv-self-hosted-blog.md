@@ -320,7 +320,7 @@ command="cd ~/blog && b=$(git rev-parse HEAD) && git pull --ff-only --quiet && e
 
 `deploy.sh`는 `docker compose up -d`를 돌린 뒤, pull 전후의 diff에서 설정 디렉터리가 바뀐 서비스만 다시 시작한다. bind mount한 설정 파일은 바뀌어도 compose가 컨테이너를 다시 만들지 않기 때문이다. compose.yaml이 바뀐 서비스는 `up -d`가 알아서 다시 만든다.
 
-첫 실행은 실패했다. 22번 포트가 내 IP 하나에만 열려 있어서 GitHub 러너가 연결하지 못했다(`Connection timed out`). 러너의 IP는 실행마다 바뀌므로, 22번을 모두에게 열고 키 인증과 forced command에 기대거나, 실행마다 Lightsail API로 러너 IP를 열었다 닫거나, 서버가 주기적으로 pull하는 방식 중에서 골라야 한다. [방화벽 결정 뒤 채움: 고른 방식과 첫 성공 실행]
+첫 실행은 실패했다. 22번 포트가 내 IP 하나에만 열려 있어서 GitHub 러너가 연결하지 못했다(`Connection timed out`). 러너의 IP는 실행마다 바뀌므로, 22번을 모두에게 열고 키 인증과 forced command에 기대거나, 실행마다 Lightsail API로 러너 IP를 열었다 닫거나, 서버가 주기적으로 pull하는 방식 중에서 골라야 한다. 두 번째는 AWS 키를 GitHub에 둬야 하고 실패했을 때 닫는 단계가 빠질 수 있으며, 세 번째는 푸시 즉시 배포가 아니다. sshd가 비밀번호 인증을 끈 키 전용이고 배포 키가 할 수 있는 일이 정해져 있으니 첫 번째를 골랐다. Lightsail의 `open-instance-public-ports`는 기존 규칙에 더하는 동작이라 `0.0.0.0/0`을 기존 IP 목록과 함께 지정할 수 없다고 거부했고, 22번 규칙을 닫았다가 다시 열어야 했다. 다시 실행한 워크플로는 서버를 e02c600a에서 f3c6f8ff로 pull했고, 설정 디렉터리에 바뀐 것이 없어 컨테이너를 다시 시작하지 않은 채 몇 초 만에 끝났다.
 
 ## 닷새 동안 쌓인 값
 

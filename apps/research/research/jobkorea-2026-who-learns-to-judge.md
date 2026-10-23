@@ -69,6 +69,13 @@ section.columns > .stats { grid-column: 1 / -1; }
 
 .mermaid { display: flex; justify-content: center; margin: 0 0 20px; }
 .mermaid svg { height: auto; width: auto; max-width: 100%; max-height: 170px; }
+
+/* QR: 블로그 주소를 PC 화면에서 바로 찍을 수 있게. 발표자 장은 블로그 마크 아래, 마무리 장은 오른쪽 아래 */
+.qr { position: absolute; display: flex; flex-direction: column; gap: 10px; }
+.qr img { display: block; width: 180px; height: 180px; }
+.qr small { font-family: var(--display); font-size: 15px; font-weight: 500; line-height: 1.4; letter-spacing: 0.02em; color: var(--muted-light); }
+section.profile .qr { left: 76px; top: 456px; }
+section.closing .qr { right: 76px; bottom: 96px; align-items: flex-end; }
 </style>
 
 <!-- _class: cover -->
@@ -94,6 +101,8 @@ section.columns > .stats { grid-column: 1 / -1; }
 <!-- _header: 발표자 -->
 
 ![김용찬의 블로그 favicon](/feconf-2026/blog-favicon.svg)
+
+<div class="qr"><img src="/jobkorea-2026/qr-blog.svg" alt="yceffort.kr QR 코드"></div>
 
 ### 김용찬
 
@@ -880,6 +889,8 @@ _속도를 잰 연구이지 학습을 측정한 연구는 아닙니다._
 **김용찬** 카카오페이증권 / [yceffort.kr](https://yceffort.kr)
 
 못다 한 이야기는 블로그 시리즈 "AI 시대의 판단"에서 확인하실 수 있습니다.<br>질문은 댓글창에 남겨 주시면 발표 뒤에 답하겠습니다.
+
+<div class="qr"><img src="/jobkorea-2026/qr-series.svg" alt="블로그 시리즈 AI 시대의 판단 QR 코드"><small>yceffort.kr/series/ai-era-judgment</small></div>
 
 <!--
 발표 20초 / 18:40~19:00

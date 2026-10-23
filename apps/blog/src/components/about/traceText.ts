@@ -9,6 +9,8 @@ const ko = {
     '방금 이 브라우저가 이 탭을 불러온 실제 기록입니다. 측정값은 브라우저 밖으로 보내지 않습니다.',
   replay: '다시 재생',
   hint: '드래그해서 돌리고, 막대를 누르면 자세히 볼 수 있습니다',
+  hintMouse:
+    '드래그해서 돌리고, Ctrl+휠로 확대하고, Shift+드래그로 옮깁니다. 더블클릭하면 처음 구도로 돌아오고, 막대를 누르면 자세히 볼 수 있습니다',
   selfLabel: '이 그래픽의 코드',
   selfNote: '이 그래픽을 그리는 코드',
   mainThread: '메인 스레드를 막은 작업',
@@ -65,6 +67,8 @@ const en: TraceText = {
     'This is the actual record of your browser loading this tab just now. The measurements never leave your browser.',
   replay: 'Replay',
   hint: 'Drag to rotate. Click a bar for details.',
+  hintMouse:
+    'Drag to rotate, Ctrl+wheel to zoom, Shift+drag to pan. Double-click to reset. Click a bar for details.',
   selfLabel: 'Code for this graphic',
   selfNote: 'the code drawing this graphic',
   mainThread: 'Tasks that blocked the main thread',

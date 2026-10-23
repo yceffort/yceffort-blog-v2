@@ -433,15 +433,43 @@ interface LabelSpec {
   at: number
 }
 
-// 드래그로 더한 회전. 재생 연출이 정하는 기본 방향 위에 얹는다.
+// 드래그로 더한 회전과 확대, 이동. 재생 연출이 정하는 기본 구도 위에 얹는다.
 interface Orbit {
   yaw: number
   pitch: number
   vYaw: number
   vPitch: number
+  // 카메라 거리 배율. 1이 기본 구도
+  zoom: number
+  // 바라보는 점을 옮긴 양(월드 좌표)
+  pan: THREE.Vector3
+  // 아직 pan에 반영하지 않은 Shift 드래그 픽셀
+  panDx: number
+  panDy: number
   dragging: boolean
+  panning: boolean
+  // 더블클릭 뒤 기본 구도로 미끄러져 돌아가는 중
+  homing: boolean
   touched: boolean
   invalidate: () => void
+}
+
+const FOV = 30
+const ZOOM_MIN = 0.35
+const ZOOM_MAX = 2.5
+
+function resetOrbit(o: Orbit) {
+  Object.assign(o, {
+    yaw: 0,
+    pitch: 0,
+    vYaw: 0,
+    vPitch: 0,
+    zoom: 1,
+    panDx: 0,
+    panDy: 0,
+    homing: false,
+  })
+  o.pan.set(0, 0, 0)
 }
 
 function Scene({
@@ -503,6 +531,8 @@ function Scene({
     [],
   )
   const dir = useMemo(() => new THREE.Vector3(), [])
+  const camRight = useMemo(() => new THREE.Vector3(), [])
+  const camUp = useMemo(() => new THREE.Vector3(), [])
 
   const shared = useMemo(
     () => ({
@@ -582,7 +612,7 @@ function Scene({
     if (keyRef.current !== replayKey) {
       keyRef.current = replayKey
       startRef.current = null
-      Object.assign(orbit.current, {yaw: 0, pitch: 0, vYaw: 0, vPitch: 0})
+      resetOrbit(orbit.current)
     }
     startRef.current ??= now
     const p = reduced ? 1 : Math.min(1, (now - startRef.current) / REPLAY_MS)
@@ -618,6 +648,20 @@ function Scene({
       o.vYaw *= 0.88
       o.vPitch *= 0.88
     }
+    if (o.homing) {
+      const k = reduced ? 1 : 1 - Math.exp(-delta * 6)
+      o.yaw *= 1 - k
+      o.pitch *= 1 - k
+      o.zoom += (1 - o.zoom) * k
+      o.pan.multiplyScalar(1 - k)
+      const left =
+        Math.abs(o.yaw) +
+        Math.abs(o.pitch) +
+        Math.abs(o.zoom - 1) +
+        o.pan.length()
+      if (left < 0.002) resetOrbit(o)
+      else invalidate()
+    }
     o.pitch = THREE.MathUtils.clamp(o.pitch, -0.55, 0.7)
     sph.setFromVector3(dir)
     sph.theta -= o.yaw
@@ -637,12 +681,26 @@ function Scene({
     shared.uFocusAmt.value = fa
     if (fa > 0.001 && fa < 0.999) invalidate()
 
-    aim.lerpVectors(look, focusPos, fa)
     const dist = THREE.MathUtils.lerp(
-      THREE.MathUtils.lerp(6, 11.5, ease) * fit,
+      THREE.MathUtils.lerp(6, 11.5, ease) * fit * o.zoom,
       focusDist.current,
       fa,
     )
+    // Shift 드래그 픽셀을 지난 프레임 카메라의 가로세로 축으로 옮긴다
+    if (o.panDx || o.panDy) {
+      const perPx =
+        (2 * dist * Math.tan(THREE.MathUtils.degToRad(FOV / 2))) / size.height
+      camRight.setFromMatrixColumn(camera.matrixWorld, 0)
+      camUp.setFromMatrixColumn(camera.matrixWorld, 1)
+      o.pan
+        .addScaledVector(camRight, -o.panDx * perPx)
+        .addScaledVector(camUp, o.panDy * perPx)
+      if (o.pan.length() > W) o.pan.setLength(W)
+      o.panDx = 0
+      o.panDy = 0
+    }
+    // 초점 모드에서는 확대와 이동을 접고 막대 구도로 간다
+    aim.copy(look).add(o.pan).lerp(focusPos, fa)
     camera.position.copy(dir).multiplyScalar(dist).add(aim)
     if (!reduced && !o.touched) {
       camera.position.x += pointer.x * 0.8 * (1 - fa)
@@ -766,14 +824,14 @@ function formatKb(bytes: number) {
 
 const REDUCED_QUERY = '(prefers-reduced-motion: reduce)'
 
-function useReducedMotion() {
+function useMedia(query: string) {
   return useSyncExternalStore(
     (on) => {
-      const q = window.matchMedia(REDUCED_QUERY)
+      const q = window.matchMedia(query)
       q.addEventListener('change', on)
       return () => q.removeEventListener('change', on)
     },
-    () => window.matchMedia(REDUCED_QUERY).matches,
+    () => window.matchMedia(query).matches,
     () => false,
   )
 }
@@ -882,7 +940,9 @@ export default function LoadTrace() {
     x: 0,
     y: 0,
   })
-  const reduced = useReducedMotion()
+  const reduced = useMedia(REDUCED_QUERY)
+  // 마우스가 있을 때만 휠과 Shift 조작을 안내한다
+  const finePointer = useMedia('(pointer: fine)')
   const wrapRef = useRef<HTMLDivElement>(null)
   const labelEls = useRef<(HTMLDivElement | null)[]>([])
   const hudEl = useRef<HTMLDivElement>(null)
@@ -891,13 +951,24 @@ export default function LoadTrace() {
     pitch: 0,
     vYaw: 0,
     vPitch: 0,
+    zoom: 1,
+    pan: new THREE.Vector3(),
+    panDx: 0,
+    panDy: 0,
     dragging: false,
+    panning: false,
+    homing: false,
     touched: false,
     invalidate: () => {},
   })
   const [dragged, setDragged] = useState(false)
   const [grabbing, setGrabbing] = useState(false)
   const [focus, setFocus] = useState(-1)
+  // 포인터 리스너는 한 번만 달아서 초점 상태를 ref로 본다
+  const focusRef = useRef(focus)
+  useEffect(() => {
+    focusRef.current = focus
+  }, [focus])
   // 측정이 끝나도 WebGL 초기화와 셰이더 컴파일이 남아 있다. 첫 프레임까지 로딩 표시를 유지한다.
   const [drawn, setDrawn] = useState(false)
 
@@ -941,6 +1012,9 @@ export default function LoadTrace() {
       pressed = true
       orbit.current.vYaw = 0
       orbit.current.vPitch = 0
+      orbit.current.homing = false
+      // Shift를 누른 채 끌면 돌리는 대신 옮긴다. 초점 모드에서는 보이지 않으니 받지 않는다.
+      orbit.current.panning = e.shiftKey && focusRef.current < 0
       lastX = e.clientX
       lastY = e.clientY
     }
@@ -954,11 +1028,16 @@ export default function LoadTrace() {
         setHover({i: -1, x: 0, y: 0})
       }
       if (!o.dragging) return
-      o.vYaw = (e.clientX - lastX) * 0.006
-      // 터치의 세로 이동은 페이지 스크롤에 남겨 둔다
-      o.vPitch = e.pointerType === 'mouse' ? (e.clientY - lastY) * -0.005 : 0
-      o.yaw += o.vYaw
-      o.pitch += o.vPitch
+      if (o.panning) {
+        o.panDx += e.clientX - lastX
+        o.panDy += e.clientY - lastY
+      } else {
+        o.vYaw = (e.clientX - lastX) * 0.006
+        // 터치의 세로 이동은 페이지 스크롤에 남겨 둔다
+        o.vPitch = e.pointerType === 'mouse' ? (e.clientY - lastY) * -0.005 : 0
+        o.yaw += o.vYaw
+        o.pitch += o.vPitch
+      }
       lastX = e.clientX
       lastY = e.clientY
       if (!o.touched) {
@@ -970,19 +1049,51 @@ export default function LoadTrace() {
     const up = (e: PointerEvent) => {
       pressed = false
       orbit.current.dragging = false
+      orbit.current.panning = false
       if (el.hasPointerCapture(e.pointerId))
         el.releasePointerCapture(e.pointerId)
       setGrabbing(false)
+    }
+    // 휠은 페이지 스크롤에 남기고, Ctrl/⌘를 누른 휠(트랙패드 핀치 포함)만 확대로 받는다
+    const wheel = (e: WheelEvent) => {
+      if (!(e.ctrlKey || e.metaKey) || focusRef.current >= 0) return
+      e.preventDefault()
+      const o = orbit.current
+      o.homing = false
+      const dy = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY
+      o.zoom = THREE.MathUtils.clamp(
+        o.zoom * Math.exp(dy * 0.002),
+        ZOOM_MIN,
+        ZOOM_MAX,
+      )
+      if (!o.touched) {
+        o.touched = true
+        setDragged(true)
+      }
+      o.invalidate()
+    }
+    const home = () => {
+      const o = orbit.current
+      // 몇 바퀴 돌았어도 가까운 쪽으로 돌아온다
+      o.yaw = Math.atan2(Math.sin(o.yaw), Math.cos(o.yaw))
+      o.vYaw = 0
+      o.vPitch = 0
+      o.homing = true
+      o.invalidate()
     }
     el.addEventListener('pointerdown', down)
     el.addEventListener('pointermove', move)
     el.addEventListener('pointerup', up)
     el.addEventListener('pointercancel', up)
+    el.addEventListener('wheel', wheel, {passive: false})
+    el.addEventListener('dblclick', home)
     return () => {
       el.removeEventListener('pointerdown', down)
       el.removeEventListener('pointermove', move)
       el.removeEventListener('pointerup', up)
       el.removeEventListener('pointercancel', up)
+      el.removeEventListener('wheel', wheel)
+      el.removeEventListener('dblclick', home)
     }
   }, [])
 
@@ -1079,7 +1190,7 @@ export default function LoadTrace() {
           <Canvas
             dpr={[1, 2]}
             frameloop={visible && !reduced ? 'always' : 'demand'}
-            camera={{fov: 30, near: 0.1, far: 80}}
+            camera={{fov: FOV, near: 0.1, far: 80}}
             gl={{
               antialias: true,
               alpha: false,
@@ -1136,7 +1247,9 @@ export default function LoadTrace() {
             </div>
           ))}
           {trace && !dragged && (
-            <p className={aboutStyles.trace_hint}>{t.hint}</p>
+            <p className={aboutStyles.trace_hint}>
+              {finePointer ? t.hintMouse : t.hint}
+            </p>
           )}
           <ul className={aboutStyles.trace_legend}>
             {kinds.map((k) => (

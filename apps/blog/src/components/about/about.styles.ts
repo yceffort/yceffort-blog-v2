@@ -347,6 +347,8 @@ const styles = stylex.create({
       backgroundColor: '#0a0a0f',
       boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.06) inset',
       touchAction: 'pan-y',
+      // Shift 드래그가 글자 선택이나 선택 끌기로 새지 않게 한다
+      userSelect: 'none',
       cursor: 'grab',
     },
   },

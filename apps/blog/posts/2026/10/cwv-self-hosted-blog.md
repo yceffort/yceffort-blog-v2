@@ -7,6 +7,7 @@ tags:
   - backend
 published: true
 date: 2026-10-23 13:31:00
+updated: 2026-10-23 20:34:50
 description: '공용 관측 인프라를 기준으로 만든 핵심 웹 지표 수집을 개인 블로그로 옮겼다. 방문이 드물어 비어 있던 대시보드를 고치고, 일반 브라우저에 맞춰 수집 시점을 바꿨다. 10월 17일부터 22일까지의 변경 과정과 23일에 확인한 조회 누락, 닷새치 데이터로 판단할 수 있는 범위를 기록했다.'
 series: 'Core Web Vitals 직접 수집하기'
 seriesOrder: 4
@@ -22,7 +23,7 @@ art:
 
 3편까지는 공용 관측 인프라의 설정을 바꿀 수 없었고, 앱 웹뷰는 떠날 때 신호를 주지 않는 경우가 있었다. 블로그에서는 월 \$12짜리 서버 한 대에 수집 서버를 직접 띄우고 collector부터 대시보드까지 설정을 바꿀 수 있었다. 방문자도 일반 브라우저로 들어온다. 웹뷰에서 값을 놓치지 않으려고 넣었던 장치가 여기서도 필요한지, 방문이 드물어도 같은 집계 방식이 맞는지 다시 확인해야 했다.
 
-이 글은 2026년 10월 17일과 18일에 수집 서버를 블로그에 붙이고, 22일에 배포와 입력 검사를 보완한 기록이다. 23일에는 닷새치 데이터를 조회하다 생긴 Tempo 오류의 원인도 확인했다. 날짜와 시각이 있는 소제목은 커밋 순서를 따른다. 마지막에는 약 121시간 동안 쌓인 값으로 앞의 선택을 다시 살펴본다.
+이 글은 2026년 10월 17일과 18일에 수집 서버를 블로그에 붙이고, 22일에 배포와 입력 검사를 보완한 기록이다. 23일에는 닷새치 데이터를 조회하다 생긴 Tempo 오류의 원인도 확인했다. 번호를 붙인 소제목은 커밋 순서를 따른다. 마지막에는 약 121시간 동안 쌓인 값으로 앞의 선택을 다시 살펴본다.
 
 처음에는 표본이 적어도 건수가 맞게 나오도록 저장과 조회 방식을 고쳤다. 이어서 quiet LCP 확정과 주기적인 metric 전송을 블로그에 맞게 바꾸고, 손실을 확인할 패널을 만들었다. 이 과정에서 수집 코드뿐 아니라 대시보드와 배포 경로도 검증해야 한다는 문제가 남았다.
 
@@ -30,7 +31,7 @@ art:
 >
 > 버전은 web-vitals 6.2.3, OTel JS 2.12.0(OTLP exporter 0.223.0), OpenTelemetry Collector contrib 0.163.1, Tempo 3.1.0, Mimir 3.2.2, Grafana 13.2.4, Caddy 2.11.7이다. 서버는 Amazon Lightsail 서울 리전의 Debian 13 인스턴스(2GB 메모리)다.
 
-## 10월 17일 12:38 수집 서버를 블로그 저장소로
+## 1. 수집 서버를 블로그 저장소로
 
 수집 서버는 처음에 재현 환경 저장소의 배포용 덮어쓰기 설정으로 띄웠다가, 실험과 운영을 섞지 않으려고 블로그 저장소의 `infra/otel`로 옮겼다. 서버는 블로그 저장소에서 이 디렉터리만 sparse checkout으로 받아 `docker compose up`으로 돈다. 구성은 Caddy, collector, Tempo, Mimir, Grafana 다섯 개다.
 
@@ -44,7 +45,7 @@ art:
 
 > Lightsail 가격은 서울 리전에서 Lightsail API(`get-bundles`)로 확인한 값이고, EC2의 공인 IPv4 요금은 AWS의 VPC 요금표[^2]에서 확인했다. 2026년 10월 기준이고, 10월 22일에 다시 조회해도 같았다.
 
-같은 날 오후의 메모리는 Mimir 115MiB, Grafana 243MiB, Tempo 158MiB, collector 86MiB, Caddy 19MiB로, 다섯 개를 합쳐 2GB 중 약 620MiB였다. 이 중 Grafana는 기본 설치 그대로 띄웠을 때 가장 컸다. Grafana 13은 처음 뜰 때 쓰지 않는 앱 플러그인을 받아 설치하고, 데이터소스 플러그인을 쓸 때마다 프로세스를 따로 띄운다. 그래서 미리 설치하는 플러그인을 끄고(`GF_PLUGINS_PREINSTALL_DISABLED`), Mimir와 Tempo 말고는 내장 데이터소스 플러그인 11개를 꺼 두었다(`GF_PLUGINS_DISABLE_PLUGINS`). 같은 데이터소스와 대시보드를 넣어 띄우고 한 번씩 조회한 뒤 재 보면 차이는 이 정도였다.
+첫날 오후의 메모리는 Mimir 115MiB, Grafana 243MiB, Tempo 158MiB, collector 86MiB, Caddy 19MiB로, 다섯 개를 합쳐 2GB 중 약 620MiB였다. 이 중 Grafana는 기본 설치 그대로 띄웠을 때 가장 컸다. Grafana 13은 처음 뜰 때 쓰지 않는 앱 플러그인을 받아 설치하고, 데이터소스 플러그인을 쓸 때마다 프로세스를 따로 띄운다. 그래서 미리 설치하는 플러그인을 끄고(`GF_PLUGINS_PREINSTALL_DISABLED`), Mimir와 Tempo 말고는 내장 데이터소스 플러그인 11개를 꺼 두었다(`GF_PLUGINS_DISABLE_PLUGINS`). 같은 데이터소스와 대시보드를 넣어 띄우고 한 번씩 조회한 뒤 재 보면 차이는 이 정도였다.
 
 | Grafana 13.2.4  | 5분 뒤 | 6분 뒤 | 데이터소스 플러그인 프로세스 | 미리 설치된 플러그인 |
 | --------------- | ------ | ------ | ---------------------------- | -------------------- |
@@ -92,13 +93,13 @@ metrics query time range exceeds the maximum allowed duration of 24h0m0s
 
 방문이 드문 블로그에서는 라벨별로 나누면 하루치 표본이 몇 건 되지 않았다. 그래서 보존 기간과 조회 범위를 함께 1년으로 늘렸다(`max_search_duration`, `max_metrics_duration`, `block_retention`). 보존 기간만 늘리면 데이터는 남아 있는데 조회는 막힌다.
 
-## 10월 17일 12:42 블로그에 붙이다
+## 2. 블로그에 붙이다
 
 브라우저 쪽은 재현 환경의 수집 코드를 블로그 구조에 맞게 옮겼다. production에서만 켜고, OTel SDK는 첫 화면에 필요 없으므로 동적 import로 따로 받는다. 이 청크는 10월 22일의 빌드(커밋 466ad1b1)에서 raw 100,571B, gzip 29,365B다. 수집 코드와 SDK 버전은 둘째 날 이후 바뀌지 않았다. web-vitals는 늦게 붙어도 buffered 항목으로 이미 발생한 LCP와 CLS를 수집할 수 있지만, Event Timing의 buffered 항목은 104ms 이상인 것만 남으므로 SDK를 받기 전의 짧은 입력은 INP 후보에서 빠진다. 화면은 홈, 글, 태그, 시리즈, 그 밖의 다섯 가지(`page.route`)로만 나눈다.
 
-## 10월 17일 13:42 대시보드가 비어 있었다
+## 3. 대시보드가 비어 있었다
 
-서론의 빈 대시보드가 이 시각이다. 원인을 찾으려고 방문이 드문 사이트를 흉내 내어, 같은 LCP 값 8건을 수집 경로 네 가지로 동시에 보내고 대시보드 쿼리가 몇 건으로 세는지 쟀다. 다섯 개의 라벨 조합은 한 번씩, 하나는 7분 간격으로 세 번 보냈다.
+서론의 빈 대시보드가 이때다. 원인을 찾으려고 방문이 드문 사이트를 흉내 내어, 같은 LCP 값 8건을 수집 경로 네 가지로 동시에 보내고 대시보드 쿼리가 몇 건으로 세는지 쟀다. 다섯 개의 라벨 조합은 한 번씩, 하나는 7분 간격으로 세 번 보냈다.
 
 | 경로                                                              | 대시보드가 센 값 |
 | ----------------------------------------------------------------- | ---------------- |
@@ -129,7 +130,7 @@ metrics query time range exceeds the maximum allowed duration of 24h0m0s
 
 이 방식에는 두 가지 제약이 있다. 값의 시각이 페이지 로드 시각이 아니라 collector가 받은 시각이 되고, 같은 시리즈의 값 두 개가 같은 밀리초에 들어오면 같은 시각의 표본이 되어 Mimir가 하나를 버린다. 시리즈 하나에 초당 10건이면 1.3~1.5%를 잃었다(3편, `cwv-otel-grafana/experiments/e10-concurrent-writers`). 블로그 트래픽에서는 드물 것으로 보았고, 이 손실은 뒤에서 손실 패널을 만들 때 다시 나온다.
 
-## 10월 17일 13:43 누구에게, 무엇이 느린가
+## 4. 누구에게, 무엇이 느린가
 
 블로그는 화면이 다섯 가지뿐이라, 화면만으로는 어디가 느린지 좁히기 어려웠다. 그래서 화면과 접속 환경을 구분할 수 있도록 값의 종류가 정해진 metric 라벨을 더했다. 언어(`page.lang`, `/en`으로 시작하면 en), 기기(`device.class`, 화면 폭 768px과 1024px으로 나눈 세 가지), 브라우저 엔진(`browser.engine`)이다. 브라우저 이름만으로 엔진을 구별할 수 없어 엔진 정보도 따로 남긴다. 유입 경로(검색, 소셜, AI 서비스 등), 서비스 워커를 거친 내비게이션인지, 네트워크와 기기 정보는 값의 종류가 많거나 개별 방문을 조사할 때 필요한 정보여서 span 속성에만 싣는다.
 
@@ -144,13 +145,13 @@ LCP 요소의 selector에서는 StyleX의 원자 클래스를 지운다.
 
 블로그의 스타일은 StyleX가 만드는 원자 클래스라, web-vitals가 만든 selector에는 그 클래스가 줄줄이 붙는다. 그대로 두면 Tempo 대시보드의 "LCP 요소별" 패널이 같은 요소를 배포마다 다른 요소로 센다.
 
-## 10월 17일 14:17 봇, SPA 이동, bfcache
+## 5. 봇, SPA 이동, bfcache
 
 이때 고친 것은 세 가지다. 첫째는 봇이다. PageSpeed Insights(`Chrome-Lighthouse`), headless 브라우저, 검색 엔진의 렌더러가 블로그를 열면 그 값도 수집됐다. 사람의 방문이 드문 블로그에서는 이런 값이 섞이면 분위수가 쉽게 흔들린다. 그래서 SDK를 받기 전에 user agent와 `navigator.webdriver`로 거른다. 이 판정은 뒤의 Playwright 검증도 걸러 내므로, reader 비교 실험은 별도 데모 페이지에서 진행했다.
 
 둘째는 SPA 이동이다. 블로그 안의 링크 이동은 클라이언트 이동이라, 지금까지는 첫 로드 하나의 값만 있었다. web-vitals의 `reportSoftNavs`를 켜면 Chromium 151 이상에서 이동마다 FCP, LCP, CLS, INP를 다시 잰다. TTFB는 이동에서 0으로 보고되므로 첫 로드에만 잰다. 셋째는 bfcache 복원이다. 첫 로드, SPA 이동, bfcache 복원을 각각 내비게이션 하나로 보고 trace도 따로 만든다. SPA 이동은 web-vitals가 주는 `navigationId`로, bfcache 복원은 `pageshow`의 `persisted`를 센 횟수로 가른다. 대시보드에는 첫 로드와 SPA 이동을 고르는 변수를 두었다.
 
-## 10월 17일 16:17 일반 브라우저에 맞춰 수집 시점을 바꾸다
+## 6. 일반 브라우저에 맞춰 수집 시점을 바꾸다
 
 수집 코드와 대시보드를 검토하면서, 웹뷰를 위해 넣은 quiet 확정과 주기 export를 블로그에서도 유지할 이유가 있는지 살펴봤다.
 
@@ -210,7 +211,7 @@ hidden이 끝내 오지 않으면 metric은 전송되지 않는다. span은 주�
 
 [1편](/2026/10/web-vitals-report-timing)에서 찾은 INP 손실도 알고서 그대로 두었다. 블로그는 web-vitals 6.2.3을 쓰고 INP를 기본 설정으로 받는다. 새 상호작용 뒤 1초 안에 떠나면 그 입력이 INP 후보에 반영되기 전에 문서가 사라질 수 있다. INP만 `reportAllChanges`로 받는 우회는 첫 보고만 세는 이 구조와 맞지 않아 넣지 않았고, 수정(#809)이 담긴 버전이 나오면 web-vitals를 올려서 해결할 생각이다. 올린 뒤에는 1편처럼 떠나는 페이지 로드를 만들어 지표별 보고 수를 다시 센다.
 
-## 10월 17일 17:05 손실 패널이 손실을 숨기고 있었다
+## 7. 손실 패널이 손실을 숨기고 있었다
 
 손실 패널은 지표 수집이 끊겨도 0을 보여 주고 있었다. 버린 값이 없는 경우와 손실 지표를 받지 못한 경우를 구별하지 못하는 쿼리였다.
 
@@ -237,7 +238,7 @@ max by (reason) (max_over_time(cortex_discarded_samples_total{job="mimir", user=
 
 > 실제 Grafana 13.2.4의 `/api/ds/query`로 패널 쿼리를 보내 확인했고, 고친 뒤에는 Mimir 패널 30개가 모두 200이었다. 운영 서버의 Grafana에서도 같았다.
 
-## 10월 18일 13:50 복원된 페이지의 TTFB가 첫 로드로 세어졌다
+## 8. 복원된 페이지의 TTFB가 첫 로드로 세어졌다
 
 다음 날에는 bfcache 복원 지표가 서로 다른 trace에 들어가는 문제를 고쳤다. 복원의 TTFB는 web-vitals가 `pageshow` 리스너 안에서 바로 보고한다(1편의 `onBFCacheRestore`). 수집 코드도 window의 `pageshow`에서 복원 횟수를 세고 그 횟수를 키로 썼는데, web-vitals는 capture로 걸었고 수집 코드는 bubble로 걸었다. 현행 DOM 명세에서는 같은 타깃이라도 capture 리스너가 등록 순서와 상관없이 먼저 돌므로, 복원의 TTFB는 횟수가 늘기 전에 보고되어 다른 지표와 다른 키를 받았다. 프레임 두 개 뒤에 보고되는 FCP와 LCP는 늘어난 횟수로 갔다. 복원 하나가 trace 둘로 갈라진 것이다.
 
@@ -268,7 +269,7 @@ max by (reason) (max_over_time(cortex_discarded_samples_total{job="mimir", user=
 
 그래서 복원의 TTFB는 아예 기록하지 않고(SPA 이동의 TTFB를 재지 않는 것과 같은 이유다), 변수를 첫 로드, SPA 이동, bfcache 복원, 전체의 네 가지로 나눴다. 복원이 얼마나 되는지는 복원마다 보고되는 FCP의 건수로 센다. 이렇게 나눠야 같은 이름이어도 측정 기준이 다른 값을 한 분포에 섞지 않고 볼 수 있다.
 
-## 10월 18일 13:50 preview 배포도 production 빌드다
+## 9. preview 배포도 production 빌드다
 
 Vercel의 preview 배포에서도 수집 코드가 실행되고 있었다. 수집 코드는 `NODE_ENV`가 production일 때만 켜지는데, preview 배포도 production 빌드라 그대로 켜졌다. collector는 블로그 origin만 허용하므로 브라우저가 요청을 막고, 2편의 표대로 exporter는 CORS 거부를 네트워크 오류로 보고 약 8초 동안 5번 시도한다(처음 요청과 재시도 4번). 값이 잘못 들어가지는 않았지만, preview에서 글을 확인할 때마다 SDK를 받고 실패할 요청을 보내고 있었다. SDK를 받기 전에 origin을 비교해 거른다. 같은 자리에서 동적 import의 실패도 잡았다. 청크를 받지 못하면 `unhandledrejection`으로 새던 것을 삼켜서, 계측이 실패해도 독자에게 오류로 보이지 않게 했다.
 
@@ -278,7 +279,7 @@ Vercel의 preview 배포에서도 수집 코드가 실행되고 있었다. 수�
     if (window.location.origin !== SiteConfig.url) return
 ```
 
-## 10월 18일 13:51 preflight 캐시와 서버 자원 상한을 설정하다
+## 10. preflight 캐시와 서버 자원 상한을 설정하다
 
 서버에서는 preflight 캐시와 메모리 상한, 로그 보관 설정을 고쳤다. exporter의 cross-origin 요청은 `Content-Type: application/json`을 쓰므로 preflight(OPTIONS)가 필요하다. collector의 CORS 응답에 `Access-Control-Max-Age`가 없으면 결과를 기본값인 5초만 캐시한다[^3]. span의 전송 주기도 5초라 캐시를 오래 활용하기 어려웠다. `cors.max_age`를 Chromium의 상한인 2시간으로 두고, 서버에 OPTIONS 요청을 보내 `access-control-max-age: 7200`을 확인했다. 실제 브라우저에서 OPTIONS가 얼마나 줄었는지는 별도로 세지 않았다.
 
@@ -286,7 +287,7 @@ Vercel의 preview 배포에서도 수집 코드가 실행되고 있었다. 수�
 
 셋째는 컨테이너 로그다. Docker의 `json-file` 로그는 기본으로 회전하지 않는다. 1년 보존으로 둔 서버라 로그가 디스크를 채울 수 있어, 컨테이너마다 10MB 파일 3개로 돌린다.
 
-## 10월 18일 13:54 flush 시점은 수집 코드 하나가 정한다
+## 11. flush 시점은 수집 코드 하나가 정한다
 
 2편에서 `BatchSpanProcessor`가 document의 `pagehide`에 건 리스너는 불리지 않는다고 썼다. 같은 자리에서 document의 `visibilitychange`에 건 리스너는 불린다. 이 리스너는 SDK를 만들 때 등록되므로 수집 코드의 리스너보다 먼저 돌고, 수집 코드가 뒤이어 부르는 trace의 `forceFlush`는 빈 큐에 대고 부르는 셈이었다. 나가는 값은 같지만, flush 시점을 수집 코드가 정한다는 주석이 span에는 맞지 않았다. 2.12.0의 `disableAutoFlushOnDocumentHide` 옵션으로 SDK의 리스너를 끄고, 수집 코드의 리스너 하나가 span과 metric의 flush를 함께 부르게 했다.
 
@@ -300,7 +301,7 @@ Vercel의 preview 배포에서도 수집 코드가 실행되고 있었다. 수�
       ),
 ```
 
-## 10월 18일 16:29 대시보드를 열자 429가 났다
+## 12. 대시보드를 열자 429가 났다
 
 고친 대시보드를 운영 Grafana에서 열고 맨 아래로 바로 스크롤하자 패널 3개가 `too many outstanding requests`로 깨졌다. Mimir가 429를 돌려준 것이다. 로그에는 15:51:03에 10ms 사이 16건의 요청을 버렸다고 남았고, 그 전 48시간에는 한 건도 없었다. 다시 열거나 천천히 스크롤하면 7일이나 30일 범위에서도 재현되지 않았다.
 
@@ -317,11 +318,11 @@ frontend:
 
 ### trace는 왔는데 metric이 없다
 
-같은 날 넣은 패널 두 개는 Tempo의 첫 로드 trace 56건과 Mimir의 첫 로드 표본 40건을 보여 줬다. 같은 첫 로드를 비교하려던 패널인데 16건이 달랐다. 라벨과 시각을 맞춰 보니 6건은 17일 13:42 수정을 배포하기 전의 trace였다. Mimir의 첫 표본은 13:56부터 있었다.
+같은 날 넣은 패널 두 개는 Tempo의 첫 로드 trace 56건과 Mimir의 첫 로드 표본 40건을 보여 줬다. 같은 첫 로드를 비교하려던 패널인데 16건이 달랐다. 라벨과 시각을 맞춰 보니 6건은 첫날 Mimir 저장 방식을 바꾼 수정을 배포하기 전의 trace였다. Mimir의 첫 표본은 13:56부터 있었다.
 
 나머지 10건은 17일 저녁부터 18일 오후까지 퍼져 있었고 대부분 데스크톱 Chromium에서 글을 연 방문이었다. span은 주기 export로 먼저 나갈 수 있으므로, 탭이 아직 hidden이 되지 않았거나 hidden에서 시작한 metric 전송이 완료되지 않았을 가능성이 있다. 확인한 Mimir의 폐기 표본과 collector의 수신 거부 카운터는 0이었지만, 그것만으로 원인을 특정할 수는 없었다. 비교 대상 50건 중 10건이라는 차이를 남기고 닷새치 데이터에서 다시 확인했다.
 
-## 10월 22일 16:25 설정 반영을 GitHub Actions에 맡기다
+## 13. 설정 반영을 GitHub Actions에 맡기다
 
 지금까지는 서버 설정을 바꿀 때마다 SSH로 들어가 `git pull`과 `docker compose up -d`를 손으로 쳤다. 리뷰 반영처럼 하루에 몇 번씩 바꾸는 날에는 이 단계를 빼먹기 쉽고, 저장소와 서버가 다른 커밋에 있는 채로 글을 쓰게 된다. 그래서 `infra/otel`이 main에 올라가면 GitHub Actions가 서버에 SSH로 들어가 반영하게 했다(`.github/workflows/deploy-otel.yml`, `infra/otel/deploy.sh`).
 
@@ -336,7 +337,7 @@ command="cd ~/blog && b=$(git rev-parse HEAD) && git pull --ff-only --quiet && e
 
 첫 실행에서는 22번 포트가 내 IP에만 열려 있어 GitHub 러너가 연결하지 못했다(`Connection timed out`). GitHub 러너의 IP 대역은 공개되어 있지만 범위가 넓고 바뀌므로 방화벽 규칙으로 좁히지 않고, 22번 포트를 모든 IP에 열었다. 비밀번호 인증은 끈 채 배포 키에 forced command를 적용했지만, 내 키의 셸 접근도 같은 포트로 노출된다. 다시 실행한 워크플로는 서버를 e02c600a에서 f3c6f8ff로 pull했다. 설정 디렉터리에 바뀐 파일이 없어 컨테이너를 다시 시작하지 않고 끝났다. 실제 설정 파일이 바뀌었을 때도 재시작되는지는 다음 변경에서 확인하게 됐다.
 
-## 10월 22일 19:09 collector가 라벨을 검사하지 않았다
+## 14. collector가 라벨을 검사하지 않았다
 
 첫날에는 브라우저 코드에서만 라벨을 제한했다. collector는 요청의 `service.name`과 라벨을 그대로 받으므로, 직접 만든 OTLP 요청으로 블로그의 `cwv.lcp`에 임의의 값이나 라벨을 넣을 수 있었다. 지표당 하루 100~180건인 데이터에 가짜 값이 섞이면 p75도 영향을 받는다. 실제 방문인지 확인할 수는 없더라도, 브라우저 코드가 보내지 않는 이름과 라벨까지 받을 필요는 없었다. 당시 Mimir의 상한은 기본값 그대로였다.
 
@@ -367,7 +368,7 @@ command="cd ~/blog && b=$(git rev-parse HEAD) && git pull --ff-only --quiet && e
 
 허용한 라벨로 만든 가짜 값은 여전히 들어온다. 전체 시리즈 수가 수천 개 이하라고 보장할 수도 없다. 이 설정은 남겨 둔 resource 속성의 값이나 histogram의 버킷 경계까지 검증하지 않고, 요청 빈도도 제한하지 않는다. 입력 검사를 추가한 범위와 저장량을 제한하는 문제는 구별해야 한다.
 
-설정은 자동 배포 과정에서도 한 번 더 확인해야 했다. 워크플로는 성공했는데 collector는 여전히 "Up 4 days"였다. `deploy.sh`가 `cd infra/otel` 뒤에 `git diff -- infra/otel`을 실행하면서, 현재 디렉터리 기준으로 `infra/otel/infra/otel`을 찾고 있었다. pathspec을 `.`로 고친 19:10 커밋이 올라가자 바뀐 파일 두 개가 출력되고 collector가 다시 시작됐다. 워크플로의 성공 여부만으로 설정 반영까지 확인할 수 없었던 사례다.
+설정은 자동 배포 과정에서도 한 번 더 확인해야 했다. 워크플로는 성공했는데 collector는 여전히 "Up 4 days"였다. `deploy.sh`가 `cd infra/otel` 뒤에 `git diff -- infra/otel`을 실행하면서, 현재 디렉터리 기준으로 `infra/otel/infra/otel`을 찾고 있었다. pathspec을 `.`로 고친 다음 커밋이 올라가자 바뀐 파일 두 개가 출력되고 collector가 다시 시작됐다. 워크플로의 성공 여부만으로 설정 반영까지 확인할 수 없었던 사례다.
 
 ## Tempo 조회가 성공해도 빠진 block이 있었다
 

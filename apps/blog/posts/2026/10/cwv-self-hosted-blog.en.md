@@ -7,6 +7,7 @@ tags:
   - backend
 published: true
 date: 2026-10-23 13:31:00
+updated: 2026-10-23 20:34:50
 description: 'Moved a Core Web Vitals collection setup designed for shared observability infrastructure to my personal blog. Fixed a dashboard left empty by sparse traffic and changed when metrics are collected for ordinary browsers. This post records the changes from October 17 to 22, query omissions investigated on October 23, and what five days of data can support.'
 series: 'Core Web Vitals 직접 수집하기'
 seriesOrder: 4
@@ -22,7 +23,7 @@ After adding the collection code to the blog and visiting a few times, I opened 
 
 Through part 3, I could not change the shared observability infrastructure, and the app webview sometimes gave no signal when a user left. For the blog, I ran the collection services on a single server costing \$12 a month and could change everything from the collector to the dashboards. Visitors also used ordinary browsers. I needed to check whether the measures added to avoid losing webview data were still useful, and whether the same aggregation method worked with sparse visits.
 
-This post records connecting the collection server to the blog on October 17 and 18, 2026, then improving deployment and input validation on October 22. On October 23, I also investigated the Tempo error encountered while querying those five days of data. Dated section headings follow commit order. At the end, I revisit those choices using roughly 121 hours of collected data.
+This post records connecting the collection server to the blog on October 17 and 18, 2026, then improving deployment and input validation on October 22. On October 23, I also investigated the Tempo error encountered while querying those five days of data. Numbered section headings follow commit order. At the end, I revisit those choices using roughly 121 hours of collected data.
 
 I first changed storage and queries so that even a few observations would be counted. Then I adjusted quiet LCP finalization and periodic metric exports for the blog and built panels to monitor loss. The work also required checking the dashboards and deployment process alongside the collection code.
 
@@ -30,7 +31,7 @@ I first changed storage and queries so that even a few observations would be cou
 >
 > Versions: web-vitals 6.2.3, OTel JS 2.12.0 (OTLP exporter 0.223.0), OpenTelemetry Collector contrib 0.163.1, Tempo 3.1.0, Mimir 3.2.2, Grafana 13.2.4 and Caddy 2.11.7. The server is a Debian 13 instance with 2GB of memory in the Amazon Lightsail Seoul region.
 
-## October 17, 12:38: Moving the Collection Server into the Blog Repository
+## 1. Moving the Collection Server into the Blog Repository
 
 I initially started the server with a deployment override in the reproduction repository. To separate experiments from the live setup, I moved it into `infra/otel` in the blog repository. The server uses sparse checkout to fetch only that directory and runs it with `docker compose up`. There are five services: Caddy, the collector, Tempo, Mimir and Grafana.
 
@@ -44,7 +45,7 @@ I chose Lightsail because the server, disk, public IPv4 address and monthly tran
 
 > The Lightsail price was checked with its `get-bundles` API in Seoul. The EC2 public IPv4 price came from the AWS VPC pricing page[^2]. These are October 2026 prices; checking again on October 22 returned the same values.
 
-That afternoon, memory use was 115MiB for Mimir, 243MiB for Grafana, 158MiB for Tempo, 86MiB for the collector and 19MiB for Caddy. Together, they used about 620MiB of the server's 2GB. Grafana was the largest service with its default installation. Grafana 13 downloads preinstalled app plugins at startup and launches separate processes for data source plugins. I disabled plugin preinstallation (`GF_PLUGINS_PREINSTALL_DISABLED`) and 11 built-in data source plugins other than Mimir and Tempo (`GF_PLUGINS_DISABLE_PLUGINS`). With the same data sources and dashboards loaded and queried once, the measurements were:
+On the first afternoon, memory use was 115MiB for Mimir, 243MiB for Grafana, 158MiB for Tempo, 86MiB for the collector and 19MiB for Caddy. Together, they used about 620MiB of the server's 2GB. Grafana was the largest service with its default installation. Grafana 13 downloads preinstalled app plugins at startup and launches separate processes for data source plugins. I disabled plugin preinstallation (`GF_PLUGINS_PREINSTALL_DISABLED`) and 11 built-in data source plugins other than Mimir and Tempo (`GF_PLUGINS_DISABLE_PLUGINS`). With the same data sources and dashboards loaded and queried once, the measurements were:
 
 | Grafana 13.2.4       | After 5 minutes | After 6 minutes | Data source plugin processes | Preinstalled plugins |
 | -------------------- | --------------- | --------------- | ---------------------------- | -------------------- |
@@ -92,11 +93,11 @@ metrics query time range exceeds the maximum allowed duration of 24h0m0s
 
 Once divided by label, a day's traffic on this blog left only a few observations. I increased both retention and the query range to one year (`max_search_duration`, `max_metrics_duration` and `block_retention`). Increasing retention alone would keep data that the queries could not reach.
 
-## October 17, 12:42: Connecting the Blog
+## 2. Connecting the Blog
 
 I adapted the reproduction environment's browser code to the blog. It runs only in production, and the OTel SDK loads through a dynamic import because the initial screen does not need it. In the October 22 build at commit `466ad1b1`, this chunk was 100,571B raw and 29,365B gzipped. The collection code and SDK versions had not changed since the second day. Even when loaded late, web-vitals can collect earlier LCP and CLS entries from the buffer. However, buffered Event Timing entries include only interactions of at least 104ms, so shorter interactions before the SDK loads are absent from the INP candidates. I classify screens into five `page.route` values: home, post, tag, series and other.
 
-## October 17, 13:42: The Empty Dashboard
+## 3. The Empty Dashboard
 
 This was the empty dashboard from the introduction. To investigate, I simulated a site with sparse visits, sent the same 8 LCP observations through four collection pipelines and counted what each dashboard query returned. Five label combinations received one observation each; a sixth received three, 7 minutes apart.
 
@@ -129,7 +130,7 @@ I changed timestamps as well. Browser clocks differ, and Mimir rejects a sample 
 
 There are two limitations. The timestamp now represents receipt by the collector rather than the page load. Also, two values for the same series arriving within the same millisecond become samples with the same timestamp, and Mimir drops one. In the experiment from part 3, sending 10 observations per second to one series lost 1.3-1.5% (`cwv-otel-grafana/experiments/e10-concurrent-writers`). I expected this to be uncommon at the blog's traffic level. I return to it when adding the loss panels.
 
-## October 17, 13:43: What Is Slow, and for Whom?
+## 4. What Is Slow, and for Whom?
 
 With only five screen categories, the route alone was not enough to narrow down slow visits. I added metric labels with bounded sets of values: language (`page.lang`, `en` when the path starts with `/en`), device class (`device.class`, three groups divided at viewport widths of 768px and 1024px) and browser engine (`browser.engine`). Browser names alone do not identify the engine. Referrer category, whether the navigation passed through a service worker, network details and device details go only into span attributes because they have more possible values or answer narrower questions.
 
@@ -144,13 +145,13 @@ I also remove StyleX atomic classes from LCP element selectors.
 
 The blog uses StyleX atomic classes, and web-vitals includes those classes in its selectors. Leaving them in would split the same element into different entries across deployments in Tempo's panel grouped by LCP element.
 
-## October 17, 14:17: Bots, SPA Navigations and bfcache
+## 5. Bots, SPA Navigations and bfcache
 
 I made three changes here. First, bots: visits from PageSpeed Insights (`Chrome-Lighthouse`), headless browsers and search engine renderers were also being collected. These observations can easily shift percentiles on a quiet blog. I added checks for the user agent and `navigator.webdriver` before loading the SDK. These checks also filter out Playwright, so the later reader comparison uses a separate demo page.
 
 Second, SPA navigation: links within the blog use client-side navigation, so only the initial load had been measured. Enabling web-vitals' `reportSoftNavs` measures FCP, LCP, CLS and INP for each navigation on Chromium 151 and later. TTFB is reported as zero for these navigations, so I measure it only for the initial load. Third, bfcache restores: initial loads, SPA navigations and bfcache restores each get their own navigation and trace. SPA navigations use the `navigationId` from web-vitals. At this stage, bfcache restores used a counter incremented by `pageshow` events with `persisted` set. The dashboard gained a variable for selecting initial loads or SPA navigations.
 
-## October 17, 16:17: Adjusting Collection Timing for Ordinary Browsers
+## 6. Adjusting Collection Timing for Ordinary Browsers
 
 While reviewing the code and dashboards, I reconsidered whether the blog still needed quiet finalization and periodic exports, both added for the webview.
 
@@ -210,7 +211,7 @@ I measured two other issues without changing how they were handled. The first wa
 
 I also left the INP loss found in [part 1](/2026/10/web-vitals-report-timing) in place. The blog uses web-vitals 6.2.3 with the default INP reporting options. Leaving within 1 second of a new interaction can destroy the document before that input reaches the INP candidates. Using `reportAllChanges` only for INP does not fit a histogram that records the first report. I plan to upgrade web-vitals when a version containing fix #809 becomes available, then repeat the departing-page experiment from part 1 and count reports by metric.
 
-## October 17, 17:05: The Loss Panel Hid Missing Collection
+## 7. The Loss Panel Hid Missing Collection
 
 The loss panel showed zero even when collection of its own metrics had stopped. Its query could not distinguish no discarded samples from no loss metrics received.
 
@@ -237,7 +238,7 @@ I started the same configuration locally and compared the queries with fixtures.
 
 > I sent the panel queries through Grafana 13.2.4's `/api/ds/query`. After the fixes, all 30 Mimir panels returned 200, including on the live server's Grafana.
 
-## October 18, 13:50: Restored-Page TTFB Was Counted as an Initial Load
+## 8. Restored-Page TTFB Was Counted as an Initial Load
 
 The next day, I fixed bfcache restore metrics being split across different traces. web-vitals reports restored-page TTFB directly inside its `pageshow` listener (`onBFCacheRestore` in part 1). The collection code also counted restores in a window `pageshow` listener and used that count as a key. But web-vitals used capture and the collection code used bubble. Under the current DOM specification, capture listeners on the same target run first regardless of registration order. TTFB therefore arrived before the counter incremented and received a different key from FCP and LCP, which were reported two frames later. One restore became two traces.
 
@@ -268,7 +269,7 @@ Fixing the key exposed another issue. As part 1 showed, web-vitals supplies zero
 
 I stopped recording restored-page TTFB, for the same reason I exclude SPA TTFB, and split the selector into initial load, SPA navigation, bfcache restore and all. FCP, reported for each restore, provides the restore count. This keeps values with different measurement definitions out of the same distribution, even when their metric names match.
 
-## October 18, 13:50: Preview Deployments Are Production Builds Too
+## 9. Preview Deployments Are Production Builds Too
 
 The collection code was also running in Vercel preview deployments. It checks whether `NODE_ENV` is production, which is also true for preview builds. The collector allows only the blog origin, so the browser blocks the requests. As part 2 showed, the exporter treats a CORS rejection as a network error and makes 5 attempts over roughly 8 seconds: the initial request and 4 retries. The values did not reach storage, but every preview loaded the SDK and attempted requests that would fail. I now check the origin before loading the SDK. At the same point, I catch dynamic import failures so a missing telemetry chunk does not produce an `unhandledrejection` for the reader.
 
@@ -278,7 +279,7 @@ The collection code was also running in Vercel preview deployments. It checks wh
     if (window.location.origin !== SiteConfig.url) return
 ```
 
-## October 18, 13:51: Setting the Preflight Cache and Server Resource Limits
+## 10. Setting the Preflight Cache and Server Resource Limits
 
 On the server, I changed the preflight cache, memory limit and log retention. The exporter's cross-origin requests use `Content-Type: application/json`, which requires a preflight (OPTIONS). Without `Access-Control-Max-Age`, the collector's CORS response is cached for only the default 5 seconds[^3]. Spans export every 5 seconds too, leaving little opportunity to reuse the cached result. I set `cors.max_age` to Chromium's 2-hour cap and checked an OPTIONS response for `access-control-max-age: 7200`. I did not separately count the reduction in OPTIONS requests in a real browser.
 
@@ -286,7 +287,7 @@ The second change was the collector's memory cap. `memory_limiter` used `limit_p
 
 Third, Docker's default `json-file` logging does not rotate. Since this server was configured for one-year data retention, logs could eventually fill the disk. Each container now rotates three 10MB log files.
 
-## October 18, 13:54: One Listener Controls the Flush
+## 11. One Listener Controls the Flush
 
 Part 2 described how the `BatchSpanProcessor` listener for document `pagehide` is not called. Its document `visibilitychange` listener does run. Registered when the SDK is created, it runs before the collection code's listener. The collection code then calls trace `forceFlush` against a queue already drained by the SDK. The outgoing values were the same, but the comment saying the collection code controlled flush timing was inaccurate for spans. I disabled the SDK listener with `disableAutoFlushOnDocumentHide` in version 2.12.0, leaving one collection-code listener to start both trace and metric flushes.
 
@@ -300,7 +301,7 @@ Part 2 described how the `BatchSpanProcessor` listener for document `pagehide` i
       ),
 ```
 
-## October 18, 16:29: Opening the Dashboard Produced 429s
+## 12. Opening the Dashboard Produced 429s
 
 I opened the corrected dashboard in the live Grafana and immediately scrolled to the bottom. Three panels failed with `too many outstanding requests`: Mimir had returned 429. Its logs recorded 16 rejected requests within 10ms at 15:51:03, with none in the preceding 48 hours. Reloading or scrolling slowly did not reproduce it, even with 7-day or 30-day ranges.
 
@@ -317,11 +318,11 @@ After disabling time splitting and sharding, I sent the live dashboard's 36 Mimi
 
 ### Traces Arrived Without Corresponding Metrics
 
-Two new panels showed 56 initial-load traces in Tempo and 40 initial-load observations in Mimir. They were intended to count the same loads, yet differed by 16. Comparing labels and timestamps showed that 6 traces preceded the deployment of the 13:42 fix on October 17. Mimir's first sample was at 13:56.
+Two new panels showed 56 initial-load traces in Tempo and 40 initial-load observations in Mimir. They were intended to count the same loads, yet differed by 16. Comparing labels and timestamps showed that 6 traces preceded the first day's deployment of the Mimir storage change. Mimir's first sample was at 13:56.
 
 The other 10 were spread from the evening of October 17 through the afternoon of October 18, mostly desktop Chromium visits to posts. Periodic span export can run before hidden, so these could be tabs not yet hidden or metric requests that started on hidden but did not complete. The Mimir discarded-sample and collector refused-data counters I checked were zero, but that did not identify the cause. I recorded the difference of 10 out of 50 comparable visits and revisited it with five days of data.
 
-## October 22, 16:25: Applying Configuration Through GitHub Actions
+## 13. Applying Configuration Through GitHub Actions
 
 Until then, every configuration change required SSH access followed by a manual `git pull` and `docker compose up -d`. On days with several revisions, it was easy to skip that step and write about a repository state the server was not running. I added a GitHub Actions workflow that connects over SSH and applies changes when `infra/otel` reaches main (`.github/workflows/deploy-otel.yml` and `infra/otel/deploy.sh`).
 
@@ -336,7 +337,7 @@ After `docker compose up -d`, `deploy.sh` compares the commits before and after 
 
 The first run failed with `Connection timed out` because port 22 allowed only my IP address. GitHub publishes the runners' IP ranges, but they are broad and change, so instead of narrowing the firewall rule I opened port 22 to every address. Password authentication stays disabled and the deployment key is restricted by the forced command, but my own key's shell access is exposed on the same port. The next run pulled the server from `e02c600a` to `f3c6f8ff`. No configuration files had changed, so no containers restarted. Whether a configuration change actually triggered a restart would be tested by the next change.
 
-## October 22, 19:09: The Collector Was Not Validating Labels
+## 14. The Collector Was Not Validating Labels
 
 On the first day, labels were restricted only in browser code. The collector accepted the supplied `service.name` and labels, so a manually constructed OTLP request could add arbitrary values or labels to the blog's `cwv.lcp`. With 100 to 180 observations per metric per day, fake values can affect p75. Even without verifying that a request came from a real visit, there was no need to accept names and labels the browser code never sends. Mimir was still using these default limits:
 
@@ -367,7 +368,7 @@ I validated the configuration locally with the same image, replaced the exporter
 
 Fake values using allowed labels still pass. This also does not guarantee that the total number of series stays below a few thousand. The configuration does not validate the values of retained resource attributes or histogram bucket boundaries, and it does not limit request frequency. The input checks implemented here do not constitute a bound on storage volume.
 
-The deployment process needed another check too. The workflow succeeded, but the collector still showed "Up 4 days." After `cd infra/otel`, `deploy.sh` ran `git diff -- infra/otel`, resolving the pathspec as `infra/otel/infra/otel`. Once the 19:10 commit changed the pathspec to `.`, the script printed the two changed files and restarted the collector. Workflow success alone had not established that configuration was applied.
+The deployment process needed another check too. The workflow succeeded, but the collector still showed "Up 4 days." After `cd infra/otel`, `deploy.sh` ran `git diff -- infra/otel`, resolving the pathspec as `infra/otel/infra/otel`. Once the next commit changed the pathspec to `.`, the script printed the two changed files and restarted the collector. Workflow success alone had not established that configuration was applied.
 
 ## Successful Tempo Queries Still Omitted Blocks
 

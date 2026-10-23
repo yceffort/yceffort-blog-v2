@@ -8,7 +8,7 @@ const ko = {
   caption:
     '방금 이 브라우저가 이 탭을 불러온 실제 기록입니다. 측정값은 브라우저 밖으로 보내지 않습니다.',
   replay: '다시 재생',
-  hint: '드래그해서 돌리고, 막대를 누르면 자세히 볼 수 있습니다',
+  hint: '드래그해서 돌리고, 두 손가락으로 벌려 확대하고 옮깁니다. 막대를 누르면 자세히 볼 수 있습니다',
   hintMouse:
     '드래그해서 돌리고, Ctrl+휠로 확대하고, Shift+드래그로 옮깁니다. 더블클릭하면 처음 구도로 돌아오고, 막대를 누르면 자세히 볼 수 있습니다',
   selfLabel: '이 그래픽의 코드',
@@ -66,7 +66,7 @@ const en: TraceText = {
   caption:
     'This is the actual record of your browser loading this tab just now. The measurements never leave your browser.',
   replay: 'Replay',
-  hint: 'Drag to rotate. Click a bar for details.',
+  hint: 'Drag to rotate, pinch to zoom, two-finger drag to pan. Tap a bar for details.',
   hintMouse:
     'Drag to rotate, Ctrl+wheel to zoom, Shift+drag to pan. Double-click to reset. Click a bar for details.',
   selfLabel: 'Code for this graphic',

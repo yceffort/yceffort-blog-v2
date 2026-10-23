@@ -357,11 +357,24 @@ const styles = stylex.create({
       cursor: 'grabbing',
     },
   },
-  trace_hint: {
+  trace_bottom: {
     '@layer site': {
       position: 'absolute',
+      right: '16px',
       bottom: '14px',
       left: '18px',
+      display: 'flex',
+      flexWrap: 'wrap',
+      alignItems: 'flex-end',
+      gap: '8px 20px',
+    },
+  },
+  trace_hint: {
+    '@layer site': {
+      // 범례와 한 줄에 못 들어가면 범례 위로 올라간다
+      flexGrow: '1',
+      flexShrink: '1',
+      flexBasis: '320px',
       margin: '0',
       fontSize: '11px',
       color: '#8b8ba3',
@@ -442,14 +455,11 @@ const styles = stylex.create({
   },
   trace_legend: {
     '@layer site': {
-      position: 'absolute',
-      right: '16px',
-      bottom: '14px',
       display: 'flex',
       flexWrap: 'wrap',
       justifyContent: 'flex-end',
       maxWidth: '70%',
-      margin: '0',
+      margin: '0 0 0 auto',
       padding: '0',
       listStyle: 'none',
       gap: '6px 14px',
@@ -657,6 +667,7 @@ export const trace_viewport_grabbing = stylex.props(
   styles.trace_viewport,
   styles.trace_grabbing,
 ).className!
+export const trace_bottom = stylex.props(styles.trace_bottom).className!
 export const trace_hint = stylex.props(styles.trace_hint).className!
 export const trace_overlay = stylex.props(styles.trace_overlay).className!
 export const trace_hud = stylex.props(styles.trace_hud).className!

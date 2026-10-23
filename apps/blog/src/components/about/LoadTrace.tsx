@@ -1006,9 +1006,20 @@ export default function LoadTrace() {
     let lastX = 0
     let lastY = 0
     let pressed = false
+    // 눌려 있는 포인터별 마지막 위치. 둘이면 핀치(확대)와 두 손가락 끌기(이동)로 본다.
+    const pts = new Map<number, {x: number; y: number}>()
+    const touched = () => {
+      const o = orbit.current
+      if (!o.touched) {
+        o.touched = true
+        setDragged(true)
+      }
+      o.invalidate()
+    }
     // 누르자마자 포인터를 잡으면 막대 클릭이 R3F에 닿지 않는다. 4px 넘게 움직여야 드래그로 본다.
     const down = (e: PointerEvent) => {
       if (e.button !== 0) return
+      pts.set(e.pointerId, {x: e.clientX, y: e.clientY})
       pressed = true
       orbit.current.vYaw = 0
       orbit.current.vPitch = 0
@@ -1017,9 +1028,35 @@ export default function LoadTrace() {
       orbit.current.panning = e.shiftKey && focusRef.current < 0
       lastX = e.clientX
       lastY = e.clientY
+      if (pts.size === 2 && !orbit.current.dragging) {
+        orbit.current.dragging = true
+        setGrabbing(true)
+        setHover({i: -1, x: 0, y: 0})
+      }
     }
     const move = (e: PointerEvent) => {
       const o = orbit.current
+      const prev = pts.get(e.pointerId)
+      if (prev && pts.size >= 2) {
+        // 두 손가락 사이가 벌어진 비율만큼 당기고, 중점이 움직인 만큼 옮긴다
+        const other = [...pts].find(([id]) => id !== e.pointerId)?.[1]
+        if (other && focusRef.current < 0) {
+          const before = Math.hypot(prev.x - other.x, prev.y - other.y)
+          const after = Math.hypot(e.clientX - other.x, e.clientY - other.y)
+          if (before > 0 && after > 0) {
+            o.zoom = THREE.MathUtils.clamp(
+              o.zoom * (before / after),
+              ZOOM_MIN,
+              ZOOM_MAX,
+            )
+          }
+          o.panDx += (e.clientX - prev.x) / 2
+          o.panDy += (e.clientY - prev.y) / 2
+        }
+        pts.set(e.pointerId, {x: e.clientX, y: e.clientY})
+        touched()
+        return
+      }
       if (pressed && !o.dragging) {
         if (Math.hypot(e.clientX - lastX, e.clientY - lastY) < 4) return
         o.dragging = true
@@ -1040,19 +1077,30 @@ export default function LoadTrace() {
       }
       lastX = e.clientX
       lastY = e.clientY
-      if (!o.touched) {
-        o.touched = true
-        setDragged(true)
-      }
-      o.invalidate()
+      if (prev) pts.set(e.pointerId, {x: e.clientX, y: e.clientY})
+      touched()
     }
     const up = (e: PointerEvent) => {
+      pts.delete(e.pointerId)
+      if (el.hasPointerCapture(e.pointerId))
+        el.releasePointerCapture(e.pointerId)
+      const rest = pts.values().next().value
+      if (rest) {
+        // 한 손가락이 남으면 그 손가락 기준으로 이어서 돌린다
+        lastX = rest.x
+        lastY = rest.y
+        orbit.current.vYaw = 0
+        orbit.current.vPitch = 0
+        return
+      }
       pressed = false
       orbit.current.dragging = false
       orbit.current.panning = false
-      if (el.hasPointerCapture(e.pointerId))
-        el.releasePointerCapture(e.pointerId)
       setGrabbing(false)
+    }
+    // touch-action이 pan-y라 두 손가락의 세로 이동을 브라우저가 스크롤로 가져갈 수 있다. 핀치 중에는 막는다.
+    const touchMove = (e: TouchEvent) => {
+      if (e.touches.length >= 2 && e.cancelable) e.preventDefault()
     }
     // 휠은 페이지 스크롤에 남기고, Ctrl/⌘를 누른 휠(트랙패드 핀치 포함)만 확대로 받는다
     const wheel = (e: WheelEvent) => {
@@ -1066,11 +1114,7 @@ export default function LoadTrace() {
         ZOOM_MIN,
         ZOOM_MAX,
       )
-      if (!o.touched) {
-        o.touched = true
-        setDragged(true)
-      }
-      o.invalidate()
+      touched()
     }
     const home = () => {
       const o = orbit.current
@@ -1085,6 +1129,7 @@ export default function LoadTrace() {
     el.addEventListener('pointermove', move)
     el.addEventListener('pointerup', up)
     el.addEventListener('pointercancel', up)
+    el.addEventListener('touchmove', touchMove, {passive: false})
     el.addEventListener('wheel', wheel, {passive: false})
     el.addEventListener('dblclick', home)
     return () => {
@@ -1092,6 +1137,7 @@ export default function LoadTrace() {
       el.removeEventListener('pointermove', move)
       el.removeEventListener('pointerup', up)
       el.removeEventListener('pointercancel', up)
+      el.removeEventListener('touchmove', touchMove)
       el.removeEventListener('wheel', wheel)
       el.removeEventListener('dblclick', home)
     }
@@ -1246,31 +1292,33 @@ export default function LoadTrace() {
               </span>
             </div>
           ))}
-          {trace && !dragged && (
-            <p className={aboutStyles.trace_hint}>
-              {finePointer ? t.hintMouse : t.hint}
-            </p>
-          )}
-          <ul className={aboutStyles.trace_legend}>
-            {kinds.map((k) => (
-              <li key={k} className={aboutStyles.trace_legend_item}>
-                <i
-                  className={aboutStyles.trace_swatch}
-                  style={{background: KIND_COLOR[k]}}
-                />
-                {t.kind[k]}
-              </li>
-            ))}
-            {trace?.longTasks.length ? (
-              <li className={aboutStyles.trace_legend_item}>
-                <i
-                  className={aboutStyles.trace_swatch}
-                  style={{background: LONG_TASK_COLOR}}
-                />
-                {t.longTask}
-              </li>
-            ) : null}
-          </ul>
+          <div className={aboutStyles.trace_bottom}>
+            {trace && !dragged && (
+              <p className={aboutStyles.trace_hint}>
+                {finePointer ? t.hintMouse : t.hint}
+              </p>
+            )}
+            <ul className={aboutStyles.trace_legend}>
+              {kinds.map((k) => (
+                <li key={k} className={aboutStyles.trace_legend_item}>
+                  <i
+                    className={aboutStyles.trace_swatch}
+                    style={{background: KIND_COLOR[k]}}
+                  />
+                  {t.kind[k]}
+                </li>
+              ))}
+              {trace?.longTasks.length ? (
+                <li className={aboutStyles.trace_legend_item}>
+                  <i
+                    className={aboutStyles.trace_swatch}
+                    style={{background: LONG_TASK_COLOR}}
+                  />
+                  {t.longTask}
+                </li>
+              ) : null}
+            </ul>
+          </div>
           {hovered && focus < 0 && (
             <div
               className={aboutStyles.trace_tooltip}

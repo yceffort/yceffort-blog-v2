@@ -8,6 +8,7 @@ tags:
   - backend
 published: true
 date: 2026-10-22 11:27:00
+updated: 2026-10-23 13:57:31
 description: 'Sent the Core Web Vitals measured in an app webview to an observability platform shared by many teams. The webview gave no signal on leaving, and tail sampling, delta-to-cumulative conversion and Tempo queries each dropped values in their own way without raising an error. For every setting that could not be changed, re-measured what was lost in a reproduction environment.'
 series: 'Core Web Vitals 직접 수집하기'
 seriesOrder: 3
@@ -31,7 +32,7 @@ The work came with a few constraints from the start. The observability infrastru
 
 ## Why It Splits into Two Paths
 
-If one trace could answer every question, that would have been simplest. Make one trace per page load, hang one span per metric under it, carry the attribution values as attributes, and TraceQL can filter anything. For finding causes, this was in fact the most convenient way. The problem was production. The shared infrastructure mentioned above was not designed to take the volume of traces a browser sends on every page load, and it did not accept spanmetrics, which extracts metrics from traces, either. So traces are collected only in the staging environment before production, and in production the browser builds the metrics itself and sends them.
+If one trace could answer every question, that would have been simplest. Make one trace per page load, hang one span per metric under it, carry the attribution values as attributes, and TraceQL can filter anything. For finding causes, this was in fact the most convenient way. The problem was production. The shared infrastructure mentioned above was not designed to take the volume of traces a browser sends on every page load, and it did not accept spanmetrics, which extracts metrics from traces, either. I therefore split the configuration into metrics built and sent directly by the browser, and traces used to investigate causes in the verification environment.
 
 ```mermaid
 flowchart LR
@@ -41,7 +42,7 @@ flowchart LR
   M --> DC["collector<br/>delta_to_cumulative"] --> MIMIR["Mimir<br/>how slow is it"]
 ```
 
-Metrics are aggregated before they are sent, so the questions you can ask are fixed at collection time, and that has to be accepted. Mimir can answer "what is the LCP p75 of this screen, and has it gotten worse", but not "what was the LCP element on that screen". That question has to be reproduced in staging and then narrowed down with Tempo. It means the original problem, "what is the LCP", remains a question that production data alone cannot answer, and I judged this to be the best this infrastructure could offer.
+Metrics are aggregated before they are sent, so the questions you can ask are fixed at collection time, and that has to be accepted. Mimir can answer "what is the LCP p75 of this screen, and has it gotten worse", but not "what was the LCP element on that screen". That question has to be reproduced in staging and then narrowed down with Tempo. The metrics alone still cannot identify the LCP element, but this division gives each path a role within the constraints of the shared infrastructure.
 
 ## The Webview Does Not Say It Is Leaving
 
@@ -293,9 +294,7 @@ last.use(func(last pmetric.HistogramDataPoint) {
 
 The time of the last received value is recorded before aggregation, so as long as values keep arriving, the series stays alive even if all of them are dropped. The gap made by a fast clock lasts exactly as far ahead as that clock was, as long as there is traffic.
 
-So how skewed are real browser clocks? The only public data I could find was from 2014, comparing the browser's `Date()` with the server time over 300 million page loads a day[^4]. In absolute values bucketed by 5 minutes, 90% were under 5 minutes, 99% under 115 minutes and 99.9% under 25.5 hours, and about 57% of the skewed clocks were ahead. Drawing skews from this distribution and running the same experiment lost 92.0% and 95.6% at 1 per second, and 99.9% in both runs at 10 per second. Only the percentile boundaries and the share of clocks that were ahead were published, so the gaps were filled with assumptions: the 90% under 5 minutes were given a skew of 0, and within the other ranges the skew was drawn uniformly. So this value is the result of an assumed model fitted to the 2014 percentiles, not a loss measured against an observed distribution. There is no guarantee either that setting the skew to 0 produces the smallest loss, so it cannot be read as a lower bound. Once the first fast clock comes in, only clocks even further ahead pass after that, and most such values exceed the 10-minute grace period and are rejected again by Mimir. In the end, what remained in Mimir was the few values before the fast clock came in. At 1 per second, the share lost varied widely depending on when and by how much the fast clock came in, and at 10 per second the series was stuck from a few seconds in, in both runs.
-
-The 2014 data is skewed toward sites in the US, Canada and the EU, and probably comes from a time with more PCs with wrong clocks than today's phones, which set their clocks over the network. The real distribution in app webviews is very likely much narrower. But as the experiment above shows, even with a narrow distribution, one clock a few minutes ahead stops the whole series for those few minutes, and the only values that survive in between are those from browsers with clocks even further ahead.
+The experiment combining clock skews from several browsers is documented separately in the [supplementary experiment](#supplementary-experiment-a-clock-skew-model-based-on-2014-data) at the end. The key finding here is that a single browser with a fast clock can cause other values in the same series to be lost.
 
 I could not measure how often this loss happens in production. I have never compared sent and received counts on production data, and it also depends on how the collector splits streams (resource attributes, instance configuration). What I can say with certainty is that counts matching in a low-traffic staging environment is no evidence that this loss is absent. The loss grows with the number of browsers writing to the same series at the same time, and staging does not create that condition.
 
@@ -305,11 +304,11 @@ If the cause of the loss is that one series has many writers, the fix is to funn
 
 The gateway receives the browser's reports per measurement (document, navigation, metric name). Each report carries a revision; a revision higher than the one received replaces the value, and an equal or lower one is discarded. When no new report has arrived for 30 minutes after the last update, the measurement is finalized, added to a cumulative histogram per series, and exported to the collector on a schedule. The writer of a series is the gateway alone, and the gateway sets the times. When a series is exported for the first time, a sample with value 0 is exported once first, which also avoids the problem of `increase()` not counting a label combination with only one sample. The keys of finalized measurements and the samples not yet delivered to the collector are saved to a file, so after a restart the same report arriving again is counted only once and undelivered samples continue to be exported. The same reports were also sent to the delta path of the reproduction environment for comparison.
 
-| Case                                                               | Measurements sent | Stored by the gateway | Stored by the delta path |
-| ------------------------------------------------------------------ | ----------------- | --------------------- | ------------------------ |
-| 30 with the same label combination at once                         | 30                | 30                    | 1, 1                     |
-| The 50-per-second input of the earlier experiment                  | 3056              | 3056                  | 1199, 1202               |
-| The 2014 distribution at 10 per second from the earlier experiment | 1219              | 1219                  | 35, 35                   |
+| Case                                                | Measurements sent | Stored by the gateway | Stored by the delta path |
+| --------------------------------------------------- | ----------------- | --------------------- | ------------------------ |
+| 30 with the same label combination at once          | 30                | 30                    | 1, 1                     |
+| The 50-per-second input of the earlier experiment   | 3056              | 3056                  | 1199, 1202               |
+| The supplementary clock skew model at 10 per second | 1219              | 1219                  | 35, 35                   |
 
 > Run twice with the finalization time shortened to 2 seconds. The gateway side was the same both times, and the bucket sums matched the values computed from the input. The delta path lists the two runs in order. Since the values were spread over several buckets and the rating label split the series into three, I take the delta path's loss to be smaller than in the earlier table for that reason. `cwv-otel-grafana/experiments/e11-server-aggregation`.
 
@@ -452,13 +451,17 @@ So for the same `cwv.value` attribute, a CLS of 0.008 is stored as a double and 
 
 To draw the four LCP phases in one panel, I put `avg_over_time(span.cwv.lcp.time_to_first_byte)` and `avg_over_time(span.cwv.lcp.element_render_delay)` in with different refIds, and the refId of the frames the Tempo data source of Grafana 13.2.4 returned had both been overwritten with `avg_over_time`. The legend becomes two entries with the same name, and an override that picks a series by refId to rename it cannot be used either. I drew one panel per phase.
 
-## Two Dashboards
+## Finding Changes in Mimir and Causes in Tempo
 
-There is one dashboard per store. The Mimir dashboard looks at "how slow is it now, has it gotten worse, and where is it slow", and the Tempo dashboard at "why is it slow". The dashboard JSON of the reproduction environment comes from a script that builds the panels in code (`cwv-otel-grafana/grafana/build-dashboards.py`). The Mimir dashboard has a source variable (`source`) that picks between the values the gateway aggregated (`cwv-gateway`, the default) and the values of the delta path (`demo-web`). LCPs that only ever sent a provisional value on the gateway path are kept apart as `cwv_lcp_provisional` and do not enter these panels. The screens below show the dashboards of this commit filled with 400 demo visits in the reproduction environment, with that 20-minute range selected, and the Mimir side with the source set to `cwv-gateway`. Each full dashboard comes first, and the rows, captured separately, sit before their explanations.
+The dashboards are used in sequence: narrow down the slow metric and screen in Mimir, then reproduce the same conditions and investigate the cause in Tempo. The reproduction environment's dashboard JSON is generated by `cwv-otel-grafana/grafana/build-dashboards.py`. The Mimir dashboard's source variable (`source`) selects either the values aggregated by the gateway (`cwv-gateway`, the default) or the delta path (`demo-web`). LCP measurements for which the gateway received only a provisional value are aggregated separately as `cwv_lcp_provisional` and are not included in the panels below.
+
+The screenshots show the dashboards at the commit specified earlier, after collecting 400 demo visits in the reproduction environment and selecting that 20-minute range. The Mimir source is set to `cwv-gateway`.
+
+### Finding the Slow Metric and Screen in Mimir
+
+First, I check each metric's p75 and good ratio over the selected range. The p75 shows the level of the metric, while the good ratio shows how many page loads fall within the threshold.
 
 ![Mimir dashboard. Panels for p75 and good ratio per metric, the 10-minute window p75 trend, p75 by route and by interaction type, LCP count by rating and samples by metric, with the source variable at the top](./images/cwv-to-tempo-and-mimir/ops-dashboard.png)
-
-The top two rows are values over the whole selected range taken as one.
 
 ![The first row of the Mimir dashboard. The p75 of each metric in five stat panels, colored green or orange by rating](./images/cwv-to-tempo-and-mimir/ops-row-p75.png)
 
@@ -470,7 +473,7 @@ histogram_quantile(0.75, sum by (le) (increase(cwv_lcp_milliseconds_bucket{job="
 
 ![The good ratio row of the Mimir dashboard. The good ratio of each metric in five stat panels](./images/cwv-to-tempo-and-mimir/ops-row-good.png)
 
-The good ratio divides the good-boundary bucket by the total count. Because the boundary is a bucket edge, this value is exact, with no interpolation.
+The good ratio divides the count in the good-boundary bucket by the total count. Including the threshold as a bucket boundary makes it possible to calculate the ratio without interpolation. When p75 moves near a rating boundary, this ratio helps show how many page loads are affected.
 
 ```promql
 sum(increase(cwv_lcp_milliseconds_bucket{job="$source", page_route=~"$route", le="2500"}[$__range]))
@@ -478,23 +481,15 @@ sum(increase(cwv_lcp_milliseconds_bucket{job="$source", page_route=~"$route", le
 sum(increase(cwv_lcp_milliseconds_count{job="$source", page_route=~"$route"}[$__range]))
 ```
 
-The reason for putting p75 and good ratio side by side is that they say different things. When the p75 wobbles near the boundary, the good ratio tells you how many page loads that wobble spans.
-
-![The trend row of the Mimir dashboard. The 10-minute window p75 trend of each metric in five time series panels](./images/cwv-to-tempo-and-mimir/ops-row-trend.png)
-
-The trend is fixed to a 10-minute window regardless of the selected range.
+After identifying the slow metric, I narrow the investigation by looking at p75 per screen or input type. These are calculated by adding the relevant label to `by`, as in `sum by (le, page_route)`.
 
 ![The fourth row of the Mimir dashboard. LCP p75 by route, INP p75 by route and INP p75 by interaction type as bar panels](./images/cwv-to-tempo-and-mimir/ops-row-where.png)
 
-By route and by interaction type are split by adding a label to `by`, as in `sum by (le, page_route)`.
+### Reproducing the Conditions to Check the LCP Element and Phases
 
-![The last row of the Mimir dashboard. LCP count by rating as bars and samples by metric as a time series](./images/cwv-to-tempo-and-mimir/ops-row-samples.png)
-
-The description of the sample count panel at the bottom is written differently per source. The delta path undercounts for the reasons in the two sections above, so it should not be read as page loads. On the gateway path no values go missing, but `increase()` extrapolates from the last sample to the query time and overcounts. On a series that has just started, this error varies widely with the query time, so the same 30 concurrent measurements were counted as 30.65 once and 45.71 another time (E11). For the reproduction environment's gateway, which exports every 10 seconds on a continuous series, it works out to around 0.3% over a 1-hour range, but this value was not measured.
+Mimir's aggregates cannot tell which element was the LCP, so the screen and conditions have to be reproduced in the verification environment before querying Tempo. In the earlier quiet-timer experiment, a page that painted its body text after 5 seconds recorded a final LCP of 5080ms. When investigating a page like this, the first step is to distinguish whether the slow LCP belongs to the heading or to the body text that appeared later.
 
 ![Tempo dashboard. LCP count and p75 by element, the average of each LCP and INP phase, INP p75 by target, CLS count by largest shift target, counts of final LCP and quiet provisional values, and a table of slow LCPs](./images/cwv-to-tempo-and-mimir/why-dashboard.png)
-
-The top two panels of the Tempo dashboard are the answer to the original question.
 
 ![The first row of the Tempo dashboard. LCP count by element as bars and LCP p75 by element as a time series](./images/cwv-to-tempo-and-mimir/why-row-lcp-target.png)
 
@@ -503,25 +498,53 @@ The top two panels of the Tempo dashboard are the answer to the original questio
 {resource.service.name="demo-web" && name="cwv.lcp"} | quantile_over_time(duration, .75) by (span.cwv.lcp.target)
 ```
 
-The count by element shows which element often becomes the LCP, and the p75 by element shows which of them is slow. In the reproduction environment it splits three ways: the heading (`#app>h1`), the body text painted late (`#app>p.hero`) and the image (`#app>img.hero-image`). The demo finalizes LCP on the first click, so clicking before the body text is painted makes the heading the LCP.
+The count by element shows which element often becomes the LCP, and p75 by element compares their durations. The reproduction environment distinguishes the heading (`#app>h1`), the body text painted late (`#app>p.hero`) and the image (`#app>img.hero-image`). The demo finalizes LCP on the first click, so clicking before the body text is painted makes the heading the LCP. The condition of waiting without input, as in the earlier experiment, therefore also needs to be considered separately.
+
+After identifying the element, I compare the averages of the four LCP phases: TTFB, resource load delay, resource load duration and element render delay. Along with the element and total LCP value, knowing which phase took longer helps narrow the next investigation. Each phase has a separate panel because of the legend issue described earlier.
 
 ![The LCP phase row of the Tempo dashboard. The averages of TTFB, resource load delay, resource load duration and element render delay in four panels](./images/cwv-to-tempo-and-mimir/why-row-lcp-phases.png)
 
+INP follows the same sequence of checking the target and phases. I look at p75 by target alongside the averages of input delay, processing duration and presentation delay. For CLS, I use the panel showing the elements responsible for layout shifts.
+
 ![The INP phase row of the Tempo dashboard. Three panels for the averages of input delay, processing duration and presentation delay, with INP p75 by target and CLS count by largest shift target below them](./images/cwv-to-tempo-and-mimir/why-row-inp.png)
 
-The next two rows split LCP and INP into per-phase averages, and the separate panel per phase is because of the legend problem seen above. The INP row also has INP p75 by target and CLS count by largest shift target below the phase averages.
+### Checking Which Samples a Before-and-After Comparison Includes
+
+Interpreting a change also requires checking the sample count and collection path. The sample count panel has a different description for each path.
+
+![The last row of the Mimir dashboard. LCP count by rating as bars and samples by metric as a time series](./images/cwv-to-tempo-and-mimir/ops-row-samples.png)
+
+The delta path undercounts because of cumulative-value expiry and concurrent sends, so its count cannot be used as a page-load count. The gateway path lost no values in the concurrent-send experiments above, but `increase()` extrapolates from the last sample to the query time and overcounts. On a newly created series, the error also varies widely with the query time. The same 30 concurrent measurements under the same conditions were counted as 30.65 and 45.71 (E11).
+
+For the reproduction environment's gateway, which exports every 10 seconds and keeps its series active, I calculated an error of around 0.3% over a 1-hour range. I did not directly measure the error under those conditions.
 
 ![The last row of the Tempo dashboard. A time series of final LCP and quiet provisional counts and a table of slow LCPs](./images/cwv-to-tempo-and-mimir/why-row-finalize.png)
 
-The "LCP final vs quiet provisional" panel in the last row shows the counts of the two spans side by side. In the first setup this was a panel counting which of web-vitals and the quiet timer finalized first, but since quiet finalizes first merely by staying more than 3 seconds without input, that ratio alone could not reveal missing hidden events. The current panel is no different, so the provisional count is read only as an upper bound on page loads whose final value never came.
+Tempo's "LCP final vs quiet provisional" panel shows the span counts of final and quiet provisional values side by side. A quiet provisional value can arrive first simply because the page remains open for more than 3 seconds without input. Its presence alone therefore does not establish that a hidden event was missed. This count is used only as an upper bound on page loads that reported a provisional value but never reported a final one.
 
-The order of use is set. Find the metric and screen that got worse in Mimir, reproduce the same condition in staging and narrow down the cause with Tempo, and after the fix come back to Mimir's trend to confirm. It is a pity that production data alone cannot reach the cause, but dividing up in advance the questions each store can answer also settles what to carry where.
+After finding and fixing the cause, the next step is to select the same screen and collection path in Mimir and compare the trend. Regardless of the selected query range, the trend panels calculate p75 over the preceding 10 minutes at each point.
 
-## In Front of Defaults That Cannot Be Changed
+![The trend row of the Mimir dashboard. The 10-minute window p75 trend of each metric in five time series panels](./images/cwv-to-tempo-and-mimir/ops-row-trend.png)
 
-Looking back, measurement itself was almost never the problem in this work. The places where values were lost were always after it, and mostly in the defaults of settings I could not change. Tail sampling dropped a root that arrived alone, the cumulative conversion forgot a series quiet for 5 minutes, several browsers writing to one series had their out-of-order values dropped, and Tempo left intervals older than 30 minutes and values of 0 out of its quantiles. Not one stage raised an error. Each default was probably a reasonable choice for server traffic. But the data a browser sends lives briefly and clusters at the moment of leaving, arrives sparsely per label combination, and yet countless browsers write to one series, each with their own clock. I think that is where defaults set with servers in mind stop fitting.
+The dashboards are arranged around this sequence: choose the screen to investigate in Mimir, check the element and phases in Tempo, then return to Mimir to examine the change. Element details absent from the metrics still require reproduction, but the workflow connects the initial slow value to the next thing to investigate.
 
-When the settings could not be changed, the only means of verification available was counting sent and arrived values at every stage. Most of the experiments in this post started from those numbers not matching. But as the earlier section showed, even a result where the numbers matched holds only under the condition they were counted in. Counts that matched with one browser writing at a time were the result of that condition. Until I count once more under production-like conditions, that is, imitating the load of many browsers writing to the same series at the same time, I find it hard to say that the metric path counts production traffic in full. When counting that way reveals a loss and the shared infrastructure's settings cannot be changed, the place that can be fixed is in front of it. In the reproduction environment, funneling the writers of a series into one gateway run by myself removed the loss, and the price was one more stateful server to look after.
+## What Comparing Sent and Stored Counts Established
+
+Because I could not change the shared infrastructure's settings, I first checked what could be addressed in the collection code. Sending the root with the first metric avoided having a trace dropped because its root arrived alone. Keeping quiet values provisional allowed a final LCP arriving later to be recorded as well. Limits remained: a webview that never sent hidden could still have no final value, and late spans could still be dropped by tail sampling.
+
+I examined the loss from several browsers writing to one series by adding a gateway in the reproduction environment. With the gateway setting timestamps and aggregating each series, the counts and bucket sums matched the inputs used for comparison. It could also handle updates to the same measurement and distinguish provisional LCP values. In return, there was a 30-minute finalization wait, unfinalized state that could be lost on restart, and response latency to manage. This established what collection-code changes and a separate aggregation server could each address, along with the constraints that remained.
+
+Verification consisted of comparing the counts sent to each stage with the counts stored or returned by queries. Counts that matched when one browser sent values in order changed when several browsers sent to the same series concurrently. The loss ratios in this post belong to those reproduction conditions. For another environment, the useful check is how far the sent values survive under its own series configuration and sending conditions, rather than expecting the same ratios.
+
+## Supplementary Experiment: A Clock Skew Model Based on 2014 Data
+
+I also looked for data on clock skew in real browsers. The public data I found was from 2014, comparing the browser's `Date()` with server time over 300 million page loads a day[^4]. With the absolute differences grouped into 5-minute buckets, 90% were under 5 minutes, 99% under 115 minutes and 99.9% under 25.5 hours. About 57% of the skewed clocks were ahead of the server.
+
+I generated clock skews from the published percentile boundaries and the share of clocks that were ahead, then ran the same experiment. The 90% with differences below 5 minutes were assigned a skew of 0, and the rest were drawn uniformly within each range. At 1 value per second, the loss was 92.0% and 95.6%; at 10 per second, it was 99.9% in both runs. These are the results of a model fitted to the 2014 percentiles, rather than measurements using the original observed distribution. There is also no basis for treating the zero-skew assumption as the one that minimizes loss, so these results cannot be used as a lower bound.
+
+In this experiment, once the first value with a timestamp ahead of the server arrived, only values with still later timestamps passed the aggregation checks. Most of those also exceeded Mimir's 10-minute grace period and were not stored. Mimir retained only the few values received before the first fast-clock value. At 1 per second, the loss varied widely with when that value arrived and how far ahead its clock was. At 10 per second, both runs stopped storing values a few seconds after the start.
+
+The 2014 data is weighted toward sites in the US, Canada and the EU. I suspect there were more PCs with inaccurate clocks then than there are among today's phones, which synchronize their clocks over the network. The actual clock skew in app webviews may therefore be much smaller. As the earlier experiment showed, however, a single browser a few minutes ahead can cause other values in the same series to be lost for that period. Only values from browsers with still later clocks pass the aggregation checks in the meantime.
 
 [^1]: [opentelemetry-collector-contrib v0.162.0 `processor/tailsamplingprocessor/processor.go`](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/v0.162.0/processor/tailsamplingprocessor/processor.go#L1191-L1199)
 

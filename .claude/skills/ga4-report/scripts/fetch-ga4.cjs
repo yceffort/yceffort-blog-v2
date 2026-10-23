@@ -114,8 +114,31 @@ const client = new BetaAnalyticsDataClient({
 })
 const property = `properties/${propertyId}`
 
+// GA4는 속성당 동시 요청 한도(10)가 있어 한꺼번에 보내면 RESOURCE_EXHAUSTED가 난다. 4개씩만 보내고 걸리면 한 번 쉬었다 다시 보낸다.
+const MAX_CONCURRENT = 4
+let active = 0
+const waiting = []
+async function runReport(req) {
+  if (active >= MAX_CONCURRENT) await new Promise((r) => waiting.push(r))
+  active++
+  try {
+    for (let attempt = 0; ; attempt++) {
+      try {
+        return await client.runReport({property, ...req})
+      } catch (e) {
+        if (e.code !== 8 || attempt >= 2) throw e
+        await new Promise((r) => setTimeout(r, 3000 * (attempt + 1)))
+      }
+    }
+  } finally {
+    active--
+    const next = waiting.shift()
+    if (next) next()
+  }
+}
+
 async function run(name, req) {
-  const [res] = await client.runReport({property, ...req})
+  const [res] = await runReport(req)
   const rows = (res.rows || []).map((r) => ({
     d: (r.dimensionValues || []).map((v) => v.value),
     m: (r.metricValues || []).map((v) => v.value),

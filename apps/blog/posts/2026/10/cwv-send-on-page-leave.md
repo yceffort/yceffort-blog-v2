@@ -6,6 +6,7 @@ tags:
   - browser
 published: true
 date: 2026-10-18 18:10:00
+updated: 2026-10-23 13:57:31
 description: '페이지를 떠날 때 CLS와 INP가 누락되는 원인을 OTel JS의 전송 방식과 flush 순서에서 찾았다.'
 series: 'Core Web Vitals 직접 수집하기'
 seriesOrder: 2
@@ -40,101 +41,7 @@ CWV 전송 코드는 값을 모아 주기적으로 내보내는 부분과, 페�
 >
 > 재현 환경의 버전은 web-vitals 6.2.3, OTel JS 2.12.0(OTLP exporter 0.223.0), OpenTelemetry Collector contrib 0.162.0(e7 재측정은 0.163.1), Mimir 3.2.2, Tempo 3.1.0이다. 비교할 때는 OTel JS 1.30.1(exporter 0.57.2)을 함께 썼고, 브라우저는 Playwright 1.64.1의 Chromium 156이다. 인용한 소스는 모두 이 버전의 태그로 고정했다.
 
-## 같은 측정값을 trace와 metric으로 기록하기
-
-수집 코드는 지표의 원인 분석 정보를 제공하는 web-vitals attribution 빌드의 콜백 하나에서 trace와 metric을 함께 기록한다. Next.js의 [`useReportWebVitals`](https://nextjs.org/docs/app/api-reference/functions/use-report-web-vitals)는 Next.js가 자체 번들한 web-vitals 사본(16.3.5 기준 4.2.1)으로 값을 잰다. 이 훅과 직접 설치한 web-vitals를 섞어 쓰면 같은 페이지 로드라도 값과 `id`가 어긋난다. 두 저장소의 값을 `id`로 연결하려면 같은 측정 결과를 사용해야 했다.
-
-페이지 로드 하나를 trace 하나로 기록하고, 지표마다 span을 하나씩 추가한다. span의 길이를 지표 값에 맞췄기 때문에 TraceQL의 `quantile_over_time(duration, .75)`로 지표의 p75를 구할 수 있다. CLS는 점수에 1000을 곱한 값을 ms 단위로 넣었으므로, TraceQL이 초 단위로 반환한 값이 원래 CLS 점수와 같다. span 속성에는 attribution 값을 모두 넣는다. LCP라면 요소 selector, 리소스 URL, LCP를 네 단계로 나눈 시간이 포함된다.
-
-```ts
-// cwv-otel-grafana/demo-web/src/telemetry/page-trace.ts
-export function createPageTrace(tracer: Tracer, getBaseAttributes: () => Attributes) {
-  let parent: Context | undefined;
-  let base: Attributes = {};
-
-  return function record(name: string, durationMs: number, attributes: Attributes): void {
-    if (!parent) {
-      const root = tracer.startSpan('cwv.page', { startTime: performance.timeOrigin });
-      root.end();
-      parent = trace.setSpan(ROOT_CONTEXT, root);
-      base = getBaseAttributes();
-    }
-
-    const end = performance.timeOrigin + performance.now();
-    tracer
-      .startSpan(name, { startTime: end - durationMs, attributes: { ...base, ...attributes } }, parent)
-      .end(end);
-  };
-}
-```
-
-```ts
-// cwv-otel-grafana/demo-web/src/telemetry/setup.ts
-/** CLS 는 점수라서 span 길이로 넣을 때 1000 을 곱한다. TraceQL 의 초 단위 결과가 그대로 CLS 가 된다. */
-function spanDurationMs(metric: { name: Metric['name']; value: number }): number {
-  return metric.name === 'CLS' ? metric.value * 1000 : metric.value;
-}
-```
-
-지표 span은 보고된 시각에서 값만큼 거슬러 올라간 시각에 시작해 보고된 시각에 끝난다. 그래서 길이는 지표 값과 같지만, 시작 시각은 지표가 실제로 시작된 시각이 아니다. 이 trace에서 믿을 수 있는 것은 span의 길이와 속성이고, 타임라인 위의 위치는 보지 않는다. root인 `cwv.page`는 첫 지표가 올 때 만들어 그 자리에서 끝내는데, 페이지가 열릴 때 따로 보내지 않는 이유는 3편의 tail sampling에서 나온다.
-
-metric은 지표마다 히스토그램 하나로 기록한다. 브라우저에서는 탭마다 따로 집계하고 페이지를 떠나면 수집 코드도 종료되므로, 누적값을 계속 유지하기 어렵다. 그래서 직전 전송 이후의 증분을 보내는 delta temporality를 쓰고, 누적값으로 바꾸는 일은 collector에 맡긴다. 버킷 경계에는 web-vitals의 good, poor 기준값을 넣었다.
-
-```ts
-// cwv-otel-grafana/demo-web/src/telemetry/buckets.ts
-export const BUCKETS: Record<Metric['name'], number[]> = {
-  TTFB: [100, 200, 400, 600, 800, 1000, 1400, 1800, 2500, 4000],
-  FCP: [400, 800, 1200, 1500, 1800, 2400, 3000, 4000, 6000],
-  LCP: [500, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 7000, 10000],
-  INP: [50, 100, 150, 200, 300, 400, 500, 750, 1000, 2000],
-  CLS: [0.01, 0.025, 0.05, 0.1, 0.15, 0.25, 0.5, 1],
-};
-```
-
-경계에 2500이 있으면 `le="2500"` 버킷 하나를 전체 건수로 나눈 값이 보간 없이 정확한 good 비율이 된다. 경계 사이 값은 버킷 안에서 선형 보간으로 추정되므로, p75가 자주 걸리는 구간은 촘촘하게 두었다. 라벨은 화면 이름(`page.route`), 탐색 종류, 등급, INP의 입력 종류처럼 값의 종류가 정해진 것만 쓴다. 라벨 조합 하나가 시리즈 하나라서, selector를 라벨로 넣으면 시리즈 수가 화면 요소 수만큼 늘어난다.
-
-```ts
-// cwv-otel-grafana/demo-web/src/telemetry/setup.ts
-  const histograms = Object.fromEntries(
-    (Object.keys(BUCKETS) as Metric['name'][]).map((name) => [
-      name,
-      meter.createHistogram(`cwv.${name.toLowerCase()}`, {
-        unit: name === 'CLS' ? '1' : 'ms',
-        advice: { explicitBucketBoundaries: BUCKETS[name] },
-      }),
-    ]),
-  ) as Record<Metric['name'], Histogram>;
-```
-
-버킷 경계는 히스토그램을 만들 때 `advice`로 넘긴다. 이 값이 없으면 sdk-metrics의 기본 경계(0부터 10000까지 15개, 지표와 상관없이 같다)가 쓰이는데, 거기에는 INP의 200과 CLS의 0.1 같은 기준값이 없다. web-vitals의 콜백은 두 기록을 한 번에 한다.
-
-```ts
-// cwv-otel-grafana/demo-web/src/telemetry/setup.ts
-  observeVitals((metric, extra) => {
-    record(`cwv.${metric.name.toLowerCase()}`, spanDurationMs(metric), { ...toAttributes(metric), ...extra });
-    histograms[metric.name].record(metric.value, toLabels(metric, route));
-  }, flush);
-```
-
-`observeVitals`는 지표별 `on*` 함수에 이 콜백을 거는데, 같은 `id`는 처음 한 번만 넘긴다.
-
-```ts
-// cwv-otel-grafana/demo-web/src/telemetry/vitals.ts
-export function oncePerId(report: Report): Report {
-  const seen = new Set<string>();
-
-  return (metric, extra) => {
-    const key = `${metric.name}:${metric.id}`;
-    if (seen.has(key)) return;
-    seen.add(key);
-    report(metric, extra);
-  };
-}
-```
-
-1편에서 본 대로 CLS와 INP는 페이지가 다시 보였다가 숨겨질 때마다 같은 `id`로 다시 보고된다. 히스토그램은 `record`를 부른 횟수를 세므로, 그대로 두면 페이지 로드 하나가 건수 둘이 된다. 그래서 첫 보고만 세고, 나중에 나빠진 값은 들어가지 않는다. 이 선택의 대가를 재는 이야기는 4편에 있다.
-
-metric은 `PeriodicExportingMetricReader`가 10초마다 내보내고, trace는 `BatchSpanProcessor`가 모았다가 내보낸다. 둘 다 주기를 기다리는 동안 페이지를 떠나면 남은 값을 직접 flush해야 한다.
+수집 코드는 web-vitals의 같은 콜백에서 trace와 metric을 함께 기록한다. trace는 Tempo에, metric은 Mimir에 저장한다. 앞의 실험에서는 두 모드 모두 다섯 지표의 span이 Tempo에 도착했지만, pagehide에서도 flush한 모드는 CLS와 INP의 metric이 도착하지 않았다. 같은 측정값을 기록했는데 전송 경로에 따라 결과가 달라진 것이다.
 
 ## CLS와 INP는 hidden에서 보고된다
 
@@ -435,6 +342,102 @@ pagehide의 flush를 뺀 뒤에도 남는 경쟁을 재현 환경에서 만들�
 경계는 떠나는 시각이 아니라 응답이 도착한 시각이다. 응답이 오기 전에 떠난 방문은 떠날 때 trace 요청만 나갔고 metric 요청은 끝내 나가지 않았다. INP와 CLS span은 Tempo에 있는데 같은 값의 histogram은 Mimir에 없다. 응답이 온 뒤에 떠난 방문은 떠나는 순간 trace와 metric 요청이 10ms 안에 함께 나갔고 다섯 지표가 모두 도착했다. 응답 지연이 300ms뿐이어도 그 안에 떠나면 같은 결과다.
 
 이 손실이 얼마나 되는지는 떠나는 순간에 export가 진행 중일 확률로 정해진다. 떠나는 시각이 10초 주기 안에 고르게 퍼져 있다고 보면, 그 확률은 주기 export의 응답 지연을 10초로 나눈 값이다. 응답이 50ms면 0.5%, 2초면 20%다. 실제 응답 지연의 분포는 재지 않았으므로 블로그의 값은 알 수 없고, 느린 네트워크일수록 커지는 손실이라는 것만 말할 수 있다.
+
+## 같은 측정값을 trace와 metric으로 기록하기
+
+수집 코드는 지표의 원인 분석 정보를 제공하는 web-vitals attribution 빌드의 콜백 하나에서 trace와 metric을 함께 기록한다. Next.js의 [`useReportWebVitals`](https://nextjs.org/docs/app/api-reference/functions/use-report-web-vitals)는 Next.js가 자체 번들한 web-vitals 사본(16.3.5 기준 4.2.1)으로 값을 잰다. 이 훅과 직접 설치한 web-vitals를 섞어 쓰면 같은 페이지 로드라도 값과 `id`가 어긋난다. 두 저장소의 값을 `id`로 연결하려면 같은 측정 결과를 사용해야 했다.
+
+페이지 로드 하나를 trace 하나로 기록하고, 지표마다 span을 하나씩 추가한다. span의 길이를 지표 값에 맞췄기 때문에 TraceQL의 `quantile_over_time(duration, .75)`로 지표의 p75를 구할 수 있다. CLS는 점수에 1000을 곱한 값을 ms 단위로 넣었으므로, TraceQL이 초 단위로 반환한 값이 원래 CLS 점수와 같다. span 속성에는 attribution 값을 모두 넣는다. LCP라면 요소 selector, 리소스 URL, LCP를 네 단계로 나눈 시간이 포함된다.
+
+```ts
+// cwv-otel-grafana/demo-web/src/telemetry/page-trace.ts (태그 cwv-otel-grafana-v1)
+export function createPageTrace(tracer: Tracer, getBaseAttributes: () => Attributes) {
+  let parent: Context | undefined;
+  let base: Attributes = {};
+
+  return function record(name: string, durationMs: number, attributes: Attributes): void {
+    if (!parent) {
+      const root = tracer.startSpan('cwv.page', { startTime: performance.timeOrigin });
+      root.end();
+      parent = trace.setSpan(ROOT_CONTEXT, root);
+      base = getBaseAttributes();
+    }
+
+    const end = performance.timeOrigin + performance.now();
+    tracer
+      .startSpan(name, { startTime: end - durationMs, attributes: { ...base, ...attributes } }, parent)
+      .end(end);
+  };
+}
+```
+
+```ts
+// cwv-otel-grafana/demo-web/src/telemetry/setup.ts
+/** CLS 는 점수라서 span 길이로 넣을 때 1000 을 곱한다. TraceQL 의 초 단위 결과가 그대로 CLS 가 된다. */
+function spanDurationMs(metric: { name: Metric['name']; value: number }): number {
+  return metric.name === 'CLS' ? metric.value * 1000 : metric.value;
+}
+```
+
+지표 span은 보고된 시각에서 값만큼 거슬러 올라간 시각에 시작해 보고된 시각에 끝난다. 그래서 길이는 지표 값과 같지만, 시작 시각은 지표가 실제로 시작된 시각이 아니다. CLS는 점수를 1000배 한 길이라 페이지 로드 시작보다 앞에서 시작할 수도 있는데, 지금의 재현 환경 코드는 그런 span의 시작을 내비게이션 시작으로 밀고 길이만 그대로 둔다(3편). 이 trace에서 믿을 수 있는 것은 span의 길이와 속성이고, 타임라인 위의 위치는 보지 않는다. root인 `cwv.page`는 첫 지표가 올 때 만들어 그 자리에서 끝내는데, 페이지가 열릴 때 따로 보내지 않는 이유는 3편의 tail sampling에서 나온다.
+
+metric은 지표마다 히스토그램 하나로 기록한다. 브라우저에서는 탭마다 따로 집계하고 페이지를 떠나면 수집 코드도 종료되므로, 누적값을 계속 유지하기 어렵다. 그래서 직전 전송 이후의 증분을 보내는 delta temporality를 쓰고, 누적값으로 바꾸는 일은 collector에 맡긴다. 버킷 경계에는 web-vitals의 good, poor 기준값을 넣었다.
+
+```ts
+// cwv-otel-grafana/demo-web/src/telemetry/buckets.ts
+export const BUCKETS: Record<Metric['name'], number[]> = {
+  TTFB: [100, 200, 400, 600, 800, 1000, 1400, 1800, 2500, 4000],
+  FCP: [400, 800, 1200, 1500, 1800, 2400, 3000, 4000, 6000],
+  LCP: [500, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 7000, 10000],
+  INP: [50, 100, 150, 200, 300, 400, 500, 750, 1000, 2000],
+  CLS: [0.01, 0.025, 0.05, 0.1, 0.15, 0.25, 0.5, 1],
+};
+```
+
+경계에 2500이 있으면 `le="2500"` 버킷 하나를 전체 건수로 나눈 값이 보간 없이 정확한 good 비율이 된다. 경계 사이 값은 버킷 안에서 선형 보간으로 추정되므로, p75가 자주 걸리는 구간은 촘촘하게 두었다. 라벨은 화면 이름(`page.route`), 탐색 종류, 등급, INP의 입력 종류처럼 값의 종류가 정해진 것만 쓴다. 라벨 조합 하나가 시리즈 하나라서, selector를 라벨로 넣으면 시리즈 수가 화면 요소 수만큼 늘어난다.
+
+```ts
+// cwv-otel-grafana/demo-web/src/telemetry/setup.ts
+  const histograms = Object.fromEntries(
+    (Object.keys(BUCKETS) as Metric['name'][]).map((name) => [
+      name,
+      meter.createHistogram(`cwv.${name.toLowerCase()}`, {
+        unit: name === 'CLS' ? '1' : 'ms',
+        advice: { explicitBucketBoundaries: BUCKETS[name] },
+      }),
+    ]),
+  ) as Record<Metric['name'], Histogram>;
+```
+
+버킷 경계는 히스토그램을 만들 때 `advice`로 넘긴다. 이 값이 없으면 sdk-metrics의 기본 경계(0부터 10000까지 15개, 지표와 상관없이 같다)가 쓰이는데, 거기에는 INP의 200과 CLS의 0.1 같은 기준값이 없다. web-vitals의 콜백은 두 기록을 한 번에 한다.
+
+```ts
+// cwv-otel-grafana/demo-web/src/telemetry/setup.ts
+  observeVitals((metric, extra) => {
+    record(`cwv.${metric.name.toLowerCase()}`, spanDurationMs(metric), { ...toAttributes(metric), ...extra });
+    histograms[metric.name].record(metric.value, toLabels(metric, route));
+  }, flush);
+```
+
+`observeVitals`는 지표별 `on*` 함수에 이 콜백을 거는데, 같은 `id`는 처음 한 번만 넘긴다.
+
+```ts
+// cwv-otel-grafana/demo-web/src/telemetry/vitals.ts
+export function oncePerId(report: Report): Report {
+  const seen = new Set<string>();
+
+  return (metric, extra) => {
+    const key = `${metric.name}:${metric.id}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    report(metric, extra);
+  };
+}
+```
+
+1편에서 본 대로 CLS와 INP는 페이지가 다시 보였다가 숨겨질 때마다 같은 `id`로 다시 보고된다. 히스토그램은 `record`를 부른 횟수를 세므로, 그대로 두면 페이지 로드 하나가 건수 둘이 된다. 그래서 첫 보고만 세고, 나중에 나빠진 값은 들어가지 않는다. 이 선택의 대가를 재는 이야기는 4편에 있다.
+
+metric은 `PeriodicExportingMetricReader`가 10초마다 내보내고, trace는 `BatchSpanProcessor`가 모았다가 내보낸다. 둘 다 주기를 기다리는 동안 페이지를 떠나면 남은 값을 직접 flush해야 한다.
 
 ## 버전을 올릴 때 다시 세야 하는 것
 

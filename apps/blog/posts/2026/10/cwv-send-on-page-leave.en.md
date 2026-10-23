@@ -6,6 +6,7 @@ tags:
   - browser
 published: true
 date: 2026-10-18 18:10:00
+updated: 2026-10-23 13:57:31
 description: 'Traced why CLS and INP go missing when the page is left, through the transport of OTel JS and the order in which flush runs.'
 series: 'Core Web Vitals 직접 수집하기'
 seriesOrder: 2
@@ -40,101 +41,7 @@ When leaving, the request has to keep going after the document is gone, so it is
 >
 > The reproduction environment runs web-vitals 6.2.3, OTel JS 2.12.0 (OTLP exporter 0.223.0), OpenTelemetry Collector contrib 0.162.0 (0.163.1 for the e7 re-run), Mimir 3.2.2 and Tempo 3.1.0. OTel JS 1.30.1 (exporter 0.57.2) was used alongside for comparison, and the browser is Chromium 156 from Playwright 1.64.1. Every quoted source is pinned to the tag of these versions.
 
-## Recording the Same Measurement as a Trace and a Metric
-
-The collection code records a trace and a metric from a single callback of the web-vitals attribution build, the build that supplies the data for root-cause analysis. Next.js's [`useReportWebVitals`](https://nextjs.org/docs/app/api-reference/functions/use-report-web-vitals) measures with the copy of web-vitals that Next.js bundles itself (4.2.1 as of 16.3.5). Mixing that hook with a separately installed web-vitals gives different values and `id`s for the same page load. To join the values in the two stores by `id`, both had to come from the same measurement.
-
-One page load is recorded as one trace, with one span added per metric. The span's length is set to the metric's value, so TraceQL's `quantile_over_time(duration, .75)` gives the metric's p75. CLS is a score, so it is stored as the score times 1000 in milliseconds, and the value TraceQL returns in seconds equals the original CLS score. The span attributes carry every attribution value. For LCP that is the element selector, the resource URL and the time split into the four LCP phases.
-
-```ts
-// cwv-otel-grafana/demo-web/src/telemetry/page-trace.ts
-export function createPageTrace(tracer: Tracer, getBaseAttributes: () => Attributes) {
-  let parent: Context | undefined;
-  let base: Attributes = {};
-
-  return function record(name: string, durationMs: number, attributes: Attributes): void {
-    if (!parent) {
-      const root = tracer.startSpan('cwv.page', { startTime: performance.timeOrigin });
-      root.end();
-      parent = trace.setSpan(ROOT_CONTEXT, root);
-      base = getBaseAttributes();
-    }
-
-    const end = performance.timeOrigin + performance.now();
-    tracer
-      .startSpan(name, { startTime: end - durationMs, attributes: { ...base, ...attributes } }, parent)
-      .end(end);
-  };
-}
-```
-
-```ts
-// cwv-otel-grafana/demo-web/src/telemetry/setup.ts
-/** CLS 는 점수라서 span 길이로 넣을 때 1000 을 곱한다. TraceQL 의 초 단위 결과가 그대로 CLS 가 된다. */
-function spanDurationMs(metric: { name: Metric['name']; value: number }): number {
-  return metric.name === 'CLS' ? metric.value * 1000 : metric.value;
-}
-```
-
-A metric span starts at the report time minus the value and ends at the report time. Its length therefore equals the metric value, but its start is not when the metric actually started. What can be trusted in this trace is the length and the attributes of each span, not its position on the timeline. The root span `cwv.page` is created when the first metric arrives and ended on the spot. Why it is not sent on its own when the page opens comes up with tail sampling in part 3.
-
-Metrics are one histogram per metric. In the browser, every tab counts on its own and the collection code ends with the page, so nothing can keep holding a cumulative value. So it sends delta temporality, the increment since the previous export, and leaves the conversion to cumulative to the collector. The bucket boundaries include the good and poor thresholds of web-vitals.
-
-```ts
-// cwv-otel-grafana/demo-web/src/telemetry/buckets.ts
-export const BUCKETS: Record<Metric['name'], number[]> = {
-  TTFB: [100, 200, 400, 600, 800, 1000, 1400, 1800, 2500, 4000],
-  FCP: [400, 800, 1200, 1500, 1800, 2400, 3000, 4000, 6000],
-  LCP: [500, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 7000, 10000],
-  INP: [50, 100, 150, 200, 300, 400, 500, 750, 1000, 2000],
-  CLS: [0.01, 0.025, 0.05, 0.1, 0.15, 0.25, 0.5, 1],
-};
-```
-
-With 2500 as a boundary, the single `le="2500"` bucket divided by the total count is the exact good ratio, with no interpolation. Values between boundaries are estimated by linear interpolation inside a bucket, so the ranges where p75 usually lands are denser. Labels are limited to values with a fixed set of possibilities: the screen name (`page.route`), the navigation type, the rating and the INP input type. Each label combination is one series, so putting a selector in a label would grow the number of series by the number of elements on the screen.
-
-```ts
-// cwv-otel-grafana/demo-web/src/telemetry/setup.ts
-  const histograms = Object.fromEntries(
-    (Object.keys(BUCKETS) as Metric['name'][]).map((name) => [
-      name,
-      meter.createHistogram(`cwv.${name.toLowerCase()}`, {
-        unit: name === 'CLS' ? '1' : 'ms',
-        advice: { explicitBucketBoundaries: BUCKETS[name] },
-      }),
-    ]),
-  ) as Record<Metric['name'], Histogram>;
-```
-
-The bucket boundaries are passed as `advice` when the histogram is created. Without them, sdk-metrics uses its default boundaries (15 values from 0 to 10000, the same for every metric), which do not include thresholds like 200 for INP or 0.1 for CLS. The web-vitals callback does both recordings at once.
-
-```ts
-// cwv-otel-grafana/demo-web/src/telemetry/setup.ts
-  observeVitals((metric, extra) => {
-    record(`cwv.${metric.name.toLowerCase()}`, spanDurationMs(metric), { ...toAttributes(metric), ...extra });
-    histograms[metric.name].record(metric.value, toLabels(metric, route));
-  }, flush);
-```
-
-`observeVitals` attaches this callback to each metric's `on*` function, passing each `id` through only once.
-
-```ts
-// cwv-otel-grafana/demo-web/src/telemetry/vitals.ts
-export function oncePerId(report: Report): Report {
-  const seen = new Set<string>();
-
-  return (metric, extra) => {
-    const key = `${metric.name}:${metric.id}`;
-    if (seen.has(key)) return;
-    seen.add(key);
-    report(metric, extra);
-  };
-}
-```
-
-As part 1 showed, CLS and INP are reported again with the same `id` every time the page becomes visible and is hidden again. A histogram counts every call to `record`, so left alone, one page load would count as two. Only the first report is counted, and a value that got worse later is not included. Measuring the cost of that choice is part 4's story.
-
-Metrics are exported every 10 seconds by `PeriodicExportingMetricReader`, and traces are batched and exported by `BatchSpanProcessor`. In both cases, if the page is left while waiting for the next interval, whatever remains has to be flushed by hand.
+The collection code records a trace and a metric together in the same web-vitals callback. Traces are stored in Tempo, and metrics in Mimir. In the experiment above, spans for all five metrics reached Tempo in both modes, but the mode that also flushed on pagehide did not deliver the CLS and INP metrics. The same measurements were recorded, yet the results differed between the two export paths.
 
 ## CLS and INP Are Reported on hidden
 
@@ -435,6 +342,102 @@ I built the race that remains after removing the pagehide flush in the reproduct
 The boundary is not the moment of leaving but the moment the response arrives. Visits that left before the response sent only the trace request on leaving, and the metric request never went out. The INP and CLS spans are in Tempo while the histogram with the same values is missing from Mimir. Visits that left after the response sent the trace and metric requests together within 10ms of leaving, and all five metrics arrived. Even with a response delay of only 300ms, leaving within it gives the same result.
 
 How much is lost is set by the probability that an export is in progress at the moment of leaving. If departures are spread evenly across the 10-second interval, that probability is the periodic export's response delay divided by 10 seconds: 0.5% at 50ms, 20% at 2 seconds. I did not measure the actual distribution of response delays, so the blog's number is unknown. What can be said is that this loss grows as the network gets slower.
+
+## Recording the Same Measurement as a Trace and a Metric
+
+The collection code records a trace and a metric from a single callback of the web-vitals attribution build, the build that supplies the data for root-cause analysis. Next.js's [`useReportWebVitals`](https://nextjs.org/docs/app/api-reference/functions/use-report-web-vitals) measures with the copy of web-vitals that Next.js bundles itself (4.2.1 as of 16.3.5). Mixing that hook with a separately installed web-vitals gives different values and `id`s for the same page load. To join the values in the two stores by `id`, both had to come from the same measurement.
+
+One page load is recorded as one trace, with one span added per metric. The span's length is set to the metric's value, so TraceQL's `quantile_over_time(duration, .75)` gives the metric's p75. CLS is a score, so it is stored as the score times 1000 in milliseconds, and the value TraceQL returns in seconds equals the original CLS score. The span attributes carry every attribution value. For LCP that is the element selector, the resource URL and the time split into the four LCP phases.
+
+```ts
+// cwv-otel-grafana/demo-web/src/telemetry/page-trace.ts (tag cwv-otel-grafana-v1)
+export function createPageTrace(tracer: Tracer, getBaseAttributes: () => Attributes) {
+  let parent: Context | undefined;
+  let base: Attributes = {};
+
+  return function record(name: string, durationMs: number, attributes: Attributes): void {
+    if (!parent) {
+      const root = tracer.startSpan('cwv.page', { startTime: performance.timeOrigin });
+      root.end();
+      parent = trace.setSpan(ROOT_CONTEXT, root);
+      base = getBaseAttributes();
+    }
+
+    const end = performance.timeOrigin + performance.now();
+    tracer
+      .startSpan(name, { startTime: end - durationMs, attributes: { ...base, ...attributes } }, parent)
+      .end(end);
+  };
+}
+```
+
+```ts
+// cwv-otel-grafana/demo-web/src/telemetry/setup.ts
+/** CLS 는 점수라서 span 길이로 넣을 때 1000 을 곱한다. TraceQL 의 초 단위 결과가 그대로 CLS 가 된다. */
+function spanDurationMs(metric: { name: Metric['name']; value: number }): number {
+  return metric.name === 'CLS' ? metric.value * 1000 : metric.value;
+}
+```
+
+A metric span starts at the report time minus the value and ends at the report time. Its length therefore equals the metric value, but its start is not when the metric actually started. CLS is stored as the score times 1000, so its span can start before the page load began; the current reproduction code moves such a span's start to the navigation start and keeps the length (part 3). What can be trusted in this trace is the length and the attributes of each span, not its position on the timeline. The root span `cwv.page` is created when the first metric arrives and ended on the spot. Why it is not sent on its own when the page opens comes up with tail sampling in part 3.
+
+Metrics are one histogram per metric. In the browser, every tab counts on its own and the collection code ends with the page, so nothing can keep holding a cumulative value. So it sends delta temporality, the increment since the previous export, and leaves the conversion to cumulative to the collector. The bucket boundaries include the good and poor thresholds of web-vitals.
+
+```ts
+// cwv-otel-grafana/demo-web/src/telemetry/buckets.ts
+export const BUCKETS: Record<Metric['name'], number[]> = {
+  TTFB: [100, 200, 400, 600, 800, 1000, 1400, 1800, 2500, 4000],
+  FCP: [400, 800, 1200, 1500, 1800, 2400, 3000, 4000, 6000],
+  LCP: [500, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 7000, 10000],
+  INP: [50, 100, 150, 200, 300, 400, 500, 750, 1000, 2000],
+  CLS: [0.01, 0.025, 0.05, 0.1, 0.15, 0.25, 0.5, 1],
+};
+```
+
+With 2500 as a boundary, the single `le="2500"` bucket divided by the total count is the exact good ratio, with no interpolation. Values between boundaries are estimated by linear interpolation inside a bucket, so the ranges where p75 usually lands are denser. Labels are limited to values with a fixed set of possibilities: the screen name (`page.route`), the navigation type, the rating and the INP input type. Each label combination is one series, so putting a selector in a label would grow the number of series by the number of elements on the screen.
+
+```ts
+// cwv-otel-grafana/demo-web/src/telemetry/setup.ts
+  const histograms = Object.fromEntries(
+    (Object.keys(BUCKETS) as Metric['name'][]).map((name) => [
+      name,
+      meter.createHistogram(`cwv.${name.toLowerCase()}`, {
+        unit: name === 'CLS' ? '1' : 'ms',
+        advice: { explicitBucketBoundaries: BUCKETS[name] },
+      }),
+    ]),
+  ) as Record<Metric['name'], Histogram>;
+```
+
+The bucket boundaries are passed as `advice` when the histogram is created. Without them, sdk-metrics uses its default boundaries (15 values from 0 to 10000, the same for every metric), which do not include thresholds like 200 for INP or 0.1 for CLS. The web-vitals callback does both recordings at once.
+
+```ts
+// cwv-otel-grafana/demo-web/src/telemetry/setup.ts
+  observeVitals((metric, extra) => {
+    record(`cwv.${metric.name.toLowerCase()}`, spanDurationMs(metric), { ...toAttributes(metric), ...extra });
+    histograms[metric.name].record(metric.value, toLabels(metric, route));
+  }, flush);
+```
+
+`observeVitals` attaches this callback to each metric's `on*` function, passing each `id` through only once.
+
+```ts
+// cwv-otel-grafana/demo-web/src/telemetry/vitals.ts
+export function oncePerId(report: Report): Report {
+  const seen = new Set<string>();
+
+  return (metric, extra) => {
+    const key = `${metric.name}:${metric.id}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    report(metric, extra);
+  };
+}
+```
+
+As part 1 showed, CLS and INP are reported again with the same `id` every time the page becomes visible and is hidden again. A histogram counts every call to `record`, so left alone, one page load would count as two. Only the first report is counted, and a value that got worse later is not included. Measuring the cost of that choice is part 4's story.
+
+Metrics are exported every 10 seconds by `PeriodicExportingMetricReader`, and traces are batched and exported by `BatchSpanProcessor`. In both cases, if the page is left while waiting for the next interval, whatever remains has to be flushed by hand.
 
 ## What Has to Be Counted Again When a Version Goes Up
 

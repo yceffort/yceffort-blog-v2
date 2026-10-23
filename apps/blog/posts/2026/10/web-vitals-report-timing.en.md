@@ -6,7 +6,7 @@ tags:
   - browser
 published: true
 date: 2026-10-18 02:35:00
-updated: 2026-10-18 18:21:03
+updated: 2026-10-23 13:57:30
 description: 'Checked the conditions under which web-vitals 6.2.3 reports each metric, and why INP goes missing when the page is left right after a click.'
 series: 'Core Web Vitals 직접 수집하기'
 seriesOrder: 1
@@ -22,7 +22,7 @@ I built a simple page with a button whose handler takes 200ms, set to navigate t
 
 The definitions of Core Web Vitals alone cannot explain this difference. LCP is the time until the largest piece of content is painted, CLS is how much the layout shifted, and INP is how long the screen takes to respond to an interaction. If measurement is left to Google's web-vitals library and only the values received in the callback are sent to the server, the cases where the callback never fired leave no trace in the collected data. web-vitals measures these three metrics plus two supporting ones, TTFB and FCP, so this post covers all five as well.
 
-The fact that INP did not reach the server cannot tell you whether there was no click, or whether there was a click that was never reported. This series collects Core Web Vitals split into OpenTelemetry traces (for root-cause analysis) and metrics (for operational monitoring). Before that, I needed to confirm the conditions under which web-vitals calls the callback.
+The fact that INP did not reach the server cannot tell you whether there was no click, or whether there was a click that was never reported. In the experiment above, the user had a 200ms interaction, yet it was absent from the collected data because they left the page shortly afterward. Before using the collected values to assess user experience, I needed to understand which visits could be missing from the data.
 
 Understanding the report timing means looking at three places in the code together: `bindReporter`, which filters the value to report, the visibility watcher, which checks whether the page is hidden, and `whenIdleOrHidden`, which defers processing until the browser is idle. In the experiment above, the callback did not fire because of when the INP entry is processed and the order in which the report conditions are checked.
 
@@ -31,6 +31,18 @@ Understanding the report timing means looking at three places in the code togeth
 > Measurements ran in Chromium 156 (new headless) from Playwright 1.64.1, with Chromium 153 from Playwright 1.63.0 for version comparisons. web-vitals was built from source (the 6.2.3 and 4.2.1 builds were byte-for-byte identical to the npm packages). Clicks were sent through the [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/) (CDP), and the key conditions were re-measured with macOS mouse events against a Chrome Beta 157 window with no DevTools attached. The measurement code is in [blog-experiments/cwv-otel-grafana/experiments/e13-report-timing](https://github.com/yceffort/blog-experiments/tree/0426377c2119e32018e064428353e2aa70617fed/cwv-otel-grafana/experiments/e13-report-timing).
 >
 > Whether a callback fired in a departing document was counted by sending a [`navigator.sendBeacon`](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/sendBeacon) from inside the callback to the measurement script's receiving server. Passing values to the next document through [`sessionStorage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage) cannot observe tab closes. Each page load got a fresh browser context, and each condition was run 5 times in two batches and combined. Playwright's [`click`](https://playwright.dev/docs/api/class-locator#locator-click) moves the mouse over the element before pressing, so there is one `pointermove` before the click and, unless input is added deliberately, nothing after it.
+
+## Each Metric Has Its Own Reporting Time
+
+The table below summarizes when web-vitals 6.2.3 reports each of the five metrics and when it does not. It covers the initial page load with `reportAllChanges` disabled; hidden means the document is hidden.
+
+| Metric | Reporting time                                            | Not reported when                                                                  |
+| ------ | --------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| TTFB   | The task after the `load` event                           | Left before `load`                                                                 |
+| FCP    | Immediately on receiving the first contentful paint entry | Hidden before the paint                                                            |
+| LCP    | Idle after the first `keydown` or `click`, or hidden      | Hidden before the candidate was painted; Firefox before 122 and Safari before 26.2 |
+| CLS    | Every time hidden arrives                                 | FCP not reported; non-Chromium browsers                                            |
+| INP    | Every time hidden arrives                                 | No processed interaction; browsers without `interactionId`                         |
 
 ## From Performance Entries to Metric Values
 
@@ -203,15 +215,7 @@ Excluding what was painted after the page was hidden is intended behavior that a
 
 ## Each Metric Calls report(true) Somewhere Different
 
-From the source, here is where each of the five functions calls `report(true)`, and the cases where leaving the page before that means no report.
-
-| Metric | Where `report(true)` is called                            | Not reported when                                                                  |
-| ------ | --------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| TTFB   | The task after the `load` event                           | Left before `load`                                                                 |
-| FCP    | Immediately on receiving the first contentful paint entry | Hidden before the paint                                                            |
-| LCP    | Idle after the first `keydown` or `click`, or hidden      | Hidden before the candidate was painted; Firefox before 122 and Safari before 26.2 |
-| CLS    | Every time hidden arrives                                 | FCP not reported; non-Chromium browsers                                            |
-| INP    | Every time hidden arrives                                 | No processed interaction; browsers without `interactionId`                         |
+Next, I look at how each function determines the reporting time summarized in the earlier table: when it calls `report(true)` and which values it applies before that call.
 
 ### TTFB Is Reported After load Even Though Its Value Is Already Decided
 

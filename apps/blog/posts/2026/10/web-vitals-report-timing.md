@@ -6,7 +6,7 @@ tags:
   - browser
 published: true
 date: 2026-10-18 02:35:00
-updated: 2026-10-18 18:21:03
+updated: 2026-10-23 13:57:30
 description: 'web-vitals 6.2.3의 지표별 보고 조건과 클릭 직후 페이지를 떠날 때 INP가 누락되는 원인을 확인했다.'
 series: 'Core Web Vitals 직접 수집하기'
 seriesOrder: 1
@@ -22,7 +22,7 @@ art:
 
 핵심 웹 지표(Core Web Vitals)의 정의만으로는 이 차이를 설명하기 어렵다. LCP는 가장 큰 콘텐츠가 그려지기까지의 시간이고, CLS는 레이아웃이 밀린 정도이고, INP는 상호작용에 화면이 응답하기까지의 시간이다. 측정을 Google의 web-vitals 라이브러리에 맡기고 콜백으로 받은 값만 서버에 보내면, 콜백이 불리지 않은 경우는 수집 결과에 남지 않는다. web-vitals는 이 세 지표에 보조 지표인 TTFB와 FCP를 더해 측정하므로, 이 글에서도 다섯 지표를 함께 다룬다.
 
-서버에 INP가 도착하지 않았다는 사실만으로는 클릭이 없었는지, 클릭은 있었지만 보고되지 않았는지 구별할 수 없다. 이 시리즈에서는 핵심 웹 지표를 OpenTelemetry의 trace(원인 분석용)와 metric(운영 모니터링용)으로 나눠 수집한다. 그에 앞서 web-vitals가 콜백을 호출하는 조건부터 확인할 필요가 있었다.
+서버에 INP가 도착하지 않았다는 사실만으로는 클릭이 없었는지, 클릭은 있었지만 보고되지 않았는지 구별할 수 없다. 앞의 실험에서는 사용자가 200ms짜리 상호작용을 했는데도, 그 직후 페이지를 떠났다는 이유로 수집 결과에 남지 않았다. 모인 값으로 사용자 경험을 판단하려면 어떤 방문의 값이 빠질 수 있는지부터 알아야 했다.
 
 보고 시점을 이해하려면 세 곳의 코드를 함께 봐야 한다. 보고할 값을 거르는 `bindReporter`, 페이지가 숨겨졌는지 확인하는 가시성 감시, 처리를 브라우저의 유휴 시간(idle)까지 미루는 `whenIdleOrHidden`이다. 앞의 실험에서는 INP 항목을 처리하는 시점과 보고 조건을 검사하는 순서 때문에 콜백이 불리지 않았다.
 
@@ -31,6 +31,18 @@ art:
 > 측정은 Playwright 1.64.1의 Chromium 156(new headless)에서 했고, 버전 차이를 볼 때는 Playwright 1.63.0의 Chromium 153을 함께 썼다. web-vitals는 소스에서 직접 빌드했다(6.2.3과 4.2.1 빌드는 npm 배포본과 바이트 단위로 같았다). 클릭은 [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/)(CDP)로 보냈고, 핵심 조건은 DevTools를 붙이지 않은 Chrome Beta 157 창에 macOS 마우스 이벤트로 클릭해 다시 쟀다. 측정 코드는 [blog-experiments/cwv-otel-grafana/experiments/e13-report-timing](https://github.com/yceffort/blog-experiments/tree/0426377c2119e32018e064428353e2aa70617fed/cwv-otel-grafana/experiments/e13-report-timing)에 있다.
 >
 > 떠나는 문서에서 콜백이 불렸는지는 콜백 안에서 [`navigator.sendBeacon`](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/sendBeacon)으로 측정 스크립트의 수신 서버에 보내서 셌다. [`sessionStorage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage)로 다음 문서에 넘기는 방식은 탭을 닫는 경우를 볼 수 없어서다. 페이지 로드마다 새 브라우저 컨텍스트를 만들었고, 조건마다 5번씩 두 차례 돌려 합쳤다. Playwright의 [`click`](https://playwright.dev/docs/api/class-locator#locator-click)은 마우스를 요소 위로 옮긴 다음 누르므로, 클릭 전에는 `pointermove`가 한 번 들어가고 클릭 뒤에는 따로 입력을 넣지 않는 한 아무 입력도 없다.
+
+## 지표마다 보고 시점이 다르다
+
+web-vitals 6.2.3에서 다섯 지표를 보고하는 시점과 보고하지 않는 경우를 정리하면 다음과 같다. 표는 `reportAllChanges`를 켜지 않은 첫 페이지 로드를 기준으로 하며, hidden은 문서가 숨겨진 상태를 가리킨다.
+
+| 지표 | 보고 시점                                  | 보고되지 않는 경우                                               |
+| ---- | ------------------------------------------ | ---------------------------------------------------------------- |
+| TTFB | `load` 이벤트 다음 task                    | `load` 전에 떠남                                                 |
+| FCP  | 첫 contentful paint 항목을 받은 즉시       | 그리기 전에 숨겨짐                                               |
+| LCP  | 첫 `keydown`, `click` 뒤 idle, 또는 hidden | 후보가 그려지기 전에 숨겨짐, Firefox 122와 Safari 26.2 이전      |
+| CLS  | hidden이 올 때마다                         | FCP가 보고되지 않음, Chromium 계열이 아닌 브라우저               |
+| INP  | hidden이 올 때마다                         | 처리된 상호작용이 없음, `interactionId`를 지원하지 않는 브라우저 |
 
 ## 성능 항목을 받아 지표를 계산하기까지
 
@@ -203,15 +215,7 @@ iOS에서는 이 제약들을 함께 고려해야 한다. EU에서 허용된 대
 
 ## 지표마다 report(true)를 부르는 곳이 다르다
 
-다섯 함수가 `report(true)`를 부르는 곳과, 그 전에 페이지를 떠나면 보고되지 않는 경우를 소스에서 정리하면 다음과 같다.
-
-| 지표 | `report(true)`를 부르는 곳                 | 보고되지 않는 경우                                               |
-| ---- | ------------------------------------------ | ---------------------------------------------------------------- |
-| TTFB | `load` 이벤트 다음 task                    | `load` 전에 떠남                                                 |
-| FCP  | 첫 contentful paint 항목을 받은 즉시       | 그리기 전에 숨겨짐                                               |
-| LCP  | 첫 `keydown`, `click` 뒤 idle, 또는 hidden | 후보가 그려지기 전에 숨겨짐, Firefox 122와 Safari 26.2 이전      |
-| CLS  | hidden이 올 때마다                         | FCP가 보고되지 않음, Chromium 계열이 아닌 브라우저               |
-| INP  | hidden이 올 때마다                         | 처리된 상호작용이 없음, `interactionId`를 지원하지 않는 브라우저 |
+앞서 표로 정리한 보고 시점이 각 함수에서 어떻게 결정되는지 살펴본다. 각 함수가 `report(true)`를 부르는 시점과 그 전에 반영하는 값을 함께 확인한다.
 
 ### TTFB는 값이 정해져도 load 이후에 보고한다
 

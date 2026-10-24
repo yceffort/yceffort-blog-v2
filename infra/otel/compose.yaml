@@ -25,7 +25,7 @@ services:
       - collector
 
   collector:
-    image: otel/opentelemetry-collector-contrib:0.163.1
+    image: otel/opentelemetry-collector-contrib:0.163.1-386
     restart: unless-stopped
     logging: *logging
     command: ['--config=/etc/otelcol/config.yaml']

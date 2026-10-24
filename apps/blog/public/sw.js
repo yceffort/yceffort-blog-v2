@@ -277,12 +277,14 @@ self.addEventListener('notificationclick', (event) => {
   // 상대 URL은 일부 플랫폼(iOS PWA 등)의 openWindow에서 조용히 실패한다
   const url = new URL(event.notification.data?.url || '/', self.location.origin)
     .href
+  // 알림 URL에는 utm 꼬리표가 붙으므로, 이미 열린 창을 찾을 때는 경로만 비교한다
+  const samePage = (href) => new URL(href).pathname === new URL(url).pathname
   event.waitUntil(
     self.clients
       .matchAll({type: 'window', includeUncontrolled: true})
       .then((clientList) => {
         for (const client of clientList) {
-          if (client.url === url && 'focus' in client) {
+          if (samePage(client.url) && 'focus' in client) {
             return client.focus()
           }
         }

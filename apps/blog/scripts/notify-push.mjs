@@ -11,6 +11,8 @@ import {fileURLToPath} from 'node:url'
 import webpush from 'web-push'
 
 const SUBSCRIPTIONS_KEY = 'push:subscriptions'
+// 알림을 눌러 들어온 세션을 GA4에서 Direct와 가르기 위한 꼬리표
+const PUSH_UTM = 'utm_source=push&utm_medium=notification'
 
 const {
   KV_REST_API_URL,
@@ -100,7 +102,7 @@ async function toNotification(filePath) {
       title: '새 글이 올라왔어요',
       // 알림 본문은 일반 텍스트라 제목의 <em> 강조를 걷어낸다
       body: fm.title?.replace(/<\/?em>/g, '') || post[3],
-      url: `/${post[1]}/${post[2]}/${post[3]}`,
+      url: `/${post[1]}/${post[2]}/${post[3]}?${PUSH_UTM}`,
     }
   }
   if (!(await seriesHasPublishedPost(fm.name))) {
@@ -109,7 +111,7 @@ async function toNotification(filePath) {
   return {
     title: '새 시리즈가 시작됐어요',
     body: fm.name || series[1],
-    url: `/series/${series[1]}`,
+    url: `/series/${series[1]}?${PUSH_UTM}`,
   }
 }
 

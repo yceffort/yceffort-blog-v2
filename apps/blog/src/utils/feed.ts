@@ -34,7 +34,7 @@ export async function buildFeedResponse(locale: Locale) {
         return `
         <item>
           <title><![CDATA[${stripTitleEmphasis(post.frontMatter.title)}]]></title>
-          <link>${postUrl}</link>
+          <link>${postUrl}?utm_source=rss&amp;utm_medium=feed</link>
           <guid>${postUrl}</guid>
           <pubDate>${postDate.toUTCString()}</pubDate>
           <description><![CDATA[${postDescription}]]></description>

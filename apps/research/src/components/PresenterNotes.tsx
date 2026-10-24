@@ -154,7 +154,9 @@ export function PresenterNotes({
         </section>
         <div
           ref={trackRef}
-          className={styles.notesTrack}
+          className={
+            scroll.overflow ? styles.notesTrack : styles.notesTrackIdle
+          }
           role="scrollbar"
           aria-label="발표자 노트 스크롤"
           aria-controls={viewportId}

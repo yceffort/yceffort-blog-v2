@@ -63,15 +63,17 @@ for (const viewport of [
       hasTouch: viewport.touch,
     })
 
-    test('notes show a persistent scrollbar, remaining content and reset on slide change', async ({
+    test('notes show a scrollbar only when they overflow, remaining content and reset on slide change', async ({
       page,
       request,
     }, testInfo) => {
       await openNotes(page, request)
       const panel = page.getByRole('region', {name: '발표자 노트', exact: true})
       const content = page.getByRole('region', {name: '발표자 노트 본문'})
+      // 넘치는 글이 없으면 트랙이 숨겨져 접근성 트리에서도 빠지므로 includeHidden 으로 찾는다.
       const scrollbar = page.getByRole('scrollbar', {
         name: '발표자 노트 스크롤',
+        includeHidden: true,
       })
       const more = page.getByRole('button', {name: '↓ 아래에 내용 더 있음'})
       await expect(scrollbar).toBeVisible()
@@ -128,14 +130,16 @@ for (const viewport of [
       await page.getByRole('button', {name: '다음 ▶', exact: true}).click()
       await expect(content).toHaveText('짧은 노트입니다.')
       await expect(scrollbar).toHaveAttribute('aria-disabled', 'true')
-      await expect(scrollbar).toBeVisible()
+      await expect(scrollbar).toBeHidden()
       await expect(more).toHaveCount(0)
       await expect(panel.getByText('노트 전체 표시 중')).toBeVisible()
       await page.getByRole('button', {name: '다음 ▶', exact: true}).click()
       await expect(content).toHaveText('노트 없음')
+      await expect(scrollbar).toBeHidden()
       await expect(more).toHaveCount(0)
       await page.getByRole('button', {name: '다음 ▶', exact: true}).click()
       await expect(more).toBeVisible()
+      await expect(scrollbar).toBeVisible()
       await expect(scrollbar).toHaveAttribute('aria-valuenow', '0')
       await expect
         .poll(() => content.evaluate((node) => node.scrollTop))

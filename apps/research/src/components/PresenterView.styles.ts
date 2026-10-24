@@ -163,6 +163,12 @@ const styles = stylex.create({
       outlineOffset: '2px',
     },
   },
+  // 넘치는 글이 없으면 자리는 그대로 두고 트랙만 감춘다.
+  notesTrackIdle: {
+    '@layer site': {
+      visibility: 'hidden',
+    },
+  },
   notesThumb: {
     '@layer site': {
       position: 'absolute',
@@ -311,6 +317,10 @@ export const notesPanel = stylex.props(styles.notesPanel).className!
 export const notesBody = stylex.props(styles.notesBody).className!
 export const notesViewport = stylex.props(styles.notesViewport).className!
 export const notesTrack = stylex.props(styles.notesTrack).className!
+export const notesTrackIdle = stylex.props(
+  styles.notesTrack,
+  styles.notesTrackIdle,
+).className!
 export const notesThumb = stylex.props(styles.notesThumb).className!
 export const notesStatus = stylex.props(styles.notesStatus).className!
 export const notesMore = stylex.props(styles.notesMore).className!

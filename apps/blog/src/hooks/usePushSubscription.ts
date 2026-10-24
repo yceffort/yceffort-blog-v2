@@ -16,7 +16,7 @@ function urlBase64ToUint8Array(base64: string) {
 
 function trackPush(eventName: string, source: PushSource) {
   if (typeof window.gtag === 'function') {
-    window.gtag('event', eventName, {source})
+    window.gtag('event', eventName, {placement: source})
   }
 }
 

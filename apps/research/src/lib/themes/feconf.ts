@@ -268,6 +268,21 @@ section.entry-map > blockquote:first-of-type { border-left: 4px solid var(--yell
 section.entry-map pre { background: none; border: 0; padding: 0; font-size: 23px; line-height: 1.8; }
 section.entry-map > blockquote p { font-size: 23px; }
 
+section.harness pre { font-size: 21px; }
+section.harness > p:last-of-type { font-size: 22px; }
+
+/* Module map: one square per source module, with the legend table beside it. */
+section.module-map { display: grid; grid-template-columns: minmax(0, 1fr) 360px; column-gap: 44px; align-content: start; }
+section.module-map > h2, section.module-map > p:not(:has(img)) { grid-column: 1 / -1; }
+section.module-map > p:has(img) { margin: 0; }
+section.module-map > p:has(img) img { width: 100%; }
+section.module-map table { font-size: 21px; margin: 0; }
+section.module-map th { font-size: 16px; padding: 6px 10px; }
+section.module-map td { padding: 6px 10px; }
+section.module-map th:nth-child(n+2), section.module-map td:nth-child(n+2) { font-family: var(--mono); text-align: right; }
+section.module-map > p:has(> strong:only-child) { margin-top: 22px; }
+section.module-map > p:has(> em:only-child) { font-size: 16px; color: var(--muted); }
+
 /* Processes are open timelines: the rules connect the actual event nodes. */
 section.flow > ol, section.recovery > ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; list-style: none; padding: 0; margin: 30px 0 32px; counter-reset: step; }
 section.flow > ol > li, section.recovery > ul > li { position: relative; border-top: 2px solid var(--blue); padding: 32px 12px 0 0; margin: 0; font-size: 24px; counter-increment: step; }

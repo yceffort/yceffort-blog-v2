@@ -45,8 +45,8 @@ const styles = stylex.create({
   effect_cursor_glow: {
     '@layer site': {
       position: 'fixed',
-      top: '50%',
-      left: '50%',
+      top: '0',
+      left: '0',
       zIndex: '0',
       width: '500px',
       height: '500px',
@@ -54,9 +54,8 @@ const styles = stylex.create({
       backgroundColor: 'transparent',
       backgroundImage:
         'radial-gradient(\n    circle,\n    var(--primary) 0%,\n    transparent 60%\n  )',
-      transform: 'translate(-50%, -50%)',
-      transition:
-        'left 400ms cubic-bezier(0.2, 0.9, 0.2, 1),\n    top 400ms cubic-bezier(0.2, 0.9, 0.2, 1)',
+      transform: 'translate3d(50vw, 50vh, 0) translate(-50%, -50%)',
+      transition: 'transform 400ms cubic-bezier(0.2, 0.9, 0.2, 1)',
       opacity: {
         default: '0.08',
         ':is(html.dark #cursor-glow)': '0.12',

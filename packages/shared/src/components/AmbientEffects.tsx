@@ -27,8 +27,8 @@ export default function AmbientEffects({
       nextY = e.clientY
       if (!raf) {
         raf = window.requestAnimationFrame(() => {
-          glow.style.left = `${nextX}px`
-          glow.style.top = `${nextY}px`
+          // left/top 이동은 layout shift 로 집계돼 CLS 에 쌓인다. transform 이동은 집계에서 제외된다.
+          glow.style.transform = `translate3d(${nextX}px, ${nextY}px, 0) translate(-50%, -50%)`
           raf = 0
         })
       }

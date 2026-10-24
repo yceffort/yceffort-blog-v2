@@ -1,0 +1,96 @@
+/* Ambient background effects and user-selected palettes. */
+@layer site {
+  #grain {
+    position: fixed;
+    z-index: 100;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    opacity: 0.055;
+    inset: 0;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+  }
+  #anim-bg {
+    position: fixed;
+    z-index: 0;
+    background:
+      radial-gradient(
+        800px circle at 10% 10%,
+        color-mix(in oklab, var(--primary) 15%, transparent),
+        transparent 60%
+      ),
+      radial-gradient(
+        600px circle at 90% 80%,
+        color-mix(in oklab, var(--primary-3) 10%, transparent),
+        transparent 60%
+      );
+    opacity: 0.6;
+    inset: 0;
+    pointer-events: none;
+  }
+  #cursor-glow {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 0;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--primary) 0%, transparent 60%);
+    transform: translate(-50%, -50%);
+    transition:
+      left 400ms cubic-bezier(0.2, 0.9, 0.2, 1),
+      top 400ms cubic-bezier(0.2, 0.9, 0.2, 1);
+    opacity: 0.08;
+    pointer-events: none;
+    filter: blur(20px);
+  }
+  html.dark #cursor-glow {
+    opacity: 0.12;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #cursor-glow,
+    #grain {
+      display: none;
+    }
+  }
+}
+
+/* User preferences follow the component layer so minimal mode can disable effects. */
+@layer preferences {
+  body[data-grain='false'] #grain {
+    display: none;
+  }
+  body[data-minimal='true'] #anim-bg,
+  body[data-minimal='true'] #cursor-glow,
+  body[data-minimal='true'] #grain {
+    display: none;
+  }
+  body[data-minimal='true'] {
+    background-image: none;
+  }
+  body[data-minimal='true'] .hero-eyebrow .dot,
+  body[data-minimal='true'] .hero-title .accent {
+    animation: none;
+  }
+  body[data-accent='rose'] {
+    --primary: #f472b6;
+    --primary-2: #fb923c;
+    --primary-3: #fbbf24;
+  }
+  body[data-accent='emerald'] {
+    --primary: #34d399;
+    --primary-2: #38bdf8;
+    --primary-3: #fbbf24;
+  }
+  body[data-accent='amber'] {
+    --primary: #fbbf24;
+    --primary-2: #fb923c;
+    --primary-3: #f472b6;
+  }
+  body[data-accent='cyan'] {
+    --primary: #38bdf8;
+    --primary-2: #a78bfa;
+    --primary-3: #34d399;
+  }
+}

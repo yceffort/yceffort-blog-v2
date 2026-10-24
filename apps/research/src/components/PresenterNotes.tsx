@@ -5,12 +5,21 @@ import type {KeyboardEvent, PointerEvent} from 'react'
 
 import * as styles from './PresenterView.styles'
 
+export const DEFAULT_NOTES_FONT_SIZE = 16
+export const MIN_NOTES_FONT_SIZE = 12
+export const MAX_NOTES_FONT_SIZE = 40
+const NOTES_FONT_SIZE_STEP = 2
+
 export function PresenterNotes({
   note,
   height,
+  fontSize,
+  onFontSizeChange,
 }: {
   note: string
   height?: number
+  fontSize: number
+  onFontSizeChange: (delta: number) => void
 }) {
   const viewportId = useId()
   const viewportRef = useRef<HTMLDivElement>(null)
@@ -134,7 +143,30 @@ export function PresenterNotes({
       aria-label="발표자 노트"
       style={height === undefined ? undefined : {height, maxHeight: 'none'}}
     >
-      <div className={styles.notesLabel}>발표자 노트</div>
+      <div className={styles.notesHeader}>
+        <div className={styles.notesLabel}>발표자 노트</div>
+        <div className={styles.notesFontControls}>
+          <button
+            type="button"
+            className={styles.notesFontButton}
+            onClick={() => onFontSizeChange(-NOTES_FONT_SIZE_STEP)}
+            disabled={fontSize <= MIN_NOTES_FONT_SIZE}
+            aria-label="글자 작게"
+          >
+            A-
+          </button>
+          <span className={styles.notesFontSize}>{fontSize}px</span>
+          <button
+            type="button"
+            className={styles.notesFontButton}
+            onClick={() => onFontSizeChange(NOTES_FONT_SIZE_STEP)}
+            disabled={fontSize >= MAX_NOTES_FONT_SIZE}
+            aria-label="글자 크게"
+          >
+            A+
+          </button>
+        </div>
+      </div>
       <div className={styles.notesBody}>
         <section
           id={viewportId}
@@ -148,6 +180,7 @@ export function PresenterNotes({
           <div
             ref={contentRef}
             className={`marp-presenter-notes-content ${styles.notesContent}`}
+            style={{fontSize}}
           >
             {note || <span className={styles.noNotes}>노트 없음</span>}
           </div>

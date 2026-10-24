@@ -1,6 +1,13 @@
 'use client'
 
-import {useCallback, useEffect, useMemo, useRef, useState} from 'react'
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from 'react'
 import type {PointerEvent} from 'react'
 
 import {useBroadcastChannel} from '@/hooks/useBroadcastChannel'
@@ -8,12 +15,46 @@ import {useTimer} from '@/hooks/useTimer'
 import {getSlideGroups} from '@/lib/slideNavigation'
 
 import {Marp} from './Marp'
-import {PresenterNotes} from './PresenterNotes'
+import {
+  DEFAULT_NOTES_FONT_SIZE,
+  MAX_NOTES_FONT_SIZE,
+  MIN_NOTES_FONT_SIZE,
+  PresenterNotes,
+} from './PresenterNotes'
 import * as styles from './PresenterView.styles'
 
 // Resizing the notes always leaves this much room for them and the slide previews.
 const MIN_NOTES_HEIGHT = 120
 const MIN_SLIDES_HEIGHT = 96
+// The notes font size is a persisted preference, read as an external store so
+// the server render and the first client render agree on the default.
+const NOTES_FONT_SIZE_KEY = 'research-presenter-notes-font-size'
+const notesFontSizeListeners = new Set<() => void>()
+
+function subscribeNotesFontSize(listener: () => void) {
+  notesFontSizeListeners.add(listener)
+  return () => notesFontSizeListeners.delete(listener)
+}
+
+function readNotesFontSize() {
+  try {
+    const size = Number(localStorage.getItem(NOTES_FONT_SIZE_KEY))
+    return size >= MIN_NOTES_FONT_SIZE && size <= MAX_NOTES_FONT_SIZE
+      ? size
+      : DEFAULT_NOTES_FONT_SIZE
+  } catch {
+    return DEFAULT_NOTES_FONT_SIZE
+  }
+}
+
+function writeNotesFontSize(size: number) {
+  try {
+    localStorage.setItem(NOTES_FONT_SIZE_KEY, String(size))
+  } catch {
+    // A disabled/full preference store must not interrupt a presentation.
+  }
+  notesFontSizeListeners.forEach((listener) => listener())
+}
 
 interface PresenterViewProps {
   dataHtml: string
@@ -71,6 +112,20 @@ export function PresenterView({
     null,
   )
   const [notesHeight, setNotesHeight] = useState<number>()
+  const notesFontSize = useSyncExternalStore(
+    subscribeNotesFontSize,
+    readNotesFontSize,
+    () => DEFAULT_NOTES_FONT_SIZE,
+  )
+
+  const changeNotesFontSize = (delta: number) => {
+    writeNotesFontSize(
+      Math.min(
+        MAX_NOTES_FONT_SIZE,
+        Math.max(MIN_NOTES_FONT_SIZE, notesFontSize + delta),
+      ),
+    )
+  }
 
   const {sendSlideChange, requestSync} = useBroadcastChannel(channelName, {
     onSlideChange: (index, includeHidden) => {
@@ -242,6 +297,8 @@ export function PresenterView({
         key={activeIndex}
         note={currentNote}
         height={notesHeight}
+        fontSize={notesFontSize}
+        onFontSizeChange={changeNotesFontSize}
       />
 
       <div className={styles.controlBar}>

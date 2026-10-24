@@ -204,6 +204,15 @@ const styles = stylex.create({
       cursor: 'pointer',
     },
   },
+  notesHeader: {
+    '@layer site': {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: '12px',
+      marginBottom: '8px',
+    },
+  },
   notesLabel: {
     '@layer site': {
       fontSize: '12px',
@@ -211,7 +220,35 @@ const styles = stylex.create({
       textTransform: 'uppercase',
       letterSpacing: '0.5px',
       color: '#888',
-      marginBottom: '8px',
+    },
+  },
+  notesFontControls: {
+    '@layer site': {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '6px',
+    },
+  },
+  notesFontButton: {
+    '@layer site': {
+      padding: '2px 10px',
+      border: '1px solid #777',
+      borderRadius: '6px',
+      background: {default: '#383838', ':hover:not(:disabled)': '#484848'},
+      color: '#fff',
+      fontSize: '13px',
+      fontWeight: 600,
+      cursor: {default: 'pointer', ':disabled': 'not-allowed'},
+      opacity: {default: null, ':disabled': 0.4},
+    },
+  },
+  notesFontSize: {
+    '@layer site': {
+      minWidth: '40px',
+      textAlign: 'center',
+      color: '#aaa',
+      fontSize: '12px',
+      fontVariantNumeric: 'tabular-nums',
     },
   },
   notesContent: {
@@ -324,7 +361,13 @@ export const notesTrackIdle = stylex.props(
 export const notesThumb = stylex.props(styles.notesThumb).className!
 export const notesStatus = stylex.props(styles.notesStatus).className!
 export const notesMore = stylex.props(styles.notesMore).className!
+export const notesHeader = stylex.props(styles.notesHeader).className!
 export const notesLabel = stylex.props(styles.notesLabel).className!
+export const notesFontControls = stylex.props(
+  styles.notesFontControls,
+).className!
+export const notesFontButton = stylex.props(styles.notesFontButton).className!
+export const notesFontSize = stylex.props(styles.notesFontSize).className!
 export const notesContent = stylex.props(styles.notesContent).className!
 export const noNotes = stylex.props(styles.noNotes).className!
 export const controlBar = stylex.props(styles.controlBar).className!

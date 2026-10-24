@@ -42,6 +42,16 @@ const MarpQrModal = dynamic(
 const LONG_PRESS_MS = 500
 const LONG_PRESS_MOVE_TOLERANCE = 10
 
+// QR로 들어온 방문을 GA4 세션 소스(qr)로 가르기 위한 캠페인 파라미터. 쿼리는 해시 앞에 와야 한다.
+function qrSlideUrl(slug: string, index: number) {
+  const params = new URLSearchParams({
+    utm_source: 'qr',
+    utm_medium: 'slides',
+    utm_campaign: slug,
+  })
+  return `${window.location.origin}/slides/${slug}?${params}#${index + 1}`
+}
+
 const INTERACTIVE_TARGET =
   'a[href], button, input, select, textarea, [contenteditable]'
 
@@ -287,9 +297,7 @@ export function MarpSlides({
       // QR 코드 토글 (Q 키)
       if (e.code === 'KeyQ') {
         setQrUrl((prev) =>
-          prev
-            ? null
-            : `${window.location.origin}/slides/${slug}#${activeIndexRef.current + 1}`,
+          prev ? null : qrSlideUrl(slug, activeIndexRef.current),
         )
         return
       }
@@ -580,7 +588,7 @@ export function MarpSlides({
       }
     },
     copyLink: () => void navigator.clipboard.writeText(slideUrl(activeIndex)),
-    qr: () => setQrUrl(slideUrl(activeIndex)),
+    qr: () => setQrUrl(qrSlideUrl(slug, activeIndex)),
     print: () => setIsPrinting(true),
     toggleLaser: () => setIsLaserMode((prev) => !prev),
     toggleDrawing: () => setIsDrawingMode((prev) => !prev),
